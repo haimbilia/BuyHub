@@ -246,6 +246,7 @@ class StripeConnect extends PaymentMethodBase
             $this->stripeAccountId = $this->stripe->getResourceOwner($accessToken)->getId();
             if ($this->updateUserMeta('stripe_account_id', $this->stripeAccountId)) {
                 $this->updateUserMeta('stripe_form_submitted', 1);
+                $this->updateUserMeta($this->stripeAccountId, $this->getEnv());
             }
             return true;
         } catch (Exception $e) {
@@ -458,6 +459,16 @@ class StripeConnect extends PaymentMethodBase
     }
 
     /**
+     * Returns the environment setting for the Stripe Connect integration.
+     *
+     * @return int The environment setting, either 0 for test mode or 1 for live mode.
+     */
+    public function getEnv(): int
+    {
+        return FatUtility::int($this->getKey('env'));
+    }
+
+    /**
      * updateAllAccounts
      *
      * @return bool
@@ -467,7 +478,9 @@ class StripeConnect extends PaymentMethodBase
         $accountIds = $this->getAllConnectAccountIds();
         $error = '';
         foreach ($accountIds as $acct) {
-            if (false === $this->update(['settings' => $this->getPayoutSettingsArr()], $acct['usermeta_value'])) {
+            $env = $this->getAccountEnv($acct['usermeta_user_id'], $acct['usermeta_value']);
+
+            if ($env == $this->getEnv() && false === $this->update(['settings' => $this->getPayoutSettingsArr()], $acct['usermeta_value'])) {
                 $error .= !empty($error) ? '\n' . $this->error : $this->error;
             }
         }
@@ -480,6 +493,72 @@ class StripeConnect extends PaymentMethodBase
     }
 
     /**
+     * Retrieves the environment for the specified account of the given user.
+     *
+     * If the account environment is not found in the user's metadata, it attempts to find the account and retrieve the environment. The environment is then stored in the user's metadata for future use.
+     *
+     * @param int $userId The ID of the user.
+     * @param string $accountId The connected account ID of the account.
+     * @return string The environment for the specified account, or an empty string if the account is not found.
+     */
+    public function getAccountEnv(int $userId, string $accountId)
+    {
+        if (empty($accountId)) {
+            return '';
+        }
+
+        $env = User::getUserMeta($userId, $accountId);
+        if ('' == $env || false == $env) {
+            if ($this->findAccount($accountId)) {
+                $env = $this->getEnv();
+                $user = new User($userId);
+                $user->updateUserMeta($accountId, $env);
+            }
+        }
+        return $env;
+    }
+
+    /**
+     * Finds a Stripe account by its connected account ID.
+     *
+     * @param string $accountId The ID of the Stripe account to find.
+     * @param string $lastAccountId The ID of the last Stripe account retrieved, used for pagination.
+     * @return bool True if the Stripe account is found, false otherwise.
+     */
+    public function findAccount(string $accountId, string $lastAccountId = ''): bool
+    {
+        $params = [
+            'limit' => 100
+        ];
+        if (!empty($lastAccountId)) {
+            $params['starting_after'] = $lastAccountId;
+        }
+        if (false === $this->loadAllAccounts($params)) {
+            return false;
+        }
+
+        $connectedAccounts = $this->getAllAccounts();
+        if (empty($connectedAccounts) || !isset($connectedAccounts['data']) || empty($connectedAccounts['data'])) {
+            $this->error = Labels::getLabel('ERR_NOT_FOUND_STRIPE_ACCOUNT', $this->langId);
+            return false;
+        }
+
+        foreach ($connectedAccounts['data'] as $acct) {
+            if ($accountId == $acct['id']) {
+                return true;
+                break;
+            }
+            $lastAccountId = $acct['id'];
+        }
+
+        $found = array_search($accountId, array_column($connectedAccounts['data'], 'id'));
+        if (false !== $found) {
+            return true;
+        }
+        return $this->findAccount($accountId, $lastAccountId);
+    }
+
+    /**
      * getAllConnectAccountIds
      *
      * @return array
@@ -487,7 +566,7 @@ class StripeConnect extends PaymentMethodBase
     private function getAllConnectAccountIds(): array
     {
         $srch = new SearchBase(User::DB_TBL_META, 't_um');
-        $srch->addMultipleFields(['usermeta_value']);
+        $srch->addMultipleFields(['usermeta_user_id', 'usermeta_value']);
         $srch->addCondition('t_um.' . User::DB_TBL_META_PREFIX . 'key', '=', 'stripe_account_id');
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
@@ -1148,7 +1227,6 @@ class StripeConnect extends PaymentMethodBase
     public function loadAllAccounts(array $requestParam = ['limit' => 10]): bool
     {
         $this->resp = $this->doRequest(self::REQUEST_ALL_CONNECT_ACCOUNTS, $requestParam);
-        // CommonHelper::printArray($this->resp, true);
         if (false === $this->resp) {
             return false;
         }

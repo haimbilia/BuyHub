@@ -22,3 +22,4 @@
     - Bug-080244 - Error occur on the My Offers page on the buyer dashboard in Arabic language.
     - Bug-079388 - "Pay At Store" not working.
     - Bug-083721 - Depraction appears when the guest user tries to place a GDPRrequest
+    - Bug-083863 - A fatal error occurs when the admin enables the Payout settings in the production mode.
