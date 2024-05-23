@@ -469,18 +469,22 @@ class StripeConnect extends PaymentMethodBase
     }
 
     /**
-     * updateAllAccounts
+     * Updates all connected Stripe accounts.
      *
-     * @return bool
+     * Retrieves a list of all connected Stripe account IDs, and then updates the payout settings for each account.
+     *
+     * @return bool True if all accounts were updated successfully, false otherwise.
      */
     private function updateAllAccounts(): bool
     {
-        $accountIds = $this->getAllConnectAccountIds();
+        $accountIds = $this->getAllConnectAccountIds($this->getEnv());
+        if (empty($accountIds)) {
+            $accountIds = $this->updateConnnectedAccountsEnv($accountIds);
+        }
+
         $error = '';
         foreach ($accountIds as $acct) {
-            $env = $this->getAccountEnv($acct['usermeta_user_id'], $acct['usermeta_value']);
-
-            if ($env == $this->getEnv() && false === $this->update(['settings' => $this->getPayoutSettingsArr()], $acct['usermeta_value'])) {
+            if (false === $this->update(['settings' => $this->getPayoutSettingsArr()], $acct['usermeta_value'])) {
                 $error .= !empty($error) ? '\n' . $this->error : $this->error;
             }
         }
@@ -490,6 +494,43 @@ class StripeConnect extends PaymentMethodBase
             return false;
         }
         return true;
+    }
+
+    /**
+     * Updates the connected Stripe accounts environment for the specified account IDs.
+     *
+     * @param array $accountIds The connected account IDs to update.
+     * @param array $foundRecords The records that have been found so far from stripe connect platform.
+     * @param string $lastAccountId The ID of the last account found.
+     * @return array The records that have been found.
+     */
+    private function updateConnnectedAccountsEnv(array $accountIds, array $foundRecords = [], string $lastAccountId = ''): array
+    {
+        if (empty($accountIds)) {
+            $accountIds = $this->getAllConnectAccountIds();
+        }
+
+        $env = $this->getEnv();
+        $stripeAccountsArr = $this->getAccountsFromStripe($lastAccountId);
+        $notFoundAccts = $accountIds;
+        if (!empty($stripeAccountsArr)) {
+            foreach ($stripeAccountsArr['data'] as $sAcct) {
+                foreach ($accountIds as $index => $acct) {
+                    if ($acct['usermeta_value'] == $sAcct['id']) {
+                        $foundRecords[] = $acct;
+                        $user = new User($acct['usermeta_user_id']);
+                        $user->updateUserMeta($acct['usermeta_value'], $env);
+                        unset($notFoundAccts[$index]);
+                    }
+                }
+                $lastAccountId = $sAcct['id'];
+            }
+
+            if (0 < count($notFoundAccts)) {
+                $this->updateConnnectedAccountsEnv($notFoundAccts, $foundRecords, $lastAccountId);
+            }
+        }
+        return $foundRecords;
     }
 
     /**
@@ -507,25 +548,20 @@ class StripeConnect extends PaymentMethodBase
             return '';
         }
 
-        $env = User::getUserMeta($userId, $accountId);
-        if ('' == $env || false == $env) {
-            if ($this->findAccount($accountId)) {
-                $env = $this->getEnv();
-                $user = new User($userId);
-                $user->updateUserMeta($accountId, $env);
-            }
-        }
-        return $env;
+        return User::getUserMeta($userId, $accountId);
     }
 
     /**
-     * Finds a Stripe account by its connected account ID.
+     * Retrieves a list of connected Stripe accounts.
      *
-     * @param string $accountId The ID of the Stripe account to find.
-     * @param string $lastAccountId The ID of the last Stripe account retrieved, used for pagination.
-     * @return bool True if the Stripe account is found, false otherwise.
+     * This function fetches a list of connected Stripe accounts, with the ability to paginate through the results.
+     * It uses the Stripe API to retrieve the accounts, with a limit of 100 accounts per request.
+     * If a `$lastAccountId` is provided, it will start fetching accounts after that ID to enable pagination.
+     *
+     * @param string $lastAccountId The ID of the last account fetched, used for pagination.
+     * @return array An array of connected Stripe accounts, or an empty array if no accounts are found.
      */
-    public function findAccount(string $accountId, string $lastAccountId = ''): bool
+    private function getAccountsFromStripe(string $lastAccountId = '')
     {
         $params = [
             'limit' => 100
@@ -534,42 +570,39 @@ class StripeConnect extends PaymentMethodBase
             $params['starting_after'] = $lastAccountId;
         }
         if (false === $this->loadAllAccounts($params)) {
-            return false;
+            return [];
         }
 
         $connectedAccounts = $this->getAllAccounts();
         if (empty($connectedAccounts) || !isset($connectedAccounts['data']) || empty($connectedAccounts['data'])) {
-            $this->error = Labels::getLabel('ERR_NOT_FOUND_STRIPE_ACCOUNT', $this->langId);
-            return false;
+            return [];
         }
-
-        foreach ($connectedAccounts['data'] as $acct) {
-            if ($accountId == $acct['id']) {
-                return true;
-                break;
-            }
-            $lastAccountId = $acct['id'];
-        }
-
-        $found = array_search($accountId, array_column($connectedAccounts['data'], 'id'));
-        if (false !== $found) {
-            return true;
-        }
-        return $this->findAccount($accountId, $lastAccountId);
+        return $connectedAccounts;
     }
 
     /**
-     * getAllConnectAccountIds
+     * Retrieves all Stripe Connect account IDs for the specified environment.
      *
-     * @return array
+     * @param int $env The environment ID (-1 for all environments).
+     * @return array An array of Stripe Connect account IDs.
      */
-    private function getAllConnectAccountIds(): array
+    private function getAllConnectAccountIds(int $env = -1): array
     {
+        $subSrch = new SearchBase(User::DB_TBL_META, 't_ums');
+        $subSrch->addFld('t_ums.usermeta_value');
+        $subSrch->addCondition('t_ums.usermeta_key', '=', 'mysql_func_t_um.usermeta_value', 'AND', true);
+        $subSrch->doNotCalculateRecords();
+        $subSrch->doNotLimitRecords();
+
         $srch = new SearchBase(User::DB_TBL_META, 't_um');
-        $srch->addMultipleFields(['usermeta_user_id', 'usermeta_value']);
-        $srch->addCondition('t_um.' . User::DB_TBL_META_PREFIX . 'key', '=', 'stripe_account_id');
+        $srch->addMultipleFields(['t_um.usermeta_user_id', 't_um.usermeta_value']);
+        $srch->addCondition('t_um.usermeta_key', '=', 'stripe_account_id');
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
+        $srch->addCondition('t_um.usermeta_key', '=', 'stripe_account_id');
+        if (-1 < $env) {
+            $srch->addDirectCondition($env . " = (" . $subSrch->getQuery() . ")");
+        }
         return (array) FatApp::getDb()->fetchAll($srch->getResultSet());
     }
 
