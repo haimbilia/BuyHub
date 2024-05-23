@@ -480,6 +480,13 @@ class StripeConnect extends PaymentMethodBase
         $accountIds = $this->getAllConnectAccountIds($this->getEnv());
         if (empty($accountIds)) {
             $accountIds = $this->updateConnnectedAccountsEnv($accountIds);
+        } else {
+            $selectedAccounts = array_column($accountIds, 'usermeta_value');
+            $records = $this->getAllConnectAccountIds(NULL, $selectedAccounts);
+            if (!empty($records)) {
+                $otherAccountIds = $this->updateConnnectedAccountsEnv($records);
+                $accountIds = array_merge($accountIds, $otherAccountIds);
+            }
         }
 
         $error = '';
@@ -517,6 +524,7 @@ class StripeConnect extends PaymentMethodBase
             foreach ($stripeAccountsArr['data'] as $sAcct) {
                 foreach ($accountIds as $index => $acct) {
                     if ($acct['usermeta_value'] == $sAcct['id']) {
+                        $acct['acct_env'] = $env;
                         $foundRecords[] = $acct;
                         $user = new User($acct['usermeta_user_id']);
                         $user->updateUserMeta($acct['usermeta_value'], $env);
@@ -527,7 +535,7 @@ class StripeConnect extends PaymentMethodBase
             }
 
             if (0 < count($notFoundAccts)) {
-                $this->updateConnnectedAccountsEnv($notFoundAccts, $foundRecords, $lastAccountId);
+                return $this->updateConnnectedAccountsEnv($notFoundAccts, $foundRecords, $lastAccountId);
             }
         }
         return $foundRecords;
@@ -583,25 +591,25 @@ class StripeConnect extends PaymentMethodBase
     /**
      * Retrieves all Stripe Connect account IDs for the specified environment.
      *
-     * @param int $env The environment ID (-1 for all environments).
+     * @param int $env The environment ID (-1 for all environments) possible values can be (NULL, 0, 1).
      * @return array An array of Stripe Connect account IDs.
      */
-    private function getAllConnectAccountIds(int $env = -1): array
+    private function getAllConnectAccountIds(?int $env = -1, array $excludeAccounts = []): array
     {
-        $subSrch = new SearchBase(User::DB_TBL_META, 't_ums');
-        $subSrch->addFld('t_ums.usermeta_value');
-        $subSrch->addCondition('t_ums.usermeta_key', '=', 'mysql_func_t_um.usermeta_value', 'AND', true);
-        $subSrch->doNotCalculateRecords();
-        $subSrch->doNotLimitRecords();
-
         $srch = new SearchBase(User::DB_TBL_META, 't_um');
-        $srch->addMultipleFields(['t_um.usermeta_user_id', 't_um.usermeta_value']);
+        $srch->joinTable(User::DB_TBL_META, 'LEFT JOIN', 't_ums.usermeta_key = t_um.usermeta_value', 't_ums');
+        $srch->addMultipleFields(['t_um.usermeta_user_id', 't_um.usermeta_value', 't_ums.usermeta_value as acct_env']);
         $srch->addCondition('t_um.usermeta_key', '=', 'stripe_account_id');
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
-        $srch->addCondition('t_um.usermeta_key', '=', 'stripe_account_id');
-        if (-1 < $env) {
-            $srch->addDirectCondition($env . " = (" . $subSrch->getQuery() . ")");
+        if (-1 != $env) {
+            $operator = is_null($env) ? 'IS' : '=';
+            $env = is_null($env) ? 'NULL' : $env;
+            $srch->addCondition('t_ums.usermeta_value', $operator, 'mysql_func_' . $env, 'AND', true);
+        }
+
+        if (!empty($excludeAccounts)) {
+            $srch->addCondition('t_um.usermeta_value', 'NOT IN', $excludeAccounts);
         }
         return (array) FatApp::getDb()->fetchAll($srch->getResultSet());
     }

@@ -20,3 +20,7 @@ INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_
 COD will work only if the fulfillment method is Shipping.
 Pay at Store will work only if the fulfillment method is Pickup.', 1)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES 
+('FRM_SELECTING_THIS_FEATURE_WILL_UPDATE_PAYOUT_SETTINGS_FOR_ALL_PREVIOUS_CONNECTED_ACCOUNTS.',1,'When activated, all the payout settings will be updated for every previously connected account. This setting will not remain enabled after saving.',1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
