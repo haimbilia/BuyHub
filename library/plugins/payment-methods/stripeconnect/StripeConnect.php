@@ -70,6 +70,7 @@ class StripeConnect extends PaymentMethodBase
     public const REQUEST_CREATE_COUPON = 30;
     public const REQUEST_CREATE_ACCOUNT_TOKEN = 31;
     public const REQUEST_UPDATE_ALL_ACCOUNTS = 32;
+    public const REQUEST_CHARGE_RETRIEVE = 33;
 
     public const PAYMENT_RESPONSE_INTENT_TYPE_SUCCESS = 'payment_intent.succeeded';
 
@@ -1424,6 +1425,21 @@ class StripeConnect extends PaymentMethodBase
     }
 
     /**
+     * doChargeRetrieve
+     *
+     * @param string $chargeId
+     * @return bool
+     */
+    public function doChargeRetrieve(string $chargeId): bool
+    {
+        $this->resp = $this->doRequest(self::REQUEST_CHARGE_RETRIEVE, [$chargeId]);
+        if (false === $this->resp) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * createPaymentIntent
      *
      * @param array $requestParam
@@ -1737,6 +1753,9 @@ class StripeConnect extends PaymentMethodBase
                     break;
                 case self::REQUEST_CREATE_ACCOUNT_TOKEN:
                     return $this->createAccountTokenId();
+                    break;
+                case self::REQUEST_CHARGE_RETRIEVE:
+                    return $this->chargeRetrieve($requestParam);
                     break;
             }
         } catch (\Stripe\Exception\CardException $e) {

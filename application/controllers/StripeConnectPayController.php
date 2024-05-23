@@ -346,7 +346,92 @@ class StripeConnectPayController extends PaymentController
             CommonHelper::printArray($error, true);
         }
 
-        $payloadStr = @file_get_contents('php://input');
+        // $payloadStr = @file_get_contents('php://input');
+        $payloadStr = '{
+            "id": "evt_3PJYYLRsf0giojtW1rluNAIF",
+            "object": "event",
+            "api_version": "2024-04-10",
+            "created": 1716458838,
+            "data": {
+              "object": {
+                "id": "pi_3PJYYLRsf0giojtW1dCuEHft",
+                "object": "payment_intent",
+                "amount": 27180,
+                "amount_capturable": 0,
+                "amount_details": {
+                  "tip": {
+                  }
+                },
+                "amount_received": 27180,
+                "application": null,
+                "application_fee_amount": null,
+                "automatic_payment_methods": null,
+                "canceled_at": null,
+                "cancellation_reason": null,
+                "capture_method": "automatic_async",
+                "client_secret": "pi_3PJYYLRsf0giojtW1dCuEHft_secret_gEx5BVzCf7kail92QiE2hLRXw",
+                "confirmation_method": "automatic",
+                "created": 1716458837,
+                "currency": "usd",
+                "customer": "cus_Q9sIcf8fEWtish",
+                "description": null,
+                "invoice": null,
+                "last_payment_error": null,
+                "latest_charge": "ch_3PJYYLRsf0giojtW1ajywx2Q",
+                "livemode": false,
+                "metadata": {
+                  "orderId": "223"
+                },
+                "next_action": null,
+                "on_behalf_of": null,
+                "payment_method": "pm_1PJYYKRsf0giojtW0OC3Jqxo",
+                "payment_method_configuration_details": null,
+                "payment_method_options": {
+                  "card": {
+                    "installments": null,
+                    "mandate_options": null,
+                    "network": null,
+                    "request_three_d_secure": "automatic"
+                  }
+                },
+                "payment_method_types": [
+                  "card"
+                ],
+                "processing": null,
+                "receipt_email": "contact@tutt.app",
+                "review": null,
+                "setup_future_usage": null,
+                "shipping": {
+                  "address": {
+                    "city": "Sahibzada Ajit Singh Nagar",
+                    "country": "United States",
+                    "line1": "s. c. f -19 backside, P-6, Sector 71, Sahibzada Ajit Singh Nagar, Punjab 160071, India",
+                    "line2": "",
+                    "postal_code": "90071",
+                    "state": "California"
+                  },
+                  "carrier": null,
+                  "name": "sagar",
+                  "phone": "+1-us6899532154",
+                  "tracking_number": null
+                },
+                "source": null,
+                "statement_descriptor": "O9368630863",
+                "statement_descriptor_suffix": null,
+                "status": "succeeded",
+                "transfer_data": null,
+                "transfer_group": null
+              }
+            },
+            "livemode": false,
+            "pending_webhooks": 1,
+            "request": {
+              "id": "req_cm3NOE22jLZNBY",
+              "idempotency_key": "6141624b-4cc5-4830-897e-46f76642fa99"
+            },
+            "type": "payment_intent.succeeded"
+          }
+          ';
         $payload = json_decode($payloadStr, true);
 
         if (empty($payload)) {
@@ -399,13 +484,26 @@ class StripeConnectPayController extends PaymentController
         }
 
         $chargeResponse = isset($payload['data']['object']['charges']['data']) ? current($payload['data']['object']['charges']['data']) : [];
+        
         if (empty($chargeResponse)) {
-            $error = [
-                'msg' => Labels::getLabel('ERR_INVALID_ORDER_CHARGE', $this->siteLangId),
-                'response' => $payload,
-            ];
-            SystemLog::transaction(json_encode($error), self::KEY_NAME . "-" . $orderId);
-            return;
+            $latestCharge = isset($payload['data']['object']['latest_charge']) ? $payload['data']['object']['latest_charge'] : '';
+            if(!$this->stripeConnect->doChargeRetrieve($latestCharge)) {
+                $error = [
+                    'msg' => Labels::getLabel('ERR_INVALID_ORDER_CHARGE', $this->siteLangId),
+                    'response' => $payload,
+                ];
+                SystemLog::transaction(json_encode($error), self::KEY_NAME . "-" . $orderId);
+                return;
+            }
+            $chargeResponse = json_decode(json_encode($this->stripeConnect->getResponse()), true);
+            if (empty($chargeResponse)) {
+                $error = [
+                    'msg' => Labels::getLabel('ERR_INVALID_ORDER_CHARGE', $this->siteLangId),
+                    'response' => $payload,
+                ];
+                SystemLog::transaction(json_encode($error), self::KEY_NAME . "-" . $orderId);
+                return;
+            }
         }
 
         $chargeId = $chargeResponse['id'];
