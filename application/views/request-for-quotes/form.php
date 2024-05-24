@@ -212,7 +212,7 @@ if (null != $fld) {
                     </div>
                     <div class="col-auto">
                         <div class="quote-for-qty">
-                            <div class="qty-wrap">
+                            <div class="qty-wrap input-group">
                                 <label class="label">
                                     <?php echo Labels::getLabel('LBL_REQUIRED_QUANTITY'); ?>
                                     <span class="spn_must_field">*</span>
@@ -252,7 +252,7 @@ if (null != $fld) {
                     <?php echo HtmlHelper::getFieldHtml($frm, 'rfq_prodcat_id', 8); ?>
                     <div class="col-md-4">
                         <div class="quote-for-qty">
-                            <div class="qty-wrap">
+                            <div class="qty-wrap input-group">
                                 <label class="label">
                                     <?php echo Labels::getLabel('LBL_REQUIRED_QUANTITY'); ?>
                                     <span class="spn_must_field">*</span>

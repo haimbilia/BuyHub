@@ -405,7 +405,11 @@
                             if (0 < field.parent().hasClass('groupFieldsJs')) {
                                 field.parent().after(errorlist.empty());
                             } else {
-                                field.after(errorlist.empty());
+                                if (field.parent().hasClass('input-group')) {
+                                    field.parent().after(errorlist.empty());
+                                } else {
+                                    field.after(errorlist.empty());
+                                }
                             }
                         }
                         break;
