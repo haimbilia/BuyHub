@@ -7,7 +7,7 @@ class RequestForQuotesController extends MyAppController
         parent::__construct($action);
         $this->loggedUserId = UserAuthentication::getLoggedUserId(true);
         if (1 > FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0)) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_RFQ_MODULE_IS_NOT_ENABLED', $this->siteLangId), true);
         }
 
         if (UserAuthentication::isUserLogged() && !User::isBuyer(true)) {
@@ -127,7 +127,7 @@ class RequestForQuotesController extends MyAppController
 
             $reviews = FatApp::getDb()->fetch($selProdReviewObj->getResultSet());
         }
-
+        
         $address = new Address();
         $addresses = $address->getData(Address::TYPE_USER, UserAuthentication::getLoggedUserId(true), sessionId: session_id());
         $defaultAddress = current($addresses);

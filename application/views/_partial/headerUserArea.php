@@ -24,11 +24,15 @@ if (UserAuthentication::isUserLogged()) {
         $dashboardUrl = UrlHelper::generateUrl('Account', '', [], CONF_WEBROOT_DASHBOARD, null, false, false, false);
         $dashboardOrgUrl = UrlHelper::generateUrl('Account', '', [], CONF_WEBROOT_DASHBOARD, null, false, $getOrgUrl, false);
     }
-} ?>
-<button class="btn btn-outline-brand btn-sm btn-rfq" type="button" onclick="requestForQuoteFn(0);">
-    <?php echo Labels::getLabel('LBL_REQUEST_FOR_QUOTE', $siteLangId); ?>
-</button>
-<?php if ($layoutType == applicationConstants::SCREEN_DESKTOP) {
+}
+
+if (0 < FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0)) { ?>
+    <button class="btn btn-outline-brand btn-sm btn-rfq" type="button" onclick="requestForQuoteFn(0);">
+        <?php echo Labels::getLabel('LBL_REQUEST_FOR_QUOTE', $siteLangId); ?>
+    </button>
+<?php }
+
+if ($layoutType == applicationConstants::SCREEN_DESKTOP) {
     if (!UserAuthentication::isUserLogged()) {
         if (UserAuthentication::isGuestUserLogged()) { ?>
             <li class="quick-nav-item item-desktop">
