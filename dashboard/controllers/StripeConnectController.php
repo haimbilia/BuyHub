@@ -89,6 +89,8 @@ class StripeConnectController extends PaymentMethodBaseController
         /* Check if user account has errors. */
         $this->stripeConnect->checkUserAccountIsIncomplete();
 
+        $accountEnv = $this->stripeConnect->getAccountEnv($this->userParentId, $accountId);
+        $this->set('accountEnv', $accountEnv);
         $this->set('isSubUser', (0 < (int) $this->userInfo['user_parent']));
         $this->set('userAccountErrors', $this->stripeConnect->getError());
         $this->set('loginUrl', $this->stripeConnect->getLoginUrl());

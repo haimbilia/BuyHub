@@ -3176,6 +3176,10 @@ class AccountController extends LoggedUserController
 
     public function truncateDataRequestPopup()
     {
+        if (UserAuthentication::isGuestUserLogged()) {
+            LibHelper::exitWithError(Labels::getLabel("ERR_UNAUTHORISED_ACCESS", $this->siteLangId));
+        }
+
         $this->_template->render(false, false);
     }
 
@@ -3223,6 +3227,10 @@ class AccountController extends LoggedUserController
 
     public function requestDataForm()
     {
+        if (UserAuthentication::isGuestUserLogged()) {
+            LibHelper::exitWithError(Labels::getLabel("ERR_UNAUTHORISED_ACCESS", $this->siteLangId));
+        }
+
         $userObj = new User($this->userId);
         $srch = $userObj->getUserSearchObj(array('credential_username', 'credential_email', 'user_name'));
         $rs = $srch->getResultSet();
@@ -3254,6 +3262,10 @@ class AccountController extends LoggedUserController
 
     public function setupRequestData()
     {
+        if (UserAuthentication::isGuestUserLogged()) {
+            LibHelper::exitWithError(Labels::getLabel("ERR_UNAUTHORISED_ACCESS", $this->siteLangId));
+        }
+
         $frm = $this->getRequestDataForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (false === $post) {

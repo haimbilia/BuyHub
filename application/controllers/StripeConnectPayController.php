@@ -399,13 +399,26 @@ class StripeConnectPayController extends PaymentController
         }
 
         $chargeResponse = isset($payload['data']['object']['charges']['data']) ? current($payload['data']['object']['charges']['data']) : [];
+        
         if (empty($chargeResponse)) {
-            $error = [
-                'msg' => Labels::getLabel('ERR_INVALID_ORDER_CHARGE', $this->siteLangId),
-                'response' => $payload,
-            ];
-            SystemLog::transaction(json_encode($error), self::KEY_NAME . "-" . $orderId);
-            return;
+            $latestCharge = isset($payload['data']['object']['latest_charge']) ? $payload['data']['object']['latest_charge'] : '';
+            if(!$this->stripeConnect->doChargeRetrieve($latestCharge)) {
+                $error = [
+                    'msg' => Labels::getLabel('ERR_INVALID_ORDER_CHARGE', $this->siteLangId),
+                    'response' => $payload,
+                ];
+                SystemLog::transaction(json_encode($error), self::KEY_NAME . "-" . $orderId);
+                return;
+            }
+            $chargeResponse = json_decode(json_encode($this->stripeConnect->getResponse()), true);
+            if (empty($chargeResponse)) {
+                $error = [
+                    'msg' => Labels::getLabel('ERR_INVALID_ORDER_CHARGE', $this->siteLangId),
+                    'response' => $payload,
+                ];
+                SystemLog::transaction(json_encode($error), self::KEY_NAME . "-" . $orderId);
+                return;
+            }
         }
 
         $chargeId = $chargeResponse['id'];
