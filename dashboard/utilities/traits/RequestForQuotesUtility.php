@@ -134,6 +134,7 @@ trait RequestForQuotesUtility
         $this->set("approvalStatusArr", RequestForQuote::getApprovalStatusArr($this->siteLangId));
         $this->set("statusArr", RequestForQuote::getStatusArr($this->siteLangId));
         $this->set("isSeller", $this->isSeller);
+        $this->set("isBuyer", $this->isBuyer);
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }
