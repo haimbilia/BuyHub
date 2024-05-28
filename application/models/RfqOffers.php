@@ -73,7 +73,7 @@ class RfqOffers extends MyAppModel
         if (!$this->save()) {
             $msg = $this->getError();
             if (false !== strpos(strtolower($msg), 'duplicate')) {
-                $msg = Labels::getLabel('ERR_DUPLICATE_OFFER.');
+                $msg = Labels::getLabel('ERR_DUPLICATE_OFFER_WITH_SAME_QUANTITY.');
             }
             $this->error = $msg;
             return false;
@@ -664,6 +664,7 @@ class RfqOffers extends MyAppModel
         $srch->addCondition('offer_quantity', '=', $qty);
         $srch->addCondition('offer_deleted', '=', applicationConstants::NO);
         $srch->addCondition('rlo_seller_user_id', '=', $sellerId);
+        $srch->addCondition('rlo_deleted', '=', applicationConstants::NO);
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
         $srch->addFld('offer_id');
