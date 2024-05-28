@@ -265,9 +265,9 @@ trait RfqOffersUtility
 
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $rfqOfferData = (array)RfqOffers::getAttributesById($recordId, RfqOffers::FIELDS);
-        if (0 < $recordId && $rfqOfferData['offer_status'] != RfqOffers::STATUS_OPEN) {
+        /* if (0 < $recordId && $rfqOfferData['offer_status'] != RfqOffers::STATUS_OPEN) {
             LibHelper::exitWithError(Labels::getLabel('LBL_INVALID_OFFER', $this->siteLangId), true);
-        }
+        } */
 
         $frm = $this->getForm();
         $ctrOfferId = FatApp::getPostedData('offer_counter_offer_id', FatUtility::VAR_INT, 0);
