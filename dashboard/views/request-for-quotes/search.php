@@ -62,6 +62,7 @@
                                 'class' => 'actions-link',
                                 'href' => 'javascript:void(0)',
                                 'onclick' => 'viewRfq("' . $row['rfq_id'] . '", ' . $visibilityType . ');',
+                                'data-bs-toggle' => 'tooltip',
                                 'title' => Labels::getLabel('LBL_VIEW', $siteLangId)
                             ),
                             '<svg class="svg" width="18" height="18">
@@ -80,10 +81,12 @@
                                     'a',
                                     array(
                                         'class' => 'actions-link',
+                                        'data-bs-toggle' => 'tooltip',
                                         'href' => UrlHelper::generateUrl(($isSeller ? 'Seller' : '') . 'RfqOffers', $action, [$row['rfq_id']]),
                                         'title' => Labels::getLabel('LBL_OFFERS', $siteLangId)
                                     ),
                                     '<svg class="svg" width="18" height="18">
+
                                     <use
                                         xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#list">
                                     </use>
@@ -108,6 +111,25 @@
                                     true
                                 );
                             }
+                        }
+
+                        if ($isBuyer) {
+                            $li = $ul->appendElement("li", ['class' => 'actions-item']);
+                            $li->appendElement(
+                                'a',
+                                array(
+                                    'class' => 'actions-link',
+                                    'data-bs-toggle' => 'tooltip',
+                                    'href' => UrlHelper::generateUrl('RequestForQuotes', 'downloadRfqCopy', [$row['rfq_id']]),
+                                    'title' => Labels::getLabel('LBL_DOWNLOAD_RFQ_COPY', $siteLangId)
+                                ),
+                                '<svg class="svg" width="18" height="18">
+                                    <use
+                                        xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#download">
+                                    </use>
+                                </svg>',
+                                true
+                            );
                         }
                         break;
                     default:

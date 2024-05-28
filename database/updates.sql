@@ -524,7 +524,6 @@ INSERT INTO `tbl_collections_lang` (`collectionlang_collection_id`, `collectionl
 ((SELECT collection_id FROM `tbl_collections` WHERE collection_type = 11 AND collection_layout_type  = 31 AND collection_identifier = 'Content Block 2'), 1, 'Content Block 2', '\r\n<section class=\"section\" data-collection=\"collection-cms\">    \r\n	<div class=\"container\">        \r\n		<div class=\"section-head section-head-space\">            \r\n			<div class=\"section-heading\">                \r\n				<h2>                    Discover countless offerings curated to suit your business requirements.</h2>            </div>            \r\n			<div class=\"section-action\">                \r\n				<div class=\"category-number\">                    \r\n					<div class=\"category-number-item\">                        <span class=\"number\">100M+</span>                        \r\n						<p>products</p>                    </div>                    \r\n					<div class=\"category-number-item\"><span class=\"number\">80K+</span>                        \r\n						<p>suppliers</p>                    </div>                    \r\n					<div class=\"category-number-item\"><span class=\"number\">4,250</span>                        \r\n						<p>product categories\r\n                        </p>                    </div>                    \r\n					<div class=\"category-number-item\"><span class=\"number\">100+</span>                        \r\n						<p>countries and regions</p>                    </div>                </div>            </div>        </div>    </div></section>', '')
 ON DUPLICATE KEY UPDATE collection_name = VALUES(collection_name), collection_description = VALUES(collection_description);
 
-
 ALTER TABLE `tbl_rfq_latest_offers` ADD `rlo_seller_acceptance` TINYINT NOT NULL AFTER `rlo_accepted_offer_id`, ADD `rlo_buyer_acceptance` TINYINT NOT NULL AFTER `rlo_seller_acceptance`;
 
 ALTER TABLE `tbl_rfq` ADD `rfq_visibility_type` TINYINT NOT NULL DEFAULT '2' AFTER `rfq_lang_id`;
@@ -532,3 +531,6 @@ UPDATE `tbl_rfq` SET `rfq_visibility_type`='1' WHERE `rfq_selprod_id` = 0 AND `r
 ALTER TABLE `tbl_rfq` ADD `rfq_prodcat_id` INT NOT NULL AFTER `rfq_title`;
 ALTER TABLE `tbl_rfq` ADD `rfq_product_type` TINYINT NOT NULL AFTER `rfq_number`;
 
+INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES 
+('LBL_DOWNLOAD_RFQ_COPY', 1, 'Download RFQ Copy', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
