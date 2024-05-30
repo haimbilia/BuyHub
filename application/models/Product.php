@@ -1118,15 +1118,11 @@ class Product extends MyAppModel
         if ($userId > 0) {
             $srch->addCondition('pshold_user_id', '=', $userId, 'AND');
         }
-        $srch->addMultipleFields(array('sum(pshold_selprod_stock) as stockHold'));
+        $srch->addMultipleFields(array('IFNULL(SUM(pshold_selprod_stock), 0) as stockHold'));
         $srch->setPageNumber(1);
         $srch->setPageSize(1);
-        $rs = $srch->getResultSet();
-        $stockHoldRow = FatApp::getDb()->fetch($rs);
-        if ($stockHoldRow == false) {
-            return 0;
-        }
-        return $stockHoldRow['stockHold'];
+        $stockHoldRow = FatApp::getDb()->fetch($srch->getResultSet());
+        return $stockHoldRow['stockHold'] ?? 0;
     }
 
     public function addUpdateUserFavoriteProduct(int $user_id, int $selProdId)
