@@ -374,7 +374,7 @@ class Shipping
                 continue;
             }
 
-            $shippingApiObj->setAddress($shippingAddressDetail['addr_name'], $shippingAddressDetail['addr_address1'], $shippingAddressDetail['addr_address2'], $shippingAddressDetail['addr_city'], $shippingAddressDetail['state_name'], $shippingAddressDetail['addr_zip'], $shippingAddressDetail['country_code'], $shippingAddressDetail['addr_phone']);
+            $shippingApiObj->setAddress($shippingAddressDetail['addr_name'], $shippingAddressDetail['addr_address1'], $shippingAddressDetail['addr_address2'], $shippingAddressDetail['addr_city'], $shippingAddressDetail['state_name'], $shippingAddressDetail['addr_zip'], $shippingAddressDetail['country_code'], $shippingAddressDetail['addr_phone'], $shippingAddressDetail['state_code']);
 
             if (empty($product['shippack_length']) || empty($product['shippack_width']) || empty($product['shippack_height']) || empty($product['shippack_units'])) {
                 $msg = Labels::getLabel('MSG_MISSING_LENGTH_/_WIDTH_/_HEIGHT_OR_UNIT_PARAMS_FOR_"{PRODUCT}"._PLEASE_BIND_CORRECT_PACKAGE.', $this->langId);
