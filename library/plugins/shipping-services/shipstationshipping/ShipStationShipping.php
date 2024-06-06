@@ -215,7 +215,7 @@ class ShipStationShipping extends ShippingServicesBase
             'serviceCode' => null,
             'packageCode' => null,
             'fromPostalCode' => $shipFromPostalCode,
-            'toState' => $this->address['state'],
+            'toState' => !empty($this->address['state_code']) ? $this->address['state_code'] : $this->address['state'],
             'toCountry' => $this->address['country'],
             'toPostalCode' => $this->address['postalCode'],
             'toCity' => $this->address['city'],
@@ -394,7 +394,7 @@ class ShipStationShipping extends ShippingServicesBase
      * @param  string $phone
      * @return bool
      */
-    public function setAddress(string $name, string $stt1, string $stt2, string $city, string $state, string $zip, string $countryCode, string $phone): bool
+    public function setAddress(string $name, string $stt1, string $stt2, string $city, string $state, string $zip, string $countryCode, string $phone, string $stateCode = ''): bool
     {
         $this->address = [];
 
@@ -404,6 +404,7 @@ class ShipStationShipping extends ShippingServicesBase
         $this->address['street2'] = $stt2;
         $this->address['city'] = $city;
         $this->address['state'] = $state;
+        $this->address['state_code'] = $stateCode;
         $this->address['postalCode'] = $zip;
         $this->address['country'] = $countryCode;
         $this->address['phone'] = $phone;
