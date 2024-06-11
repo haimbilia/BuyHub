@@ -59,7 +59,8 @@ foreach ($arrListing as $sn => $row) {
             case 'credential_username':
                 $global = '';
                 if (RequestForQuote::VISIBILITY_TYPE_OPEN == $row['rfq_visibility_type']) {
-                    $global = HtmlHelper::getStatusHtml(HtmlHelper::INFO, Labels::getLabel('LBL_OPEN'));
+                    $labelArr = RequestForQuote::getSellerLinkingTypeArr($siteLangId);
+                    $global = HtmlHelper::getStatusHtml(HtmlHelper::INFO, $labelArr[$row['rfq_visibility_type']]);
                 }
                 $href = "javascript:void(0)";
                 $onclick = ($canViewUsers ? 'redirectUser(' . $row['user_id'] . ')' : '');

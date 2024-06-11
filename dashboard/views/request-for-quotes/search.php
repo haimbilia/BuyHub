@@ -22,7 +22,8 @@
                         $url = 0 < $row['rfq_selprod_id'] ? UrlHelper::generateUrl('Products', 'view', array($row['rfq_selprod_id']), CONF_WEBROOT_FRONTEND) : 'javascript:void(0)';
                         $global = '';
                         if (RequestForQuote::VISIBILITY_TYPE_OPEN == $row['rfq_visibility_type']) {
-                            $global = HtmlHelper::getStatusHtml(HtmlHelper::INFO, Labels::getLabel('LBL_OPEN'));
+                            $labelArr = RequestForQuote::getSellerLinkingTypeArr($siteLangId);
+                            $global = HtmlHelper::getStatusHtml(HtmlHelper::INFO, $labelArr[$row['rfq_visibility_type']]);
                         }
                         $htm = '<div>
                                     <span class="product-profile__title">
