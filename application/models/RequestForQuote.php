@@ -52,7 +52,7 @@ class RequestForQuote extends MyAppModel
 
     public const VISIBILITY_TYPE_OPEN = 1;
     public const VISIBILITY_TYPE_CLOSED = 2;
-    
+
     public const SELLER_LINKING_OPEN = 1;
     public const SELLER_LINKING_FAVOURITE = 2;
     public const SELLER_LINKING_ANY = 3;
@@ -650,13 +650,13 @@ class RequestForQuote extends MyAppModel
             self::VISIBILITY_TYPE_CLOSED => Labels::getLabel('LBL_CLOSED', $langId),
         ];
     }
-    
+
     public static function getSellerLinkingTypeArr(int $langId): array
     {
         return [
-            self::SELLER_LINKING_OPEN => Labels::getLabel('LBL_OPEN', $langId),
-            self::SELLER_LINKING_FAVOURITE => Labels::getLabel('LBL_FAVOURITE', $langId),
-            self::SELLER_LINKING_ANY => Labels::getLabel('LBL_ANY', $langId),
+            self::SELLER_LINKING_OPEN => Labels::getLabel('LBL_ALL_SELLERS', $langId),
+            self::SELLER_LINKING_FAVOURITE => Labels::getLabel('LBL_FAVOURITE_SELLERS', $langId),
+            self::SELLER_LINKING_ANY => Labels::getLabel('LBL_SELECT_MANUALLY', $langId),
         ];
     }
 }

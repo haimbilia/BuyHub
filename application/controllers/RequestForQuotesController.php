@@ -32,7 +32,7 @@ class RequestForQuotesController extends MyAppController
             }
 
             $frm->addRadioButtons(
-                Labels::getLabel("FRM_SELLER_LINKING", $this->siteLangId),
+                Labels::getLabel("FRM_INVITE_TO", $this->siteLangId),
                 'rfq_seller_linking_type',
                 $sellerLinkingTypeArr,
                 RequestForQuote::SELLER_LINKING_OPEN,
@@ -127,7 +127,7 @@ class RequestForQuotesController extends MyAppController
 
             $reviews = FatApp::getDb()->fetch($selProdReviewObj->getResultSet());
         }
-        
+
         $address = new Address();
         $addresses = $address->getData(Address::TYPE_USER, UserAuthentication::getLoggedUserId(true), sessionId: session_id());
         $defaultAddress = current($addresses);
