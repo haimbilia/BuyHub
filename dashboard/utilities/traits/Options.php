@@ -6,7 +6,7 @@ trait Options
     {
         $this->userPrivilege->canViewProductOptions(UserAuthentication::getLoggedUserId());
         $canAddCustomProd = FatApp::getConfig('CONF_ENABLED_SELLER_CUSTOM_PRODUCT', FatUtility::VAR_INT, 0);
-        if (1 > $canAddCustomProd) {
+        if (1 > $canAddCustomProd || FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
             FatApp::redirectUser(UrlHelper::generateUrl('Seller'));
         }
         $this->set('canEdit', $this->userPrivilege->canEditProductOptions(UserAuthentication::getLoggedUserId(), true));

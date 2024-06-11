@@ -11,7 +11,7 @@ $plugin = new Plugin();
         $userPrivilege->canViewShop(UserAuthentication::getLoggedUserId(), true) ||
         $userPrivilege->canViewProducts(UserAuthentication::getLoggedUserId(), true) ||
         $userPrivilege->canViewProductOptions(UserAuthentication::getLoggedUserId(), true) ||
-        $userPrivilege->canViewTaxCategory(UserAuthentication::getLoggedUserId(), true) || 
+        $userPrivilege->canViewTaxCategory(UserAuthentication::getLoggedUserId(), true) ||
         $userPrivilege->canViewSellerRequests(UserAuthentication::getLoggedUserId(), true)
     ) { ?>
         <li class="dashboard-menu-item dropdownJs">
@@ -57,7 +57,7 @@ $plugin = new Plugin();
                     </li>
                 <?php } ?>
                 <?php $canAddCustomProd = FatApp::getConfig('CONF_ENABLED_SELLER_CUSTOM_PRODUCT', FatUtility::VAR_INT, 0);
-                if (0 < $canAddCustomProd && $userPrivilege->canViewProductOptions(UserAuthentication::getLoggedUserId(), true)) { ?>
+                if (0 < $canAddCustomProd && !FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0) && $userPrivilege->canViewProductOptions(UserAuthentication::getLoggedUserId(), true)) { ?>
                     <li class="menu-sub-item navItemJs">
                         <a class="menu-sub-link navLinkJs <?php echo (false === $quickSearch && $controller == 'seller' && $action == 'options') ? 'active' : ''; ?>" title="<?php echo Labels::getLabel('LBL_Product_Options', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Seller', 'options'); ?>">
                             <span class="menu-sub-title navTextJs">
@@ -85,17 +85,17 @@ $plugin = new Plugin();
                 <?php } ?>
             </ul>
         </li>
-    <?php } 
-    
+    <?php }
+
     $shippingObj = new Shipping($siteLangId);
     $shippingProfileEnabled = $userPrivilege->canViewShippingProfiles(UserAuthentication::getLoggedUserId(), true) && !FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0) && (!$shippingObj->getShippingApiObj($userParentId) || Shop::getAttributesByUserId($userParentId, 'shop_use_manual_shipping_rates'));
     $shippingPackagesEnabled = $userPrivilege->canViewShippingPackages(UserAuthentication::getLoggedUserId(), true) && FatApp::getConfig("CONF_PRODUCT_DIMENSIONS_ENABLE", FatUtility::VAR_INT, 1) && FatApp::getConfig('CONF_ENABLED_SELLER_CUSTOM_PRODUCT', FatUtility::VAR_INT, 0);
-        
+
     if (
         $shippingProfileEnabled ||
         $shippingPackagesEnabled
-    ) {        
-        ?>
+    ) {
+    ?>
         <li class="dashboard-menu-item dropdownJs">
             <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom collapsed" type="button" <?php if (false === $quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#nav-shipping" aria-expanded="true" aria-controls="collapseOne" <?php } ?> title="">
                 <span class="dashboard-menu-icon">
@@ -112,7 +112,7 @@ $plugin = new Plugin();
                 <?php } ?>
             </button>
             <ul class="menu-sub menu-sub-accordion <?php echo $collapseClass; ?>" id="nav-shipping" aria-labelledby="" data-parent="#dashboard-menu">
-                <?php               
+                <?php
                 if ($shippingProfileEnabled) {
                 ?>
                     <li class="menu-sub-item navItemJs">
@@ -132,7 +132,7 @@ $plugin = new Plugin();
                 <?php } ?>
             </ul>
         </li>
-    <?php } 
+    <?php }
     if (
         $userPrivilege->canViewSales(UserAuthentication::getLoggedUserId(), true) ||
         $userPrivilege->canViewCancellationRequests(UserAuthentication::getLoggedUserId(), true) ||

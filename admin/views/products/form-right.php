@@ -88,80 +88,82 @@ $sellerId = $productData['product_seller_id'] ?? 0;
             </div>
         </div>
     </div>
-    <div class="card card-toggle" id="variants-options">
-        <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block1" aria-expanded="false" aria-controls="stock-block1">
-            <div class="card-head-label">
-                <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_VARIANTS_&_OPTIONS', $langId); ?>
-                </h3>
-                <span class="text-muted"><?php echo Labels::getLabel('MSG_CUSTOMIZE_PRODUCT_VARIENTS_INCLUDING_SIZE_COLOR_ETC', $langId); ?></span>
-            </div>
-            <div class="card-toolbar"> <i class="dropdown-toggle-custom-arrow"></i></div>
-        </div>
-        <div class="show" id="stock-block1">
-            <div class="card-table p-0 ">
-                <?php
-                if (0 < $recordId) {
-                    echo HtmlHelper::getErrorMessageHtml(Labels::getLabel('ERR_IF_INVENTORY_IS_ALREADY_ADDED_THEN_YOU_CANNOT_BIND_FURTHER_OPTIONS.'));
-                } ?>
-                <div class="table-responsive table-scrollable js-scrollable">
-                    <table class="table table-variants" id="variantsJs" data-auto-column-width="0">
-                        <thead class="tableHeadJs">
-                            <tr>
-                                <th width="40%"><?php echo Labels::getLabel('FRM_OPTIONS', $langId) ?></th>
-                                <th width="40%"><?php echo Labels::getLabel('FRM_OPTION_VALUES', $langId) ?></th>
-                                <?php if (false === $hasInventory) { ?>
-                                    <th class="align-right" width="20%"></th>
-                                <?php } ?>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            $optionCount = count($productOptions);
-                            for ($i = 0; $i <=  (1 > $optionCount ? 0 : $optionCount - 1); $i++) {
-                                $prodOption = $productOptions[$i] ?? [];
-                                $this->includeTemplate('products/get-variant-row.php', ['langId' => $langId, 'index' => $i, 'hasInventory' => $hasInventory, 'productOption' => $prodOption]);
-                            }
-                            ?>
-                        </tbody>
-                    </table>
+    <?php if (!FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) { ?>
+        <div class="card card-toggle" id="variants-options">
+            <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block1" aria-expanded="false" aria-controls="stock-block1">
+                <div class="card-head-label">
+                    <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_VARIANTS_&_OPTIONS', $langId); ?>
+                    </h3>
+                    <span class="text-muted"><?php echo Labels::getLabel('MSG_CUSTOMIZE_PRODUCT_VARIENTS_INCLUDING_SIZE_COLOR_ETC', $langId); ?></span>
                 </div>
+                <div class="card-toolbar"> <i class="dropdown-toggle-custom-arrow"></i></div>
             </div>
-            <div class="card-body p-0">
-                <div class="separator separator-dashed my-4"></div>
-                <div class="px-4">
-                    <div class="row justify-content-between">
-                        <div class="col">
-                            <label class="label"><?php echo Labels::getLabel('LBL_PRODUCT_HAS_SAME_EAN/UPC_CODE_FOR_ALL_VARIENTS', $langId); ?></label>
+            <div class="show" id="stock-block1">
+                <div class="card-table p-0 ">
+                    <?php
+                    if (0 < $recordId) {
+                        echo HtmlHelper::getErrorMessageHtml(Labels::getLabel('ERR_IF_INVENTORY_IS_ALREADY_ADDED_THEN_YOU_CANNOT_BIND_FURTHER_OPTIONS.'));
+                    } ?>
+                    <div class="table-responsive table-scrollable js-scrollable">
+                        <table class="table table-variants" id="variantsJs" data-auto-column-width="0">
+                            <thead class="tableHeadJs">
+                                <tr>
+                                    <th width="40%"><?php echo Labels::getLabel('FRM_OPTIONS', $langId) ?></th>
+                                    <th width="40%"><?php echo Labels::getLabel('FRM_OPTION_VALUES', $langId) ?></th>
+                                    <?php if (false === $hasInventory) { ?>
+                                        <th class="align-right" width="20%"></th>
+                                    <?php } ?>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $optionCount = count($productOptions);
+                                for ($i = 0; $i <=  (1 > $optionCount ? 0 : $optionCount - 1); $i++) {
+                                    $prodOption = $productOptions[$i] ?? [];
+                                    $this->includeTemplate('products/get-variant-row.php', ['langId' => $langId, 'index' => $i, 'hasInventory' => $hasInventory, 'productOption' => $prodOption]);
+                                }
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <div class="separator separator-dashed my-4"></div>
+                    <div class="px-4">
+                        <div class="row justify-content-between">
+                            <div class="col">
+                                <label class="label"><?php echo Labels::getLabel('LBL_PRODUCT_HAS_SAME_EAN/UPC_CODE_FOR_ALL_VARIENTS', $langId); ?></label>
+                            </div>
+                            <div class="col-auto">
+                                <?php
+                                $fld = $frm->getField('upc_type');
+                                HtmlHelper::configureSwitchForRadio($fld);
+                                $fld->addOptionListTagAttribute('class', 'list-radio my-2');
+                                $fld->addFieldTagAttribute('onchange', 'upcType()');
+                                $fld->addFieldTagAttribute('class', 'upc_type');
+                                echo $fld->getHtml();
+                                ?>
+                            </div>
                         </div>
+                    </div>
+                    <div id="variantsListJs"></div>
+                </div>
+                <div class="card-foot">
+                    <div class="row justify-content-end">
                         <div class="col-auto">
-                            <?php
-                            $fld = $frm->getField('upc_type');
-                            HtmlHelper::configureSwitchForRadio($fld);
-                            $fld->addOptionListTagAttribute('class', 'list-radio my-2');
-                            $fld->addFieldTagAttribute('onchange', 'upcType()');
-                            $fld->addFieldTagAttribute('class', 'upc_type');
-                            echo $fld->getHtml();
-                            ?>
+                            <a class="btn btn-icon btn-outline-brand" href="<?php echo UrlHelper::generateUrl('options') ?>" target="_blank">
+                                <svg class="svg btn-icon-start" width="18" height="18">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
+                                    </use>
+                                </svg>
+                                <span><?php echo Labels::getLabel('NAV_ADD_PRODUCT_OPTION', $langId); ?></span>
+                            </a>
                         </div>
-                    </div>
-                </div>
-                <div id="variantsListJs"></div>
-            </div>
-            <div class="card-foot">
-                <div class="row justify-content-end">
-                    <div class="col-auto">
-                        <a class="btn btn-icon btn-outline-brand" href="<?php echo UrlHelper::generateUrl('options') ?>" target="_blank">
-                            <svg class="svg btn-icon-start" width="18" height="18">
-                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
-                                </use>
-                            </svg>
-                            <span><?php echo Labels::getLabel('NAV_ADD_PRODUCT_OPTION', $langId); ?></span>
-                        </a>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    <?php } ?>
     <div class="card card-toggle" id="media">
         <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block2" aria-expanded="false" aria-controls="stock-block2">
             <div class="card-head-label">

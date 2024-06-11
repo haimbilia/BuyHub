@@ -392,7 +392,7 @@ class ImportexportCommon extends FatModel
             } else {
                 $arr['product_dimension_unit_identifier'] = Labels::getLabel('LBL_Dimension_Unit_Identifier', $langId);
             } */
-            
+
             if (FatApp::getConfig("CONF_PRODUCT_WEIGHT_ENABLE", FatUtility::VAR_INT, 1)) {
                 $arr['product_weight'] = Labels::getLabel('LBL_Weight', $langId);
 
@@ -994,7 +994,7 @@ class ImportexportCommon extends FatModel
 
     public function getSettingsArr($siteConfiguration = false)
     {
-        return array(
+        $arr =  array(
             'CONF_USE_BRAND_ID' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_BRAND_ID', FatUtility::VAR_INT, 0) : false,
             'CONF_USE_CATEGORY_ID' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_CATEGORY_ID', FatUtility::VAR_INT, 0) : false,
             'CONF_USE_PRODUCT_ID' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_PRODUCT_ID', FatUtility::VAR_INT, 0) : false,
@@ -1022,6 +1022,12 @@ class ImportexportCommon extends FatModel
             'CONF_PRODUCT_BRAND_MANDATORY' => ($siteConfiguration) ? FatApp::getConfig('CONF_PRODUCT_BRAND_MANDATORY', FatUtility::VAR_INT, false) : false,
             'CONF_USE_ZONE_ID' => ($siteConfiguration) ? FatApp::getConfig('CONF_USE_ZONE_ID', FatUtility::VAR_INT, 0) : false,
         );
+
+        if (FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+            unset($arr['CONF_USE_OPTION_ID']);
+            unset($arr['CONF_OPTION_VALUE_ID']);
+        }
+        return $arr;
     }
 
     public function getSettings($userId = 0)

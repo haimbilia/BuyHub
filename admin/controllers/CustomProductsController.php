@@ -416,7 +416,7 @@ class CustomProductsController extends ListingBaseController
         if ($status == ProductRequest::STATUS_CANCELLED) {
             $updateData['preq_product_identifier'] = $data['preq_product_identifier'] . '-' . $preqId . '{cancelled}';
         }
-        
+
         $prodReqObj->assignValues($updateData);
 
         if (!$prodReqObj->save()) {
@@ -697,10 +697,10 @@ class CustomProductsController extends ListingBaseController
         CalculativeDataRecord::updateSelprodRequestCount();
         CalculativeDataRecord::updateCustomCatalogCount();
         $db->commitTransaction();
-        
+
         if ($status == ProductRequest::STATUS_APPROVED) {
             Product::updateMinPrices($product_id);
-        }       
+        }
         $this->set('msg', Labels::getLabel('MSG_STATUS_UPDATED_SUCCESSFULLY', $this->siteLangId));
         $this->set('preq_id', $preqId);
         $this->_template->render(false, false, 'json-success.php');
@@ -804,8 +804,10 @@ class CustomProductsController extends ListingBaseController
         $upcCodeData = [];
         if (!empty($upcCodes)) {
             $upcCodes = json_decode($upcCodes, true);
-            foreach ($upcCodes as $key => $upcCode) {
-                $upcCodeData[$key]['upc_code'] = $upcCode;
+            if (!empty($upcCodes)) {
+                foreach ($upcCodes as $key => $upcCode) {
+                    $upcCodeData[$key]['upc_code'] = $upcCode;
+                }
             }
         }
 

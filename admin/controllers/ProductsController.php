@@ -290,7 +290,7 @@ class ProductsController extends ListingBaseController
                 }
             }
 
-            $productCategories = $this->modelObj->getProductCategories($recordId);           
+            $productCategories = $this->modelObj->getProductCategories($recordId);
             if (!empty($productCategories)) {
                 $selectedCat = current($productCategories)['prodcat_id'];
                 $productData['ptc_prodcat_id'] = $selectedCat;
@@ -500,7 +500,7 @@ class ProductsController extends ListingBaseController
             LibHelper::exitWithError($prodObj->getError(), true);
         }
         $recordId = $prodObj->getMainTableRecordId();
-        
+
         $this->setLangData($prodObj, [
             $prodObj::tblFld('name') => $post[$prodObj::tblFld('name')],
             $prodObj::tblFld('description') => $post[$prodObj::tblFld('description')],
@@ -603,15 +603,17 @@ class ProductsController extends ListingBaseController
         }
 
         UpcCode::remove($recordId);
-        foreach ($post['product_upcs'] as $optionsIds => $upcCode) {
-            $dataToSave = array(
-                'upc_code' => $upcCode,
-                'upc_product_id' => $recordId,
-                'upc_options' => $optionsIds,
-            );
-            if (!$db->insertFromArray(UpcCode::DB_TBL, $dataToSave, false, [], $dataToSave)) {
-                $db->rollbackTransaction();
-                LibHelper::exitWithError($db->getError(), true);
+        if (isset($post['product_upcs']) && !empty($post['product_upcs'])) {
+            foreach ($post['product_upcs'] as $optionsIds => $upcCode) {
+                $dataToSave = array(
+                    'upc_code' => $upcCode,
+                    'upc_product_id' => $recordId,
+                    'upc_options' => $optionsIds,
+                );
+                if (!$db->insertFromArray(UpcCode::DB_TBL, $dataToSave, false, [], $dataToSave)) {
+                    $db->rollbackTransaction();
+                    LibHelper::exitWithError($db->getError(), true);
+                }
             }
         }
 

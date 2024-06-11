@@ -31,7 +31,10 @@ trait CatalogProduct
         $fld->requirements()->setRequired();
 
         if (0 == $isRequested) {
-            $frm->addSelectBox(Labels::getLabel('FRM_USER', $langId), 'product_seller_id', [], '', [], Labels::getLabel('FRM_ADMIN', $langId));
+            $fld = $frm->addSelectBox(Labels::getLabel('FRM_USER', $langId), 'product_seller_id', [], '', [], Labels::getLabel('FRM_ADMIN', $langId));
+            if (FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+                $fld->requirements()->setRequired();
+            }
         }
         $frm->addRequiredField(Labels::getLabel('FRM_PRODUCT_IDENTIFIER', $langId), 'product_identifier');
         $frm->addRequiredField(Labels::getLabel('FRM_PRODUCT_NAME', $langId), 'product_name');
@@ -105,9 +108,12 @@ trait CatalogProduct
             }
         }
 
-        $fld = $frm->addRadioButtons('', 'upc_type', applicationConstants::getYesNoArr($langId), applicationConstants::YES);
-        $fld->requirements()->setRequired();
-
+        if (FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+            $frm->addHiddenField('', 'upc_type', applicationConstants::YES);
+        } else {
+            $fld = $frm->addRadioButtons('', 'upc_type', applicationConstants::getYesNoArr($langId), applicationConstants::YES);
+            $fld->requirements()->setRequired();
+        }
         $frm->addHiddenField('', 'product_upcs');
         $frm->addHiddenField('', 'options');
         $frm->addHiddenField('', 'optionValues');
@@ -252,7 +258,7 @@ trait CatalogProduct
             }
         }
         $post['product_upcs'] = $post['product_upcs'] ?? [];
-        if (isset($post['product_upcs'])) {
+        if (isset($post['product_upcs']) && !empty($post['product_upcs'])) {
             foreach ($post['product_upcs'] as $optionsIds => $upcCode) {
                 if (empty($upcCode)) {
                     unset($post['product_upcs'][$optionsIds]);
