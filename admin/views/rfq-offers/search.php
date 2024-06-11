@@ -191,7 +191,7 @@ if (!isset($tbody)) {
                                     </svg> <?php echo Labels::getLabel('LBL_ACCEPT'); ?>
                                 </button>
                             <?php }
-                            if (!in_array($row['counter_offer_status'], [RfqOffers::STATUS_ACCEPTED, RfqOffers::STATUS_REJECTED])) { ?>
+                            if (!in_array($row['counter_offer_status'], [RfqOffers::STATUS_ACCEPTED, RfqOffers::STATUS_REJECTED]) && $canReplyOffer) { ?>
                                 <button class="btn btn-reject btn-icon" onClick="reject(<?php echo $row['counter_offer_id']; ?>,<?php echo $rfqId; ?>)" data-bs-toggle="tooltip" title="<?php echo Labels::getLabel('LBL_Reject', $siteLangId); ?>">
                                     <svg class="svg" width="16" height="16">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#reject">

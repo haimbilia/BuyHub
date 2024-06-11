@@ -18,18 +18,14 @@
                             <div class="industry-carousal-item">
                             <?php } ?>
                             <?php
-                            $afile_record_id = 0;
-                            $afile_lang_id = 0;
-                            $afile_id = 0;
-                            $uploadedTime = '';
-                            $image = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_ICON, $rootParentId);
-                            if (!empty($image)) {
-                                $uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);
-                                $afile_record_id = $image['afile_record_id'];
-                                $afile_lang_id = $image['afile_lang_id'];
-                                $afile_id = $image['afile_id'];
-                                /*   $catIconUrl = UrlHelper::generateFileUrl('Category', ImageDimension::VIEW_ICON, array($image['afile_record_id'], $image['afile_lang_id'], ImageDimension::VIEW_THUMB, $image['afile_id']), CONF_WEBROOT_FRONT_URL) . $uploadedTime; */
+                            $image = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_ICON, $category['prodcat_id']);
+                            if (!empty($image) && $image['afile_id'] <= 0) {
+                                $image = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_ICON, $rootParentId);
                             }
+                            $uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);
+                            $afile_record_id = $image['afile_record_id'];
+                            $afile_lang_id = $image['afile_lang_id'];
+                            $afile_id = $image['afile_id'];
                             $catIconUrl = UrlHelper::generateFileUrl('Category', ImageDimension::VIEW_ICON, array($afile_record_id, $afile_lang_id, ImageDimension::VIEW_THUMB, $afile_id), CONF_WEBROOT_FRONT_URL) . $uploadedTime;
                             $prodCatUrl = UrlHelper::generateUrl('Category', 'View', array($category['prodcat_id']));
                             ?>

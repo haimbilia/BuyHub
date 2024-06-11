@@ -8,7 +8,19 @@
             <div class="offers-card-body">
                 <div class="offers-card-head">
                     <h6 class="h6"><?php echo Labels::getLabel('LBL_SELLER_LATEST_OFFER', $siteLangId); ?><span>(<?php echo $offersCountArr[$row['offer_primary_offer_id']]['sellerOffersCount'] ?? 0; ?> <?php echo Labels::getLabel('LBL_OFFERS', $siteLangId); ?>)</span></h6>
-                    <?php if ($canEdit && RequestForQuote::STATUS_CLOSED != $row['rfq_status'] && RfqOffers::STATUS_OPEN == $row['offer_status'] && !in_array(RfqOffers::STATUS_ACCEPTED, [$row['offer_status'], $row['counter_offer_status']])) { ?>
+                    <?php 
+                    $canEditOffer = (
+                        (
+                            RfqOffers::STATUS_OPEN == $row['offer_status'] ||
+                            RfqOffers::STATUS_REJECTED == $row['offer_status'] ||
+                            (
+                                RfqOffers::STATUS_COUNTERED == $row['offer_status'] &&
+                                $row['rlo_seller_offer_id'] > $row['rlo_buyer_offer_id']
+                            )
+                        ) &&
+                        !in_array(RfqOffers::STATUS_ACCEPTED, [$row['offer_status'], $row['counter_offer_status']])
+                    );
+                    if ($canEdit && RequestForQuote::STATUS_CLOSED != $row['rfq_status'] && $canEditOffer) { ?>
                         <div class="offers-card-head-action">
                             <button class="link-underline" onClick="editRecord(<?php echo $row['offer_id']; ?>,<?php echo  $rfqId; ?>)" data-bs-toggle="tooltip" title="<?php echo Labels::getLabel('LBL_EDIT', $siteLangId); ?>">
                                 <?php echo Labels::getLabel('LBL_EDIT'); ?>
@@ -139,14 +151,20 @@
                             <span>(<?php echo $offersCountArr[$row['offer_primary_offer_id']]['buyerOffersCount'] ?? 0; ?> <?php echo Labels::getLabel('LBL_OFFERS', $siteLangId); ?>)</span>
                         </h6>
                         <?php if (0 < $row['counter_offer_id']) {
-                            if ($canEdit && RequestForQuote::STATUS_CLOSED != $row['rfq_status'] && !in_array(RfqOffers::STATUS_ACCEPTED, [$row['offer_status'], $row['counter_offer_status']])) {
-                                if (RfqOffers::STATUS_OPEN == $row['counter_offer_status'] && !in_array(RfqOffers::STATUS_REJECTED, [$row['offer_status'], $row['counter_offer_status']])) { ?>
-                                    <div class="offer-block-head-action">
-                                        <button class="link-underline" onClick="counter(<?php echo $row['counter_offer_id']; ?>,<?php echo  $rfqId; ?>)" data-bs-toggle="tooltip" title="<?php echo Labels::getLabel('LBL_COUNTER', $siteLangId); ?>">
-                                            <?php echo Labels::getLabel('LBL_REPLY'); ?>
-                                        </button>
-                                    </div>
-                        <?php }
+                            $canReplyOffer = (
+                                RfqOffers::STATUS_COUNTERED == $row['offer_status'] &&
+                                FatUtility::int($row['rlo_buyer_offer_id']) > FatUtility::int($row['rlo_seller_offer_id']) &&
+                                RequestForQuote::STATUS_CLOSED != $row['rfq_status'] &&
+                                !in_array(RfqOffers::STATUS_ACCEPTED, [$row['offer_status'], $row['counter_offer_status']]) &&
+                                !in_array(RfqOffers::STATUS_REJECTED, [$row['offer_status'], $row['counter_offer_status']])
+                            );
+                            if ($canEdit && $canReplyOffer) { ?>
+                                <div class="offer-block-head-action">
+                                    <button class="link-underline" onClick="counter(<?php echo $row['counter_offer_id']; ?>,<?php echo  $rfqId; ?>)" data-bs-toggle="tooltip" title="<?php echo Labels::getLabel('LBL_COUNTER', $siteLangId); ?>">
+                                        <?php echo Labels::getLabel('LBL_REPLY'); ?>
+                                    </button>
+                                </div>
+                        <?php
                             }
                         } ?>
                     </div>
