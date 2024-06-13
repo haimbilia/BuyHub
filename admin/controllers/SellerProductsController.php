@@ -287,123 +287,7 @@ class SellerProductsController extends ListingBaseController
     public function setUp()
     {
         $this->objPrivilege->canEditSellerProducts();
-
-        $post = FatApp::getPostedData();
-        $productId = Fatutility::int($post['selprod_product_id']);
-
-        $frm = $this->getSellerProductForm($productId);
-        $post = $frm->getFormDataFromArray($post);
-        if (false === $post) {
-            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
-        }
-
-        $selProdId = Fatutility::int($post['selprod_id']);
-
-        $productRow = Product::getAttributesById($productId, array('product_type'));
-        if ($productRow['product_type'] == Product::PRODUCT_TYPE_DIGITAL && $post['selprod_max_download_times'] == 0) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_DOWNLOAD_TIMES_MUST_BE_-1_OR_GREATER_THAN_ZERO', $this->siteLangId), true);
-        }
-
-        if ($productRow['product_type'] == Product::PRODUCT_TYPE_DIGITAL && $post['selprod_download_validity_in_days'] == 0) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_DOWNLOAD_VALIDITY_MUST_BE_-1_OR_GREATER_THAN_ZERO', $this->siteLangId), true);
-        }
-
-        $selprod_stock = Fatutility::int($post['selprod_stock']);
-        $selprod_min_order_qty = Fatutility::int($post['selprod_min_order_qty']);
-        $selprod_threshold_stock_level = Fatutility::int($post['selprod_threshold_stock_level']);
-        $useShopPolicy = FatApp::getPostedData('use_shop_policy', FatUtility::VAR_INT, 0);
-        $post['use_shop_policy'] = $useShopPolicy;
-
-        if (!$productId) {
-            LibHelper::exitWithError($this->str_invalid_request_id, true);
-        }
-        $productRow = Product::getAttributesById($productId, array('product_id', 'product_active', 'product_seller_id'));
-        if (!$productRow) {
-            LibHelper::exitWithError($this->str_invalid_request_id, true);
-        }
-
-        $status = Fatutility::int($post['selprod_active']);
-        if (0 < $selProdId) {
-            $selprodTitle = SellerProduct::getAttributesByLangId($this->siteLangId, $selProdId, 'selprod_title');
-            $oldSelprodData = SellerProduct::getAttributesById($selProdId, ['selprod_user_id', 'selprod_active']);
-            if (
-                $oldSelprodData['selprod_active'] != $status &&
-                $status == applicationConstants::ACTIVE &&
-                FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0) &&
-                SellerProduct::getActiveCount($oldSelprodData['selprod_user_id']) >= SellerPackages::getAllowedLimit($oldSelprodData['selprod_user_id'], $this->siteLangId, 'ossubs_inventory_allowed')
-            ) {
-                LibHelper::exitWithError(CommonHelper::replaceStringData(Labels::getLabel('ERR_UNABLE_TO_CHANGE_STATUS_FOR_"{PRODUCT-NAME}"._AS_SELLER_SUBSCRIPTION_PACKAGE_LIMIT_CROSSED.', $this->siteLangId), ['{PRODUCT-NAME}' => $selprodTitle]), true);
-            }
-        }
-
-        $srch = new SearchBase(SellerProductSpecialPrice::DB_TBL);
-        $srch->addCondition('splprice_selprod_id', '=', $selProdId);
-        $srch->addCondition('splprice_price', '>=', $post['selprod_price']);
-        $srch->addCondition('splprice_end_date', '>=', date('Y-m-d H:i:s'));
-        $srch->addFld('splprice_price');
-        $srch->addOrder('splprice_price', 'DESC');
-        $srch->doNotCalculateRecords();
-        $srch->setPageSize(1);
-        $result = FatApp::getDb()->fetch($srch->getResultSet());
-        if (is_array($result) && !empty($result)) {
-            $price = CommonHelper::displayMoneyFormat($result['splprice_price']);
-            $msg = Labels::getLabel('ERR_SELLING_PRICE_MUST_BE_GREATER_THAN_SPECIAL_PRICE_{SPECIAL-PRICE}', $this->siteLangId);
-            $msg = CommonHelper::replaceStringData($msg, ['{SPECIAL-PRICE}' => $price]);
-            LibHelper::exitWithError($msg, true);
-        }
-
-        if (isset($post['selprod_track_inventory']) && $post['selprod_track_inventory'] == Product::INVENTORY_NOT_TRACK) {
-            $post['selprod_threshold_stock_level'] = 0;
-        }
-
-        if ($post['selprod_threshold_stock_level'] == 1 && $selprod_threshold_stock_level >= $selprod_stock) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_ALERT_STOCK_LEVEL_SHOULD_BE_LESS_THAN_STOCK_QUANTITY.', $this->siteLangId), true);
-        }
-
-        if ($post['selprod_threshold_stock_level'] == 1 && ($selprod_min_order_qty > $selprod_stock || 1 > $selprod_min_order_qty)) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_MINIMUM_QUANTITY_SHOULD_BE_LESS_THAN_EQUAL_TO_STOCK_QUANTITY.', $this->siteLangId), true);
-        }
-
-        $recordObj = new SellerProduct($selProdId);
-        $recordObj->assignValues($post);
-        if (!$recordObj->save()) {
-            LibHelper::exitWithError($recordObj->getError(), true);
-        }
-
-        $selProdId = $recordObj->getMainTableRecordId();
-
-        if (!$recordObj->updateLangData(CommonHelper::getDefaultFormLangId(), ['selprod_title' => $post['selprod_title'], 'selprod_comments' => $post['selprod_comments']])) {
-            LibHelper::exitWithError($recordObj->getError(), true);
-        }
-
-        $selProdSpecificsObj = new SellerProductSpecifics($selProdId);
-        if (0 < $useShopPolicy) {
-            if (!$selProdSpecificsObj->deleteRecord()) {
-                LibHelper::exitWithError($selProdSpecificsObj->getError(), true);
-            }
-        } else {
-            $post['sps_selprod_id'] = $selProdId;
-            $selProdSpecificsObj->assignValues($post);
-            $data = $selProdSpecificsObj->getFlds();
-            if (!$selProdSpecificsObj->addNew(array(), $data)) {
-                LibHelper::exitWithError($selProdSpecificsObj->getError(), true);
-            }
-        }
-
-        /* Add Url rewriting  [  ---- */
-        $recordObj->rewriteUrlProduct($post['selprod_url_keyword']);
-        $recordObj->rewriteUrlReviews($post['selprod_url_keyword']);
-        $recordObj->rewriteUrlMoreSellers($post['selprod_url_keyword']);
-        /* --------  ] */
-
-        $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
-        if (0 < $autoUpdateOtherLangsData) {
-            $updateLangDataobj = new TranslateLangData($recordObj::DB_TBL_LANG);
-            if (false === $updateLangDataobj->updateTranslatedData($selProdId, CommonHelper::getDefaultFormLangId())) {
-                LibHelper::exitWithError($updateLangDataobj->getError(), true);
-            }
-        }
-
+        $selProdId = $this->setupInventory();
         $newTabLangId = 0;
         $languages = Language::getDropDownList(CommonHelper::getDefaultFormLangId());
         if (0 < count($languages)) {
@@ -414,8 +298,6 @@ class SellerProductsController extends ListingBaseController
                 }
             }
         }
-        CalculativeDataRecord::updateThresholdSelprodRequestCount();
-        Product::updateMinPrices($productId);
 
         $this->set('recordId', $selProdId);
         $this->set('langId', $newTabLangId);

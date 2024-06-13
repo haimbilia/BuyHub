@@ -5,6 +5,12 @@ if (0 < $recordId) {
     $displayDigitalDownloadAddBtn = ($productData['product_type'] == Product::PRODUCT_TYPE_DIGITAL && $frm->getField('product_type')->value == Product::PRODUCT_TYPE_DIGITAL  && 0 < $productData['product_seller_id']);
     $displayDigitalDownloadList = $displayDigitalDownloadAddBtn && 1 > $productData['product_attachements_with_inventory'];
 }
+if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+    $fld = $frm->getField('selprod_url_keyword');
+    $fld->setFieldTagAttribute('id', "urlrewrite_custom");
+    $fld->setFieldTagAttribute('onkeyup', "getUniqueSlugUrl(this,this.value,$selProdId)");
+    $fld->htmlAfterField = "<span class='form-text text-muted'>" . UrlHelper::generateFullUrl('Products', 'View', array($selProdId), CONF_WEBROOT_FRONTEND) . '</span>';
+}
 ?>
 <div class="content-wrapper content-space mainJs" <?php echo CommonHelper::getLayoutDirection() != $formLayout ? 'dir="' . $formLayout . '"' : ''; ?>>
     <?php
@@ -69,10 +75,10 @@ if (0 < $recordId) {
                             echo HtmlHelper::getFieldHtml($frm, 'product_type', 6, ['onchange' => 'productType(this)', 'class' => 'productTypeJs']);
                             echo HtmlHelper::getFieldHtml($frm, 'product_identifier', 12, [], Labels::getLabel('MSG_A_UNIQUE_IDENTIFIER_ASSOCIATED_FOR_PRODUCT_NAME', $langId));
                             echo HtmlHelper::getFieldHtml($frm, 'product_name', 12, [], Labels::getLabel('MSG_A_NAME_OF_THE_PRODUCT_TO_BE_LISTED', $langId));
+                            echo HtmlHelper::getFieldHtml($frm, 'selprod_url_keyword', 12);
                             echo HtmlHelper::getFieldHtml($frm, 'product_brand_id', 6, ['id' => 'product_brand_id'], '', '', ['label' => FatApp::getConfig('CONF_BRAND_REQUEST_APPROVAL', FatUtility::VAR_INT, 0) ? Labels::getLabel('FRM_REQUEST_FOR_BRAND', $langId) : Labels::getLabel('FRM_ADD_BRAND', $langId), 'attr' => ['href' => 'javascript:void(0)', 'onclick' => 'addBrandReqForm(0)', 'class' => 'link']]);
                             echo HtmlHelper::getFieldHtml($frm, 'ptc_prodcat_id', 6, ['id' => 'ptc_prodcat_id'], '', '', ['label' => FatApp::getConfig('CONF_PRODUCT_CATEGORY_REQUEST_APPROVAL', FatUtility::VAR_INT, 0) ? Labels::getLabel('FRM_REQUEST_FOR_CATEGORY', $langId) : Labels::getLabel('FRM_ADD_CATEGORY', $langId), 'attr' => ['href' => 'javascript:void(0)', 'onclick' => 'addCategoryReqForm(0)', 'class' => 'link']]);
                             echo HtmlHelper::getFieldHtml($frm, 'product_model', 6);
-                            echo HtmlHelper::getFieldHtml($frm, 'product_min_selling_price', 6);
                             $fld = $frm->getField('product_warranty');
                             if (null !== $fld) {
                             ?>
@@ -98,17 +104,77 @@ if (0 < $recordId) {
                                     </div>
                                 </div>
                             <?php }
-                            echo HtmlHelper::getFieldHtml($frm, 'product_youtube_video', 6);
+                            echo HtmlHelper::getFieldHtml($frm, 'selprod_cost', 6);
+                            echo HtmlHelper::getFieldHtml($frm, 'product_min_selling_price', 6);
+                            echo HtmlHelper::getFieldHtml($frm, 'product_youtube_video', 12);
                             echo HtmlHelper::getFieldHtml($frm, 'product_attachements_with_inventory', 6, ['class' => 'attachmentWithInventoryJs'], Labels::getLabel('FRM_PRODUCT_DOWNLOAD_ATTACHEMENTS_AT_INVENTORY_LEVEL_INFO', $langId));
                             echo HtmlHelper::getFieldHtml($frm, 'product_description', 12);
                             echo HtmlHelper::getFieldHtml($frm, 'record_id', 6);
+                            echo HtmlHelper::getFieldHtml($frm, 'selprod_id', 6);
                             echo HtmlHelper::getFieldHtml($frm, 'temp_product_id', 6, ['id' => 'temp_product_id']);
                             echo HtmlHelper::getFieldHtml($frm, 'product_warranty_unit', 6, ['id' => 'product_warranty_unit']);
                             ?>
                         </div>
                     </div>
                 </div>
-                <?php if (!FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) { ?>
+                <?php if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) { ?>
+                    <div class="card card-toggle" id="inventory">
+                        <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#inventory-block1" aria-expanded="false" aria-controls="inventory-block1">
+                            <div class="card-head-label">
+                                <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_INVENTORY', $langId); ?>
+                                </h3>
+                                <span class="text-muted"><?php echo Labels::getLabel('MSG_SET_UP_NEW_INVENTORY', $langId); ?></span>
+                            </div>
+                            <div class="card-toolbar"> <i class="dropdown-toggle-custom-arrow"></i></div>
+                        </div>
+                        <div class="show" id="inventory-block1">
+                            <div class="card-body p-0">
+                                <div class="px-4">
+                                    <div class="row justify-content-between">
+                                        <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_stock', 4); ?>
+                                        <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_min_order_qty', 4); ?>
+                                        <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_available_from', 4); ?>
+                                        <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_sku', 6, [], Labels::getLabel('LBL_STOCK_KEEPING_UNIT', $siteLangId)); ?>
+                                        <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_max_download_times', 6); ?>
+                                        <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_download_validity_in_days', 6); ?>
+                                        <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_condition', 6); ?>
+
+                                        <?php
+                                        $fld = $frm->getField('selprod_subtract_stock');
+                                        if (null != $fld) {
+                                            HtmlHelper::configureSwitchForCheckbox($fld);
+                                            $fld->developerTags['noCaptionTag'] = true;
+                                            echo '<div class="col-md-12"><div class="form-group"><div class="setting-block">' . $fld->getHtml() . '</div></div></div>';
+                                        }
+                                        ?>
+                                        <?php
+                                        $fld = $frm->getField('selprod_track_inventory');
+                                        if (null != $fld) {
+                                            HtmlHelper::configureSwitchForCheckbox($fld);
+                                            $fld->developerTags['noCaptionTag'] = true;
+                                            $fld->addFieldtagAttribute('id', 'selprod_track_inventory');
+                                            echo '<div class="col-md-12"><div class="form-group"><div class="setting-block">' . $fld->getHtml() . '</div></div></div>';
+                                        }
+                                        ?>
+                                        <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_threshold_stock_level', 6); ?>
+                                        <?php
+                                        $fld = $frm->getField('use_shop_policy');
+                                        if (null != $fld) {
+                                            $fld->setFieldTagAttribute('class', "fieldsVisibility-js");
+                                            HtmlHelper::configureSwitchForCheckbox($fld);
+                                            $fld->developerTags['noCaptionTag'] = true;
+                                            echo '<div class="col-md-12"><div class="form-group"><div class="setting-block">' . $fld->getHtml() . '</div></div></div>';
+                                        }
+                                        ?>
+                                        <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_return_age', 6); ?>
+                                        <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_cancellation_age', 6); ?>
+                                        <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_comments', 12); ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <?php } else { ?>
                     <div class="card card-toggle" id="variants-options">
                         <div class="card-head dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-bs-target="#stock-block1" aria-expanded="false" aria-controls="stock-block1">
                             <div class="card-head-label">
@@ -390,8 +456,15 @@ if (0 < $recordId) {
                         <div class="card-body">
                             <ul class="list-featured">
                                 <?php
+                                $publishInventory = $frm->getField('selprod_active');
                                 $fld = $frm->getField('product_featured');
                                 $codFld = $frm->getField('product_cod_enabled');
+
+                                if (null !=  $publishInventory) {
+                                    HtmlHelper::configureSwitchForCheckbox($publishInventory);
+                                    echo '<li><div class="form-group"><div class="setting-block">' . $publishInventory->getHtml() . '</div></div></li>';
+                                }
+            
                                 if (null !=  $fld) {
                                     HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel('FRM_MARK_THIS_PRODUCT_AS_FEATURED_INFO', $langId));
                                     echo null !=  $fld && $codEnabled ? '<li><div class="form-group"><div class="setting-block">' . $fld->getHtml() . '</div></div></li>' : '<li><div class="setting-block">' . $fld->getHtml() . '</div></li>';

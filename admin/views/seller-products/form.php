@@ -1,5 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
+$frm->setFormTagAttribute('data-onclear', 'editRecord(' . $recordId . ', false, "modal-dialog-vertical-md")');
 HtmlHelper::formatFormFields($frm);
 $fld = $frm->getField('use_shop_policy');
 $fld->setFieldTagAttribute('class', "fieldsVisibilityJs");
@@ -110,7 +111,6 @@ $fld = $frm->getField('selprod_subtract_stock');
 HtmlHelper::configureSwitchForCheckbox($fld);
 $fld->developerTags['noCaptionTag'] = true;
 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
-$fld->developerTags['noCaptionTag'] = true;
 
 $fld = $frm->getField('selprod_track_inventory');
 HtmlHelper::configureSwitchForCheckbox($fld);

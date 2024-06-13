@@ -20,7 +20,22 @@
                                 </div>
                             </a>
                         </li>
-                        <?php if (!FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) { ?>
+                        <?php if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) { ?>
+                            <li class="stock-nav-item">
+                                <a class="stock-nav-link" href="#inventory">
+                                    <i class="stock-nav-icn">
+                                        <svg class="svg" width="20" height="20">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-add-product.svg#icn-variants-options">
+                                            </use>
+                                        </svg>
+                                    </i>
+                                    <div class="">
+                                        <h6 class="stock-nav-title"><?php echo Labels::getLabel('NAV_INVENTORY', $siteLangId); ?></h6>
+                                        <span class="stock-nav-desc"> <?php echo Labels::getLabel('MSG_SET_UP_NEW_INVENTORY', $siteLangId); ?></span>
+                                    </div>
+                                </a>
+                            </li>
+                        <?php } else { ?>
                             <li class="stock-nav-item">
                                 <a class="stock-nav-link" href="#variants-options">
                                     <i class="stock-nav-icn">

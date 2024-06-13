@@ -2364,7 +2364,6 @@ trait SellerProducts
 
         $productOptions = Product::getProductOptions($product_id, $this->siteLangId, true);
         if ($productOptions) {
-            $frm->addHtml('', 'optionSectionHeading', '');
             foreach ($productOptions as $option) {
                 $option_name = ($option['option_name'] != '') ? $option['option_name'] : $option['option_identifier'];
                 $fld = $frm->addSelectBox($option_name, 'selprodoption_optionvalue_id[' . $option['option_id'] . ']', $option['optionValues'], '', array('class' => 'selprodoption_optionvalue_id'), Labels::getLabel('LBL_Select', $this->siteLangId));
@@ -2390,28 +2389,26 @@ trait SellerProducts
         $useShopPolicy = $frm->addCheckBox(Labels::getLabel('FRM_USE_SHOP_RETURN_AND_CANCELLATION_AGE_POLICY', $this->siteLangId), 'use_shop_policy', 1, ['id' => 'use_shop_policy'], false, 0);
 
         $fld = $frm->addIntegerField(Labels::getLabel('FRM_ORDER_RETURN_AGE', $this->siteLangId), 'selprod_return_age');
+        $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('FRM_WARRANTY_IN_DAYS', $this->siteLangId) . ' </span>';
 
         $orderReturnAgeReqFld = new FormFieldRequirement('selprod_return_age', Labels::getLabel('FRM_ORDER_RETURN_AGE', $this->siteLangId));
         $orderReturnAgeReqFld->setRequired(true);
         $orderReturnAgeReqFld->setPositive();
-        $orderReturnAgeReqFld->htmlAfterField = '<br/><small>' . Labels::getLabel('FRM_WARRANTY_IN_DAYS', $this->siteLangId) . ' </small>';
 
         $orderReturnAgeUnReqFld = new FormFieldRequirement('selprod_return_age', Labels::getLabel('FRM_ORDER_RETURN_AGE', $this->siteLangId));
         $orderReturnAgeUnReqFld->setRequired(false);
         $orderReturnAgeUnReqFld->setPositive();
-        $orderReturnAgeUnReqFld->htmlAfterField = '<br/><small>' . Labels::getLabel('FRM_WARRANTY_IN_DAYS', $this->siteLangId) . ' </small>';
 
         $fld = $frm->addIntegerField(Labels::getLabel('FRM_ORDER_CANCELLATION_AGE', $this->siteLangId), 'selprod_cancellation_age');
+        $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('FRM_WARRANTY_IN_DAYS', $this->siteLangId) . ' </span>';
 
         $orderCancellationAgeReqFld = new FormFieldRequirement('selprod_cancellation_age', Labels::getLabel('FRM_ORDER_CANCELLATION_AGE', $this->siteLangId));
         $orderCancellationAgeReqFld->setRequired(true);
         $orderCancellationAgeReqFld->setPositive();
-        $orderCancellationAgeReqFld->htmlAfterField = '<br/><small>' . Labels::getLabel('FRM_WARRANTY_IN_DAYS', $this->siteLangId) . ' </small>';
 
         $orderCancellationAgeUnReqFld = new FormFieldRequirement('selprod_cancellation_age', Labels::getLabel('FRM_ORDER_CANCELLATION_AGE', $this->siteLangId));
         $orderCancellationAgeUnReqFld->setRequired(false);
         $orderCancellationAgeUnReqFld->setPositive();
-        $orderCancellationAgeUnReqFld->htmlAfterField = '<br/><small>' . Labels::getLabel('FRM_WARRANTY_IN_DAYS', $this->siteLangId) . ' </small>';
 
         $useShopPolicy->requirements()->addOnChangerequirementUpdate(Shop::USE_SHOP_POLICY, 'eq', 'selprod_return_age', $orderReturnAgeUnReqFld);
         $useShopPolicy->requirements()->addOnChangerequirementUpdate(Shop::USE_SHOP_POLICY, 'ne', 'selprod_return_age', $orderReturnAgeReqFld);

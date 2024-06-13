@@ -1628,4 +1628,17 @@ class SellerProduct extends MyAppModel
 
         return $validationArr;
     }
+
+    public static function getSelprodIdByProductId(int $productId): int
+    {
+        if (1 > $productId || 1 > FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+            return 0;
+        }
+        $srch = new SearchBase(static::DB_TBL, 'sp');
+        $srch->addCondition('selprod_product_id', '=', $productId);
+        $srch->doNotCalculateRecords();
+        $srch->addFld('selprod_id');
+        $result = FatApp::getDb()->fetch($srch->getResultSet());
+        return $result['selprod_id'] ?? 0;
+    }
 }
