@@ -31,7 +31,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
         ];
     }
 
-    if ($canViewProducts) {
+    if ($canViewProducts && !FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
         $redirectToAccount = false;
         $data['otherButtons'][] = [
             'attr' => [

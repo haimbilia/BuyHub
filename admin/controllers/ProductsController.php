@@ -262,6 +262,8 @@ class ProductsController extends ListingBaseController
 
             if (1 > $productType) {
                 $frm = $this->getForm($langId, $productData['product_type'], $recordId);
+                $prodSellerIdFld = $frm->getField('product_seller_id');
+                $prodSellerIdFld->requirements()->setRequired();
             }
 
             if ($productData['product_seller_id'] > 0) {

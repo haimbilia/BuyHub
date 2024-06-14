@@ -28,7 +28,7 @@ if ($canEdit) { ?>
                     </li>
             <?php }
             } ?>
-            <?php if (isset($adminCatalogs) && $adminCatalogs > 0) { ?>
+            <?php if (isset($adminCatalogs) && $adminCatalogs > 0 && !FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) { ?>
                 <li>
                     <a href="<?php echo UrlHelper::generateUrl('seller', 'catalog', [0]); ?>" class="btn btn-outline-gray btn-icon">
                         <svg class="svg btn-icon-start" width="18" height="18">
@@ -60,9 +60,13 @@ if ($canEdit) { ?>
                 </li>
             <?php } ?>
 
-            <?php if (User::canAddCustomProduct() && ($action == 'catalog')) { ?>
+            <?php if (User::canAddCustomProduct() && ($action == 'catalog')) { 
+                $prodUrl = UrlHelper::generateUrl('seller', 'products');
+                if (FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+                    $prodUrl = UrlHelper::generateUrl('seller', 'catalog');
+                }?>
                 <li>
-                    <a href="<?php echo UrlHelper::generateUrl('seller', 'products'); ?>" class="btn btn-outline-gray btn-icon">
+                    <a href="<?php echo $prodUrl; ?>" class="btn btn-outline-gray btn-icon">
                         <svg class="svg btn-icon-start" width="18" height="18">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#back">
                             </use>

@@ -185,7 +185,7 @@ trait ProductSetup
             $postedData['selprod_price'] = $postedData['product_min_selling_price'];
             $postedData['selprod_title'] = $postedData['product_name'];
             $postedData['selprod_cod_enabled'] = $postedData['product_cod_enabled'] ?? 0;
-            $postedData['selprod_fulfillment_type'] = $postedData['product_fulfillment_type'];
+            $postedData['selprod_fulfillment_type'] = $postedData['product_fulfillment_type'] ?? -1;
         }
 
         $frm = $this->getSellerProductForm($productId, $type);
