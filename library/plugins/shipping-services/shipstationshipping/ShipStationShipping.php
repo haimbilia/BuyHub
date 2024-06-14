@@ -22,6 +22,7 @@ class ShipStationShipping extends ShippingServicesBase
     private $endpoint = '';
     private $ssOrder = [];
     private $orderDetail = [];
+    private $shopSellerId = 0;
     private $warehouseId = 0;
 
     public $requiredKeys = [
@@ -131,9 +132,9 @@ class ShipStationShipping extends ShippingServicesBase
      */
     private function addWarehouse(): bool
     {
-        $sellerId = $this->orderDetail['opshipping_by_seller_user_id'];
+        $sellerId = $this->orderDetail['opshipping_by_seller_user_id'] ?? $this->shopSellerId;
         if (1 > $sellerId) {
-            return $this->syncDefaultAddressId();
+            return $this->syncDefaultAddressId($sellerId);
         }
 
         $address = $this->getShopAddress($sellerId);
@@ -163,10 +164,10 @@ class ShipStationShipping extends ShippingServicesBase
      */
     private function getWarehouseId()
     {
-        $pluginSettings = new PluginSetting(0, self::KEY_NAME, $this->orderDetail['opshipping_by_seller_user_id']);
+        $sellerId = $this->orderDetail['opshipping_by_seller_user_id'] ?? $this->shopSellerId;
+        $pluginSettings = new PluginSetting(0, self::KEY_NAME, $sellerId);
         $this->warehouseId = $pluginSettings->get(0, 'SHIPSTATION_WAREHOUSE_ID');
-
-        if (1 > $this->warehouseId) {
+        if (1 > $this->warehouseId || empty($this->warehouseId)) {
             if (false === $this->addWarehouse()) {
                 return -1;
             }
@@ -197,6 +198,16 @@ class ShipStationShipping extends ShippingServicesBase
     }
 
     /**
+     * Sets the shop seller ID.
+     *
+     * @param int $shopSellerId The shop seller ID to set.
+     */
+    public function setShopSellerId(int $shopSellerId): void
+    {
+        $this->shopSellerId = $shopSellerId;
+    }
+
+    /**
      * getRates
      *
      * @param  string $carrierCode
@@ -222,6 +233,11 @@ class ShipStationShipping extends ShippingServicesBase
             'weight' => $this->getWeight(),
             'dimensions' => $this->getDimensions()
         ];
+
+        $warehouseId = $this->getWarehouseId();
+        if (0 < $warehouseId || !empty($warehouseId)) {
+            $pkgDetail['fromWarehouseId'] = $warehouseId;
+        }
 
         if (false === $this->doRequest(self::REQUEST_SHIPPING_RATES, $pkgDetail)) {
             return [];
