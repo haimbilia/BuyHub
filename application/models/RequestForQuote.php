@@ -321,11 +321,11 @@ class RequestForQuote extends MyAppModel
 
         $srch = new SearchBase(self::DB_RFQ_TO_SELLERS);
         $srch->joinTable(SellerProduct::DB_TBL, 'INNER JOIN', 'sp.selprod_id = rfqts_selprod_id', 'sp');
-        $srch->joinTable(SellerProduct::DB_TBL, 'INNER JOIN', 'sp.selprod_code = sp1.selprod_code AND sp1.selprod_user_id = ' . $sellerId, 'sp1');
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
+        $srch->addCondition('selprod_user_id', '=', $sellerId);
         $srch->addCondition('rfqts_rfq_id', '=', 'mysql_func_' . $rfqId, 'AND', true);
-        $srch->addFld('sp1.selprod_id');
+        $srch->addFld('sp.selprod_id');
         return ((array)FatApp::getDb()->fetch($srch->getResultSet()))['selprod_id'] ?? 0;
     }
 

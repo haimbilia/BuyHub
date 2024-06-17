@@ -425,7 +425,11 @@ trait RfqOffersUtility
             $data['rlo_shipping_charges'] = $shippingcharges;
 
             $data['rlo_seller_offer_id'] = $rfq->getMainTableRecordId();
-            $data['rlo_seller_user_id'] = UserAuthentication::getLoggedUserId();
+            $data['rlo_seller_user_id'] = $this->userParentId;
+
+            if (1 > $selprodId) {
+                $selprodId = RequestForQuote::getSellerProductId($post['offer_rfq_id'], $this->userParentId);
+            }
 
             if (1 > $counterOfferId && 0 < $selprodId) {
                 $data['rlo_selprod_id'] = $selprodId;
