@@ -456,6 +456,11 @@ class ProductSearch extends SearchBase
         }
     }
 
+    public function joinProductVariant()
+    {
+        $this->joinTable(Product::DB_PRODUCT_TO_OPTION, 'LEFT OUTER JOIN', 'tpv.prodoption_product_id = p.product_id', 'tpv');
+    }
+
     /* public function joinProductVariantOptions(){
     $this->joinTable( SellerProduct::DB_TBL_SELLER_PROD_OPTIONS, 'LEFT OUTER JOIN', 'pricetbl.selprod_id = tspo.selprodoption_selprod_id', 'tspo');
     $this->joinTable( OptionValue::DB_TBL, 'LEFT OUTER JOIN', 'tspo.selprodoption_optionvalue_id = opval.optionvalue_id', 'opval' );
@@ -593,7 +598,7 @@ class ProductSearch extends SearchBase
                     }
 
                     if ($zipBased && array_key_exists('ykGeoZip', $this->geoAddress) && $this->geoAddress['ykGeoZip'] > 0) {
-                        $locCondition .= ' and shop.shop_postalcode = "' . $this->geoAddress['ykGeoZip'].'"';
+                        $locCondition .= ' and shop.shop_postalcode = "' . $this->geoAddress['ykGeoZip'] . '"';
                     }
 
                     if (true == $this->locationBasedInnerJoin) {

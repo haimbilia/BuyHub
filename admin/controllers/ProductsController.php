@@ -232,10 +232,14 @@ class ProductsController extends ListingBaseController
         }
 
         $frm = $this->getForm($langId, $productType, $recordId);
+        $prodSellerIdFld = $frm->getField('product_seller_id');
+        $prodSellerIdFld->requirements()->setRequired();
+
         $imgFrm = $this->getImageFrm();
         $isSelProdCreatedBySeller = false;
         $isProductAddedByAdmin = true;
         $productOptions = [];
+        $selProdId = 0;
         if (0 < $recordId) {
             $this->setModel([$recordId]);
             if (0 < FatApp::getPostedData('autoFillLangData', FatUtility::VAR_INT, 0)) {
@@ -258,14 +262,15 @@ class ProductsController extends ListingBaseController
 
             if (1 > $productType) {
                 $frm = $this->getForm($langId, $productData['product_type'], $recordId);
+                $prodSellerIdFld = $frm->getField('product_seller_id');
+                $prodSellerIdFld->requirements()->setRequired();
             }
 
-            $fld = $frm->getField('product_seller_id');
             if ($productData['product_seller_id'] > 0) {
                 $userShopName = User::getUserShopName($productData['product_seller_id'], $langId);
-                $fld->options = [$productData['product_seller_id'] => $userShopName['user_name'] . ' (' . $userShopName['shop_name'] . ')'];
+                $prodSellerIdFld->options = [$productData['product_seller_id'] => $userShopName['user_name'] . ' (' . $userShopName['shop_name'] . ')'];
             } else {
-                $fld->options = [0 => Labels::getLabel('FRM_ADMIN', $langId)];
+                $prodSellerIdFld->options = [0 => Labels::getLabel('FRM_ADMIN', $langId)];
             }
 
             $prodSpecificsDetails = Product::getProductSpecificsDetails($recordId);
@@ -290,7 +295,7 @@ class ProductsController extends ListingBaseController
                 }
             }
 
-            $productCategories = $this->modelObj->getProductCategories($recordId);           
+            $productCategories = $this->modelObj->getProductCategories($recordId);
             if (!empty($productCategories)) {
                 $selectedCat = current($productCategories)['prodcat_id'];
                 $productData['ptc_prodcat_id'] = $selectedCat;
@@ -361,6 +366,46 @@ class ProductsController extends ListingBaseController
             if (0 < $productType) {
                 $productData['product_type'] = $productType;
             }
+            
+            if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+                $selProdId = SellerProduct::getSelprodIdByProductId($recordId);
+                $sellerProductRow = SellerProduct::getAttributesById($selProdId, null, true, true);
+                if (!$sellerProductRow) {
+                    LibHelper::exitWithError($this->str_invalid_request_id, true);
+                }
+
+                $sellerProductLangRow = SellerProduct::getAttributesByLangId($langId, $selProdId);
+                $sellerProductLangRow = is_array($sellerProductLangRow) ? $sellerProductLangRow : [];
+
+                $urlSrch = UrlRewrite::getSearchObject();
+                $urlSrch->doNotCalculateRecords();
+                $urlSrch->doNotLimitRecords();
+                $urlSrch->addFld('urlrewrite_custom');
+                $urlSrch->addCondition('urlrewrite_original', '=', 'products/view/' . $selProdId);
+                $urlSrch->doNotCalculateRecords();
+                $urlSrch->setPageSize(1);
+                $rs = $urlSrch->getResultSet();
+                $urlRow = FatApp::getDb()->fetch($rs);
+
+                $sellerProductRow['selprod_url_keyword'] = '';
+                if ($urlRow) {
+                    $data['urlrewrite_custom'] = $urlRow['urlrewrite_custom'];
+                    $customUrl = explode("/", $urlRow['urlrewrite_custom']);
+                    $sellerProductRow['selprod_url_keyword'] = $customUrl[0];
+                }
+
+                $user_shop_name = User::getUserShopName($sellerProductRow['selprod_user_id'], $this->siteLangId);
+                $sellerProductRow['selprod_user_shop_name'] = $user_shop_name['user_name'] . ' - ' . $user_shop_name['shop_name'];
+
+                $returnAge = isset($sellerProductRow['selprod_return_age']) ? FatUtility::int($sellerProductRow['selprod_return_age']) : '';
+                $cancellationAge = isset($sellerProductRow['selprod_cancellation_age']) ? FatUtility::int($sellerProductRow['selprod_cancellation_age']) : '';
+
+                if ('' === $returnAge || '' === $cancellationAge) {
+                    $sellerProductRow['use_shop_policy'] = 1;
+                }
+
+                $productData = array_merge($productData, $sellerProductRow, $sellerProductLangRow);
+            }
 
             $frm->fill($productData);
             $imgFrm->fill(['file_type' => AttachedFile::FILETYPE_PRODUCT_IMAGE, 'record_id' => $recordId]);
@@ -370,6 +415,7 @@ class ProductsController extends ListingBaseController
             $imgFrm->fill(['file_type' => AttachedFile::FILETYPE_PRODUCT_IMAGE_TEMP, 'record_id' => $tempProductId]);
         }
 
+        $this->set("selProdId", $selProdId);
         $this->set("frm", $frm);
         $this->set("imgFrm", $imgFrm);
 
@@ -408,6 +454,11 @@ class ProductsController extends ListingBaseController
     public function setup()
     {
         $this->checkEditPrivilege();
+
+        if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+            $this->objPrivilege->canEditSellerProducts();
+        }
+
         $recordId = FatApp::getPostedData('record_id', FatUtility::VAR_INT, 0);
         $productType = FatApp::getPostedData('product_type', FatUtility::VAR_INT, 0);
         $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
@@ -416,6 +467,9 @@ class ProductsController extends ListingBaseController
         }
 
         $frm = $this->getForm($langId, $productType, $recordId);
+        $fld = $frm->getField('product_seller_id');
+        $fld->requirements()->setRequired();
+
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
@@ -500,12 +554,20 @@ class ProductsController extends ListingBaseController
             LibHelper::exitWithError($prodObj->getError(), true);
         }
         $recordId = $prodObj->getMainTableRecordId();
-        
+
         $this->setLangData($prodObj, [
             $prodObj::tblFld('name') => $post[$prodObj::tblFld('name')],
             $prodObj::tblFld('description') => $post[$prodObj::tblFld('description')],
             $prodObj::tblFld('youtube_video') => $post[$prodObj::tblFld('youtube_video')]
         ], $langId);
+
+        if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+            $selProdId = $this->setupInventory($recordId, $db);
+            if (1 > $selProdId) {
+                $db->rollbackTransaction();
+                LibHelper::exitWithError($this->str_invalid_request, true);
+            }
+        }
 
         if (!$prodObj->saveProductCategory($post['ptc_prodcat_id'])) {
             $db->rollbackTransaction();
@@ -603,15 +665,17 @@ class ProductsController extends ListingBaseController
         }
 
         UpcCode::remove($recordId);
-        foreach ($post['product_upcs'] as $optionsIds => $upcCode) {
-            $dataToSave = array(
-                'upc_code' => $upcCode,
-                'upc_product_id' => $recordId,
-                'upc_options' => $optionsIds,
-            );
-            if (!$db->insertFromArray(UpcCode::DB_TBL, $dataToSave, false, [], $dataToSave)) {
-                $db->rollbackTransaction();
-                LibHelper::exitWithError($db->getError(), true);
+        if (isset($post['product_upcs']) && !empty($post['product_upcs'])) {
+            foreach ($post['product_upcs'] as $optionsIds => $upcCode) {
+                $dataToSave = array(
+                    'upc_code' => $upcCode,
+                    'upc_product_id' => $recordId,
+                    'upc_options' => $optionsIds,
+                );
+                if (!$db->insertFromArray(UpcCode::DB_TBL, $dataToSave, false, [], $dataToSave)) {
+                    $db->rollbackTransaction();
+                    LibHelper::exitWithError($db->getError(), true);
+                }
             }
         }
 

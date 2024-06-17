@@ -6,6 +6,7 @@
 ## New Features : 
     - Maintain Single seller products to buyer cart.
     - Collect customer comments on order product while checkout.
+    - Hide product variants and merge product catalog and inventory form.
 
 ## Known Issues and Problems :
 
@@ -46,7 +47,9 @@
     - Bug-083140 - The same setting appears twice under the product settings
     - Bug-083245 - Services: A warning appears when the seller/admin tries to update the media sequence using drag and drop.
     - Bug-084657 - User is unable to add inventory for services.
+    - Bug-083721 - Depraction appears when the guest user tries to place a GDPRrequest
+    - Bug-083863 - A fatal error occurs when the admin enables the Payout settings in the production mode.
+    - Bug-084137 - Please remove the duplicity in the settings
+    - Bug-084136 - Need to remove Brand parameters from Inventory Missing Info when linking brand with the catalog is not mandatory
 ## Hit URL:
     - admin/patch-update/updateProductRating  
-    
-

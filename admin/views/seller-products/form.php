@@ -1,5 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
+$frm->setFormTagAttribute('data-onclear', 'editRecord(' . $recordId . ', false, "modal-dialog-vertical-md")');
 HtmlHelper::formatFormFields($frm);
 $fld = $frm->getField('use_shop_policy');
 $fld->setFieldTagAttribute('class', "fieldsVisibilityJs");

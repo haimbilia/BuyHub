@@ -1,5 +1,8 @@
-(function () {
+$(document).ready(function() {
+    $("#selprod_track_inventory").trigger('change');
+});
 
+(function () {
     getCurrentFrmLangId = function () {
         return $("#addProductfrm [name='lang_id']").val();
     };
@@ -758,6 +761,21 @@
         });
     };
 
+    getUniqueSlugUrl = function(obj,str,recordId){
+        if(str == ''){
+            return;
+        }
+        var data = {url_keyword:str,recordId:recordId}
+        fcom.ajax(fcom.makeUrl('SellerProducts', 'isProductRewriteUrlUnique'), data, function(t) { 
+            var ans = $.parseJSON(t);
+            $(obj).next().html(ans.msg);
+            if(ans.status == 0){
+                $(obj).next().removeClass('text-muted').addClass('text-danger');
+            }else{
+                $(obj).next().addClass('text-muted').removeClass('text-danger');
+            }
+        });
+    }
 })();
 
 /** on option select/deselect */

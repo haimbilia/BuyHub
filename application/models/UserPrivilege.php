@@ -565,18 +565,25 @@ class UserPrivilege
         $currentPlanData = OrderSubscription::getUserCurrentActivePlanDetails($langId, $userId, array(OrderSubscription::DB_TBL_PREFIX . 'id'));
         $currentActivePlanId = is_array($currentPlanData) && isset($currentPlanData[OrderSubscription::DB_TBL_PREFIX . 'id']) ? $currentPlanData[OrderSubscription::DB_TBL_PREFIX . 'id'] : 0;
 
+        $allowedLimit = SellerPackagePlans::getSubscriptionPlanDataByPlanId($spPlanId, $langId);
+
+        $totalActiveInventories = SellerProduct::getActiveCount($userId);
         if (!$currentActivePlanId) {
+            if ($allowedLimit['spackage_inventory_allowed'] < $totalActiveInventories) {
+                $lbl = Labels::getLabel('ERR_PACKAGE_SUPPORT_MAXIMUM_UP_TO_{PROD-CNT}_PRODUCTS_AND_{INV-CNT}_INVENTORIES._MARK_ALL_THE_INVENTORIES_INACTIVE', $langId);
+                $lbl = CommonHelper::replaceStringData($lbl, ['{PROD-CNT}' => $allowedLimit['spackage_products_allowed'], '{INV-CNT}' => $allowedLimit['spackage_inventory_allowed']]);
+                Message::addErrorMessage($lbl);
+                return false;
+            }
+
             return true;
         } else {
             $totalActiveProducts = Product::getActiveCount($userId);
-            $allowedLimit = SellerPackagePlans::getSubscriptionPlanDataByPlanId($spPlanId, $langId);
-
             if ($totalActiveProducts > $allowedLimit['spackage_products_allowed']) {
                 Message::addErrorMessage(sprintf(Labels::getLabel('M_YOU_ARE_DOWNGRADING_YOUR_PACKAGE', $langId), $allowedLimit['spackage_products_allowed'], $totalActiveProducts));
                 return false;
             }
 
-            $totalActiveInventories = SellerProduct::getActiveCount($userId);
             if ($totalActiveInventories > $allowedLimit['spackage_inventory_allowed']) {
                 Message::addErrorMessage(sprintf(Labels::getLabel('M_YOU_ARE_DOWNGRADING_YOUR_PACKAGE', $langId), $allowedLimit['spackage_inventory_allowed'], $totalActiveInventories));
                 return false;

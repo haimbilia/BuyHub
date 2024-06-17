@@ -1,4 +1,8 @@
 var advanceMedia = false; /* open via advance media*/
+$(document).ready(function () {
+    $("#selprod_track_inventory").trigger('change');
+});
+
 (function () {
     getCurrentFrmLangId = function () {
         return $("#addProductfrm [name='lang_id']").val();
@@ -430,7 +434,7 @@ var advanceMedia = false; /* open via advance media*/
                         record_id,
                         file_type,
                         ids: sort
-                    }, function (t) {fcom.displaySuccessMessage(t.msg)});
+                    }, function (t) { fcom.displaySuccessMessage(t.msg) });
                 }
             }).disableSelection();
         }, { fOutMode: 'json' });
@@ -664,6 +668,21 @@ var advanceMedia = false; /* open via advance media*/
         });
     };
 
+	getUniqueSlugUrl = function (obj, str, recordId) {
+		if (str == '') {
+			return;
+		}
+		var data = { url_keyword: str, recordId: recordId }
+		fcom.ajax(fcom.makeUrl('Seller', 'isProductRewriteUrlUnique'), data, function (t) {
+			var ans = $.parseJSON(t);
+			$(obj).next().html(ans.msg);
+			if (ans.status == 0) {
+				$(obj).next().addClass('text-danger').removeClass('text-muted');
+			} else {
+				$(obj).next().removeClass('text-danger').addClass('text-muted');
+			}
+		});
+	};
 })();
 
 /** on option select/deselect */

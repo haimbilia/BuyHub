@@ -321,8 +321,16 @@ class CustomProductsController extends ListingBaseController
 
         $productData['record_id'] = $recordId;
 
+        if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+            $selprodData = json_decode($productData['preq_sel_prod_data'], true);
+            if (!empty($selprodData)) {
+                $productData = array_merge($productData, $selprodData);
+            }
+        }
+
         $frm->fill($productData);
 
+        $this->set("selProdId", 0);
         $this->set("frm", $frm);
         $this->set("imgFrm", $imgFrm);
 
@@ -416,7 +424,7 @@ class CustomProductsController extends ListingBaseController
         if ($status == ProductRequest::STATUS_CANCELLED) {
             $updateData['preq_product_identifier'] = $data['preq_product_identifier'] . '-' . $preqId . '{cancelled}';
         }
-        
+
         $prodReqObj->assignValues($updateData);
 
         if (!$prodReqObj->save()) {
@@ -432,6 +440,7 @@ class CustomProductsController extends ListingBaseController
                 'product_type' => isset($data['product_type']) ? $data['product_type'] : '',
                 'product_model' => isset($data['product_model']) ? $data['product_model'] : '',
                 'product_brand_id' => isset($data['product_brand_id']) ? $data['product_brand_id'] : 0,
+                'product_seller_id' => isset($data['preq_user_id']) ? $data['preq_user_id'] : 0,
                 'product_added_by_admin_id' => applicationConstants::YES,
                 'product_min_selling_price' => isset($data['product_min_selling_price']) ? $data['product_min_selling_price'] : 0,
                 'product_length' => isset($data['product_length']) ? $data['product_length'] : 0,
@@ -462,6 +471,18 @@ class CustomProductsController extends ListingBaseController
             }
 
             $product_id = $prodObj->getMainTableRecordId();
+
+            if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+                $selprodData = json_decode($data['preq_sel_prod_data'], true);
+                unset($selprodData['selprod_id']);
+                $selprodData['selprod_user_id'] = $productData['product_seller_id'];
+                $selprodData['selprod_product_id'] = $product_id;
+                $selProdId = $this->saveInventoryRecord($selprodData, $product_id, 0, $db);
+                if (1 > $selProdId) {
+                    $db->rollbackTransaction();
+                    LibHelper::exitWithError($this->str_invalid_request, true);
+                }
+            }
 
             /*TODO
                 1) get all the records from tbl_product_digital_data_relation and update record_id with catalog product_id
@@ -697,10 +718,10 @@ class CustomProductsController extends ListingBaseController
         CalculativeDataRecord::updateSelprodRequestCount();
         CalculativeDataRecord::updateCustomCatalogCount();
         $db->commitTransaction();
-        
+
         if ($status == ProductRequest::STATUS_APPROVED) {
             Product::updateMinPrices($product_id);
-        }       
+        }
         $this->set('msg', Labels::getLabel('MSG_STATUS_UPDATED_SUCCESSFULLY', $this->siteLangId));
         $this->set('preq_id', $preqId);
         $this->_template->render(false, false, 'json-success.php');
@@ -804,8 +825,10 @@ class CustomProductsController extends ListingBaseController
         $upcCodeData = [];
         if (!empty($upcCodes)) {
             $upcCodes = json_decode($upcCodes, true);
-            foreach ($upcCodes as $key => $upcCode) {
-                $upcCodeData[$key]['upc_code'] = $upcCode;
+            if (!empty($upcCodes)) {
+                foreach ($upcCodes as $key => $upcCode) {
+                    $upcCodeData[$key]['upc_code'] = $upcCode;
+                }
             }
         }
 
@@ -940,6 +963,11 @@ class CustomProductsController extends ListingBaseController
             $productIdentifier .=  '-' . $recordId . '{cancelled}';
         }
         $data['preq_product_identifier'] = $productIdentifier;
+
+        if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+            $selProdData = $this->setupInventory(type: 'REQUESTED_CATALOG_PRODUCT');
+            $data['preq_sel_prod_data'] = json_encode($selProdData);
+        }
 
         $prodReqObj = new ProductRequest($recordId);
         $prodReqObj->assignValues($data);

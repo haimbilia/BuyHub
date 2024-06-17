@@ -1578,12 +1578,16 @@ class SellerProduct extends MyAppModel
                     }
                 }
 
-                $brand = Brand::getAttributesById($product['product_brand_id'], ['brand_active', 'brand_deleted']);
-                if ($brand) {
-                    $validationArr['brand_active']['valid'] = $brand['brand_active'] === applicationConstants::YES;
-                    $validationArr['brand_active']['currentStatus'] = $brand['brand_active'];
-                    $validationArr['brand_deleted']['valid'] = $brand['brand_deleted'] === applicationConstants::NO;
-                    $validationArr['brand_deleted']['currentStatus'] = $brand['brand_deleted'];
+                if (1 > FatApp::getConfig('CONF_PRODUCT_BRAND_MANDATORY', FatUtility::VAR_INT, 1)) {
+                    unset($validationArr['brand_active'],  $validationArr['brand_deleted']);
+                } else {
+                    $brand = Brand::getAttributesById($product['product_brand_id'], ['brand_active', 'brand_deleted']);
+                    if ($brand) {
+                        $validationArr['brand_active']['valid'] = $brand['brand_active'] === applicationConstants::YES;
+                        $validationArr['brand_active']['currentStatus'] = $brand['brand_active'];
+                        $validationArr['brand_deleted']['valid'] = $brand['brand_deleted'] === applicationConstants::NO;
+                        $validationArr['brand_deleted']['currentStatus'] = $brand['brand_deleted'];
+                    }
                 }
 
                 $userObj = User::getSearchObject(true, 0, false);
@@ -1634,5 +1638,18 @@ class SellerProduct extends MyAppModel
         $srch->doNotLimitRecords();
         $row = FatApp::getDb()->fetch($srch->getResultSet());
         return is_array($row) && isset($row['selprod_id']) ? $row['selprod_id'] : 0;
+    }
+    
+    public static function getSelprodIdByProductId(int $productId): int
+    {
+        if (1 > $productId || 1 > FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+            return 0;
+        }
+        $srch = new SearchBase(static::DB_TBL, 'sp');
+        $srch->addCondition('selprod_product_id', '=', $productId);
+        $srch->doNotCalculateRecords();
+        $srch->addFld('selprod_id');
+        $result = FatApp::getDb()->fetch($srch->getResultSet());
+        return $result['selprod_id'] ?? 0;
     }
 }

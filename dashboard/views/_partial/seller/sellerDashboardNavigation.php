@@ -39,9 +39,14 @@ $plugin = new Plugin();
                         </a>
                     </li>
                 <?php } ?>
-                <?php if ($userPrivilege->canViewProducts(UserAuthentication::getLoggedUserId(), true)) { ?>
+                <?php if ($userPrivilege->canViewProducts(UserAuthentication::getLoggedUserId(), true)) {
+                    $prodUrl = UrlHelper::generateUrl('seller', 'products');
+                    if (FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+                        $prodUrl = UrlHelper::generateUrl('seller', 'catalog');
+                    }
+                ?>
                     <li class="menu-sub-item navItemJs">
-                        <a class="menu-sub-link navLinkJs <?php echo (false === $quickSearch && $controller == 'seller' && ($action == 'catalog' || $action == 'products')) ||  $controller == 'products' ? 'active' : ''; ?>" title="<?php echo Labels::getLabel('LBL_Products', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('seller', 'products'); ?>">
+                        <a class="menu-sub-link navLinkJs <?php echo (false === $quickSearch && $controller == 'seller' && ($action == 'catalog' || $action == 'products')) ||  $controller == 'products' ? 'active' : ''; ?>" title="<?php echo Labels::getLabel('LBL_Products', $siteLangId); ?>" href="<?php echo $prodUrl; ?>">
                             <span class="menu-sub-title navTextJs">
                                 <?php echo Labels::getLabel('LBL_Shop_Inventory', $siteLangId); ?></span>
                         </a>
@@ -57,7 +62,7 @@ $plugin = new Plugin();
                     </li>
                 <?php } ?>
                 <?php $canAddCustomProd = FatApp::getConfig('CONF_ENABLED_SELLER_CUSTOM_PRODUCT', FatUtility::VAR_INT, 0);
-                if (0 < $canAddCustomProd && $userPrivilege->canViewProductOptions(UserAuthentication::getLoggedUserId(), true)) { ?>
+                if (0 < $canAddCustomProd && !FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0) && $userPrivilege->canViewProductOptions(UserAuthentication::getLoggedUserId(), true)) { ?>
                     <li class="menu-sub-item navItemJs">
                         <a class="menu-sub-link navLinkJs <?php echo (false === $quickSearch && $controller == 'seller' && $action == 'options') ? 'active' : ''; ?>" title="<?php echo Labels::getLabel('LBL_Product_Options', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('Seller', 'options'); ?>">
                             <span class="menu-sub-title navTextJs">

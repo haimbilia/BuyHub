@@ -106,7 +106,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                         </li>
                     <?php } ?>
 
-                    <?php if ($objPrivilege->canViewOptions(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                    <?php if (!FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0) && $objPrivilege->canViewOptions(AdminAuthentication::getLoggedAdminId(), true)) { ?>
                         <li class="nav_item navItemJs">
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["Options", "OptionValues"]' href="<?php echo UrlHelper::generateUrl('Options'); ?>">
                                 <span class="nav_icon">

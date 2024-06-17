@@ -482,4 +482,15 @@ trait StripeConnectFunctions
             ],
         ]);
     }
+
+    /**
+     * chargeRetrieve
+     *
+     * @param array $requestParam
+     * @return object
+     */
+    private function chargeRetrieve(array $requestParam): object
+    {
+        return $this->stripe->charges->retrieve(current($requestParam));
+    }
 }

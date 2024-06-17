@@ -72,8 +72,10 @@ class Importexport extends ImportexportCommon
                 $arr[static::TYPE_INVENTORIES] = Labels::getLabel('NAV_PRODUCT_INVENTORIES', $langId);
                 // $arr[static::TYPE_INVENTORY_UPDATE] = Labels::getLabel('NAV_INVENTORY_UPDATE', $langId);
                 $arr[static::TYPE_BRANDS] = Labels::getLabel('NAV_BRANDS', $langId);
-                $arr[static::TYPE_OPTIONS] = Labels::getLabel('NAV_OPTIONS', $langId);
-                $arr[static::TYPE_OPTION_VALUES] = Labels::getLabel('NAV_OPTION_VALUES', $langId);
+                if (!FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+                    $arr[static::TYPE_OPTIONS] = Labels::getLabel('NAV_OPTIONS', $langId);
+                    $arr[static::TYPE_OPTION_VALUES] = Labels::getLabel('NAV_OPTION_VALUES', $langId);
+                }
                 //$arr[static::TYPE_TAG] = Labels::getLabel('NAV_TAGS', $langId);
                 $arr[static::TYPE_ZONES] = Labels::getLabel('NAV_ZONES', $langId);
                 $arr[static::TYPE_COUNTRY] = Labels::getLabel('NAV_COUNTRIES', $langId);
@@ -95,8 +97,10 @@ class Importexport extends ImportexportCommon
                 if (!$sellerDashboard) {
                     $arr[static::TYPE_CATEGORIES] = Labels::getLabel('NAV_CATEGORIES', $langId);
                     $arr[static::TYPE_BRANDS] = Labels::getLabel('NAV_BRANDS', $langId);
-                    $arr[static::TYPE_OPTIONS] = Labels::getLabel('NAV_OPTIONS', $langId);
-                    $arr[static::TYPE_OPTION_VALUES] = Labels::getLabel('NAV_OPTION_VALUES', $langId);
+                    if (!FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+                        $arr[static::TYPE_OPTIONS] = Labels::getLabel('NAV_OPTIONS', $langId);
+                        $arr[static::TYPE_OPTION_VALUES] = Labels::getLabel('NAV_OPTION_VALUES', $langId);
+                    }
                     //$arr[static::TYPE_TAG] = Labels::getLabel('NAV_TAGS', $langId);
                     $arr[static::TYPE_ZONES] = Labels::getLabel('NAV_ZONES', $langId);
                     $arr[static::TYPE_COUNTRY] = Labels::getLabel('NAV_COUNTRIES', $langId);
@@ -129,8 +133,10 @@ class Importexport extends ImportexportCommon
                 $arr[static::TYPE_INVENTORIES] = Labels::getLabel('MSG_EXPORT_PRODUCT_INVENTORIES_DATA_THROUGH_CSV_FILE', $langId);
                 // $arr[static::TYPE_INVENTORY_UPDATE] = Labels::getLabel('NAV_INVENTORY_UPDATE', $langId);
                 $arr[static::TYPE_BRANDS] = Labels::getLabel('MSG_EXPORT_PRODUCT_BRANDS_DATA_THROUGH_CSV_FILE', $langId);
-                $arr[static::TYPE_OPTIONS] = Labels::getLabel('MSG_EXPORT_PRODUCT_OPTIONS_DATA_THROUGH_CSV_FILE', $langId);
-                $arr[static::TYPE_OPTION_VALUES] = Labels::getLabel('MSG_EXPORT_PRODUCT_OPTION_VALUES_THROUGH_CSV_FILE', $langId);
+                if (!FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+                    $arr[static::TYPE_OPTIONS] = Labels::getLabel('MSG_EXPORT_PRODUCT_OPTIONS_DATA_THROUGH_CSV_FILE', $langId);
+                    $arr[static::TYPE_OPTION_VALUES] = Labels::getLabel('MSG_EXPORT_PRODUCT_OPTION_VALUES_THROUGH_CSV_FILE', $langId);
+                }
                 //$arr[static::TYPE_TAG] = Labels::getLabel('NAV_TAGS', $langId);
                 $arr[static::TYPE_ZONES] = Labels::getLabel('MSG_EXPORT_ZONES_DATA_THROUGH_CSV_FILE', $langId);
                 $arr[static::TYPE_COUNTRY] = Labels::getLabel('MSG_EXPORT_COUNTRIES_DATA_THROUGH_CSV_FILE', $langId);
@@ -153,8 +159,10 @@ class Importexport extends ImportexportCommon
                 if (!$sellerDashboard) {
                     $arr[static::TYPE_CATEGORIES] = Labels::getLabel('MSG_IMPORT_CATEGORIES_THROUGH_CSV_FILE', $langId);
                     $arr[static::TYPE_BRANDS] = Labels::getLabel('MSG_IMPORT_BRAND_THROUGH_CSV_FILE', $langId);
-                    $arr[static::TYPE_OPTIONS] = Labels::getLabel('MSG_IMPORT_PRODUCT_OPTIONS_THROUGH_CSV_FILE', $langId);
-                    $arr[static::TYPE_OPTION_VALUES] = Labels::getLabel('MSG_IMPORT_PRODUCT_OPTION_VALUES_THROUGH_CSV_FILE', $langId);
+                    if (!FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+                        $arr[static::TYPE_OPTIONS] = Labels::getLabel('MSG_IMPORT_PRODUCT_OPTIONS_THROUGH_CSV_FILE', $langId);
+                        $arr[static::TYPE_OPTION_VALUES] = Labels::getLabel('MSG_IMPORT_PRODUCT_OPTION_VALUES_THROUGH_CSV_FILE', $langId);
+                    }
                     //$arr[static::TYPE_TAG] = Labels::getLabel('NAV_TAGS', $langId);
                     $arr[static::TYPE_ZONES] = Labels::getLabel('MSG_IMPORT_ZONES_DATA_THROUGH_CSV_FILE', $langId);
                     $arr[static::TYPE_COUNTRY] = Labels::getLabel('MSG_IMPORT_COUNTRIES_DATA_THROUGH_CSV_FILE', $langId);
