@@ -213,7 +213,7 @@ trait ShipStationFunctions
      */
     private function updateWarehouseRecord(array $requestParam): bool
     {
-        $this->endpoint = 'warehouses/warehouseId';
+        $this->endpoint = 'warehouses/' . $requestParam['warehouseId'];
         return $this->post($requestParam, 'PUT');
     }
 

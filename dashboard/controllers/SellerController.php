@@ -2449,15 +2449,6 @@ class SellerController extends SellerBaseController
         }
         $shop_id = $shopObj->getMainTableRecordId();
 
-        $shipping = new Shipping($this->siteLangId);
-        $shippingService = $shipping->getShippingApiObj();
-        if (false !== $shippingService) {
-            if (method_exists($shippingService, 'setShopSellerId') && method_exists($shippingService, 'updateWarehouse')) {
-                $shippingService->setShopSellerId($userId);
-                $shippingService->updateWarehouse();
-            }
-        }
-
         $post['ss_shop_id'] = $shop_id;
         $shopSpecificsObj = new ShopSpecifics($shop_id);
         $shopSpecificsObj->assignValues($post);
@@ -2497,6 +2488,15 @@ class SellerController extends SellerBaseController
         ShippingProfile::getDefaultProfileId($this->userParentId);
 
         $msg = !empty($errorMsg) ? $errorMsg : Labels::getLabel('MSG_SET_UP_SUCCESSFULLY', $this->siteLangId);
+
+        $shipping = new Shipping($this->siteLangId);
+        $shippingService = $shipping->getShippingApiObj();
+        if (false !== $shippingService) {
+            if (method_exists($shippingService, 'setShopSellerId') && method_exists($shippingService, 'updateWarehouse')) {
+                $shippingService->setShopSellerId($userId);
+                $shippingService->updateWarehouse();
+            }
+        }
 
         $this->set('shopId', $shop_id);
         $this->set('langId', $newTabLangId);
@@ -2552,15 +2552,6 @@ class SellerController extends SellerBaseController
         if (!$shopObj->updateLangData($lang_id, $data)) {
             FatUtility::dieJsonError($shopObj->getError());
         }
-        
-        $shipping = new Shipping($this->siteLangId);
-        $shippingService = $shipping->getShippingApiObj();
-        if (false !== $shippingService) {
-            if (method_exists($shippingService, 'setShopSellerId') && method_exists($shippingService, 'updateWarehouse')) {
-                $shippingService->setShopSellerId($userId);
-                $shippingService->updateWarehouse();
-            }
-        }
 
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
@@ -2578,7 +2569,15 @@ class SellerController extends SellerBaseController
                 break;
             }
         }
-
+        
+        $shipping = new Shipping($this->siteLangId);
+        $shippingService = $shipping->getShippingApiObj();
+        if (false !== $shippingService) {
+            if (method_exists($shippingService, 'setShopSellerId') && method_exists($shippingService, 'updateWarehouse')) {
+                $shippingService->setShopSellerId($userId);
+                $shippingService->updateWarehouse();
+            }
+        }
 
         $this->set('shopId', $shop_id);
         $this->set('langId', $newTabLangId);
@@ -4537,15 +4536,6 @@ class SellerController extends SellerBaseController
             FatUtility::dieJsonError(Labels::getLabel($userObj->getError(), $this->siteLangId));
         }
 
-        $shipping = new Shipping($this->siteLangId);
-        $shippingService = $shipping->getShippingApiObj();
-        if (false !== $shippingService) {
-            if (method_exists($shippingService, 'setShopSellerId') && method_exists($shippingService, 'updateWarehouse')) {
-                $shippingService->setShopSellerId($userId);
-                $shippingService->updateWarehouse();
-            }
-        }
-
         $post['lang_id'] = CommonHelper::getDefaultFormLangId();
 
         if (!$userObj->updateUserReturnAddressLang($post)) {
@@ -4572,6 +4562,16 @@ class SellerController extends SellerBaseController
                 }
             }
         }
+
+        $shipping = new Shipping($this->siteLangId);
+        $shippingService = $shipping->getShippingApiObj();
+        if (false !== $shippingService) {
+            if (method_exists($shippingService, 'setShopSellerId') && method_exists($shippingService, 'updateWarehouse')) {
+                $shippingService->setShopSellerId($userId);
+                $shippingService->updateWarehouse();
+            }
+        }
+
         $this->set('langId', $newTabLangId);
         $this->set('msg', Labels::getLabel('MSG_SETUP_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');

@@ -170,7 +170,7 @@ class ShipStationShipping extends ShippingServicesBase
         $warehouseId = $this->getWarehouseId();
         if (true == $this->updateWarehouse && (0 < $warehouseId || !empty($warehouseId))) {
             $address = $this->getShopAddress($sellerId);
-            $this->setAddress($address['shop_name'], $address['line1'], $address['line2'], $address['city'], $address['state'], $address['postalCode'], $address['countryCode'], $address['phone']);
+            $this->setAddress($address['shop_name'], $address['line1'], $address['line2'], $address['city'], $address['stateCode'], $address['postalCode'], $address['countryCode'], $address['phone']);
 
             $requestData = [
                 'warehouseId' => $warehouseId,
@@ -180,14 +180,17 @@ class ShipStationShipping extends ShippingServicesBase
 
             $userObj = new User($sellerId);
             $returnAddress = $userObj->getUserReturnAddress(CommonHelper::getLangId());
-            $this->setAddress($address['shop_name'], $returnAddress['ura_address_line_1'], $returnAddress['ura_address_line_2'], $returnAddress['ura_city'], $returnAddress['state_name'], $returnAddress['ura_zip'], $returnAddress['country_code'], $returnAddress['ura_phone']);
+            $this->setAddress($address['shop_name'], $returnAddress['ura_address_line_1'], $returnAddress['ura_address_line_2'], $returnAddress['ura_city'], $returnAddress['state_code'], $returnAddress['ura_zip'], $returnAddress['country_code'], $returnAddress['ura_phone']);
 
             $requestData['returnAddress'] = $this->getAddress();
             if (false === $this->doRequest(self::REQUEST_UPDATE_WAREHOUSE, $requestData)) {
                 return false;
             }
-            $warehouse =  (array) $this->getResponse();
-            $this->warehouseId = $warehouse['warehouseId'];
+            $resp = (array) $this->getResponse();
+            if (!isset($resp['success']) || 1 != $resp['success']) {
+                $this->error = $resp['message'];
+                return false;
+            }
         }
 
         return true;
