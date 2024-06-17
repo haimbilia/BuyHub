@@ -17,6 +17,7 @@ class ShipStationShipping extends ShippingServicesBase
     private const REQUEST_MARK_AS_SHIPPED = 7;
     private const REQUEST_WAREHOUSES_LIST = 8;
     private const REQUEST_CREATE_WAREHOUSE = 9;
+    private const REQUEST_UPDATE_WAREHOUSE = 10;
 
     private $resp;
     private $endpoint = '';
@@ -24,6 +25,7 @@ class ShipStationShipping extends ShippingServicesBase
     private $orderDetail = [];
     private $shopSellerId = 0;
     private $warehouseId = 0;
+    private bool $updateWarehouse = false;
 
     public $requiredKeys = [
         'api_key',
@@ -157,6 +159,40 @@ class ShipStationShipping extends ShippingServicesBase
         return $this->addWarehouseIdToDb($sellerId);
     }
 
+    public function updateWarehouse(): bool
+    {
+        $sellerId = $this->shopSellerId ?? 0;
+        if (1 > $sellerId) {
+            $this->error = Labels::getLabel('LBL_INVALID_SELLER_ID');
+            return false;
+        }
+
+        $warehouseId = $this->getWarehouseId();
+        if (true == $this->updateWarehouse && (0 < $warehouseId || !empty($warehouseId))) {
+            $address = $this->getShopAddress($sellerId);
+            $this->setAddress($address['shop_name'], $address['line1'], $address['line2'], $address['city'], $address['state'], $address['postalCode'], $address['countryCode'], $address['phone']);
+
+            $requestData = [
+                'warehouseId' => $warehouseId,
+                'warehouseName' => $address['shop_name'],
+                'originAddress' => $this->getAddress()
+            ];
+
+            $userObj = new User($sellerId);
+            $returnAddress = $userObj->getUserReturnAddress(CommonHelper::getLangId());
+            $this->setAddress($address['shop_name'], $returnAddress['ura_address_line_1'], $returnAddress['ura_address_line_2'], $returnAddress['ura_city'], $returnAddress['state_name'], $returnAddress['ura_zip'], $returnAddress['country_code'], $returnAddress['ura_phone']);
+
+            $requestData['returnAddress'] = $this->getAddress();
+            if (false === $this->doRequest(self::REQUEST_UPDATE_WAREHOUSE, $requestData)) {
+                return false;
+            }
+            $warehouse =  (array) $this->getResponse();
+            $this->warehouseId = $warehouse['warehouseId'];
+        }
+
+        return true;
+    }
+
     /**
      * getWarehouseId
      *
@@ -167,7 +203,9 @@ class ShipStationShipping extends ShippingServicesBase
         $sellerId = $this->orderDetail['opshipping_by_seller_user_id'] ?? $this->shopSellerId;
         $pluginSettings = new PluginSetting(0, self::KEY_NAME, $sellerId);
         $this->warehouseId = $pluginSettings->get(0, 'SHIPSTATION_WAREHOUSE_ID');
+        $this->updateWarehouse = true;
         if (1 > $this->warehouseId || empty($this->warehouseId)) {
+            $this->updateWarehouse = false;
             if (false === $this->addWarehouse()) {
                 return -1;
             }
@@ -661,6 +699,9 @@ class ShipStationShipping extends ShippingServicesBase
                     break;
                 case self::REQUEST_CREATE_WAREHOUSE:
                     $this->createWarehouse($requestParam);
+                    break;
+                case self::REQUEST_UPDATE_WAREHOUSE:
+                    $this->updateWarehouseRecord($requestParam);
                     break;
             }
 

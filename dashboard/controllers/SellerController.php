@@ -2449,6 +2449,15 @@ class SellerController extends SellerBaseController
         }
         $shop_id = $shopObj->getMainTableRecordId();
 
+        $shipping = new Shipping($this->siteLangId);
+        $shippingService = $shipping->getShippingApiObj();
+        if (false !== $shippingService) {
+            if (method_exists($shippingService, 'setShopSellerId') && method_exists($shippingService, 'updateWarehouse')) {
+                $shippingService->setShopSellerId($userId);
+                $shippingService->updateWarehouse();
+            }
+        }
+
         $post['ss_shop_id'] = $shop_id;
         $shopSpecificsObj = new ShopSpecifics($shop_id);
         $shopSpecificsObj->assignValues($post);
@@ -2519,11 +2528,9 @@ class SellerController extends SellerBaseController
             $lang_id = array_key_first($languages);
         }
 
-
         if ($lang_id <= 0) {
             FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST_ID', $this->siteLangId));
         }
-
 
         $shopObj = new Shop($shop_id);
         $data = array(
@@ -2544,6 +2551,15 @@ class SellerController extends SellerBaseController
 
         if (!$shopObj->updateLangData($lang_id, $data)) {
             FatUtility::dieJsonError($shopObj->getError());
+        }
+        
+        $shipping = new Shipping($this->siteLangId);
+        $shippingService = $shipping->getShippingApiObj();
+        if (false !== $shippingService) {
+            if (method_exists($shippingService, 'setShopSellerId') && method_exists($shippingService, 'updateWarehouse')) {
+                $shippingService->setShopSellerId($userId);
+                $shippingService->updateWarehouse();
+            }
         }
 
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
@@ -4520,12 +4536,22 @@ class SellerController extends SellerBaseController
         if (!$userObj->updateUserReturnAddress($post)) {
             FatUtility::dieJsonError(Labels::getLabel($userObj->getError(), $this->siteLangId));
         }
+
+        $shipping = new Shipping($this->siteLangId);
+        $shippingService = $shipping->getShippingApiObj();
+        if (false !== $shippingService) {
+            if (method_exists($shippingService, 'setShopSellerId') && method_exists($shippingService, 'updateWarehouse')) {
+                $shippingService->setShopSellerId($userId);
+                $shippingService->updateWarehouse();
+            }
+        }
+
         $post['lang_id'] = CommonHelper::getDefaultFormLangId();
 
         if (!$userObj->updateUserReturnAddressLang($post)) {
             FatUtility::dieJsonError(Labels::getLabel($userObj->getError(), $this->siteLangId));
         }
-
+        
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData($userObj::DB_TBL_USR_RETURN_ADDR_LANG);
@@ -4644,6 +4670,15 @@ class SellerController extends SellerBaseController
         $userObj = new User($userId);
         if (!$userObj->updateUserReturnAddressLang($post)) {
             FatUtility::dieJsonError(Labels::getLabel($userObj->getError(), $this->siteLangId));
+        }
+
+        $shipping = new Shipping($this->siteLangId);
+        $shippingService = $shipping->getShippingApiObj();
+        if (false !== $shippingService) {
+            if (method_exists($shippingService, 'setShopSellerId') && method_exists($shippingService, 'updateWarehouse')) {
+                $shippingService->setShopSellerId($userId);
+                $shippingService->updateWarehouse();
+            }
         }
 
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
