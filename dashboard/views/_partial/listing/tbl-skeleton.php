@@ -15,7 +15,7 @@
                     <tr>
                         <?php for ($j = 0; $j < count($headerCols); $j++) { ?>
                             <td>
-                                <span class="skeleton"></span>
+                                <div class="skeleton"></div>
                             </td>
                         <?php } ?>
                     </tr>

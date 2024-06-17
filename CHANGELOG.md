@@ -51,5 +51,7 @@
     - Bug-083863 - A fatal error occurs when the admin enables the Payout settings in the production mode.
     - Bug-084137 - Please remove the duplicity in the settings
     - Bug-084136 - Need to remove Brand parameters from Inventory Missing Info when linking brand with the catalog is not mandatory
+    - Bug-084664 - Add inventory button is not working properly.
+
 ## Hit URL:
     - admin/patch-update/updateProductRating  

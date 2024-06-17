@@ -14,7 +14,11 @@ $icon = '<svg class="svg" width="18" height="18">
             </use>
         </svg>';
 $lbl = Labels::getLabel('LBL_NOT_FOUND?', $siteLangId);
-$link = '<a class="btn btn-outline-brand btn-sm" href="' . UrlHelper::generateUrl('Seller', 'sellerProductForm', [$productId]) .'" >' . $icon . Labels::getLabel('LBL_ADD_INVENTORY', $siteLangId) . '</a>';
+$productFormUrl = UrlHelper::generateUrl('products', 'form');
+if (0 < $productId) {
+    $productFormUrl = UrlHelper::generateUrl('Seller', 'sellerProductForm', [$productId]);
+}
+$link = '<a class="btn btn-outline-brand btn-sm" href="' . $productFormUrl .'" >' . $icon . Labels::getLabel('LBL_ADD_INVENTORY', $siteLangId) . '</a>';
 $fld->htmlAfterField = '<div class="d-flex justify-content-between mt-3"><h6 class="text-muted">' . $lbl . '</h6>' . $link . '</div>';
 
 $formTitle = Labels::getLabel('LBL_LINK_INVENTORY', $siteLangId);

@@ -1,7 +1,4 @@
 <?php
-
-use Abraham\TwitterOAuth\Request;
-
 class SellerRequestForQuotesController extends SellerBaseController
 {
     use RequestForQuotesUtility;
