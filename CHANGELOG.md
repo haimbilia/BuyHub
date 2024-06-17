@@ -44,6 +44,7 @@
     - Bug-082874 - Price still appears for when hide price is enabled on system level
     - Bug-072665 - Product specification special character issue
     - Bug-083140 - The same setting appears twice under the product settings
+    - Bug-084657 - User is unable to add inventory for services.
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  

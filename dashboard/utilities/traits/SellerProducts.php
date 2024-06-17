@@ -806,6 +806,8 @@ trait SellerProducts
             foreach ($optionCombinations as $optionKey => $optionValue) {
                 /* Check if product already added for this option [ */
                 $selProdCode = $post['selprod_code'] . $optionKey;
+                $post['selprod_stock' . $optionKey] = $post['selprod_stock' . $optionKey] ?? 1;
+
                 $selProdAvailable = Product::isSellProdAvailableForUser($selProdCode, $this->siteLangId, $this->userParentId);
                 if (!empty($selProdAvailable)) {
                     if (!$selProdAvailable['selprod_deleted']) {
@@ -815,7 +817,8 @@ trait SellerProducts
                     }
                     $data_to_be_save['selprod_deleted'] = applicationConstants::NO;
                 }
-                if (!isset($post['selprod_cost' . $optionKey]) || !isset($post['selprod_price' . $optionKey]) || !isset($post['selprod_stock' . $optionKey])) {
+
+                if (!isset($post['selprod_cost' . $optionKey]) || !isset($post['selprod_price' . $optionKey])) {
                     continue;
                 }
 
