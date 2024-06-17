@@ -45,7 +45,7 @@
     - Bug-072665 - Product specification special character issue
     - Bug-083140 - The same setting appears twice under the product settings
     - Bug-083245 - Services: A warning appears when the seller/admin tries to update the media sequence using drag and drop.
-
+    - Bug-084657 - User is unable to add inventory for services.
 ## Hit URL:
     - admin/patch-update/updateProductRating  
     
