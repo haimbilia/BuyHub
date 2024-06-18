@@ -383,13 +383,13 @@ class AdminBaseController extends FatController
         $frm = new Form('frmProduct', array('id' => 'frmProduct'));
         if ($type == 'CUSTOM_PRODUCT') {
             $fld = $frm->addTextBox(Labels::getLabel('FRM_USER', $this->siteLangId), 'selprod_user_shop_name', '', array(' ' => ' '));
-            $fld->htmlAfterField = '<br/><small>' . Labels::getLabel('FRM_PLEASE_LEAVE_EMPTY_IF_YOU_WANT_TO_ADD_PRODUCT_IN_SYSTEM_CATALOG', $this->siteLangId) . ' </small>';
+            $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('FRM_PLEASE_LEAVE_EMPTY_IF_YOU_WANT_TO_ADD_PRODUCT_IN_SYSTEM_CATALOG', $this->siteLangId) . ' </span>';
             $frm->addHtml('', 'user_shop', '<div id="user_shop_name"></div>');
         }
 
         $frm->addHiddenField('', 'product_seller_id');
         $fld = $frm->addRequiredField(Labels::getLabel('FRM_PRODUCT_IDENTIFIER', $this->siteLangId), 'product_identifier');
-        $fld->htmlAfterField = '<br/><small>' . Labels::getLabel('FRM_IT_MAY_BE_SAME_AS_OF_PRODUCT_NAME', $this->siteLangId) . ' </small>';
+        $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('FRM_IT_MAY_BE_SAME_AS_OF_PRODUCT_NAME', $this->siteLangId) . ' </span>';
 
         $pTypeFld = $frm->addSelectBox(Labels::getLabel('FRM_PRODUCT_TYPE', $this->siteLangId), 'product_type', Product::getProductTypes($langId), Product::PRODUCT_TYPE_PHYSICAL, array('id' => 'product_type'), '');
 
@@ -430,7 +430,7 @@ $prodTypeFld->requirements()->addOnChangerequirementUpdate(applicationConstants:
         $fld = $frm->addRequiredField(Labels::getLabel('FRM_PRODUCT_WARRANTY', $this->siteLangId), 'product_warranty');
         $fld->requirements()->setInt();
         $fld->requirements()->setPositive();
-        $fld->htmlAfterField = '<br/><small>' . Labels::getLabel('FRM_WARRANTY_IN_DAYS', $this->siteLangId) . ' </small>';
+        $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('FRM_WARRANTY_IN_DAYS', $this->siteLangId) . ' </span>';
         if (Product::PRODUCT_TYPE_DIGITAL == $productType) {
             $fld->requirements()->setRequired(false);
         }
@@ -508,7 +508,7 @@ $frm->addTextBox('ISBN Code','product_isbn'); */
         $paymentMethod = new PaymentMethods();
         if (!$paymentMethod->cashOnDeliveryIsActive()) {
             $codFld->addFieldTagAttribute('disabled', 'disabled');
-            $codFld->htmlAfterField = '<br/><small>' . Labels::getLabel('FRM_COD_OPTION_IS_DISABLED_IN_PAYMENT_GATEWAY_SETTINGS', $this->siteLangId) . '</small>';
+            $codFld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('FRM_COD_OPTION_IS_DISABLED_IN_PAYMENT_GATEWAY_SETTINGS', $this->siteLangId) . '</span>';
         }
 
         if ($type == 'REQUESTED_CATALOG_PRODUCT') {
@@ -575,7 +575,7 @@ $frm->addTextBox('ISBN Code','product_isbn'); */
                         $postfix_hint = '(' . $attr['attr_postfix'] . ') ';
                     }
                     $postfix_hint .= " Enter -1 for N.A";
-                    $fld->htmlAfterField = '<small>' . $postfix_hint . '</small>';
+                    $fld->htmlAfterField = '<span class="form-text text-muted">' . $postfix_hint . '</span class="form-text text-muted">';
                 }
             }
         }
@@ -666,10 +666,10 @@ $frm->addTextBox('ISBN Code','product_isbn'); */
 
         if ($productData['product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
             $fld = $frm->addIntegerField(Labels::getLabel('FRM_MAX_DOWNLOAD_TIMES', $this->siteLangId), 'selprod_max_download_times');
-            $fld->htmlAfterField = '<small class="text--small">' . Labels::getLabel('FRM_-1_for_unlimited', $this->siteLangId) . '</small>';
+            $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('FRM_-1_for_unlimited', $this->siteLangId) . '</span>';
 
             $fld1 = $frm->addIntegerField(Labels::getLabel('FRM_DOWNLOAD_VALIDITY_(days)', $this->siteLangId), 'selprod_download_validity_in_days');
-            $fld1->htmlAfterField = '<small class="text--small">' . Labels::getLabel('FRM_-1_for_unlimited', $this->siteLangId) . '</small>';
+            $fld1->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('FRM_-1_for_unlimited', $this->siteLangId) . '</span>';
             $frm->addHiddenField('', 'selprod_condition', $defaultProductCond);
         } else {
             $fld = $frm->addSelectBox(Labels::getLabel('FRM_PRODUCT_CONDITION', $this->siteLangId), 'selprod_condition', Product::getConditionArr($this->siteLangId), '', array(), Labels::getLabel('FRM_SELECT_CONDITION', $this->siteLangId));
@@ -681,7 +681,7 @@ $frm->addTextBox('ISBN Code','product_isbn'); */
             $paymentMethod = new PaymentMethods();
             if (!$paymentMethod->cashOnDeliveryIsActive()) {
                 $codFld->addFieldTagAttribute('disabled', 'disabled');
-                $codFld->htmlAfterField = '<br/><small>' . Labels::getLabel('FRM_COD_OPTION_IS_DISABLED_IN_PAYMENT_GATEWAY_SETTINGS', $this->siteLangId) . '</small>';
+                $codFld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('FRM_COD_OPTION_IS_DISABLED_IN_PAYMENT_GATEWAY_SETTINGS', $this->siteLangId) . '</span>';
             }
 
             $fulFillmentArr = Shipping::getFulFillmentArr($this->siteLangId, $isPickupEnabled);
@@ -706,33 +706,29 @@ $frm->addTextBox('ISBN Code','product_isbn'); */
         $fld = $frm->addTextBox(Labels::getLabel('FRM_ALERT_STOCK_LEVEL', $this->siteLangId), 'selprod_threshold_stock_level');
         $fld->requirements()->setInt();
 
-
-
         $useShopPolicy = $frm->addCheckBox(Labels::getLabel('FRM_USE_SHOP_RETURN_AND_CANCELLATION_AGE_POLICY', $this->siteLangId), 'use_shop_policy', 1, ['id' => 'use_shop_policy'], false, 0);
 
         $fld = $frm->addIntegerField(Labels::getLabel('FRM_PRODUCT_ORDER_RETURN_PERIOD_(Days)', $this->siteLangId), 'selprod_return_age');
+        $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('FRM_WARRANTY_IN_DAYS', $this->siteLangId) . ' </span>';
 
         $orderReturnAgeReqFld = new FormFieldRequirement('selprod_return_age', Labels::getLabel('FRM_PRODUCT_ORDER_RETURN_PERIOD_(Days)', $this->siteLangId));
         $orderReturnAgeReqFld->setRequired(true);
         $orderReturnAgeReqFld->setPositive();
-        $orderReturnAgeReqFld->htmlAfterField = '<br/><small>' . Labels::getLabel('FRM_WARRANTY_IN_DAYS', $this->siteLangId) . ' </small>';
 
         $orderReturnAgeUnReqFld = new FormFieldRequirement('selprod_return_age', Labels::getLabel('FRM_PRODUCT_ORDER_RETURN_PERIOD_(Days)', $this->siteLangId));
         $orderReturnAgeUnReqFld->setRequired(false);
         $orderReturnAgeUnReqFld->setPositive();
-        $orderReturnAgeUnReqFld->htmlAfterField = '<br/><small>' . Labels::getLabel('FRM_WARRANTY_IN_DAYS', $this->siteLangId) . ' </small>';
 
         $fld = $frm->addIntegerField(Labels::getLabel('FRM_PRODUCT_ORDER_CANCELLATION_PERIOD_(Days)', $this->siteLangId), 'selprod_cancellation_age');
+        $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('FRM_WARRANTY_IN_DAYS', $this->siteLangId) . ' </span>';
 
         $orderCancellationAgeReqFld = new FormFieldRequirement('selprod_cancellation_age', Labels::getLabel('FRM_PRODUCT_ORDER_CANCELLATION_PERIOD_(Days)', $this->siteLangId));
         $orderCancellationAgeReqFld->setRequired(true);
         $orderCancellationAgeReqFld->setPositive();
-        $orderCancellationAgeReqFld->htmlAfterField = '<br/><small>' . Labels::getLabel('FRM_WARRANTY_IN_DAYS', $this->siteLangId) . ' </small>';
 
         $orderCancellationAgeUnReqFld = new FormFieldRequirement('selprod_cancellation_age', Labels::getLabel('FRM_PRODUCT_ORDER_CANCELLATION_PERIOD_(Days)', $this->siteLangId));
         $orderCancellationAgeUnReqFld->setRequired(false);
         $orderCancellationAgeUnReqFld->setPositive();
-        $orderCancellationAgeUnReqFld->htmlAfterField = '<br/><small>' . Labels::getLabel('FRM_WARRANTY_IN_DAYS', $this->siteLangId) . ' </small>';
 
         $useShopPolicy->requirements()->addOnChangerequirementUpdate(Shop::USE_SHOP_POLICY, 'eq', 'selprod_return_age', $orderReturnAgeUnReqFld);
         $useShopPolicy->requirements()->addOnChangerequirementUpdate(Shop::USE_SHOP_POLICY, 'ne', 'selprod_return_age', $orderReturnAgeReqFld);
