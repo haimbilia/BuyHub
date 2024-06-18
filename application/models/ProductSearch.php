@@ -742,14 +742,20 @@ class ProductSearch extends SearchBase
         $this->joinTable(Brand::DB_TBL_LANG, $joinBy, 'brand.brand_id = tb_l.brandlang_brand_id AND brandlang_lang_id = ' . $langId . $joinCondition, 'tb_l');
     }
 
-    public function joinProductToCategory($langId = 0, $isActive = true, $isDeleted = true, $useInnerJoin = true, $useRelationTable = false)
+    public function joinProductToCategory($langId = 0, $isActive = true, $isDeleted = true, $useInnerJoin = true, $useRelationTable = false, $criteria = [])
     {
         $langId = FatUtility::int($langId);
         if ($this->langId && 1 > $langId) {
             $langId = $this->langId;
         }
         $join = ($useInnerJoin) ? 'INNER JOIN' : 'LEFT OUTER JOIN';
-        $this->joinTable(Product::DB_TBL_PRODUCT_TO_CATEGORY, $join, 'ptc.ptc_product_id = p.product_id', 'ptc');
+
+        $catCondition = '';
+        if ($useInnerJoin) {
+            $catCondition .= (isset($criteria['categoryIds']) && count($criteria['categoryIds']) > 0) ? ' and ptc_prodcat_id IN (' . implode(",", $criteria['categoryIds']) . ')' : '';
+        }
+
+        $this->joinTable(Product::DB_TBL_PRODUCT_TO_CATEGORY, $join, 'ptc.ptc_product_id = p.product_id' . $catCondition, 'ptc');
 
         $categoryActiveCondition = '';
         if ($isActive) {

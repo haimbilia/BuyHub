@@ -78,15 +78,19 @@ class ProductsController extends ListingBaseController
 
     public function search()
     {
-        $this->getListingData();
+        $loadPagination = FatApp::getPostedData('loadPagination', FatUtility::VAR_INT, 0);
+        $this->getListingData([], $loadPagination);
         $jsonData = [
-            'listingHtml' => $this->_template->render(false, false, 'products/search.php', true),
             'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
         ];
+
+        if (!$loadPagination || !FatUtility::isAjaxCall()) {
+            $jsonData['listingHtml'] = $this->_template->render(false, false, 'products/search.php', true);
+        }
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    private function getListingData($defaultSrchParm = [])
+    private function getListingData($defaultSrchParm = [], $loadPagination = 0)
     {
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
@@ -186,7 +190,9 @@ class ProductsController extends ListingBaseController
             $srch->addCondition('product_id', '=', $product_id);
         }
 
-        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        if ($loadPagination && FatUtility::isAjaxCall()) {
+            $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        }
         $srch->doNotCalculateRecords();
 
         $srch->addMultipleFields(
@@ -199,7 +205,10 @@ class ProductsController extends ListingBaseController
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
         $srch->addOrder($sortBy, $sortOrder);
-        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
+        $records = [];
+        if (!$loadPagination) {
+            $records = FatApp::getDb()->fetchAll($srch->getResultSet());
+        }
 
         $this->set('activeInactiveArr', applicationConstants::getActiveInactiveArr($this->siteLangId));
         $this->set("arrListing", $records);
@@ -788,6 +797,7 @@ class ProductsController extends ListingBaseController
     public function autoComplete()
     {
         $srch = Product::getSearchObject($this->siteLangId);
+        $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
         if (!empty($keyword)) {
@@ -806,9 +816,7 @@ class ProductsController extends ListingBaseController
         }
 
         $srch->addMultipleFields(array('product_id as id', 'COALESCE(product_name, product_identifier) as text'));
-        $rs = $srch->getResultSet();
-        $db = FatApp::getDb();
-        $products = $db->fetchAll($rs);
+        $products = FatApp::getDb()->fetchAll($srch->getResultSet());
         $json['results'] = $products;
         die(json_encode($json));
     }

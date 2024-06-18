@@ -9034,8 +9034,8 @@ CREATE TABLE `tbl_zones_lang` (
 LOCK TABLES `tbl_zones_lang` WRITE;
 /*!40000 ALTER TABLE `tbl_zones_lang` DISABLE KEYS */;
 INSERT INTO `tbl_zones_lang` VALUES (1,1,'Africa'),(10,1,'Antarctica'),(2,1,'Asia'),(3,1,'Central America'),(4,1,'Europe'),(5,1,'Middle East'),(6,1,'North America'),(7,1,'Oceania'),(8,1,'South America'),(9,1,'The Caribbean');
-TRUNCATE TABLE `yokartv84livedem_pawan`.`tbl_meta_tags`;
-TRUNCATE TABLE `yokartv84livedem_pawan`.`tbl_meta_tags_lang`;
+TRUNCATE TABLE `tbl_meta_tags`;
+TRUNCATE TABLE `tbl_meta_tags_lang`;
 /*!40000 ALTER TABLE `tbl_zones_lang` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

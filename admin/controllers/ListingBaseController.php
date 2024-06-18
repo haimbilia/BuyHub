@@ -41,7 +41,7 @@ class ListingBaseController extends AdminBaseController
         $recordCountSrch->doNotLimitRecords();
         if ($isGroupSearch == false) {
             $recordCountSrch->addFld('count(1) as totalRecords');
-            $recordCountSrch->doNotCalculateRecords();
+            $recordCountSrch->doNotCalculateRecords();           
             $results = FatApp::getDb()->fetch($recordCountSrch->getResultSet());
             $defaultRecordCount = !empty($results['totalRecords']) ? $results['totalRecords'] : 0;
         } else {

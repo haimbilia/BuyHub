@@ -82,15 +82,19 @@ class SellerProductsController extends ListingBaseController
 
     public function search()
     {
-        $this->getListingData();
+        $loadPagination = FatApp::getPostedData('loadPagination', FatUtility::VAR_INT, 0);
+        $this->getListingData(0, $loadPagination);
         $jsonData = [
-            'listingHtml' => $this->_template->render(false, false, 'seller-products/search.php', true),
             'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
         ];
+
+        if (!$loadPagination || !FatUtility::isAjaxCall()) {
+            $jsonData['listingHtml'] = $this->_template->render(false, false, 'seller-products/search.php', true);
+        }
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    public function getListingData($product_id = 0)
+    public function getListingData($product_id = 0, $loadPagination = 0)
     {
         $data = FatApp::getPostedData();
         $fields = $this->getFormColumns();
@@ -181,7 +185,9 @@ class SellerProductsController extends ListingBaseController
             $srch->addCondition('selprod_product_id', '=', 'mysql_func_' . $product_id, 'AND', true);
         }
 
-        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        if ($loadPagination && FatUtility::isAjaxCall()) {
+            $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        }
         $srch->doNotCalculateRecords();
 
         $srch->setPageNumber($page);
@@ -194,8 +200,15 @@ class SellerProductsController extends ListingBaseController
             )
         );
 
-        $srch->addOrder($sortBy, $sortOrder);
-        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
+        if (!empty($sortBy)) {
+            $srch->addOrder($sortBy, $sortOrder);
+        }
+
+        $records = [];
+        if (!$loadPagination) {
+            $records = FatApp::getDb()->fetchAll($srch->getResultSet());
+        }
+        
         if (count($records)) {
             foreach ($records as &$arr) {
                 $arr['options'] = SellerProduct::getSellerProductOptions($arr['selprod_id'], true, $this->siteLangId);
