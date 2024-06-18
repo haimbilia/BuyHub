@@ -41,15 +41,20 @@ class BrandsController extends ListingBaseController
 
     public function search()
     {
-        $this->getListingData();
+        $loadPagination = FatApp::getPostedData('loadPagination', FatUtility::VAR_INT, 0);
+        $this->getListingData($loadPagination);
         $jsonData = [
-            'listingHtml' => $this->_template->render(false, false, 'brands/search.php', true),
             'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
         ];
+
+        if (!$loadPagination || !FatUtility::isAjaxCall()) {
+            $jsonData['listingHtml'] =  $this->_template->render(false, false, 'brands/search.php', true);
+        }
+
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    private function getListingData()
+    private function getListingData($loadPagination = 0)
     {
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
@@ -85,7 +90,9 @@ class BrandsController extends ListingBaseController
             $srch->addCondition('b.brand_id', '=', 'mysql_func_' . $post['brand_id'], 'AND', true);
         }
 
-        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        if ($loadPagination && FatUtility::isAjaxCall()) {
+            $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        }
         $srch->doNotCalculateRecords();
 
         $srch->addMultipleFields(array('b.*', "b_l.brand_name"));
@@ -95,7 +102,11 @@ class BrandsController extends ListingBaseController
         $srch->setPageSize($pageSize);
         $srch->addOrder($sortBy, $sortOrder);
         $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
+
+        $records = [];
+        if (!$loadPagination) {
+            $records = FatApp::getDb()->fetchAll($rs);
+        }
         $this->set("arrListing", $records);
         $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
