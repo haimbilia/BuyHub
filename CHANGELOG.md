@@ -56,6 +56,7 @@
     - Bug-084662 - Offer acceptance flow is not proper in some cases
     - Bug-084643 - it shows an invalid validation message.
     - Bug-084638 - It shows unnecessary accept button and if clikced them creates a conflict.
+    - Bug-084644 - platform non registered product's name should not be clickable.
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  

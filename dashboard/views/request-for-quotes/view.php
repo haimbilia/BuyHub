@@ -16,7 +16,10 @@
             <li class="list-stats-item list-stats-item-full">
                 <span class="label"><?php echo Labels::getLabel('LBL_PRODUCT', $siteLangId); ?>:</span>
                 <span class="value">
-                    <a href="<?php echo UrlHelper::generateUrl('Products', 'view', array($rfqData['rfq_selprod_id']), CONF_WEBROOT_FRONTEND); ?>">
+                    <?php
+                    $url = 0 < $rfqData['rfq_selprod_id'] ? UrlHelper::generateUrl('Products', 'view', array($rfqData['rfq_selprod_id']), CONF_WEBROOT_FRONTEND) : 'javascript:void(0)';
+                    ?>
+                    <a href="<?php echo $url; ?>">
                         <?php echo $rfqData['rfq_title']; ?>
                     </a>
                 </span>
