@@ -66,12 +66,13 @@ class HomeController extends MyAppController
 
         if (true === MOBILE_APP_API_CALL) {
             $slides = $this->getSlides();
+            $this->set('slides', $slides);
             $this->_template->render();
             die;
         } else {
             $slides = $this->getSlides(1);
-        }
-        $this->set('slides', $slides);
+            $this->set('slides', $slides);
+        }        
 
         $displayProductNotAvailableLable = false;
         //availableInLocation
