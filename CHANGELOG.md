@@ -55,6 +55,7 @@
     - Bug-084668 - it shows wrong information text.
     - Bug-084662 - Offer acceptance flow is not proper in some cases
     - Bug-084643 - it shows an invalid validation message.
+    - Bug-084638 - It shows unnecessary accept button and if clikced them creates a conflict.
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  
