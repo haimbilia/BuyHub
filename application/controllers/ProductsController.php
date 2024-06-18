@@ -217,6 +217,74 @@ class ProductsController extends MyAppController
         exit;
     }
 
+    public function catFilter()
+    {
+        $headerFormParamsAssocArr = FilterHelper::getParamsAssocArr();
+        $categoryId = 0;
+        if (array_key_exists('category', $headerFormParamsAssocArr)) {
+            $categoryId = FatUtility::int($headerFormParamsAssocArr['category']);
+        }
+
+        $keyword = '';
+        $langIdForKeywordSeach = 0;
+        if (array_key_exists('keyword', $headerFormParamsAssocArr) && !empty($headerFormParamsAssocArr['keyword'])) {
+            $keyword = $headerFormParamsAssocArr['keyword'];
+            $langIdForKeywordSeach = $this->siteLangId;
+        }
+
+        $cacheKey = FilterHelper::getCacheKey($this->siteLangId, $headerFormParamsAssocArr);
+        $categoryFilterData = CacheHelper::get('categoryFilterData' . $cacheKey, CONF_FILTER_CACHE_TIME, '.txt');
+        if ($categoryFilterData) {
+            echo $categoryFilterData;
+            exit;
+        }
+
+        /* Categories Data[ ToDO need to update logic fetch from prodsrch obj or catid only*/
+        $categoriesArr = array();
+        if (empty($keyword)) {
+            $catCriteria = $headerFormParamsAssocArr;
+            $catCriteria['addFld'] = 'DISTINCT(prodcat_id) as prodcatid';
+
+            $catProdSrchObj = $this->getFilterSearchObj($langIdForKeywordSeach, $catCriteria);
+            $catProdSrchObj->doNotCalculateRecords();
+            $catProdSrchObj->removeFld('1 as availableInLocation');
+            $categoriesArr = FilterHelper::getCategories($this->siteLangId, $categoryId, $catProdSrchObj, $cacheKey);
+        }
+        /* ] */
+
+        $prodcatArr = array();
+        //$productCategories = array();
+        if (array_key_exists('prodcat', $headerFormParamsAssocArr)) {
+            $prodcatArr = $headerFormParamsAssocArr['prodcat'];
+            // $productCatObj = new ProductCategory;
+            // $productCategories =  $productCatObj->getCategoriesForSelectBox($this->siteLangId);
+        }
+
+        $tpl = new FatTemplate('', '');
+
+        $shopCatFilters = false;
+        if (array_key_exists('shop_id', $headerFormParamsAssocArr)) {
+            $shop_id = FatUtility::int($headerFormParamsAssocArr['shop_id']);
+            $searchFrm = Shop::getFilterSearchForm();
+            $searchFrm->fill($headerFormParamsAssocArr);
+            $tpl->set('searchFrm', $searchFrm);
+            if (0 < $shop_id) {
+                $shopCatFilters = true;
+            }
+        }
+
+        $tpl->set('shopCatFilters', $shopCatFilters);
+        $tpl->set('prodcatArr', $prodcatArr);
+        $tpl->set('categoriesArr', $categoriesArr);
+        $tpl->set('categoryId', $categoryId);
+        $tpl->set('siteLangId', $this->siteLangId);
+
+        $html = $tpl->render(false, false, 'products/cat-filter.php', true, true);
+        CacheHelper::create('categoryFilterData' . $cacheKey, $html, CacheHelper::TYPE_PRODUCT_CATEGORIES);
+        echo $html;
+        exit;
+    }
+
     public function filters()
     {
         $db = FatApp::getDb();
@@ -237,19 +305,6 @@ class ProductsController extends MyAppController
 
         $headerFormParamsAssocArr['doNotJoinSpecialPrice'] = true;
         $headerFormParamsAssocArr['joinWithRelationTableInstead'] = true;
-
-        /* Categories Data[ ToDO need to update logic fetch from prodsrch obj or catid only*/
-        $categoriesArr = array();
-        if (empty($keyword)) {
-            $catCriteria = $headerFormParamsAssocArr;
-            $catCriteria['addFld'] = 'DISTINCT(prodcat_id) as prodcatid';
-
-            $catProdSrchObj = $this->getFilterSearchObj($langIdForKeywordSeach, $catCriteria);
-            $catProdSrchObj->doNotCalculateRecords();
-            $catProdSrchObj->removeFld('1 as availableInLocation');
-            $categoriesArr = FilterHelper::getCategories($this->siteLangId, $categoryId, $catProdSrchObj, $cacheKey);
-        }
-        /* ] */
 
         $prodSrchObj = $this->getFilterSearchObj($langIdForKeywordSeach, $headerFormParamsAssocArr);
         $prodSrchObj->doNotCalculateRecords();
@@ -364,30 +419,8 @@ class ProductsController extends MyAppController
 
         $productFiltersArr = array('count_for_view_more' => FatApp::getConfig('CONF_COUNT_FOR_VIEW_MORE', FatUtility::VAR_INT, 5));
 
-        $prodcatArr = array();
-        //$productCategories = array();
-        if (array_key_exists('prodcat', $headerFormParamsAssocArr)) {
-            $prodcatArr = $headerFormParamsAssocArr['prodcat'];
-            // $productCatObj = new ProductCategory;
-            // $productCategories =  $productCatObj->getCategoriesForSelectBox($this->siteLangId);
-        }
-
-        $shopCatFilters = false;
-        if (array_key_exists('shop_id', $headerFormParamsAssocArr)) {
-            $shop_id = FatUtility::int($headerFormParamsAssocArr['shop_id']);
-            $searchFrm = Shop::getFilterSearchForm();
-            $searchFrm->fill($headerFormParamsAssocArr);
-            $this->set('searchFrm', $searchFrm);
-            if (0 < $shop_id) {
-                $shopCatFilters = true;
-            }
-        }
-
         $this->set('productFiltersArr', $productFiltersArr);
         $this->set('headerFormParamsAssocArr', $headerFormParamsAssocArr);
-        $this->set('categoriesArr', $categoriesArr);
-        $this->set('shopCatFilters', $shopCatFilters);
-        $this->set('prodcatArr', $prodcatArr);
         // $this->set('productCategories',$productCategories);
         $this->set('brandsArr', $brandsArr);
         $this->set('brandsCheckedArr', $brandsCheckedArr);

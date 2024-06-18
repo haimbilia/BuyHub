@@ -639,8 +639,30 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
         $('#resetAllJs').show();
     };
 
-    loadProductListingfilters = function (frm) {
+    loadProductListingCatfilters = function (frm) {
         $('.productFiltersJs').html(fcom.getLoader());
+        var url = window.location.href;
+        if ($currentPageUrl == removeLastSpace(url) + '/index') {
+            url = fcom.makeUrl('Products', 'catFilter');
+        } else {
+            url = url.replace($currentPageUrl, fcom.makeUrl('Products', 'catFilter'));
+        }
+
+        if (url.indexOf("products/catFilter") == -1) {
+            url = fcom.makeUrl('Products', 'catFilter');
+        }
+
+        url = url.replace(/\/?$/, '/');
+
+        var data = fcom.frmData(frm);
+        fcom.ajax(url, data, function (res) {
+            $('.productFiltersJs').html(res);
+            fcom.removeLoader();
+        });
+    };
+
+    loadProductListingfilters = function (frm) {
+        loadProductListingCatfilters(frm);
         var url = window.location.href;
         if ($currentPageUrl == removeLastSpace(url) + '/index') {
             url = fcom.makeUrl('Products', 'filters');
@@ -651,10 +673,10 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
         if (url.indexOf("products/filters") == -1) {
             url = fcom.makeUrl('Products', 'filters');
         }
-
+        url = url.replace(/\/?$/, '/');
         var data = fcom.frmData(frm);
         fcom.ajax(url, data, function (res) {
-            $('.productFiltersJs').html(res);
+            $('.otherFiltersJs').html(res);
             getSetSelectedOptionsUrl(frm);
             fcom.removeLoader();
         });

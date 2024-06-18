@@ -139,6 +139,9 @@
         </div> <?php
             } ?>
     <div class="filters">
-        <div class="filters__ele productFiltersJs"></div>
+        <div class="filters__ele">
+            <div class="productFiltersJs"></div>
+            <div class="otherFiltersJs"></div>
+        </div>
     </div>
 </aside>
