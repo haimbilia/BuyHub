@@ -62,14 +62,16 @@ class HomeController extends MyAppController
             }
         }
 
-        $slides = $this->getSlides();
-        $this->set('slides', $slides);
         $this->set('collections', $collections);
 
         if (true === MOBILE_APP_API_CALL) {
+            $slides = $this->getSlides();
             $this->_template->render();
             die;
+        } else {
+            $slides = $this->getSlides(1);
         }
+        $this->set('slides', $slides);
 
         $displayProductNotAvailableLable = false;
         //availableInLocation
@@ -317,6 +319,13 @@ class HomeController extends MyAppController
         $this->set('collectionTemplates', $collectionTemplates);
 
         $this->_template->render();
+    }
+
+    public function getSlidesHtml()
+    {
+        $this->set('slides', $this->getSlides());
+        $this->set('html', $this->_template->render(false, false, '_partial/homePageSlides.php', true, true));
+        $this->_template->render(false, false, 'json-success.php', false, false);
     }
 
     private function getProductSearchObj($loggedUserId)
@@ -1369,7 +1378,7 @@ class HomeController extends MyAppController
         return $collections;
     }
 
-    private function getSlides()
+    private function getSlides($recordLimit = 0)
     {
         $langId = $this->siteLangId;
         $db = FatApp::getDb();
@@ -1384,8 +1393,14 @@ class HomeController extends MyAppController
         $srchSlide->joinAttachedFile();
         $srchSlide->addMultipleFields(array('slide_id', 'slide_record_id', 'slide_type', 'IFNULL(promotion_name, promotion_identifier) as promotion_name,IFNULL(slide_title, slide_identifier) as slide_title', 'slide_target', 'slide_url', 'promotion_id', 'daily_cost', 'weekly_cost', 'monthly_cost', 'total_cost', 'slide_img_updated_on'));
 
-        $totalSlidesPageSize = FatApp::getConfig('CONF_TOTAL_SLIDES_HOME_PAGE', FatUtility::VAR_INT, 4);
-        $ppcSlidesPageSize = FatApp::getConfig('CONF_PPC_SLIDES_HOME_PAGE', FatUtility::VAR_INT, 4);
+        if ($recordLimit == 1) {
+            $totalSlidesPageSize = 1;
+            $ppcSlidesPageSize = 1;
+        } else {
+            $totalSlidesPageSize = FatApp::getConfig('CONF_TOTAL_SLIDES_HOME_PAGE', FatUtility::VAR_INT, 4);
+            $ppcSlidesPageSize = FatApp::getConfig('CONF_PPC_SLIDES_HOME_PAGE', FatUtility::VAR_INT, 4);
+        }
+
 
         $ppcSlides = array();
         $adminSlides = array();

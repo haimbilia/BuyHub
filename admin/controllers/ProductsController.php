@@ -729,6 +729,7 @@ class ProductsController extends ListingBaseController
     public function autoComplete()
     {
         $srch = Product::getSearchObject($this->siteLangId);
+        $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
         if (!empty($keyword)) {
@@ -747,9 +748,7 @@ class ProductsController extends ListingBaseController
         }
 
         $srch->addMultipleFields(array('product_id as id', 'COALESCE(product_name, product_identifier) as text'));
-        $rs = $srch->getResultSet();
-        $db = FatApp::getDb();
-        $products = $db->fetchAll($rs);
+        $products = FatApp::getDb()->fetchAll($srch->getResultSet());
         $json['results'] = $products;
         die(json_encode($json));
     }
