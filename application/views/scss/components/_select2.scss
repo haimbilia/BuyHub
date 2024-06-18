@@ -1,7 +1,7 @@
 .select2-container--default {
     .select2-selection--single {
-        border: none;
-        height: auto;
+        border: none !important;
+        height: auto !important;
         .select2-selection__clear {
             background-color: transparent;
             border: none;

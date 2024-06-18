@@ -57,6 +57,8 @@
     - Bug-084643 - it shows an invalid validation message.
     - Bug-084638 - It shows unnecessary accept button and if clikced them creates a conflict.
     - Bug-084644 - platform non registered product's name should not be clickable.
+    - Bug-084640 - Looking for field's options are not proeprly visible in mobile and tablet devices
+    - Bug-084639 - Category field's ui is not proper in global RFQ form
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  

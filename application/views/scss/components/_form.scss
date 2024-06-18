@@ -97,6 +97,7 @@ $input-border-focus: #000;
 }
 
 .form {
+
   .form-group,
   .field-set {
     margin-bottom: 1.3rem;
@@ -153,8 +154,7 @@ $input-border-focus: #000;
         height: 1.25em;
         width: 1.25em;
         border-radius: 50em;
-        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath fill='none' d='M0 0h24v24H0z'/%3E%3Cpath d='M12 10.586l4.95-4.95 1.414 1.414-4.95 4.95 4.95 4.95-1.414 1.414-4.95-4.95-4.95 4.95-1.414-1.414 4.95-4.95-4.95-4.95L7.05 5.636z'/%3E%3C/svg%3E")
-          no-repeat 50% 50%;
+        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath fill='none' d='M0 0h24v24H0z'/%3E%3Cpath d='M12 10.586l4.95-4.95 1.414 1.414-4.95 4.95 4.95 4.95-1.414 1.414-4.95-4.95-4.95 4.95-1.414-1.414 4.95-4.95-4.95-4.95L7.05 5.636z'/%3E%3C/svg%3E") no-repeat 50% 50%;
         background-size: contain;
 
         &:hover {
@@ -264,6 +264,7 @@ $input-border-focus: #000;
   }
 
   button {
+
     //@include submit;
     i {
       &:before {
@@ -479,8 +480,15 @@ form.custom-form {
       border-bottom-#{$end-direction}-radius: 0;
     }
   }
+
   .custom-w {
-    max-width: 18%;
+    @include media-breakpoint-up(lg) {
+      max-width: 18%;
+    }
+    @include media-breakpoint-down(md) {
+      max-width: 30%;
+    }
+    
   }
 }
 
@@ -528,12 +536,12 @@ form.custom-form {
       outline-color: $brand-color;
       border-color: $brand-color;
 
-      + .form-floating__label {
+      +.form-floating__label {
         transform: translateY(-6px) scale(0.8);
       }
     }
 
-    &.filled + .form-floating__label {
+    &.filled+.form-floating__label {
       opacity: 0.7;
       transform: translateY(-6px) scale(0.8);
     }
@@ -586,9 +594,11 @@ form.custom-form {
 .list-radio {
   display: flex;
   gap: 2px;
+
   li {
     list-style-type: none;
   }
+
   .radio,
   .checkbox {
     padding: 10px 1rem;
@@ -597,6 +607,7 @@ form.custom-form {
     border-radius: $input-border-radius;
     display: flex;
     align-items: center;
+
     &:hover {
       background-color: darken($bg-gray, 10);
     }
