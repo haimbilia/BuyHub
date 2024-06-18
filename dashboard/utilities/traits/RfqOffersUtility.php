@@ -26,10 +26,15 @@ trait RfqOffersUtility
             CommonHelper::redirectUserReferer();
         }
 
-        $rfqInfo = RequestForQuote::getAttributesById($rfqId, ['rfq_approved', 'rfq_selprod_id', 'rfq_product_id', 'rfq_visibility_type']);
+        $rfqInfo = RequestForQuote::getAttributesById($rfqId, ['rfq_approved', 'rfq_selprod_id', 'rfq_product_id', 'rfq_visibility_type', 'rfq_status']);
 
         if (false == $rfqInfo || $rfqInfo['rfq_approved'] != RequestForQuote::APPROVED) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_RFQ_STATUS_IS_NOT_APPROVED', $this->siteLangId), false, true);
+            LibHelper::exitWithError(Labels::getLabel('ERR_RFQ_IS_NOT_APPROVED_YET', $this->siteLangId), false, true);
+            CommonHelper::redirectUserReferer();
+        }
+        
+        if (RequestForQuote::STATUS_CLOSED == $rfqInfo['rfq_status']) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_THIS_RFQ_HAS_BEEN_CLOSED_BY_THE_BUYER', $this->siteLangId), false, true);
             CommonHelper::redirectUserReferer();
         }
 

@@ -54,6 +54,7 @@
     - Bug-084664 - Add inventory button is not working properly.
     - Bug-084668 - it shows wrong information text.
     - Bug-084662 - Offer acceptance flow is not proper in some cases
+    - Bug-084643 - it shows an invalid validation message.
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  
