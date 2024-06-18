@@ -147,7 +147,9 @@ if (count($arrListing) == 0) {
                             </li>
                         </ul>
                     </div>
-                    <?php if (RfqOffers::STATUS_REJECTED == $row['offer_status'] || RfqOffers::STATUS_ACCEPTED == $row['offer_status']) { ?>
+                    <?php 
+                    $buyerAcceptance = applicationConstants::YES == $row['rlo_buyer_acceptance'];
+                    if (RfqOffers::STATUS_REJECTED == $row['offer_status'] || RfqOffers::STATUS_ACCEPTED == $row['offer_status'] || $buyerAcceptance) { ?>
                         <div class="offer-block-foot">
                             <?php if (RfqOffers::STATUS_REJECTED == $row['offer_status']) { ?>
                                 <p class="note note-rejects">
@@ -157,7 +159,7 @@ if (count($arrListing) == 0) {
                                     </svg><?php echo Labels::getLabel('MSG_THIS_OFFER_HAS_BEEN_REJECTED_BY_YOU'); ?>
                                 </p>
                             <?php } ?>
-                            <?php if (RfqOffers::STATUS_ACCEPTED == $row['offer_status']) { ?>
+                            <?php if (RfqOffers::STATUS_ACCEPTED == $row['offer_status'] || $buyerAcceptance) { ?>
                                 <p class="note note-accepted">
                                     <svg class="svg" width="16" height="16">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#info">
@@ -272,7 +274,9 @@ if (count($arrListing) == 0) {
                             </ul>
                         </div>
                     <?php } ?>
-                    <?php if (RfqOffers::STATUS_REJECTED == $row['counter_offer_status'] || RfqOffers::STATUS_ACCEPTED == $row['counter_offer_status'] || 1 > $row['counter_offer_id']) { ?>
+                    <?php 
+                    $sellerAcceptance = applicationConstants::YES == $row['rlo_seller_acceptance'];
+                    if (RfqOffers::STATUS_REJECTED == $row['counter_offer_status'] || RfqOffers::STATUS_ACCEPTED == $row['counter_offer_status'] || 1 > $row['counter_offer_id'] || $sellerAcceptance) { ?>
                         <div class="offer-block-foot">
                             <?php if (RfqOffers::STATUS_REJECTED == $row['counter_offer_status']) { ?>
                                 <p class="note note-rejects">
@@ -282,7 +286,7 @@ if (count($arrListing) == 0) {
                                     </svg><?php echo Labels::getLabel('MSG_YOUR_OFFER_HAS_BEEN_REJECTED_BY_SELLER'); ?>
                                 </p>
                             <?php } ?>
-                            <?php if (RfqOffers::STATUS_ACCEPTED == $row['counter_offer_status']) { ?>
+                            <?php if (RfqOffers::STATUS_ACCEPTED == $row['counter_offer_status'] || $sellerAcceptance) { ?>
                                 <p class="note note-accepted">
                                     <svg class="svg" width="16" height="16">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#info">
