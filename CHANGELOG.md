@@ -59,6 +59,7 @@
     - Bug-084644 - platform non registered product's name should not be clickable.
     - Bug-084640 - Looking for field's options are not proeprly visible in mobile and tablet devices
     - Bug-084639 - Category field's ui is not proper in global RFQ form
+    - Bug-084742 - All Data should appear in the downloaded RFQ details
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  

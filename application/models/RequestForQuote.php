@@ -50,7 +50,7 @@ class RequestForQuote extends MyAppModel
     public const STATUS_CLOSED = 3;
     public const STATUS_COMPLETED = 4;
 
-    public const VISIBILITY_TYPE_OPEN = 1;
+    public const VISIBILITY_TYPE_OPEN = 1; /* Global */
     public const VISIBILITY_TYPE_CLOSED = 2;
 
     public const SELLER_LINKING_OPEN = 1;
