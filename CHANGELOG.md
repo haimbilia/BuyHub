@@ -67,6 +67,7 @@
     - Bug-084718 - Favourite option is not coming even if a guest user have added the shop in fav
     - Bug-084716 - Seller is unable to see that which inventory has been linked with the RFQ.
     - Bug-084709 - Back button Redirection is not proper from GLobal RFQ offer detail page
+    - Bug-084700 - Attachment acess is not working properly
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  
