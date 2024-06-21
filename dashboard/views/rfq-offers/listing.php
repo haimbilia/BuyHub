@@ -17,12 +17,17 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
         $selprodTitleLbl = CommonHelper::replaceStringData($selprodTitleLbl,  ['{INVENTORY}' => $selprodTitle]);
         $rfqTitle .= '<i class="fa fa-info-circle" data-toggle="tooltip" data-placement="right" data-container="body" title="' . $selprodTitleLbl . '"></i>';
     }
+    $ctrl = ($isSeller ? 'Seller' : '') . 'RequestForQuotes';
+    $backBtnUrl = UrlHelper::generateUrl($ctrl);
+    if ($isGlobal) {
+        $backBtnUrl = UrlHelper::generateUrl($ctrl, 'global');
+    }
     $data = [
         'headingLabel' => $rfqTitle,
         'siteLangId' => $siteLangId,
         'otherButtons' => $otherButtons,
         'headingBackButton' => [
-            'href' => UrlHelper::generateUrl(($isSeller ? 'Seller' : '') . 'RequestForQuotes')
+            'href' => $backBtnUrl
         ],
     ];
     $this->includeTemplate('_partial/header/content-header.php', $data, false); ?>
