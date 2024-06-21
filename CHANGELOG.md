@@ -64,6 +64,7 @@
     - Bug-084726 - RFQ title should not appear as bold and clickable.
     - Bug-084724 - Calender field's is not properly clickable
     - Bug-084722 - Admin is able to assign any seller in case if Buyer had selected only one while filling form
+    - Bug-084718 - Favourite option is not coming even if a guest user have added the shop in fav
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  

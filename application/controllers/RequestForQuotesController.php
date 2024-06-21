@@ -27,7 +27,7 @@ class RequestForQuotesController extends MyAppController
             $fld->requirements()->setRequired();
 
             $sellerLinkingTypeArr = RequestForQuote::getSellerLinkingTypeArr($this->siteLangId);
-            if (False == UserAuthentication::isUserLogged()) {
+            if (false == UserAuthentication::isUserLogged() && false == UserAuthentication::isGuestUserLogged()) {
                 unset($sellerLinkingTypeArr[RequestForQuote::SELLER_LINKING_FAVOURITE]);
             }
 
