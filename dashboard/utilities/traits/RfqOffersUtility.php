@@ -139,6 +139,13 @@ trait RfqOffersUtility
                 'label' => Labels::getLabel('LBL_CLOSE', $this->siteLangId)
             ];
         }
+
+        $selprodTitle = '';
+        if ($this->isGlobal && isset($rfqData['rfqts_selprod_id']) && !empty($rfqData['rfqts_selprod_id'])) {
+            $selprodTitle = SellerProduct::getAttributesByLangId($this->siteLangId, $rfqData['rfqts_selprod_id'], 'selprod_title');
+        }
+
+        $this->set("selprodTitle", $selprodTitle);
         $this->set("isGlobal", $this->isGlobal);
         $this->set("otherButtons", $otherButtons);
         $this->set("isSeller", $this->isSeller);

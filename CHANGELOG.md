@@ -65,6 +65,7 @@
     - Bug-084724 - Calender field's is not properly clickable
     - Bug-084722 - Admin is able to assign any seller in case if Buyer had selected only one while filling form
     - Bug-084718 - Favourite option is not coming even if a guest user have added the shop in fav
+    - Bug-084716 - Seller is unable to see that which inventory has been linked with the RFQ.
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  
