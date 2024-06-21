@@ -61,6 +61,7 @@
     - Bug-084639 - Category field's ui is not proper in global RFQ form
     - Bug-084742 - All Data should appear in the downloaded RFQ details
     - Bug-084727 - Email template is not proper in case of global RFQ.
+    - Bug-084726 - RFQ title should not appear as bold and clickable.
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  

@@ -20,15 +20,19 @@
                         break;
                     case 'rfq_title':
                         $url = 0 < $row['rfq_selprod_id'] ? UrlHelper::generateUrl('Products', 'view', array($row['rfq_selprod_id']), CONF_WEBROOT_FRONTEND) : 'javascript:void(0)';
+                        $title = '<a href="' . $url . '">' . Labels::getLabel('LBL_TITLE') . ': ' . $row[$key] . '</a>';
                         $global = '';
+                        $class = '';
                         if (RequestForQuote::VISIBILITY_TYPE_OPEN == $row['rfq_visibility_type']) {
                             $labelArr = RequestForQuote::getSellerLinkingTypeArr($siteLangId);
                             $global = HtmlHelper::getStatusHtml(HtmlHelper::INFO, $labelArr[$row['rfq_visibility_type']]);
+                            $title = Labels::getLabel('LBL_TITLE') . ': ' . $row[$key];
+                            $class = 'fw-normal';
                         }
                         $htm = '<div>
-                                    <span class="product-profile__title">
-                                        <a href="' . $url . '">' . Labels::getLabel('LBL_TITLE') . ': ' . $row[$key] . '</a>
-                                    </span>
+                                    <span class="product-profile__title ' . $class . '">'
+                                    . $title .
+                                    '</span>
                                     ' . $global . '
                                     <div>' . Labels::getLabel('LBL_QTY') . ': ' . $row['rfq_quantity'] . ' ' . applicationConstants::getWeightUnitName($siteLangId, $row['rfq_quantity_unit'], true) . '</div>
                                 </div>';
