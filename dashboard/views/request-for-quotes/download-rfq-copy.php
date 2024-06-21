@@ -116,8 +116,7 @@ $productTypeArr = Product::getProductTypes($siteLangId);
 
             </td>
         </tr>
-        <?php 
-        if (false == $isGlobal) { ?>
+        <?php if (false == $isGlobal) { ?>
             <tr>
                 <td style="border-bottom: solid 1px #000; "><br>
                     <strong style=" padding-bottom:10px; "><?php echo Labels::getLabel('LBL_SOLD_BY', $siteLangId); ?>: <?php echo $rfqData['shop_name']; ?></strong>

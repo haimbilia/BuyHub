@@ -60,6 +60,7 @@
     - Bug-084640 - Looking for field's options are not proeprly visible in mobile and tablet devices
     - Bug-084639 - Category field's ui is not proper in global RFQ form
     - Bug-084742 - All Data should appear in the downloaded RFQ details
+    - Bug-084727 - Email template is not proper in case of global RFQ.
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  
