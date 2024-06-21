@@ -68,6 +68,7 @@
     - Bug-084716 - Seller is unable to see that which inventory has been linked with the RFQ.
     - Bug-084709 - Back button Redirection is not proper from GLobal RFQ offer detail page
     - Bug-084700 - Attachment acess is not working properly
+    - Bug-084712 - There is no option to remove the atached file in the rfq form
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  
