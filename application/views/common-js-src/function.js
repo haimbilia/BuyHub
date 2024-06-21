@@ -1040,6 +1040,9 @@ function requestForQuoteFn(selprodId) {
 				minDate: date,
 				onClose: function () {
 					$(".modalRfqJS").focus();
+				},
+				onSelect: function (selected, evnt) {
+					$('[name="rfq_description"]').focus();
 				}
 			});
 		}, { 'fOutMode': 'json' }
