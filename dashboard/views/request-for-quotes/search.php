@@ -26,9 +26,13 @@
                         if (RequestForQuote::VISIBILITY_TYPE_OPEN == $row['rfq_visibility_type']) {
                             $labelArr = RequestForQuote::getSellerLinkingTypeArr($siteLangId);
                             $global = HtmlHelper::getStatusHtml(HtmlHelper::INFO, $labelArr[$row['rfq_visibility_type']]);
+                        }
+
+                        if (1 > $row['rfq_selprod_id']) {
                             $title = Labels::getLabel('LBL_TITLE') . ': ' . $row[$key];
                             $class = 'fw-normal';
                         }
+
                         $htm = '<div>
                                     <span class="product-profile__title ' . $class . '">'
                                     . $title .
