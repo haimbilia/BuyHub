@@ -29,5 +29,7 @@
                         </div>
             <?php }
         }
+    } else {
+        $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId), false);
     } ?>
 </div>

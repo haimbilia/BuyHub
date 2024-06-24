@@ -69,6 +69,7 @@
     - Bug-084709 - Back button Redirection is not proper from GLobal RFQ offer detail page
     - Bug-084700 - Attachment acess is not working properly
     - Bug-084712 - There is no option to remove the atached file in the rfq form
+    - Bug-084775 - Content missing for No data found while searching Brand name.
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  
