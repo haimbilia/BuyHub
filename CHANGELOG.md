@@ -70,6 +70,7 @@
     - Bug-084700 - Attachment acess is not working properly
     - Bug-084712 - There is no option to remove the atached file in the rfq form
     - Bug-084775 - Content missing for No data found while searching Brand name.
+    - Bug-084685 - Dropdown suggestions still shows selected seller name
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  
