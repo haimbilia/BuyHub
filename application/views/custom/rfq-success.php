@@ -1,7 +1,4 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<script>
-    ykevents.rfqSubmitted();
-</script>
 <main id="body" class="body main">
     <section class="section">
         <div class="container">

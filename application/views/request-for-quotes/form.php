@@ -132,7 +132,7 @@ if (null != $fld) {
                     <?php echo Labels::getLabel('LBL_PROCEED_WITH_GUEST_INFORMATION_TO_PLACE_RFQ'); ?>
                 </div>
             </div>
-            <?php
+        <?php
         } ?>
         <div class="request-quote-body">
             <?php if (1 > FatApp::getConfig('CONF_HIDE_SELLER_INFO', FatUtility::VAR_INT, 0) && RequestForQuote::TYPE_INDIVIDUAL == FatApp::getConfig('CONF_RFQ_MODULE_TYPE', FatUtility::VAR_INT, 0) && 0 < $selprodId) { ?>
@@ -161,8 +161,7 @@ if (null != $fld) {
                                         <div class="rating-count"><?php echo round($shopRating, 1); ?></div>
                                         <div class="rating-stars">
                                             <svg class="star svg" width="16" height="16">
-                                                <use
-                                                    xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
                                                 </use>
                                             </svg>
                                         </div>
@@ -195,8 +194,7 @@ if (null != $fld) {
                                 }
                                 ?>
                                 <a class="" href="<?php echo $prodUrl; ?>">
-                                    <img src="<?php echo $imgSrc; ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_SMALL); ?> title="<?php echo $productTitle; ?>"
-                                        alt="<?php echo $productTitle; ?>">
+                                    <img src="<?php echo $imgSrc; ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_SMALL); ?> title="<?php echo $productTitle; ?>" alt="<?php echo $productTitle; ?>">
                                 </a>
                             </div>
 
@@ -289,11 +287,9 @@ if (null != $fld) {
                         <div class="field-set">
                             <div class="caption-wraper d-flex justify-content-between align-items-center">
                                 <label class="field_label">
-                                    <?php echo Labels::getLabel('LBL_DELIVERY_ADDRESS'); ?><span
-                                        class="spn_must_field">*</span>
+                                    <?php echo Labels::getLabel('LBL_DELIVERY_ADDRESS'); ?><span class="spn_must_field">*</span>
                                 </label>
-                                <button class="link-brand link-underline" type="button"
-                                    onclick="addAddress(<?php echo $selprodId; ?>);">
+                                <button class="link-brand link-underline" type="button" onclick="addAddress(<?php echo $selprodId; ?>);">
                                     <?php echo Labels::getLabel('LBL_ADD_NEW'); ?>
                                 </button>
                             </div>
@@ -326,10 +322,8 @@ if (null != $fld) {
 </div>
 <div class="modal-footer">
     <div class="buttons-group">
-        <button class="btn btn-outline-gray" type="button"
-            onclick="$.ykmodal.close();"><?php echo Labels::getLabel('LBL_CLOSE'); ?></button>
-        <button class="btn btn-brand btn-wide submitBtnJs" type="submit"
-            form="<?php echo $frm->getFormTagAttribute('id'); ?>">
+        <button class="btn btn-outline-gray" type="button" onclick="$.ykmodal.close();"><?php echo Labels::getLabel('LBL_CLOSE'); ?></button>
+        <button class="btn btn-brand btn-wide submitBtnJs" type="submit" form="<?php echo $frm->getFormTagAttribute('id'); ?>">
             <?php echo Labels::getLabel('LBL_SUBMIT'); ?>
         </button>
     </div>
@@ -337,94 +331,100 @@ if (null != $fld) {
 <?php if (1 > $selprodId) { ?>
     <script>
         var SELLER_LINKING_OPEN = '<?php echo RequestForQuote::SELLER_LINKING_OPEN; ?>';
-        var rfqItemNameSelector = $("#rfqItemNameJs");
-        if (0 < rfqItemNameSelector.length) {
-            rfqItemNameSelector.autocomplete({
-                'classes': {
-                    "ui-autocomplete": "custom-ui-autocomplete z-index-9999"
-                },
-                'source': function (request, response) {
-                    $.ajax({
-                        url: fcom.makeUrl('RequestForQuotes', 'searchItemAutoComplete'),
-                        data: {
-                            keyword: request['term'],
-                            rfq_product_type: $('#rfqProductTypeJs').val(),
-                            fIsAjax: 1
-                        },
-                        dataType: 'json',
-                        type: 'post',
-                        success: function (json) {
-                            response($.map(json['results'], function (item) {
-                                return {
-                                    label: item['text'],
-                                    value: item['text'],
-                                    id: item['id']
-                                };
-                            }));
-                        },
-                    });
+        $(document).ready(function() {
+            var rfqItemNameSelector = $("#rfqItemNameJs");
+            if (0 < rfqItemNameSelector.length) {
+                rfqItemNameSelector.autocomplete({
+                    'classes': {
+                        "ui-autocomplete": "custom-ui-autocomplete z-index-9999"
+                    },
+                    'source': function(request, response) {
+                        $.ajax({
+                            url: fcom.makeUrl('RequestForQuotes', 'searchItemAutoComplete'),
+                            data: {
+                                keyword: request['term'],
+                                rfq_product_type: $('#rfqProductTypeJs').val(),
+                                fIsAjax: 1
+                            },
+                            dataType: 'json',
+                            type: 'post',
+                            success: function(json) {
+                                response($.map(json['results'], function(item) {
+                                    return {
+                                        label: item['text'],
+                                        value: item['text'],
+                                        id: item['id']
+                                    };
+                                }));
+                            },
+                        });
+                    }
+                });
+            }
+
+            var sellerNameSelector = $("#sellerNameJs");
+            $(document).on('change', '.sellerLinkingJs', function() {
+                if (SELLER_LINKING_OPEN == $(this).val()) {
+                    sellerNameSelector.select2('val', '');
+                    sellerNameSelector.val('').attr('disabled', 'disabled');
+                    sellerNameSelector.parent().hide();
+                } else {
+                    sellerNameSelector.removeAttr('disabled');
+                    sellerNameSelector.parent().show();
                 }
             });
-        }
 
-        var sellerNameSelector = $("#sellerNameJs");
-        $(document).on('change', '.sellerLinkingJs', function () {
-            if (SELLER_LINKING_OPEN == $(this).val()) {
-                sellerNameSelector.select2('val', '');
-                sellerNameSelector.val('').attr('disabled', 'disabled');
-            } else {
-                sellerNameSelector.removeAttr('disabled');
+            if (0 < sellerNameSelector.length) {
+                select2('sellerNameJs', fcom.makeUrl('RequestForQuotes', 'getSellers'), function() {
+                    return {
+                        rfq_seller_linking_type: $('.sellerLinkingJs:checked').val()
+                    };
+                });
+
+                var sellerLinkingType = $('.sellerLinkingJs:checked').val();
+                if (SELLER_LINKING_OPEN == sellerLinkingType) {
+                    sellerNameSelector.select2('val', '');
+                    sellerNameSelector.val('').attr('disabled', 'disabled');
+                    sellerNameSelector.parent().hide();
+                }
             }
-        });
 
-        if (0 < sellerNameSelector.length) {
-            select2('sellerNameJs', fcom.makeUrl('RequestForQuotes', 'getSellers'), function () {
-                return {
-                    rfq_seller_linking_type: $('.sellerLinkingJs:checked').val()
-                };
-            });
 
-            var sellerLinkingType = $('.sellerLinkingJs').val();
-            if (SELLER_LINKING_OPEN == sellerLinkingType) {
-                sellerNameSelector.select2('val', '');
-                sellerNameSelector.val('').attr('disabled', 'disabled');
+
+            var categorySelector = $("#categoryJs");
+            if (0 < categorySelector.length) {
+                categorySelector.select2({
+                    tags: true,
+                    closeOnSelect: true,
+                    allowClear: true,
+                    dir: langLbl.layoutDirection,
+                    placeholder: categorySelector.attr('placeholder'),
+                    dropdownParent: categorySelector.closest('form'),
+                    ajax: {
+                        url: fcom.makeUrl('Products', 'linksAutocomplete'),
+                        dataType: 'json',
+                        delay: 250,
+                        method: 'post',
+                        data: function(params) {
+                            return {
+                                keyword: params.term,
+                                langId: <?php echo $siteLangId; ?>
+                            };
+                        },
+                        processResults: function(data, params) {
+                            return {
+                                results: data.results
+                            };
+                        },
+                        cache: true
+                    },
+                    minimumInputLength: 0,
+                });
             }
-        }
 
-
-        var categorySelector = $("#categoryJs");
-        if (0 < categorySelector.length) {
-            categorySelector.select2({
-                tags: true,
-                closeOnSelect: true,
-                allowClear: true,
-                dir: langLbl.layoutDirection,
-                placeholder: categorySelector.attr('placeholder'),
-                dropdownParent: categorySelector.closest('form'),
-                ajax: {
-                    url: fcom.makeUrl('Products', 'linksAutocomplete'),
-                    dataType: 'json',
-                    delay: 250,
-                    method: 'post',
-                    data: function (params) {
-                        return {
-                            keyword: params.term,
-                            langId: <?php echo $siteLangId; ?>
-                        };
-                    },
-                    processResults: function (data, params) {
-                        return {
-                            results: data.results
-                        };
-                    },
-                    cache: true
-                },
-                minimumInputLength: 0,
+            $(document).on('change', '#rfqProductTypeJs', function() {
+                $('#rfqItemNameJs').val('');
             });
-        }
-
-        $(document).on('change', '#rfqProductTypeJs', function(){
-            $('#rfqItemNameJs').val('');
         });
     </script>
 <?php } ?>

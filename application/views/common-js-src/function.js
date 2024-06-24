@@ -1064,13 +1064,17 @@ function saveRfq(frm) {
 	var data = new FormData();
 	data.append('fIsAjax', 1);
 
-	frm.find('select,input[type=hidden],input[type=text],input[type=search],textarea').each(function () {
+	frm.find('select,input[type=hidden],input[type=text],input[type=search], input[type="radio"],textarea').each(function () {
 		var isMultiple = $(this).attr('multiple');
 		var eleName = this.name;
 		if (typeof isMultiple !== 'undefined' && isMultiple !== false) {
 			$(this).find('option:selected').each(function (i) {
 				data.append(eleName, $(this).val());
 			});
+		} else if ("radio" == this.type) {
+			if (!data.has(eleName)) {
+				data.append(eleName, $("input[name='" + eleName + "']:checked").val());
+			}
 		} else {
 			data.append(eleName, $(this).val());
 		}

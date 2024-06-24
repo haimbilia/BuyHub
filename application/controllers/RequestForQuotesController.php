@@ -267,7 +267,8 @@ class RequestForQuotesController extends MyAppController
         CalculativeDataRecord::updateRfqCount();
 
         /* When buyer wants to bind with specific seller. */
-        if (0 < $sellerIdArr) {
+        $isOpen = FatApp::getPostedData('rfq_seller_linking_type', FatUtility::VAR_INT, RequestForQuote::SELLER_LINKING_OPEN);
+        if (0 < $sellerIdArr && RequestForQuote::SELLER_LINKING_OPEN != $isOpen) {
             foreach ($sellerIdArr as $sellerId) {
                 $rfqToSeller = [
                     'rfqts_rfq_id' => $rfq->getMainTableRecordId(),
