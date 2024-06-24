@@ -10,7 +10,7 @@ class OrderProductSearch extends SearchBase
     private $isOrderProductStatusJoined;
     private $isShippingChargesTblJoined;
 
-    public function __construct($langId = 0, $joinOrders = false, $joinOrderProductStatus = false, $deletedOrders = false)
+    public function __construct($langId = 0, $joinOrders = false, $joinOrderProductStatus = false, $deletedOrders = false, $joinSettings = true)
     {
         parent::__construct(Orders::DB_TBL_ORDER_PRODUCTS, 'op');
         $this->langId = FatUtility::int($langId);
@@ -41,7 +41,9 @@ class OrderProductSearch extends SearchBase
             $this->addCondition('order_deleted', '=', applicationConstants::NO);
         }
 
-        $this->joinSettings();
+        if ($joinSettings) {
+            $this->joinSettings();
+        }
     }
 
     public function joinSellerUser()
@@ -356,7 +358,7 @@ class OrderProductSearch extends SearchBase
         $cnd = $subSrch->addCondition($alias . '_tc.opcharge_type', '=', OrderProduct::CHARGE_TYPE_TAX, 'OR');
         $cnd->attachCondition('op_tax_collected_by_seller', '>', 0, 'AND');
         $subSrch->addCondition($alias . '_tc.opcharge_type', 'IN', array(OrderProduct::CHARGE_TYPE_VOLUME_DISCOUNT, /*OrderProduct::CHARGE_TYPE_DISCOUNT, OrderProduct::CHARGE_TYPE_REWARD_POINT_DISCOUNT*/), 'OR');
-        
+
         $srch->joinTable('(' . $subSrch->getQuery() . ')', 'LEFT OUTER JOIN', $alias . 'c.opcharge_op_id = ' . $alias . '.op_id', $alias . 'c');
 
         switch ($type) {
@@ -372,7 +374,7 @@ class OrderProductSearch extends SearchBase
         }
 
         $srch->addGroupBy($alias . '.op_selprod_user_id');
-       
+
         $qrytotalOrders = $srch->getQuery();
         $this->joinTable('(' . $qrytotalOrders . ')', 'LEFT OUTER JOIN', 'op.op_selprod_user_id = ' . $alias . '.' . $alias . '_op_selprod_user_id', $alias);
     }
