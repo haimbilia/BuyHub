@@ -27,7 +27,7 @@ class RequestForQuotesController extends MyAppController
             $fld->requirements()->setRequired();
 
             $sellerLinkingTypeArr = RequestForQuote::getSellerLinkingTypeArr($this->siteLangId);
-            if (False == UserAuthentication::isUserLogged()) {
+            if (false == UserAuthentication::isUserLogged() && false == UserAuthentication::isGuestUserLogged()) {
                 unset($sellerLinkingTypeArr[RequestForQuote::SELLER_LINKING_FAVOURITE]);
             }
 
@@ -326,7 +326,13 @@ class RequestForQuotesController extends MyAppController
         }
 
         $post['rfq_number'] = $rfq->getRfqNo();
-        $emailData = array_merge($selprodData, $shopData, $userInfo, $address, $post, ['rfq_id' => $rfq->getMainTableRecordId(), 'rfq_added_on' => date("d-m-Y")]);
+        $catId = $post['rfq_prodcat_id'] ?? 0; 
+        $catName = '';
+        if (0 < $catId) {
+            $catData = ProductCategory::getAttributesByLangId($this->siteLangId, $post['rfq_prodcat_id'], ['COALESCE(prodcat_name, prodcat_identifier) as prodcat_name'], applicationConstants::JOIN_RIGHT);
+            $catName = $catData['prodcat_name'];
+        }
+        $emailData = array_merge($selprodData, $shopData, $userInfo, $address, $post, ['rfq_id' => $rfq->getMainTableRecordId(), 'rfq_added_on' => date("d-m-Y"), 'prodcat_name' => $catName]);
         $weightUnits =  applicationConstants::getWeightUnitsArr($this->siteLangId);
 
 

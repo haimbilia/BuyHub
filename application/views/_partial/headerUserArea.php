@@ -26,7 +26,7 @@ if (UserAuthentication::isUserLogged()) {
     }
 }
 
-if (0 < FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0)) { ?>
+if (0 < FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0) && (User::isBuyer(true) || !UserAuthentication::isUserLogged())) { ?>
     <button class="btn btn-outline-brand btn-sm btn-rfq" type="button" onclick="requestForQuoteFn(0);">
         <?php echo Labels::getLabel('LBL_REQUEST_FOR_QUOTE', $siteLangId); ?>
     </button>

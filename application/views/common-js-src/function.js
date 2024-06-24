@@ -1040,6 +1040,9 @@ function requestForQuoteFn(selprodId) {
 				minDate: date,
 				onClose: function () {
 					$(".modalRfqJS").focus();
+				},
+				onSelect: function (selected, evnt) {
+					$('[name="rfq_description"]').focus();
 				}
 			});
 		}, { 'fOutMode': 'json' }
@@ -1253,6 +1256,11 @@ $(function () {
 		if ('undefined' == typeof rowId) {
 			nameEle = $('.rfqFileNameJs');
 		}
-		nameEle.text($(this).val());
+		nameEle.html($(this).val() + '<button type="button" class="btn-close text-reset resetAttachmentJs"></button>');
+	});
+
+	$(document).on('click', '.resetAttachmentJs', function () {
+		$('.rfqDocumentJs').val("");
+		$('.rfqFileNameJs').html("");
 	});
 })

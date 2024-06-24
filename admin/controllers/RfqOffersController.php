@@ -462,6 +462,17 @@ class RfqOffersController extends ListingBaseController
             LibHelper::exitWithError($rfq->getError(), true);
         }
 
+        if (1 > $counterOfferId) {
+            $rfqToSeller = [
+                'rfqts_rfq_id' => $post['offer_rfq_id'],
+                'rfqts_user_id' => $post['offer_user_id']
+            ];
+            if (!FatApp::getDb()->insertFromArray(RequestForQuote::DB_RFQ_TO_SELLERS, $rfqToSeller, true, array(), $rfqToSeller)) {
+                $db->rollbackTransaction();
+                LibHelper::exitWithError(FatApp::getDb()->getError(), true);
+            } 
+        }
+
         /* For New/Counter. Not on edit. */
         // if (1 > $recordId) 
         {

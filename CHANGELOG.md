@@ -59,6 +59,17 @@
     - Bug-084644 - platform non registered product's name should not be clickable.
     - Bug-084640 - Looking for field's options are not proeprly visible in mobile and tablet devices
     - Bug-084639 - Category field's ui is not proper in global RFQ form
+    - Bug-084742 - All Data should appear in the downloaded RFQ details
+    - Bug-084727 - Email template is not proper in case of global RFQ.
+    - Bug-084726 - RFQ title should not appear as bold and clickable.
+    - Bug-084724 - Calender field's is not properly clickable
+    - Bug-084722 - Admin is able to assign any seller in case if Buyer had selected only one while filling form
+    - Bug-084718 - Favourite option is not coming even if a guest user have added the shop in fav
+    - Bug-084716 - Seller is unable to see that which inventory has been linked with the RFQ.
+    - Bug-084709 - Back button Redirection is not proper from GLobal RFQ offer detail page
+    - Bug-084700 - Attachment acess is not working properly
+    - Bug-084712 - There is no option to remove the atached file in the rfq form
+    - Bug-084775 - Content missing for No data found while searching Brand name.
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  

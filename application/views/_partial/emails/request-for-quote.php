@@ -42,6 +42,10 @@ if (isset($data['selprod_id']) && 0 < $data['selprod_id']) {
 }
 $imgSrc = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($productId, ImageDimension::VIEW_SMALL, $selProdId, 0, $siteLangId), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
 
+$visibility = $data['rfq_visibility_type'] ?? RequestForQuote::VISIBILITY_TYPE_CLOSED;
+$isGlobal = (RequestForQuote::VISIBILITY_TYPE_OPEN == $visibility);
+$productTypeArr = Product::getProductTypes($siteLangId);
+
 $str = '<table width="100%" cellspacing="0" cellpadding="20" border="0" style="font-size: 14px;background: #f2f2f2;font-family: Arial, sans-serif;">
             <tr>
                 <td>
@@ -65,14 +69,16 @@ $str = '<table width="100%" cellspacing="0" cellpadding="20" border="0" style="f
                                                 <tr>
                                                     <td style="border-bottom:1px solid #ecf0f1;">
                                                         <table width="100%" cellspacing="0" cellpadding="0" border="0">
-                                                            <tr>
-                                                                <td style="width: 70px; padding: 10px;">
-                                                                    <a href=""' . $prodUrl . '""><img src="' . $imgSrc . '" alt="" title="" ' . HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_MINI) . ' /></a>
-                                                                </td>
-                                                                <td style="padding: 10px;">
+                                                            <tr>';
+                                                            if (!$isGlobal) {
+                                                                $str .= '<td style="width: 70px; padding: 10px;">
+                                                                        <a href=""' . $prodUrl . '""><img src="' . $imgSrc . '" alt="" title="" ' . HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_MINI) . ' /></a>
+                                                                    </td>';
+                                                            }
+                                                                $str .= '<td style="padding: 10px;">
                                                                     <a href="' . $prodUrl . '" style="color: #555555;font-size: 14px;font-weight: $font-weight-bold;text-decoration: none;">' . $data['rfq_title'] . '</a>';
 
-                                                                    if (RequestForQuote::TYPE_INDIVIDUAL == FatApp::getConfig('CONF_RFQ_MODULE_TYPE', FatUtility::VAR_INT, 0)) {
+                                                                    if (RequestForQuote::TYPE_INDIVIDUAL == FatApp::getConfig('CONF_RFQ_MODULE_TYPE', FatUtility::VAR_INT, 0) && false == $isGlobal) {
                                                                         $str .= '<div style="color: #555555;font-size: 14px;font-weight: $font-weight-bold;">' . Labels::getLabel('Lbl_By', $siteLangId) . ':' . $shopName . '</div>';
                                                                     }
                                                         $str .= '</td>
@@ -88,20 +94,33 @@ $str = '<table width="100%" cellspacing="0" cellpadding="20" border="0" style="f
                         </tr>
                         <tr>
                             <td style="background-color: #f2f2f2;padding: 20px 25px;">
-                                <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                                <table width="100%" cellspacing="0" cellpadding="0" border="0">';
+                                if ($isGlobal) {
+                                    $str .= '<tr>
+                                        <td style="padding: color#000;font-size: 14px;padding: 5px 0;">' . Labels::getLabel('LBL_PRODUCT_TYPE') . '</td>
+                                        <td style="padding: color#000;font-size: 14px;padding: 5px 0;text-align: right;">' . $productTypeArr[$data['rfq_product_type']] . '</td>
+                                    </tr>
                                     <tr>
+                                        <td style="padding: color#000;font-size: 14px;padding: 5px 0;">' . Labels::getLabel('LBL_CATEGORY') . '</td>
+                                        <td style="padding: color#000;font-size: 14px;padding: 5px 0;text-align: right;">' . $data['prodcat_name'] . '</td>
+                                    </tr>';
+                                }
+                                    $str .= '<tr>
                                         <td style="padding: color#000;font-size: 14px;padding: 5px 0;">' . Labels::getLabel('LBL_RFQ_NO') . '</td>
                                         <td style="padding: color#000;font-size: 14px;padding: 5px 0;text-align: right;">' . $data['rfq_number'] . '</td>
                                     </tr>
                                     <tr>
                                         <td style="padding: color#000;font-size: 14px;padding: 5px 0;">' . Labels::getLabel('LBL_REQUESTED_QTY') . '</td>
                                         <td style="padding: color#000;font-size: 14px;padding: 5px 0;text-align: right;">' . $data['rfq_quantity']  . ' ' . applicationConstants::getWeightUnitName($siteLangId, $data['rfq_quantity_unit'], true) . '</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding: color#000;font-size: 14px;padding: 5px 0;">' . Labels::getLabel('LBL_EXPECTED_DELIVERY_DATE') . '</td>
-                                        <td style="padding: color#000;font-size: 14px;padding: 5px 0;text-align: right;">' . FatDate::format($data['rfq_delivery_date']) . '</td>
-                                    </tr>
-                                    <tr>
+                                    </tr>';
+                                    if (!empty($data['rfq_delivery_date']) && 0 < strtotime($data['rfq_delivery_date'])) {
+                                        $str .= '<tr>
+                                            <td style="padding: color#000;font-size: 14px;padding: 5px 0;">' . Labels::getLabel('LBL_EXPECTED_DELIVERY_DATE') . '</td>
+                                            <td style="padding: color#000;font-size: 14px;padding: 5px 0;text-align: right;">' . FatDate::format($data['rfq_delivery_date']) . '</td>
+                                        </tr>';
+                                    }
+
+                                    $str .= '<tr>
                                         <td style="padding: color#000;font-size: 14px;padding: 5px 0;">' . Labels::getLabel('LBL_DELIVERY_ADDRESS') . '</td>
                                         <td style="padding: color#000;font-size: 14px;padding: 5px 0;text-align: right;">' . $shippingInfo . '</td>
                                     </tr>

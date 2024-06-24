@@ -31,7 +31,9 @@
                             <?php } ?>
                                         </ul>
                                     </div>
-                        <?php } ?>
+                        <?php } else {
+                            $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId), false);
+                        } ?>
                     </div>
                 </div>
             </div>

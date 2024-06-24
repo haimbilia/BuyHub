@@ -74,6 +74,9 @@ if (isset($rfqData['country_name']) &&  $rfqData['country_name'] != '') {
 if (isset($rfqData['addr_zip']) &&  $rfqData['addr_zip'] != '') {
     $shippingInfo .= $rfqData['addr_zip'];
 }
+
+$isGlobal = (RequestForQuote::VISIBILITY_TYPE_OPEN == $rfqData['rfq_visibility_type']);
+$productTypeArr = Product::getProductTypes($siteLangId);
 ?>
 <table width="100%" border="0" cellpadding="10" cellspacing="0" class="tbl-border">
     <tbody>
@@ -113,30 +116,40 @@ if (isset($rfqData['addr_zip']) &&  $rfqData['addr_zip'] != '') {
 
             </td>
         </tr>
-        <tr>
-            <td style="border-bottom: solid 1px #000; "><br>
-                <strong style=" padding-bottom:10px; "><?php echo Labels::getLabel('LBL_SOLD_BY', $siteLangId); ?>: <?php echo $rfqData['shop_name']; ?></strong>
-            </td>
-        </tr>
+        <?php if (false == $isGlobal) { ?>
+            <tr>
+                <td style="border-bottom: solid 1px #000; "><br>
+                    <strong style=" padding-bottom:10px; "><?php echo Labels::getLabel('LBL_SOLD_BY', $siteLangId); ?>: <?php echo $rfqData['shop_name']; ?></strong>
+                </td>
+            </tr>
+        <?php } ?>
         <tr>
             <td>
                 <table class="tbl-border" width="100%" border="0" cellpadding="10" cellspacing="0">
                     <thead>
                         <tr>
-                            <th width="90%" style="padding:10px; ;text-align: left; border-bottom:1px solid #ddd; background-color:#ddd; "><?php echo Labels::getLabel('LBL_Item', $siteLangId); ?></th>
+                            <th width="<?php echo $isGlobal ? '50%' : '90%'; ?>" style="padding:10px; ;text-align: left; border-bottom:1px solid #ddd; background-color:#ddd; "><?php echo Labels::getLabel('LBL_ITEM', $siteLangId); ?></th>
+                            <?php if ($isGlobal) { ?>
+                                <th width="20%" style="padding:10px; ;text-align: left; border-bottom:1px solid #ddd; background-color:#ddd; "><?php echo Labels::getLabel('LBL_PRODUCT_TYPE', $siteLangId); ?></th>
+                                <th width="20%" style="padding:10px; ;text-align: left; border-bottom:1px solid #ddd; background-color:#ddd; "><?php echo Labels::getLabel('LBL_CATEGORY', $siteLangId); ?></th>
+                            <?php } ?>
                             <th width="10%" style="padding:10px; ;text-align: left; border-bottom:1px solid #ddd; background-color:#ddd; "><?php echo Labels::getLabel('LBL_Qty', $siteLangId); ?></th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td style="padding:10px; ;text-align: left;"><?php echo $rfqData['rfq_title']; ?></td>
+                            <?php if ($isGlobal) { ?>
+                                <td style="padding:10px; ;text-align: left;"><?php echo $productTypeArr[$rfqData['rfq_product_type']]; ?></td>
+                                <td style="padding:10px; ;text-align: left;"><?php echo $rfqData['prodcat_name']; ?></td>
+                            <?php } ?>
                             <td style="padding:10px; ;text-align: left;"><?php echo $rfqData['rfq_quantity']  . ' ' . applicationConstants::getWeightUnitName($siteLangId, $rfqData['rfq_quantity_unit'], true); ?></td>
                         </tr>
                         <tr>
-                            <td style="padding:10px; ;text-align: left;font-weight:700;background-color: #ddd;" colspan="2"><?php echo Labels::getLabel('LBL_COMMENTS', $siteLangId) ?> </td>
+                            <td style="padding:10px; ;text-align: left;font-weight:700;background-color: #ddd;" colspan="<?php echo ($isGlobal) ? 4 : 2; ?>"><?php echo Labels::getLabel('LBL_COMMENTS', $siteLangId) ?> </td>
                         </tr>
                         <tr>
-                            <td style="padding:10px; ;text-align: left;" colspan="2"><?php echo $rfqData['rfq_description']; ?></td>
+                            <td style="padding:10px; ;text-align: left;" colspan="<?php echo ($isGlobal) ? 4 : 2; ?>"><?php echo $rfqData['rfq_description']; ?></td>
                         </tr>
                     </tbody>
                 </table>

@@ -248,6 +248,9 @@
                 $('.btnAttachmentsJs').removeClass('active');
                 $('.btnSubmitJs').attr('disabled', 'disabled');
                 $(".modalFormJs").get(0).reset();
+                if ($('.buyerAccessInputJs').prop('checked')) {
+                    $('.btnSccessJs').addClass('active');
+                }
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 alert("Error Occurred.");
@@ -326,11 +329,11 @@ $(document).ready(function () {
     $(document).on('keyup', '.chatTextareaJs', function () {
         if ('' != $(this).val()) {
             $('.btnSubmitJs').removeAttr('disabled');
-        } else {            
+        } else {
             $('.btnSubmitJs').attr('disabled', 'disabled');
         }
     });
-    
+
     $(document).on('click', '.btnSccessJs', function () {
         if ($(this).find('.buyerAccessInputJs:checked').length) {
             $(this).addClass('active');
@@ -338,7 +341,7 @@ $(document).ready(function () {
             $(this).removeClass('active');
         }
     });
-    
+
     $(document).on('change', '.attachmentFileInputJs', function () {
         if ('' != $(this).val()) {
             $('.btnAttachmentsJs').addClass('active');
