@@ -62,3 +62,7 @@ ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 ALTER TABLE `tbl_orders` ADD INDEX( `order_date_added`);
 ALTER TABLE `tbl_order_products` ADD INDEX( `op_status_id`);
 ALTER TABLE `tbl_orders` ADD INDEX( `order_payment_status`);
+
+ALTER TABLE `tbl_calculative_data` ADD `cd_updated_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `cd_value`;
+ALTER TABLE `tbl_calculative_data` CHANGE `cd_updated_on` `cd_updated_on` DATETIME on update CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+ALTER TABLE `tbl_calculative_data` CHANGE `cd_value` `cd_value` TEXT CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL;
