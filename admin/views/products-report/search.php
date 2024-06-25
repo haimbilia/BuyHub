@@ -24,7 +24,7 @@ foreach ($arrListing as $sn => $row) {
                 if ($row['selprod_title'] != '') {
                     $name .= '<br/><strong>' . Labels::getLabel('LBL_Custom_Title', $siteLangId) . ': </strong>' . $row['selprod_title'];
                 }
-                if ($row['grouped_option_name'] != '') {
+                if (isset($row['grouped_option_name']) && $row['grouped_option_name'] != '') {
                     $groupedOptionNameArr = explode(',', $row['grouped_option_name']);
                     $groupedOptionValueArr = explode(',', $row['grouped_optionvalue_name']);
                     if (!empty($groupedOptionNameArr)) {

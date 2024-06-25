@@ -597,4 +597,19 @@ class Report extends SearchBase
         }
         return $srch;
     }
+
+    public static function getSelProdOptions(array $selrProdIdArr, $langId = 0)
+    {
+        $spOptionSrch = new SearchBase(SellerProduct::DB_TBL_SELLER_PROD_OPTIONS, 'spo');
+        $spOptionSrch->joinTable(OptionValue::DB_TBL, 'INNER JOIN', 'spo.selprodoption_optionvalue_id = ov.optionvalue_id', 'ov');
+        $spOptionSrch->joinTable(OptionValue::DB_TBL . '_lang', 'LEFT OUTER JOIN', 'ov_lang.optionvaluelang_optionvalue_id = ov.optionvalue_id AND ov_lang.optionvaluelang_lang_id = ' . $langId, 'ov_lang');
+        $spOptionSrch->joinTable(Option::DB_TBL, 'INNER JOIN', '`option`.option_id = ov.optionvalue_option_id', '`option`');
+        $spOptionSrch->joinTable(Option::DB_TBL . '_lang', 'LEFT OUTER JOIN', '`option`.option_id = option_lang.optionlang_option_id AND option_lang.optionlang_lang_id = ' . $langId, 'option_lang');
+        $spOptionSrch->doNotCalculateRecords();
+        $spOptionSrch->doNotLimitRecords();
+        $spOptionSrch->addGroupBy('spo.selprodoption_selprod_id');
+        $spOptionSrch->addMultipleFields(array('spo.selprodoption_selprod_id', 'COALESCE(option_lang.option_name, `option`.option_identifier) as option_name', 'COALESCE(ov_lang.optionvalue_name, ov.optionvalue_identifier) as optionvalue_name', 'GROUP_CONCAT(option_lang.option_name) as grouped_option_name', 'GROUP_CONCAT(ov_lang.optionvalue_name) as grouped_optionvalue_name'));
+        $spOptionSrch->addCondition('selprodoption_selprod_id', 'IN', $selrProdIdArr);
+        return FatApp::getDb()->fetchAll($spOptionSrch->getResultSet(), 'selprodoption_selprod_id');
+    }
 }

@@ -94,7 +94,7 @@ class ProductsReportController extends ListingBaseController
 
 
         /* get Seller product Options[ */
-        $spOptionSrch = new SearchBase(SellerProduct::DB_TBL_SELLER_PROD_OPTIONS, 'spo');
+       /*  $spOptionSrch = new SearchBase(SellerProduct::DB_TBL_SELLER_PROD_OPTIONS, 'spo');
         $spOptionSrch->joinTable(OptionValue::DB_TBL, 'INNER JOIN', 'spo.selprodoption_optionvalue_id = ov.optionvalue_id', 'ov');
         $spOptionSrch->joinTable(OptionValue::DB_TBL . '_lang', 'LEFT OUTER JOIN', 'ov_lang.optionvaluelang_optionvalue_id = ov.optionvalue_id AND ov_lang.optionvaluelang_lang_id = ' . $this->siteLangId, 'ov_lang');
         $spOptionSrch->joinTable(Option::DB_TBL, 'INNER JOIN', '`option`.option_id = ov.optionvalue_option_id', '`option`');
@@ -102,7 +102,7 @@ class ProductsReportController extends ListingBaseController
         $spOptionSrch->doNotCalculateRecords();
         $spOptionSrch->doNotLimitRecords();
         $spOptionSrch->addGroupBy('spo.selprodoption_selprod_id');
-        $spOptionSrch->addMultipleFields(array('spo.selprodoption_selprod_id', 'IFNULL(option_name, option_identifier) as option_name', 'IFNULL(optionvalue_name, optionvalue_identifier) as optionvalue_name', 'GROUP_CONCAT(option_name) as grouped_option_name', 'GROUP_CONCAT(optionvalue_name) as grouped_optionvalue_name'));
+        $spOptionSrch->addMultipleFields(array('spo.selprodoption_selprod_id', 'IFNULL(option_name, option_identifier) as option_name', 'IFNULL(optionvalue_name, optionvalue_identifier) as optionvalue_name', 'GROUP_CONCAT(option_name) as grouped_option_name', 'GROUP_CONCAT(optionvalue_name) as grouped_optionvalue_name')); */
         /* ] */
 
         /* Sub Query to get, how many users added current product in his/her wishlist[ */
@@ -120,7 +120,7 @@ class ProductsReportController extends ListingBaseController
         $srch->joinBrands($this->siteLangId, false, true);
         //$srch->addCondition('brand_id', '!=', 'NULL');
         $srch->joinShops($this->siteLangId, false, false);
-        $srch->joinTable('(' . $spOptionSrch->getQuery() . ')', 'LEFT OUTER JOIN', 'selprod_id = spoq.selprodoption_selprod_id', 'spoq');
+        // $srch->joinTable('(' . $spOptionSrch->getQuery() . ')', 'LEFT OUTER JOIN', 'selprod_id = spoq.selprodoption_selprod_id', 'spoq');
         $srch->joinTable('(' . $opSrch->getQuery() . ')', 'LEFT OUTER JOIN', 'selprod.selprod_id = opq.op_selprod_id', 'opq');
         $srch->joinTable('(' . $uWsrch->getQuery() . ')', 'LEFT OUTER JOIN', 'tquwl.uwlp_selprod_id = selprod.selprod_id', 'tquwl');
         $srch->joinProductToCategory();
@@ -155,7 +155,7 @@ class ProductsReportController extends ListingBaseController
         
         $this->setRecordCount(clone $srch, $pageSize, $page, $post,true);
         $srch->doNotCalculateRecords();
-        $srch->addMultipleFields(array('product_id', 'product_name', 'selprod_id', 'selprod_code', 'selprod_user_id', 'selprod_title', 'selprod_price', /* 'IFNULL(totOrders, 0) as totOrders', */ 'grouped_option_name', 'grouped_optionvalue_name', 'IFNULL(s_l.shop_name, shop_identifier) as shop_name', 'IFNULL(tb_l.brand_name, brand_identifier) as brand_name', 'count(distinct tquwl.uwlist_user_id) as followers', 'opq.*'));
+        $srch->addMultipleFields(array('product_id', 'product_name', 'selprod_id', 'selprod_code', 'selprod_user_id', 'selprod_title', 'selprod_price', /* 'IFNULL(totOrders, 0) as totOrders',  'grouped_option_name', 'grouped_optionvalue_name',*/'IFNULL(s_l.shop_name, shop_identifier) as shop_name', 'IFNULL(tb_l.brand_name, brand_identifier) as brand_name', 'count(distinct tquwl.uwlist_user_id) as followers', 'opq.*'));
         if (!array_key_exists($sortOrder, applicationConstants::sortOrder(CommonHelper::getLangId()))) {
             $sortOrder = applicationConstants::SORT_ASC;
         }
@@ -174,6 +174,11 @@ class ProductsReportController extends ListingBaseController
 
             array_push($sheetData, array_values($fields));
             while ($row = $db->fetch($rs)) {
+                $result = Report::getSelProdOptions([$row['selprod_id']], $this->siteLangId);
+                if (isset($result[$row['selprod_id']]) && !empty($result[$row['selprod_id']])) {
+                    $row = array_merge($row, $result[$row['selprod_id']]);
+                }
+
                 $arr = [];
                 foreach ($fields as $key => $val) {
                     switch ($key) {
@@ -237,7 +242,14 @@ class ProductsReportController extends ListingBaseController
         } else {
             $srch->setPageNumber($page);
             $srch->setPageSize($pageSize); 
-            $this->set("arrListing", $db->fetchAll($srch->getResultSet())); 
+            $arrListing = $db->fetchAll($srch->getResultSet(), 'selprod_id');
+            $result = Report::getSelProdOptions(array_keys($arrListing), $this->siteLangId);
+            foreach ($arrListing as &$row) {
+                if (isset($result[$row['selprod_id']]) && !empty($result[$row['selprod_id']])) {
+                    $row = array_merge($row, $result[$row['selprod_id']]);
+                }
+            }            
+            $this->set("arrListing", $arrListing);
             $this->set('postedData', $post);
             $this->set('sortBy', $sortBy);
             $this->set('sortOrder', $sortOrder);
