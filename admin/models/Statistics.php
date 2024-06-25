@@ -80,26 +80,23 @@ class Statistics extends MyAppModel
                 break;
             case 'orders':
                 $srch = new OrderSearch();
-                $srch->joinOrderPaymentMethod();
                 $srch->doNotCalculateRecords();
                 $srch->doNotLimitRecords();
                 $cnd = $srch->addCondition('order_payment_status', '=', 'mysql_func_' . Orders::ORDER_PAYMENT_PAID, 'AND', true);
-                $cnd->attachCondition('plugin_code', '=', 'CashOnDelivery');
-                $cnd->attachCondition('plugin_code', '=', 'payatstore');
+                $plugInIds = self::getPluginIds(['cashondelivery', 'payatstore']);
+                $cnd->attachCondition('o.order_pmethod_id', 'in', $plugInIds);
                 $srch->addMultipleFields(array('avg(order_net_amount) AS avg_order,count(order_id) as total_orders'));
                 $rs = $srch->getResultSet();
                 return $this->db->fetch($rs);
                 break;
             case 'sales':
-                $srch = new OrderProductSearch();
-                $srch->joinorders();
-                $srch->joinPaymentMethod();
+                $srch = new OrderProductSearch(0, true, false, false, false);
                 $srch->addOrderProductCharges();
                 $srch->doNotCalculateRecords();
                 $srch->doNotLimitRecords();
                 $cnd = $srch->addCondition('order_payment_status', '=', 'mysql_func_' . Orders::ORDER_PAYMENT_PAID, 'AND', true);
-                $cnd->attachCondition('plugin_code', '=', 'CashOnDelivery');
-                $cnd->attachCondition('plugin_code', '=', 'payatstore');
+                $plugInIds = self::getPluginIds(['cashondelivery', 'payatstore']);
+                $cnd->attachCondition('o.order_pmethod_id', 'in', $plugInIds);
                 $completedOrderStatus = unserialize(FatApp::getConfig("CONF_COMPLETED_ORDER_STATUS"));
                 $srch->addStatusCondition($completedOrderStatus);
                 $srch->addMultipleFields(array('SUM((op_unit_price * op_qty ) + COALESCE(op_other_charges,0) + COALESCE(op_rounding_off,0) - COALESCE(op_refund_amount,0)) AS lifetime_sales,avg((op_unit_price * op_qty ) + COALESCE(op_other_charges,0) + COALESCE(op_rounding_off,0) - COALESCE(op_refund_amount,0)) AS avg_order,count(op_id) as total_orders'));
@@ -115,14 +112,12 @@ class Statistics extends MyAppModel
         $type = strtolower($type);
         switch ($type) {
             case 'sales':
-                $srch = new OrderProductSearch();
-                $srch->joinorders();
-                $srch->joinPaymentMethod();
+                $srch = new OrderProductSearch(0, true, false, false, false);
                 $srch->addOrderProductCharges();
                 $srch->doNotCalculateRecords();
                 $srch->doNotLimitRecords();
                 $srch->addStatusCondition(unserialize(FatApp::getConfig("CONF_COMPLETED_ORDER_STATUS")));
-                foreach ($last12Months as $key => $val) {
+                foreach ($last12Months as $key => $val) {                   
                     $srchObj = clone $srch;
                     $srchObj->addDirectCondition("month(`order_date_added` ) = $val[monthCount] and year(`order_date_added` )= $val[year]");
                     $srchObj->addMultipleFields(array('SUM((op_unit_price * op_qty ) + COALESCE(op_other_charges,0) + COALESCE(op_rounding_off,0) - COALESCE(op_refund_amount,0)) AS Sales,avg((op_unit_price * op_qty ) + COALESCE(op_other_charges,0) + COALESCE(op_rounding_off,0) - COALESCE(op_refund_amount,0)) AS avg_order,count(op_id) as total_orders'));
@@ -133,9 +128,7 @@ class Statistics extends MyAppModel
                 return $sales_data;
                 break;
             case 'earnings':
-                $srch = new OrderProductSearch();
-                $srch->joinorders();
-                $srch->joinPaymentMethod();
+                $srch = new OrderProductSearch(0, true, false, false, false);
                 $srch->addOrderProductCharges();
                 $srch->doNotCalculateRecords();
                 $srch->doNotLimitRecords();
@@ -206,15 +199,13 @@ class Statistics extends MyAppModel
 
     public function getOrderSalesStats($interval = self::BY_THIS_MONTH)
     {
-        $srch = new OrderProductSearch();
-        $srch->joinorders();
-        $srch->joinPaymentMethod();
+        $srch = new OrderProductSearch(0, true, false, false, false);
         $srch->addOrderProductCharges();
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $cnd = $srch->addCondition('order_payment_status', '=', 'mysql_func_' . Orders::ORDER_PAYMENT_PAID, 'AND', true);
-        $cnd->attachCondition('plugin_code', '=', 'CashOnDelivery');
-        $cnd->attachCondition('plugin_code', '=', 'payatstore');
+        $plugInIds = self::getPluginIds(['cashondelivery', 'payatstore']);
+        $cnd->attachCondition('o.order_pmethod_id', 'in', $plugInIds);
         $srch->addStatusCondition(unserialize(FatApp::getConfig("CONF_COMPLETED_ORDER_STATUS")));
         $srch->addCondition('order_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         $srch->addMultipleFields(array('SUM((op_unit_price * op_qty ) + IFNULL(op_other_charges,0) + IFNULL(op_rounding_off,0) - IFNULL(op_refund_amount,0)) AS totalsales,SUM(op_commission_charged - op_refund_commission) totalcommission'));
@@ -635,10 +626,7 @@ class Statistics extends MyAppModel
             $srch->doNotLimitRecords();
         }
 
-        $plugInIds = [0 => '-1'];
-        $plugInIds[] = Plugin::getAttributesByCode('cashondelivery', 'plugin_id');
-        $plugInIds[] = Plugin::getAttributesByCode('payatstore', 'plugin_id');
-
+        $plugInIds = self::getPluginIds(['cashondelivery', 'payatstore']);
         $cnd = $srch->addCondition('order_payment_status', '=', 'mysql_func_' . Orders::ORDER_PAYMENT_PAID, 'AND', true);
         /*  $cnd->attachCondition('plugin_code', '=', 'CashOnDelivery');
         $cnd->attachCondition('plugin_code', '=', 'payatstore'); */
@@ -707,9 +695,7 @@ class Statistics extends MyAppModel
 
     public function getUserOrderStatsCount($type = '')
     {
-        $plugInIds = [0 => '-1'];
-        $plugInIds[] = Plugin::getAttributesByCode('cashondelivery', 'plugin_id');
-        $plugInIds[] = Plugin::getAttributesByCode('payatstore', 'plugin_id');
+        $plugInIds = self::getPluginIds(['cashondelivery', 'payatstore']);
 
         $cancelAndRefundedStatusArr = (array) FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS");
         $srch = new OrderProductSearch(0, true, false, false, false);
@@ -781,5 +767,19 @@ class Statistics extends MyAppModel
         'cancelled'=>array('count'=>$cancelAndRefundedUserCount,'%age'=>round(($cancelAndRefundedUserCount*100)/$totalUser),2),
         ); */
         return $data;
+    }
+
+    public static function getPluginIds(array $paymentMethodCode = [])
+    {
+
+        if (empty($paymentMethodCode)) {
+            $paymentMethodCode = ['cashondelivery', 'payatstore'];
+        }
+
+        $plugInIds = Plugin::getIdsByCodeArr($paymentMethodCode, 'plugin_id');
+        if (empty($plugInIds)) {
+            $plugInIds = [0 => '-1'];
+        }
+        return  array_keys($plugInIds);
     }
 }
