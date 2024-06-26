@@ -131,16 +131,19 @@ class CheckoutController extends MyAppController
                                 }
                             }
                         } else {
-                            $tempHoldStock = Product::tempHoldStockCount($product['selprod_id']);
+                            $tempHoldStock = (0 < $product['selprod_track_inventory']) ? Product::tempHoldStockCount($product['selprod_id']) : 0;
                             $availableStock = $product['selprod_stock'] - $tempHoldStock;
-                            $userTempHoldStock = Product::tempHoldStockCount($product['selprod_id'], $cart_user_id, 0, true);
+                            $userTempHoldStock = 0;
+                            if (0 < $product['selprod_track_inventory']) {
+                                $userTempHoldStock = Product::tempHoldStockCount($product['selprod_id'], $cart_user_id, 0, true);
+                            }
                             $productName = (isset($product['selprod_title']) && $product['selprod_title'] != '') ? $product['selprod_title'] : $product['name'];
                             if ($availableStock < ($product['quantity'] - $userTempHoldStock)) {
                                 $key = false;
                                 $this->errMessage = Labels::getLabel('ERR_{PRODUCT-NAME}_IS_TEMPORARY_OUT_OF_STOCK_OR_HOLD_BY_OTHER_CUSTOMER', $this->siteLangId);
                             } elseif ($product['selprod_min_order_qty'] > ($availableStock + $userTempHoldStock)) {
                                 $this->errMessage = Labels::getLabel('ERR_{PRODUCT-NAME}_ITS_MIN_PURCHASE_QUANTITY_IS_HIGHER_THAN_AVAILABLE_STOCK_LIMIT._SO_UNABLE_TO_PROCEED_FURTHER.', $this->siteLangId);
-                            } elseif ($product['selprod_min_order_qty'] > $userTempHoldStock) {
+                            } elseif ($product['selprod_min_order_qty'] > $product['quantity']) {
                                 $this->errMessage = Labels::getLabel('ERR_{PRODUCT-NAME}_ITS_PURCHASE_QUANTITY_IS_LESS_THAN_MIN_PURCHASE_QUANTITY._SO_UNABLE_TO_PROCEED_FURTHER.', $this->siteLangId);
                             }
 

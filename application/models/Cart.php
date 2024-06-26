@@ -160,9 +160,10 @@ class Cart extends FatModel
             return false;
         }
 
+        $selProdData = SellerProduct::getAttributesById($selprod_id, ['selprod_user_id', 'selprod_track_inventory']);
         if ($this->hasProducts() > 0 && FatApp::getConfig('CONF_SINGLE_SELLER_CART', FatUtility::VAR_INT, 0)) {
             $this->getBasketProducts($this->cart_lang_id);
-            $sellerUserId = SellerProduct::getAttributesById($selprod_id, 'selprod_user_id');
+            $sellerUserId = $selProdData['selprod_user_id'];
             if ($this->singleCartSellerId > 0 && $sellerUserId != $this->singleCartSellerId) {
                 $this->clear();
             }
@@ -188,13 +189,18 @@ class Cart extends FatModel
                 foreach ($products as $cartKey => $product) {
                     if ($product['is_batch'] && $prodgroup_id == $product['prodgroup_id']) {
                         foreach ($product['products'] as $pgProduct) {
+                            if (1 > $pgProduct['selprod_track_inventory']) {
+                                continue;
+                            }
                             $this->updateTempStockHold($pgProduct['selprod_id'], $this->SYSTEM_ARR['cart'][$key], $product['prodgroup_id']);
                         }
                     }
                 }
             }
         } else {
-            $this->updateTempStockHold($selprod_id, $this->SYSTEM_ARR['cart'][$key]);
+            if (0 < $selProdData['selprod_track_inventory']) {
+                $this->updateTempStockHold($selprod_id, $this->SYSTEM_ARR['cart'][$key]);
+            }
         }
         $this->removeCartDiscountCoupon();
         $this->updateUserCart();
@@ -791,7 +797,7 @@ class Cart extends FatModel
             'selprod_id', 'selprod_code', 'selprod_stock', 'selprod_user_id', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'selprod_min_order_qty',
             'special_price_found', 'theprice', 'shop_id', 'shop_free_ship_upto', 'shop_state_id', 'shop_country_id',
             'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'selprod_price', 'selprod_cost', 'case when product_seller_id=0 then IFNULL(psbs_user_id,0)   else product_seller_id end  as psbs_user_id', 'product_seller_id', 'product_cod_enabled', 'shop_fulfillment_type', 'selprod_fulfillment_type', 'selprod_cod_enabled', 'shippack_length', 'shippack_width', 'shippack_height', 'shippack_units',
-            'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name', 'product_updated_on'
+            'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name', 'product_updated_on', 'selprod_track_inventory'
         ));
 
         if ($siteLangId) {
@@ -1145,7 +1151,9 @@ class Cart extends FatModel
                         if ($quantity) {
                             $this->SYSTEM_ARR['cart'][$cartKey] = $quantity;
                             /* to keep track of temporary hold the product stock[ */
-                            $this->updateTempStockHold($product['selprod_id'], $quantity);
+                            if (0 < $product['selprod_track_inventory']) {
+                                $this->updateTempStockHold($product['selprod_id'], $quantity);
+                            }
                             /* ] */
                             if (is_numeric($this->cart_user_id) && $this->cart_user_id > 0) {
                                 AbandonedCart::saveAbandonedCart($this->cart_user_id, $product['selprod_id'], $quantity, AbandonedCart::ACTION_ADDED);
@@ -1218,7 +1226,9 @@ class Cart extends FatModel
                         if ($product['is_batch'] && $product['prodgroup_id'] == $prodgroup_id) {
                             $this->SYSTEM_ARR['cart'][$cartKey] = $quantity;
                             foreach ($product['products'] as $pgproduct) {
-                                $this->updateTempStockHold($pgproduct['selprod_id'], $quantity, $prodgroup_id);
+                                if (0 < $pgproduct['selprod_track_inventory']) {
+                                    $this->updateTempStockHold($pgproduct['selprod_id'], $quantity, $prodgroup_id);
+                                }
                             }
                         }
                     }

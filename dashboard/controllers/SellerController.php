@@ -4240,6 +4240,8 @@ class SellerController extends SellerBaseController
             $fld->requirements()->setInt();
             $fld = $frm->addIntegerField(Labels::getLabel('FRM_MINIMUM_PURCHASE_QUANTITY', $this->siteLangId), 'selprod_min_order_qty');
             $fld->requirements()->setRange(1, SellerProduct::MAX_RANGE_OF_MINIMUM_PURCHANGE_QTY);
+        }else{
+            $frm->addHiddenField(Labels::getLabel('FRM_MINIMUM_PURCHASE_QUANTITY', $this->siteLangId), 'selprod_min_order_qty',1);
         }
 
         if ($productData['product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
@@ -4249,7 +4251,9 @@ class SellerController extends SellerBaseController
             $fld1 = $frm->addIntegerField(Labels::getLabel('FRM_VALIDITY_(days)', $this->siteLangId), 'selprod_download_validity_in_days');
             $fld1->htmlAfterField = '<span class="note">' . Labels::getLabel('FRM_-1_FOR_UNLIMITED', $this->siteLangId) . '</span>';
             $frm->addHiddenField('', 'selprod_condition', $defaultProductCond);
-        } else {
+        } elseif ($productData['product_type'] != Product::PRODUCT_TYPE_SERVICE) {
+            $frm->addHiddenField('', 'selprod_condition', $defaultProductCond);
+         } else {
             $fld = $frm->addSelectBox(Labels::getLabel('FRM_PRODUCT_CONDITION', $this->siteLangId), 'selprod_condition', Product::getConditionArr($this->siteLangId), $defaultProductCond, array(), Labels::getLabel('FRM_SELECT_CONDITION', $this->siteLangId));
             $fld->requirements()->setRequired();
         }
