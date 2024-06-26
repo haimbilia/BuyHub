@@ -1253,18 +1253,15 @@ class ConfigurationsController extends ListingBaseController
             case Configurations::FORM_THIRD_PARTY_API:
                 $frm->addHtml('', 'GooglePushNotification', '<h3 class="form-section-head">' . Labels::getLabel("FRM_GOOGLE_PUSH_NOTIFICATION", $langId) . '</h3>');
 
-                $fld = $frm->addTextBox(Labels::getLabel("FRM_GOOGLE_PUSH_NOTIFICATION_API_KEY", $langId), 'CONF_GOOGLE_PUSH_NOTIFICATION_API_KEY');
-                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_THIS_IS_THE_API_KEY_USED_IN_PUSH_NOTIFICATIONS.", $langId) . "</span>";
-
                 $fld = $frm->addTextarea(Labels::getLabel('FRM_FIREBASE_SERVICE_ACCOUNT_PRIVATE_KEY_JSON_FILE'), 'CONF_FIREBASE_SERVICE_ACCOUNT_JSON_KEY');
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 $link = '<a href="javascript:void(0)" title="' . Labels::getLabel('FRM_FIREBASE_SERVICE_ACCOUNT_PRIVATE_KEY_JSON_FILE_STEPS') . '" data-bs-toggle="modal" data-bs-target="#firebaseServiceAccountStepsJs">' . Labels::getLabel('LBL_STEPS', $this->siteLangId) . '</a>';
                 $link .= HtmlHelper::getModalStructure('firebaseServiceAccountStepsJs', Labels::getLabel('LBL_FIREBASE_SERVICE_ACCOUNT_PRIVATE_KEY_JSON', $this->siteLangId), Extrapage::getFirebaseServiceAccountSteps($this->siteLangId));
                 $lbl = CommonHelper::replaceStringData(Labels::getLabel("LBL_PLEASE_FOLLOW_{STEPS}_TO_GET_FIREBASE_SERVICE_ACCOUNT_JSON_KEY", $this->siteLangId), ['{STEPS}' => $link]);
                 $fld->htmlAfterField = "<small class='form-text text-muted'>" . $lbl . "</small>";
-                
 
-                $frm->addHtml('', 'FaceBookPixel', '<h3 class="form-section-head">' . Labels::getLabel("FRM_FACEBOOK_PIXEL", $langId) . '</h3>');
+                $fld = $frm->addHtml('', 'FaceBookPixel', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("FRM_FACEBOOK_PIXEL", $langId) . '</h3>');
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
                 $fld = $frm->addTextBox(Labels::getLabel("FRM_FACEBOOK_PIXEL_ID", $langId), 'CONF_FACEBOOK_PIXEL_ID');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_THIS_IS_THE_FACEBOOK_PIXEL_ID_USED_IN_TRACK_EVENTS.", $langId) . "</span>";
