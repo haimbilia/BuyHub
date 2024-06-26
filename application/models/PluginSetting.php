@@ -18,6 +18,7 @@ class PluginSetting
     public const TYPE_SELECT = 5;
     public const TYPE_HTML = 6;
     public const TYPE_ENVIRONMENT = 7;
+    public const TYPE_TEXTAREA = 8;
 
     public function __construct($id, $pluginKey = '', $recordId = 0)
     {
@@ -194,6 +195,9 @@ class PluginSetting
                     if (!empty($html)) {
                         $frm->addHtml('', $fieldName, $html);
                     }
+                    break;
+                case static::TYPE_TEXTAREA:
+                    $fld = $frm->addTextarea($label, $fieldName);
                     break;
                 default:
                     $fld = $frm->addTextBox($label, $fieldName);

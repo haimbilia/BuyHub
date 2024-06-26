@@ -61,6 +61,7 @@ class Extrapage extends MyAppModel
 
     public const GOOGLE_SERVICE_ACCOUNT_STEPS = 84;
     public const GOOGLE_ANALYTICS_PROPERTY_ID_STEPS = 85;
+    public const FIREBASE_SERVICE_ACCOUNT_STEPS = 86; /* Used for Push Notification */
 
     public function __construct($epageId = 0)
     {
@@ -295,6 +296,12 @@ class Extrapage extends MyAppModel
     {
         $obj = new Extrapage();
         return (string)(($obj->getContentByPageType(self::GOOGLE_SERVICE_ACCOUNT_STEPS, $langId))['epage_content'] ?? '');
+    }
+    
+    public static function getFirebaseServiceAccountSteps(int $langId): string
+    {
+        $obj = new Extrapage();
+        return (string)(($obj->getContentByPageType(self::FIREBASE_SERVICE_ACCOUNT_STEPS, $langId))['epage_content'] ?? '');
     }
     
     public static function getGoogleAnalyticsPropertyIdSteps(int $langId): string
