@@ -546,7 +546,7 @@ trait SellerProducts
                 FatUtility::dieWithError(Message::getHtml());
             }
         }
-
+                
         $post['selprod_subtract_stock'] = FatApp::getPostedData('selprod_subtract_stock', FatUtility::VAR_INT, 0);
         $post['selprod_track_inventory'] = FatApp::getPostedData('selprod_track_inventory', FatUtility::VAR_INT, 0);
         $post['selprod_rfq_enabled'] = FatApp::getPostedData('selprod_rfq_enabled', FatUtility::VAR_INT, 0);

@@ -135,11 +135,12 @@ class CheckoutController extends MyAppController
                                 $tempHoldStock = 0;
                                 $availableStock = $product['quantity'];
                             } else {
-                                $tempHoldStock = Product::tempHoldStockCount($product['selprod_id']);
+                                $tempHoldStock = (0 < $product['selprod_track_inventory']) ? Product::tempHoldStockCount($product['selprod_id']) : 0;
                                 $availableStock = $product['selprod_stock'] - $tempHoldStock;
                             }
-
-                            $userTempHoldStock = Product::tempHoldStockCount($product['selprod_id'], $cart_user_id, 0, true);
+                            if (0 < $product['selprod_track_inventory']) {
+                                $userTempHoldStock = Product::tempHoldStockCount($product['selprod_id'], $cart_user_id, 0, true);
+                            }
                             $productName = (isset($product['selprod_title']) && $product['selprod_title'] != '') ? $product['selprod_title'] : $product['name'];
                             if (!isset($_SESSION['offer_checkout'])) {
                                 if ($availableStock < ($product['quantity'] - $userTempHoldStock)) {

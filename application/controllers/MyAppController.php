@@ -56,6 +56,9 @@ class MyAppController extends FatController
             $cartProducts = $cartObj->getBasketProducts($this->siteLangId, false);
             if ($cartProducts) {
                 foreach ($cartProducts as $product) {
+                    if (1 > $product['selprod_track_inventory']) {
+                        continue;
+                    }
                     $cartObj->updateTempStockHold($product['selprod_id'], $product['quantity']);
                 }
             }
