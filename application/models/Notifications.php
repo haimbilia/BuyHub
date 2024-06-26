@@ -55,9 +55,9 @@ class Notifications extends MyAppModel
                 return $this->getMainTableRecordId();
             }
 
+            $siteName = FatApp::getConfig('CONF_WEBSITE_NAME_' . $this->commonLangId, FatUtility::VAR_STRING, 'Yo!Kart');
+            $message = array('title' => empty($siteName) ? $_SERVER['SERVER_NAME'] : $siteName, 'text' => $data['unotification_body'], 'type' => $data['unotification_type']);
             foreach ($fcmDeviceIds as $pushNotificationApiToken) {
-                $siteName = FatApp::getConfig('CONF_WEBSITE_NAME_' . $this->commonLangId, FatUtility::VAR_STRING, 'Yo!Kart');
-                $message = array('title' => empty($siteName) ? $_SERVER['SERVER_NAME'] : $siteName, 'text' => $data['unotification_body'], 'type' => $data['unotification_type']);
                 self::sendPushNotification($config, $pushNotificationApiToken['uauth_fcm_id'], $message);
             }
         }
@@ -147,7 +147,6 @@ class Notifications extends MyAppModel
         curl_close($ch);
         return true;
     }
-
 
     public function readUserNotification($notificationId, $userId)
     {
