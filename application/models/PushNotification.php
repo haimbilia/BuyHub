@@ -319,7 +319,6 @@ class PushNotification extends MyAppModel
             } else {
                 static::updateDetail($recordId, static::STATUS_PROCESSING, $lastUserAccessTime);
             }
-            // CommonHelper::printArray($response);
         }
         return true;
     }

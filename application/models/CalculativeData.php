@@ -19,8 +19,15 @@ class CalculativeData extends MyAppModel
     public const KEY_SELLER_PRODUCT = 13;
     public const KEY_RFQ = 14;
 
+    public const KEY_ADMIN_SALES_STATS = 15;
+    public const KEY_ADMIN_EARNINGS_STATS = 16;
+    public const KEY_USER_SIGNUPS_STATS = 17;
+    public const KEY_AFFILIATE_SIGNUPS_STATS = 18;
+    public const KEY_ADVERTISER_SIGNUPS_STATS = 19;
+    public const KEY_ADMIN_PRODUCTS_STATS = 20;
 
     public const TYPE_REQUESTS = 1;
+    public const TYPE_ADMIN_SALES_STATS = 2;
 
     public const COLUMNS = [
         'cd_key',
@@ -119,6 +126,14 @@ class CalculativeData extends MyAppModel
                 self::KEY_BADGE,
                 self::KEY_SELLER_PRODUCT,
                 self::KEY_RFQ
+            ],
+            self::TYPE_ADMIN_SALES_STATS => [
+                self::KEY_ADMIN_SALES_STATS,
+                self::KEY_ADMIN_EARNINGS_STATS,
+                self::KEY_USER_SIGNUPS_STATS,
+                self::KEY_AFFILIATE_SIGNUPS_STATS,
+                self::KEY_ADVERTISER_SIGNUPS_STATS,
+                self::KEY_ADMIN_PRODUCTS_STATS
             ]
         ];
     }
@@ -196,15 +211,32 @@ class CalculativeData extends MyAppModel
     }
 
     /**
+     * getJsonToArrayValue
+     *
+     * @param  int $type
+     * @return array
+     */
+    public static function getJsonToArrayValue(int $key): mixed
+    {
+        $srch = self::getSearchObject();
+        $srch->doNotCalculateRecords();
+        $srch->addFld('cd_value');
+        $srch->addCondition('cd_key', '=', $key);
+        $record = FatApp::getDb()->fetch($srch->getResultSet());
+        return (isset($record['cd_value']) ? json_decode($record['cd_value'], true) : []);
+    }
+
+    /**
      * updateValue
      *
      * @param  int $key
      * @param  mixed $value
+     * @param  int $type
      * @return bool
      */
-    public static function updateValue(int $key, mixed $value): bool
+    public static function updateValue(int $key, mixed $value, int $type = 0): bool
     {
-        $type = self::getTypeByKey($key);
+        $type = (1 > $type) ? self::getTypeByKey($key) : $type;
         if (0 == $type) {
             self::$errorMsg = Labels::getLabel('ERR_INVALID_KEY');
             return false;

@@ -118,6 +118,38 @@ class Plugin extends PluginCommon
     }
 
     /**
+     * getIdsByCodeArr
+     *
+     * @param  array $code
+     * @param  mixed $attr
+     * @param  int $langId
+     * @return mixed
+     */
+    public static function getIdsByCodeArr(array $code, $attr = '', int $langId = 0)
+    {
+        $srch = new SearchBase(static::DB_TBL, 'plg');
+        $srch->addCondition('plg.' . static::DB_TBL_PREFIX . 'code', 'in', $code);
+
+        if (0 < $langId) {
+            $srch->joinTable(self::DB_TBL_LANG, 'LEFT JOIN', self::DB_TBL_LANG_PREFIX . static::DB_TBL_PREFIX . 'id = ' . static::DB_TBL_PREFIX . 'id and ' . self::DB_TBL_LANG_PREFIX . 'lang_id = ' . $langId, 'plg_l');
+        }
+
+        if ('' != $attr) {
+            if (is_array($attr)) {
+                $srch->addMultipleFields($attr);
+            } elseif (is_string($attr)) {
+                $srch->addFld($attr);
+            }
+        }
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $rs = $srch->getResultSet();
+
+        $db = FatApp::getDb();
+        return (array) $db->fetchAll($rs, 'plugin_id');
+    }
+
+    /**
      * pluginTypeSrchObj
      *
      * @param  int $typeId

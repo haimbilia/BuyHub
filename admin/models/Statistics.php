@@ -80,26 +80,23 @@ class Statistics extends MyAppModel
                 break;
             case 'orders':
                 $srch = new OrderSearch();
-                $srch->joinOrderPaymentMethod();
                 $srch->doNotCalculateRecords();
                 $srch->doNotLimitRecords();
                 $cnd = $srch->addCondition('order_payment_status', '=', 'mysql_func_' . Orders::ORDER_PAYMENT_PAID, 'AND', true);
-                $cnd->attachCondition('plugin_code', '=', 'CashOnDelivery');
-                $cnd->attachCondition('plugin_code', '=', 'payatstore');
+                $plugInIds = self::getPluginIds(['cashondelivery', 'payatstore']);
+                $cnd->attachCondition('o.order_pmethod_id', 'in', $plugInIds);
                 $srch->addMultipleFields(array('avg(order_net_amount) AS avg_order,count(order_id) as total_orders'));
                 $rs = $srch->getResultSet();
                 return $this->db->fetch($rs);
                 break;
             case 'sales':
-                $srch = new OrderProductSearch();
-                $srch->joinorders();
-                $srch->joinPaymentMethod();
+                $srch = new OrderProductSearch(0, true, false, false, false);
                 $srch->addOrderProductCharges();
                 $srch->doNotCalculateRecords();
                 $srch->doNotLimitRecords();
                 $cnd = $srch->addCondition('order_payment_status', '=', 'mysql_func_' . Orders::ORDER_PAYMENT_PAID, 'AND', true);
-                $cnd->attachCondition('plugin_code', '=', 'CashOnDelivery');
-                $cnd->attachCondition('plugin_code', '=', 'payatstore');
+                $plugInIds = self::getPluginIds(['cashondelivery', 'payatstore']);
+                $cnd->attachCondition('o.order_pmethod_id', 'in', $plugInIds);
                 $completedOrderStatus = unserialize(FatApp::getConfig("CONF_COMPLETED_ORDER_STATUS"));
                 $srch->addStatusCondition($completedOrderStatus);
                 $srch->addMultipleFields(array('SUM((op_unit_price * op_qty ) + COALESCE(op_other_charges,0) + COALESCE(op_rounding_off,0) - COALESCE(op_refund_amount,0)) AS lifetime_sales,avg((op_unit_price * op_qty ) + COALESCE(op_other_charges,0) + COALESCE(op_rounding_off,0) - COALESCE(op_refund_amount,0)) AS avg_order,count(op_id) as total_orders'));
@@ -109,58 +106,115 @@ class Statistics extends MyAppModel
         }
     }
 
-    public function getDashboardLast12MonthsSummary($langId, $type, $userTypeArr = array(), $months = 12)
+    public function getDashboardLast12MonthsSummary($langId, $type, $userTypeArr = array(), $months = 12, $cache = true)
     {
         $last12Months = Stats::getLast12MonthsDetails($months);
         $type = strtolower($type);
         switch ($type) {
             case 'sales':
-                $srch = new OrderProductSearch();
-                $srch->joinorders();
-                $srch->joinPaymentMethod();
+                $salesDataArr = [];
+                if (true == $cache) {
+                    $salesDataArr =  CalculativeData::getJsonToArrayValue(CalculativeData::KEY_ADMIN_SALES_STATS);
+                }
+
+                $srch = new OrderProductSearch(0, true, false, false, false);
                 $srch->addOrderProductCharges();
                 $srch->doNotCalculateRecords();
                 $srch->doNotLimitRecords();
                 $srch->addStatusCondition(unserialize(FatApp::getConfig("CONF_COMPLETED_ORDER_STATUS")));
+                $arrValues =  $sales_data = [];
                 foreach ($last12Months as $key => $val) {
+                    $arrKey = $val['monthShort'] . '-' . $val['year'];
+                    if (true == $cache) {
+                        if (isset($salesDataArr[$arrKey])) {
+                            $sales_data[] = array("duration" => Labels::getLabel('LBL_' . $val['monthShort'], $langId) . "-" . $val['year'], "value" => $salesDataArr[$arrKey]);
+                            $arrValues[$arrKey] = round($row["Sales"] ?? 0, 2);
+                            continue;
+                        }
+                    }
                     $srchObj = clone $srch;
                     $srchObj->addDirectCondition("month(`order_date_added` ) = $val[monthCount] and year(`order_date_added` )= $val[year]");
                     $srchObj->addMultipleFields(array('SUM((op_unit_price * op_qty ) + COALESCE(op_other_charges,0) + COALESCE(op_rounding_off,0) - COALESCE(op_refund_amount,0)) AS Sales,avg((op_unit_price * op_qty ) + COALESCE(op_other_charges,0) + COALESCE(op_rounding_off,0) - COALESCE(op_refund_amount,0)) AS avg_order,count(op_id) as total_orders'));
                     $rs = $srchObj->getResultSet();
                     $row = $this->db->fetch($rs);
                     $sales_data[] = array("duration" => Labels::getLabel('LBL_' . $val['monthShort'], $langId) . "-" . $val['year'], "value" => round($row["Sales"] ?? 0, 2));
+
+                    if (!in_array($val['monthShort'], [date('M'), date('M', strtotime(date('M') . " last month"))])) {
+                        $arrValues[$arrKey] = round($row["Sales"] ?? 0, 2);
+                    }
                 }
+                CalculativeData::updateValue(CalculativeData::KEY_ADMIN_SALES_STATS, json_encode($arrValues), CalculativeData::KEY_ADMIN_SALES_STATS);
                 return $sales_data;
                 break;
             case 'earnings':
-                $srch = new OrderProductSearch();
-                $srch->joinorders();
-                $srch->joinPaymentMethod();
+                $salesDataArr = [];
+                if (true == $cache) {
+                    $salesDataArr =  CalculativeData::getJsonToArrayValue(CalculativeData::KEY_ADMIN_EARNINGS_STATS);
+                }
+
+                $srch = new OrderProductSearch(0, true, false, false, false);
                 $srch->addOrderProductCharges();
                 $srch->doNotCalculateRecords();
                 $srch->doNotLimitRecords();
                 $srch->addStatusCondition(unserialize(FatApp::getConfig("CONF_COMPLETED_ORDER_STATUS")));
-
+                $arrValues =  $earnings_data = [];
                 foreach ($last12Months as $key => $val) {
+                    $arrKey = $val['monthShort'] . '-' . $val['year'];
+                    if (true == $cache) {
+                        if (isset($salesDataArr[$arrKey])) {
+                            $earnings_data[] = array("duration" => Labels::getLabel('LBL_' . $val['monthShort'], $langId) . "-" . $val['year'], "value" => $salesDataArr[$arrKey]);
+                            $arrValues[$arrKey] = round($row["Earning"] ?? 0, 2);
+                            continue;
+                        }
+                    }
+
                     $srchObj = clone $srch;
                     $srchObj->addMultipleFields(array('sum((IFNULL(op_commission_charged,0) - IFNULL(op_refund_commission,0))) AS Earning'));
                     $srchObj->addDirectCondition("month(`order_date_added` ) = $val[monthCount] and year(`order_date_added` )= $val[year]");
                     $rs = $srchObj->getResultSet();
                     $row = $this->db->fetch($rs);
                     $earnings_data[] = array("duration" => Labels::getLabel('LBL_' . $val['monthShort'], $langId) . "-" . $val['year'], "value" => round($row["Earning"] ?? 0, 2));
+
+                    if (!in_array($val['monthShort'], [date('M'), date('M', strtotime(date('M') . " last month"))])) {
+                        $arrValues[$arrKey] = round($row["Earning"] ?? 0, 2);
+                    }
                 }
+                CalculativeData::updateValue(CalculativeData::KEY_ADMIN_EARNINGS_STATS, json_encode($arrValues), CalculativeData::KEY_ADMIN_SALES_STATS);
                 return $earnings_data;
                 break;
 
             case 'signups':
+                $signupDataArr = [];
+                $calculativeDataKey = CalculativeData::KEY_USER_SIGNUPS_STATS;
+                if (isset($userTypeArr['user_is_affiliate']) && FatUtility::int($userTypeArr['user_is_affiliate']) > 0) {
+                    $calculativeDataKey = CalculativeData::KEY_AFFILIATE_SIGNUPS_STATS;
+                }
+
+                if (isset($userTypeArr['user_is_advertiser']) && FatUtility::int($userTypeArr['user_is_advertiser']) > 0) {
+                    $calculativeDataKey = CalculativeData::KEY_ADVERTISER_SIGNUPS_STATS;
+                }
+
+                if (true == $cache) {
+                    $signupDataArr =  CalculativeData::getJsonToArrayValue($calculativeDataKey);
+                }
+
                 $userObj = new User();
                 $srch = $userObj->getUserSearchObj();
                 $srch->doNotCalculateRecords();
                 $srch->doNotLimitRecords();
                 $srch->addMultipleFields(array('count(user_id) AS Registrations'));
                 $srch->addCondition('u.user_is_shipping_company', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
-
+                $arrValues =  $signups_data = [];
                 foreach ($last12Months as $key => $val) {
+                    $arrKey = $val['monthShort'] . '-' . $val['year'];
+                    if (true == $cache) {
+                        if (isset($signupDataArr[$arrKey])) {
+                            $signups_data[] = array("duration" => Labels::getLabel('LBL_' . $val['monthShort'], $langId) . "-" . $val['year'], "value" => $signupDataArr[$arrKey]);
+                            $arrValues[$arrKey] = round($row["Registrations"] ?? 0, 2);
+                            continue;
+                        }
+                    }
+
                     $srchObj = clone $srch;
                     $srchObj->addDirectCondition("month(`user_regdate` ) = $val[monthCount] and year(`user_regdate` ) = $val[year]");
 
@@ -179,7 +233,13 @@ class Statistics extends MyAppModel
                     $rs = $srchObj->getResultSet();
                     $row = $this->db->fetch($rs);
                     $signups_data[] = array("duration" => Labels::getLabel('LBL_' . $val['monthShort'], $langId) . "-" . $val['year'], "value" => round($row["Registrations"], 2));
+
+                    if (!in_array($val['monthShort'], [date('M')])) {
+                        $arrValues[$arrKey] = round($row["Registrations"] ?? 0, 2);
+                    }
                 }
+
+                CalculativeData::updateValue($calculativeDataKey, json_encode($arrValues), CalculativeData::KEY_ADMIN_SALES_STATS);
                 return $signups_data;
                 break;
             case 'products':
@@ -206,15 +266,13 @@ class Statistics extends MyAppModel
 
     public function getOrderSalesStats($interval = self::BY_THIS_MONTH)
     {
-        $srch = new OrderProductSearch();
-        $srch->joinorders();
-        $srch->joinPaymentMethod();
+        $srch = new OrderProductSearch(0, true, false, false, false);
         $srch->addOrderProductCharges();
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $cnd = $srch->addCondition('order_payment_status', '=', 'mysql_func_' . Orders::ORDER_PAYMENT_PAID, 'AND', true);
-        $cnd->attachCondition('plugin_code', '=', 'CashOnDelivery');
-        $cnd->attachCondition('plugin_code', '=', 'payatstore');
+        $plugInIds = self::getPluginIds(['cashondelivery', 'payatstore']);
+        $cnd->attachCondition('o.order_pmethod_id', 'in', $plugInIds);
         $srch->addStatusCondition(unserialize(FatApp::getConfig("CONF_COMPLETED_ORDER_STATUS")));
         $srch->addCondition('order_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         $srch->addMultipleFields(array('SUM((op_unit_price * op_qty ) + IFNULL(op_other_charges,0) + IFNULL(op_rounding_off,0) - IFNULL(op_refund_amount,0)) AS totalsales,SUM(op_commission_charged - op_refund_commission) totalcommission'));
@@ -635,10 +693,7 @@ class Statistics extends MyAppModel
             $srch->doNotLimitRecords();
         }
 
-        $plugInIds = [0 => '-1'];
-        $plugInIds[] = Plugin::getAttributesByCode('cashondelivery', 'plugin_id');
-        $plugInIds[] = Plugin::getAttributesByCode('payatstore', 'plugin_id');
-
+        $plugInIds = self::getPluginIds(['cashondelivery', 'payatstore']);
         $cnd = $srch->addCondition('order_payment_status', '=', 'mysql_func_' . Orders::ORDER_PAYMENT_PAID, 'AND', true);
         /*  $cnd->attachCondition('plugin_code', '=', 'CashOnDelivery');
         $cnd->attachCondition('plugin_code', '=', 'payatstore'); */
@@ -707,9 +762,7 @@ class Statistics extends MyAppModel
 
     public function getUserOrderStatsCount($type = '')
     {
-        $plugInIds = [0 => '-1'];
-        $plugInIds[] = Plugin::getAttributesByCode('cashondelivery', 'plugin_id');
-        $plugInIds[] = Plugin::getAttributesByCode('payatstore', 'plugin_id');
+        $plugInIds = self::getPluginIds(['cashondelivery', 'payatstore']);
 
         $cancelAndRefundedStatusArr = (array) FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS");
         $srch = new OrderProductSearch(0, true, false, false, false);
@@ -781,5 +834,19 @@ class Statistics extends MyAppModel
         'cancelled'=>array('count'=>$cancelAndRefundedUserCount,'%age'=>round(($cancelAndRefundedUserCount*100)/$totalUser),2),
         ); */
         return $data;
+    }
+
+    public static function getPluginIds(array $paymentMethodCode = [])
+    {
+
+        if (empty($paymentMethodCode)) {
+            $paymentMethodCode = ['cashondelivery', 'payatstore'];
+        }
+
+        $plugInIds = Plugin::getIdsByCodeArr($paymentMethodCode, 'plugin_id');
+        if (empty($plugInIds)) {
+            $plugInIds = [0 => '-1'];
+        }
+        return  array_keys($plugInIds);
     }
 }
