@@ -143,6 +143,43 @@ class AdminUsersController extends ListingBaseController
                CALL UPDATECATEGORYRELATIONS(old.prodcat_parent);
             END IF",
             "CALL updateCategoryRelations(0)",
+            "DROP PROCEDURE IF EXISTS updateShopUserValid",
+            "CREATE PROCEDURE updateShopUserValid(IN userId INT)
+            BEGIN    
+                -- Set shop_user_valid to 0 where shop_user_id matches the input userId
+                UPDATE tbl_shops SET shop_user_valid = 0 WHERE shop_user_id = userId;
+              
+                -- Set shop_user_valid to 1 based on the conditions in the subquery
+                UPDATE tbl_shops SET shop_user_valid = 1 WHERE shop_user_id = ( SELECT u.user_id FROM tbl_users u INNER JOIN tbl_user_credentials c ON u.user_id = c.credential_user_id WHERE u.user_id = userId AND u.user_is_supplier = 1 AND u.user_deleted = 0 AND c.credential_active = 1 AND c.credential_verified = 1 LIMIT 1 );
+            END",
+            "DROP TRIGGER IF EXISTS `ON_USER_CREDENTIALS_INSERT`",
+            "CREATE TRIGGER ON_USER_CREDENTIALS_INSERT
+            AFTER INSERT
+            ON tbl_user_credentials
+            FOR EACH ROW
+            BEGIN
+                CALL updateShopUserValid(NEW.credential_user_id);
+            END",
+            "DROP TRIGGER IF EXISTS `ON_USERS_UPDATE`",
+            "CREATE TRIGGER ON_USERS_UPDATE
+            AFTER UPDATE
+            ON tbl_users
+            FOR EACH ROW
+            BEGIN
+                IF NEW.user_deleted != OLD.user_deleted THEN
+                    CALL updateShopUserValid(NEW.user_id);
+                END IF;      
+            END",
+            "DROP TRIGGER IF EXISTS `ON_USER_CREDENTIALS_UPDATE`",
+            "CREATE TRIGGER ON_USER_CREDENTIALS_UPDATE
+            AFTER UPDATE
+            ON tbl_user_credentials
+            FOR EACH ROW
+            BEGIN
+                IF NEW.credential_active != OLD.credential_active OR NEW.credential_verified != OLD.credential_verified THEN
+                    CALL updateShopUserValid(NEW.credential_user_id);
+                END IF;     
+            END"
         );
 
         foreach ($queries as $qry) {
@@ -225,14 +262,14 @@ class AdminUsersController extends ListingBaseController
         }
         $this->setRecordCount(clone $srch, $pageSize, $page, $post);
         $srch->doNotCalculateRecords();
-         
+
         $srch->addOrder($sortBy, $sortOrder);
         $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);  
-        $records = FatApp::getDb()->fetchAll($srch->getResultSet()); 
-        $this->set("arrListing", $records);   
+        $srch->setPageSize($pageSize);
+        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
+        $this->set("arrListing", $records);
         $paginationArr = empty($postedData) ? $post : $postedData;
-        $this->set('postedData', $paginationArr); 
+        $this->set('postedData', $paginationArr);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
@@ -466,7 +503,7 @@ class AdminUsersController extends ListingBaseController
 
         $arr = [
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
-           /*  'listSerial' => Labels::getLabel('LBL_#', $this->siteLangId), */
+            /*  'listSerial' => Labels::getLabel('LBL_#', $this->siteLangId), */
             'admin_name' => Labels::getLabel('LBL_FULL_NAME', $this->siteLangId),
             'admin_username' => Labels::getLabel('LBL_USERNAME', $this->siteLangId),
             'admin_email' => Labels::getLabel('LBL_EMAIL', $this->siteLangId),
@@ -482,7 +519,7 @@ class AdminUsersController extends ListingBaseController
     {
         return [
             'select_all',
-          /*   'listSerial', */
+            /*   'listSerial', */
             'admin_name',
             'admin_username',
             'admin_email',

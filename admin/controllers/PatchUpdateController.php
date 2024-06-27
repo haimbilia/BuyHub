@@ -563,6 +563,8 @@ class PatchUpdateController extends ListingBaseController
         foreach ($result as $user) {
             $assignValues = ['user_has_valid_subscription' => $user['hasValidSubscription']];
             FatApp::getDb()->updateFromArray(User::DB_TBL, $assignValues, array('smt' => 'user_id = ? ', 'vals' => array((int) $user['seller_user_id'])));
+            $assignValues = ['shop_has_valid_subscription' => $user['hasValidSubscription']];
+            FatApp::getDb()->updateFromArray(Shop::DB_TBL, $assignValues, array('smt' => 'shop_user_id = ? ', 'vals' => array((int) $user['seller_user_id'])));
         }
         echo 'Done';
     }

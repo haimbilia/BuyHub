@@ -75,3 +75,14 @@ INSERT INTO `tbl_extra_pages` (`epage_identifier`, `epage_type`, `epage_content_
 ('Firebase Service Account Private Key JSON File', 86, 0, 1, 0, '<h6 class=\"mt-2\"><strong>To generate a private key file for your service account:</strong></h6>\n<ul class=\"listing--bullet\">\n	<li>\n		<p>In the Firebase console, open <strong>Settings > <a href=\"https://console.firebase.google.com/project/\">Service Accounts</a></strong>.</p></li>\n	<li>\n		<p>Click <strong>Generate New Private Key</strong>, then confirm by clicking <strong>Generate Key</strong>.</p></li>\n	<li>\n		<p>Securely store the JSON file containing the key.</p></li>\n</ul>')
 ON DUPLICATE KEY UPDATE epage_identifier = VALUES(epage_identifier), epage_default_content = VALUES(epage_default_content);
 
+ALTER TABLE `tbl_shops` ADD `shop_has_valid_subscription` TINYINT(4) NOT NULL AFTER `shop_total_reviews`;
+ALTER TABLE `tbl_shops` ADD `shop_user_valid` TINYINT(0) NOT NULL AFTER `shop_has_valid_subscription`;
+UPDATE tbl_shops AS s
+INNER JOIN (
+    SELECT user_id
+    FROM tbl_users u
+    INNER JOIN tbl_user_credentials c ON u.user_id = c.credential_user_id
+    WHERE u.user_deleted = 0 AND c.credential_active = 1 AND c.credential_verified = 1 and u.user_is_supplier = 1
+) t ON t.user_id = s.shop_user_id
+SET s.shop_user_valid = 1;
+ALTER TABLE `tbl_shops` ADD INDEX( `shop_user_valid`);
