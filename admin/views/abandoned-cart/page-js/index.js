@@ -12,13 +12,15 @@ $(document).ready(function () {
     var paginationDv = ".listingPaginationJs";
     var listingTableJs = ".listingTableJs";
 
-	searchRecords = function (frm) {
+	searchRecords = function (frm, page) {
         
         setColumnsData(frm);
         var data = "";
         if (frm) {
             data = fcom.frmData(frm);
         }
+		data = data + '&loadPagination=0';
+
         $(listingTableJs).prepend(fcom.getLoader());
 
         fcom.ajax(fcom.makeUrl('AbandonedCart', "search"), data, function (res) {
@@ -32,11 +34,9 @@ $(document).ready(function () {
             $(dv).replaceWith(res.listingHtml);
             $(paginationDv).replaceWith(res.paginationHtml);
             fcom.removeLoader();
-            $(".selectAllJs").prop("checked", false);
-            if (0 < $(".listingRecordJs .noRecordFoundJs").length) {
-                $(".selectAllJs").prop("disabled", "disabled");
-            } else {
-                $(".selectAllJs").removeAttr("disabled");
+            var pageVal = $(document.frmRecordSearchPaging.page).val();
+            if (typeof pageVal == 'undefined' || pageVal != page) {
+                loadPagination(document.frmRecordSearchPaging, page);
             }
         }, { fOutMode: 'json' });
     };
