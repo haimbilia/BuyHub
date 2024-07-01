@@ -659,4 +659,15 @@ class RequestForQuote extends MyAppModel
             self::SELLER_LINKING_ANY => Labels::getLabel('LBL_SELECT_MANUALLY', $langId),
         ];
     }
+
+    public static function isAssignedToSeller(int $rfqId, int $sellerId): bool
+    {
+        $srch = new SearchBase(RequestForQuote::DB_RFQ_TO_SELLERS);
+        $srch->addCondition('rfqts_rfq_id', '=', $rfqId);
+        $srch->addCondition('rfqts_user_id', '=', $sellerId);
+        $srch->doNotCalculateRecords();
+        $srch->addFld('rfqts_user_id');
+        $result = FatApp::getDb()->fetch($srch->getResultSet());
+        return (is_array($result) && !empty($result));
+    }
 }

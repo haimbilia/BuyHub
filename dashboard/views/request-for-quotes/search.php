@@ -82,7 +82,7 @@
                         );
 
                         if ($row['rfq_approved'] == RequestForQuote::APPROVED) {
-                            if ($isBuyer || $userParentId == $row['rfqts_user_id'] || RequestForQuote::STATUS_CLOSED == $row['rfq_status']) {
+                            if ($isBuyer || RequestForQuote::isAssignedToSeller($row['rfq_id'], $userParentId)) {
                                 $action = RequestForQuote::VISIBILITY_TYPE_OPEN == $visibilityType ? 'globalListing' : 'listing';
                                 $li = $ul->appendElement("li", ['class' => 'actions-item']);
                                 $li->appendElement(

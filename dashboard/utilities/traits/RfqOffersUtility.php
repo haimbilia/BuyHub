@@ -67,7 +67,7 @@ trait RfqOffersUtility
             CommonHelper::redirectUserReferer();
         }
 
-        if ($this->isSeller && RequestForQuote::VISIBILITY_TYPE_OPEN == $rfqInfo['rfq_visibility_type'] && $this->userParentId != $rfqData['rfqts_user_id']) {
+        if ($this->isSeller && RequestForQuote::VISIBILITY_TYPE_OPEN == $rfqInfo['rfq_visibility_type'] && false == RequestForQuote::isAssignedToSeller($rfqId, $this->userParentId)) {
             LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_ASSIGN_THIS_RFQ_TO_YOURSELF_FIRST', $this->siteLangId), false, true);
             CommonHelper::redirectUserReferer();
         }
