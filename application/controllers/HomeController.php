@@ -3,8 +3,7 @@ class HomeController extends MyAppController
 {
     public function index()
     {
-        $loggedUserId = UserAuthentication::getLoggedUserId(true);
-
+        $loggedUserId = UserAuthentication::getLoggedUserId(true);        
         $sponsoredShopsInCollection = $sponsoredProdsInCollection = [];
         $collections = $this->getCollections($loggedUserId, $sponsoredShopsInCollection, $sponsoredProdsInCollection);
         $sponShopLayoutCount = count($sponsoredShopsInCollection);
@@ -358,6 +357,7 @@ class HomeController extends MyAppController
         $productSrchObj->joinProductToTax();
         /* $productSrchObj->doNotCalculateRecords();
         $productSrchObj->setPageSize( 10 ); */
+        $criteria['doNotJoinSellers'] = true;
         $productSrchObj->setDefinedCriteria(0, 0, $criteria);
         $productSrchObj->joinSellerSubscription($this->siteLangId, true);
         $productSrchObj->addSubscriptionValidCondition();
