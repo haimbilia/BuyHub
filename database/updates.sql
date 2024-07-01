@@ -86,3 +86,4 @@ INNER JOIN (
 ) t ON t.user_id = s.shop_user_id
 SET s.shop_user_valid = 1;
 ALTER TABLE `tbl_shops` ADD INDEX( `shop_user_valid`);
+ALTER TABLE `tbl_states` ADD INDEX( `state_active`);

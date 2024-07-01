@@ -516,9 +516,9 @@ class ProductSearch extends SearchBase
 
     public function joinShops($langId = 0, $isActive = true, $isDisplayStatus = true, $shopId = 0, $validUser = null)
     {
-        if (!$this->sellerUserJoined) {
+        /* if (!$this->sellerUserJoined) {
             trigger_error(Labels::getLabel('ERR_JOINSHOPS_CANNOT_BE_JOINED,_UNLESS_JOINSELLERS_IS_NOT_APPLIED.', $this->commonLangId), E_USER_ERROR);
-        }
+        } */
 
         $langId = FatUtility::int($langId);
         if ($this->langId && 1 > $langId) {
@@ -619,10 +619,10 @@ class ProductSearch extends SearchBase
 
         $locationBasedInnerJoin = (true == $this->locationBasedInnerJoin) ? 'INNER JOIN' : 'LEFT OUTER JOIN';
         if ($joinShopWithSubQuery) {
-            $this->joinTable('(' . $shopSearch->getQuery() . ')', $locationBasedInnerJoin, 'seller_user.user_id = shop.shop_user_id  ' . $shopCondition, 'shop');
+            $this->joinTable('(' . $shopSearch->getQuery() . ')', $locationBasedInnerJoin, 'selprod_user_id = shop.shop_user_id  ' . $shopCondition, 'shop');
         } else {
 
-            $this->joinTable(Shop::DB_TBL, 'INNER JOIN', 'seller_user.user_id = shop.shop_user_id ' . $shopCondition, 'shop');
+            $this->joinTable(Shop::DB_TBL, 'INNER JOIN', 'selprod_user_id = shop.shop_user_id ' . $shopCondition, 'shop');
         }
 
         $this->shopsJoined = true;
