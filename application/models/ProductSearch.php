@@ -88,13 +88,21 @@ class ProductSearch extends SearchBase
         } else {
             $this->joinSellerProducts($bySeller, '', $criteria, $checkAvailableFrom);
         }
-        $this->joinSellers();
+
+        $joinSellers = true;
+        if (isset($criteria['doNotJoinSellers']) && true == $criteria['doNotJoinSellers']) {
+            $joinSellers = false;
+        }
+
+        if ($joinSellers) {
+            $this->joinSellers();
+        }
 
         $shopId = 0;
         if (isset($criteria['shop_id']) && 0 < $criteria['shop_id']) {
             $shopId = FatUtility::int($criteria['shop_id']);
         }
-        $this->joinShops(0, true, true, $shopId);
+        $this->joinShops(0, true, true, $shopId, $checkAvailableFrom);
 
         $countryId = 0;
         if (isset($criteria['country_id']) && 0 < $criteria['country_id']) {
@@ -256,9 +264,9 @@ class ProductSearch extends SearchBase
         }
 
         $srch->joinTable(Product::DB_TBL, 'INNER JOIN', 'tp.product_id = sprods.selprod_product_id AND tp.product_active = ' . applicationConstants::ACTIVE . ' and tp.product_deleted = ' . applicationConstants::NO . ' and tp.product_approved = ' . Product::APPROVED . $productCondition, 'tp');
-        $srch->joinTable(User::DB_TBL, 'INNER JOIN', 'tu.user_id = sprods.selprod_user_id AND tu.user_is_supplier = ' . applicationConstants::YES, 'tu');
-        $srch->joinTable(User::DB_TBL_CRED, 'INNER JOIN', 'tuc.credential_user_id = tu.user_id and tuc.credential_active = ' . applicationConstants::ACTIVE . ' and tuc.credential_verified = ' . applicationConstants::YES, 'tuc');
-        $srch->joinTable(Shop::DB_TBL, 'INNER JOIN', 'ts.shop_user_id = sprods.selprod_user_id and ts.shop_active = ' . applicationConstants::YES . ' AND ts.shop_supplier_display_status = ' . applicationConstants::YES . $shopCondition, 'ts');
+        /* $srch->joinTable(User::DB_TBL, 'INNER JOIN', 'tu.user_id = sprods.selprod_user_id AND tu.user_is_supplier = ' . applicationConstants::YES, 'tu');
+        $srch->joinTable(User::DB_TBL_CRED, 'INNER JOIN', 'tuc.credential_user_id = tu.user_id and tuc.credential_active = ' . applicationConstants::ACTIVE . ' and tuc.credential_verified = ' . applicationConstants::YES, 'tuc'); */
+        $srch->joinTable(Shop::DB_TBL, 'INNER JOIN', 'ts.shop_user_id = sprods.selprod_user_id and ts.shop_user_valid = 1 and ts.shop_active = ' . applicationConstants::YES . ' AND ts.shop_supplier_display_status = ' . applicationConstants::YES . $shopCondition, 'ts');
         $srch->joinTable(Countries::DB_TBL, 'INNER JOIN', 'tcn.country_id = ts.shop_country_id and tcn.country_active = ' . applicationConstants::YES, 'tcn');
         $srch->joinTable(States::DB_TBL, 'INNER JOIN', 'tst.state_id = ts.shop_state_id and tst.state_active = ' . applicationConstants::YES, 'tst');
 

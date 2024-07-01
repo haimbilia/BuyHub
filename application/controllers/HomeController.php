@@ -3,8 +3,7 @@ class HomeController extends MyAppController
 {
     public function index()
     {
-        $loggedUserId = UserAuthentication::getLoggedUserId(true);
-
+        $loggedUserId = UserAuthentication::getLoggedUserId(true);        
         $sponsoredShopsInCollection = $sponsoredProdsInCollection = [];
         $collections = $this->getCollections($loggedUserId, $sponsoredShopsInCollection, $sponsoredProdsInCollection);
         $sponShopLayoutCount = count($sponsoredShopsInCollection);
