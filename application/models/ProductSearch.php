@@ -102,7 +102,7 @@ class ProductSearch extends SearchBase
         if (isset($criteria['shop_id']) && 0 < $criteria['shop_id']) {
             $shopId = FatUtility::int($criteria['shop_id']);
         }
-        $this->joinShops(0, true, true, $shopId, $checkAvailableFrom);
+        $this->joinShops(0, true, true, $shopId, true);
 
         $countryId = 0;
         if (isset($criteria['country_id']) && 0 < $criteria['country_id']) {
@@ -1154,8 +1154,8 @@ class ProductSearch extends SearchBase
 
         //$this->setDefinedCriteria();
         $this->joinSellerProducts();
-        $this->joinSellers();
-        $this->joinShops();
+        //$this->joinSellers();
+        $this->joinShops(0, true, true, 0, true);
         $this->joinShopCountry();
         $this->joinShopState();
         $this->joinBrands();

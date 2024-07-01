@@ -788,14 +788,14 @@ class Cart extends FatModel
         $selProdIds = array_keys($cartData);
 
         $prodSrch = new ProductSearch($siteLangId);
-        $prodSrch->setDefinedCriteria(0, 0, ['selProdIds' => $selProdIds]);
+        $prodSrch->setDefinedCriteria(0, 0, ['selProdIds' => $selProdIds, 'doNotJoinSellers' => true]);
+        $prodSrch->joinShops(0, true, true, 0, true);
         $prodSrch->joinProductToCategory();
         $prodSrch->joinSellerSubscription();
         $prodSrch->addSubscriptionValidCondition();
         $prodSrch->joinProductShippedBy();
         $prodSrch->joinProductFreeShipping();
-        $prodSrch->joinSellers();
-        $prodSrch->joinShops();
+        // $prodSrch->joinSellers();        
         $prodSrch->doNotCalculateRecords();
         $prodSrch->doNotLimitRecords();
         $prodSrch->addDirectCondition('selprod_id IN (' . implode(',', $selProdIds) . ')');
