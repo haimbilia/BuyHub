@@ -519,11 +519,11 @@ class ProductSearch extends SearchBase
         $this->locationBasedInnerJoin = $innerJoin;
     }
 
-    public function joinShops($langId = 0, $isActive = true, $isDisplayStatus = true, $shopId = 0)
+    public function joinShops($langId = 0, $isActive = true, $isDisplayStatus = true, $shopId = 0, $validUser = null)
     {
-        if (!$this->sellerUserJoined) {
+        /* if (!$this->sellerUserJoined) {
             trigger_error(Labels::getLabel('ERR_JOINSHOPS_CANNOT_BE_JOINED,_UNLESS_JOINSELLERS_IS_NOT_APPLIED.', $this->commonLangId), E_USER_ERROR);
-        }
+        } */
 
         $langId = FatUtility::int($langId);
         if ($this->langId && 1 > $langId) {
@@ -531,6 +531,11 @@ class ProductSearch extends SearchBase
         }
 
         $shopCondition = '';
+        if ($validUser != null) {
+            $shopCondition .= ' and shop.shop_user_valid = ' . applicationConstants::ACTIVE;
+            $this->addCondition('shop.shop_user_valid', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
+        }
+
         if ($isActive) {
             $shopCondition .= ' and shop.shop_active = ' . applicationConstants::ACTIVE;
             $this->addCondition('shop.shop_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
@@ -561,6 +566,7 @@ class ProductSearch extends SearchBase
                         $shopSearch->doNotLimitRecords();
                         $shopSearch->addCondition('shop.shop_supplier_display_status', '=', 'mysql_func_' . applicationConstants::ON, 'AND', true);
                         $shopSearch->addCondition(Shop::tblFld('active'), '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
+                        $shopSearch->addCondition(Shop::tblFld('user_valid'), '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
                         $shopSearch->addFld('*');
                         $shopSearch->addFld('( 6371 * acos( cos( radians(' . $this->geoAddress['ykGeoLat'] . ') ) * cos( radians( shop.`shop_lat` ) ) * cos( radians( shop.`shop_lng` ) - radians(' . $this->geoAddress['ykGeoLng'] . ') ) + sin( radians(' . $this->geoAddress['ykGeoLat'] . ') ) * sin( radians( shop.`shop_lat` ) ) ) ) AS distance');
                         $shopSearch->addHaving('distance', '<=', FatApp::getConfig('CONF_RADIUS_DISTANCE_IN_MILES', FatUtility::VAR_INT, 10));
@@ -571,6 +577,7 @@ class ProductSearch extends SearchBase
                             $shopSearch->doNotLimitRecords();
                             $shopSearch->addCondition('sshop.shop_supplier_display_status', '=', 'mysql_func_' . applicationConstants::ON, 'AND', true);
                             $shopSearch->addCondition('sshop.' . Shop::tblFld('active'), '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
+                            $shopSearch->addCondition('sshop.' . Shop::tblFld('user_valid'), '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
                             $shopSearch->addMultipleFields(array('sshop.*', 'shop.distance'));
                             $shopSearch->joinTable('(' . $shopSubQuery . ')', 'LEFT OUTER JOIN', 'shop.shop_id = sshop.shop_id', 'shop');
                         }
@@ -588,7 +595,7 @@ class ProductSearch extends SearchBase
                         $countryBased = $stateBased = $zipBased = true;
                     }
 
-                    $locCondition = '';
+                    $locCondition = ' and shop_user_valid = 1';
                     if ($countryBased && array_key_exists('ykGeoCountryId', $this->geoAddress) && $this->geoAddress['ykGeoCountryId'] > 0) {
                         $locCondition .= ' and shop.shop_country_id = ' . $this->geoAddress['ykGeoCountryId'];
                     }
@@ -617,10 +624,10 @@ class ProductSearch extends SearchBase
 
         $locationBasedInnerJoin = (true == $this->locationBasedInnerJoin) ? 'INNER JOIN' : 'LEFT OUTER JOIN';
         if ($joinShopWithSubQuery) {
-            $this->joinTable('(' . $shopSearch->getQuery() . ')', $locationBasedInnerJoin, 'seller_user.user_id = shop.shop_user_id  ' . $shopCondition, 'shop');
+            $this->joinTable('(' . $shopSearch->getQuery() . ')', $locationBasedInnerJoin, 'selprod_user_id = shop.shop_user_id  ' . $shopCondition, 'shop');
         } else {
 
-            $this->joinTable(Shop::DB_TBL, 'INNER JOIN', 'seller_user.user_id = shop.shop_user_id ' . $shopCondition, 'shop');
+            $this->joinTable(Shop::DB_TBL, 'INNER JOIN', 'selprod_user_id = shop.shop_user_id ' . $shopCondition, 'shop');
         }
 
         $this->shopsJoined = true;

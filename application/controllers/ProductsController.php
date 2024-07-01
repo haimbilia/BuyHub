@@ -47,9 +47,9 @@ class ProductsController extends MyAppController
             $prodSrchObj = new ProductSearch(0);
             $prodSrchObj->addMultipleFields(array('brand_id', 'COALESCE(tb_l.brand_name, brand.brand_identifier) as brand_name'));
             $prodSrchObj->joinSellerProducts(0, '', ['doNotJoinSpecialPrice' => true], true);
-            $prodSrchObj->joinSellers();
+            // $prodSrchObj->joinSellers();
             $prodSrchObj->setGeoAddress();
-            $prodSrchObj->joinShops();
+            $prodSrchObj->joinShops(0, true, true, 0, true);
             $prodSrchObj->validateAndJoinDeliveryLocation();
             $prodSrchObj->joinBrands();
             $prodSrchObj->joinBrandsLang($this->siteLangId, $keyword);
@@ -244,6 +244,7 @@ class ProductsController extends MyAppController
         if (empty($keyword)) {
             $catCriteria = $headerFormParamsAssocArr;
             $catCriteria['addFld'] = 'DISTINCT(prodcat_id) as prodcatid';
+            $catCriteria['doNotJoinSpecialPrice'] = true;
 
             $catProdSrchObj = $this->getFilterSearchObj($langIdForKeywordSeach, $catCriteria);
             $catProdSrchObj->doNotCalculateRecords();
@@ -1352,9 +1353,9 @@ class ProductsController extends MyAppController
             $prodSrchObj = new ProductSearch($this->siteLangId);
             $prodSrchObj->joinSellerProducts(0, '', $criteria, true);
             $prodSrchObj->unsetDefaultLangForJoins();
-            $prodSrchObj->joinSellers();
+            // $prodSrchObj->joinSellers();
             $prodSrchObj->setGeoAddress();
-            $prodSrchObj->joinShops();
+            $prodSrchObj->joinShops(0, true, true, 0, true);
             $prodSrchObj->joinProductToCategory($this->siteLangId);
             $prodSrchObj->joinProductToTax();
             /*$prodSrchObj->validateAndJoinDeliveryLocation(false, false);*/
@@ -1386,9 +1387,9 @@ class ProductsController extends MyAppController
             $catSrch = new ProductSearch(0);
             $catSrch->joinSellerProducts(0, '', $criteria, true);
             $catSrch->unsetDefaultLangForJoins();
-            $catSrch->joinSellers();
+            // $catSrch->joinSellers();
             $catSrch->setGeoAddress();
-            $catSrch->joinShops();
+            $catSrch->joinShops(0, true, true, 0, true);
             $catSrch->joinBrands(0);
             $catSrch->joinSellerSubscription(0, false, true);
             $catSrch->addSubscriptionValidCondition();

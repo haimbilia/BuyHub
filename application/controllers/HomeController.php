@@ -664,7 +664,10 @@ class HomeController extends MyAppController
             } else {
                 $cacheData = $collectionsArr;
             }
-            CacheHelper::create('collectionsArr' . $cacheKey, serialize($cacheData), CacheHelper::TYPE_COLLECTIONS);
+
+            if (!empty($collectionsArr)) {
+                CacheHelper::create('collectionsArr' . $cacheKey, serialize($cacheData), CacheHelper::TYPE_COLLECTIONS);
+            }
             $pagesCount = (1 == $page ? $srch->pages() : $pagesCount);
         }
 
@@ -875,7 +878,7 @@ class HomeController extends MyAppController
                     $catIds = array_keys($collectionCatRecords);
 
                     /* fetch Categories data[ */
-                    $productCatSrchTempObj = $this->getProductSearchObj($loggedUserId, ['categoryIds' => $catIds]); 
+                    $productCatSrchTempObj = $this->getProductSearchObj($loggedUserId, ['categoryIds' => $catIds]);
                     $productCatSrchTempObj->joinTable('(' . $tempObj->getQuery() . ')', 'INNER JOIN', 'prodcat_id = ctr.ctr_record_id', 'ctr');
 
                     $productCatSrchTempObj->addCondition('prodcat_deleted', '=', applicationConstants::NO);
