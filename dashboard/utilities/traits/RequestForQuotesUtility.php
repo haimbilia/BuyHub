@@ -169,7 +169,7 @@ trait RequestForQuotesUtility
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
-        if ($this->isSeller && !$this->userPrivilege->canViewRfqOffers($this->userId, true)) {
+        if ($this->isSeller && !$this->userPrivilege->canViewRequestForQuote($this->userId, true)) {
             LibHelper::exitWithError(Labels::getLabel('ERR_UNAUTHORIZED_ACCESS'), true);
         }
 

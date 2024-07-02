@@ -19,7 +19,7 @@ class SellerRequestForQuotesController extends SellerBaseController
 
     public function assignToMe(int $rfqId)
     {
-        $this->userPrivilege->canEditRfqOffers($this->userId);
+        $this->userPrivilege->canEditRequestForQuote($this->userId);
 
         if (!UserPrivilege::isUserHasValidSubsription($this->userParentId)) {
             LibHelper::exitWithError(Labels::getLabel("MSG_PLEASE_BUY_SUBSCRIPTION", $this->siteLangId));
