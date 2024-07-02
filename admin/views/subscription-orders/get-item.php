@@ -21,16 +21,16 @@ $op = current($order['items']); ?>
             <li class="list-stats-item">
                 <span class="lable"><?php echo Labels::getLabel('LBL_SUBSCRIPTION_PERIOD', $siteLangId); ?>:</span>
                 <span class="value">
-                    <?php 
-                    if(SellerPackagePlans::SUBSCRIPTION_PERIOD_UNLIMITED == $op['ossubs_frequency']) {
+                    <?php
+                    if (SellerPackagePlans::SUBSCRIPTION_PERIOD_UNLIMITED == $op['ossubs_frequency']) {
                         echo $subcriptionPeriodArr[$op['ossubs_frequency']];
-                    } else { 
+                    } else {
                         if ($op['ossubs_from_date'] == 0 || $op['ossubs_till_date'] == 0) {
                             echo Labels::getLabel("LBL_N/A", $siteLangId);
                         } else {
                             echo FatDate::format($op['ossubs_from_date']) . " - " . FatDate::format($op['ossubs_till_date']);
-                        } 
-                    }?>
+                        }
+                    } ?>
                 </span>
             </li>
             <li class="list-stats-item">
@@ -48,10 +48,14 @@ $op = current($order['items']); ?>
             <li class="list-stats-item">
                 <span class="lable"><?php echo Labels::getLabel('LBL_IMAGES_LIMIT', $siteLangId); ?>:</span>
                 <span class="value"><?php echo $op['ossubs_images_allowed']; ?></span>
-            </li>           
+            </li>
+            <li class="list-stats-item">
+                <span class="lable"><?php echo Labels::getLabel('LBL_RFQ_OFFERS_LIMIT', $siteLangId); ?>:</span>
+                <span class="value"><?php echo $op['ossubs_rfq_offers_allowed']; ?></span>
+            </li>
             <li class="list-stats-item">
                 <span class="lable"><?php echo Labels::getLabel('LBL_Commision_rate', $siteLangId); ?>:</span>
-                <span class="value"><?php echo $op['ossubs_commission']."%"; ?></span>
+                <span class="value"><?php echo $op['ossubs_commission'] . "%"; ?></span>
             </li>
 
             <li class="list-stats-item">

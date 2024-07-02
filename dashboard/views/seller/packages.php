@@ -47,7 +47,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                 </div>
                                 <div class="packages-box-body">
                                     <div class="trial">
-                                        <ul class="features">
+                                        <ul class="features p-0">
                                             <li class="features-item">
                                                 <span><?php echo CommonHelper::displayComissionPercentage($package[SellerPackages::DB_TBL_PREFIX . 'commission_rate']); ?>%</span>
                                                 <?php echo Labels::getLabel('LBL_Commision_rate', $siteLangId); ?>
@@ -64,19 +64,21 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                                 <span><?php echo $package[SellerPackages::DB_TBL_PREFIX . 'images_per_product']; ?></span>
                                                 <?php echo ($package[SellerPackages::DB_TBL_PREFIX . 'images_per_product'] == 1) ? Labels::getlabel('LBL_image_per_product', $siteLangId) : Labels::getlabel('LBL_images_per_product', $siteLangId); ?>
                                             </li>
+                                            <li class="features-item">
+                                                <span><?php echo CommonHelper::replaceStringData(Labels::getLabel('LBL_{LIMIT}_RFQ_OFFERS', $siteLangId), ['{LIMIT}' => $package[SellerPackages::DB_TBL_PREFIX . 'rfq_offers_allowed']]); ?></span>
+                                            </li>
                                         </ul>
                                     </div>
                                 </div>
-                                <?php if ($parentUserId == UserAuthentication::getLoggedUserId()) { ?>
+                                <?php if (UserAuthentication::getLoggedUserId(true) == $parentUserId) { ?>
                                     <div class="packages-box-foot">
                                         <p>
                                             <?php
                                             echo CommonHelper::replaceStringData(Labels::getLabel('LBL_SELECT_YOUR_{PACKAGE-NAME}_PRICE', $siteLangId), ['{PACKAGE-NAME}' => $package['spackage_name']]);
                                             ?>
                                         </p>
-                                        <?php $disabled = ($parentUserId != UserAuthentication::getLoggedUserId()) ? 'disabled=disabled' : ''; ?>
+                                        <?php $disabled = ($parentUserId != UserAuthentication::getLoggedUserId(true)) ? 'disabled=disabled' : ''; ?>
                                         <select name="packages" class="form-select packagesJS" <?php echo $disabled; ?>>
-
                                             <?php foreach ($package['plans'] as $plan) {
                                                 $isActive = ($currentActivePlanId == $plan[SellerPackagePlans::DB_TBL_PREFIX . 'id']) ? 'selected=selected' : '';
                                             ?>

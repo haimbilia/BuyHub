@@ -700,4 +700,30 @@ class RfqOffers extends MyAppModel
         $charges = !is_array($result) || empty($result) ? 0 : $result['rlo_shipping_charges'];
         return FatUtility::float($charges);
     }
+
+    public static function getSubmittedOffersCount(int $sellerId, string $fromDate = ''): int
+    {
+        $srch = new SearchBase(self::DB_RFQ_LATEST_OFFER, 'rlo');
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        if (!empty($fromDate)) {
+            $srch->addCondition('rlo_added_on', '>=', $fromDate);
+        }
+        $srch->addCondition('rlo_seller_user_id', '=', $sellerId);
+        $srch->addFld('IFNULL(COUNT(rlo_primary_offer_id), 0) as submitted_offers_count');
+        $result = FatApp::getDb()->fetch($srch->getResultSet());
+        return $result['submitted_offers_count'] ?? 0;
+    }
+
+    public static function hasValidSubscription(int $sellerId, int $langId): bool
+    {
+        if (1 > FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
+            return true;
+        }
+        $plan = OrderSubscription::getUserCurrentActivePlanDetails($langId, $sellerId, ['ossubs_from_date', 'ossubs_rfq_offers_allowed']);
+        $allowedLimit = (int) ($plan['ossubs_rfq_offers_allowed'] ?? 0);
+
+        $submittedOffersCount = self::getSubmittedOffersCount($sellerId, $plan['ossubs_from_date']);
+        return ($submittedOffersCount < $allowedLimit);
+    }
 }

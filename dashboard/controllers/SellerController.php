@@ -1187,7 +1187,7 @@ class SellerController extends SellerBaseController
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'shop'));
         }
         if (!UserPrivilege::isUserHasValidSubsription($this->userParentId)) {
-            Message::addInfo(Labels::getLabel("MSG_Please_buy_subscription", $this->siteLangId));
+            Message::addErrorMessage(Labels::getLabel("MSG_Please_buy_subscription", $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'Packages'));
         }
 

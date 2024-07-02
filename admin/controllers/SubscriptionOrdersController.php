@@ -52,7 +52,7 @@ class SubscriptionOrdersController extends ListingBaseController
             array(
                 'ossubs_id', 'ossubs_invoice_number', 'ossubs_price', 'ossubs_type', 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'orderstatus_color_class',
                 'ossubs_frequency', 'ossubs_subscription_name,ossubs_interval', 'ossubs_status_id', 'ossubs_till_date', 'ossubs_from_date', 'ossubs_products_allowed', 'ossubs_inventory_allowed',
-                'ossubs_images_allowed', 'ossubs_commission'
+                'ossubs_images_allowed', 'ossubs_commission', 'ossubs_rfq_offers_allowed'
             )
         );
 

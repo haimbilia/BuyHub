@@ -570,3 +570,12 @@ INNER JOIN (
 SET s.shop_user_valid = 1;
 ALTER TABLE `tbl_shops` ADD INDEX( `shop_user_valid`);
 ALTER TABLE `tbl_states` ADD INDEX( `state_active`);
+
+ALTER TABLE `tbl_seller_packages`  ADD `spackage_rfq_offers_allowed` INT NOT NULL  AFTER `spackage_free_trial_days`;
+ALTER TABLE `tbl_order_seller_subscriptions`  ADD `ossubs_rfq_offers_allowed` INT NOT NULL  AFTER `ossubs_inventory_allowed`;
+
+ALTER TABLE `tbl_rfq_latest_offers`  ADD `rlo_added_on` DATE NOT NULL  AFTER `rlo_deleted`;
+
+UPDATE `tbl_rfq_latest_offers`
+INNER JOIN tbl_rfq_offers ON rlo_primary_offer_id = offer_id
+SET rlo_added_on = offer_added_on;

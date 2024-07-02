@@ -169,6 +169,10 @@ trait RequestForQuotesUtility
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
+        if ($this->isSeller && !$this->userPrivilege->canViewRfqOffers($this->userId, true)) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_UNAUTHORIZED_ACCESS'), true);
+        }
+
         $visibilityType = FatApp::getPostedData('rfq_visibility_type', FatUtility::VAR_INT, 0);
 
         $srch = new RequestForQuoteSearch();
