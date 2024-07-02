@@ -7,6 +7,8 @@ class SellerRequestForQuotesController extends SellerBaseController
     {
         parent::__construct($action);
         $this->isSeller = true;
+
+        $this->userPrivilege->canViewRfqOffers($this->userId);
     }
 
     public function global()
@@ -17,6 +19,12 @@ class SellerRequestForQuotesController extends SellerBaseController
 
     public function assignToMe(int $rfqId)
     {
+        $this->userPrivilege->canEditRequestForQuote($this->userId);
+
+        if (!UserPrivilege::isUserHasValidSubsription($this->userParentId)) {
+            LibHelper::exitWithError(Labels::getLabel("MSG_PLEASE_BUY_SUBSCRIPTION", $this->siteLangId));
+        }
+
         $visibilityType = RequestForQuote::getAttributesById($rfqId, 'rfq_visibility_type');
         if (empty($visibilityType) || RequestForQuote::VISIBILITY_TYPE_CLOSED == $visibilityType) {
             LibHelper::exitWithError($this->str_invalid_Action, true);

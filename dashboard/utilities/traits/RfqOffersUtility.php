@@ -26,13 +26,22 @@ trait RfqOffersUtility
             CommonHelper::redirectUserReferer();
         }
 
+        if ($this->isSeller) {
+            if (!UserPrivilege::isUserHasValidSubsription($this->userParentId)) {
+                LibHelper::exitWithError(Labels::getLabel("MSG_PLEASE_BUY_SUBSCRIPTION", $this->siteLangId));
+            }
+            if (!$this->userPrivilege->canEditRfqOffers($this->userId, true)) {
+                LibHelper::exitWithError(Labels::getLabel('ERR_UNAUTHORIZED_ACCESS'), true);
+            }
+        }
+
         $rfqInfo = RequestForQuote::getAttributesById($rfqId, ['rfq_approved', 'rfq_selprod_id', 'rfq_product_id', 'rfq_visibility_type', 'rfq_status']);
 
         if (false == $rfqInfo || $rfqInfo['rfq_approved'] != RequestForQuote::APPROVED) {
             LibHelper::exitWithError(Labels::getLabel('ERR_RFQ_IS_NOT_APPROVED_YET', $this->siteLangId), false, true);
             CommonHelper::redirectUserReferer();
         }
-        
+
         if (RequestForQuote::STATUS_CLOSED == $rfqInfo['rfq_status']) {
             LibHelper::exitWithError(Labels::getLabel('ERR_THIS_RFQ_HAS_BEEN_CLOSED_BY_THE_BUYER', $this->siteLangId), false, true);
             CommonHelper::redirectUserReferer();
@@ -358,20 +367,24 @@ trait RfqOffersUtility
             LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST_ID', $this->siteLangId), true);
         }
 
+        $recordId = FatApp::getPostedData('offer_id', FatUtility::VAR_INT, 0);
+        $counterOfferId = FatApp::getPostedData('offer_counter_offer_id', FatUtility::VAR_INT, 0);
+
+        if ($this->isSeller && 1 > $counterOfferId && 1 > $recordId && false == RfqOffers::hasValidSubscription($this->userParentId, $this->siteLangId)) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_SUBSCRIPTION_PLAN_RFQ_OFFERS_LIMIT_REACHED.', $this->siteLangId), true);
+        }
+
         $rfqData = RequestForQuote::getAttributesById($post['offer_rfq_id'], ['rfq_status', 'rfq_selprod_id', 'rfq_product_id', 'rfq_visibility_type']);
         $rfqStatus = $rfqData['rfq_status'];
         if ($this->isSeller && (false === $rfqStatus || $rfqStatus == RequestForQuote::STATUS_CLOSED)) {
             LibHelper::exitWithError(Labels::getLabel('ERR_RFQ_IS_CLOSED_BY_BUYER', $this->siteLangId), true);
         }
 
-        $counterOfferId = FatApp::getPostedData('offer_counter_offer_id', FatUtility::VAR_INT, 0);
         if (1 > $post['offer_id'] && 0 < $counterOfferId) {
             if ($this->isBuyer && false == RfqOffers::canBuyerReply($counterOfferId)) {
                 LibHelper::exitWithError(Labels::getLabel('ERR_NOT_ALLOWED!!', $this->siteLangId), true);
             }
         }
-
-        $recordId = FatApp::getPostedData('offer_id', FatUtility::VAR_INT, 0);
 
         $selprodId = 0;
         if (1 > $counterOfferId && $this->isSeller) {
