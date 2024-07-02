@@ -145,11 +145,14 @@ class ShipStationShipping extends ShippingServicesBase
             'warehouseName' => $address['shop_name'],
             'originAddress' => $this->getAddress()
         ];
+
         $userObj = new User($sellerId);
         $returnAddress = $userObj->getUserReturnAddress(CommonHelper::getLangId());
-        $this->setAddress($address['shop_name'], $returnAddress['ura_address_line_1'], $returnAddress['ura_address_line_2'], $returnAddress['ura_city'], $returnAddress['state_name'], $returnAddress['ura_zip'], $returnAddress['country_code'], $returnAddress['ura_phone']);
+        if (!empty($returnAddress)) {
+            $this->setAddress($address['shop_name'], $returnAddress['ura_address_line_1'], $returnAddress['ura_address_line_2'], $returnAddress['ura_city'], $returnAddress['state_name'], $returnAddress['ura_zip'], $returnAddress['country_code'], $returnAddress['ura_phone']);
+            $requestData['returnAddress'] = $this->getAddress();
+        }
 
-        $requestData['returnAddress'] = $this->getAddress();
         if (false === $this->doRequest(self::REQUEST_CREATE_WAREHOUSE, $requestData)) {
             return false;
         }
@@ -180,9 +183,11 @@ class ShipStationShipping extends ShippingServicesBase
 
             $userObj = new User($sellerId);
             $returnAddress = $userObj->getUserReturnAddress(CommonHelper::getLangId());
-            $this->setAddress($address['shop_name'], $returnAddress['ura_address_line_1'], $returnAddress['ura_address_line_2'], $returnAddress['ura_city'], $returnAddress['state_code'], $returnAddress['ura_zip'], $returnAddress['country_code'], $returnAddress['ura_phone']);
-
-            $requestData['returnAddress'] = $this->getAddress();
+            if (!empty($returnAddress)) {
+                $this->setAddress($address['shop_name'], $returnAddress['ura_address_line_1'], $returnAddress['ura_address_line_2'], $returnAddress['ura_city'], $returnAddress['state_code'], $returnAddress['ura_zip'], $returnAddress['country_code'], $returnAddress['ura_phone']);
+                $requestData['returnAddress'] = $this->getAddress();
+            }
+            
             if (false === $this->doRequest(self::REQUEST_UPDATE_WAREHOUSE, $requestData)) {
                 return false;
             }
