@@ -725,7 +725,7 @@ class ProductsController extends MyAppController
             /* ] */
 
             $optionSrchObj = new ProductSearch($this->siteLangId);
-            $optionSrchObj->setDefinedCriteria();
+            $optionSrchObj->setDefinedCriteria(0, 0, ['doNotJoinSellers' => true]);
             $optionSrchObj->doNotCalculateRecords();
             $optionSrchObj->doNotLimitRecords();
             $optionSrchObj->joinTable(SellerProduct::DB_TBL_SELLER_PROD_OPTIONS, 'LEFT OUTER JOIN', 'selprod_id = tspo.selprodoption_selprod_id', 'tspo');
@@ -733,7 +733,7 @@ class ProductsController extends MyAppController
             $optionSrchObj->joinTable(Option::DB_TBL, 'LEFT OUTER JOIN', 'opval.optionvalue_option_id = op.option_id', 'op');
             if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
                 $validDateCondition = " and oss.ossubs_till_date >= '" . date('Y-m-d') . "'";
-                $optionSrchObj->joinTable(Orders::DB_TBL, 'INNER JOIN', 'o.order_user_id=seller_user.user_id AND o.order_type=' . ORDERS::ORDER_SUBSCRIPTION . ' AND o.order_payment_status =1', 'o');
+                $optionSrchObj->joinTable(Orders::DB_TBL, 'INNER JOIN', 'o.order_user_id=selprod_user_id AND o.order_type=' . ORDERS::ORDER_SUBSCRIPTION . ' AND o.order_payment_status =1', 'o');
                 $optionSrchObj->joinTable(OrderSubscription::DB_TBL, 'INNER JOIN', 'o.order_id = oss.ossubs_order_id and oss.ossubs_status_id=' . FatApp::getConfig('CONF_DEFAULT_SUBSCRIPTION_PAID_ORDER_STATUS') . $validDateCondition, 'oss');
             }
             $optionSrchObj->addCondition('product_id', '=', $product['product_id']);
@@ -1075,8 +1075,8 @@ class ProductsController extends MyAppController
         if (1 > $product_id) {
             return array();
         }
-        $specSrchObj = new ProductSearch($langId);
-        $specSrchObj->setDefinedCriteria();
+        $specSrchObj = new ProductSearch(0);
+        $specSrchObj->setDefinedCriteria(0, 0, ['doNotJoinSellers' => true, 'doNotJoinSpecialPrice' => true]);
         $specSrchObj->doNotCalculateRecords();
         $specSrchObj->doNotLimitRecords();
         $specSrchObj->joinTable(Product::DB_PRODUCT_SPECIFICATION, 'LEFT OUTER JOIN', 'product_id = tcps.prodspec_product_id', 'tcps');
