@@ -1141,7 +1141,7 @@ class ProductsController extends MyAppController
         $srch = new ProductSearch($langId);
         $join_price = 1;
         $srch->setGeoAddress();
-        $srch->setDefinedCriteria($join_price);
+        $srch->setDefinedCriteria($join_price, 0, ['doNotJoinSellers' => true]);
         $srch->joinProductToCategory();
         $srch->joinSellerSubscription();
         $srch->addSubscriptionValidCondition();
@@ -1152,7 +1152,7 @@ class ProductsController extends MyAppController
                 'product_id', 'prodcat_id', 'substring_index(group_concat(COALESCE(prodcat_name, prodcat_identifier) ORDER BY COALESCE(prodcat_name, prodcat_identifier) ASC SEPARATOR "," ) , ",", 1) as prodcat_name', 'COALESCE(product_name, product_identifier) as product_name', 'product_model', 'product_short_description', 'product_updated_on',
                 'selprod_id', 'selprod_user_id',  'selprod_code', 'selprod_stock', 'selprod_condition', 'selprod_price', 'COALESCE(selprod_title, product_name, product_identifier) as selprod_title',
                 'special_price_found', 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type',
-                'theprice', 'brand_id', 'COALESCE(brand_name, brand_identifier) as brand_name', 'brand_short_description', 'user_name',
+                'theprice', 'brand_id', 'COALESCE(brand_name, brand_identifier) as brand_name', 'brand_short_description',
                 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'selprod_sold_count', 'selprod_return_policy', 'shop_id'
             )
         );
@@ -1241,7 +1241,7 @@ class ProductsController extends MyAppController
 
         $prodSrch = new ProductSearch($this->siteLangId);
         $prodSrch->setGeoAddress();
-        $prodSrch->setDefinedCriteria();
+        $prodSrch->setDefinedCriteria(0, 0, ['doNotJoinSellers' => true]);
         $prodSrch->joinSellerSubscription();
         $prodSrch->addSubscriptionValidCondition();
         $prodSrch->validateAndJoinDeliveryLocation();
@@ -1271,7 +1271,7 @@ class ProductsController extends MyAppController
     {
         if (isset($ids) && is_array($ids) && count($ids)) {
             $prodSrch = new ProductSearch($this->siteLangId);
-            $prodSrch->setDefinedCriteria(0, 0, ['selProdIds' => $ids]);
+            $prodSrch->setDefinedCriteria(0, 0, ['selProdIds' => $ids, 'doNotJoinSellers' => true]);
             $prodSrch->joinProductToCategory();
             $prodSrch->doNotCalculateRecords();
 
@@ -2093,15 +2093,28 @@ class ProductsController extends MyAppController
         die(json_encode($products));
     }
 
+    private function getRelatedProdIdArr($sellProdId)
+    {
+        $srch = new SearchBase(SellerProduct::DB_TBL_RELATED_PRODUCTS);
+        $srch->joinTable(SellerProduct::DB_TBL, 'INNER JOIN', SellerProduct::DB_TBL_PREFIX . 'id = ' . SellerProduct::DB_TBL_RELATED_PRODUCTS_PREFIX . 'recommend_sellerproduct_id');
+        $srch->joinTable(Product::DB_TBL, 'LEFT JOIN', Product::DB_TBL_PREFIX . 'id = ' . SellerProduct::DB_TBL_PREFIX . 'product_id');
+        $srch->addCondition('related_sellerproduct_id', '=', 'mysql_func_' . $sellProdId, 'AND', true);
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(5);
+        $rs = $srch->getResultSet();
+        $db = FatApp::getDb();
+        return $db->fetchAll($rs, 'selprod_id');
+    }
+
     public function interRelatedProducts(int $selprodId)
     {
         $prodData = $this->getProductDetail($selprodId);
         $this->set('product', $prodData);
 
         /* Related Products */
-        $product = $this->getProductDetail($selprodId);
-        $sellerProduct = new SellerProduct($selprodId);
-        $relatedProducts = $sellerProduct->getRelatedProducts($this->siteLangId, $product['selprod_id'], ['selprod_id']);
+        //$sellerProduct = new SellerProduct($selprodId);
+        // $relatedProducts = $sellerProduct->getRelatedProducts($this->siteLangId, $prodData['selprod_id'], ['selprod_id']);
+        $relatedProducts = $this->getRelatedProdIdArr($prodData['selprod_id']);
         $relatedProductsRs = $this->relatedProductsById(array_keys($relatedProducts));
         $relSelProdIdsArr = array_column($relatedProducts, 'selprod_id');
         $relatedProductsRibbons = [
