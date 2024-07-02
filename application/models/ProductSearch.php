@@ -1249,7 +1249,7 @@ class ProductSearch extends SearchBase
             $langId = $this->langId;
         }
 
-        if ($joinSeller) {
+        if ($joinSeller && FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
             $this->joinSellers();
         }
 
