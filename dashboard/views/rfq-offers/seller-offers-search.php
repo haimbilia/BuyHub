@@ -260,7 +260,7 @@
                             <?php
                             $counterOfferId = FatUtility::int($row['counter_offer_id']);
                             $counterOfferId = 1 > $counterOfferId ? $row['offer_id'] : $counterOfferId;
-                            $buyerAcceptance = applicationConstants::YES == $row['rlo_buyer_acceptance'];
+                            $buyerAcceptance = (applicationConstants::YES == $row['rlo_buyer_acceptance'] || $row['rlo_buyer_offer_id'] > $row['rlo_seller_offer_id']);
                             if (in_array($row['counter_offer_status'], [RfqOffers::STATUS_OPEN, RfqOffers::STATUS_COUNTERED]) && 1 > $row['rlo_seller_acceptance'] && 0 < $buyerAcceptance) { ?>
                                 <button class="btn btn-accept btn-icon" onClick="sellerAcceptance(<?php echo $counterOfferId; ?>,<?php echo  $rfqId; ?>)" data-bs-toggle="tooltip" title="<?php echo Labels::getLabel('LBL_ACCEPT_BUYER_OFFER', $siteLangId); ?>">
                                     <svg class="svg" width="16" height="16">
