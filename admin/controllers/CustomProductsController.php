@@ -57,15 +57,19 @@ class CustomProductsController extends ListingBaseController
 
     public function search()
     {
-        $this->getListingData();
+        $loadPagination = FatApp::getPostedData('loadPagination', FatUtility::VAR_INT, 0);
+        $this->getListingData($loadPagination);
+
         $jsonData = [
-            'listingHtml' => $this->_template->render(false, false, null, true),
             'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
         ];
+        if (!$loadPagination || !FatUtility::isAjaxCall()) {
+            $jsonData['listingHtml'] = $this->_template->render(false, false, null, true);
+        }
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    private function getListingData()
+    private function getListingData($loadPagination = 0)
     {
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
 
@@ -121,7 +125,9 @@ class CustomProductsController extends ListingBaseController
             $srch->addCondition('preq_id', '=', $recordId);
         }
 
-        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        if ($loadPagination && FatUtility::isAjaxCall()) {
+            $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        }
         $srch->doNotCalculateRecords();
         $srch->addMultipleFields(array('preq.*', 'user_id', 'user_name', 'user_parent', 'credential_username', 'credential_email', 'IFNULL(shop_name, shop_identifier) as shop_name', 'shop_id', 'shop_updated_on'));
         $srch->setPageNumber($page);
@@ -130,34 +136,36 @@ class CustomProductsController extends ListingBaseController
         $rs = $srch->getResultSet();
 
         $records = [];
-        while ($res = FatApp::getDb()->fetch($rs)) {
-            $content = (!empty($res['preq_content'])) ? json_decode($res['preq_content'], true) : array();
-            $langContent = (!empty($res['preq_lang_data'])) ? json_decode($res['preq_lang_data'], true) : array();
+        if (!$loadPagination) {
+            while ($res = FatApp::getDb()->fetch($rs)) {
+                $content = (!empty($res['preq_content'])) ? json_decode($res['preq_content'], true) : array();
+                $langContent = (!empty($res['preq_lang_data'])) ? json_decode($res['preq_lang_data'], true) : array();
 
-            $res = array_merge($res, $content);
-            if (!empty($langContent)) {
-                $res = array_merge($res, $langContent);
+                $res = array_merge($res, $content);
+                if (!empty($langContent)) {
+                    $res = array_merge($res, $langContent);
+                }
+                $arr = array(
+                    'preq_id' => $res['preq_id'],
+                    'preq_user_id' => $res['preq_user_id'] ?? 0,
+                    'preq_added_on' => $res['preq_added_on'] ?? '',
+                    'preq_status' => $res['preq_status'] ?? '',
+                    'preq_comment' => $res['preq_comment'] ?? '',
+                    'preq_requested_on' => $res['preq_requested_on'] ?? '',
+                    'preq_status_updated_on' => $res['preq_status_updated_on'] ?? '',
+                    'user_id' => $res['user_id'] ?? 0,
+                    'user_name' => $res['user_name'] ?? '',
+                    'user_parent' => $res['user_parent'] ?? 0,
+                    'shop_name' => $res['shop_name'] ?? '',
+                    'shop_id' => $res['shop_id'] ?? '',
+                    'shop_updated_on' => $res['shop_updated_on'] ?? '',
+                    'product_identifier' => $res['product_identifier'],
+                    'product_name' => (!empty($res['product_name'])) ? $res['product_name'] : $res['product_identifier'],
+                    'credential_username' => $res['credential_username'] ?? '',
+                    'credential_email' => $res['credential_email'] ?? '',
+                );
+                $records[] = $arr;
             }
-            $arr = array(
-                'preq_id' => $res['preq_id'],
-                'preq_user_id' => $res['preq_user_id'] ?? 0,
-                'preq_added_on' => $res['preq_added_on'] ?? '',
-                'preq_status' => $res['preq_status'] ?? '',
-                'preq_comment' => $res['preq_comment'] ?? '',
-                'preq_requested_on' => $res['preq_requested_on'] ?? '',
-                'preq_status_updated_on' => $res['preq_status_updated_on'] ?? '',
-                'user_id' => $res['user_id'] ?? 0,
-                'user_name' => $res['user_name'] ?? '',
-                'user_parent' => $res['user_parent'] ?? 0,
-                'shop_name' => $res['shop_name'] ?? '',
-                'shop_id' => $res['shop_id'] ?? '',
-                'shop_updated_on' => $res['shop_updated_on'] ?? '',
-                'product_identifier' => $res['product_identifier'],
-                'product_name' => (!empty($res['product_name'])) ? $res['product_name'] : $res['product_identifier'],
-                'credential_username' => $res['credential_username'] ?? '',
-                'credential_email' => $res['credential_email'] ?? '',
-            );
-            $records[] = $arr;
         }
         $this->set("arrListing", $records);
         $this->set('postedData', $post);
@@ -416,7 +424,7 @@ class CustomProductsController extends ListingBaseController
         if ($status == ProductRequest::STATUS_CANCELLED) {
             $updateData['preq_product_identifier'] = $data['preq_product_identifier'] . '-' . $preqId . '{cancelled}';
         }
-        
+
         $prodReqObj->assignValues($updateData);
 
         if (!$prodReqObj->save()) {
@@ -697,10 +705,10 @@ class CustomProductsController extends ListingBaseController
         CalculativeDataRecord::updateSelprodRequestCount();
         CalculativeDataRecord::updateCustomCatalogCount();
         $db->commitTransaction();
-        
+
         if ($status == ProductRequest::STATUS_APPROVED) {
             Product::updateMinPrices($product_id);
-        }       
+        }
         $this->set('msg', Labels::getLabel('MSG_STATUS_UPDATED_SUCCESSFULLY', $this->siteLangId));
         $this->set('preq_id', $preqId);
         $this->_template->render(false, false, 'json-success.php');

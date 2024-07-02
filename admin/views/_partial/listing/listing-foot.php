@@ -3,6 +3,9 @@
 $defaultPageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
 $doNotLimitRecords = $doNotLimitRecords ?? false;
 $hidePaginationHtml = $hidePaginationHtml ?? false;
+$pageCount = $pageCount ?? 0;
+$recordCount = $recordCount ?? 0;
+$page = $page ?? 0;
 
 if (false === $doNotLimitRecords) { ?>
     <div class="listingPaginationJs">

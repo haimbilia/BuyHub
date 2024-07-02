@@ -45,15 +45,19 @@ class AbandonedCartController extends ListingBaseController
 
     public function search()
     {
-        $this->getListingData();
+        $loadPagination = FatApp::getPostedData('loadPagination', FatUtility::VAR_INT, 0);
+        $this->getListingData($loadPagination);
+
         $jsonData = [
-            'listingHtml' => $this->_template->render(false, false, 'abandoned-cart/search.php', true),
             'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
         ];
+        if (!$loadPagination || !FatUtility::isAjaxCall()) {
+            $jsonData['listingHtml'] = $this->_template->render(false, false, 'abandoned-cart/search.php', true);
+        }
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    private function getListingData()
+    private function getListingData($loadPagination = 0)
     {
         $fields = $this->getFormColumns();
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
@@ -71,7 +75,6 @@ class AbandonedCartController extends ListingBaseController
         $page = ($page <= 0) ? 1 : $page;
 
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
-
         $searchForm = $this->getSearchForm($fields);
         $postedData = FatApp::getPostedData();
         $post = $searchForm->getFormDataFromArray($postedData);
@@ -113,13 +116,19 @@ class AbandonedCartController extends ListingBaseController
             $cnd->attachCondition(AbandonedCart::DB_TBL_PREFIX . 'discount_notification', '>', 'mysql_func_0', 'OR', true);
         }
 
-        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        if ($loadPagination && FatUtility::isAjaxCall()) {
+            $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        }
         $srch->doNotCalculateRecords();
 
         $srch->addOrder($sortBy, $sortOrder);
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
-        $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getResultSet()));
+        $records = [];
+        if (!$loadPagination) {
+            $records = FatApp::getDb()->fetchAll($srch->getResultSet());
+        }
+        $this->set("arrListing", $records);
         $paginationArr = empty($postedData) ? $post : $postedData;
         $this->set('postedData', $paginationArr);
         $this->set('sortBy', $sortBy);
@@ -143,7 +152,7 @@ class AbandonedCartController extends ListingBaseController
         $frm->addSelectBox(Labels::getLabel('FRM_SELLER_PRODUCT', $this->siteLangId), 'abandonedcart_selprod_id', [], '', ['placeholder' => Labels::getLabel('FRM_SELECT', $this->siteLangId)]);
         $actionArr = AbandonedCart::getActionArr($this->siteLangId);
         unset($actionArr[AbandonedCart::ACTION_PURCHASED]);
-        $frm->addSelectBox(Labels::getLabel('FRM_CART_ACTION', $this->siteLangId), 'abandonedcart_action',$actionArr);
+        $frm->addSelectBox(Labels::getLabel('FRM_CART_ACTION', $this->siteLangId), 'abandonedcart_action', $actionArr);
         $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'date_from', '', array('placeholder' => Labels::getLabel('FRM_DATE_FROM', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
         $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('placeholder' => Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'field--calender'));
         $frm->addHiddenField('', 'total_record_count');

@@ -99,54 +99,59 @@ $accountId = !empty($accountId) && true === $isSubUser ? substr($accountId, 0, 5
             <script>
                 requiredFieldsForm();
             </script>
-        <?php } elseif (!empty($accountId) && !empty($stripeUserData) &&  true === $userAccountIsValid) { ?>
-            <div class="row justify-content-center">
-                <div class="col-md-8">
-                    <ul class="stripe-stats">
-                        <li>
-                            <div class="stats">
-                                <span class="title"><?php echo Labels::getLabel('MSG_PAYOUT_DETAIL', $siteLangId); ?></span>
-                                <?php if (isset($stripeUserData['settings']['payouts']['schedule'])) {
-                                    $schedule = $stripeUserData['settings']['payouts']['schedule'];
-                                    $isMonthly = false;
-                                    foreach ($schedule as $payoutKey => $payoutValue) {
-                                        if ('monthly' == strtolower($payoutValue)) {
-                                            $isMonthly = true;
-                                        }
+            <?php } elseif (!empty($accountId) && !empty($stripeUserData) &&  true === $userAccountIsValid) {
+            $payoutSchedule = $stripeUserData['settings']['payouts']['schedule'] ?? [];
+            $bankData = $stripeUserData['external_accounts']['data'] ?? [];
+            if (!empty($payoutSchedule) || !empty($bankData)) {
+            ?>
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <ul class="stripe-stats">
+                            <?php if (!empty($payoutSchedule)) { ?>
+                                <li>
+                                    <div class="stats">
+                                        <span class="title"><?php echo Labels::getLabel('MSG_PAYOUT_DETAIL', $siteLangId); ?></span>
+                                        <?php $isMonthly = false;
+                                        foreach ($payoutSchedule as $payoutKey => $payoutValue) {
+                                            if ('monthly' == strtolower($payoutValue)) {
+                                                $isMonthly = true;
+                                            }
 
-                                        $payoutValue = ucwords($payoutValue);
-                                        if (true === $isMonthly && 'monthly_anchor' == strtolower($payoutKey)) {
-                                            $payoutValue = $payoutValue . 'th';
-                                        }
-                                ?>
-                                        <p>
-                                            <b><?php echo ucwords(str_replace('_', ' ', $payoutKey)); ?> : </b>
-                                            <?php echo $payoutValue; ?>
-                                        </p>
-                                    <?php } ?>
-                                <?php } ?>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="stats">
-                                <span class="title"><?php echo Labels::getLabel('MSG_BANK_DETAIL', $siteLangId); ?></span>
-                                <?php foreach ($stripeUserData['external_accounts']['data'] as $index => $bank) { ?>
-                                    <p>
-                                        <?php echo Labels::getLabel('MSG_BANK_NAME', $siteLangId); ?> : <?php echo $bank['bank_name']; ?>
-                                    </p>
-                                    <p><?php echo Labels::getLabel('MSG_ACCOUNT_HOLDER_NAME', $siteLangId); ?> :
-                                        <?php echo $bank['account_holder_name']; ?></p>
-                                    <p><?php echo Labels::getLabel('MSG_ACCOUNT_NUMBER', $siteLangId); ?> :
-                                        <?php echo '****' . $bank['last4']; ?></p>
-                                    <p><?php echo Labels::getLabel('MSG_ROUTING_NUMBER', $siteLangId); ?> :
-                                        <?php echo $bank['routing_number']; ?></p>
-                                <?php } ?>
-                            </div>
-                        </li>
-                    </ul>
+                                            $payoutValue = ucwords($payoutValue);
+                                            if (true === $isMonthly && 'monthly_anchor' == strtolower($payoutKey)) {
+                                                $payoutValue = $payoutValue . 'th';
+                                            } ?>
+                                            <p>
+                                                <b><?php echo ucwords(str_replace('_', ' ', $payoutKey)); ?> : </b>
+                                                <?php echo $payoutValue; ?>
+                                            </p>
+                                        <?php } ?>
+                                    </div>
+                                </li>
+                            <?php } ?>
+                            <?php if (!empty($bankData)) { ?>
+                                <li>
+                                    <div class="stats">
+                                        <span class="title"><?php echo Labels::getLabel('MSG_BANK_DETAIL', $siteLangId); ?></span>
+                                        <?php foreach ($bankData as $index => $bank) { ?>
+                                            <p>
+                                                <?php echo Labels::getLabel('MSG_BANK_NAME', $siteLangId); ?> : <?php echo $bank['bank_name']; ?>
+                                            </p>
+                                            <p><?php echo Labels::getLabel('MSG_ACCOUNT_HOLDER_NAME', $siteLangId); ?> :
+                                                <?php echo $bank['account_holder_name']; ?></p>
+                                            <p><?php echo Labels::getLabel('MSG_ACCOUNT_NUMBER', $siteLangId); ?> :
+                                                <?php echo '****' . $bank['last4']; ?></p>
+                                            <p><?php echo Labels::getLabel('MSG_ROUTING_NUMBER', $siteLangId); ?> :
+                                                <?php echo $bank['routing_number']; ?></p>
+                                        <?php } ?>
+                                    </div>
+                                </li>
+                            <?php } ?>
+                        </ul>
+                    </div>
                 </div>
-            </div>
-        <?php } ?>
+        <?php }
+        } ?>
     <?php } ?>
 </div>
 <script>

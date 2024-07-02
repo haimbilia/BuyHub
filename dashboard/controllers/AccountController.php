@@ -68,6 +68,16 @@ class AccountController extends LoggedUserController
             Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Account', 'SupplierApprovalForm', [], CONF_WEBROOT_DASHBOARD));
         }
+
+        if ($supplierRequest["usuprequest_status"] == User::SUPPLIER_REQUEST_APPROVED) {
+            $userData = User::getAttributesById($this->userId, ['user_is_supplier', 'user_is_advertiser']);
+            $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['user_is_supplier'] = $userData['user_is_supplier'];
+            $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['user_is_advertiser'] = $userData['user_is_advertiser'];
+            $msg = Labels::getLabel('LBL_Hello', $this->siteLangId) . ', ' . $supplierRequest["user_name"] . ', ' . Labels::getLabel('LBL_Your_Application_Approved', $this->siteLangId);
+            Message::addMessage($msg);
+            FatApp::redirectUser(UrlHelper::generateUrl('Seller'));
+        }
+
         $maxAttempts = FatApp::getConfig('CONF_MAX_SUPPLIER_REQUEST_ATTEMPT', FatUtility::VAR_INT, 3);
         if ($supplierRequest && $supplierRequest['usuprequest_attempts'] >= $maxAttempts) {
             $this->set('maxAttemptsReached', true);
@@ -3180,6 +3190,10 @@ class AccountController extends LoggedUserController
 
     public function truncateDataRequestPopup()
     {
+        if (UserAuthentication::isGuestUserLogged()) {
+            LibHelper::exitWithError(Labels::getLabel("ERR_UNAUTHORISED_ACCESS", $this->siteLangId));
+        }
+
         $this->_template->render(false, false);
     }
 
@@ -3228,6 +3242,10 @@ class AccountController extends LoggedUserController
 
     public function requestDataForm()
     {
+        if (UserAuthentication::isGuestUserLogged()) {
+            LibHelper::exitWithError(Labels::getLabel("ERR_UNAUTHORISED_ACCESS", $this->siteLangId));
+        }
+
         $userObj = new User($this->userId);
         $srch = $userObj->getUserSearchObj(array('credential_username', 'credential_email', 'user_name'));
         $rs = $srch->getResultSet();
@@ -3259,6 +3277,10 @@ class AccountController extends LoggedUserController
 
     public function setupRequestData()
     {
+        if (UserAuthentication::isGuestUserLogged()) {
+            LibHelper::exitWithError(Labels::getLabel("ERR_UNAUTHORISED_ACCESS", $this->siteLangId));
+        }
+
         $frm = $this->getRequestDataForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (false === $post) {

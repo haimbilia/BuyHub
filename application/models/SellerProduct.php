@@ -765,13 +765,14 @@ class SellerProduct extends MyAppModel
         return true;
     }
 
-    public static function searchRelatedProducts($lang_id, $criteria = array())
+    public static function searchRelatedProducts($lang_id = 0, $criteria = array())
     {
         $srch = new SearchBase(static::DB_TBL_RELATED_PRODUCTS);
         $srch->joinTable(static::DB_TBL, 'INNER JOIN', static::DB_TBL_PREFIX . 'id = ' . static::DB_TBL_RELATED_PRODUCTS_PREFIX . 'recommend_sellerproduct_id');
         $srch->joinTable(static::DB_TBL . '_lang', 'LEFT JOIN', 'slang.' . static::DB_TBL_LANG_PREFIX . 'selprod_id = ' . static::DB_TBL_RELATED_PRODUCTS_PREFIX . 'recommend_sellerproduct_id AND ' . static::DB_TBL_LANG_PREFIX . 'lang_id = ' . $lang_id, 'slang');
         $srch->joinTable(Product::DB_TBL, 'LEFT JOIN', Product::DB_TBL_PREFIX . 'id = ' . static::DB_TBL_PREFIX . 'product_id');
         $srch->joinTable(Product::DB_TBL . '_lang', 'LEFT JOIN', 'lang.productlang_product_id = ' . static::DB_TBL_LANG_PREFIX . 'selprod_id AND productlang_lang_id = ' . $lang_id, 'lang');
+        
         if (!empty($criteria)) {
             if (is_string($criteria)) {
                 $srch->addFld($criteria);
@@ -1578,12 +1579,16 @@ class SellerProduct extends MyAppModel
                     }
                 }
 
-                $brand = Brand::getAttributesById($product['product_brand_id'], ['brand_active', 'brand_deleted']);
-                if ($brand) {
-                    $validationArr['brand_active']['valid'] = $brand['brand_active'] === applicationConstants::YES;
-                    $validationArr['brand_active']['currentStatus'] = $brand['brand_active'];
-                    $validationArr['brand_deleted']['valid'] = $brand['brand_deleted'] === applicationConstants::NO;
-                    $validationArr['brand_deleted']['currentStatus'] = $brand['brand_deleted'];
+                if (1 > FatApp::getConfig('CONF_PRODUCT_BRAND_MANDATORY', FatUtility::VAR_INT, 1)) {
+                    unset($validationArr['brand_active'],  $validationArr['brand_deleted']);
+                } else {
+                    $brand = Brand::getAttributesById($product['product_brand_id'], ['brand_active', 'brand_deleted']);
+                    if ($brand) {
+                        $validationArr['brand_active']['valid'] = $brand['brand_active'] === applicationConstants::YES;
+                        $validationArr['brand_active']['currentStatus'] = $brand['brand_active'];
+                        $validationArr['brand_deleted']['valid'] = $brand['brand_deleted'] === applicationConstants::NO;
+                        $validationArr['brand_deleted']['currentStatus'] = $brand['brand_deleted'];
+                    }
                 }
 
                 $userObj = User::getSearchObject(true, 0, false);

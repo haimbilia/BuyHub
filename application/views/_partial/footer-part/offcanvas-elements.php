@@ -24,7 +24,9 @@ $this->includeTemplate('_partial/footer-part/headerSearchFormArea.php'); ?>
     <div class="offcanvas-header">
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
-    <div class="offcanvas-body productFiltersJs">
+    <div class="offcanvas-body">
+        <div class="productFiltersJs"></div>
+        <div class="otherFiltersJs"></div>
     </div>
 </div>
 <?php if ((!UserAuthentication::isUserLogged() && UserAuthentication::isGuestUserLogged()) ||  UserAuthentication::isUserLogged()) {

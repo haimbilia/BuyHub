@@ -32,9 +32,9 @@ class FilterHelper extends FatUtility
         $prodSrchObj->addSubscriptionValidCondition();*/
         $prodSrchObj->joinSellerProducts(0, '', $headerFormParamsAssocArr, true);
         $prodSrchObj->unsetDefaultLangForJoins();
-        $prodSrchObj->joinSellers();
+        // $prodSrchObj->joinSellers();
         $prodSrchObj->setGeoAddress();
-        $prodSrchObj->joinShops($langId);
+        $prodSrchObj->joinShops($langId, true, true, 0, true);
         $prodSrchObj->joinShopCountry();
         $prodSrchObj->joinShopState();
         $prodSrchObj->joinBrands($langId);
@@ -185,7 +185,7 @@ class FilterHelper extends FatUtility
         /* if needs to show product counts under brands[ */
         //$brandSrch->addFld('count(selprod_id) as totalProducts');
         /* ] */
-        $brandSrch->doNotCalculateRecords();        
+        $brandSrch->doNotCalculateRecords();
         $brandRs = $brandSrch->getResultSet();
         $brands = FatApp::getDb()->fetchAll($brandRs);
 

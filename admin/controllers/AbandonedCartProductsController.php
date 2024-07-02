@@ -35,15 +35,20 @@ class AbandonedCartProductsController extends ListingBaseController
 
     public function search()
     {
-        $this->getListingData();
+        $loadPagination = FatApp::getPostedData('loadPagination', FatUtility::VAR_INT, 0);
+        $this->getListingData($loadPagination);
+
         $jsonData = [
-            'listingHtml' => $this->_template->render(false, false, 'abandoned-cart-products/search.php', true),
             'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
         ];
+
+        if (!$loadPagination || !FatUtility::isAjaxCall()) {
+            $jsonData['listingHtml'] = $this->_template->render(false, false, 'abandoned-cart-products/search.php', true);
+        }
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    private function getListingData()
+    private function getListingData($loadPagination = 0)
     {
         $fields = $this->getFormColumns();
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
@@ -61,7 +66,6 @@ class AbandonedCartProductsController extends ListingBaseController
         $page = ($page <= 0) ? 1 : $page;
 
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
-
         $searchForm = $this->getSearchForm($fields);
         $postedData = FatApp::getPostedData();
         $post = $searchForm->getFormDataFromArray($postedData);
@@ -79,12 +83,19 @@ class AbandonedCartProductsController extends ListingBaseController
             $srch->addCondition(AbandonedCart::DB_TBL_PREFIX . 'selprod_id', '=', 'mysql_func_' . $selProdId, 'AND', true);
         }
 
+        if ($loadPagination && FatUtility::isAjaxCall()) {
+            $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        }
+
         $srch->addOrder($sortBy, $sortOrder);
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
 
         $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);
+        $records = [];
+        if (!$loadPagination) {
+            $records = FatApp::getDb()->fetchAll($rs);
+        }
 
         $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
@@ -123,7 +134,7 @@ class AbandonedCartProductsController extends ListingBaseController
         }
 
         $arr = [
-           /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
+            /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'selprod_title' => Labels::getLabel('LBL_SELLER_PRODUCT', $this->siteLangId),
             'product_count' => Labels::getLabel('LBL_USER_COUNT', $this->siteLangId),
         ];
@@ -135,7 +146,7 @@ class AbandonedCartProductsController extends ListingBaseController
     protected function getDefaultColumns(): array
     {
         return [
-           /*  'listSerial', */
+            /*  'listSerial', */
             'selprod_title',
             'product_count'
         ];

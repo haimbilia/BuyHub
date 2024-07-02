@@ -1320,6 +1320,8 @@ class Orders extends MyAppModel
             if (Orders::ORDER_PAYMENT_PAID == $orderPaymentStatus) {
                 $assignValues = ['user_has_valid_subscription' => applicationConstants::YES];
                 FatApp::getDb()->updateFromArray(User::DB_TBL, $assignValues, array('smt' => 'user_id = ? ', 'vals' => array((int) $orderInfo['order_user_id'])));
+                $assignValues = ['shop_has_valid_subscription' => applicationConstants::YES];
+                FatApp::getDb()->updateFromArray(Shop::DB_TBL, $assignValues, array('smt' => 'shop_user_id = ? ', 'vals' => array((int) $orderInfo['order_user_id'])));
             }
             $this->addSubscriptionOrderPayment($orderId, $orderInfo, $orderPaymentStatus, $comment, $notify);
         }

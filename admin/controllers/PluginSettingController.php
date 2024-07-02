@@ -79,6 +79,10 @@ class PluginSettingController extends ListingBaseController
             FatUtility::dieJsonError($error);
         }
 
+        if (isset($post['update_previous_connected_accounts'])) {
+            $post['update_previous_connected_accounts'] = applicationConstants::NO;
+        }
+
         $pluginSetting = new PluginSetting($post["plugin_id"]);
         if (!$pluginSetting->save($post)) {
             LibHelper::exitWithError($pluginSetting->getError(), true);

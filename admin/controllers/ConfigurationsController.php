@@ -557,15 +557,11 @@ class ConfigurationsController extends ListingBaseController
                 $fld = $frm->addCheckBox(Labels::getLabel("FRM_ENABLE_THIS_SETTING_TO_ADD_WEIGHT_AND_WEIGHT_UNIT", $langId), 'CONF_PRODUCT_WEIGHT_ENABLE', 1, array(), false, 0);
                 HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("FRM_YOU_CAN_ADD_WEIGHT_AND_WEIGHT_UNIT_TO_PRODUCT_IF_THIS_SETTING_IS_ENABLED.", $langId));
 
-                $fld = $frm->addCheckBox(Labels::getLabel("FRM_ENABLE_THIS_SETTING_TO_ADD_WEIGHT_AND_WEIGHT_UNIT", $langId), 'CONF_PRODUCT_WEIGHT_ENABLE', 1, array(), false, 0);
-                HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("FRM_YOU_CAN_ADD_WEIGHT_AND_WEIGHT_UNIT_TO_PRODUCT_IF_THIS_SETTING_IS_ENABLED.", $langId));
-
                 $fld = $frm->addCheckBox(Labels::getLabel("FRM_BRANDS_REQUESTED_BY_SELLERS_WILL_REQUIRE_APPROVAL", $langId), 'CONF_BRAND_REQUEST_APPROVAL', 1, array(), false, 0);
                 HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("FRM_ON_ENABLING_THIS_FEATURE,_Admin_Need_To_Approve_the_brand_requests_(User_Cannot_link_the_requested_brand_with_any_product_until_it_gets_approved_by_Admin)", $langId));
 
                 $fld = $frm->addCheckBox(Labels::getLabel("FRM_CATEGORIES_REQUESTED_BY_SELLERS_WILL_REQUIRE_APPROVAL", $langId), 'CONF_PRODUCT_CATEGORY_REQUEST_APPROVAL', 1, array(), false, 0);
                 HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("FRM_ON_ENABLING_THIS_FEATURE,_Admin_Need_To_Approve_the_Product_category_requests_(User_Cannot_link_the_requested_category_with_any_product_until_it_gets_approved_by_Admin)", $langId));
-
 
                 $fld = $frm->addCheckBox(Labels::getLabel("FRM_BRAND_WILL_BE_MANDATORY_FOR_PRODUCTS", $langId), 'CONF_PRODUCT_BRAND_MANDATORY', 1, array(), false, 0);
                 HtmlHelper::configureSwitchForCheckbox($fld);
@@ -1257,10 +1253,15 @@ class ConfigurationsController extends ListingBaseController
             case Configurations::FORM_THIRD_PARTY_API:
                 $frm->addHtml('', 'GooglePushNotification', '<h3 class="form-section-head">' . Labels::getLabel("FRM_GOOGLE_PUSH_NOTIFICATION", $langId) . '</h3>');
 
-                $frm->addHtml('', 'FaceBookPixel', '<h3 class="form-section-head">' . Labels::getLabel("FRM_FACEBOOK_PIXEL", $langId) . '</h3>');
+                $fld = $frm->addTextarea(Labels::getLabel('FRM_FIREBASE_SERVICE_ACCOUNT_PRIVATE_KEY_JSON_FILE'), 'CONF_FIREBASE_SERVICE_ACCOUNT_JSON_KEY');
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
+                $link = '<a href="javascript:void(0)" title="' . Labels::getLabel('FRM_FIREBASE_SERVICE_ACCOUNT_PRIVATE_KEY_JSON_FILE_STEPS') . '" data-bs-toggle="modal" data-bs-target="#firebaseServiceAccountStepsJs">' . Labels::getLabel('LBL_STEPS', $this->siteLangId) . '</a>';
+                $link .= HtmlHelper::getModalStructure('firebaseServiceAccountStepsJs', Labels::getLabel('LBL_FIREBASE_SERVICE_ACCOUNT_PRIVATE_KEY_JSON', $this->siteLangId), Extrapage::getFirebaseServiceAccountSteps($this->siteLangId));
+                $lbl = CommonHelper::replaceStringData(Labels::getLabel("LBL_PLEASE_FOLLOW_{STEPS}_TO_GET_FIREBASE_SERVICE_ACCOUNT_JSON_KEY", $this->siteLangId), ['{STEPS}' => $link]);
+                $fld->htmlAfterField = "<small class='form-text text-muted'>" . $lbl . "</small>";
 
-                $fld = $frm->addTextBox(Labels::getLabel("FRM_GOOGLE_PUSH_NOTIFICATION_API_KEY", $langId), 'CONF_GOOGLE_PUSH_NOTIFICATION_API_KEY');
-                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_THIS_IS_THE_API_KEY_USED_IN_PUSH_NOTIFICATIONS.", $langId) . "</span>";
+                $fld = $frm->addHtml('', 'FaceBookPixel', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("FRM_FACEBOOK_PIXEL", $langId) . '</h3>');
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
                 $fld = $frm->addTextBox(Labels::getLabel("FRM_FACEBOOK_PIXEL_ID", $langId), 'CONF_FACEBOOK_PIXEL_ID');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_THIS_IS_THE_FACEBOOK_PIXEL_ID_USED_IN_TRACK_EVENTS.", $langId) . "</span>";

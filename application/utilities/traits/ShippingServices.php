@@ -655,7 +655,7 @@ trait ShippingServices
         $shippingAddress = [];
         if (!empty($addresses)) {
             $shippingAddress = (!empty($addresses[Orders::SHIPPING_ADDRESS_TYPE])) ? $addresses[Orders::SHIPPING_ADDRESS_TYPE] : array();
-            $this->shippingService->setAddress($shippingAddress['oua_name'], $shippingAddress['oua_address1'], $shippingAddress['oua_address2'], $shippingAddress['oua_city'], $shippingAddress['oua_state'], $shippingAddress['oua_zip'], $shippingAddress['oua_country_code'], $shippingAddress['oua_phone']);
+            $this->shippingService->setAddress($shippingAddress['oua_name'], $shippingAddress['oua_address1'], $shippingAddress['oua_address2'], $shippingAddress['oua_city'], $shippingAddress['oua_state'], $shippingAddress['oua_zip'], $shippingAddress['oua_country_code'], $shippingAddress['oua_phone'], $shippingAddress['oua_state_code']);
         }
 
         $shippingHandledBySeller = CommonHelper::canAvailShippingChargesBySeller($orderData['op_selprod_user_id'], $orderData['opshipping_by_seller_user_id']);
@@ -664,6 +664,11 @@ trait ShippingServices
             $referenceId = str_pad($shopAddress['shop_id'], 6, "0", STR_PAD_LEFT);
             $this->shippingService->setAddressReference($referenceId);
         }
+
+        if (method_exists($this->shippingService, 'setShopSellerId')) {
+            $this->shippingService->setShopSellerId($orderData['op_selprod_user_id']);
+        }
+        
         if (method_exists($this->shippingService, 'setFromAddress')) {
             $this->shippingService->setFromAddress($shopAddress['shop_name'], $shopAddress['line1'], $shopAddress['line2'], $shopAddress['city'], $shopAddress['state'], $shopAddress['postalCode'], $shopAddress['countryCode'], $shopAddress['phone']);
         }
