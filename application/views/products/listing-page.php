@@ -178,7 +178,21 @@ $this->includeTemplate('_partial/productsSearchForm.php', array('frmProductSearc
             );
             if ($vtype != "map") { ?>
                 <div class="collection-listing filter-left">
-                    <aside class="collection-sidebar productFiltersJs" data-close-on-click-outside="collection-sidebar">
+                    <aside class="collection-sidebar" data-close-on-click-outside="collection-sidebar">
+                        <div class="productFiltersJs">
+                            <ul class="grouping grouping-level">
+                                <li class="skeleton grouping-item"></li>
+                                <li class="skeleton grouping-item"></li>
+                                <li class="skeleton grouping-item"></li>
+                                <li class="skeleton grouping-item"></li>
+                                <li class="skeleton grouping-item"></li>
+                                <li class="skeleton grouping-item"></li>
+                                <li class="skeleton grouping-item"></li>
+                                <li class="skeleton grouping-item"></li>
+                                <li class="skeleton grouping-item"></li>
+                            </ul>
+                        </div>
+                        <div class="otherFiltersJs"></div>
                     </aside>
                     <main class="collection-content">
                         <div class="">

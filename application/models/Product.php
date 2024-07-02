@@ -1487,9 +1487,9 @@ class Product extends MyAppModel
         }
         $criteria['max_price'] = true;
         //$srch->setDefinedCriteria($join_price, 0, $criteria, true);
-        if(0 < $shop_id){
-            $srch->joinSellerProducts(0,'', $criteria, true);
-        }else{
+        if (0 < $shop_id) {
+            $srch->joinSellerProducts(0, '', $criteria, true);
+        } else {
             $srch->joinForPrice('', $criteria, true);
         }
         $srch->unsetDefaultLangForJoins();
@@ -1567,7 +1567,7 @@ class Product extends MyAppModel
             $srch->joinTable('(' . $selProdRviewSubQuery . ')', 'LEFT OUTER JOIN', 'sq_sprating.spreview_product_id = product_id', 'sq_sprating');
             $srch->addMultipleFields(['COALESCE(prod_rating,0) prod_rating', 'COALESCE(totReviews,0) totReviews']);
         }
-     
+
         if (array_key_exists('category', $criteria)) {
             $srch->addCategoryCondition($criteria['category']);
         }

@@ -798,7 +798,7 @@ class Cronjob extends FatModel
             $dialCode = array_key_exists('user_phone_dcode', $val) ? ValidateElement::formatDialCode($val['user_phone_dcode']) : '';
             $phone = array_key_exists('user_phone', $val) ? $val['user_phone'] : '';
             $data = array("user_id" => $val['usercart_user_id'], "user_name" => $val['user_name'], "user_email" => $val['credential_email'], "link" => UrlHelper::generateFullUrl('Checkout'), 'user_phone_dcode' => $dialCode, 'user_phone' => $phone);
-            
+
             $email = new EmailHandler();
             if (!$email->remindBuyerForCartItems(CommonHelper::getLangId(), $data)) {
                 $error = true;
@@ -897,11 +897,11 @@ class Cronjob extends FatModel
     }
 
     public static function publishGoogleShoppingFeed()
-    { 
+    {
         $activePluginCode = (new Plugin())->getDefaultPluginKeyName(Plugin::TYPE_ADVERTISEMENT_FEED);
         if (empty($activePluginCode)) {
             return;
-        }  
+        }
 
         $srch = AdsBatch::getSearchObject();
         $srch->joinTable(User::DB_TBL, 'INNER JOIN', 'user_id = adsbatch_user_id AND user_deleted =' . applicationConstants::NO . ' AND user_is_supplier = ' . applicationConstants::YES);
@@ -917,12 +917,12 @@ class Cronjob extends FatModel
 
         if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
             $subSrch = new SearchBase(Orders::DB_TBL, 'o');
-            $subSrch->joinTable(OrderSubscription::DB_TBL, 'INNER JOIN', 'o.order_id = oss.ossubs_order_id and o.order_type = '.Orders::ORDER_SUBSCRIPTION.' and oss.ossubs_status_id =' . FatApp::getConfig('CONF_DEFAULT_SUBSCRIPTION_PAID_ORDER_STATUS') . ' and oss.ossubs_till_date >="'.date('Y-m-d').'"', 'oss');      
+            $subSrch->joinTable(OrderSubscription::DB_TBL, 'INNER JOIN', 'o.order_id = oss.ossubs_order_id and o.order_type = ' . Orders::ORDER_SUBSCRIPTION . ' and oss.ossubs_status_id =' . FatApp::getConfig('CONF_DEFAULT_SUBSCRIPTION_PAID_ORDER_STATUS') . ' and oss.ossubs_till_date >="' . date('Y-m-d') . '"', 'oss');
             $subSrch->addCondition('o.order_payment_status', '=', 'mysql_func_1', 'AND', true);
             $subSrch->doNotCalculateRecords();
-            $subSrch->doNotLimitRecords();    
-            $subSrch->addFld('order_user_id');                
-            $srch->joinTable('(' . $subSrch->getQuery() . ')', 'INNER JOIN', 'osub.order_user_id = user_id','osub');
+            $subSrch->doNotLimitRecords();
+            $subSrch->addFld('order_user_id');
+            $srch->joinTable('(' . $subSrch->getQuery() . ')', 'INNER JOIN', 'osub.order_user_id = user_id', 'osub');
         }
         $srch->doNotCalculateRecords();
         $srch->setPageSize(100);
@@ -937,10 +937,10 @@ class Cronjob extends FatModel
                     date(adsbatch_next_execution_on) < '" . date('Y-m-d') . "'                                                 
                 )        
             )"
-        );  
+        );
 
         $rs = $srch->getResultSet();
-        while($batch = FatApp::getDb()->fetch($rs)){       
+        while ($batch = FatApp::getDb()->fetch($rs)) {
             $adsBatchobj = new AdsBatch($batch['adsbatch_id']);
             $adsBatchobj->assignValues(['adsbatch_synced_on' => date('Y-m-d H:i:s')]);
             if (!$adsBatchobj->save()) {
@@ -956,12 +956,12 @@ class Cronjob extends FatModel
                 continue;
             }
 
-            if (empty($shoppingFeedObj->getSettings())) {           
+            if (empty($shoppingFeedObj->getSettings())) {
                 continue;
             }
 
             $productData = $adsBatchobj->getBatchDataForFeed($batch['adsbatch_user_id'], $batch['adsbatch_lang_id']);
-            if (empty($productData)) {             
+            if (empty($productData)) {
                 continue;
             }
 
@@ -978,7 +978,7 @@ class Cronjob extends FatModel
             ];
 
             $response = $shoppingFeedObj->publishBatch($data);
-            if (false === $response['status'] || Plugin::RETURN_FALSE === $response['status']) {                
+            if (false === $response['status'] || Plugin::RETURN_FALSE === $response['status']) {
                 SystemLog::transaction($shoppingFeedObj->getError(), $activePluginCode);
                 continue;
             }
@@ -1023,7 +1023,7 @@ class Cronjob extends FatModel
         $srch->joinTable('(' . $sSrch->getQuery() . ')', 'INNER JOIN', 'otemp.currentOrderId=o.order_id', 'otemp');
         $srch->joinTable(OrderSubscription::DB_TBL, 'INNER JOIN', 'o.order_id = oss.ossubs_order_id and oss.ossubs_status_id =' . FatApp::getConfig('CONF_DEFAULT_SUBSCRIPTION_PAID_ORDER_STATUS') . " and oss.ossubs_till_date < '" . date('Y-m-d') . "'", 'oss');
         $srch->joinTable(User::DB_TBL, 'INNER JOIN', 'o.order_user_id = u.user_id', 'u');
-        
+
         $srch->addCondition('u.user_has_valid_subscription', '= ', applicationConstants::YES);
         $srch->addCondition('oss.ossubs_status_id', 'IN ', Orders::getActiveSubscriptionStatusArr());
         $srch->addCondition('o.order_type', '=', 'mysql_func_' . ORDERS::ORDER_SUBSCRIPTION, 'AND', true);
@@ -1034,11 +1034,13 @@ class Cronjob extends FatModel
         $srch->addGroupBy('o.order_user_id');
         $srch->addFld('o.order_user_id');
         $srch->addMultipleFields(['o.order_user_id']);
-        
+
         $result = FatApp::getDb()->fetchAll($srch->getResultSet());
         foreach ($result as $user) {
             $assignValues = ['user_has_valid_subscription' => applicationConstants::NO];
             FatApp::getDb()->updateFromArray(User::DB_TBL, $assignValues, array('smt' => 'user_id = ? ', 'vals' => array((int) $user['order_user_id'])));
+            $assignValues = ['shop_has_valid_subscription' => applicationConstants::NO];
+            FatApp::getDb()->updateFromArray(Shop::DB_TBL, $assignValues, array('smt' => 'shop_user_id = ? ', 'vals' => array((int) $user['order_user_id'])));
         }
         echo 'Done';
     }

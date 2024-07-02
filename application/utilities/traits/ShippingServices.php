@@ -664,6 +664,11 @@ trait ShippingServices
             $referenceId = str_pad($shopAddress['shop_id'], 6, "0", STR_PAD_LEFT);
             $this->shippingService->setAddressReference($referenceId);
         }
+
+        if (method_exists($this->shippingService, 'setShopSellerId')) {
+            $this->shippingService->setShopSellerId($orderData['op_selprod_user_id']);
+        }
+        
         if (method_exists($this->shippingService, 'setFromAddress')) {
             $this->shippingService->setFromAddress($shopAddress['shop_name'], $shopAddress['line1'], $shopAddress['line2'], $shopAddress['city'], $shopAddress['state'], $shopAddress['postalCode'], $shopAddress['countryCode'], $shopAddress['phone']);
         }

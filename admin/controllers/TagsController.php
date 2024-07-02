@@ -52,7 +52,7 @@ class TagsController extends ListingBaseController
         $this->setCustomColumnWidth();
         $this->set('autoTableColumWidth', false);
         $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_PRODUCT_NAME_AND_MODEL', $langId));
-        $this->getListingData();
+        $this->getListingData(0);
 
         if (FatUtility::isAjaxCall()) {
             $this->_template->render(false, false, null, false, false);
@@ -70,11 +70,15 @@ class TagsController extends ListingBaseController
 
     public function search()
     {
-        $this->getListingData();
+        $loadPagination = FatApp::getPostedData('loadPagination', FatUtility::VAR_INT, 0);
+        $this->getListingData($loadPagination);
         $jsonData = [
-            'listingHtml' => $this->_template->render(false, false, 'tags/search.php', true),
             'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
         ];
+
+        if (!$loadPagination || !FatUtility::isAjaxCall()) {
+            $jsonData['listingHtml'] =  $this->_template->render(false, false, 'tags/search.php', true);
+        }
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
@@ -158,7 +162,7 @@ class TagsController extends ListingBaseController
         return $frm;
     }
 
-    private function getListingData()
+    private function getListingData($loadPagination = 0)
     {
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
         $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
@@ -197,18 +201,24 @@ class TagsController extends ListingBaseController
             $cnd->attachCondition('product_identifier', 'like', '%' . $keyword . '%', 'OR');
             $cnd->attachCondition('product_model', 'like', '%' . $keyword . '%');
         }
+
+        if ($loadPagination && FatUtility::isAjaxCall()) {
+            $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        }
+        $srch->doNotCalculateRecords();
+
         $srch->addMultipleFields(['product_id', 'IFNULL(product_name, product_identifier) as product_name']);
         $srch->addOrder($sortBy, $sortOrder);
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
-        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
+
+        $records = [];
+        if (!$loadPagination) {
+            $records = FatApp::getDb()->fetchAll($srch->getResultSet());
+        }
 
         $this->set("arrListing", $records);
         $this->set('langId', $langId);
-        $this->set('pageCount', $srch->pages());
-        $this->set('recordCount', $srch->recordCount());
-        $this->set('page', $page);
-        $this->set('pageSize', $pageSize);
         $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);

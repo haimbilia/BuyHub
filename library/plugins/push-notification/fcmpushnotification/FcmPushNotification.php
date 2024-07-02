@@ -1,5 +1,7 @@
 <?php
 
+use Google\Client as GoogleClient;
+
 class FcmPushNotification extends PushNotificationBase
 {
     public const KEY_NAME = __CLASS__;
@@ -8,7 +10,7 @@ class FcmPushNotification extends PushNotificationBase
 
     private $deviceTokens;
 
-    public $requiredKeys = ['server_api_key'];
+    public $requiredKeys = ['firebase_service_account_json_key'];
 
     /**
      * __construct
@@ -20,7 +22,7 @@ class FcmPushNotification extends PushNotificationBase
     {
         $this->langId = $langId;
     }
-    
+
     /**
      * setDeviceTokens
      *
@@ -31,7 +33,7 @@ class FcmPushNotification extends PushNotificationBase
     {
         $this->deviceTokens = $deviceTokens;
     }
-    
+
     /**
      * notify
      *
@@ -51,55 +53,31 @@ class FcmPushNotification extends PushNotificationBase
             $this->error = Labels::getLabel('ERR_ARRAY_MUST_CONTAIN_AT_LEAST_1_AND_AT_MOST_1000_REGISTRATION_TOKENS', $this->langId);
             return $this->formatOutput(Plugin::RETURN_FALSE, $this->error);
         }
-            
+
         if (empty($title) || empty($message)) {
             $this->error = Labels::getLabel('ERR_INVALID_REQUEST', $this->langId);
             return $this->formatOutput(Plugin::RETURN_FALSE, $this->error);
         }
 
-        $msg = [
-            'title' => $title,
-            'body' => $message,
-            'image' => isset($data['image']) ? $data['image'] : ''
-        ];
-        
-        $fields = [
-            'registration_ids' => $this->deviceTokens,
-            'notification' => $msg,
-            'data' => isset($data['customData']) ? $data['customData'] : [],
-            'priority' => 'high'
-        ];
-
-        if (User::DEVICE_OS_ANDROID == $os) {
-            unset($fields['notification']);
-            $fields['data'] = array_merge($msg, $fields['data']);
+        $config = json_decode($this->settings['firebase_service_account_json_key'], true);
+        if (json_last_error() !== JSON_ERROR_NONE &&  $config['project_id'] == '') {
+            $this->error = Labels::getLabel('ERR_INVALID_JSON_KEY_FORMAT', $this->langId);
+            return $this->formatOutput(Plugin::RETURN_FALSE, $this->error);
         }
         
-        $fields['data'] = empty($fields['data']) ? (object) [] : $fields['data'];
-
-        $headers = [
-            'Authorization: key=' . $this->settings['server_api_key'],
-            'Content-Type: application/json'
-        ];
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, static::PRODUCTION_URL);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
-        $response = curl_exec($ch);  
-        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE); 
-        curl_close($ch);    
-                 
-        if($httpCode === 401){
-            return $this->formatOutput(Plugin::RETURN_FALSE, Labels::getLabel('ERR_INVALID_KEYS', $this->langId), []);
-        } 
-      
-        $result = json_decode($response, true);
-        $msg = Labels::getLabel('MSG_SUCCESS', $this->langId);
-        return $this->formatOutput(Plugin::RETURN_TRUE, $msg, $result);
+        foreach ($this->deviceTokens as $deviceToken) {
+            if (empty($deviceToken)) {
+                continue;
+            }
+            $data = [
+                'title' => $title,
+                'text' => $message,
+                'image' => ($data['image'] ?? ''),
+                'customData' => $data['customData'] ?? []
+            ];
+            Notifications::sendPushNotification($config, $deviceToken, $data);
+        }
+        return $this->formatOutput(Plugin::RETURN_TRUE, Labels::getLabel('MSG_SUCCESS', $this->langId));
     }
 
     /**

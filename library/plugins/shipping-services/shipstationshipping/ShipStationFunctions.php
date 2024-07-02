@@ -94,9 +94,9 @@ trait ShipStationFunctions
      *
      * @return bool
      */
-    private function post(array $requestParam): bool
+    private function post(array $requestParam, string $requestType = 'POST'): bool
     {
-        return $this->call('POST', $requestParam);
+        return $this->call($requestType, $requestParam);
     }
 
     /**
@@ -203,6 +203,18 @@ trait ShipStationFunctions
     {
         $this->endpoint = 'warehouses/createwarehouse';
         return $this->post($requestParam);
+    }
+    
+    /**
+     * Updates a warehouse record in the ShipStation API.
+     *
+     * @param array $requestParam The request parameters to send to the ShipStation API.
+     * @return bool True if the update was successful, false otherwise.
+     */
+    private function updateWarehouseRecord(array $requestParam): bool
+    {
+        $this->endpoint = 'warehouses/' . $requestParam['warehouseId'];
+        return $this->post($requestParam, 'PUT');
     }
 
     /**

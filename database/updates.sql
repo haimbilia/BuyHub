@@ -59,3 +59,31 @@ INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_
 ('ERR_PACKAGE_SUPPORT_MAXIMUM_UP_TO_{PROD-CNT}_PRODUCTS_AND_{INV-CNT}_INVENTORIES._MARK_ALL_THE_INVENTORIES_INACTIVE', 1, 'This package support maximum up to 5 products and 10 inventories. Please mark all the inventories as inactive before buying a plan. Then you can re-activate them again.', 1)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 
+ALTER TABLE `tbl_orders` ADD INDEX( `order_date_added`);
+ALTER TABLE `tbl_order_products` ADD INDEX( `op_status_id`);
+ALTER TABLE `tbl_orders` ADD INDEX( `order_payment_status`);
+
+ALTER TABLE `tbl_calculative_data` ADD `cd_updated_on` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `cd_value`;
+ALTER TABLE `tbl_calculative_data` CHANGE `cd_updated_on` `cd_updated_on` DATETIME on update CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+ALTER TABLE `tbl_calculative_data` CHANGE `cd_value` `cd_value` TEXT CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL;
+
+INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES 
+('LBL_PLEASE_FOLLOW_{STEPS}_TO_GET_FIREBASE_SERVICE_ACCOUNT_JSON_KEY',1,'Please follow {STEPS} to get firebase service account JSON Key',1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+INSERT INTO `tbl_extra_pages` (`epage_identifier`, `epage_type`, `epage_content_for`, `epage_active`, `epage_default`, `epage_default_content`) VALUES 
+('Firebase Service Account Private Key JSON File', 86, 0, 1, 0, '<h6 class=\"mt-2\"><strong>To generate a private key file for your service account:</strong></h6>\n<ul class=\"listing--bullet\">\n	<li>\n		<p>In the Firebase console, open <strong>Settings > <a href=\"https://console.firebase.google.com/project/\">Service Accounts</a></strong>.</p></li>\n	<li>\n		<p>Click <strong>Generate New Private Key</strong>, then confirm by clicking <strong>Generate Key</strong>.</p></li>\n	<li>\n		<p>Securely store the JSON file containing the key.</p></li>\n</ul>')
+ON DUPLICATE KEY UPDATE epage_identifier = VALUES(epage_identifier), epage_default_content = VALUES(epage_default_content);
+
+ALTER TABLE `tbl_shops` ADD `shop_has_valid_subscription` TINYINT(4) NOT NULL AFTER `shop_total_reviews`;
+ALTER TABLE `tbl_shops` ADD `shop_user_valid` TINYINT(0) NOT NULL AFTER `shop_has_valid_subscription`;
+UPDATE tbl_shops AS s
+INNER JOIN (
+    SELECT user_id
+    FROM tbl_users u
+    INNER JOIN tbl_user_credentials c ON u.user_id = c.credential_user_id
+    WHERE u.user_deleted = 0 AND c.credential_active = 1 AND c.credential_verified = 1 and u.user_is_supplier = 1
+) t ON t.user_id = s.shop_user_id
+SET s.shop_user_valid = 1;
+ALTER TABLE `tbl_shops` ADD INDEX( `shop_user_valid`);
+ALTER TABLE `tbl_states` ADD INDEX( `state_active`);

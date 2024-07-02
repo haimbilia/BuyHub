@@ -127,7 +127,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         /* if ("undefined" != typeof document.frmRecordSearch.page) {
             document.frmRecordSearch.page.value = 1;
         } */
-        searchRecords(frm);
+        searchRecords(frm, page);
     };
 
     loadMore = function (callback = '') {
@@ -190,7 +190,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         searchRecords(document.frmRecordSearchPaging);
     };
 
-    searchRecords = function (frm) {
+    searchRecords = function (frm, page) {
         var arr = ['ThemeColor', 'Configurations'];
         if (false === checkControllerName() || arr.indexOf(controllerName) > -1) {
             return false;
@@ -201,6 +201,8 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         if (frm) {
             data = fcom.frmData(frm);
         }
+        data = data + '&loadPagination=0';
+
         $(listingTableJs).prepend(fcom.getLoader());
 
         fcom.ajax(fcom.makeUrl(controllerName, "search"), data, function (res) {
@@ -214,6 +216,37 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
             $(dv).replaceWith(res.listingHtml);
             $(paginationDv).replaceWith(res.paginationHtml);
             fcom.removeLoader();
+
+            var pageVal = $(document.frmRecordSearchPaging.page).val();
+            if (typeof pageVal == 'undefined' || pageVal != page) {
+                loadPagination(document.frmRecordSearchPaging, page);
+            }
+        }, { fOutMode: 'json' });
+    };
+
+    loadPagination = function (frm, page) {
+        if (typeof page == undefined) {
+            page = 1;
+        }
+        $(frm.page).val(page);
+
+        var arr = ['ThemeColor', 'Configurations'];
+        if (false === checkControllerName() || arr.indexOf(controllerName) > -1) {
+            return false;
+        }
+        setColumnsData(frm);
+        var data = "";
+        if (frm) {
+            data = fcom.frmData(frm);
+        }
+        data = data + '&loadPagination=1';
+        $(paginationDv).html('<div class="card-foot">Processing...</div>');
+        fcom.ajax(fcom.makeUrl(controllerName, "search"), data, function (res) {
+            if (0 == res.status) {
+                return;
+            }
+            fcom.removeLoader();
+            $(paginationDv).replaceWith(res.paginationHtml);
             $(".selectAllJs").prop("checked", false);
             if (0 < $(".listingRecordJs .noRecordFoundJs").length) {
                 $(".selectAllJs").prop("disabled", "disabled");
@@ -243,7 +276,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
             }
         });
         $('.select2-hidden-accessible').val('').trigger('change');
-        searchRecords(document.frmRecordSearch, loadRowsOnly);
+        searchRecords(document.frmRecordSearch, 0);
 
     };
 
@@ -826,4 +859,11 @@ $(document).on("click", ".selectItemJs", function () {
 
 $(window).on('load', function () {
     fixTableColumnWidth();
+    frm = document.frmRecordSearchPaging;
+    if (typeof frm != 'undefined' && frm != null) {
+        var pageRecordCount = $(frm.total_record_count).val();
+        if (typeof pageRecordCount == 'undefined' || pageRecordCount <= 0) {
+            loadPagination(document.frmRecordSearchPaging);
+        }
+    }
 });

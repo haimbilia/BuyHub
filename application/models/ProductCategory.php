@@ -234,7 +234,7 @@ class ProductCategory extends MyAppModel
             $prodSrchObj = new ProductSearch();
             // $prodSrchObj->addMultipleFields(array('count(selprod_id) as productCounts', 'c.prodcat_id as qryProducts_prodcat_id'));
             $prodSrchObj->addMultipleFields(array('DISTINCT(prodcat_code)', 'cr.pcr_parent_id as qryProducts_prodcat_id'));
-            $prodSrchObj->setDefinedCriteria(0, 0, array('doNotJoinSpecialPrice' => true));
+            $prodSrchObj->setDefinedCriteria(0, 0, array('doNotJoinSpecialPrice' => true, 'doNotJoinSellers' => true));
             $prodSrchObj->joinSellerSubscription(0, true);
             $prodSrchObj->addSubscriptionValidCondition();
             $prodSrchObj->doNotCalculateRecords();
@@ -245,6 +245,8 @@ class ProductCategory extends MyAppModel
             if (0 < $parentId) {
                 $prodSrchObj->addCondition('prodcat_code', 'like', $catCode . '%');
             }
+            /*  echo $prodSrchObj->getQuery();
+            exit; */
             $srch->joinTable('(' . $prodSrchObj->getQuery() . ')', 'INNER JOIN', 'qryProducts.qryProducts_prodcat_id = cr.pcr_prodcat_id', 'qryProducts');
         }
         $srch->joinTable(self::DB_TBL, 'INNER JOIN', 'c.prodcat_id = cr.pcr_prodcat_id', 'c');
@@ -340,7 +342,7 @@ class ProductCategory extends MyAppModel
             $prodSrchObj = new ProductSearch();
             // $prodSrchObj->addMultipleFields(array('count(selprod_id) as productCounts', 'c.prodcat_id as qryProducts_prodcat_id'));
             $prodSrchObj->addMultipleFields(array('DISTINCT(prodcat_code)', 'cr.pcr_parent_id as qryProducts_prodcat_id'));
-            $prodSrchObj->setDefinedCriteria(0, 0, array('doNotJoinSpecialPrice' => true));
+            $prodSrchObj->setDefinedCriteria(0, 0, array('doNotJoinSpecialPrice' => true, 'doNotJoinSellers' => true));
             $prodSrchObj->joinSellerSubscription(0, true);
             $prodSrchObj->addSubscriptionValidCondition();
             $prodSrchObj->doNotCalculateRecords();
@@ -855,7 +857,7 @@ class ProductCategory extends MyAppModel
 
         if ($excludeCategoriesHavingNoProducts) {
             $prodSrchObj = new ProductSearch();
-            $prodSrchObj->setDefinedCriteria(0, 0, array('doNotJoinSpecialPrice' => true));
+            $prodSrchObj->setDefinedCriteria(0, 0, array('doNotJoinSpecialPrice' => true, 'doNotJoinSellers' => true));
             $prodSrchObj->doNotCalculateRecords();
             $prodSrchObj->doNotLimitRecords();
             $prodSrchObj->joinSellerSubscription(0, true);
@@ -1096,7 +1098,7 @@ class ProductCategory extends MyAppModel
     public function haveProducts(bool $isActive = true)
     {
         $prodSrchObj = new ProductSearch(0, null, null, $isActive);
-        $prodSrchObj->setDefinedCriteria(0, 0, array('doNotJoinSpecialPrice' => true));
+        $prodSrchObj->setDefinedCriteria(0, 0, array('doNotJoinSpecialPrice' => true, 'doNotJoinSellers' => true));
         $prodSrchObj->joinProductToCategory(0, $isActive);
         $prodSrchObj->doNotCalculateRecords();
         $prodSrchObj->setPageSize(1);
