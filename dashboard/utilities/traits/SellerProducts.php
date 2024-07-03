@@ -545,9 +545,10 @@ trait SellerProducts
                 FatUtility::dieWithError(Message::getHtml());
             }
         }
-
+                
         $post['selprod_subtract_stock'] = FatApp::getPostedData('selprod_subtract_stock', FatUtility::VAR_INT, 0);
         $post['selprod_track_inventory'] = FatApp::getPostedData('selprod_track_inventory', FatUtility::VAR_INT, 0);
+        $post['selprod_min_order_qty'] = FatApp::getPostedData('selprod_min_order_qty', FatUtility::VAR_INT, 1);
 
         $keywordSlug = '';
         $productId = SellerProduct::getAttributesById($selprod_id, 'selprod_product_id', false);
@@ -803,6 +804,8 @@ trait SellerProducts
             foreach ($optionCombinations as $optionKey => $optionValue) {
                 /* Check if product already added for this option [ */
                 $selProdCode = $post['selprod_code'] . $optionKey;
+                $post['selprod_stock' . $optionKey] = $post['selprod_stock' . $optionKey] ?? 1;
+
                 $selProdAvailable = Product::isSellProdAvailableForUser($selProdCode, $this->siteLangId, $this->userParentId);
                 if (!empty($selProdAvailable)) {
                     if (!$selProdAvailable['selprod_deleted']) {
@@ -812,7 +815,8 @@ trait SellerProducts
                     }
                     $data_to_be_save['selprod_deleted'] = applicationConstants::NO;
                 }
-                if (!isset($post['selprod_cost' . $optionKey]) || !isset($post['selprod_price' . $optionKey]) || !isset($post['selprod_stock' . $optionKey])) {
+
+                if (!isset($post['selprod_cost' . $optionKey]) || !isset($post['selprod_price' . $optionKey])) {
                     continue;
                 }
 

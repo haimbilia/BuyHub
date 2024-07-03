@@ -701,7 +701,7 @@ class ProductsController extends MyAppController
                 }
             }
 
-            if ($product['product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
+            if (in_array($product['product_type'], [Product::PRODUCT_TYPE_DIGITAL, Product::PRODUCT_TYPE_SERVICE])) {
                 $fulfillmentType = Shipping::FULFILMENT_ALL;
             }
 

@@ -50,6 +50,7 @@ class Product extends MyAppModel
 
     public const PRODUCT_TYPE_PHYSICAL = 1;
     public const PRODUCT_TYPE_DIGITAL = 2;
+    public const PRODUCT_TYPE_SERVICE = 3;
 
     public const APPROVED = 1;
     public const UNAPPROVED = 0;
@@ -314,7 +315,8 @@ class Product extends MyAppModel
         }
         return array(
             self::PRODUCT_TYPE_PHYSICAL => Labels::getLabel('LBL_PHYSICAL', $langId),
-            self::PRODUCT_TYPE_DIGITAL => Labels::getLabel('LBL_DIGITAL', $langId)
+            self::PRODUCT_TYPE_DIGITAL => Labels::getLabel('LBL_DIGITAL', $langId),
+            self::PRODUCT_TYPE_SERVICE => Labels::getLabel('LBL_SERVICE', $langId),
         );
     }
 

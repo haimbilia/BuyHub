@@ -131,9 +131,12 @@ class CheckoutController extends MyAppController
                                 }
                             }
                         } else {
-                            $tempHoldStock = Product::tempHoldStockCount($product['selprod_id']);
+                            $tempHoldStock = (0 < $product['selprod_track_inventory']) ? Product::tempHoldStockCount($product['selprod_id']) : 0;
                             $availableStock = $product['selprod_stock'] - $tempHoldStock;
-                            $userTempHoldStock = Product::tempHoldStockCount($product['selprod_id'], $cart_user_id, 0, true);
+                            $userTempHoldStock = 0;
+                            if (0 < $product['selprod_track_inventory']) {
+                                $userTempHoldStock = Product::tempHoldStockCount($product['selprod_id'], $cart_user_id, 0, true);
+                            }
                             $productName = (isset($product['selprod_title']) && $product['selprod_title'] != '') ? $product['selprod_title'] : $product['name'];
                             if ($availableStock < ($product['quantity'] - $userTempHoldStock)) {
                                 $key = false;
@@ -2189,7 +2192,7 @@ class CheckoutController extends MyAppController
 
             foreach ($pickupOptions[$pickUpBy]['products'] as $pickupProduct) {
                 foreach ($cartProducts as $cartKey => $cartval) {
-                    if ($cartval['selprod_id'] != $pickupProduct['selprod_id'] || $cartval['product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
+                    if ($cartval['selprod_id'] != $pickupProduct['selprod_id'] || in_array($cartval['product_type'], [Product::PRODUCT_TYPE_DIGITAL, Product::PRODUCT_TYPE_SERVICE])) {
                         continue;
                     }
                     /* get Product Data[ */

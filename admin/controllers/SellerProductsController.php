@@ -321,9 +321,9 @@ class SellerProductsController extends ListingBaseController
             LibHelper::exitWithError(Labels::getLabel('ERR_DOWNLOAD_VALIDITY_MUST_BE_-1_OR_GREATER_THAN_ZERO', $this->siteLangId), true);
         }
 
-        $selprod_stock = Fatutility::int($post['selprod_stock']);
-        $selprod_min_order_qty = Fatutility::int($post['selprod_min_order_qty']);
-        $selprod_threshold_stock_level = Fatutility::int($post['selprod_threshold_stock_level']);
+        $selprod_stock = Fatutility::int($post['selprod_stock'] ?? 1);
+        $selprod_min_order_qty = Fatutility::int($post['selprod_min_order_qty'] ?? 1);
+        $selprod_threshold_stock_level = Fatutility::int($post['selprod_threshold_stock_level'] ?? 0);
         $useShopPolicy = FatApp::getPostedData('use_shop_policy', FatUtility::VAR_INT, 0);
         $post['use_shop_policy'] = $useShopPolicy;
 
@@ -369,11 +369,11 @@ class SellerProductsController extends ListingBaseController
             $post['selprod_threshold_stock_level'] = 0;
         }
 
-        if ($post['selprod_threshold_stock_level'] == 1 && $selprod_threshold_stock_level >= $selprod_stock) {
+        if ($selprod_threshold_stock_level == 1 && $selprod_threshold_stock_level >= $selprod_stock) {
             LibHelper::exitWithError(Labels::getLabel('ERR_ALERT_STOCK_LEVEL_SHOULD_BE_LESS_THAN_STOCK_QUANTITY.', $this->siteLangId), true);
         }
 
-        if ($post['selprod_threshold_stock_level'] == 1 && ($selprod_min_order_qty > $selprod_stock || 1 > $selprod_min_order_qty)) {
+        if ($selprod_threshold_stock_level == 1 && ($selprod_min_order_qty > $selprod_stock || 1 > $selprod_min_order_qty)) {
             LibHelper::exitWithError(Labels::getLabel('ERR_MINIMUM_QUANTITY_SHOULD_BE_LESS_THAN_EQUAL_TO_STOCK_QUANTITY.', $this->siteLangId), true);
         }
 
