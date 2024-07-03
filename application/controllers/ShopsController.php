@@ -43,7 +43,7 @@ class ShopsController extends MyAppController
         $prodShopSrch = new ProductSearch($this->siteLangId);
         $prodShopSrch->addMultipleFields(array('distinct(shop_id)'));
         $prodShopSrch->setGeoAddress();
-        $prodShopSrch->setDefinedCriteria();
+        $prodShopSrch->setDefinedCriteria(0, 0, ['doNotJoinSpecialPrice' => true, 'doNotJoinSellers' => true]);
         $prodShopSrch->validateAndJoinDeliveryLocation();
         $prodShopSrch->joinProductToCategory();
         $prodShopSrch->doNotCalculateRecords();
@@ -62,7 +62,7 @@ class ShopsController extends MyAppController
 
         $flds = [
             's.shop_id', 'shop_user_id', 'shop_ltemplate_id', 'shop_created_on', 'IFNULL(shop_name, shop_identifier) as shop_name', 'shop_description',
-            'shop_country_l.country_name as country_name', 'shop_state_l.state_name as state_name', 'shop_city','shop_updated_on'
+            'shop_country_l.country_name as country_name', 'shop_state_l.state_name as state_name', 'shop_city', 'shop_updated_on'
         ];
         $srch->addMultipleFields($flds);
 
@@ -92,7 +92,7 @@ class ShopsController extends MyAppController
         $productSrchObj->joinProductToCategory($this->siteLangId);
         $productSrchObj->joinProductToTax();
         $productSrchObj->doNotCalculateRecords();
-        $productSrchObj->setDefinedCriteria();
+        $productSrchObj->setDefinedCriteria(0, 0, ['doNotJoinSellers' => true]);
         $productSrchObj->joinSellerSubscription($this->siteLangId, true);
         $productSrchObj->addSubscriptionValidCondition();
         $productSrchObj->validateAndJoinDeliveryLocation();
@@ -122,7 +122,7 @@ class ShopsController extends MyAppController
             }
             $allShops[$val['shop_id']]['shopTotalReviews'] = SelProdReview::getSellerTotalReviews($val['shop_user_id'], true);
             $uploadedTime = AttachedFile::setTimeParam($val['shop_updated_on']);
-            $allShops[$val['shop_id']]['shop_logo'] = UrlHelper::generateFullUrl('image', 'shopLogo', [$val['shop_id'], $this->siteLangId, 'SMALL']).$uploadedTime;
+            $allShops[$val['shop_id']]['shop_logo'] = UrlHelper::generateFullUrl('image', 'shopLogo', [$val['shop_id'], $this->siteLangId, 'SMALL']) . $uploadedTime;
 
             $selProdIdsArr = array_column($allShops[$val['shop_id']]['products'], 'selprod_id');
             $allShops[$val['shop_id']]['tRightRibbons'] = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $selProdIdsArr);
@@ -950,7 +950,7 @@ class ShopsController extends MyAppController
             FatApp::redirectUser(UrlHelper::generateUrl(''));
         }
 
-        $url = UrlHelper::generateFullUrl('shops', 'view', array($shopId));        
+        $url = UrlHelper::generateFullUrl('shops', 'view', array($shopId));
         $userId = UserAuthentication::getLoggedUserId(true);
 
         if (Promotion::isUserClickCountable($userId, $row['promotion_id'], $_SERVER['REMOTE_ADDR'], session_id())) {
