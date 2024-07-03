@@ -219,6 +219,19 @@ class ConfigurationsController extends ListingBaseController
             $post['CONF_TAX_AFTER_DISOCUNT'] = 0;
         }
 
+
+        if (isset($post['CONF_WITHOUT_PROD_VARIANTS']) && 1 == $post['CONF_WITHOUT_PROD_VARIANTS']) {
+            $srch = new ProductSearch(0, '', '', false, false, false);
+            $srch->joinProductVariant();
+            $srch->doNotCalculateRecords();
+            $srch->setPageSize(1);
+            $rs = $srch->getResultSet();
+            $row = FatApp::getDb()->fetch($rs);
+            if (!empty($row)) {
+                LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_REMOVE_PRODUCT_VARIANTS_LINKED_WITH_PRODUCTS', $this->siteLangId), true);
+            }
+        }
+
         if (!$record->update($post)) {
             LibHelper::exitWithError($record->getError(), true);
         }
@@ -1618,6 +1631,10 @@ class ConfigurationsController extends ListingBaseController
                 HtmlHelper::configureSwitchForCheckbox($fld);
 
                 $fld = $frm->addCheckBox(Labels::getLabel("FRM_SINGLE_SELLER_CART", $langId), 'CONF_SINGLE_SELLER_CART', 1, array(), false, 0);
+                HtmlHelper::configureSwitchForCheckbox($fld);
+
+                $fld = $frm->addCheckBox(Labels::getLabel("FRM_WITHOUT_PRODUCT_VARIANTS", $langId), 'CONF_WITHOUT_PROD_VARIANTS', 1, array(), false, 0);
+                $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("FRM_IT_WILL_MERGE_PROD_ADD_FORM_&_REMOVE_PROD_VARIANTS", $langId) . '.</span>';
                 HtmlHelper::configureSwitchForCheckbox($fld);
 
                 $fld = $frm->addHtmlEditor(Labels::getLabel('FRM_MAINTENANCE_TEXT', $this->siteLangId), 'CONF_MAINTENANCE_TEXT_' . $langId);

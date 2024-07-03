@@ -1,6 +1,8 @@
 <?php
 class AdminBaseController extends FatController
 {
+    use ProductSetup;
+
     protected $objPrivilege;
     protected $unAuthorizeAccess;
     protected $admin_id;

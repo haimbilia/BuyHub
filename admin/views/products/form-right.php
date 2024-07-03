@@ -1,5 +1,13 @@
 <?php
 $sellerId = $productData['product_seller_id'] ?? 0;
+
+if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+    $fld = $frm->getField('selprod_url_keyword');
+    $fld->setFieldTagAttribute('id', "urlrewrite_custom");
+    $fld->htmlAfterField = '<span class="form-text text-muted">' . HtmlHelper::seoFriendlyUrl(UrlHelper::generateFullUrl('Products', 'View', array($selProdId), CONF_WEBROOT_FRONT_URL)) . '</span>';
+    $fld->setFieldTagAttribute('onkeyup', "getUniqueSlugUrl(this,this.value,$selProdId)");
+}
+
 ?>
 <div class="add-stock-column column-main">
     <div class="add-stock-column-head">
@@ -49,10 +57,13 @@ $sellerId = $productData['product_seller_id'] ?? 0;
                 echo HtmlHelper::getFieldHtml($frm, 'product_seller_id', 6, ['id' => 'product_seller_id', 'placeholder' => Labels::getLabel('FRM_SELECT_USER', $langId)]);
                 echo HtmlHelper::getFieldHtml($frm, 'product_identifier', 12, [], Labels::getLabel('MSG_A_UNIQUE_IDENTIFIER_ASSOCIATED_FOR_PRODUCT_NAME', $langId));
                 echo HtmlHelper::getFieldHtml($frm, 'product_name', 12, [], Labels::getLabel('MSG_A_NAME_OF_THE_PRODUCT_TO_BE_LISTED', $langId));
+
+                echo HtmlHelper::getFieldHtml($frm, 'selprod_url_keyword', 12);
+
                 echo HtmlHelper::getFieldHtml($frm, 'product_brand_id', 6, ['id' => 'product_brand_id'], '', '', ['label' => Labels::getLabel('FRM_ADD_BRAND', $langId), 'attr' => ['href' => 'javascript:void(0)', 'onclick' => 'addBrand()', 'class' => 'link']]);
                 echo HtmlHelper::getFieldHtml($frm, 'ptc_prodcat_id', 6, ['id' => 'ptc_prodcat_id'], '', '', ['label' => Labels::getLabel('FRM_ADD_CATEGORY', $langId), 'attr' => ['href' => 'javascript:void(0)', 'onclick' => 'addCategory()', 'class' => 'link']]);
                 echo HtmlHelper::getFieldHtml($frm, 'product_model', 6);
-                echo HtmlHelper::getFieldHtml($frm, 'product_min_selling_price', 6);
+
                 $fld = $frm->getField('product_warranty');
                 if (null !== $fld) {
                 ?>
@@ -78,90 +89,153 @@ $sellerId = $productData['product_seller_id'] ?? 0;
                         </div>
                     </div>
                 <?php }
-                echo HtmlHelper::getFieldHtml($frm, 'product_youtube_video', 6);
+                echo HtmlHelper::getFieldHtml($frm, 'selprod_cost', 6);
+
+                echo HtmlHelper::getFieldHtml($frm, 'product_min_selling_price', 6);
+                echo HtmlHelper::getFieldHtml($frm, 'product_youtube_video', 12);
                 echo HtmlHelper::getFieldHtml($frm, 'product_attachements_with_inventory', 6, ['class' => 'attachmentWithInventoryJs'], Labels::getLabel('FRM_PRODUCT_DOWNLOAD_ATTACHEMENTS_AT_INVENTORY_LEVEL_INFO', $langId));
                 echo HtmlHelper::getFieldHtml($frm, 'product_description', 12);
                 echo HtmlHelper::getFieldHtml($frm, 'record_id', 6);
+                echo HtmlHelper::getFieldHtml($frm, 'selprod_id', 6);
                 echo HtmlHelper::getFieldHtml($frm, 'temp_product_id', 6, ['id' => 'temp_product_id']);
                 echo HtmlHelper::getFieldHtml($frm, 'product_warranty_unit', 6, ['id' => 'product_warranty_unit']);
                 ?>
             </div>
         </div>
     </div>
-    <div class="card card-toggle" id="variants-options">
-        <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block1" aria-expanded="false" aria-controls="stock-block1">
-            <div class="card-head-label">
-                <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_VARIANTS_&_OPTIONS', $langId); ?>
-                </h3>
-                <span class="text-muted"><?php echo Labels::getLabel('MSG_CUSTOMIZE_PRODUCT_VARIENTS_INCLUDING_SIZE_COLOR_ETC', $langId); ?></span>
+    <?php if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) { ?>
+        <div class="card card-toggle" id="inventory">
+            <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#inventory-block1" aria-expanded="false" aria-controls="inventory-block1">
+                <div class="card-head-label">
+                    <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_INVENTORY', $langId); ?>
+                    </h3>
+                    <span class="text-muted"><?php echo Labels::getLabel('MSG_SET_UP_NEW_INVENTORY', $langId); ?></span>
+                </div>
+                <div class="card-toolbar"> <i class="dropdown-toggle-custom-arrow"></i></div>
             </div>
-            <div class="card-toolbar"> <i class="dropdown-toggle-custom-arrow"></i></div>
-        </div>
-        <div class="show" id="stock-block1">
-            <div class="card-table p-0 ">
-                <?php
-                if (0 < $recordId) {
-                    echo HtmlHelper::getErrorMessageHtml(Labels::getLabel('ERR_IF_INVENTORY_IS_ALREADY_ADDED_THEN_YOU_CANNOT_BIND_FURTHER_OPTIONS.'));
-                } ?>
-                <div class="table-responsive table-scrollable js-scrollable">
-                    <table class="table table-variants" id="variantsJs" data-auto-column-width="0">
-                        <thead class="tableHeadJs">
-                            <tr>
-                                <th width="40%"><?php echo Labels::getLabel('FRM_OPTIONS', $langId) ?></th>
-                                <th width="40%"><?php echo Labels::getLabel('FRM_OPTION_VALUES', $langId) ?></th>
-                                <?php if (false === $hasInventory) { ?>
-                                    <th class="align-right" width="20%"></th>
-                                <?php } ?>
-                            </tr>
-                        </thead>
-                        <tbody>
+            <div class="show" id="inventory-block1">
+                <div class="card-body p-0">
+                    <div class="px-4">
+                        <div class="row justify-content-between">
+                            <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_stock', 4); ?>
+                            <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_min_order_qty', 4); ?>
+                            <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_available_from', 4); ?>
+                            <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_sku', 6, [], Labels::getLabel('LBL_STOCK_KEEPING_UNIT', $siteLangId)); ?>
+                            <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_max_download_times', 6); ?>
+                            <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_download_validity_in_days', 6); ?>
+                            <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_condition', 6); ?>
+
                             <?php
-                            $optionCount = count($productOptions);
-                            for ($i = 0; $i <=  (1 > $optionCount ? 0 : $optionCount - 1); $i++) {
-                                $prodOption = $productOptions[$i] ?? [];
-                                $this->includeTemplate('products/get-variant-row.php', ['langId' => $langId, 'index' => $i, 'hasInventory' => $hasInventory, 'productOption' => $prodOption]);
+                            $fld = $frm->getField('selprod_subtract_stock');
+                            if (null != $fld) {
+                                HtmlHelper::configureSwitchForCheckbox($fld);
+                                $fld->developerTags['noCaptionTag'] = true;
+                                echo '<div class="col-md-12"><div class="form-group"><div class="setting-block">' . $fld->getHtml() . '</div></div></div>';
                             }
                             ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="card-body p-0">
-                <div class="separator separator-dashed my-4"></div>
-                <div class="px-4">
-                    <div class="row justify-content-between">
-                        <div class="col">
-                            <label class="label"><?php echo Labels::getLabel('LBL_PRODUCT_HAS_SAME_EAN/UPC_CODE_FOR_ALL_VARIENTS', $langId); ?></label>
-                        </div>
-                        <div class="col-auto">
                             <?php
-                            $fld = $frm->getField('upc_type');
-                            HtmlHelper::configureSwitchForRadio($fld);
-                            $fld->addOptionListTagAttribute('class', 'list-radio my-2');
-                            $fld->addFieldTagAttribute('onchange', 'upcType()');
-                            $fld->addFieldTagAttribute('class', 'upc_type');
-                            echo $fld->getHtml();
+                            $fld = $frm->getField('selprod_track_inventory');
+                            if (null != $fld) {
+                                HtmlHelper::configureSwitchForCheckbox($fld);
+                                $fld->developerTags['noCaptionTag'] = true;
+                                $fld->addFieldtagAttribute('id', 'selprod_track_inventory');
+                                echo '<div class="col-md-12"><div class="form-group"><div class="setting-block">' . $fld->getHtml() . '</div></div></div>';
+                            }
                             ?>
+                            <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_threshold_stock_level', 6); ?>
+                            <?php
+                            $fld = $frm->getField('use_shop_policy');
+                            if (null != $fld) {
+                                $fld->setFieldTagAttribute('class', "fieldsVisibilityJs");
+                                HtmlHelper::configureSwitchForCheckbox($fld);
+                                $fld->developerTags['noCaptionTag'] = true;
+                                echo '<div class="col-md-12"><div class="form-group"><div class="setting-block">' . $fld->getHtml() . '</div></div></div>';
+                            }
+                            ?>
+                            <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_return_age', 6); ?>
+                            <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_cancellation_age', 6); ?>
+                            <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_comments', 12); ?>
                         </div>
-                    </div>
-                </div>
-                <div id="variantsListJs"></div>
-            </div>
-            <div class="card-foot">
-                <div class="row justify-content-end">
-                    <div class="col-auto">
-                        <a class="btn btn-icon btn-outline-brand" href="<?php echo UrlHelper::generateUrl('options') ?>" target="_blank">
-                            <svg class="svg btn-icon-start" width="18" height="18">
-                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
-                                </use>
-                            </svg>
-                            <span><?php echo Labels::getLabel('NAV_ADD_PRODUCT_OPTION', $langId); ?></span>
-                        </a>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    <?php } else { ?>
+        <div class="card card-toggle" id="variants-options">
+            <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block1" aria-expanded="false" aria-controls="stock-block1">
+                <div class="card-head-label">
+                    <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_VARIANTS_&_OPTIONS', $langId); ?>
+                    </h3>
+                    <span class="text-muted"><?php echo Labels::getLabel('MSG_CUSTOMIZE_PRODUCT_VARIENTS_INCLUDING_SIZE_COLOR_ETC', $langId); ?></span>
+                </div>
+                <div class="card-toolbar"> <i class="dropdown-toggle-custom-arrow"></i></div>
+            </div>
+            <div class="show" id="stock-block1">
+                <div class="card-table p-0 ">
+                    <?php
+                    if (0 < $recordId) {
+                        echo HtmlHelper::getErrorMessageHtml(Labels::getLabel('ERR_IF_INVENTORY_IS_ALREADY_ADDED_THEN_YOU_CANNOT_BIND_FURTHER_OPTIONS.'));
+                    } ?>
+                    <div class="table-responsive table-scrollable js-scrollable">
+                        <table class="table table-variants" id="variantsJs" data-auto-column-width="0">
+                            <thead class="tableHeadJs">
+                                <tr>
+                                    <th width="40%"><?php echo Labels::getLabel('FRM_OPTIONS', $langId) ?></th>
+                                    <th width="40%"><?php echo Labels::getLabel('FRM_OPTION_VALUES', $langId) ?></th>
+                                    <?php if (false === $hasInventory) { ?>
+                                        <th class="align-right" width="20%"></th>
+                                    <?php } ?>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $optionCount = count($productOptions);
+                                for ($i = 0; $i <=  (1 > $optionCount ? 0 : $optionCount - 1); $i++) {
+                                    $prodOption = $productOptions[$i] ?? [];
+                                    $this->includeTemplate('products/get-variant-row.php', ['langId' => $langId, 'index' => $i, 'hasInventory' => $hasInventory, 'productOption' => $prodOption]);
+                                }
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <div class="separator separator-dashed my-4"></div>
+                    <div class="px-4">
+                        <div class="row justify-content-between">
+                            <div class="col">
+                                <label class="label"><?php echo Labels::getLabel('LBL_PRODUCT_HAS_SAME_EAN/UPC_CODE_FOR_ALL_VARIENTS', $langId); ?></label>
+                            </div>
+                            <div class="col-auto">
+                                <?php
+                                $fld = $frm->getField('upc_type');
+                                HtmlHelper::configureSwitchForRadio($fld);
+                                $fld->addOptionListTagAttribute('class', 'list-radio my-2');
+                                $fld->addFieldTagAttribute('onchange', 'upcType()');
+                                $fld->addFieldTagAttribute('class', 'upc_type');
+                                echo $fld->getHtml();
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="variantsListJs"></div>
+                </div>
+                <div class="card-foot">
+                    <div class="row justify-content-end">
+                        <div class="col-auto">
+                            <a class="btn btn-icon btn-outline-brand" href="<?php echo UrlHelper::generateUrl('options') ?>" target="_blank">
+                                <svg class="svg btn-icon-start" width="18" height="18">
+                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
+                                    </use>
+                                </svg>
+                                <span><?php echo Labels::getLabel('NAV_ADD_PRODUCT_OPTION', $langId); ?></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php } ?>
     <div class="card card-toggle" id="media">
         <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block2" aria-expanded="false" aria-controls="stock-block2">
             <div class="card-head-label">
@@ -389,8 +463,15 @@ $sellerId = $productData['product_seller_id'] ?? 0;
             <div class="card-body">
                 <ul class="list-featured">
                     <?php
+                    $publishInventory = $frm->getField('selprod_active');
                     $fld = $frm->getField('product_featured');
                     $codFld = $frm->getField('product_cod_enabled');
+
+                    if (null !=  $publishInventory) {
+                        HtmlHelper::configureSwitchForCheckbox($publishInventory);
+                        echo '<li><div class="form-group"><div class="setting-block">' . $publishInventory->getHtml() . '</div></div></li>';
+                    }
+
                     if (null !=  $fld) {
                         HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel('FRM_PRODUCT_DISPLAYED_UNDER_FEATURED_ON_STOREFRONT', $langId));
                         echo null !=  $fld && $codEnabled ? '<li><div class="form-group"><div class="setting-block">' . $fld->getHtml() . '</div></div></li>' : '<li><div class="setting-block">' . $fld->getHtml() . '</div></li>';

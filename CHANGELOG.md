@@ -6,6 +6,7 @@
 ## New Features : 
     - Maintain Single seller products to buyer cart.
     - Collect customer comments on order product while checkout.
+    - Hide product variants and merge product catalog and inventory form.
 
 ## Known Issues and Problems :
 

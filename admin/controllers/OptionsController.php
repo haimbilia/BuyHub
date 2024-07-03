@@ -8,6 +8,9 @@ class OptionsController extends ListingBaseController
     public function __construct($action)
     {
         parent::__construct($action);
+        if (FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', CommonHelper::getLangId()));
+        }
         $this->objPrivilege->canViewOptions();
     }
 
