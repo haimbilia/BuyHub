@@ -30,7 +30,7 @@ trait RfqOffersUtility
             if (!UserPrivilege::isUserHasValidSubsription($this->userParentId)) {
                 LibHelper::exitWithError(Labels::getLabel("MSG_PLEASE_BUY_SUBSCRIPTION", $this->siteLangId));
             }
-            if (!$this->userPrivilege->canEditRfqOffers($this->userId, true)) {
+            if (!$this->userPrivilege->canEditRfqOffers($this->userParentId, true)) {
                 LibHelper::exitWithError(Labels::getLabel('ERR_UNAUTHORIZED_ACCESS'), true);
             }
         }
@@ -60,10 +60,9 @@ trait RfqOffersUtility
         $dbFlds = array_merge(RequestForQuote::FIELDS, ['addr_name', 'addr_address1', 'addr_address2', 'addr_city', 'state_name', 'country_name', 'addr_zip', 'addr_phone_dcode', 'addr_phone', 'buc.credential_username', 'buc.credential_email', 'bu.user_id as user_id', 'bu.user_updated_on', 'bu.user_name', 'IFNULL(country_name, country_code) as country_name', 'IFNULL(state_name, state_identifier) as state_name', 'rfq.rfq_product_id', 'rfq_selprod_code', 'rfq_added_on']);
         $srch->addMultipleFields($dbFlds);
 
-
         if ($this->isSeller) {
             if (RequestForQuote::VISIBILITY_TYPE_CLOSED == $rfqInfo['rfq_visibility_type']) {
-                $srch->addCondition('rfqts_user_id', '=', $this->userId);
+                $srch->addCondition('rfqts_user_id', '=', $this->userParentId);
             }
         } else {
             $srch->addCondition('rfq_user_id', '=', $this->userId);
@@ -71,6 +70,7 @@ trait RfqOffersUtility
 
         $srch->addCondition('rfq_id', '=', $rfqId);
         $rfqData = (array)FatApp::getDb()->fetch($srch->getDataResultSet());
+        
         if (empty($rfqData)) {
             LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST_ID', $this->siteLangId), false, true);
             CommonHelper::redirectUserReferer();
@@ -92,7 +92,7 @@ trait RfqOffersUtility
 
         $otherButtons = [];
         if ($this->isSeller && in_array($rfqData['rfq_status'], [RequestForQuote::STATUS_OPEN, RequestForQuote::STATUS_OFFERED])) {
-            if (!empty($rfqData['rfqts_selprod_id']) || $this->isGlobal) {
+            if (RequestForQuote::isAssignedToSeller($rfqId, $this->userParentId)) {
                 $otherButtons[] = [
                     'attr' => [
                         'class' => 'btn-brand btn-icon',
