@@ -1738,7 +1738,7 @@ class Cart extends FatModel
                         $balTotal = ($subTotal - $cartVolumeDiscount);
                         $balTotal = 1 > $balTotal ? 1 : $balTotal;
 
-                        $totalSelProdDiscount = 1 > $discountTotal ? 0 : round(($discountTotal * ($cartProduct['total'] - $cartProduct['volume_discount_total'])) / $balTotal, 2);
+                        $totalSelProdDiscount = (0.001 > $discountTotal) ? 0 : round(($discountTotal * ($cartProduct['total'] - $cartProduct['volume_discount_total'])) / $balTotal, 2);
 
                         $selProdDiscountTotal += $totalSelProdDiscount;
                         $discountedSelProdIds[$cartProduct['selprod_id']] = round($totalSelProdDiscount, 2);
@@ -1757,7 +1757,7 @@ class Cart extends FatModel
                             $balTotal = ($subTotal - $cartVolumeDiscount);
                             $balTotal = 1 > $balTotal ? 1 : $balTotal;
 
-                            $totalSelProdDiscount = 1 > $discountTotal ? 0 : round(($discountTotal * ($cartProduct['total'] - $cartProduct['volume_discount_total'])) / $balTotal, 2);
+                            $totalSelProdDiscount = (0.001 > $discountTotal) ? 0 : round(($discountTotal * ($cartProduct['total'] - $cartProduct['volume_discount_total'])) / $balTotal, 2);
                             $selProdDiscountTotal += $totalSelProdDiscount;
                             $discountedSelProdIds[$cartProduct['selprod_id']] = round($totalSelProdDiscount, 2);
                         }
