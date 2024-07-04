@@ -170,7 +170,7 @@ class Shipping
         }
 
         $srch = new ProductSearch($this->langId);
-        $srch->setDefinedCriteria(0, 0, array(), false);
+        $srch->setDefinedCriteria(0, 0, ['doNotJoinSellers' => true, 'doNotJoinSpecialPrice' => true], false);
         $srch->joinProductShippedBySeller();
         $srch->joinShippingProfileProducts();
         $srch->addCondition('selprod_id', 'IN', $selProdIdArr);
@@ -200,7 +200,7 @@ class Shipping
         $shippedByAdminOnly = FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0);
 
         $srch = new ProductSearch();
-        $srch->setDefinedCriteria(0, 0, array(), false);
+        $srch->setDefinedCriteria(0, 0, ['doNotJoinSellers' => true, 'doNotJoinSpecialPrice' => true], false);
         $srch->joinProductShippedBy();
         $srch->joinShippingProfileProducts();
         $srch->joinShippingProfile($this->langId);
@@ -219,6 +219,7 @@ class Shipping
         $srch->addGroupBy('selprod_id');
         $srch->addGroupBy('shiprate_id');
         $srch->addOrder('shiprate_cost');
+        $srch->doNotCalculateRecords();
         //$srch->addOrder('shiprate_condition_type', 'desc');       
         $prodSrchRs = $srch->getResultSet();
         /*ToDo : Updated logic and fetch from query and also handle for states*/
@@ -407,7 +408,7 @@ class Shipping
                 $referenceId = str_pad($shopAddress['shop_id'], 6, "0", STR_PAD_LEFT);
                 $shippingApiObj->setAddressReference($referenceId);
             }
-            
+
             if (method_exists($shippingApiObj, 'setShopSellerId')) {
                 $shippingApiObj->setShopSellerId($product['selprod_user_id']);
             }

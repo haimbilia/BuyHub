@@ -857,7 +857,7 @@ class CheckoutController extends MyAppController
     private function getCartProductsLangData($selprodIds, $lang_id)
     {
         $langProdSrch = new ProductSearch($lang_id);
-        $langProdSrch->setDefinedCriteria();
+        $langProdSrch->setDefinedCriteria(0, 0, ['doNotJoinSellers' => true, 'doNotJoinSpecialPrice' => true]);
         $langProdSrch->joinBrands();
         $langProdSrch->joinProductToCategory();
         $langProdSrch->joinSellerSubscription();
@@ -2254,7 +2254,7 @@ class CheckoutController extends MyAppController
                     }
                     /* get Product Data[ */
                     $prodSrch = new ProductSearch();
-                    $prodSrch->setDefinedCriteria();
+                    $prodSrch->setDefinedCriteria(0, 0, ['doNotJoinSellers' => true, 'doNotJoinSpecialPrice' => true]);
                     $prodSrch->joinProductToCategory();
                     $prodSrch->joinProductShippedBy();
                     $prodSrch->joinProductFreeShipping();
