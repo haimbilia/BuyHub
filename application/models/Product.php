@@ -984,7 +984,7 @@ class Product extends MyAppModel
         } else {
             $prodSrch2 = new ProductSearch(CommonHelper::getLangId());
             $prodSrch2->doNotCalculateRecords();
-            $prodSrch2->setDefinedCriteria(0, 0, ['doNotJoinSpecialPrice' => true, 'doNotJoinSellers' => true]);
+            $prodSrch2->setDefinedCriteria(0, 0, ['doNotJoinSellers' => true]);
             $prodSrch2->addCondition('selprod_id', '!=', 'mysql_func_' . $selprod_id, 'AND', true);
             $prodSrch2->addCondition('product_id', '=', 'mysql_func_' . $product_id, 'AND', true);
             $prodSrch2->addCondition('selprod_code', 'LIKE', '%_' . $optionvalue_id . '%');
