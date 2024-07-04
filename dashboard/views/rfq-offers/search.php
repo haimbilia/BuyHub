@@ -34,7 +34,8 @@ if (count($arrListing) == 0) {
                         FatUtility::int($row['rlo_seller_offer_id']) > FatUtility::int($row['rlo_buyer_offer_id']) &&
                         RequestForQuote::STATUS_CLOSED != $row['rfq_status'] &&
                         $row['offer_negotiable'] == applicationConstants::YES &&
-                        !in_array(RfqOffers::STATUS_ACCEPTED, [$row['offer_status'], $row['counter_offer_status']])
+                        !in_array(RfqOffers::STATUS_ACCEPTED, [$row['offer_status'], $row['counter_offer_status']]) &&
+                        1 > $row['rlo_buyer_acceptance']
                     );
 
                     if ($canReplyOffer) { ?>
@@ -180,7 +181,8 @@ if (count($arrListing) == 0) {
                         RequestForQuote::STATUS_CLOSED != $row['rfq_status'] &&
                         FatUtility::int($row['rlo_buyer_offer_id']) > FatUtility::int($row['rlo_seller_offer_id']) &&
                         !in_array(RfqOffers::STATUS_ACCEPTED, [$row['offer_status'], $row['counter_offer_status']]) &&
-                        RfqOffers::STATUS_REJECTED != $row['offer_status'] /* If rejected by Buyer. Not allowed to edit counter offer. */
+                        RfqOffers::STATUS_REJECTED != $row['offer_status'] && /* If rejected by Buyer. Not allowed to edit counter offer. */
+                        1 > $row['rlo_buyer_acceptance']
                     );
 
                     if ($canEditOffer) { ?>
@@ -342,7 +344,7 @@ if (count($arrListing) == 0) {
                                 </button>
                             <?php }
 
-                            if (!in_array($row['offer_status'], [RfqOffers::STATUS_ACCEPTED, RfqOffers::STATUS_REJECTED]) && $canReplyOffer) { ?>
+                            if (!in_array($row['offer_status'], [RfqOffers::STATUS_ACCEPTED, RfqOffers::STATUS_REJECTED]) && $canReplyOffer && 0 == $row['rlo_buyer_acceptance']) { ?>
                                 <button class="btn btn-reject btn-icon" onClick="reject(<?php echo $row['offer_id']; ?>,<?php echo $rfqId; ?>)" data-bs-toggle="tooltip" title="<?php echo Labels::getLabel('LBL_REJECT_SELLER_OFFER', $siteLangId); ?>">
                                     <svg class="svg" width="16" height="16">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#reject">

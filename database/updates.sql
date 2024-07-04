@@ -579,3 +579,5 @@ ALTER TABLE `tbl_rfq_latest_offers`  ADD `rlo_added_on` DATE NOT NULL  AFTER `rl
 UPDATE `tbl_rfq_latest_offers`
 INNER JOIN tbl_rfq_offers ON rlo_primary_offer_id = offer_id
 SET rlo_added_on = offer_added_on;
+
+ALTER TABLE `tbl_rfq_offers` CHANGE `offer_quantity` `offer_quantity` INT NULL;
