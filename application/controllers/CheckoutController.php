@@ -138,6 +138,7 @@ class CheckoutController extends MyAppController
                                 $tempHoldStock = (0 < $product['selprod_track_inventory']) ? Product::tempHoldStockCount($product['selprod_id']) : 0;
                                 $availableStock = $product['selprod_stock'] - $tempHoldStock;
                             }
+                            $userTempHoldStock = 0;
                             if (0 < $product['selprod_track_inventory']) {
                                 $userTempHoldStock = Product::tempHoldStockCount($product['selprod_id'], $cart_user_id, 0, true);
                             }
