@@ -27,7 +27,7 @@ class ProductCategorySearch extends SearchBase
         if ($isDeleted) {
             $this->addCondition('c.prodcat_deleted', '=', applicationConstants::NO);
         }
-        
+
         if (-1 != $prodcatStatus) {
             $this->addCondition('c.prodcat_status', '=', $prodcatStatus);
         }
@@ -53,7 +53,7 @@ class ProductCategorySearch extends SearchBase
     public function addProductsCountField()
     {
         $prodSrchObj = new ProductSearch($this->langId);
-        $prodSrchObj->setDefinedCriteria();
+        $prodSrchObj->setDefinedCriteria(0, 0, ['doNotJoinSellers' => true, 'doNotJoinSpecialPrice' => true]);
         $prodSrchObj->joinProductToCategory();
         $prodSrchObj->doNotCalculateRecords();
         $prodSrchObj->doNotLimitRecords();
