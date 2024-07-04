@@ -191,6 +191,8 @@ class SellerApprovalRequestsController extends ListingBaseController
                 FatApp::getDb()->rollbackTransaction();
                 LibHelper::exitWithError($userObj->getError(), true);
             }
+
+            $userObj->updateShopValidUser();
         }
 
         $email = new EmailHandler();

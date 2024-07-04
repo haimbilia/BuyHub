@@ -3284,4 +3284,12 @@ class User extends MyAppModel
         }
         return true;
     }
+    
+    public function updateShopValidUser()
+    {
+        if (1 > $this->mainTableRecordId) {
+            return;
+        }
+        FatApp::getDb()->query("UPDATE tbl_shops SET shop_user_valid = 1 WHERE shop_user_id = ( SELECT u.user_id FROM tbl_users u INNER JOIN tbl_user_credentials c ON u.user_id = c.credential_user_id WHERE u.user_id = " . $this->mainTableRecordId . " AND u.user_is_supplier = 1 AND u.user_deleted = 0 AND c.credential_active = 1 AND c.credential_verified = 1 LIMIT 1 )");
+    }
 }
