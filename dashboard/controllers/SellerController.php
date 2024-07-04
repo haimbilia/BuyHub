@@ -2434,10 +2434,8 @@ class SellerController extends SellerBaseController
         $stateData = States::getStateByCountryAndCode($post['shop_country_id'], $stateCode);
         $post['shop_state_id'] = $stateData['state_id'];
 
-        $recordInsert = false;
         if ($shop_id > 0) {
             $post['shop_updated_on'] = date('Y-m-d H:i:s');
-            $recordInsert = true;
         } else {
             $post['shop_created_on'] = date('Y-m-d H:i:s');
         }
@@ -2452,10 +2450,9 @@ class SellerController extends SellerBaseController
         }
 
         $shop_id = $shopObj->getMainTableRecordId();
-        if ($recordInsert && 0 < $shop_id) {
-            $user = new User($userId);
-            $user->updateShopValidUser();
-        }
+
+        $user = new User($userId);
+        $user->updateShopValidUser();
 
         $post['ss_shop_id'] = $shop_id;
         $shopSpecificsObj = new ShopSpecifics($shop_id);
