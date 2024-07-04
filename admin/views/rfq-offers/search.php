@@ -182,16 +182,20 @@ if (!isset($tbody)) {
                 </div>
                 <div class="offer-block actions-block">
                     <div class="actions-block-body">
-                        <?php if ($canEdit && $row['counter_offer_status'] != null && !in_array(RfqOffers::STATUS_ACCEPTED, [$row['offer_status'], $row['counter_offer_status']])) { ?>
-                            <?php if (in_array($row['counter_offer_status'], [RfqOffers::STATUS_OPEN, RfqOffers::STATUS_COUNTERED])) { ?>
-                                <button class="btn btn-accept btn-icon" onClick="accept(<?php echo $row['counter_offer_id']; ?>,<?php echo  $rfqId; ?>)" data-bs-toggle="tooltip" title="<?php echo Labels::getLabel('LBL_Accept', $siteLangId); ?>">
+                        <?php if ($canEdit && !in_array(RfqOffers::STATUS_ACCEPTED, [$row['offer_status'], $row['counter_offer_status']])) { 
+                            $counterOfferId = FatUtility::int($row['counter_offer_id']);
+                            $counterOfferId = 1 > $counterOfferId ? $row['offer_id'] : $counterOfferId;
+                            $buyerAcceptance = (applicationConstants::YES == $row['rlo_buyer_acceptance'] || $row['rlo_buyer_offer_id'] > $row['rlo_seller_offer_id']);
+                            ?>
+                            <?php if (in_array($row['counter_offer_status'], [RfqOffers::STATUS_OPEN, RfqOffers::STATUS_COUNTERED]) && 1 > $row['rlo_seller_acceptance'] && 0 < $buyerAcceptance) { ?>
+                                <button class="btn btn-accept btn-icon" onClick="accept(<?php echo $counterOfferId; ?>,<?php echo  $rfqId; ?>)" data-bs-toggle="tooltip" title="<?php echo Labels::getLabel('LBL_Accept', $siteLangId); ?>">
                                     <svg class="svg" width="16" height="16">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#accept">
                                         </use>
                                     </svg> <?php echo Labels::getLabel('LBL_ACCEPT'); ?>
                                 </button>
                             <?php }
-                            if (!in_array($row['counter_offer_status'], [RfqOffers::STATUS_ACCEPTED, RfqOffers::STATUS_REJECTED]) && $canReplyOffer) { ?>
+                            if (RfqOffers::STATUS_OPEN == $row['counter_offer_status'] && $row['counter_offer_status'] != null && 1 > $row['rlo_seller_acceptance']) { ?>
                                 <button class="btn btn-reject btn-icon" onClick="reject(<?php echo $row['counter_offer_id']; ?>,<?php echo $rfqId; ?>)" data-bs-toggle="tooltip" title="<?php echo Labels::getLabel('LBL_Reject', $siteLangId); ?>">
                                     <svg class="svg" width="16" height="16">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#reject">
