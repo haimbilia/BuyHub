@@ -18,7 +18,9 @@
                                 $row['rlo_seller_offer_id'] > $row['rlo_buyer_offer_id']
                             )
                         ) &&
-                        !in_array(RfqOffers::STATUS_ACCEPTED, [$row['offer_status'], $row['counter_offer_status']])
+                        !in_array(RfqOffers::STATUS_ACCEPTED, [$row['offer_status'], $row['counter_offer_status']]) &&
+                        1 > $row['rlo_buyer_acceptance'] &&
+                        1 > $row['rlo_seller_acceptance']
                     );
                     if ($canEdit && RequestForQuote::STATUS_CLOSED != $row['rfq_status'] && $canEditOffer) { ?>
                         <div class="offers-card-head-action">
@@ -158,7 +160,9 @@
                                 FatUtility::int($row['rlo_buyer_offer_id']) > FatUtility::int($row['rlo_seller_offer_id']) &&
                                 RequestForQuote::STATUS_CLOSED != $row['rfq_status'] &&
                                 !in_array(RfqOffers::STATUS_ACCEPTED, [$row['offer_status'], $row['counter_offer_status']]) &&
-                                !in_array(RfqOffers::STATUS_REJECTED, [$row['offer_status'], $row['counter_offer_status']])
+                                !in_array(RfqOffers::STATUS_REJECTED, [$row['offer_status'], $row['counter_offer_status']]) &&
+                                1 > $row['rlo_buyer_acceptance'] &&
+                                1 > $row['rlo_seller_acceptance']
                             );
                             if ($canEdit && $canReplyOffer) { ?>
                                 <div class="offer-block-head-action">
