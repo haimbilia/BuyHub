@@ -2349,7 +2349,7 @@ class User extends MyAppModel
         $srch->addCondition('uttr_expiry', '>=', date('Y-m-d H:i:s'));
         $srch->addMultipleFields(array('uttr_user_id', 'uttr_token'));
         $srch->doNotCalculateRecords();
-        $srch->setPagesize(1);       
+        $srch->setPagesize(1);
         $rs = $srch->getResultSet();
         if ((!$row = FatApp::getDb()->fetch($rs)) || ($row['uttr_token'] !== $token)) {
             return false;
@@ -2746,7 +2746,7 @@ class User extends MyAppModel
         $srch = $this->getUserSearchObj($attr);
         $srch->joinTable(static::DB_TBL_META, 'LEFT OUTER JOIN', 't_um.' . static::DB_TBL_META_PREFIX . 'user_id = u.user_id', 't_um');
 
-        $srch->addDirectCondition('(credential_email = "' . $email .'" OR (usermeta_key = "' . strtolower($keyName) . '_account_id" AND usermeta_value = "' . $socialAccountId . '"))');
+        $srch->addDirectCondition('(credential_email = "' . $email . '" OR (usermeta_key = "' . strtolower($keyName) . '_account_id" AND usermeta_value = "' . $socialAccountId . '"))');
 
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
@@ -3241,5 +3241,13 @@ class User extends MyAppModel
             return $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['credential_username'] = $result['credential_username'];
         }
         return '';
+    }
+
+    public function updateShopValidUser()
+    {
+        if (1 > $this->mainTableRecordId) {
+            return;
+        }
+        FatApp::getDb()->query("UPDATE tbl_shops SET shop_user_valid = 1 WHERE shop_user_id = ( SELECT u.user_id FROM tbl_users u INNER JOIN tbl_user_credentials c ON u.user_id = c.credential_user_id WHERE u.user_id = " . $this->mainTableRecordId . " AND u.user_is_supplier = 1 AND u.user_deleted = 0 AND c.credential_active = 1 AND c.credential_verified = 1 LIMIT 1 )");
     }
 }

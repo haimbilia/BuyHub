@@ -142,7 +142,7 @@ class ReviewsController extends MyAppController
         }
 
         $prodSrch = new ProductSearch($this->siteLangId);
-        $prodSrch->setDefinedCriteria();
+        $prodSrch->setDefinedCriteria(0, 0, ['doNotJoinSpecialPrice' => true, 'doNotJoinSellers' => true]);
         $prodSrch->joinSellerSubscription();
         $prodSrch->addSubscriptionValidCondition();
         $prodSrch->joinProductToCategory();
