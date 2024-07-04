@@ -546,6 +546,16 @@ class RfqOffersController extends ListingBaseController
             ]);
             LibHelper::exitWithError($msg, true);
         }
+
+        $sellerId = RfqOffers::getSellerIdByOfferId($recordId);
+        if (1 > $sellerId) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_NO_SELLER_BOUND_WITH_THIS_OFFER'), true);
+        }
+
+        $selProdId = RequestForQuote::getSellerProductId($rfqId, $sellerId);
+        if (1 > $selProdId) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVENTORY_NOT_LINKED_WITH_THIS_OFFER'), true);
+        }
     }
 
     public function accept(int $recordId, int $rfqId)
@@ -580,7 +590,8 @@ class RfqOffersController extends ListingBaseController
         $data = [
             'rlo_primary_offer_id' => $primaryOfferId,
             'rlo_accepted_offer_id' => $recordId,
-            'rlo_status' => RfqOffers::STATUS_ACCEPTED
+            'rlo_status' => RfqOffers::STATUS_ACCEPTED,
+            'rlo_seller_acceptance' => applicationConstants::YES
         ];
 
         if (false == $rfq->updateLatestOffer($data)) {

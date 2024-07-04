@@ -726,4 +726,16 @@ class RfqOffers extends MyAppModel
         $submittedOffersCount = self::getSubmittedOffersCount($sellerId, $plan['ossubs_from_date']);
         return ($submittedOffersCount < $allowedLimit);
     }
+
+    public static function getSellerIdByOfferId(int $offerId): int
+    {
+        $srch = new SearchBase(self::DB_TBL, 'ro');
+        $srch->joinTable(self::DB_RFQ_LATEST_OFFER, 'INNER JOIN', 'rlo_primary_offer_id = offer_primary_offer_id', 'rlo');
+        $srch->addCondition('offer_id', '=', $offerId);
+        $srch->addFld('rlo_seller_user_id');
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
+        $result = FatApp::getDb()->fetch($srch->getResultSet());
+        return $result['rlo_seller_user_id'] ?? 0;
+    }
 }

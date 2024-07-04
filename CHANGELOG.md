@@ -75,6 +75,7 @@
     - Bug-085023 - Global RFQ flow is not working properly
     - Bug-085117 - Address Label Field Exceeds Character Limit in Shipping Address Form
     - Bug-085115 - 'Duplicate offer with same quantity' error still appears when admin tries to add an offer for the same seller after deleting the previous offer.
+    - Bug-085113 - The admin can accept the buyer's offer on behalf of the seller when the seller has not linked the product's inventory
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  
