@@ -44,9 +44,10 @@ class SellerRfqOffersController extends SellerBaseController
         }
 
         $rfqOffer = new RfqOffers($recordId);
+        $rfqOffer->setFldValue('offer_quantity', 'mysql_func_null', true);
         $rfqOffer->assignValues(
             [
-                $rfqOffer::tblFld('deleted') => 1,
+                $rfqOffer::tblFld('deleted') => 1
             ],
             false,
             '',

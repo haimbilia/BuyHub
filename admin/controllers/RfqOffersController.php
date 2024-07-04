@@ -470,7 +470,7 @@ class RfqOffersController extends ListingBaseController
             if (!FatApp::getDb()->insertFromArray(RequestForQuote::DB_RFQ_TO_SELLERS, $rfqToSeller, true, array(), $rfqToSeller)) {
                 $db->rollbackTransaction();
                 LibHelper::exitWithError(FatApp::getDb()->getError(), true);
-            } 
+            }
         }
 
         /* For New/Counter. Not on edit. */
@@ -679,7 +679,7 @@ class RfqOffersController extends ListingBaseController
         $whr = array('smt' => 'rlo_seller_offer_id = ?', 'vals' => [$offerId]);
 
         $db = FatApp::getDb();
-        if (!$db->updateFromArray(RfqOffers::DB_RFQ_LATEST_OFFER, $updateArray, $whr)) {
+        if (!$db->updateFromArray(RfqOffers::DB_RFQ_LATEST_OFFER, $updateArray, $whr, true)) {
             LibHelper::exitWithError($db->getError());
         }
         FatUtility::dieJsonSuccess($this->str_delete_record);
@@ -706,6 +706,29 @@ class RfqOffersController extends ListingBaseController
         }
         $this->set('msg', Labels::getLabel('MSG_RECORDS_DELETED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
+    }
+
+    protected function markAsDeleted(int $recordId)
+    {
+        $recordId = FatUtility::int($recordId);
+        if (1 > $recordId) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
+        }
+
+        $rfqOffer = new RfqOffers($recordId);
+        $rfqOffer->setFldValue('offer_quantity', 'mysql_func_null', true);
+        $rfqOffer->assignValues(
+            [
+                $rfqOffer::tblFld('deleted') => 1
+            ],
+            false,
+            '',
+            '',
+            true
+        );
+        if (!$rfqOffer->save()) {
+            LibHelper::exitWithError($rfqOffer->getError(), true);
+        }
     }
 
     public function getShippingRates()
