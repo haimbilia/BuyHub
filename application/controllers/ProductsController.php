@@ -560,9 +560,9 @@ class ProductsController extends MyAppController
             $selProdReviewObj->addCondition('spr.spreview_product_id', '=', 'mysql_func_' . $productId, 'AND', true);
             $selProdReviewObj->addCondition('spreview_product_id', '=', $row['product_id']);
             $row += (array)FatApp::getDb()->fetch($selProdReviewObj->getResultSet());
+            $row['prod_rating'] = $row['prod_rating'] ?? 0;
+            $row['totReviews'] = $row['totReviews'] ?? 0;
         }
-        $row['prod_rating'] = $row['prod_rating'] ?? 0;
-        $row['totReviews'] = $row['totReviews'] ?? 0;
         return $row;
     }
 
