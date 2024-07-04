@@ -440,6 +440,41 @@ class ProductsController extends MyAppController
 
         if (true === MOBILE_APP_API_CALL) {
             $this->set('position', FatApp::getPostedData('position', FatUtility::VAR_INT, 0));
+
+            /* Categories Data[ ToDO need to update logic fetch from prodsrch obj or catid only*/
+            $categoriesArr = array();
+            if (empty($keyword)) {
+                $catCriteria = $headerFormParamsAssocArr;
+                $catCriteria['addFld'] = 'DISTINCT(prodcat_id) as prodcatid';
+                $catCriteria['doNotJoinSpecialPrice'] = true;
+
+                $catProdSrchObj = $this->getFilterSearchObj($langIdForKeywordSeach, $catCriteria);
+                $catProdSrchObj->doNotCalculateRecords();
+                $catProdSrchObj->removeFld('1 as availableInLocation');
+                $categoriesArr = FilterHelper::getCategories($this->siteLangId, $categoryId, $catProdSrchObj, $cacheKey);
+            }
+            /* ] */
+
+            $prodcatArr = array();
+            if (array_key_exists('prodcat', $headerFormParamsAssocArr)) {
+                $prodcatArr = $headerFormParamsAssocArr['prodcat'];
+            }
+
+            $shopCatFilters = false;
+            if (array_key_exists('shop_id', $headerFormParamsAssocArr)) {
+                $shop_id = FatUtility::int($headerFormParamsAssocArr['shop_id']);
+                $searchFrm = Shop::getFilterSearchForm();
+                $searchFrm->fill($headerFormParamsAssocArr);
+                $this->set('searchFrm', $searchFrm);
+                if (0 < $shop_id) {
+                    $shopCatFilters = true;
+                }
+            }
+
+            $this->set('shopCatFilters', $shopCatFilters);
+            $this->set('prodcatArr', $prodcatArr);
+            $this->set('categoriesArr', $categoriesArr);
+
             $this->_template->render();
         }
 

@@ -961,7 +961,7 @@ class Product extends MyAppModel
         $selprod_code = $product_id . '_' . implode('_', $selectedOptions);
 
         $prodSrchObj = new ProductSearch();
-        $prodSrchObj->setDefinedCriteria();
+        $prodSrchObj->setDefinedCriteria(0, 0, ['doNotJoinSellers' => true]);
         $prodSrchObj->joinProductToCategory();
         $prodSrchObj->doNotCalculateRecords();
         $prodSrchObj->addCondition('selprod_id', '!=', 'mysql_func_' . $selprod_id, 'AND', true);
@@ -984,7 +984,7 @@ class Product extends MyAppModel
         } else {
             $prodSrch2 = new ProductSearch(CommonHelper::getLangId());
             $prodSrch2->doNotCalculateRecords();
-            $prodSrch2->setDefinedCriteria();
+            $prodSrch2->setDefinedCriteria(0, 0, ['doNotJoinSpecialPrice' => true, 'doNotJoinSellers' => true]);
             $prodSrch2->addCondition('selprod_id', '!=', 'mysql_func_' . $selprod_id, 'AND', true);
             $prodSrch2->addCondition('product_id', '=', 'mysql_func_' . $product_id, 'AND', true);
             $prodSrch2->addCondition('selprod_code', 'LIKE', '%_' . $optionvalue_id . '%');
@@ -1445,7 +1445,7 @@ class Product extends MyAppModel
     public static function verifyProductIsValid($selprod_id)
     {
         $prodSrch = new ProductSearch();
-        $prodSrch->setDefinedCriteria();
+        $prodSrch->setDefinedCriteria(0, 0, ['doNotJoinSpecialPrice' => true, 'doNotJoinSellers' => true]);
         $prodSrch->joinProductToCategory();
         $prodSrch->joinSellerSubscription();
         $prodSrch->addSubscriptionValidCondition();
@@ -1863,6 +1863,7 @@ END,   special_price_found ) as special_price_found'
             'country_id' => $countryId,
             'shop_id' => $shopId,
             'state_id' => $stateId,
+            'doNotJoinSellers' => true
         );
 
         $srch = new ProductSearch();
