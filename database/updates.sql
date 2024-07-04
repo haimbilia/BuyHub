@@ -85,5 +85,6 @@ INNER JOIN (
     WHERE u.user_deleted = 0 AND c.credential_active = 1 AND c.credential_verified = 1 and u.user_is_supplier = 1
 ) t ON t.user_id = s.shop_user_id
 SET s.shop_user_valid = 1;
+-- admin/admin-users/create-procedures/------------
 ALTER TABLE `tbl_shops` ADD INDEX( `shop_user_valid`);
 ALTER TABLE `tbl_states` ADD INDEX( `state_active`);
