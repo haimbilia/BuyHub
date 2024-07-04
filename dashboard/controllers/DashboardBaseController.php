@@ -507,8 +507,9 @@ class DashboardBaseController extends FatController
         $siteLangId = FatUtility::int($siteLangId);
         $frm = new Form('frmAddress');
         $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $siteLangId), 'lang_id', Language::getAllNames(), $siteLangId, array(), '');
-        $fld = $frm->addTextBox(Labels::getLabel('FRM_ADDRESS_LABEL', $siteLangId), 'addr_title');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_ADDRESS_TITLE', $siteLangId), 'addr_title');
         $fld->requirement->setRequired(true);
+        $fld->setFieldTagAttribute('maxlength', Address::ADDRESS_TITLE_LENGTH);
         $fld->setFieldTagAttribute('placeholder', Labels::getLabel('FRM_E.g:_My_Office_Address', $siteLangId));
         $frm->addRequiredField(Labels::getLabel('FRM_NAME', $siteLangId), 'addr_name');
         $frm->addRequiredField(Labels::getLabel('FRM_ADDRESS_LINE1', $siteLangId), 'addr_address1');

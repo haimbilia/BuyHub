@@ -494,8 +494,9 @@ class MyAppController extends FatController
         $frm = new Form('frmAddress');
         $frm->addHiddenField('', 'addr_id');
         $frm->addHiddenField('', 'shipping_addr_id');
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Address_Label', $siteLangId), 'addr_title');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_ADDRESS_TITLE', $siteLangId), 'addr_title');
         $fld->requirement->setRequired(true);
+        $fld->setFieldTagAttribute('maxlength', Address::ADDRESS_TITLE_LENGTH);
         $fld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_E.g:_My_Office_Address', $siteLangId));
         $frm->addRequiredField(Labels::getLabel('LBL_Name', $siteLangId), 'addr_name');
         $frm->addRequiredField(Labels::getLabel('LBL_Address_Line1', $siteLangId), 'addr_address1');

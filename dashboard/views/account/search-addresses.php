@@ -27,8 +27,8 @@ if (!empty($addresses)) {
                         <input type="radio" <?php echo ($address['addr_is_default'] == 1) ? 'checked=""' : ''; ?> name="1" onclick="<?php echo $action; ?>">
                     </span>
                     <address class="address delivery-address">
-                        <h5><?php echo $address['addr_name']; ?><span class="tag"><?php echo $address['addr_title']; ?></span>
-                        </h5>
+                        <h5><?php echo $address['addr_name']; ?></h5>
+                        <span class="tag"><?php echo $address['addr_title']; ?></span>
                         <p>
                             <?php echo $address['addr_address1'] . '<br>'; ?>
                             <?php echo (strlen($address['addr_address2']) > 0) ? $address['addr_address2'] . '<br>' : ''; ?>

@@ -72,7 +72,8 @@
     - Bug-084775 - Content missing for No data found while searching Brand name.
     - Bug-084685 - Dropdown suggestions still shows selected seller name.
     - Bug-084686 - User is still able to activate the disabled field from console. 
-    - Bug-085023 - Global RFQ flow is not working properl
+    - Bug-085023 - Global RFQ flow is not working properly
+    - Bug-085117 - Address Label Field Exceeds Character Limit in Shipping Address Form
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  
