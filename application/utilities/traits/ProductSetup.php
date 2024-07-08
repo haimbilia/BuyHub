@@ -241,8 +241,13 @@ trait ProductSetup
             LibHelper::exitWithError(Labels::getLabel('ERR_DOWNLOAD_VALIDITY_MUST_BE_-1_OR_GREATER_THAN_ZERO', $this->siteLangId), true);
         }
 
-        $selprod_stock = FatApp::getPostedData('selprod_stock', FatUtility::VAR_INT, 1);
-        $selprod_min_order_qty = FatApp::getPostedData('selprod_min_order_qty', FatUtility::VAR_INT, 1);
+        if ($productRow['product_type'] == Product::PRODUCT_TYPE_SERVICE) {
+            $post['selprod_stock'] = $post['selprod_stock'] ?? 1;
+            $post['selprod_min_order_qty'] = $post['selprod_min_order_qty'] ?? 1;
+        }
+
+        $selprod_stock =  $post['selprod_stock'];
+        $selprod_min_order_qty =$post['selprod_min_order_qty'];
         $selprod_threshold_stock_level = $post['selprod_threshold_stock_level'] = FatApp::getPostedData('selprod_threshold_stock_level', FatUtility::VAR_INT, 0);
         $useShopPolicy = FatApp::getPostedData('use_shop_policy', FatUtility::VAR_INT, 0);
         $post['use_shop_policy'] = $useShopPolicy;
