@@ -242,12 +242,12 @@ trait ProductSetup
         }
 
         if ($productRow['product_type'] == Product::PRODUCT_TYPE_SERVICE) {
-            $post['selprod_stock'] = $post['selprod_stock'] ?? 1;
-            $post['selprod_min_order_qty'] = $post['selprod_min_order_qty'] ?? 1;
+            $post['selprod_stock'] = (isset($post['selprod_stock']) && 0 <  $post['selprod_stock']) ? $post['selprod_stock'] : 1;
+            $post['selprod_min_order_qty'] = (isset($post['selprod_min_order_qty']) && 0 <  $post['selprod_min_order_qty']) ? $post['selprod_min_order_qty'] : 1;
         }
 
         $selprod_stock =  $post['selprod_stock'];
-        $selprod_min_order_qty =$post['selprod_min_order_qty'];
+        $selprod_min_order_qty = $post['selprod_min_order_qty'];
         $selprod_threshold_stock_level = $post['selprod_threshold_stock_level'] = FatApp::getPostedData('selprod_threshold_stock_level', FatUtility::VAR_INT, 0);
         $useShopPolicy = FatApp::getPostedData('use_shop_policy', FatUtility::VAR_INT, 0);
         $post['use_shop_policy'] = $useShopPolicy;
