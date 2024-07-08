@@ -667,7 +667,11 @@ $frm->addTextBox('ISBN Code','product_isbn'); */
 
             $fld = $frm->addIntegerField(Labels::getLabel('FRM_MINIMUM_PURCHASE_QUANTITY', $this->siteLangId), 'selprod_min_order_qty');
             $fld->requirements()->setPositive();
+        } else {
+            $frm->addHiddenField('', 'selprod_stock', 1);
+            $frm->addHiddenField('', 'selprod_min_order_qty', 1);
         }
+
         if ($productData['product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
             $fld = $frm->addIntegerField(Labels::getLabel('FRM_MAX_DOWNLOAD_TIMES', $this->siteLangId), 'selprod_max_download_times');
             $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('FRM_-1_for_unlimited', $this->siteLangId) . '</span>';
