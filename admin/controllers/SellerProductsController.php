@@ -208,7 +208,7 @@ class SellerProductsController extends ListingBaseController
         if (!$loadPagination) {
             $records = FatApp::getDb()->fetchAll($srch->getResultSet());
         }
-        
+
         if (count($records)) {
             foreach ($records as &$arr) {
                 $arr['options'] = SellerProduct::getSellerProductOptions($arr['selprod_id'], true, $this->siteLangId);

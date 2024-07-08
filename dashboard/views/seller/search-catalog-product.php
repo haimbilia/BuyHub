@@ -87,7 +87,7 @@
                         $ul = $td->appendElement("ul", array('class' => 'actions'), '', true);
                         if ($canEdit) {
                             $hasInventory = Product::hasInventory($row['product_id'], UserAuthentication::getLoggedUserId());
-                            if ($hasInventory) {
+                            if ($hasInventory && !FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
                                 $li = $ul->appendElement("li");
                                 $li->appendElement(
                                     'a',

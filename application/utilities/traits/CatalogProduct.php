@@ -62,16 +62,21 @@ trait CatalogProduct
         $fld->requirements()->setRange('0.01', '99999999.99');
 
         if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
-            $fld = $frm->addIntegerField(Labels::getLabel('FRM_STOCK', $this->siteLangId), 'selprod_stock');
-            $fld->requirements()->setPositive();
-            $fld_sku = $frm->addTextBox(Labels::getLabel('FRM_PRODUCT_SKU', $this->siteLangId), 'selprod_sku');
-            if (FatApp::getConfig("CONF_PRODUCT_SKU_MANDATORY", FatUtility::VAR_INT, 1)) {
-                $fld_sku->requirements()->setRequired();
+
+            if ($productType != Product::PRODUCT_TYPE_SERVICE) {
+                $fld = $frm->addIntegerField(Labels::getLabel('FRM_STOCK', $this->siteLangId), 'selprod_stock');
+                $fld->requirements()->setPositive();
+                $fld_sku = $frm->addTextBox(Labels::getLabel('FRM_PRODUCT_SKU', $this->siteLangId), 'selprod_sku');
+                if (FatApp::getConfig("CONF_PRODUCT_SKU_MANDATORY", FatUtility::VAR_INT, 1)) {
+                    $fld_sku->requirements()->setRequired();
+                }
+
+                $fld = $frm->addIntegerField(Labels::getLabel('FRM_MIN_PURCHASE_QUANTITY', $this->siteLangId), 'selprod_min_order_qty');
+                $fld->requirements()->setPositive();
+            } else {
+                $frm->addHiddenField('', 'selprod_stock', 1);
             }
 
-            $fld = $frm->addIntegerField(Labels::getLabel('FRM_MIN_PURCHASE_QUANTITY', $this->siteLangId), 'selprod_min_order_qty');
-            $fld->requirements()->setPositive();
-            
             $frm->addDateField(Labels::getLabel('FRM_AVAILABLE_FROM', $this->siteLangId), 'selprod_available_from', '', array('readonly' => 'readonly', 'class' => 'field--calender'))->requirements()->setRequired();
 
             if ($productType == Product::PRODUCT_TYPE_DIGITAL) {
@@ -81,42 +86,49 @@ trait CatalogProduct
                 $fld1 = $frm->addIntegerField(Labels::getLabel('FRM_DOWNLOAD_VALIDITY_(days)', $this->siteLangId), 'selprod_download_validity_in_days');
                 $fld1->htmlAfterField = '<small class="text--small">' . Labels::getLabel('FRM_-1_for_unlimited', $this->siteLangId) . '</small>';
                 $frm->addHiddenField('', 'selprod_condition', Product::CONDITION_NEW);
+            } elseif ($productType == Product::PRODUCT_TYPE_SERVICE) {
+                $frm->addHiddenField('', 'selprod_condition', Product::CONDITION_NEW);
             } else {
                 $fld = $frm->addSelectBox(Labels::getLabel('FRM_PRODUCT_CONDITION', $this->siteLangId), 'selprod_condition', Product::getConditionArr($this->siteLangId), '', array(), Labels::getLabel('FRM_SELECT_CONDITION', $this->siteLangId));
                 $fld->requirements()->setRequired();
             }
 
-            $frm->addCheckBox(Labels::getLabel('FRM_SYSTEM_SHOULD_MAINTAIN_STOCK_LEVELS', $this->siteLangId), 'selprod_subtract_stock', applicationConstants::YES, array(), false, 0);
-            $fld = $frm->addCheckBox(Labels::getLabel('FRM_SYSTEM_SHOULD_TRACK_PRODUCT_INVENTORY', $this->siteLangId), 'selprod_track_inventory', Product::INVENTORY_TRACK, ['class' => 'fieldsVisibilityJs'], false, 0);
+            if ($productType != Product::PRODUCT_TYPE_SERVICE) {
+                if (false === Plugin::isActive('EasyEcom')) {
+                    $frm->addCheckBox(Labels::getLabel('FRM_SYSTEM_SHOULD_MAINTAIN_STOCK_LEVELS', $this->siteLangId), 'selprod_subtract_stock', applicationConstants::YES, array(), false, 0);
+                    $fld = $frm->addCheckBox(Labels::getLabel('FRM_SYSTEM_SHOULD_TRACK_PRODUCT_INVENTORY', $this->siteLangId), 'selprod_track_inventory', Product::INVENTORY_TRACK, ['class' => 'fieldsVisibilityJs'], false, 0);
+                }
+                $stockLevelReqFld = new FormFieldRequirement('selprod_threshold_stock_level', Labels::getLabel('FRM_ALERT_STOCK_LEVEL', $this->siteLangId));
+                $stockLevelReqFld->setRequired(true);
 
-            $stockLevelReqFld = new FormFieldRequirement('selprod_threshold_stock_level', Labels::getLabel('FRM_ALERT_STOCK_LEVEL', $this->siteLangId));
-            $stockLevelReqFld->setRequired(true);
+                $stockLevelUnReqFld = new FormFieldRequirement('selprod_threshold_stock_level', Labels::getLabel('FRM_ALERT_STOCK_LEVEL', $this->siteLangId));
+                $stockLevelUnReqFld->setRequired(false);
 
-            $stockLevelUnReqFld = new FormFieldRequirement('selprod_threshold_stock_level', Labels::getLabel('FRM_ALERT_STOCK_LEVEL', $this->siteLangId));
-            $stockLevelUnReqFld->setRequired(false);
+                $fld->requirements()->addOnChangerequirementUpdate(1, 'eq', 'selprod_threshold_stock_level', $stockLevelReqFld);
+                $fld->requirements()->addOnChangerequirementUpdate(1, 'ne', 'selprod_threshold_stock_level', $stockLevelUnReqFld);
 
-            $fld->requirements()->addOnChangerequirementUpdate(1, 'eq', 'selprod_threshold_stock_level', $stockLevelReqFld);
-            $fld->requirements()->addOnChangerequirementUpdate(1, 'ne', 'selprod_threshold_stock_level', $stockLevelUnReqFld);
-
-            $fld = $frm->addTextBox(Labels::getLabel('FRM_ALERT_STOCK_LEVEL', $this->siteLangId), 'selprod_threshold_stock_level');
-            $fld->requirements()->setInt();
-
+                $fld = $frm->addTextBox(Labels::getLabel('FRM_ALERT_STOCK_LEVEL', $this->siteLangId), 'selprod_threshold_stock_level');
+                $fld->requirements()->setInt();
+            } else {
+                $frm->addHiddenField(Labels::getLabel('FRM_MINIMUM_PURCHASE_QUANTITY', $this->siteLangId), 'selprod_min_order_qty', 1);
+            }
             $useShopPolicy = $frm->addCheckBox(Labels::getLabel('FRM_USE_SHOP_RETURN_AND_CANCELLATION_AGE_POLICY', $this->siteLangId), 'use_shop_policy', 1, ['id' => 'use_shop_policy'], false, 0);
 
-            $fld = $frm->addIntegerField(Labels::getLabel('FRM_PRODUCT_ORDER_RETURN_PERIOD_(Days)', $this->siteLangId), 'selprod_return_age');
-            $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('FRM_WARRANTY_IN_DAYS', $this->siteLangId) . ' </span>';
+            if ($productType != Product::PRODUCT_TYPE_SERVICE) {
+                $fld = $frm->addIntegerField(Labels::getLabel('FRM_PRODUCT_ORDER_RETURN_PERIOD_(Days)', $this->siteLangId), 'selprod_return_age');
+                $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('FRM_WARRANTY_IN_DAYS', $this->siteLangId) . ' </span>';
 
-            $orderReturnAgeReqFld = new FormFieldRequirement('selprod_return_age', Labels::getLabel('FRM_PRODUCT_ORDER_RETURN_PERIOD_(Days)', $this->siteLangId));
-            $orderReturnAgeReqFld->setRequired(true);
-            $orderReturnAgeReqFld->setPositive();
-            
+                $orderReturnAgeReqFld = new FormFieldRequirement('selprod_return_age', Labels::getLabel('FRM_PRODUCT_ORDER_RETURN_PERIOD_(Days)', $this->siteLangId));
+                $orderReturnAgeReqFld->setRequired(true);
+                $orderReturnAgeReqFld->setPositive();
 
-            $orderReturnAgeUnReqFld = new FormFieldRequirement('selprod_return_age', Labels::getLabel('FRM_PRODUCT_ORDER_RETURN_PERIOD_(Days)', $this->siteLangId));
-            $orderReturnAgeUnReqFld->setRequired(false);
-            $orderReturnAgeUnReqFld->setPositive();
 
+                $orderReturnAgeUnReqFld = new FormFieldRequirement('selprod_return_age', Labels::getLabel('FRM_PRODUCT_ORDER_RETURN_PERIOD_(Days)', $this->siteLangId));
+                $orderReturnAgeUnReqFld->setRequired(false);
+                $orderReturnAgeUnReqFld->setPositive();
+            }
             $fld = $frm->addIntegerField(Labels::getLabel('FRM_PRODUCT_ORDER_CANCELLATION_PERIOD_(Days)', $this->siteLangId), 'selprod_cancellation_age');
-            $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('FRM_WARRANTY_IN_DAYS', $this->siteLangId) . ' </span>';
+            $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('FRM_PERIOD_IN_DAYS', $this->siteLangId) . ' </span>';
 
             $orderCancellationAgeReqFld = new FormFieldRequirement('selprod_cancellation_age', Labels::getLabel('FRM_PRODUCT_ORDER_CANCELLATION_PERIOD_(Days)', $this->siteLangId));
             $orderCancellationAgeReqFld->setRequired(true);
@@ -126,8 +138,10 @@ trait CatalogProduct
             $orderCancellationAgeUnReqFld->setRequired(false);
             $orderCancellationAgeUnReqFld->setPositive();
 
-            $useShopPolicy->requirements()->addOnChangerequirementUpdate(Shop::USE_SHOP_POLICY, 'eq', 'selprod_return_age', $orderReturnAgeUnReqFld);
-            $useShopPolicy->requirements()->addOnChangerequirementUpdate(Shop::USE_SHOP_POLICY, 'ne', 'selprod_return_age', $orderReturnAgeReqFld);
+            if ($productType != Product::PRODUCT_TYPE_SERVICE) {
+                $useShopPolicy->requirements()->addOnChangerequirementUpdate(Shop::USE_SHOP_POLICY, 'eq', 'selprod_return_age', $orderReturnAgeUnReqFld);
+                $useShopPolicy->requirements()->addOnChangerequirementUpdate(Shop::USE_SHOP_POLICY, 'ne', 'selprod_return_age', $orderReturnAgeReqFld);
+            }
 
             $useShopPolicy->requirements()->addOnChangerequirementUpdate(Shop::USE_SHOP_POLICY, 'eq', 'selprod_cancellation_age', $orderCancellationAgeUnReqFld);
             $useShopPolicy->requirements()->addOnChangerequirementUpdate(Shop::USE_SHOP_POLICY, 'ne', 'selprod_cancellation_age', $orderCancellationAgeReqFld);

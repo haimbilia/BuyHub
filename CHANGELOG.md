@@ -78,6 +78,5 @@
     - Bug-085113 - The admin can accept the buyer's offer on behalf of the seller when the seller has not linked the product's inventory
     - Bug-085132 - issue on 'RFQ detail' page of buyer and seller account
     - Bug-085112 - 'New' button does not appear for the RFQ sent to a particular seller.
-
 ## Hit URL:
     - admin/patch-update/updateProductRating  

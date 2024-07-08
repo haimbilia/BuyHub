@@ -6,8 +6,10 @@ $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 $fld = $frm->getField('spackage_products_allowed');
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 
-$fld = $frm->getField('spackage_inventory_allowed');
-$fld->developerTags['colWidthValues'] = [null, '6', null, null];
+if (!FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+    $fld = $frm->getField('spackage_inventory_allowed');
+    $fld->developerTags['colWidthValues'] = [null, '6', null, null];
+}
 
 $fld = $frm->getField('spackage_images_per_product');
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];
@@ -25,4 +27,4 @@ $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 $fld = $frm->getField('spackage_rfq_offers_allowed');
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 
-require_once(CONF_THEME_PATH . '_partial/listing/form.php'); 
+require_once(CONF_THEME_PATH . '_partial/listing/form.php');

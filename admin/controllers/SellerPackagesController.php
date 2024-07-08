@@ -170,6 +170,9 @@ class SellerPackagesController extends ListingBaseController
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
+        if (FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+            $post['spackage_inventory_allowed'] = $post['spackage_products_allowed'];
+        }
         $recordObj = new SellerPackages($recordId);
         $post['spackage_identifier'] = $post['spackage_name'];
         $recordObj->assignValues($post);
@@ -206,8 +209,10 @@ class SellerPackagesController extends ListingBaseController
         $fld = $frm->addIntegerField(Labels::getLabel('FRM_PACKAGE_PRODUCTS_ALLOWED', $this->siteLangId), SellerPackages::DB_TBL_PREFIX . 'products_allowed');
         $fld->requirements()->setIntPositive();
 
-        $fld = $frm->addIntegerField(Labels::getLabel('FRM_PACKAGE_INVENTORY_ALLOWED', $this->siteLangId), SellerPackages::DB_TBL_PREFIX . 'inventory_allowed');
-        $fld->requirements()->setIntPositive();
+        if (!FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+            $fld = $frm->addIntegerField(Labels::getLabel('FRM_PACKAGE_INVENTORY_ALLOWED', $this->siteLangId), SellerPackages::DB_TBL_PREFIX . 'inventory_allowed');
+            $fld->requirements()->setIntPositive();
+        }
 
         $fld = $frm->addIntegerField(Labels::getLabel('FRM_PACKAGE_IMAGES_PER_CATALOG', $this->siteLangId), SellerPackages::DB_TBL_PREFIX . 'images_per_product');
         $fld->requirements()->setIntPositive();
