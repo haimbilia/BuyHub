@@ -243,6 +243,7 @@ class ShippingProfile extends MyAppModel
                 $userId = 0;
             }
 
+            $shippingProfileId = $shippingProfileId ?? 0;
             $srch->addMultipleFields(array($userId . ' as user_id', $shippingProfileId . ' as shipprofile_id', 'product_id'));
             $srch->doNotCalculateRecords();
             $srch->doNotLimitRecords();

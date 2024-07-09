@@ -217,7 +217,7 @@ trait ProductSetup
         if (0 < $prodId || $return) {
             $productRow = $postedData;
         } else {
-            $productRow = Product::getAttributesById($productId, array('product_type'));
+            $productRow = Product::getAttributesById($productId, array('product_type','product_active'));
         }
 
         if (empty($productRow)) {
@@ -227,6 +227,10 @@ trait ProductSetup
             LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST_ID', $this->siteLangId), true);
         }
 
+        if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+            $post['selprod_active'] = $productRow['product_active'] ?? 1;
+        }
+        
         if ($productRow['product_type'] == Product::PRODUCT_TYPE_DIGITAL && $post['selprod_max_download_times'] == 0) {
             if ($isDbObj) {
                 $db->rollbackTransaction();
