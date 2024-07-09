@@ -475,7 +475,7 @@ if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0))
                                     HtmlHelper::configureSwitchForCheckbox($publishInventory);
                                     echo '<li><div class="form-group"><div class="setting-block">' . $publishInventory->getHtml() . '</div></div></li>';
                                 }
-            
+
                                 if (null !=  $fld) {
                                     HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel('FRM_PRODUCT_DISPLAYED_UNDER_FEATURED_ON_STOREFRONT', $langId));
                                     echo null !=  $fld && $codEnabled ? '<li><div class="form-group"><div class="setting-block">' . $fld->getHtml() . '</div></div></li>' : '<li><div class="setting-block">' . $fld->getHtml() . '</div></li>';
@@ -603,8 +603,11 @@ if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0))
     });
     $(document).ready(function() {
         $('#product_fulfillment_type').trigger('change');
-
-        if (prodTypeDigital == $('.productTypeJs:checked').val() && 0 == $('.attachmentWithInventoryJs:checked').val()) {
+        var attachmentWithInventory = $('.attachmentWithInventoryJs:checked').val();
+        <?php if (FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) { ?>
+            var attachmentWithInventory = $('.attachmentWithInventoryJs').val();
+        <?php } ?>
+        if (prodTypeDigital == $('.productTypeJs').find(":selected").val() && 0 == attachmentWithInventory) {
             $('.digitalDownloadSectionJS').removeClass('hidden');
         } else if (!$('.digitalDownloadSectionJS').hasClass('hidden')) {
             $('.digitalDownloadSectionJS').addClass('hidden');
@@ -612,7 +615,7 @@ if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0))
     });
 
     $(document).on('change', '.attachmentWithInventoryJs', function() {
-        if (prodTypeDigital == $('.productTypeJs:checked').val()) {
+        if (prodTypeDigital == $('.productTypeJs').find(":selected").val()) {
             if (1 == $(this).val()) {
                 $('.digitalDownloadSectionJS').addClass('hidden');
             } else {
