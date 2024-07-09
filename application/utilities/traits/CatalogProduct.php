@@ -171,8 +171,12 @@ trait CatalogProduct
             $frm->addSelectBox(Labels::getLabel('FRM_COUNTRY_OF_ORIGIN', $langId), 'ps_from_country_id', []);
         }
         if ($productType == Product::PRODUCT_TYPE_DIGITAL) {
-            $fld = $frm->addRadioButtons(Labels::getLabel('FRM_PRODUCT_DOWNLOAD_ATTACHEMENTS_AT_INVENTORY_LEVEL', $this->siteLangId), 'product_attachements_with_inventory', applicationConstants::getYesNoArr($langId), applicationConstants::NO);
-            $fld->requirements()->setRequired();
+            if(!FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+                $fld = $frm->addRadioButtons(Labels::getLabel('FRM_PRODUCT_DOWNLOAD_ATTACHEMENTS_AT_INVENTORY_LEVEL', $this->siteLangId), 'product_attachements_with_inventory', applicationConstants::getYesNoArr($langId), applicationConstants::NO);
+                $fld->requirements()->setRequired();
+            } else {
+                $frm->addHiddenField('','product_attachements_with_inventory',0);
+            }
         } else {
             if ($productType != Product::PRODUCT_TYPE_SERVICE) {
                 $fld = $frm->addCheckBox(Labels::getLabel('FRM_AVAILABLE_FOR_CASH_ON_DELIVERY_(COD)', $langId), 'product_cod_enabled', 1, array(), false, 0);

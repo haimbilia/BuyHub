@@ -138,7 +138,11 @@ if (0 < $recordId) {
         });
 
         $(document).ready(function() {
-            if (prodTypeDigital == $('.productTypeJs:checked').val() && 0 == $('.attachmentWithInventoryJs:checked').val()) {
+            var attachmentWithInventory = $('.attachmentWithInventoryJs:checked').val();
+            <?php if (FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) { ?>
+                var attachmentWithInventory = $('.attachmentWithInventoryJs').val();
+            <?php } ?>
+            if (prodTypeDigital == $('.productTypeJs').find(":selected").val() && 0 == attachmentWithInventory) {
                 $('.digitalDownloadSectionJS').removeClass('hide');
             } else if (!$('.digitalDownloadSectionJS').hasClass('hide')) {
                 $('.digitalDownloadSectionJS').addClass('hide');
@@ -146,7 +150,7 @@ if (0 < $recordId) {
         });
 
         $(document).on('change', '.attachmentWithInventoryJs', function() {
-            if (prodTypeDigital == $('.productTypeJs:checked').val()) {
+            if (prodTypeDigital == $('.productTypeJs').find(":selected").val()) {
                 if (1 == $(this).val()) {
                     $('.digitalDownloadSectionJS').addClass('hide');
                 } else {
