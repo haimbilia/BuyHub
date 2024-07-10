@@ -114,7 +114,7 @@ trait CatalogProduct
             }
             $useShopPolicy = $frm->addCheckBox(Labels::getLabel('FRM_USE_SHOP_RETURN_AND_CANCELLATION_AGE_POLICY', $this->siteLangId), 'use_shop_policy', 1, ['id' => 'use_shop_policy'], false, 0);
 
-            if ($productType != Product::PRODUCT_TYPE_SERVICE) {
+            if ($productType == Product::PRODUCT_TYPE_PHYSICAL) {
                 $fld = $frm->addIntegerField(Labels::getLabel('FRM_PRODUCT_ORDER_RETURN_PERIOD_(Days)', $this->siteLangId), 'selprod_return_age');
                 $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('FRM_WARRANTY_IN_DAYS', $this->siteLangId) . ' </span>';
 
@@ -126,6 +126,8 @@ trait CatalogProduct
                 $orderReturnAgeUnReqFld = new FormFieldRequirement('selprod_return_age', Labels::getLabel('FRM_PRODUCT_ORDER_RETURN_PERIOD_(Days)', $this->siteLangId));
                 $orderReturnAgeUnReqFld->setRequired(false);
                 $orderReturnAgeUnReqFld->setPositive();
+            }else{
+                $frm->addHiddenField('','selprod_return_age',0);
             }
             $fld = $frm->addIntegerField(Labels::getLabel('FRM_PRODUCT_ORDER_CANCELLATION_PERIOD_(Days)', $this->siteLangId), 'selprod_cancellation_age');
             $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('FRM_PERIOD_IN_DAYS', $this->siteLangId) . ' </span>';
@@ -138,7 +140,7 @@ trait CatalogProduct
             $orderCancellationAgeUnReqFld->setRequired(false);
             $orderCancellationAgeUnReqFld->setPositive();
 
-            if ($productType != Product::PRODUCT_TYPE_SERVICE) {
+            if ($productType == Product::PRODUCT_TYPE_PHYSICAL) {
                 $useShopPolicy->requirements()->addOnChangerequirementUpdate(Shop::USE_SHOP_POLICY, 'eq', 'selprod_return_age', $orderReturnAgeUnReqFld);
                 $useShopPolicy->requirements()->addOnChangerequirementUpdate(Shop::USE_SHOP_POLICY, 'ne', 'selprod_return_age', $orderReturnAgeReqFld);
             }

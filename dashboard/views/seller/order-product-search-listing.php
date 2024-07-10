@@ -47,7 +47,7 @@
                 case 'opshipping_by_seller_user_id':
                     $label = (0 == $order[$key] ? Labels::getLabel('LBL_ADMIN', $siteLangId) : Labels::getLabel('LBL_ME', $siteLangId));
                     $class = (0 == $order[$key] ? 'badge-warning' : 'badge-success');
-                    if ($order['op_product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
+                    if (in_array($order['op_product_type'],[Product::PRODUCT_TYPE_DIGITAL,Product::PRODUCT_TYPE_SERVICE])) {
                         $label = Labels::getLabel('LBL_N/A', $siteLangId);
                         $class = 'badge-danger';
                     }
