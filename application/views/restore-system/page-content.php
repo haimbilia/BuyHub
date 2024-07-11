@@ -1,6 +1,5 @@
 <?php
 $html = '<div class="modal-header"><h5 class="modal-title">Yo!kart</h5></div><div class="modal-body"><div class="cms p-4"> <p>To enhance your demo experience, we periodically restore our database every 4 hours.</p><h6 class="mt-2">For technical issues :-</h6> <ul class="contacts"> <li> <h6>Call us at: </h6> <p>+1 469 844 3346,</br> +91 85919 19191,</br> +91 95555 96666,</br> +91 73075 70707,</br> +91 93565 35757</p></li><li> <h6>Mail us at: </h6> <a href="mailto:sales@fatbit.com">sales@fatbit.com</a> </li></ul> <div class="divider"></div><div class="cta"> <p class="mb-2">Create Your Dream Multi-vendor Ecommerce Store With Yo!Kart</p><a class="btn btn-brand btn-sm" href="https://www.yo-kart.com/contact-us.html" target="_blank">Click here</a> </div></div></div>'; ?>
-
 <script>
     $(document).on("click", "#demoBoxClose", function(e) {
         $('.demo-header').hide();
@@ -62,6 +61,10 @@ $html = '<div class="modal-header"><h5 class="modal-title">Yo!kart</h5></div><di
 
     function showRestorePopup() {
         $.ykmodal('<?php echo $html; ?>', true);
+    }
+
+    function demoRequestForm() {
+        $.ykmodal('<div class="modal-header"><h5 class="modal-title">Yo!Kart eCommerce Marketplace Software</h5></div><div class="modal-body"><iframe width="100%" height="100%" src="https://demo1.yokart-marketing.4livedemo.com/schedule-a-demo.html"></div></div>', false, 'modal-dialog-vertical-lg');
     }
 
     function restoreSystem() {

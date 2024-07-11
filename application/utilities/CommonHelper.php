@@ -1926,6 +1926,7 @@ class CommonHelper extends FatUtility
 
     public static function demoUrl($includeDevDemo = false)
     {
+        return true;
         if (true == $includeDevDemo) {
             if (strpos($_SERVER['SERVER_NAME'], 'demo.yo-kart.com') !== false || strpos($_SERVER['SERVER_NAME'], 'demo.yokart.4livedemo.com') !== false) {
                 return true;
