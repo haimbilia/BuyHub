@@ -64,7 +64,7 @@ $html = '<div class="modal-header"><h5 class="modal-title">Yo!kart</h5></div><di
     }
 
     function demoRequestForm() {
-        $.ykmodal('<div class="modal-header"><h5 class="modal-title">Yo!Kart eCommerce Marketplace Software</h5></div><div class="modal-body"><iframe width="100%" height="100%" src="https://demo1.yokart-marketing.4livedemo.com/schedule-a-demo.html"></div></div>', false, 'modal-dialog-vertical-lg');
+        $.ykmodal('<div class="modal-header"><h5 class="modal-title">Yo!Kart eCommerce Marketplace Software</h5></div><div class="modal-body"><iframe width="100%" height="100%" src="https://www.yo-kart.com/schedule-a-demo.html"></div></div>', false, 'modal-dialog-vertical-lg');
     }
 
     function restoreSystem() {
