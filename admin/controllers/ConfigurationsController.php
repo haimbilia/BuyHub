@@ -222,9 +222,10 @@ class ConfigurationsController extends ListingBaseController
 
         if (isset($post['CONF_WITHOUT_PROD_VARIANTS']) && 1 == $post['CONF_WITHOUT_PROD_VARIANTS']) {
             $srch = new ProductSearch(0, '', '', false, false, false);
-            $srch->joinProductVariant();
+            $srch->joinProductVariant('INNER JOIN');
+            $srch->addFld(1);
             $srch->doNotCalculateRecords();
-            $srch->setPageSize(1);
+            $srch->setPageSize(1);          
             $rs = $srch->getResultSet();
             $row = FatApp::getDb()->fetch($rs);
             if (!empty($row)) {

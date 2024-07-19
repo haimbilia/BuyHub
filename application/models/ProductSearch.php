@@ -464,9 +464,9 @@ class ProductSearch extends SearchBase
         }
     }
 
-    public function joinProductVariant()
+    public function joinProductVariant($joinType = 'LEFT OUTER JOIN')
     {
-        $this->joinTable(Product::DB_PRODUCT_TO_OPTION, 'LEFT OUTER JOIN', 'tpv.prodoption_product_id = p.product_id', 'tpv');
+        $this->joinTable(Product::DB_PRODUCT_TO_OPTION, $joinType, 'tpv.prodoption_product_id = p.product_id', 'tpv');
     }
 
     /* public function joinProductVariantOptions(){
