@@ -712,8 +712,7 @@ trait RfqOffersUtility
         $offerData = FatApp::getDb()->fetch($srch->getDataResultSet($this->siteLangId));
         if (!empty($offerData)) {
             $offerData['isSeller'] = $this->isSeller;
-            if ($this->isBuyer &&  RfqOffers::BUYER_ACCEPTANCE == $acceptance) {
-                // $offerData['sellers'] = RfqOffers::getNotAcceptedOffersSellerIds($rfqId, true, true, $this->siteLangId);
+            if (RfqOffers::SELLER_ACCEPTANCE == $acceptance || RfqOffers::BUYER_ACCEPTANCE == $acceptance) {
                 $offerData['sellers'] = RequestForQuote::getSellersByRecordId($rfqId, true, true, $this->siteLangId);
             }
 
