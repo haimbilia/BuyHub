@@ -888,13 +888,7 @@ class ProductsController extends SellerBaseController
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'Packages'));
         }
     }
-
-    private function isShopActive($userId, $shopId = 0)
-    {
-        $shop = new Shop($shopId, $userId);
-        return $shop->isActive();
-    }
-
+    
     private function validateGetForm(&$post)
     {
         $recordId = $post['record_id'];

@@ -408,6 +408,16 @@ class RfqOffersController extends ListingBaseController
 
         $post['offer_user_type'] = User::USER_TYPE_SELLER;
         $post['offer_user_id'] = $offerUserId;
+
+        $rfqOfferData = RfqOffers::getAttributesById($recordId, ['offer_status', 'offer_price', 'offer_quantity', 'offer_counter_offer_id']);
+        $ifRejected = !empty($rfqOfferData) ? (RfqOffers::STATUS_REJECTED == $rfqOfferData['offer_status']) : false;
+        if ($ifRejected) {
+            $post['offer_status'] = $rfqOfferData['offer_status'];
+            if ($post['offer_quantity'] != $rfqOfferData['offer_quantity'] || $post['offer_price'] != $rfqOfferData['offer_price']) {
+                $post['offer_status'] = RfqOffers::STATUS_OPEN;
+            }
+        }
+
         $db = FatApp::getDb();
         $db->startTransaction();
 
@@ -439,14 +449,22 @@ class RfqOffersController extends ListingBaseController
             'rlo_primary_offer_id' => $primaryOfferId,
             'rlo_rfq_id' => $post['offer_rfq_id'],
             'rlo_seller_offer_id' => $rfq->getMainTableRecordId(),
-            'rlo_shipping_charges' => $shippingcharges,
-            'rlo_status' => $rloStatus
+            'rlo_shipping_charges' => $shippingcharges
         ];
+
+        if (1 > $recordId || $ifRejected) {
+            $data['rlo_status'] = ($ifRejected ? $post['offer_status'] : $rloStatus);
+        }
+
         if (1 > $counterOfferId) {
             $data['rlo_seller_user_id'] = $selectedSeller;
 
             $selprodId = RequestForQuote::getSellerProductId($post['offer_rfq_id'], $selectedSeller);
             $data['rlo_selprod_id'] = $selprodId;
+
+            if (1 > $recordId) {
+                $data['rlo_added_on'] = date('Y-m-d');
+            }
         }
 
         if (false == $rfq->updateLatestOffer($data)) {
@@ -483,7 +501,7 @@ class RfqOffersController extends ListingBaseController
                 array_push($counterOfferFlds, 'roc.' . $fld . ' as counter_' . $fld);
             }
 
-            $dbFlds = array_merge($flds, $counterOfferFlds, ['rfq_title', 'rfq_number', 'rfq_added_on', 'rfq_approved', 'rfq_user_id', 'rfq_quantity', 'rfq_quantity_unit', 'bu.user_phone as buyer_phone', 'bu.user_phone_dcode as buyer_phone_dcode', 'bu.user_name as buyer_user_name', 'bu.user_id as buyer_user_id', 'buc.credential_email as buyer_credential_email', 'COALESCE(ous_l.shop_name, ous.shop_identifier) as shop_name', 'rlo_primary_offer_id', 'selprod_id', 'selprod_product_id', 'selprod_updated_on']);
+            $dbFlds = array_merge($flds, $counterOfferFlds, ['rfq_title', 'rfq_number', 'rfq_added_on', 'rfq_approved', 'rfq_user_id', 'rfq_quantity', 'rfq_quantity_unit', 'rfq_visibility_type', 'bu.user_phone as buyer_phone', 'bu.user_phone_dcode as buyer_phone_dcode', 'bu.user_name as buyer_user_name', 'bu.user_id as buyer_user_id', 'buc.credential_email as buyer_credential_email', 'COALESCE(ous_l.shop_name, ous.shop_identifier) as shop_name', 'rlo_primary_offer_id', 'selprod_id', 'selprod_product_id', 'selprod_updated_on']);
 
             $srch = new RequestForQuoteSearch();
             $srch->doNotCalculateRecords();

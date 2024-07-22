@@ -370,6 +370,10 @@ trait RfqOffersUtility
         $recordId = FatApp::getPostedData('offer_id', FatUtility::VAR_INT, 0);
         $counterOfferId = FatApp::getPostedData('offer_counter_offer_id', FatUtility::VAR_INT, 0);
 
+        if ($this->isSeller && !$this->isShopActive($this->userParentId)) {
+            LibHelper::exitWithError(Labels::getLabel("MSG_YOUR_SHOP_IS_NOT_ACTIVE_YET", $this->siteLangId));
+        }
+
         if ($this->isSeller && 1 > $counterOfferId && 1 > $recordId && false == RfqOffers::hasValidSubscription($this->userParentId, $this->siteLangId)) {
             LibHelper::exitWithError(Labels::getLabel('ERR_SUBSCRIPTION_PLAN_RFQ_OFFERS_LIMIT_REACHED.', $this->siteLangId), true);
         }
@@ -410,6 +414,15 @@ trait RfqOffersUtility
         $post['offer_user_type'] = $this->isSeller ? User::USER_TYPE_SELLER : User::USER_TYPE_BUYER;
         $post['offer_negotiable'] = $negotiable;
 
+        $rfqOfferData = RfqOffers::getAttributesById($recordId, ['offer_status', 'offer_price', 'offer_quantity', 'offer_counter_offer_id']);
+        $ifRejected = !empty($rfqOfferData) ? (RfqOffers::STATUS_REJECTED == $rfqOfferData['offer_status']) : false;
+        if ($ifRejected) {
+            $post['offer_status'] = $rfqOfferData['offer_status'];
+            if ($post['offer_quantity'] != $rfqOfferData['offer_quantity'] || $post['offer_price'] != $rfqOfferData['offer_price']) {
+                $post['offer_status'] = RfqOffers::STATUS_OPEN;
+            }
+        }
+
         $db = FatApp::getDb();
         $db->startTransaction();
 
@@ -441,9 +454,12 @@ trait RfqOffersUtility
 
         $data = [
             'rlo_primary_offer_id' => $primaryOfferId,
-            'rlo_rfq_id' => $post['offer_rfq_id'],
-            'rlo_status' => $rloStatus,
+            'rlo_rfq_id' => $post['offer_rfq_id']
         ];
+
+        if (1 > $recordId || $ifRejected) {
+            $data['rlo_status'] = ($ifRejected ? $post['offer_status'] : $rloStatus);
+        }
 
         if ($this->isSeller) {
             $shippingcharges = FatApp::getPostedData('rlo_shipping_charges', FatUtility::VAR_FLOAT, 0);
@@ -458,6 +474,10 @@ trait RfqOffersUtility
 
             if (1 > $counterOfferId && 0 < $selprodId) {
                 $data['rlo_selprod_id'] = $selprodId;
+            }
+
+            if (1 > $counterOfferId && 1 > $recordId) {
+                $data['rlo_added_on'] = date('Y-m-d');
             }
         } else {
             $data['rlo_buyer_offer_id'] = $rfq->getMainTableRecordId();
@@ -504,7 +524,7 @@ trait RfqOffersUtility
                 array_push($counterOfferFlds, 'roc.' . $fld . ' as counter_' . $fld);
             }
 
-            $dbFlds = array_merge($flds, $counterOfferFlds, ['rfq_title', 'rfq_number', 'rfq_added_on', 'rfq_approved', 'rfq_user_id', 'rfq_quantity', 'rfq_quantity_unit', 'bu.user_name as buyer_user_name', 'bu.user_id as buyer_user_id', 'buc.credential_email as buyer_credential_email', 'COALESCE(ous_l.shop_name, ous.shop_identifier) as shop_name', 'rlo_primary_offer_id', 'selprod_id', 'selprod_product_id', 'selprod_updated_on', 'bu.user_phone_dcode as buyer_phone_dcode', 'bu.user_phone as buyer_phone', 'suc.credential_email as seller_email']);
+            $dbFlds = array_merge($flds, $counterOfferFlds, ['rfq_title', 'rfq_number', 'rfq_added_on', 'rfq_approved', 'rfq_user_id', 'rfq_quantity', 'rfq_quantity_unit', 'rfq_visibility_type', 'bu.user_name as buyer_user_name', 'bu.user_id as buyer_user_id', 'buc.credential_email as buyer_credential_email', 'COALESCE(ous_l.shop_name, ous.shop_identifier) as shop_name', 'rlo_primary_offer_id', 'selprod_id', 'selprod_product_id', 'selprod_updated_on', 'bu.user_phone_dcode as buyer_phone_dcode', 'bu.user_phone as buyer_phone', 'suc.credential_email as seller_email']);
 
             $srch = new RequestForQuoteSearch();
             $srch->doNotCalculateRecords();

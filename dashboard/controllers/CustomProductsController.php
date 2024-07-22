@@ -689,7 +689,7 @@ class CustomProductsController extends SellerBaseController
 
     private function canAddCustomCatalogProduct()
     {
-        if (!$this->isShopActive($this->userParentId, 0)) {
+        if (!$this->isShopActive($this->userParentId)) {
             LibHelper::exitWithError(Labels::getLabel('ERR_YOUR_SHOP_IS_INACTIVE', $this->siteLangId), false, true);
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'shop'));
         }
@@ -703,11 +703,5 @@ class CustomProductsController extends SellerBaseController
             LibHelper::exitWithError(Labels::getLabel("ERR_PLEASE_BUY_SUBSCRIPTION", $this->siteLangId), false, true);
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'catalog'));
         }
-    }
-
-    private function isShopActive($userId, $shopId = 0)
-    {
-        $shop = new Shop($shopId, $userId);
-        return $shop->isActive();
     }
 }

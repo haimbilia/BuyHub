@@ -1183,7 +1183,7 @@ class SellerController extends SellerBaseController
     {
         $this->userPrivilege->canViewProducts(UserAuthentication::getLoggedUserId());
 
-        if (!$this->isShopActive($this->userParentId, 0, true)) {
+        if (!$this->isShopActive($this->userParentId)) {
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'shop'));
         }
         if (!UserPrivilege::isUserHasValidSubsription($this->userParentId)) {
@@ -1208,7 +1208,7 @@ class SellerController extends SellerBaseController
     {
 
         $this->userPrivilege->canViewProducts(UserAuthentication::getLoggedUserId());
-        if (!$this->isShopActive($this->userParentId, 0, true)) {
+        if (!$this->isShopActive($this->userParentId)) {
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'shop'));
         }
 
@@ -1230,7 +1230,7 @@ class SellerController extends SellerBaseController
     public function requestedCatalog()
     {
         $this->userPrivilege->canEditProducts(UserAuthentication::getLoggedUserId());
-        if (!$this->isShopActive($this->userParentId, 0, true)) {
+        if (!$this->isShopActive($this->userParentId)) {
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'shop'));
         }
         if (!User::canRequestProduct()) {
@@ -3428,22 +3428,6 @@ class SellerController extends SellerBaseController
         }
         return $frm;
     }
-
-    private function isShopActive($userId, $shopId = 0, $returnResult = false)
-    {
-        $shop = new Shop($shopId, $userId);
-        if (false == $returnResult) {
-            return $shop->isActive();
-        }
-
-        if ($shop->isActive()) {
-            return $shop->getData();
-        }
-
-        return false;
-        //return Shop::isShopActive($userId, $shopId, $returnResult);
-    }
-
     private function getShopInfoForm($shopUserId, $shop_id = 0)
     {
         $frm = new Form('frmShop');

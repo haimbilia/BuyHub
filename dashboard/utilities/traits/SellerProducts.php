@@ -22,7 +22,7 @@ trait SellerProducts
     {
         $this->userPrivilege->canViewProducts(UserAuthentication::getLoggedUserId());
         $this->includeDateTimeFiles();
-        if (!$this->isShopActive($this->userParentId, 0, true)) {
+        if (!$this->isShopActive($this->userParentId)) {
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'shop'));
         }
 
