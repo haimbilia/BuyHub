@@ -183,7 +183,7 @@ class RequestForQuote extends MyAppModel
         }
 
         if ($joinShopTable) {
-            $langId = 0 < $langId? $langId : CommonHelper::getLangId();
+            $langId = 0 < $langId ? $langId : CommonHelper::getLangId();
             $srch->joinTable(Shop::DB_TBL, 'INNER JOIN', 'shop_user_id = rfqts_user_id', 'sh');
             $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT JOIN', 'shoplang_shop_id = shop_id AND shoplang_lang_id = ' . $langId, 'sh_l');
             $attr[] = 'COALESCE(shop_name, shop_identifier) as shop_name';
@@ -660,17 +660,17 @@ class RequestForQuote extends MyAppModel
     public static function getVisibilityTypeArr(int $langId): array
     {
         return [
-            self::VISIBILITY_TYPE_OPEN => Labels::getLabel('LBL_OPEN', $langId),
-            self::VISIBILITY_TYPE_CLOSED => Labels::getLabel('LBL_CLOSED', $langId),
+            self::VISIBILITY_TYPE_OPEN => Labels::getLabel('LBL_PUBLIC_RFQ', $langId),
+            self::VISIBILITY_TYPE_CLOSED => Labels::getLabel('LBL_PRIVATE_RFQ', $langId),
         ];
     }
 
     public static function getSellerLinkingTypeArr(int $langId): array
     {
         return [
-            self::SELLER_LINKING_OPEN => Labels::getLabel('LBL_ALL_SELLERS', $langId),
-            self::SELLER_LINKING_FAVOURITE => Labels::getLabel('LBL_FAVOURITE_SELLERS', $langId),
-            self::SELLER_LINKING_ANY => Labels::getLabel('LBL_SELECT_MANUALLY', $langId),
+            self::SELLER_LINKING_OPEN => Labels::getLabel('LBL_PUBLIC', $langId),
+            self::SELLER_LINKING_FAVOURITE => Labels::getLabel('LBL_FAVOURITE', $langId),
+            self::SELLER_LINKING_ANY => Labels::getLabel('LBL_SELECTED', $langId),
         ];
     }
 
@@ -684,4 +684,63 @@ class RequestForQuote extends MyAppModel
         $result = FatApp::getDb()->fetch($srch->getResultSet());
         return (is_array($result) && !empty($result));
     }
+
+    public static function hasAcceptedOffers(int $rfqId): bool
+    {
+        $srch = new SearchBase(RfqOffers::DB_RFQ_LATEST_OFFER, 'rlo');
+        $srch->addCondition('rlo.rlo_status', '=', RfqOffers::STATUS_ACCEPTED);
+        $srch->addCondition('rlo.rlo_rfq_id', '=', $rfqId);
+        $srch->doNotCalculateRecords();
+        $srch->addFld('rlo.rlo_primary_offer_id');
+        $result = FatApp::getDb()->fetch($srch->getResultSet());
+        return (is_array($result) && !empty($result['rlo_primary_offer_id']) && 0 < $result['rlo_primary_offer_id']);
+    }
+
+    /**
+     * Gets the names of the product categories associated with the given categories string.
+     *
+     * @param string $categories A JSON-encoded string of product category IDs.
+     * @return string The comma-separated list of product category names.
+     */
+    public static function getRfqCategoriesName(string $categories, int $siteLangId): string
+    {
+        if (empty($categories)) {
+            return '';
+        }
+        $categories = json_decode($categories, true);
+        $catName = '';
+        if (!empty($categories)) {
+            foreach ($categories as $catId) {
+                $catData = ProductCategory::getAttributesByLangId($siteLangId, $catId, ['COALESCE(prodcat_name, prodcat_identifier) as prodcat_name'], applicationConstants::JOIN_RIGHT);
+                $catName .= $catData['prodcat_name'] . ', ';
+            }
+            $catName = rtrim($catName, ', ');
+        }
+        return $catName;
+    }
+
+    public static function getStatusHtml(int $rfqStatus, int $langId)
+    {
+        $lbl = self::getStatusArr($langId)[$rfqStatus];
+        $html = Labels::getLabel('LBL_N/A', $langId);
+        switch ($rfqStatus) {
+            case self::STATUS_OPEN:
+                $html = HtmlHelper::getStatusHtml(HtmlHelper::INFO, $lbl);
+                break;
+            case self::STATUS_OFFERED:
+                $html = HtmlHelper::getStatusHtml(HtmlHelper::WARNING, $lbl);
+                break;
+            case self::STATUS_ACCEPTED:
+                $html = HtmlHelper::getStatusHtml(HtmlHelper::SUCCESS, $lbl);
+                break;
+            case self::STATUS_CLOSED:
+                $html = HtmlHelper::getStatusHtml(HtmlHelper::DANGER, $lbl);
+                break;
+            case self::STATUS_COMPLETED:
+                $html = HtmlHelper::getStatusHtml(HtmlHelper::SUCCESS, $lbl);
+                break;
+        }
+        return $html;
+    }
+
 }

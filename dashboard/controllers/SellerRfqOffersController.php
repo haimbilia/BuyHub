@@ -68,7 +68,7 @@ class SellerRfqOffersController extends SellerBaseController
             $page = 1;
         }
 
-        $rfqData = RequestForQuote::getAttributesById($rfqId, ['rfq_selprod_code', 'rfq_selprod_id', 'rfq_product_id', 'rfq_visibility_type']);
+        $rfqData = RequestForQuote::getAttributesById($rfqId, ['rfq_selprod_code', 'rfq_selprod_id', 'rfq_product_id', 'rfq_visibility_type', 'rfq_product_type']);
         $selprodCode = $rfqData['rfq_selprod_code'];
 
         $srch = SellerProduct::getSearchObject($this->siteLangId);
@@ -86,6 +86,7 @@ class SellerRfqOffersController extends SellerBaseController
 
         $srch->addCondition('selprod_user_id', '=', $this->userId);
         $srch->addOrder('selprod_active', 'DESC');
+        $srch->addCondition('product_type', '=', $rfqData['rfq_product_type']);
         $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
         $srch->addCondition('selprod_active', '=', applicationConstants::ACTIVE);
         if ($rfqData['rfq_selprod_id'] > 0 && $rfqData['rfq_product_id'] > 0) {
@@ -96,18 +97,18 @@ class SellerRfqOffersController extends SellerBaseController
 
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
-        $products = FatApp::getDb()->fetchAll($srch->getResultSet(), 'id');
         $pageCount = $srch->pages();
+        $products = FatApp::getDb()->fetchAll($srch->getResultSet(), 'id');
         $json = array();
-        foreach ($products as $key => $option) {
-            $options = SellerProduct::getSellerProductOptions($key, true, $this->siteLangId);
+        foreach ($products as $selprodId => $option) {
+            $options = SellerProduct::getSellerProductOptions($selprodId, true, $this->siteLangId);
             $variantsStr = '';
             array_walk($options, function ($item, $key) use (&$variantsStr) {
                 $variantsStr .= ' | ' . $item['option_name'] . ' : ' . $item['optionvalue_name'];
             });
             $userName = isset($option["credential_username"]) ? " | " . $option["credential_username"] : '';
             $json[] = array(
-                'id' => $key,
+                'id' => $selprodId,
                 'text' => strip_tags(html_entity_decode($option['product_name'], ENT_QUOTES, 'UTF-8')) . $variantsStr . $userName,
             );
         }

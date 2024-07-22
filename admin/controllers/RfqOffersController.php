@@ -60,9 +60,8 @@ class RfqOffersController extends ListingBaseController
         $srch->joinBuyerAddress($this->siteLangId);
         $srch->joinCountry(true);
         $srch->joinState(true);
-        $srch->joinRfqCategory(true);
 
-        $dbFlds = array_merge(RequestForQuote::FIELDS, ['addr_name', 'addr_address1', 'addr_address2', 'addr_city', 'state_name', 'country_name', 'addr_zip', 'addr_phone_dcode', 'addr_phone', 'buc.credential_username', 'buc.credential_email', 'bu.user_id as user_id', 'bu.user_updated_on', 'bu.user_name', 'IFNULL(country_name, country_code) as country_name', 'IFNULL(state_name, state_identifier) as state_name', 'rfq.rfq_product_id', 'rfq_selprod_code', 'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name']);
+        $dbFlds = array_merge(RequestForQuote::FIELDS, ['addr_name', 'addr_address1', 'addr_address2', 'addr_city', 'state_name', 'country_name', 'addr_zip', 'addr_phone_dcode', 'addr_phone', 'buc.credential_username', 'buc.credential_email', 'bu.user_id as user_id', 'bu.user_updated_on', 'bu.user_name', 'IFNULL(country_name, country_code) as country_name', 'IFNULL(state_name, state_identifier) as state_name', 'rfq.rfq_product_id', 'rfq_selprod_code']);
         $srch->addMultipleFields($dbFlds);
 
         $srch->addCondition('rfq_id', '=', $rfqId);
@@ -71,6 +70,7 @@ class RfqOffersController extends ListingBaseController
             LibHelper::exitWithError($this->str_invalid_request, false, true);
             CommonHelper::redirectUserReferer();
         }
+        $rfqData['prodcat_name'] = RequestForQuote::getRfqCategoriesName($rfqData['rfq_prodcat_id'], $this->siteLangId);
 
         $selProdId = SellerProduct::getSellerProductIdByCode($rfqData['rfq_selprod_code']);
         $frmSearch->fill(['offer_rfq_id' => $rfqId, 'rfq_product_id' => $rfqData['rfq_product_id']]);
@@ -80,8 +80,13 @@ class RfqOffersController extends ListingBaseController
         } else {
             $actionItemsData['newRecordBtnAttrs'] = [
                 'attr' => [
-                    'onclick' => 'addNew(' . $rfqId . ')'
-                ]
+                    'onclick' => 'addNew(' . $rfqId . ')',
+                    'title' => Labels::getLabel('LBL_OFFER', $this->siteLangId)
+                ],
+                'label' => '<svg class="svg btn-icon-start" width="18" height="18">
+                                <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#add">
+                                </use>
+                            </svg><span>' . Labels::getLabel('LBL_NEW_OFFER', $this->siteLangId) . '</span>',
             ];
         }
 
@@ -99,7 +104,7 @@ class RfqOffersController extends ListingBaseController
         $this->set('defaultPageSize', FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10));
         $this->_template->addJs(array('js/select2.js'));
         $this->_template->addCss(array('css/select2.min.css'));
-        $this->_template->render();
+        $this->_template->render(convertVariablesToHtmlentities:false);
     }
 
     protected function getSearchForm($fields = [])
@@ -196,7 +201,7 @@ class RfqOffersController extends ListingBaseController
             array_push($counterOfferFlds, 'roc.' . $fld . ' as counter_' . $fld);
         }
 
-        $dbFlds = array_merge($flds, $counterOfferFlds, ['rlo_seller_user_id', 'olu.user_name', 'oluc.credential_email', 'olu.user_updated_on', 'olu.user_id', 'bu.user_name as buyer_user_name', 'bu.user_id as buyer_user_id', 'buc.credential_email as buyer_credential_email', 'rlo_primary_offer_id', 'rfq_added_on', 'rfq_status', 'rfq_quantity_unit', 'rlo_shipping_charges', 'rlo_seller_user_id', 'rlo_seller_offer_id', 'rlo_buyer_offer_id', 'rlo_buyer_acceptance', 'rlo_seller_acceptance']);
+        $dbFlds = array_merge($flds, $counterOfferFlds, ['rlo_seller_user_id', 'olu.user_name', 'oluc.credential_email', 'olu.user_updated_on', 'olu.user_id', 'bu.user_name as buyer_user_name', 'bu.user_id as buyer_user_id', 'buc.credential_email as buyer_credential_email', 'rlo_primary_offer_id', 'rfq_product_type', 'rfq_added_on', 'rfq_status', 'rfq_quantity_unit', 'rlo_shipping_charges', 'rlo_seller_user_id', 'rlo_seller_offer_id', 'rlo_buyer_offer_id', 'rlo_buyer_acceptance', 'rlo_seller_acceptance']);
         $srch->addMultipleFields($dbFlds);
         $srch->addOrder($sortBy, $sortOrder);
         $srch->setPageNumber($page);
@@ -279,7 +284,7 @@ class RfqOffersController extends ListingBaseController
         $this->checkEditPrivilege();
 
         $rfqId = FatApp::getPostedData('rfqId', FatUtility::VAR_INT, 0);
-        $rfqData = RequestForQuote::getAttributesById($rfqId, ['rfq_id', 'rfq_selprod_id', 'rfq_product_id', 'rfq_quantity', 'rfq_quantity_unit', 'rfq_visibility_type']);
+        $rfqData = RequestForQuote::getAttributesById($rfqId, ['rfq_id', 'rfq_selprod_id', 'rfq_product_type', 'rfq_product_id', 'rfq_quantity', 'rfq_quantity_unit', 'rfq_visibility_type']);
         if (!$rfqData) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
@@ -316,7 +321,7 @@ class RfqOffersController extends ListingBaseController
 
         $shippingcharges = '';
         /* In case of counter offer of buyer and edit own record. */
-        if (0 < $counterOfferId || 0 < $recordId) {
+        if (Product::PRODUCT_TYPE_PHYSICAL == $rfqData['rfq_product_type'] && (0 < $counterOfferId || 0 < $recordId)) {
             $srch = new SearchBase(RfqOffers::DB_RFQ_LATEST_OFFER);
             $srch->doNotCalculateRecords();
             $srch->setPageSize(1);
@@ -328,6 +333,11 @@ class RfqOffersController extends ListingBaseController
             }
             $srch->addFld('rlo_shipping_charges');
             $shippingcharges = ((array)FatApp::getDb()->fetch($srch->getResultSet()))['rlo_shipping_charges'] ?? '';
+        }
+
+        if (Product::PRODUCT_TYPE_PHYSICAL != $rfqData['rfq_product_type']) {
+            $fld = $frm->getField('rlo_shipping_charges');
+            $frm->removeField($fld);
         }
 
         $data = array_merge($rfqOfferData, [
@@ -399,6 +409,11 @@ class RfqOffersController extends ListingBaseController
             if (1 > $recordId && false == RfqOffers::validateOfferRequest($post['offer_rfq_id'], $qty, $selectedSeller)) {
                 LibHelper::exitWithError(Labels::getLabel('ERR_DUPLICATE_OFFER._YOU_CANNOT_PLACE_OFFER_WITH_THIS_QTY.'));
             }
+
+            if (1 > $recordId && false == RfqOffers::hasValidSubscription($selectedSeller, $this->siteLangId)) {
+                LibHelper::exitWithError(Labels::getLabel('ERR_SUBSCRIPTION_PLAN_RFQ_OFFERS_LIMIT_REACHED_FOR_THIS_SELECTED_SELLER.', $this->siteLangId), true);
+            }
+
             $post['offer_status'] = RfqOffers::STATUS_OPEN;
         } else {
             $primaryOfferId = (int)RfqOffers::getAttributesById($counterOfferId, 'offer_primary_offer_id');

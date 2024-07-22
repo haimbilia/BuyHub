@@ -279,7 +279,7 @@
             fcom.closeProcessing();
             fcom.removeLoader();
             setTimeout(() => {
-                location.reload();
+                location.href = fcom.makeUrl('RequestForQuotes');
             }, 1000);
         });
     }

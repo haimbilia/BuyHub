@@ -27,11 +27,19 @@ trait RfqOffersUtility
         }
 
         if ($this->isSeller) {
-            if (!UserPrivilege::isUserHasValidSubsription($this->userParentId)) {
-                LibHelper::exitWithError(Labels::getLabel("MSG_PLEASE_BUY_SUBSCRIPTION", $this->siteLangId));
+            if (!$this->isShopActive($this->userParentId)) {
+                LibHelper::exitWithError(Labels::getLabel("MSG_YOUR_SHOP_IS_NOT_ACTIVE_YET", $this->siteLangId), false, true);
+                CommonHelper::redirectUserReferer();
             }
+
+            if (!UserPrivilege::isUserHasValidSubsription($this->userParentId)) {
+                LibHelper::exitWithError(Labels::getLabel("MSG_PLEASE_BUY_SUBSCRIPTION", $this->siteLangId), false, true);
+                CommonHelper::redirectUserReferer();
+            }
+
             if (!$this->userPrivilege->canEditRfqOffers($this->userParentId, true)) {
-                LibHelper::exitWithError(Labels::getLabel('ERR_UNAUTHORIZED_ACCESS'), true);
+                LibHelper::exitWithError(Labels::getLabel('ERR_UNAUTHORIZED_ACCESS'), false, true);
+                CommonHelper::redirectUserReferer();
             }
         }
 
@@ -42,7 +50,7 @@ trait RfqOffersUtility
             CommonHelper::redirectUserReferer();
         }
 
-        if (RequestForQuote::STATUS_CLOSED == $rfqInfo['rfq_status']) {
+        if (RequestForQuote::STATUS_CLOSED == $rfqInfo['rfq_status'] && false == RequestForQuote::hasAcceptedOffers($rfqId)) {
             LibHelper::exitWithError(Labels::getLabel('ERR_THIS_RFQ_HAS_BEEN_CLOSED_BY_THE_BUYER', $this->siteLangId), false, true);
             CommonHelper::redirectUserReferer();
         }
@@ -50,7 +58,7 @@ trait RfqOffersUtility
         $srch = new RequestForQuoteSearch();
         if ($this->isSeller) {
             $srch->joinSellers();
-            $srch->addFld('rfqts_selprod_id, rfqts_user_id');
+            // $srch->addFld('rfqts_selprod_id, rfqts_user_id');
         }
         $srch->joinBuyer();
         $srch->joinBuyerAddress($this->siteLangId);
@@ -70,7 +78,7 @@ trait RfqOffersUtility
 
         $srch->addCondition('rfq_id', '=', $rfqId);
         $rfqData = (array)FatApp::getDb()->fetch($srch->getDataResultSet());
-        
+
         if (empty($rfqData)) {
             LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST_ID', $this->siteLangId), false, true);
             CommonHelper::redirectUserReferer();
@@ -91,8 +99,10 @@ trait RfqOffersUtility
         $this->set('frmSearch', $frm);
 
         $otherButtons = [];
-        if ($this->isSeller && in_array($rfqData['rfq_status'], [RequestForQuote::STATUS_OPEN, RequestForQuote::STATUS_OFFERED])) {
-            if (RequestForQuote::isAssignedToSeller($rfqId, $this->userParentId)) {
+        $linkedSelprodId = RequestForQuote::getSellerProductId($rfqId, $this->userParentId);
+        if ($this->isSeller) {
+            $isOpenOffered = in_array($rfqData['rfq_status'], [RequestForQuote::STATUS_OPEN, RequestForQuote::STATUS_OFFERED]);
+            if (RequestForQuote::isAssignedToSeller($rfqId, $this->userParentId) && $isOpenOffered) {
                 $otherButtons[] = [
                     'attr' => [
                         'class' => 'btn-brand btn-icon',
@@ -106,7 +116,7 @@ trait RfqOffersUtility
                     'label' => Labels::getLabel('LBL_OFFER', $this->siteLangId)
                 ];
             }
-            if (empty($rfqData['rfqts_selprod_id'])) {
+            if (($isOpenOffered && empty($linkedSelprodId)) || (empty($linkedSelprodId) && RequestForQuote::STATUS_ACCEPTED == $rfqData['rfq_status'] && RfqOffers::hasAnyBuyerAcceptedOffer($this->userParentId, $rfqId))) {
                 $otherButtons[] = [
                     'attr' => [
                         'onclick' => 'linkInventoryForm(' . $rfqId . ')',
@@ -150,14 +160,19 @@ trait RfqOffersUtility
         }
 
         $selprodTitle = '';
-        if ($this->isGlobal && isset($rfqData['rfqts_selprod_id']) && !empty($rfqData['rfqts_selprod_id'])) {
-            $selprodTitle = SellerProduct::getAttributesByLangId($this->siteLangId, $rfqData['rfqts_selprod_id'], 'selprod_title');
+        if (empty($rfqData['rfq_selprod_id']) && !empty($linkedSelprodId)) {
+            $selprodTitle = SellerProduct::getAttributesByLangId($this->siteLangId, $linkedSelprodId, 'selprod_title');
+            $options = SellerProduct::getSellerProductOptions($linkedSelprodId, true, $this->siteLangId);
+            array_walk($options, function ($item, $key) use (&$selprodTitle) {
+                $selprodTitle .= ' | ' . $item['option_name'] . ' : ' . $item['optionvalue_name'];
+            });
         }
 
         $this->set("selprodTitle", $selprodTitle);
         $this->set("isGlobal", $this->isGlobal);
         $this->set("otherButtons", $otherButtons);
         $this->set("isSeller", $this->isSeller);
+        $this->set("sellerId", $this->userParentId);
         $this->set("rfqStatusArr", RequestForQuote::getStatusArr($this->siteLangId));
         $this->set("approvalStatusArr", RequestForQuote::getApprovalStatusArr($this->siteLangId));
         $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_COMMENT', $this->siteLangId));
@@ -225,7 +240,7 @@ trait RfqOffersUtility
             array_push($counterOfferFlds, 'roc.' . $fld . ' as counter_' . $fld);
         }
 
-        $dbFlds = array_merge($flds, $counterOfferFlds, ['rfq_selprod_id', 'rfq_product_id', 'rfq_visibility_type', 'rlo_seller_user_id', 'ou.user_name', 'ouc.credential_email', 'ou.user_updated_on', 'ou.user_id', 'bu.user_name as buyer_user_name', 'bu.user_id as buyer_user_id', 'buc.credential_email as buyer_credential_email', 'COALESCE(ous_l.shop_name, ous.shop_identifier) as shop_name', 'ous.shop_id', 'rlo_primary_offer_id', 'rfq_status', 'rfq_quantity_unit', 'rfq_added_on', 'rlo_shipping_charges', 'rlo_accepted_offer_id', 'rlo_selprod_id', 'rlo_seller_offer_id', 'rlo_buyer_offer_id', 'rlo_seller_acceptance', 'rlo_buyer_acceptance']);
+        $dbFlds = array_merge($flds, $counterOfferFlds, ['rfq_selprod_id', 'rfq_product_type', 'rfq_product_id', 'rfq_visibility_type', 'rlo_seller_user_id', 'ou.user_name', 'ouc.credential_email', 'ou.user_updated_on', 'ou.user_id', 'bu.user_name as buyer_user_name', 'bu.user_id as buyer_user_id', 'buc.credential_email as buyer_credential_email', 'COALESCE(ous_l.shop_name, ous.shop_identifier) as shop_name', 'ous.shop_id', 'rlo_primary_offer_id', 'rfq_status', 'rfq_quantity_unit', 'rfq_added_on', 'rlo_shipping_charges', 'rlo_accepted_offer_id', 'rlo_selprod_id', 'rlo_seller_offer_id', 'rlo_buyer_offer_id', 'rlo_seller_acceptance', 'rlo_buyer_acceptance']);
         $srch->addMultipleFields($dbFlds);
 
         $sellerId = FatApp::getPostedData('offer_user_id', FatUtility::VAR_INT, 0);
@@ -294,7 +309,7 @@ trait RfqOffersUtility
     public function form()
     {
         $rfqId = FatApp::getPostedData('rfqId', FatUtility::VAR_INT, 0);
-        $rfqData = RequestForQuote::getAttributesById($rfqId, ['rfq_id', 'rfq_product_id', 'rfq_quantity', 'rfq_quantity_unit']);
+        $rfqData = RequestForQuote::getAttributesById($rfqId, ['rfq_id', 'rfq_product_id', 'rfq_quantity', 'rfq_quantity_unit', 'rfq_product_type']);
         if (!$rfqData) {
             LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST_ID', $this->siteLangId), true);
         }
@@ -316,18 +331,25 @@ trait RfqOffersUtility
 
         $shippingcharges = '';
         /* In case of counter offer of buyer and edit own record. */
-        if ($this->isSeller && (0 < $ctrOfferId || 0 < $recordId)) {
-            $srch = new SearchBase(RfqOffers::DB_RFQ_LATEST_OFFER);
-            $srch->doNotCalculateRecords();
-            $srch->setPageSize(1);
-            $srch->addCondition('rlo_rfq_id', '=', 'mysql_func_' . $rfqId, 'AND', true);
-            if (0 < $recordId) {
-                $srch->addCondition('rlo_seller_offer_id', '=', 'mysql_func_' . $recordId, 'AND', true);
-            } else {
-                $srch->addCondition('rlo_buyer_offer_id', '=', 'mysql_func_' . $ctrOfferId, 'AND', true);
+        if ($this->isSeller) {
+            if (Product::PRODUCT_TYPE_PHYSICAL == $rfqData['rfq_product_type'] && (0 < $ctrOfferId || 0 < $recordId)) {
+                $srch = new SearchBase(RfqOffers::DB_RFQ_LATEST_OFFER);
+                $srch->doNotCalculateRecords();
+                $srch->setPageSize(1);
+                $srch->addCondition('rlo_rfq_id', '=', 'mysql_func_' . $rfqId, 'AND', true);
+                if (0 < $recordId) {
+                    $srch->addCondition('rlo_seller_offer_id', '=', 'mysql_func_' . $recordId, 'AND', true);
+                } else {
+                    $srch->addCondition('rlo_buyer_offer_id', '=', 'mysql_func_' . $ctrOfferId, 'AND', true);
+                }
+                $srch->addFld('rlo_shipping_charges');
+                $shippingcharges = ((array)FatApp::getDb()->fetch($srch->getResultSet()))['rlo_shipping_charges'] ?? '';
             }
-            $srch->addFld('rlo_shipping_charges');
-            $shippingcharges = ((array)FatApp::getDb()->fetch($srch->getResultSet()))['rlo_shipping_charges'] ?? '';
+
+            if (Product::PRODUCT_TYPE_PHYSICAL != $rfqData['rfq_product_type']) {
+                $fld = $frm->getField('rlo_shipping_charges');
+                $frm->removeField($fld);
+            }
         }
 
         $data = array_merge($rfqOfferData, [
@@ -703,7 +725,7 @@ trait RfqOffersUtility
             }
         }
     }
-    
+
     public function sellerAcceptance(int $recordId, int $rfqId)
     {
         $selProdId = RequestForQuote::getSellerProductId($rfqId, $this->userParentId);
@@ -863,7 +885,7 @@ trait RfqOffersUtility
 
         FatUtility::dieJsonSuccess(Labels::getLabel('LBL_SUCCESS', $this->siteLangId));
     }
-    
+
     public function checkout(int $selprodId, int $offerId)
     {
         if (1 > $selprodId || false === $this->isBuyer || 1 > $offerId) {
@@ -1032,9 +1054,8 @@ trait RfqOffersUtility
         $srch->joinBuyerAddress($this->siteLangId);
         $srch->joinCountry(true);
         $srch->joinState(true);
-        $srch->joinRfqCategory(true);
 
-        $dbFlds = array_merge(RequestForQuote::FIELDS, ['addr_name', 'addr_address1', 'addr_address2', 'addr_city', 'state_name', 'country_name', 'addr_zip', 'addr_phone_dcode', 'addr_phone', 'buc.credential_username as credential_username', 'bu.user_id as user_id', 'bu.user_updated_on', 'credential_email', 'bu.user_name', 'IFNULL(country_name, country_code) as country_name', 'IFNULL(state_name, state_identifier) as state_name', 'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name']);
+        $dbFlds = array_merge(RequestForQuote::FIELDS, ['addr_name', 'addr_address1', 'addr_address2', 'addr_city', 'state_name', 'country_name', 'addr_zip', 'addr_phone_dcode', 'addr_phone', 'buc.credential_username as credential_username', 'bu.user_id as user_id', 'bu.user_updated_on', 'credential_email', 'bu.user_name', 'IFNULL(country_name, country_code) as country_name', 'IFNULL(state_name, state_identifier) as state_name']);
         $srch->addMultipleFields($dbFlds);
 
         if ($this->isSeller) {
@@ -1043,7 +1064,10 @@ trait RfqOffersUtility
             $srch->addCondition('rfq_user_id', '=', $this->userId);
         }
         $srch->addCondition('rfq_id', '=', $recordId);
-        $this->set("rfqData", FatApp::getDb()->fetch($srch->getDataResultSet()));
+
+        $rfqData = FatApp::getDb()->fetch($srch->getDataResultSet());
+        $rfqData['prodcat_name'] = RequestForQuote::getRfqCategoriesName($rfqData['rfq_prodcat_id'], $this->siteLangId);
+        $this->set("rfqData", $rfqData);
         $this->set("approvalStatusArr", RequestForQuote::getApprovalStatusArr($this->siteLangId));
         $this->set("statusArr", RequestForQuote::getStatusArr($this->siteLangId));
         $this->set('recordId', $recordId);
@@ -1068,6 +1092,7 @@ trait RfqOffersUtility
         $this->set('data', array_reverse($data['data']));
 
         $this->set('includeTabs', false);
+        $this->set('isSeller', $this->isSeller);
         $this->set('frm', $frm);
         $this->set('primaryOfferId', $primaryOfferId);
         $this->set('onlyWithAttachments', $onlyWithAttachments);
@@ -1154,12 +1179,12 @@ trait RfqOffersUtility
         $res = AttachedFile::getAttachment(AttachedFile::FILETYPE_RFQ_OFFER_FILE, $romId, $primaryOfferId);
         if ($res == false || 1 > $res['afile_id']) {
             LibHelper::exitWithError(Labels::getLabel('ERR_NOT_AVAILABLE_TO_DOWNLOAD', $this->siteLangId), false, true);
-            FatApp::redirectUser(UrlHelper::generateUrl('RequestForQuotes'));
+            FatApp::redirectUser(UrlHelper::generateUrl($this->isSeller ? 'SellerRequestForQuotes' : 'RequestForQuotes'));
         }
 
         if (!file_exists(CONF_UPLOADS_PATH . $res['afile_physical_path'])) {
             LibHelper::exitWithError(Labels::getLabel('ERR_FILE_NOT_FOUND', $this->siteLangId), false, true);
-            FatApp::redirectUser(UrlHelper::generateUrl('RequestForQuotes'));
+            FatApp::redirectUser(UrlHelper::generateUrl($this->isSeller ? 'SellerRequestForQuotes' : 'RequestForQuotes'));
         }
 
         AttachedFile::downloadAttachment($res['afile_physical_path'], $res['afile_name']);

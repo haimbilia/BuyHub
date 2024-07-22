@@ -80,19 +80,19 @@ if (!isset($tbody)) {
                     </div>
                     <div class="offer-block-foot">
                         <?php if (RfqOffers::STATUS_REJECTED == $row['offer_status']) { ?>
-                            <p class="note">
+                            <p class="note note-rejects text-danger">
                                 <svg class="svg" width="16" height="16">
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#info">
                                     </use>
-                                </svg><?php echo Labels::getLabel('MSG_YOUR_OFFER_HAS_BEEN_REJECTED_BY_BUYER'); ?>
+                                </svg><?php echo Labels::getLabel('MSG_THIS_OFFER_HAS_BEEN_REJECTED_BY_BUYER'); ?>
                             </p>
                         <?php } ?>
-                        <?php if (RfqOffers::STATUS_ACCEPTED == $row['offer_status']) { ?>
-                            <p class="note">
+                        <?php if (RfqOffers::STATUS_ACCEPTED == $row['offer_status'] || (applicationConstants::YES == $row['rlo_buyer_acceptance'] && 1 > $row['counter_offer_id'])) { ?>
+                            <p class="note note-accepted text-success">
                                 <svg class="svg" width="16" height="16">
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#info">
                                     </use>
-                                </svg><?php echo Labels::getLabel('MSG_YOUR_OFFER_HAS_BEEN_ACCEPTED_BY_BUYER'); ?>
+                                </svg><?php echo Labels::getLabel('MSG_THIS_OFFER_HAS_BEEN_ACCEPTED_BY_BUYER'); ?>
                             </p>
                         <?php } ?>
                     </div>
@@ -159,19 +159,19 @@ if (!isset($tbody)) {
                     <?php } ?>
                     <div class="offer-block-foot">
                         <?php if (RfqOffers::STATUS_REJECTED == $row['counter_offer_status']) { ?>
-                            <p class="note">
+                            <p class="note note-rejects text-danger">
                                 <svg class="svg" width="16" height="16">
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#info">
                                     </use>
-                                </svg><?php echo Labels::getLabel('MSG_YOUR_OFFER_HAS_BEEN_REJECTED_BY_SELLER'); ?>
+                                </svg><?php echo Labels::getLabel('MSG_THIS_OFFER_HAS_BEEN_REJECTED_BY_SELLER'); ?>
                             </p>
                         <?php } ?>
                         <?php if (RfqOffers::STATUS_ACCEPTED == $row['counter_offer_status']) { ?>
-                            <p class="note">
+                            <p class="note note-accepted text-success">
                                 <svg class="svg" width="16" height="16">
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#info">
                                     </use>
-                                </svg><?php echo Labels::getLabel('MSG_YOUR_OFFER_HAS_BEEN_ACCEPTED_BY_SELLER'); ?>
+                                </svg><?php echo Labels::getLabel('MSG_THIS_OFFER_HAS_BEEN_ACCEPTED_BY_SELLER'); ?>
                             </p>
                         <?php } ?>
                         <?php if (1 > $row['counter_offer_id']) { ?>
@@ -186,20 +186,33 @@ if (!isset($tbody)) {
                 </div>
                 <div class="offer-block actions-block">
                     <div class="actions-block-body">
-                        <?php if ($canEdit && !in_array(RfqOffers::STATUS_ACCEPTED, [$row['offer_status'], $row['counter_offer_status']])) { 
+                        <?php if ($canEdit && !in_array(RfqOffers::STATUS_ACCEPTED, [$row['offer_status'], $row['counter_offer_status']])) {
                             $counterOfferId = FatUtility::int($row['counter_offer_id']);
                             $counterOfferId = 1 > $counterOfferId ? $row['offer_id'] : $counterOfferId;
-                            $buyerAcceptance = (applicationConstants::YES == $row['rlo_buyer_acceptance'] || $row['rlo_buyer_offer_id'] > $row['rlo_seller_offer_id']);
-                            ?>
+                            $buyerOffered = $row['rlo_buyer_offer_id'] > $row['rlo_seller_offer_id'];
+                            $buyerAcceptance = (applicationConstants::YES == $row['rlo_buyer_acceptance'] || $buyerOffered);
+                        ?>
                             <?php if (in_array($row['counter_offer_status'], [RfqOffers::STATUS_OPEN, RfqOffers::STATUS_COUNTERED]) && 1 > $row['rlo_seller_acceptance'] && 0 < $buyerAcceptance) { ?>
-                                <button class="btn btn-accept btn-icon" onClick="accept(<?php echo $counterOfferId; ?>,<?php echo  $rfqId; ?>)" data-bs-toggle="tooltip" title="<?php echo Labels::getLabel('LBL_Accept', $siteLangId); ?>">
+                                <button class="btn <?php echo $buyerOffered ? 'btn-accept' : 'btn-info'; ?> btn-icon" onClick="accept(<?php echo $counterOfferId; ?>,<?php echo  $rfqId; ?>)" data-bs-toggle="tooltip" title="<?php echo Labels::getLabel('LBL_SHARE_FINAL_ACCEPTANCE', $siteLangId); ?>">
                                     <svg class="svg" width="16" height="16">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#accept">
                                         </use>
-                                    </svg> <?php echo Labels::getLabel('LBL_ACCEPT'); ?>
+                                    </svg>
+                                    <?php if ($buyerOffered) {
+                                        echo Labels::getLabel('LBL_ACCEPT', $siteLangId);
+                                    } else {
+                                        echo Labels::getLabel('LBL_APPROVE', $siteLangId);
+                                    } ?>
+                                </button>
+                            <?php } else if (RfqOffers::STATUS_REJECTED == $row['counter_offer_status'] && applicationConstants::YES == $row['rlo_buyer_acceptance']) { ?>
+                                <button class="btn btn-info btn-icon" onClick="accept(<?php echo $row['rlo_seller_offer_id']; ?>,<?php echo  $rfqId; ?>)" data-bs-toggle="tooltip" title="<?php echo Labels::getLabel('LBL_SHARE_FINAL_ACCEPTANCE', $siteLangId); ?>">
+                                    <svg class="svg" width="16" height="16">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#accept">
+                                        </use>
+                                    </svg> <?php echo Labels::getLabel('LBL_APPROVE'); ?>
                                 </button>
                             <?php }
-                            if (RfqOffers::STATUS_OPEN == $row['counter_offer_status'] && $row['counter_offer_status'] != null && 1 > $row['rlo_seller_acceptance']) { ?>
+                            if (RfqOffers::STATUS_OPEN == $row['counter_offer_status'] && $row['counter_offer_status'] !== null && 1 > $row['rlo_seller_acceptance']) { ?>
                                 <button class="btn btn-reject btn-icon" onClick="reject(<?php echo $row['counter_offer_id']; ?>,<?php echo $rfqId; ?>)" data-bs-toggle="tooltip" title="<?php echo Labels::getLabel('LBL_Reject', $siteLangId); ?>">
                                     <svg class="svg" width="16" height="16">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#reject">
@@ -235,8 +248,11 @@ if (!isset($tbody)) {
                         <?php } ?>
                     </div>
                     <div class="actions-block-foot">
-                        <button class="link-underline" type="button" onclick="viewShippingRates(<?php echo $rfqId; ?>,<?php echo $row['rlo_seller_user_id']; ?>, <?php echo $row['rlo_primary_offer_id']; ?>)">
-                            <?php echo Labels::getLabel('LBL_SHIPPING_RATES', $siteLangId); ?></button>
+                        <?php if (Product::PRODUCT_TYPE_PHYSICAL == $row['rfq_product_type']) { ?>
+                            <button class="link-underline" type="button" onclick="viewShippingRates(<?php echo $rfqId; ?>,<?php echo $row['rlo_seller_user_id']; ?>, <?php echo $row['rlo_primary_offer_id']; ?>)">
+                                <?php echo Labels::getLabel('LBL_SHIPPING_RATES', $siteLangId); ?>
+                            </button>
+                        <?php } ?>
                         <?php if ($canEdit) { ?>
                             <button class="link-underline" onClick="deleteRecord(<?php echo $rfqId; ?>,<?php echo $row['offer_id']; ?>)" data-bs-toggle="tooltip" title="<?php echo Labels::getLabel('LBL_REMOVE', $siteLangId); ?>"> <?php echo Labels::getLabel('LBL_REMOVE'); ?>
                             </button>

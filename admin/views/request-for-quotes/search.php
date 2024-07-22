@@ -36,19 +36,19 @@ foreach ($arrListing as $sn => $row) {
                         </div>';
                 $td->appendElement('plaintext', array(), $htm, true);
                 break;
+            case 'rfq_status':
+                $html = RequestForQuote::getStatusHtml($row['rfq_status'], $siteLangId);
+                $td->appendElement('plaintext', array(), $html, true);
+                break;
             case 'rfq_approved':
-                if (RequestForQuote::STATUS_CLOSED == $row['rfq_status']) {
-                    $html = HtmlHelper::getStatusHtml(HtmlHelper::DANGER, Labels::getLabel('LBL_CLOSED'));
+                if (RequestForQuote::PENDING == $row[$key]) {
+                    $html = '<select class="form-select form-select-sm custom-select" onchange="approval(event, this, ' . $row['rfq_id'] . ', this.value)">
+                            <option value="' . RequestForQuote::PENDING . '" selected>' . $approvalStatusArr[RequestForQuote::PENDING] . '</option>
+                            <option value="' . RequestForQuote::APPROVED . '">' . $approvalStatusArr[RequestForQuote::APPROVED] . '</option>
+                            <option value="' . RequestForQuote::REJECTED . '">' . $approvalStatusArr[RequestForQuote::REJECTED] . '</option>
+                        </select>';
                 } else {
-                    if (RequestForQuote::PENDING == $row[$key]) {
-                        $html = '<select class="form-select form-select-sm custom-select" onchange="approval(event, this, ' . $row['rfq_id'] . ', this.value)">
-                                <option value="' . RequestForQuote::PENDING . '" selected>' . $approvalStatusArr[RequestForQuote::PENDING] . '</option>
-                                <option value="' . RequestForQuote::APPROVED . '">' . $approvalStatusArr[RequestForQuote::APPROVED] . '</option>
-                                <option value="' . RequestForQuote::REJECTED . '">' . $approvalStatusArr[RequestForQuote::REJECTED] . '</option>
-                            </select>';
-                    } else {
-                        $html = '<span class="' . RequestForQuote::getApprovalStatusBadge($row[$key]) . '">' . $approvalStatusArr[$row[$key]] . '</span>';
-                    }
+                    $html = '<span class="' . RequestForQuote::getApprovalStatusBadge($row[$key]) . '">' . $approvalStatusArr[$row[$key]] . '</span>';
                 }
                 $td->appendElement('plaintext', $tdAttr, $html, true);
                 break;
@@ -59,8 +59,7 @@ foreach ($arrListing as $sn => $row) {
             case 'credential_username':
                 $global = '';
                 if (RequestForQuote::VISIBILITY_TYPE_OPEN == $row['rfq_visibility_type']) {
-                    $labelArr = RequestForQuote::getSellerLinkingTypeArr($siteLangId);
-                    $global = HtmlHelper::getStatusHtml(HtmlHelper::INFO, $labelArr[$row['rfq_visibility_type']]);
+                    $global = HtmlHelper::getStatusHtml(HtmlHelper::INFO, Labels::getLabel('LBL_PUBLIC', $siteLangId));
                 }
                 $href = "javascript:void(0)";
                 $onclick = ($canViewUsers ? 'redirectUser(' . $row['user_id'] . ')' : '');

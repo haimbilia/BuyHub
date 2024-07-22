@@ -81,6 +81,8 @@
     - Bug-085196 - 'Reject' button should appear to buyer when seller has given the offer while the 'Buyer can negotiate the offer' toggle button is disabled.
     - Bug-085191 - RFQ >> suggestion >> 'New' button should be replaced with 'Offer' text.
     - Bug-085186 - RFQ >> Suggestion >> A validation message should be displayed to the seller when they attempt to accept the buyer's counteroffer without linking the inventory
+    - Bug-085183 - 'Accept' button still appears for the seller's offer to the buyer even when seller has accepted the counter offer
+    - Bug-085177 - 'Final Acceptance button does not appear to seller when buyer accepts the offer of seller
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  

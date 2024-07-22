@@ -738,4 +738,32 @@ class RfqOffers extends MyAppModel
         $result = FatApp::getDb()->fetch($srch->getResultSet());
         return $result['rlo_seller_user_id'] ?? 0;
     }
+
+    public static function hasAnyBuyerAcceptedOffer(int $sellerId, int $rfqId)
+    {
+        $srch = new SearchBase(self::DB_RFQ_LATEST_OFFER, 'rlo');
+        $srch->doNotCalculateRecords();
+        $srch->addCondition('rlo_seller_user_id', '=', $sellerId);
+        $srch->addCondition('rlo_rfq_id', '=', $rfqId);
+        $srch->addCondition('rlo_buyer_acceptance', '=', applicationConstants::YES);
+        $srch->addFld('rlo_primary_offer_id');
+        $srch->setPageSize(1);
+        $result = FatApp::getDb()->fetch($srch->getResultSet());
+        return !empty($result);
+    }
+    
+    public static function isAnySellerOfferAccepted(int $sellerId, int $rfqId)
+    {
+        $srch = new SearchBase(self::DB_RFQ_LATEST_OFFER, 'rlo');
+        $srch->doNotCalculateRecords();
+        $srch->addCondition('rlo_seller_user_id', '=', $sellerId);
+        $srch->addCondition('rlo_rfq_id', '=', $rfqId);
+        $srch->addCondition('rlo_buyer_acceptance', '=', applicationConstants::YES);
+        $srch->addCondition('rlo_seller_acceptance', '=', applicationConstants::YES);
+        $srch->addCondition('rlo_status', '=', self::STATUS_ACCEPTED);
+        $srch->addFld('rlo_primary_offer_id');
+        $srch->setPageSize(1);
+        $result = FatApp::getDb()->fetch($srch->getResultSet());
+        return !empty($result);
+    }
 }
