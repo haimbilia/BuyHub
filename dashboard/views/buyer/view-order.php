@@ -6,12 +6,11 @@ $canSubmitFeedback = false;
 $selProdTotalSpecialPrice = 0;
 
 if (true == $primaryOrder) {
+    $canReturnRefund = (in_array($childOrderDetail["op_status_id"], (array) Orders::getBuyerAllowedOrderReturnStatuses($childOrderDetail['op_product_type'])));
     if ($childOrderDetail['op_product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
-        $canCancelOrder = (in_array($childOrderDetail["op_status_id"], (array) Orders::getBuyerAllowedOrderCancellationStatuses(true)));
-        $canReturnRefund = (in_array($childOrderDetail["op_status_id"], (array) Orders::getBuyerAllowedOrderReturnStatuses(true)));
+        $canCancelOrder = (in_array($childOrderDetail["op_status_id"], (array) Orders::getBuyerAllowedOrderCancellationStatuses(true)));       
     } else {
-        $canCancelOrder = (in_array($childOrderDetail["op_status_id"], (array) Orders::getBuyerAllowedOrderCancellationStatuses()));
-        $canReturnRefund = (in_array($childOrderDetail["op_status_id"], (array) Orders::getBuyerAllowedOrderReturnStatuses()));
+        $canCancelOrder = (in_array($childOrderDetail["op_status_id"], (array) Orders::getBuyerAllowedOrderCancellationStatuses()));        
         $datediff = time() - strtotime($childOrderDetail['order_date_added']);
         $daysSpent = $datediff / (60 * 60 * 24);
         $returnAge = $childOrderDetail['op_selprod_return_age'];
