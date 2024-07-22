@@ -1207,6 +1207,14 @@ $(function () {
         });
     };
 
+    setGeoLocation = function () {
+        $.ykmodal(fcom.getLoader());
+        fcom.ajax(fcom.makeUrl("Home", "setGeoLocation"), '', function (ans) {
+            fcom.removeLoader();
+            $.ykmodal(ans, true);
+        });
+    };
+
     guestUserLogin = function (frm, v) {
         v.validate();
         if (!v.isValid()) return;

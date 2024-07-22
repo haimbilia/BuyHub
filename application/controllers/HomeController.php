@@ -1786,6 +1786,11 @@ class HomeController extends MyAppController
         $this->_template->render(false, false);
     }
 
+    public function setGeoLocation()
+    {       
+        $this->_template->render(false, false);
+    }
+
     public function dummy()
     {
         $this->_template->render();
