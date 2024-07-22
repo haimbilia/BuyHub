@@ -26,13 +26,13 @@ if (UserAuthentication::isUserLogged()) {
     }
 }
 
-if (0 < FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0) && (User::isBuyer(true) || !UserAuthentication::isUserLogged())) { ?>
-    <button class="btn btn-outline-brand btn-sm btn-rfq" type="button" onclick="requestForQuoteFn(0);">
-        <?php echo Labels::getLabel('LBL_REQUEST_FOR_QUOTE', $siteLangId); ?>
-    </button>
-<?php }
-
 if ($layoutType == applicationConstants::SCREEN_DESKTOP) {
+    if (0 < FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0) && (User::isBuyer(true) || !UserAuthentication::isUserLogged())) { ?>
+        <button class="btn btn-outline-brand btn-sm btn-rfq" type="button" onclick="requestForQuoteFn(0);">
+            <?php echo Labels::getLabel('LBL_REQUEST_FOR_QUOTE', $siteLangId); ?>
+        </button>
+    <?php }
+
     if (!UserAuthentication::isUserLogged()) {
         if (UserAuthentication::isGuestUserLogged()) { ?>
             <li class="quick-nav-item item-desktop">
@@ -107,7 +107,7 @@ if ($layoutType == applicationConstants::SCREEN_DESKTOP) {
             </div>
         </li>
     <?php }
-        } elseif ($layoutType == applicationConstants::SCREEN_MOBILE) { ?>
+} elseif ($layoutType == applicationConstants::SCREEN_MOBILE) { ?>
     <div class="offcanvas offcanvas-start  offcanvas-account" tabindex="-1" id="offcanvas-account">
         <div class="offcanvas-header">
             <h5 class="offcanvas-title"><?php echo Labels::getLabel('LBL_PROFILE', $siteLangId); ?> </h5>

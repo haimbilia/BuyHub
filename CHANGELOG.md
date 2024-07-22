@@ -83,6 +83,7 @@
     - Bug-085186 - RFQ >> Suggestion >> A validation message should be displayed to the seller when they attempt to accept the buyer's counteroffer without linking the inventory
     - Bug-085183 - 'Accept' button still appears for the seller's offer to the buyer even when seller has accepted the counter offer
     - Bug-085177 - 'Final Acceptance button does not appear to seller when buyer accepts the offer of seller
+    - Bug-085157 - 'Request for Quote' button is displayed on the bottom of the home page also
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  
