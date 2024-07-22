@@ -254,7 +254,7 @@ if (!isset($tbody)) {
                             </button>
                         <?php } ?>
                         <?php if ($canEdit) { ?>
-                            <button class="link-underline" onClick="deleteRecord(<?php echo $rfqId; ?>,<?php echo $row['offer_id']; ?>)" data-bs-toggle="tooltip" title="<?php echo Labels::getLabel('LBL_REMOVE', $siteLangId); ?>"> <?php echo Labels::getLabel('LBL_REMOVE'); ?>
+                            <button class="link-underline" onClick="deleteRecord(<?php echo $rfqId; ?>,<?php echo $row['offer_id']; ?>)" data-bs-toggle="tooltip" title="<?php echo Labels::getLabel('LBL_REMOVE_THIS_RFQ', $siteLangId); ?>"> <?php echo Labels::getLabel('LBL_REMOVE'); ?>
                             </button>
                         <?php } ?>
                     </div>
