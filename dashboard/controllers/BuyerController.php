@@ -39,8 +39,33 @@ class BuyerController extends BuyerBaseController
 
         $srch->addMultipleFields(
             array(
-                'order_number', 'order_id', 'order_user_id', 'op_selprod_id', 'op_is_batch', 'selprod_product_id', 'order_date_added', 'order_net_amount', 'op_invoice_number', 'totCombinedOrders as totOrders', 'op_selprod_title', 'op_product_name', 'op_product_type', 'op_status_id', 'op_id', 'op_qty', 'op_selprod_options', 'op_brand_name', 'op_other_charges', 'op_unit_price', 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name',
-                'orderstatus_color_class', 'order_pmethod_id', 'opshipping_fulfillment_type', 'op_rounding_off', 'op_selprod_return_age', 'op_selprod_cancellation_age'
+                'order_number',
+                'order_id',
+                'order_user_id',
+                'op_selprod_id',
+                'op_is_batch',
+                'selprod_product_id',
+                'order_date_added',
+                'order_net_amount',
+                'op_invoice_number',
+                'totCombinedOrders as totOrders',
+                'op_selprod_title',
+                'op_product_name',
+                'op_product_type',
+                'op_status_id',
+                'op_id',
+                'op_qty',
+                'op_selprod_options',
+                'op_brand_name',
+                'op_other_charges',
+                'op_unit_price',
+                'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name',
+                'orderstatus_color_class',
+                'order_pmethod_id',
+                'opshipping_fulfillment_type',
+                'op_rounding_off',
+                'op_selprod_return_age',
+                'op_selprod_cancellation_age'
             )
         );
         $rs = $srch->getResultSet();
@@ -695,14 +720,41 @@ class BuyerController extends BuyerBaseController
         $srch->setPageSize($pagesize);
         $srch->addMultipleFields(
             array(
-                'order_number', 'order_id', 'order_user_id', 'order_date_added', 'order_net_amount', 'op_invoice_number',
-                'totCombinedOrders as totOrders', 'op_selprod_id', 'op_selprod_title', 'op_product_name', 'op_id', 'op_other_charges', 'op_unit_price',
-                'op_qty', 'op_selprod_options', 'op_brand_name', 'op_shop_name', 'op_status_id', 'op_product_type',
-                'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'orderstatus_color_class',
-                'order_pmethod_id', 'order_status', 'plugin_name', 'IFNULL(orrequest_id, 0) as return_request',
-                'IFNULL(ocrequest_id, 0) as cancel_request', 'op_selprod_return_age',
-                'op_selprod_cancellation_age', 'order_payment_status',
-                'order_deleted', 'plugin_code', 'opshipping_fulfillment_type', 'op_rounding_off', 'selprod_product_id', 'orderstatus_id'
+                'order_number',
+                'order_id',
+                'order_user_id',
+                'order_date_added',
+                'order_net_amount',
+                'op_invoice_number',
+                'totCombinedOrders as totOrders',
+                'op_selprod_id',
+                'op_selprod_title',
+                'op_product_name',
+                'op_id',
+                'op_other_charges',
+                'op_unit_price',
+                'op_qty',
+                'op_selprod_options',
+                'op_brand_name',
+                'op_shop_name',
+                'op_status_id',
+                'op_product_type',
+                'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name',
+                'orderstatus_color_class',
+                'order_pmethod_id',
+                'order_status',
+                'plugin_name',
+                'IFNULL(orrequest_id, 0) as return_request',
+                'IFNULL(ocrequest_id, 0) as cancel_request',
+                'op_selprod_return_age',
+                'op_selprod_cancellation_age',
+                'order_payment_status',
+                'order_deleted',
+                'plugin_code',
+                'opshipping_fulfillment_type',
+                'op_rounding_off',
+                'selprod_product_id',
+                'orderstatus_id'
             )
         );
 
@@ -1227,7 +1279,7 @@ class BuyerController extends BuyerBaseController
             $this->set('msg', $msg);
             $this->_template->render();
         }
-        
+
         FatUtility::dieJsonSuccess($msg);
         //$this->_template->render( false, false, 'json-success.php' );
     }
@@ -1361,8 +1413,20 @@ class BuyerController extends BuyerBaseController
         $srch->setPageSize($pagesize);
         $srch->addMultipleFields(
             array(
-                'orrequest_id', 'orrequest_user_id', 'orrequest_qty', 'orrequest_type', 'orrequest_reference', 'orrequest_date', 'orrequest_status',
-                'op_invoice_number', 'op_selprod_title', 'op_product_name', 'op_brand_name', 'op_selprod_options', 'op_selprod_sku', 'op_product_model',
+                'orrequest_id',
+                'orrequest_user_id',
+                'orrequest_qty',
+                'orrequest_type',
+                'orrequest_reference',
+                'orrequest_date',
+                'orrequest_status',
+                'op_invoice_number',
+                'op_selprod_title',
+                'op_product_name',
+                'op_brand_name',
+                'op_selprod_options',
+                'op_selprod_sku',
+                'op_product_model',
             )
         );
         $requests = FatApp::getDb()->fetchAll($srch->getResultSet());
@@ -1387,8 +1451,25 @@ class BuyerController extends BuyerBaseController
         $srch->addCondition('orrequest_user_id', '=', UserAuthentication::getLoggedUserId());
         $srch->addMultipleFields(
             array(
-                'orrequest_id', 'orrequest_user_id', 'orrequest_qty', 'orrequest_type', 'orrequest_reference', 'orrequest_date', 'orrequest_status',
-                'op_invoice_number', 'op_selprod_title', 'op_product_name', 'op_brand_name', 'op_selprod_options', 'op_selprod_sku', 'op_product_model', 'op_id', 'op_is_batch', 'op_selprod_id', 'order_id', 'order_number'
+                'orrequest_id',
+                'orrequest_user_id',
+                'orrequest_qty',
+                'orrequest_type',
+                'orrequest_reference',
+                'orrequest_date',
+                'orrequest_status',
+                'op_invoice_number',
+                'op_selprod_title',
+                'op_product_name',
+                'op_brand_name',
+                'op_selprod_options',
+                'op_selprod_sku',
+                'op_product_model',
+                'op_id',
+                'op_is_batch',
+                'op_selprod_id',
+                'order_id',
+                'order_number'
             )
         );
         $srch->addOrder('orrequest_date', 'DESC');
@@ -1414,13 +1495,42 @@ class BuyerController extends BuyerBaseController
         $srch->doNotLimitRecords();
         $srch->addMultipleFields(
             array(
-                'orrequest_id', 'orrequest_op_id', 'orrequest_user_id', 'orrequest_qty', 'orrequest_type',
-                'orrequest_date', 'orrequest_status', 'orrequest_reference', 'op_invoice_number', 'op_selprod_title', 'op_product_name',
-                'op_brand_name', 'op_selprod_options', 'op_selprod_sku', 'op_product_model', 'op_qty',
-                'op_unit_price', 'op_selprod_user_id', 'IFNULL(orreason_title, orreason_identifier) as orreason_title',
-                'op_shop_id', 'op_shop_name', 'op_shop_owner_name', 'order_tax_charged', 'op_other_charges', 'op_refund_amount', 'op_commission_percentage',
-                'op_affiliate_commission_percentage', 'op_commission_include_tax', 'op_commission_include_shipping', 'op_free_ship_upto', 'op_actual_shipping_charges',
-                'op_rounding_off', 'op_selprod_id', 'selprod_product_id', 'opshipping_by_seller_user_id', 'op_tax_after_discount'
+                'orrequest_id',
+                'orrequest_op_id',
+                'orrequest_user_id',
+                'orrequest_qty',
+                'orrequest_type',
+                'orrequest_date',
+                'orrequest_status',
+                'orrequest_reference',
+                'op_invoice_number',
+                'op_selprod_title',
+                'op_product_name',
+                'op_brand_name',
+                'op_selprod_options',
+                'op_selprod_sku',
+                'op_product_model',
+                'op_qty',
+                'op_unit_price',
+                'op_selprod_user_id',
+                'IFNULL(orreason_title, orreason_identifier) as orreason_title',
+                'op_shop_id',
+                'op_shop_name',
+                'op_shop_owner_name',
+                'order_tax_charged',
+                'op_other_charges',
+                'op_refund_amount',
+                'op_commission_percentage',
+                'op_affiliate_commission_percentage',
+                'op_commission_include_tax',
+                'op_commission_include_shipping',
+                'op_free_ship_upto',
+                'op_actual_shipping_charges',
+                'op_rounding_off',
+                'op_selprod_id',
+                'selprod_product_id',
+                'opshipping_by_seller_user_id',
+                'op_tax_after_discount'
             )
         );
         $rs = $srch->getResultSet();
@@ -1853,7 +1963,11 @@ class BuyerController extends BuyerBaseController
         $ratingAspects = $selProdRating;
 
         $shopRatingTypesArr = SelProdRating::getShopRatingTypeArr($this->siteLangId);
-        $deliveryRatingTypesArr = SelProdRating::getDeliveryRatingTypeArr($this->siteLangId);
+
+        $deliveryRatingTypesArr = [];
+        if ($opDetail['op_product_type'] != Product::PRODUCT_TYPE_SERVICE) {
+            $deliveryRatingTypesArr = SelProdRating::getDeliveryRatingTypeArr($this->siteLangId);
+        }
 
         if (!empty($shopRatingTypesArr) || !empty($deliveryRatingTypesArr)) {
             $ratingAspects = (0 < count($shopRatingTypesArr)) ? ($shopRatingTypesArr + $ratingAspects) : $ratingAspects;
@@ -1981,7 +2095,10 @@ class BuyerController extends BuyerBaseController
         }
 
         $shopRatingTypesArr = SelProdRating::getShopRatingTypeArr($this->siteLangId);
-        $deliveryRatingTypesArr = SelProdRating::getDeliveryRatingTypeArr($this->siteLangId);
+        $deliveryRatingTypesArr = [];
+        if ($opDetail['op_product_type'] != Product::PRODUCT_TYPE_SERVICE) {
+            $deliveryRatingTypesArr = SelProdRating::getDeliveryRatingTypeArr($this->siteLangId);
+        }
 
         if (!empty($shopRatingTypesArr) || !empty($deliveryRatingTypesArr)) {
             $ratingAspects = (0 < count($shopRatingTypesArr)) ? ($shopRatingTypesArr + $ratingAspects) : $ratingAspects;
@@ -2937,12 +3054,67 @@ class BuyerController extends BuyerBaseController
         $prodSrch->joinTable('(' . $selProdReviewObj->getQuery() . ')', 'LEFT OUTER JOIN', 'sq_sprating.spreview_product_id = product_id', 'sq_sprating');
         $prodSrch->addMultipleFields(
             array(
-                'product_id', 'selprod_sku', 'product_identifier', 'COALESCE(product_name,product_identifier) as product_name', 'product_seller_id', 'product_model', 'product_type', 'prodcat_id', 'COALESCE(prodcat_name,prodcat_identifier) as prodcat_name', 'product_upc', 'product_isbn', 'product_short_description', 'product_description',
-                'selprod_id', 'selprod_user_id', 'selprod_code', 'selprod_condition', 'selprod_price', 'special_price_found', 'splprice_start_date', 'splprice_end_date', 'COALESCE(selprod_title, product_name, product_identifier) as selprod_title', 'selprod_warranty', 'selprod_return_policy', 'selprodComments',
-                'theprice', 'selprod_stock', 'selprod_threshold_stock_level', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'brand_id', 'COALESCE(brand_name, brand_identifier) as brand_name', 'brand_short_description', 'user_name',
-                'shop_id', 'COALESCE(shop_name, shop_identifier) as shop_name', 'COALESCE(sq_sprating.prod_rating,0) prod_rating ', 'COALESCE(sq_sprating.totReviews,0) totReviews',
-                'splprice_display_dis_type', 'splprice_display_dis_val', 'splprice_display_list_price', 'product_attrgrp_id', 'product_youtube_video', 'product_cod_enabled', 'selprod_cod_enabled', 'selprod_available_from', 'selprod_min_order_qty', 'product_updated_on', 'product_warranty', 'selprod_return_age', 'selprod_cancellation_age', 'shop_return_age',
-                'shop_cancellation_age', 'selprod_fulfillment_type', 'shop_fulfillment_type', 'product_fulfillment_type', 'product_attachements_with_inventory', 'selprod_product_id', 'COALESCE(shop_state_l.state_name,state_identifier) as shop_state_name', 'COALESCE(shop_country_l.country_name,shop_country.country_code) as shop_country_name', 'selprod_condition', 'product_warranty_unit'
+                'product_id',
+                'selprod_sku',
+                'product_identifier',
+                'COALESCE(product_name,product_identifier) as product_name',
+                'product_seller_id',
+                'product_model',
+                'product_type',
+                'prodcat_id',
+                'COALESCE(prodcat_name,prodcat_identifier) as prodcat_name',
+                'product_upc',
+                'product_isbn',
+                'product_short_description',
+                'product_description',
+                'selprod_id',
+                'selprod_user_id',
+                'selprod_code',
+                'selprod_condition',
+                'selprod_price',
+                'special_price_found',
+                'splprice_start_date',
+                'splprice_end_date',
+                'COALESCE(selprod_title, product_name, product_identifier) as selprod_title',
+                'selprod_warranty',
+                'selprod_return_policy',
+                'selprodComments',
+                'theprice',
+                'selprod_stock',
+                'selprod_threshold_stock_level',
+                'IF(selprod_stock > 0, 1, 0) AS in_stock',
+                'brand_id',
+                'COALESCE(brand_name, brand_identifier) as brand_name',
+                'brand_short_description',
+                'user_name',
+                'shop_id',
+                'COALESCE(shop_name, shop_identifier) as shop_name',
+                'COALESCE(sq_sprating.prod_rating,0) prod_rating ',
+                'COALESCE(sq_sprating.totReviews,0) totReviews',
+                'splprice_display_dis_type',
+                'splprice_display_dis_val',
+                'splprice_display_list_price',
+                'product_attrgrp_id',
+                'product_youtube_video',
+                'product_cod_enabled',
+                'selprod_cod_enabled',
+                'selprod_available_from',
+                'selprod_min_order_qty',
+                'product_updated_on',
+                'product_warranty',
+                'selprod_return_age',
+                'selprod_cancellation_age',
+                'shop_return_age',
+                'shop_cancellation_age',
+                'selprod_fulfillment_type',
+                'shop_fulfillment_type',
+                'product_fulfillment_type',
+                'product_attachements_with_inventory',
+                'selprod_product_id',
+                'COALESCE(shop_state_l.state_name,state_identifier) as shop_state_name',
+                'COALESCE(shop_country_l.country_name,shop_country.country_code) as shop_country_name',
+                'selprod_condition',
+                'product_warranty_unit'
             )
         );
         $productRs = $prodSrch->getResultSet();
