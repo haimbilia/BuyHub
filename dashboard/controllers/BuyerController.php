@@ -2147,11 +2147,7 @@ class BuyerController extends BuyerBaseController
             FatApp::redirectUser(UrlHelper::generateUrl('Buyer', 'orderReturnRequests'));
         }
 
-        if ($opDetail["op_product_type"] == Product::PRODUCT_TYPE_DIGITAL) {
-            $getBuyerAllowedOrderReturnStatuses = (array) Orders::getBuyerAllowedOrderReturnStatuses(true);
-        } else {
-            $getBuyerAllowedOrderReturnStatuses = (array) Orders::getBuyerAllowedOrderReturnStatuses();
-        }
+        $getBuyerAllowedOrderReturnStatuses = (array) Orders::getBuyerAllowedOrderReturnStatuses($opDetail["op_product_type"]);
 
         if (!in_array($opDetail["op_status_id"], $getBuyerAllowedOrderReturnStatuses)) {
             $orderStatuses = Orders::getOrderProductStatusArr($this->siteLangId);
@@ -2244,11 +2240,7 @@ class BuyerController extends BuyerBaseController
             }
         }
 
-        if ($opDetail["op_product_type"] == Product::PRODUCT_TYPE_DIGITAL) {
-            $getBuyerAllowedOrderReturnStatuses = (array) Orders::getBuyerAllowedOrderReturnStatuses(true);
-        } else {
-            $getBuyerAllowedOrderReturnStatuses = (array) Orders::getBuyerAllowedOrderReturnStatuses();
-        }
+        $getBuyerAllowedOrderReturnStatuses = (array) Orders::getBuyerAllowedOrderReturnStatuses($opDetail["op_product_type"]);
 
         if (!in_array($opDetail["op_status_id"], $getBuyerAllowedOrderReturnStatuses)) {
             $orderStatuses = Orders::getOrderProductStatusArr($this->siteLangId);

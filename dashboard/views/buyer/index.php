@@ -149,13 +149,11 @@ $this->includeTemplate('_partial/dashboardNavigation.php');
                                        
                                         foreach ($orders as $orderId => $row) {
                                             $orderDetailUrl = UrlHelper::generateUrl('Buyer', 'viewOrder', array($row['order_id'], $row['op_id']));
+                                            $canReturnRefund = (in_array($row["op_status_id"], (array)Orders::getBuyerAllowedOrderReturnStatuses($row['op_product_type'])));
                                             if ($row['op_product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
-                                                $canCancelOrder = (in_array($row["op_status_id"], (array)Orders::getBuyerAllowedOrderCancellationStatuses(true)));
-                                                $canReturnRefund = (in_array($row["op_status_id"], (array)Orders::getBuyerAllowedOrderReturnStatuses(true)));
+                                                $canCancelOrder = (in_array($row["op_status_id"], (array)Orders::getBuyerAllowedOrderCancellationStatuses(true)));                                                
                                             } else {
-                                                $canCancelOrder = (in_array($row["op_status_id"], (array)Orders::getBuyerAllowedOrderCancellationStatuses()));
-                                                                                                
-                                                $canReturnRefund = (in_array($row["op_status_id"], (array)Orders::getBuyerAllowedOrderReturnStatuses()));
+                                                $canCancelOrder = (in_array($row["op_status_id"], (array)Orders::getBuyerAllowedOrderCancellationStatuses()));                                                         
                                                 $datediff = time() - strtotime($row['order_date_added']);
                                                 $daysSpent = $datediff / (60 * 60 * 24);
                                                 $returnAge = $row['op_selprod_return_age'];  

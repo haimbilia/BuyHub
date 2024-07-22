@@ -27,13 +27,11 @@
 
         if ($order['op_product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
             $canCancelOrder = true;
-            $canReturnRefund = true;
         } else {
             $canCancelOrder = false;
-            $canReturnRefund = false;
         }
         $canCancelOrder = (in_array($order["op_status_id"], (array) Orders::getBuyerAllowedOrderCancellationStatuses($canCancelOrder)));
-        $canReturnRefund = (in_array($order["op_status_id"], (array) Orders::getBuyerAllowedOrderReturnStatuses($canReturnRefund)));
+        $canReturnRefund = (in_array($order["op_status_id"], (array) Orders::getBuyerAllowedOrderReturnStatuses($order['op_product_type'])));
 
         $isValidForReview = false;
         if (in_array($order["op_status_id"], SelProdReview::getBuyerAllowedOrderReviewStatuses())) {

@@ -60,11 +60,8 @@ if ($canEdit) { ?>
                 </li>
             <?php } ?>
 
-            <?php if (User::canAddCustomProduct() && ($action == 'catalog')) { 
-                $prodUrl = UrlHelper::generateUrl('seller', 'products');
-                if (FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
-                    $prodUrl = UrlHelper::generateUrl('seller', 'catalog');
-                }?>
+            <?php if (User::canAddCustomProduct() && ($action == 'catalog') && !FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) { 
+                $prodUrl = UrlHelper::generateUrl('seller', 'products');                ?>
                 <li>
                     <a href="<?php echo $prodUrl; ?>" class="btn btn-outline-gray btn-icon">
                         <svg class="svg btn-icon-start" width="18" height="18">
