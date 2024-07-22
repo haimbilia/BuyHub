@@ -78,5 +78,7 @@
     - Bug-085113 - The admin can accept the buyer's offer on behalf of the seller when the seller has not linked the product's inventory
     - Bug-085132 - issue on 'RFQ detail' page of buyer and seller account
     - Bug-085112 - 'New' button does not appear for the RFQ sent to a particular seller.
+    - Bug-085196 - 'Reject' button should appear to buyer when seller has given the offer while the 'Buyer can negotiate the offer' toggle button is disabled.
+
 ## Hit URL:
     - admin/patch-update/updateProductRating  
