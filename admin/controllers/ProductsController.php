@@ -197,8 +197,15 @@ class ProductsController extends ListingBaseController
 
         $srch->addMultipleFields(
             array(
-                'product_id', 'product_identifier', 'product_approved', 'product_active', 'product_seller_id',
-                'product_added_on', 'COALESCE(product_name, product_identifier) as product_name', 'user_name', 'product_updated_on'
+                'product_id',
+                'product_identifier',
+                'product_approved',
+                'product_active',
+                'product_seller_id',
+                'product_added_on',
+                'COALESCE(product_name, product_identifier) as product_name',
+                'user_name',
+                'product_updated_on'
             )
         );
 
@@ -331,7 +338,7 @@ class ProductsController extends ListingBaseController
                 $countryData = Countries::getAttributesByLangId($langId, $prodShippingDetails['ps_from_country_id'], [Countries::tblFld('name'), Countries::tblFld('code')], applicationConstants::JOIN_RIGHT, applicationConstants::YES);
                 if (false != $countryData) {
                     $fld = $frm->getField('ps_from_country_id');
-                    if ($fld != null) {
+                    if (null != $fld) {
                         $fld->options = [$prodShippingDetails['ps_from_country_id'] => $countryData[Countries::tblFld('name')] ?? $countryData[Countries::tblFld('code')]];
                     }
                 }

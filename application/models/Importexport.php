@@ -67,7 +67,9 @@ class Importexport extends ImportexportCommon
         switch (strtoupper($type)) {
             case 'EXPORT':
                 $arr[static::TYPE_CATEGORIES] = Labels::getLabel('NAV_CATEGORIES', $langId);
-                $arr[static::TYPE_PRODUCTS] = Labels::getLabel('NAV_MASTER_PRODUCTS', $langId);
+                if (!FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+                    $arr[static::TYPE_PRODUCTS] = Labels::getLabel('NAV_MASTER_PRODUCTS', $langId);
+                }
                 $arr[static::TYPE_SELLER_PRODUCTS] = Labels::getLabel('NAV_SELLER_PRODUCTS', $langId);
                 $arr[static::TYPE_INVENTORIES] = Labels::getLabel('NAV_PRODUCT_INVENTORIES', $langId);
                 // $arr[static::TYPE_INVENTORY_UPDATE] = Labels::getLabel('NAV_INVENTORY_UPDATE', $langId);
@@ -90,7 +92,9 @@ class Importexport extends ImportexportCommon
                 }
                 break;
             case 'IMPORT':
-                $arr[static::TYPE_PRODUCTS] = Labels::getLabel('NAV_MASTER_PRODUCTS', $langId);
+                if (!FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+                    $arr[static::TYPE_PRODUCTS] = Labels::getLabel('NAV_MASTER_PRODUCTS', $langId);
+                }
                 $arr[static::TYPE_SELLER_PRODUCTS] = Labels::getLabel('NAV_SELLER_PRODUCTS', $langId);
                 $arr[static::TYPE_INVENTORIES] = Labels::getLabel('NAV_PRODUCT_INVENTORIES', $langId);
                 // $arr[static::TYPE_INVENTORY_UPDATE] = Labels::getLabel('NAV_INVENTORY_UPDATE', $langId);
