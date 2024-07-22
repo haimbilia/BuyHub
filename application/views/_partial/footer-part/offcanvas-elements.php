@@ -2,7 +2,8 @@
 
 $this->includeTemplate('_partial/footer-part/headerSearchFormArea.php'); ?>
 
-<div class="offcanvas offcanvas-start categories-menu categoriesJs" tabindex="-1" aria-labelledby="categories-menuLabel" id="categories-menu">
+<div class="offcanvas offcanvas-start categories-menu categoriesJs" tabindex="-1" aria-labelledby="categories-menuLabel"
+    id="categories-menu">
     <ul class="grouping grouping-level">
         <li class="skeleton grouping-item"></li>
         <li class="skeleton grouping-item"></li>
@@ -27,7 +28,7 @@ $this->includeTemplate('_partial/footer-part/headerSearchFormArea.php'); ?>
     <div class="offcanvas-body productFiltersJs">
     </div>
 </div>
-<?php if ((!UserAuthentication::isUserLogged() && UserAuthentication::isGuestUserLogged()) ||  UserAuthentication::isUserLogged()) {
+<?php if ((!UserAuthentication::isUserLogged() && UserAuthentication::isGuestUserLogged()) || UserAuthentication::isUserLogged()) {
     $this->includeTemplate('_partial/headerUserArea.php', ['layoutType' => applicationConstants::SCREEN_MOBILE]);
 }
 
@@ -51,10 +52,14 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !em
                     if (empty($geoAddress)) {
                         $geoAddress = Labels::getLabel("LBL_Location", $siteLangId);
                     }
-                    $geoAddress =  isset($_COOKIE["_ykGeoAddress"]) ? $_COOKIE["_ykGeoAddress"] : $geoAddress;
+                    $geoAddress = isset($_COOKIE["_ykGeoAddress"]) ? $_COOKIE["_ykGeoAddress"] : $geoAddress;
                     ?>
                     <div class="geo-location_dropdown-menu">
-                        <div class="geo-location_body"> <input autocomplete="no" id="ga-autoComplete-mobile" class="geo-location_input pac-target-input" title="<?php echo Labels::getLabel('LBL_TYPE_YOUR_ADDRESS', $siteLangId); ?>" placeholder="<?php echo Labels::getLabel('LBL_TYPE_YOUR_ADDRESS', $siteLangId); ?>" type="text" name="location" value="<?php echo $geoAddress; ?>">
+                        <div class="geo-location_body">
+                            <input autocomplete="no" id="ga-autoComplete-mobile" class="geo-location_input pac-target-input"
+                                title="<?php echo Labels::getLabel('LBL_TYPE_YOUR_ADDRESS', $siteLangId); ?>"
+                                placeholder="<?php echo Labels::getLabel('LBL_TYPE_YOUR_ADDRESS', $siteLangId); ?>"
+                                type="text" name="location" value="<?php echo $geoAddress; ?>">
                             <button onclick="loadGeoLocation()" class="btn btn-brand btn-block btn-detect">
 
                                 <svg class="svg" width="18" height="18">
