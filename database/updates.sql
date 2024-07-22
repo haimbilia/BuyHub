@@ -582,3 +582,35 @@ INNER JOIN tbl_rfq_offers ON rlo_primary_offer_id = offer_id
 SET rlo_added_on = offer_added_on;
 
 ALTER TABLE `tbl_rfq_offers` CHANGE `offer_quantity` `offer_quantity` INT NULL;
+
+INSERT INTO `tbl_email_templates` (`etpl_code`, `etpl_lang_id`, `etpl_name`, `etpl_subject`, `etpl_body`, `etpl_replacements`, `etpl_status`) VALUES ('RFQ_OFFER_ACCEPTED_BY_BUYER', '1', 'RFQ Offer Action By Buyer', 'RFQ ({rfq_number}) offer from other Seller accepted by Buyer', '<table width="600px" cellspacing="0" cellpadding="0" style="margin: 0 auto; table-layout: fixed; background: #ffffff; border-radius: 4px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.04)">
+    <tbody>
+        <tr>
+            <td style="background:#fff;padding:20px 0 10px; text-align:center;">
+                <h4
+                    style="font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;">
+                </h4>
+                <h2 style="margin:0; font-size:34px; padding:0;">RFQ ({rfq_number}) offer from other seller accepted by Buyer</h2>
+            </td>
+        </tr>
+        <tr>
+            <td style="background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;">
+                <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+                    <tbody>
+                        <tr>
+                            <td style="padding:20px 0 30px;">
+                                <strong style="font-size:18px;color:#333;">Dear {shop_name} Seller,</strong><br />
+                                Buyer {user_name} has accepted RFQ ({rfq_number}) offer from other seller.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>', '{rfq_number} RFQ Number<br>\r\n{shop_name} Seller`s Shop<br>\r\n{user_name} Buyer Name<br>\r\n{website_name} Name of our website<br>\r\n{website_url} URL of our website<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>\r\n', '1')
+ON DUPLICATE KEY UPDATE etpl_subject = VALUES(etpl_subject), etpl_body = VALUES(etpl_body), etpl_replacements = VALUES(etpl_replacements);
+
+INSERT INTO `tbl_sms_templates` (`stpl_code`, `stpl_lang_id`, `stpl_name`, `stpl_body`, `stpl_replacements`, `stpl_status`) VALUES 
+('RFQ_OFFER_ACCEPTED_BY_BUYER',1,'RFQ offer accepted by Buyer','Dear {shop_name} Seller,\r\n{user_name} has accepted an offer from other seller. \r\n\r\n{SITE_NAME} Team','[{\"title\":\"RFQ Number\", \"variable\":\"{rfq_number}\"},{\"title\":\"Seller`s Shop\", \"variable\":\"{shop_name}\"},{\"title\":\"Buyer Name\", \"variable\":\"{user_name}\"}, {\"title\":\"Website Name\", \"variable\":\"{SITE_NAME}\"}]',1)
+ON DUPLICATE KEY UPDATE stpl_body = VALUES(stpl_body), stpl_replacements = VALUES(stpl_replacements);

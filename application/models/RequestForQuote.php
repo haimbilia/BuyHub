@@ -159,13 +159,15 @@ class RequestForQuote extends MyAppModel
     }
 
     /**
-     * getSellersByRecordId
+     * Retrieves a list of sellers associated with the specified request for quote record.
      *
-     * @param  int $recordId
-     * @param  bool $joinUserTable
-     * @return array
+     * @param int $recordId The ID of the request for quote record.
+     * @param bool $joinUserTable Whether to join the user table and retrieve additional user-related fields.
+     * @param bool $joinShopTable Whether to join the shop table and retrieve additional shop-related fields.
+     * @param int $langId The language ID to use for retrieving localized shop names.
+     * @return array An array of seller data associated with the specified request for quote record.
      */
-    public static function getSellersByRecordId(int $recordId, bool $joinUserTable = false): array
+    public static function getSellersByRecordId(int $recordId, bool $joinUserTable = false, bool $joinShopTable = false, int $langId = 0): array
     {
         $srch = new SearchBase(self::DB_RFQ_TO_SELLERS);
         $srch->doNotCalculateRecords();
@@ -176,7 +178,19 @@ class RequestForQuote extends MyAppModel
             $srch->joinTable(User::DB_TBL_CRED, 'INNER JOIN', 'credential_user_id = user_id', 'uc');
             $attr[] = 'credential_email as shop_user_email';
             $attr[] = 'user_name as shop_user_name';
+            $attr[] = 'user_phone_dcode as seller_phone_dcode';
+            $attr[] = 'user_phone as seller_phone';
         }
+
+        if ($joinShopTable) {
+            $langId = 0 < $langId? $langId : CommonHelper::getLangId();
+            $srch->joinTable(Shop::DB_TBL, 'INNER JOIN', 'shop_user_id = rfqts_user_id', 'sh');
+            $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT JOIN', 'shoplang_shop_id = shop_id AND shoplang_lang_id = ' . $langId, 'sh_l');
+            $attr[] = 'COALESCE(shop_name, shop_identifier) as shop_name';
+            $attr[] = 'shop_phone_dcode';
+            $attr[] = 'shop_phone';
+        }
+
         $srch->addMultipleFields($attr);
         return (array)FatApp::getDb()->fetchAll($srch->getResultSet());
     }

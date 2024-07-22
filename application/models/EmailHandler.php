@@ -3437,6 +3437,31 @@ class EmailHandler extends FatModel
                     return false;
                 }
             }
+
+            if (isset($data['sellers']) && !empty($data['sellers'])) {
+                $acceptedTpl = 'RFQ_OFFER_ACCEPTED_BY_BUYER';
+                foreach ($data['sellers'] as $seller) {
+                    if (!empty($seller['rfqts_user_id']) && $data['seller_user_id'] != $seller['rfqts_user_id'] && !empty($seller['shop_user_email'])) {
+                        $otherVars = array(
+                            '{shop_name}' => $seller['shop_name'],
+                            '{user_name}' => $data['user_name'],
+                            '{rfq_number}' => $data['rfq_number']
+                        );
+
+                        if (!(new FatMailer($langId, $acceptedTpl))
+                            ->setTo($seller['shop_user_email'])
+                            ->setVariables($otherVars)
+                            ->send()) {
+                            return false;
+                        }
+
+                        if (!empty($data['shop_phone_dcode']) && !empty($data['shop_phone'])) {
+                            $otherSellersPhone = ValidateElement::formatDialCode($data['shop_phone_dcode']) . $data['shop_phone'];
+                            $this->sendSms($acceptedTpl, $otherSellersPhone, $otherVars, $langId);
+                        }
+                    }
+                }
+            }
         }
 
         if (!empty($phone)) {

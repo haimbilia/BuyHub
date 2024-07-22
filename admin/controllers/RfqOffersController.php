@@ -571,7 +571,7 @@ class RfqOffersController extends ListingBaseController
         }
 
         $selProdId = RequestForQuote::getSellerProductId($rfqId, $sellerId);
-        if (1 > $selProdId) {
+        if (1 > $selProdId && RfqOffers::STATUS_ACCEPTED == $status) {
             LibHelper::exitWithError(Labels::getLabel('ERR_INVENTORY_NOT_LINKED_WITH_THIS_OFFER'), true);
         }
     }
@@ -609,7 +609,8 @@ class RfqOffersController extends ListingBaseController
             'rlo_primary_offer_id' => $primaryOfferId,
             'rlo_accepted_offer_id' => $recordId,
             'rlo_status' => RfqOffers::STATUS_ACCEPTED,
-            'rlo_seller_acceptance' => applicationConstants::YES
+            'rlo_seller_acceptance' => applicationConstants::YES,
+            'rlo_buyer_acceptance' => applicationConstants::YES,
         ];
 
         if (false == $rfq->updateLatestOffer($data)) {
@@ -617,7 +618,7 @@ class RfqOffersController extends ListingBaseController
             LibHelper::exitWithError($rfq->getError(), true);
         }
 
-        $this->sendOfferActionNotification($recordId, $rfqId);
+        $this->sendOfferActionNotification($recordId, $rfqId, RfqOffers::getSellerIdByOfferId($recordId));
 
         $db->commitTransaction();
         FatUtility::dieJsonSuccess(Labels::getLabel('LBL_SUCCESS'));
@@ -644,18 +645,18 @@ class RfqOffersController extends ListingBaseController
         if (false == $rfq->updateLatestOffer($data)) {
             LibHelper::exitWithError($rfq->getError(), true);
         }
-
-        $this->sendOfferActionNotification($recordId, $rfqId);
+        
+        $this->sendOfferActionNotification($recordId, $rfqId, RfqOffers::getSellerIdByOfferId($recordId));
 
         FatUtility::dieJsonSuccess(Labels::getLabel('LBL_SUCCESS'));
     }
 
-    private function sendOfferActionNotification(int $recordId, int $rfqId)
+    private function sendOfferActionNotification(int $recordId, int $rfqId, int $sellerId)
     {
         $srch = new RequestForQuoteSearch();
         $srch->joinOffers();
         $srch->joinBuyer();
-        $srch->joinSellers('INNER');
+        $srch->joinSellers('INNER', $sellerId);
         $srch->joinSellerProduct(true);
         $srch->joinSellerShop(true);
         $srch->addCondition('rfq_id', '=', $rfqId);
@@ -665,6 +666,7 @@ class RfqOffersController extends ListingBaseController
             'rfq_number',
             'rfq_added_on',
             'rfq_quantity_unit',
+            'rfq_visibility_type',
             'offer_quantity',
             'offer_price',
             'offer_status',

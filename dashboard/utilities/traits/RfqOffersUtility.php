@@ -654,12 +654,12 @@ trait RfqOffersUtility
         }
     }
 
-    private function sendOfferActionNotification(int $recordId, int $rfqId, int $acceptance = 0)
+    private function sendOfferActionNotification(int $recordId, int $rfqId, int $sellerId, int $acceptance = 0)
     {
         $srch = new RequestForQuoteSearch();
         $srch->joinOffers();
         $srch->joinBuyer();
-        $srch->joinSellers('INNER');
+        $srch->joinSellers('INNER', $sellerId);
         $srch->joinSellerUser();
         $srch->joinSellerProduct(true);
         $srch->joinSellerShop(true);
@@ -670,6 +670,7 @@ trait RfqOffersUtility
             'rfq_number',
             'rfq_added_on',
             'rfq_quantity_unit',
+            'rfq_visibility_type',
             'offer_quantity',
             'offer_price',
             'offer_status',
@@ -680,29 +681,52 @@ trait RfqOffersUtility
             'bu.user_phone',
             'buc.credential_email',
             'suc.credential_email as seller_email',
+            'su.user_id as seller_user_id',
             'selprod_id',
             'selprod_product_id',
             'selprod_updated_on',
             'COALESCE(shop_name, shop_identifier) as shop_name',
         ]);
         $offerData = FatApp::getDb()->fetch($srch->getDataResultSet($this->siteLangId));
-        $offerData['isSeller'] = $this->isSeller;
-        $emailHandler = new EmailHandler();
-        if (false === $emailHandler->sendRfqOfferActionNotification($this->siteLangId, $offerData, $acceptance)) {
-            $msg = $emailHandler->getError();
-            $msg = empty($msg) ? Labels::getLabel('ERR_UNABLE_TO_NOTIFY._NOTIFICATION_LOGGED_TO_THE_SYSTEM.', $this->siteLangId) : $msg;
-            LibHelper::exitWithError($msg, true);
+        if (!empty($offerData)) {
+            $offerData['isSeller'] = $this->isSeller;
+            if ($this->isBuyer &&  RfqOffers::BUYER_ACCEPTANCE == $acceptance) {
+                // $offerData['sellers'] = RfqOffers::getNotAcceptedOffersSellerIds($rfqId, true, true, $this->siteLangId);
+                $offerData['sellers'] = RequestForQuote::getSellersByRecordId($rfqId, true, true, $this->siteLangId);
+            }
+
+            $emailHandler = new EmailHandler();
+            if (false === $emailHandler->sendRfqOfferActionNotification($this->siteLangId, $offerData, $acceptance)) {
+                $msg = $emailHandler->getError();
+                $msg = empty($msg) ? Labels::getLabel('ERR_UNABLE_TO_NOTIFY._NOTIFICATION_LOGGED_TO_THE_SYSTEM.', $this->siteLangId) : $msg;
+                LibHelper::exitWithError($msg, true);
+            }
         }
     }
-
+    
     public function sellerAcceptance(int $recordId, int $rfqId)
     {
-        $selProdId = RequestForQuote::getSellerProductId($rfqId, $this->userId);
+        $selProdId = RequestForQuote::getSellerProductId($rfqId, $this->userParentId);
         if (1 > $selProdId) {
             LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_LINK_YOUR_INVENTORY_FIRST'), true);
         }
 
         $this->validateSellerRequest($recordId, $rfqId);
+
+        $rfq = new RfqOffers($recordId);
+        if (false == $rfq->add([
+            'offer_status' => RfqOffers::STATUS_ACCEPTED
+        ])) {
+            LibHelper::exitWithError($rfq->getError(), true);
+        }
+
+        $updateArray = array('rfq_status' => RequestForQuote::STATUS_ACCEPTED);
+        $whr = array('smt' => 'rfq_id = ?', 'vals' => array($rfqId));
+
+        $db = FatApp::getDb();
+        if (!$db->updateFromArray(RequestForQuote::DB_TBL, $updateArray, $whr)) {
+            LibHelper::exitWithError($db->getError(), true);
+        }
 
         $primaryOfferId = (int)RfqOffers::getAttributesById($recordId, 'offer_primary_offer_id');
         $rfq = new RfqOffers();
@@ -710,12 +734,13 @@ trait RfqOffersUtility
             'rlo_primary_offer_id' => $primaryOfferId,
             'rlo_selprod_id' => $selProdId,
             'rlo_accepted_offer_id' => $recordId,
-            'rlo_seller_acceptance' => applicationConstants::YES
+            'rlo_seller_acceptance' => applicationConstants::YES,
+            'rlo_buyer_acceptance' => applicationConstants::YES,
         ];
         if (false == $rfq->updateLatestOffer($data)) {
             LibHelper::exitWithError($rfq->getError(), true);
         }
-        $this->sendOfferActionNotification($recordId, $rfqId, RfqOffers::SELLER_ACCEPTANCE);
+        $this->sendOfferActionNotification($recordId, $rfqId, $this->userParentId, RfqOffers::SELLER_ACCEPTANCE);
 
         $srch = new SearchBase(RfqOffers::DB_RFQ_LATEST_OFFER);
         $srch->doNotCalculateRecords();
@@ -744,21 +769,22 @@ trait RfqOffersUtility
         if (false == $rfq->updateLatestOffer($data)) {
             LibHelper::exitWithError($rfq->getError(), true);
         }
-        $this->sendOfferActionNotification($recordId, $rfqId, RfqOffers::BUYER_ACCEPTANCE);
-
         $srch = new SearchBase(RfqOffers::DB_RFQ_LATEST_OFFER);
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
         $srch->addCondition('rlo_primary_offer_id', '=', $primaryOfferId);
-        $srch->addFld('rlo_seller_acceptance');
-        $sellerAcceptance = ((array)FatApp::getDb()->fetch($srch->getResultSet()))['rlo_seller_acceptance'] ?? 0;
+        $srch->addMultipleFields(['rlo_seller_acceptance', 'rlo_seller_user_id']);
+        $rloResult = FatApp::getDb()->fetch($srch->getResultSet());
+        $sellerAcceptance = $rloResult['rlo_seller_acceptance'] ?? 0;
 
         if (applicationConstants::YES == $sellerAcceptance) {
-            $selProdId = RequestForQuote::getSellerProductId($rfqId, $this->userId);
+            $selProdId = RequestForQuote::getSellerProductId($rfqId, $rloResult['rlo_seller_user_id']);
             if (0 < $selProdId) {
                 $this->accept($recordId, $rfqId);
             }
         }
+
+        $this->sendOfferActionNotification($recordId, $rfqId, $rloResult['rlo_seller_user_id'], RfqOffers::BUYER_ACCEPTANCE);
 
         FatUtility::dieJsonSuccess(Labels::getLabel('LBL_SUCCESS', $this->siteLangId));
     }
@@ -806,7 +832,6 @@ trait RfqOffersUtility
         $db->commitTransaction();
         FatUtility::dieJsonSuccess(Labels::getLabel('LBL_SUCCESS', $this->siteLangId));
     }
-
     public function reject(int $recordId, int $rfqId)
     {
         if ($this->isSeller) {
@@ -833,11 +858,12 @@ trait RfqOffersUtility
             LibHelper::exitWithError($rfq->getError(), true);
         }
 
-        $this->sendOfferActionNotification($recordId, $rfqId);
+        $sellerId = RfqOffers::getSellerIdByOfferId($recordId);
+        $this->sendOfferActionNotification($recordId, $rfqId, $sellerId);
 
         FatUtility::dieJsonSuccess(Labels::getLabel('LBL_SUCCESS', $this->siteLangId));
     }
-
+    
     public function checkout(int $selprodId, int $offerId)
     {
         if (1 > $selprodId || false === $this->isBuyer || 1 > $offerId) {
