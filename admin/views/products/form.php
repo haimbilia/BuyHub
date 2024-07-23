@@ -49,7 +49,7 @@ if (0 < $recordId) {
     echo $imgFrm->getFormHtml();
 
     ?>
-    <script>
+    <script type="text/javascript">
         var canEditTags = <?php echo $canEditTags ? 1 : 0; ?>;
         var tagsEditErr = '<?php echo Labels::getLabel('ERR_NOT_AUTHORIZED_TO_ADD_TAGS', $langId); ?>';
         var tagifyObjs = {};
@@ -157,6 +157,18 @@ if (0 < $recordId) {
                     $('.digitalDownloadSectionJS').removeClass('hide');
                 }
             }
+        });
+
+        $(document).ready(function() {
+            $(".datePickerJs").datepicker("option", {
+                beforeShow: function(input, inst) {                   
+                    $(input).css({    
+                        "position": "relative",                   
+                        "z-index": 1020
+                    });
+                },
+                onClose: function () { $(".datePickerJs").css({ 'z-index': 0 } ); }
+            });
         });
     </script>
 </main>
