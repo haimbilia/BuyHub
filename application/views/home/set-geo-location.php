@@ -10,14 +10,13 @@ if (empty($geoAddress)) {
     $geoAddress = Labels::getLabel("LBL_Location", $siteLangId);
 }
 $geoAddress = isset($_COOKIE["_ykGeoAddress"]) ? $_COOKIE["_ykGeoAddress"] : $geoAddress; ?>
-<div class="modal-header border-0"></div>
 <div class="modal-body">
+    <button type="button" class="btn-close ykmodalJs" data-bs-dismiss="modal" aria-label="Close"></button>
     <div class="geo-location_body">
-        <!-- static -->
         <h5 class="title">
             <?php echo Labels::getLabel("LBL_LOCATION", $siteLangId); ?>
         </h5>
-        <p class="desc">Please provide your delivery location to see products at nearby store</p>
+        <p class="desc"><?php echo Labels::getLabel("MSG_PLEASE_PROVIDE_YOUR_DELIVERY_LOCATION_TO_SEE_PRODUCTS_AT_NEARBY_STORE", $siteLangId); ?></p>
         <div class="form-group">
             <label class="form-label">Change Location </label>
             <?php $value = ($geoAddress == Labels::getLabel("LBL_LOCATION", $siteLangId)) ? "" : $geoAddress; ?>
@@ -26,10 +25,8 @@ $geoAddress = isset($_COOKIE["_ykGeoAddress"]) ? $_COOKIE["_ykGeoAddress"] : $ge
                 placeholder="<?php echo Labels::getLabel('LBL_TYPE_YOUR_ADDRESS', $siteLangId); ?>" type="search"
                 name="location" value="<?php echo $value; ?>">
         </div>
-
         <div class="or">
-            <span>
-                OR </span>
+            <span><?php echo Labels::getLabel("LBL_OR", $siteLangId); ?></span>
         </div>
         <button onclick="loadGeoLocation()" class="btn btn-brand btn-block btn-detect">
             <svg class="svg" width="18" height="18">

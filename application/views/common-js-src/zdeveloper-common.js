@@ -1200,18 +1200,18 @@ $(function () {
     };
 
     showLanguageDropdown = function () {
-        $.ykmodal(fcom.getLoader());
+        $.ykmodal(fcom.getLoader(), true);
         fcom.ajax(fcom.makeUrl("Home", "languageArea"), '', function (ans) {
             fcom.removeLoader();
-            $.ykmodal(ans, true);
+            $.ykmodal(ans, true,'','','',false);
         });
     };
 
     setGeoLocation = function () {
-        $.ykmodal(fcom.getLoader());
+        $.ykmodal(fcom.getLoader(), true);
         fcom.ajax(fcom.makeUrl("Home", "setGeoLocation"), '', function (ans) {
             fcom.removeLoader();
-            $.ykmodal(ans, true);
+            $.ykmodal(ans, true,'','','',false);
         });
     };
 

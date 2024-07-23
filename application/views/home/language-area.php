@@ -2,17 +2,14 @@
 $hasMultipleLangs = ($languages && count($languages) > 1);
 $hasMultipleCurrencies = ($currencies && count($currencies) > 1);
 ?>
-<div class="modal-header border-0"></div>
 <div class="modal-body">
+    <button type="button" class="btn-close ykmodalJs" data-bs-dismiss="modal" aria-label="Close"></button>
     <div class="select-lang-currency">
-
         <h5 class="title">
             <?php echo Labels::getLabel("LBL_UPDATE_YOUR_SETTINGS", $siteLangId); ?>
         </h5>
         <p class="desc"><?php echo Labels::getLabel('MSG_SET_YOUR_LANGUAGE_&_CURRENCY_PREFERENCE', $siteLangId) ?>
         </p>
-
-
         <?php if ($hasMultipleLangs) { ?>
             <h6 class="h6">
                 <?php echo Labels::getLabel('LBL_Select_Language', $siteLangId); ?>
