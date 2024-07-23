@@ -77,7 +77,7 @@ trait CatalogProduct
                 $frm->addHiddenField('', 'selprod_stock', 1);
             }
 
-            $frm->addDateField(Labels::getLabel('FRM_AVAILABLE_FROM', $this->siteLangId), 'selprod_available_from', '', array('readonly' => 'readonly', 'class' => 'field--calender'))->requirements()->setRequired();
+            $frm->addDateField(Labels::getLabel('FRM_AVAILABLE_FROM', $this->siteLangId), 'selprod_available_from', '', array('readonly' => 'readonly', 'class' => 'field--calender datePickerJs'))->requirements()->setRequired();
 
             if ($productType == Product::PRODUCT_TYPE_DIGITAL) {
                 $fld = $frm->addIntegerField(Labels::getLabel('FRM_MAX_DOWNLOAD_TIMES', $this->siteLangId), 'selprod_max_download_times');
