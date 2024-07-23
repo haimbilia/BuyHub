@@ -1,60 +1,55 @@
 .more-sellers {
-    border: $border;
-    border-radius: $common-radius;
-    //border-radius: 2px;
-    margin-top: 2rem;
-
-    &-item {
-        border-bottom: $border;
-
-        padding: 1.5rem 1.5rem;
-
-        &.is-active {
-            background-color: $bg-gray;
-        }
-
-        &:last-child {
-            border: 0;
-        }
+  padding: 1.5rem 1.5rem;
+  &-item {
+    border-bottom: $border;
+    padding: 1.5rem 1.5rem;
+    &.is-active {
+      background-color: $bg-gray;
+      border-radius: $radius;
     }
 
-    &-head {
-        padding: 1rem 1.5rem;
-        padding-bottom: 0;
-        font-weight: $font-weight-bold;
+    &:last-child {
+      border: 0;
+    }
+  }
+
+  &-head {
+    padding: 1rem 1.5rem;
+    padding-bottom: 0;
+    font-weight: $font-weight-bold;
+  }
+
+  .sold-price {
+    font-weight: $font-weight-normal;
+    font-size: 1.125rem;
+  }
+
+  .sold-by {
+    font-size: 0.8rem;
+    display: flex;
+    margin-bottom: 0.6rem;
+    color: $txt-gray;
+
+    &-txt {
+      padding-right: 10px;
+      color: $txt-gray;
     }
 
-    .sold-price {
-        font-weight: $font-weight-normal;
-        font-size: 1.125rem;
+    &-name {
+      text-decoration: underline;
     }
+  }
 
-    .sold-by {
-        font-size: 0.8rem;
-        display: flex;
-        margin-bottom: 0.6rem;
-        color: $txt-gray;
+  .shop-wrap {
+    margin-bottom: 0.6rem;
+  }
 
-        &-txt {
-            padding-right: 10px;
-            color: $txt-gray;
-        }
+  .product-ratings {
+    color: $secondary-color;
+  }
 
-        &-name {
-            text-decoration: underline;
-        }
-    }
-
-    .shop-wrap {
-        margin-bottom: 0.6rem;
-    }
-
-    .product-ratings {
-        color: $secondary-color;
-    }
-
-    .more-link {
-        border: none;
-        margin: 0 auto;
-    }
+  .more-link {
+    border: none;
+    margin: 0 auto;
+  }
 }

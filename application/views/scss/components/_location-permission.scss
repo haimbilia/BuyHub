@@ -1,6 +1,5 @@
 .geo-location {
   display: none;
-
   @include media-breakpoint-up(lg) {
     display: block;
     position: relative;
@@ -50,13 +49,6 @@
     // min-width: 350px;
     // width: 100%;
     padding: 2rem;
-    .title {
-      font-weight: 600;
-    }
-    .desc {
-      font-weight: 600;
-      padding-bottom: 1.5rem;
-    }
   }
 
   .btn-detect {
@@ -104,6 +96,12 @@
   }
 }
 
+.geo-location-modal {
+  .btn-close {
+    float: #{$end-direction};
+    margin: 1.5rem;
+  }
+}
 .geo-location-mobile {
   .button-geo-location {
     margin-bottom: 1.5rem;
@@ -170,8 +168,8 @@
         margin: 0;
         width: 10px;
         height: 10px;
-        border-top: 2px solid $brand-color;
-        border-right: 2px solid $brand-color;
+        border-top: 2px solid currentColor;
+        border-right: 2px solid currentColor;
         transform: rotate(45deg);
 
         [dir="rtl"] & {

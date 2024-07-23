@@ -2,8 +2,9 @@
 $hasMultipleLangs = ($languages && count($languages) > 1);
 $hasMultipleCurrencies = ($currencies && count($currencies) > 1);
 ?>
-<div class="modal-body">
-    <button type="button" class="btn-close ykmodalJs" data-bs-dismiss="modal" aria-label="Close"></button>
+<div class="modal-body custom-modal">
+    <button type="button" class="btn-close btn-close-end  ykmodalJs" data-bs-dismiss="modal"
+        aria-label="Close"></button>
     <div class="select-lang-currency">
         <h5 class="title">
             <?php echo Labels::getLabel("LBL_UPDATE_YOUR_SETTINGS", $siteLangId); ?>

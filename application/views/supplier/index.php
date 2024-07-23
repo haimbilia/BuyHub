@@ -15,7 +15,7 @@ if (!empty($slogan)) {
     $bgImageUrl .= "background-size: $imageSizeType;";
     if ((isset($slogan['epage_content']) && !empty($slogan['epage_content']))) {
         $pageContent = FatUtility::decodeHtmlEntities(nl2br($slogan['epage_content']));
-    }    
+    }
 }
 ?>
 
@@ -48,24 +48,24 @@ if (!empty($slogan)) {
         </div>
     </div>
     <?php if (!empty($block1)) { ?>
-        <section class="section">
+        <section class="section" data-section="section">
             <div class="container"><?php echo FatUtility::decodeHtmlEntities($block1['epage_content']); ?></div>
         </section>
     <?php }
     if (!empty($block2)) { ?>
-        <section class="section bg-gray">
+        <section class="section bg-gray" data-section="section">
             <div class="container"> <?php echo FatUtility::decodeHtmlEntities($block2['epage_content']); ?> </div>
         </section>
     <?php }
     if (!empty($block3)) { ?>
-        <section class="section">
+        <section class="section" data-section="section">
             <div class="container"> <?php echo FatUtility::decodeHtmlEntities($block3['epage_content']); ?> </div>
         </section>
     <?php } ?>
 
     <?php if ($faqCount > 0) { ?>
         <div class="divider"></div>
-        <section class="section">
+        <section class="section" data-section="section">
             <div class="container">
                 <div class="row align-items-center justify-content-center">
                     <div class="col-lg-8">
@@ -75,8 +75,10 @@ if (!empty($slogan)) {
                             </div>
                         </div>
                         <div class="faqsearch">
-                            <form name="frmSearchFaqs" method="post" onsubmit="searchFaqsListing(this); return(false);" class="form" action="javascript:void(0);">
-                                <input placeholder="<?php echo Labels::getLabel('FRM_SEARCH', $siteLangId); ?>" class="faq-input no-focus" id="faqQuestionJs" type="search" name="question" value="">
+                            <form name="frmSearchFaqs" method="post" onsubmit="searchFaqsListing(this); return(false);"
+                                class="form" action="javascript:void(0);">
+                                <input placeholder="<?php echo Labels::getLabel('FRM_SEARCH', $siteLangId); ?>"
+                                    class="faq-input no-focus" id="faqQuestionJs" type="search" name="question" value="">
                             </form>
                         </div>
                     </div>
@@ -98,7 +100,7 @@ if (!empty($slogan)) {
         </section>
         <div class="divider"></div>
     <?php } ?>
-    <section class="section">
+    <section class="section" data-section="section">
         <div class="container">
             <div class="align-center">
                 <div class="section-head section-head-center">
@@ -106,7 +108,9 @@ if (!empty($slogan)) {
                         <h2><?php echo Labels::getLabel('LBL_Still_need_help?', $siteLangId) ?> </h2>
                     </div>
 
-                </div> <a href="<?php echo UrlHelper::generateUrl('custom', 'contact-us'); ?>" class="btn btn-secondary"><?php echo Labels::getLabel('LBL_Contact_Customer_Care', $siteLangId) ?> </a>
+                </div> <a href="<?php echo UrlHelper::generateUrl('custom', 'contact-us'); ?>"
+                    class="btn btn-secondary"><?php echo Labels::getLabel('LBL_Contact_Customer_Care', $siteLangId) ?>
+                </a>
             </div>
         </div>
 

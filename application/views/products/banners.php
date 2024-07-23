@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <?php if (isset($banners) && isset($banners['blocation_active']) && $banners['blocation_active'] && count($banners['banners'])) { ?>
-    <section class="section">
+    <section class="section" data-section="section">
         <div class="container">
             <div class="poster-layout-2">
                 <?php
@@ -14,10 +14,11 @@
                     }
                     $uploadedTime = AttachedFile::setTimeParam($val['banner_updated_on']);
                     $desktopUrl = UrlHelper::generateUrl('Banner', 'BannerImage', array($val['banner_id'], $siteLangId, applicationConstants::SCREEN_DESKTOP, ImageDimension::VIEW_PROD_PROMOTIONAL_BANNER)) . $uploadedTime;
-                ?>
+                    ?>
 
                     <div class="poster">
-                        <a href="<?php echo UrlHelper::generateUrl('Banner', 'track', array($val['banner_id'])); ?>" target="<?php echo $val['banner_target']; ?>" title="<?php echo $val['banner_title']; ?>">
+                        <a href="<?php echo UrlHelper::generateUrl('Banner', 'track', array($val['banner_id'])); ?>"
+                            target="<?php echo $val['banner_target']; ?>" title="<?php echo $val['banner_title']; ?>">
                             <?php
                             $pictureAttr = [
                                 'siteLangId' => $siteLangId,
@@ -30,7 +31,7 @@
                             ?>
                         </a>
                     </div>
-                <?php
+                    <?php
                     if (isset($val['banner_record_id']) && $val['banner_record_id'] > 0 && $val['banner_type'] == Banner::TYPE_PPC) {
                         Promotion::updateImpressionData($val['banner_record_id']);
                     }

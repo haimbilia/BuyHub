@@ -6,7 +6,7 @@
 $products = $orderInfo['orderProducts'];
 ?>
 <div id="body" class="body">
-    <section class="section">
+    <section class="section"  data-section="section">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-xl-9">

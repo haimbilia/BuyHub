@@ -10,13 +10,15 @@ if (empty($geoAddress)) {
     $geoAddress = Labels::getLabel("LBL_Location", $siteLangId);
 }
 $geoAddress = isset($_COOKIE["_ykGeoAddress"]) ? $_COOKIE["_ykGeoAddress"] : $geoAddress; ?>
-<div class="modal-body">
-    <button type="button" class="btn-close ykmodalJs" data-bs-dismiss="modal" aria-label="Close"></button>
+<div class="modal-body custom-modal">
+    <button type="button" class="btn-close btn-close-end ykmodalJs" data-bs-dismiss="modal" aria-label="Close"></button>
     <div class="geo-location_body">
         <h5 class="title">
             <?php echo Labels::getLabel("LBL_LOCATION", $siteLangId); ?>
         </h5>
-        <p class="desc"><?php echo Labels::getLabel("MSG_PLEASE_PROVIDE_YOUR_DELIVERY_LOCATION_TO_SEE_PRODUCTS_AT_NEARBY_STORE", $siteLangId); ?></p>
+        <p class="desc">
+            <?php echo Labels::getLabel("MSG_PLEASE_PROVIDE_YOUR_DELIVERY_LOCATION_TO_SEE_PRODUCTS_AT_NEARBY_STORE", $siteLangId); ?>
+        </p>
         <div class="form-group">
             <label class="form-label">Change Location </label>
             <?php $value = ($geoAddress == Labels::getLabel("LBL_LOCATION", $siteLangId)) ? "" : $geoAddress; ?>

@@ -23,7 +23,7 @@ $fld->developerTags['col'] = 12;
 </script>
 <div id="body" class="body">
     <?php $this->includeTemplate('_partial/page-head-section.php', ['headLabel' => Labels::getLabel('LBL_GET_IN_TOUCH', $siteLangId), 'subHeadLabel' => Labels::getLabel('LBL_GET_IN_TOUCH_TXT', $siteLangId)]); ?>
-    <section class="section">
+    <section class="section" data-section="section">
         <div class="container">
             <div class="row justify-content-center mt-3">
 
@@ -137,11 +137,13 @@ $fld->developerTags['col'] = 12;
                                         <?php
                                         $phone = FatApp::getConfig('CONF_SITE_PHONE', FatUtility::VAR_INT, '');
                                         if (!empty($phone)) {
-                                        ?>
+                                            ?>
                                             <li>
                                                 <span class="icon">
                                                     <svg class="svg" width="18" height="18">
-                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#phones"></use>
+                                                        <use
+                                                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#phones">
+                                                        </use>
                                                     </svg>
                                                 </span>
                                                 <span class="label">
@@ -153,10 +155,12 @@ $fld->developerTags['col'] = 12;
                                         <?php
                                         $fax = FatApp::getConfig('CONF_SITE_FAX', FatUtility::VAR_INT, '');
                                         if (!empty($fax)) {
-                                        ?>
+                                            ?>
                                             <li>
                                                 <span class="icon"><svg class="svg" width="18" height="18">
-                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#fax"></use>
+                                                        <use
+                                                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#fax">
+                                                        </use>
                                                     </svg>
                                                 </span>
                                                 <span class="label">
@@ -167,10 +171,13 @@ $fld->developerTags['col'] = 12;
                                         <?php } ?>
                                         <li>
                                             <span class="icon"><svg class="svg" width="18" height="18">
-                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#customer-care"></use>
+                                                    <use
+                                                        xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#customer-care">
+                                                    </use>
                                                 </svg>
                                             </span>
-                                            <span class="label"><?php echo Labels::getLabel('LBL_24_A_DAY_7_DAYS_WEEK', $siteLangId); ?></span>
+                                            <span
+                                                class="label"><?php echo Labels::getLabel('LBL_24_A_DAY_7_DAYS_WEEK', $siteLangId); ?></span>
                                         </li>
                                     </ul>
                                 </div>
@@ -202,5 +209,6 @@ $fld->developerTags['col'] = 12;
 $siteKey = FatApp::getConfig('CONF_RECAPTCHA_SITEKEY', FatUtility::VAR_STRING, '');
 $secretKey = FatApp::getConfig('CONF_RECAPTCHA_SECRETKEY', FatUtility::VAR_STRING, '');
 if (!empty($siteKey) && !empty($secretKey)) { ?>
-    <script defer src='https://www.google.com/recaptcha/api.js?onload=googleCaptcha&render=<?php echo $siteKey; ?>'></script>
+    <script defer
+        src='https://www.google.com/recaptcha/api.js?onload=googleCaptcha&render=<?php echo $siteKey; ?>'></script>
 <?php } ?>
