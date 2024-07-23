@@ -672,6 +672,7 @@ class RfqOffersController extends ListingBaseController
         $srch->joinOffers();
         $srch->joinBuyer();
         $srch->joinSellers('INNER', $sellerId);
+        $srch->joinSellerUser();
         $srch->joinSellerProduct(true);
         $srch->joinSellerShop(true);
         $srch->addCondition('rfq_id', '=', $rfqId);
