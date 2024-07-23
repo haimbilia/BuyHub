@@ -687,10 +687,12 @@ class RfqOffersController extends ListingBaseController
             'offer_status',
             'offer_comments',
             'offer_added_on',
-            'user_name',
-            'user_phone_dcode',
-            'user_phone',
-            'credential_email',
+            'bu.user_name',
+            'bu.user_phone_dcode',
+            'bu.user_phone',
+            'buc.credential_email',
+            'suc.credential_email as seller_email',
+            'su.user_id as seller_user_id',
             'selprod_id',
             'selprod_product_id',
             'selprod_updated_on',
@@ -698,8 +700,9 @@ class RfqOffersController extends ListingBaseController
         ]);
         $offerData = FatApp::getDb()->fetch($srch->getDataResultSet($this->siteLangId));
         $offerData['isSeller'] = true;
+        $offerData['sellers'] = RequestForQuote::getSellersByRecordId($rfqId, true, true, $this->siteLangId);
         $emailHandler = new EmailHandler();
-        if (false === $emailHandler->sendRfqOfferActionNotification($this->siteLangId, $offerData)) {
+        if (false === $emailHandler->sendRfqOfferActionNotification($this->siteLangId, $offerData, RfqOffers::SELLER_ACCEPTANCE)) {
             $msg = $emailHandler->getError();
             $msg = empty($msg) ? Labels::getLabel('ERR_UNABLE_TO_NOTIFY._NOTIFICATION_LOGGED_TO_THE_SYSTEM.') : $msg;
             LibHelper::exitWithError($msg, true);
