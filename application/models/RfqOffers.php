@@ -470,10 +470,18 @@ class RfqOffers extends MyAppModel
     public static function isBought(int $acceptedOfferId): bool
     {
         $srch = OrderProduct::getSearchObject();
+        $srch->joinTable(Orders::DB_TBL, 'LEFT JOIN', 'op_order_id = order_id', 'o');
+        $srch->joinTable(Plugin::DB_TBL, 'LEFT JOIN', 'order_pmethod_id = plugin_id', 'p');
         $srch->joinTable(Orders::DB_TBL_ORDER_PAYMENTS, 'LEFT JOIN', 'opayment_order_id = op_order_id', 'opay');
-        $srch->addCondition('opayment_id', 'IS NOT', 'mysql_func_NULL', 'AND', true);
-        $cnd = $srch->addCondition('opayment_txn_status', '=', Orders::ORDER_PAYMENT_PAID);
-        $cnd->attachCondition('opayment_method', 'LIKE', 'CashOnDelivery');
+        $srch->addDirectCondition("(
+            (
+                `opayment_id` IS NOT NULL
+                AND (
+                    `opayment_txn_status` = '" . Orders::ORDER_PAYMENT_PAID . "'
+                    OR `opayment_method` LIKE 'CashOnDelivery'
+                )
+            ) OR `plugin_code` LIKE 'TransferBank'
+        )");
         $srch->addCondition('op_offer_id', '=', $acceptedOfferId);
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
