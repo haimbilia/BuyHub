@@ -60,6 +60,14 @@ $productView = $productView ?? false;
                     <?php } ?>
                     <?php if ($totReviews > 0) { ?>
                         <div class="customer-reviews-body">
+                            <div class="all-reviews-images">
+                                <h4 class="mb-4"> <?php echo Labels::getLabel('LBL_REVIEWS_WITH_IMAGES'); ?></h4>
+                                <div class="review-images reviewImagesListJs"></div>
+                                <script>
+                                    reviewsWithImages(<?php echo $product['selprod_id']; ?>);
+                                </script>
+                            </div>
+                            <div class="divider my-5"></div>
                             <div class="rating-layout">
                                 <!-- Rating Section -->
                                 <div class="rating-layout-start">
@@ -73,15 +81,12 @@ $productView = $productView ?? false;
                                                 </div>
                                             <?php } ?>
                                             <div class="product-card-end">
-
                                                 <?php
                                                 if (!empty($product) && !$productView) { ?>
                                                     <div class="product-description">
                                                         <?php include(CONF_THEME_PATH . 'products/product-info.php'); ?>
                                                     </div>
                                                 <?php } ?>
-
-
                                                 <div class="rating-block">
                                                     <div class="average-rating">
                                                         <span class="rate"><?php echo round($avgRating, 1); ?>
@@ -95,7 +100,6 @@ $productView = $productView ?? false;
                                                 </div>
                                             </div>
                                         </div>
-
 
                                         <div class="divider"></div>
                                         <?php $this->includeTemplate('_partial/product-overall-ratings.php', [
