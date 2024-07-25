@@ -40,6 +40,7 @@ You will require the following server specifications for setting up the Yokart s
 - [Documentation](https://www.yo-kart.com/resource-center.html) Find All The Resources At One Place To Help You Setup Your eCommerce Marketplace Successfully.
 - [Server Requirements](https://www.yo-kart.com/yokart-server-requirements.html) Server Requirements.
 
+
 ## Installation Instructions
 
 1. **Prerequisite**
