@@ -32,7 +32,8 @@ foreach ($orderProductsData as $addrKey => $orderProducts) {
     $productHtml = '<table width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color: #fff;padding: 10px 0;">';
     $pickupHtml = '';
     foreach ($orderProducts as $prodkey => $val) {
-        if (isset($val["opshipping_fulfillment_type"]) || (isset($val["op_product_type"]) && $val["op_product_type"] == Product::PRODUCT_TYPE_DIGITAL)) {
+        
+        if (isset($val["opshipping_fulfillment_type"]) || (isset($val["op_product_type"]) && ($val["op_product_type"] == Product::PRODUCT_TYPE_DIGITAL || $val["op_product_type"] == Product::PRODUCT_TYPE_SERVICE))) {
             $opCustomerBuyingPrice = CommonHelper::orderProductAmount($val, 'CART_TOTAL');
             $shippingPrice = CommonHelper::orderProductAmount($val, 'SHIPPING');
             $discountedPrice = CommonHelper::orderProductAmount($val, 'DISCOUNT');
