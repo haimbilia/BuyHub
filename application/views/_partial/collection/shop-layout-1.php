@@ -1,6 +1,6 @@
 <?php
 if (isset($collection['shops']) && count($collection['shops'])) { ?>
-    <section class="section">
+    <section class="section" data-section="section">
         <div class="container">
             <div class="section-head section-head-center">
                 <div class="section-heading">
@@ -8,12 +8,13 @@ if (isset($collection['shops']) && count($collection['shops'])) { ?>
                 </div>
 
             </div>
-            <?php include('shop-layout-1-list.php'); ?>
+            <?php include ('shop-layout-1-list.php'); ?>
             <?php if ($collection['totShops'] > Collections::LIMIT_SHOP_LAYOUT1) { ?>
                 <div class="section-foot">
-                    <a href="<?php echo UrlHelper::generateUrl('Collections', 'View', array($collection['collection_id'])); ?>" class="link-underline"><?php echo Labels::getLabel('LBL_VIEW_ALL', $siteLangId); ?></a>
+                    <a href="<?php echo UrlHelper::generateUrl('Collections', 'View', array($collection['collection_id'])); ?>"
+                        class="link-underline"><?php echo Labels::getLabel('LBL_VIEW_ALL', $siteLangId); ?></a>
                 </div>
-            <?php }  ?>
+            <?php } ?>
         </div>
     </section>
 <?php }

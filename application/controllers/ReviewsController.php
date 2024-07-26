@@ -165,14 +165,19 @@ class ReviewsController extends MyAppController
         $json['recordsToDisplay'] = count($records);
         $totalRecords = $srch->recordCount();
         $json['totalRecords'] = $totalRecords;
-
+        
         if (true === MOBILE_APP_API_CALL) {
             $this->set('totalRecords', $totalRecords);
             $this->_template->render();
         }
         $this->set('reviewId', $reviewId);
 
-        $json['html'] = $this->_template->render(false, false, 'reviews/search-for-product.php', true, false);
+        $tpl = 'reviews/search-for-product.php';
+        if (0 < $withImagesOnly && false === MOBILE_APP_API_CALL) {
+            $tpl = 'reviews/reviews-with-images.php';
+        }
+
+        $json['html'] = $this->_template->render(false, false, $tpl, true, false);
         $json['loadMoreBtnHtml'] = $this->_template->render(false, false, 'reviews/load-more-product-reviews-btn.php', true, false);
         FatUtility::dieJsonSuccess($json);
     }
@@ -272,7 +277,8 @@ class ReviewsController extends MyAppController
             $this->set('userParentId', $userParentId);
         }
 
-        $this->includeFeatherLight();
+        // $this->includeFeatherLight();
+        $this->_template->addJs(['js/jquery.fancybox.min.js']);
         if (1 > $reviewId) {
             $this->_template->render();
         }

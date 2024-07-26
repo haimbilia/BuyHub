@@ -254,6 +254,33 @@ function setupReviewAbuse(frm) {
         }, '', false);
     };
 
+    reviewsWithImages = function (selprodId, page = 1) {
+        riDv = '#itemRatings .reviewImagesListJs';
+        $(riDv).html(fcom.getLoader());
+        data = 'productView=1&selprod_id=' + selprodId + '&withImages=1&page=' + page;
+        fcom.updateWithAjax(fcom.makeUrl('Reviews', 'searchForProduct'), data, function (ans) {
+            fcom.closeProcessing();
+            fcom.removeLoader();
+            if ('' == ans.html && 1 < page) {
+                return;
+            }
+
+            if ('' == ans.html) {
+                $('.reviewsWithImagesSectionJs').remove();
+            } else {
+                $('.reviewsWithImagesSectionJs').fadeIn();
+                $(riDv).append(ans.html);
+                $(riDv + " [data-fancybox]").fancybox({
+                    afterShow: function (instance, current) {
+                        if (current.index === instance.group.length - 1) {
+                            // reviewsWithImages(selprodId, page + 1);
+                        }
+                    }
+                });
+            }
+        }, '', false);
+    };
+
     goToLoadMoreReviews = function (page) {
         if (typeof page == undefined || page == null) {
             page = 1;

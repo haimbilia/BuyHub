@@ -1,8 +1,8 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.');  ?>
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 
 <div id="body" class="body">
     <?php $this->includeTemplate('_partial/page-head-section.php', ['headLabel' => Labels::getLabel('LBL_ALL_TOP_BRANDS'), 'includeBreadcrumb' => true]); ?>
-    <section class="section">
+    <section class="section" data-section="section">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -24,13 +24,14 @@
                                     <div class="item">
                                         <h6 class="big-title"><?php echo $firstCharacter; ?></h6>
                                         <ul>
-                                <?php } ?>
-                                            <li>
-                                                <a href="<?php echo UrlHelper::generateUrl('Brands', 'view', array($brands['brand_id'])); ?>"><?php echo $brands['brand_name']; ?></a>
-                                            </li>
-                            <?php } ?>
-                                        </ul>
-                                    </div>
+                                        <?php } ?>
+                                        <li>
+                                            <a
+                                                href="<?php echo UrlHelper::generateUrl('Brands', 'view', array($brands['brand_id'])); ?>"><?php echo $brands['brand_name']; ?></a>
+                                        </li>
+                                    <?php } ?>
+                                </ul>
+                            </div>
                         <?php } ?>
                     </div>
                 </div>

@@ -2,10 +2,10 @@
 
 use PHPUnit\Framework\Constraint\IsTrue;
 
- defined('SYSTEM_INIT') or die('Invalid Usage.');
+defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 if ($recommendedProducts) { ?>
-    <section class="section">
+    <section class="section" data-section="section">
         <div class="container">
             <div class="section-head">
                 <div class="section-heading">
@@ -20,7 +20,8 @@ if ($recommendedProducts) { ?>
                     </div>
                 </div>
             </div>
-            <div class="js-carousel product-listing recommended-products" id="product-listing-rp" data-slides="4,4,3,2" dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
+            <div class="js-carousel product-listing recommended-products" id="product-listing-rp" data-slides="4,4,3,2"
+                dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
                 <?php
                 $tRightRibbons = $recommendedProductsRibbons['tRightRibbons'];
                 foreach ($recommendedProducts as $rProduct) {
@@ -41,7 +42,8 @@ if ($recommendedProducts) { ?>
                                 } ?>
                                 <?php $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']); ?>
                                 <div class="products-img">
-                                    <a title="<?php echo CommonHelper::renderHtml($rProduct['selprod_title'], true); ?>" href="<?php echo !isset($rProduct['promotion_id']) ? UrlHelper::generateUrl('Products', 'View', array($rProduct['selprod_id'])) : UrlHelper::generateUrl('Products', 'track', array($rProduct['promotion_record_id'])); ?>">
+                                    <a title="<?php echo CommonHelper::renderHtml($rProduct['selprod_title'], true); ?>"
+                                        href="<?php echo !isset($rProduct['promotion_id']) ? UrlHelper::generateUrl('Products', 'View', array($rProduct['selprod_id'])) : UrlHelper::generateUrl('Products', 'track', array($rProduct['promotion_record_id'])); ?>">
                                         <?php $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_PRODUCT_IMAGE, $rProduct['product_id']); ?>
                                         <?php
                                         $pictureAttr = [
@@ -60,17 +62,20 @@ if ($recommendedProducts) { ?>
                             </div>
                             <div class="products-foot">
                                 <div class="products-category">
-                                    <a href="<?php echo UrlHelper::generateUrl('Category', 'View', array($rProduct['prodcat_id'])); ?>">
+                                    <a
+                                        href="<?php echo UrlHelper::generateUrl('Category', 'View', array($rProduct['prodcat_id'])); ?>">
                                         <?php echo CommonHelper::renderHtml($rProduct['prodcat_name'], true); ?>
                                     </a>
                                 </div>
-                                <div class="products-title"><a title="<?php echo CommonHelper::renderHtml($rProduct['selprod_title'], true); ?>" href="<?php echo UrlHelper::generateUrl('Products', 'View', array($rProduct['selprod_id'])); ?>"><?php echo (mb_strlen($rProduct['selprod_title']) > 50) ? mb_substr(CommonHelper::renderHtml($rProduct['selprod_title'], true), 0, 50) . "..." : CommonHelper::renderHtml($rProduct['selprod_title'], true); ?>
+                                <div class="products-title"><a
+                                        title="<?php echo CommonHelper::renderHtml($rProduct['selprod_title'], true); ?>"
+                                        href="<?php echo UrlHelper::generateUrl('Products', 'View', array($rProduct['selprod_id'])); ?>"><?php echo (mb_strlen($rProduct['selprod_title']) > 50) ? mb_substr(CommonHelper::renderHtml($rProduct['selprod_title'], true), 0, 50) . "..." : CommonHelper::renderHtml($rProduct['selprod_title'], true); ?>
                                     </a></div>
                                 <?php $this->includeTemplate('_partial/collection-product-price.php', array('product' => $rProduct, 'siteLangId' => $siteLangId), false); ?>
                             </div>
                         </div>
                     </div>
-                <?php
+                    <?php
                 } ?>
             </div>
         </div>

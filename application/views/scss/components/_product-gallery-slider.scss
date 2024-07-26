@@ -1,152 +1,152 @@
 .product-images {
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  @include media-breakpoint-up(lg) {
+    flex-direction: row;
+  }
+  //grid-template-columns: 1fr 20%;
+  grid-gap: 4rem;
+  & figure,
+  & a,
+  & img {
+    display: block;
+    outline: none;
+    border: none;
+  }
+
+  .main-img-slider {
+    aspect-ratio: 1/1;
+    overflow: hidden;
     width: 100%;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
+    height: 100%;
+    border: none;
+
+    min-width: 0;
+    background-color: $bg-placeholder;
+    //@include placeholder;
     @include media-breakpoint-up(lg) {
-        flex-direction: row;
+      order: 2;
+      outline: $border;
     }
-    //grid-template-columns: 1fr 20%;
-    grid-gap: 4rem;
-    & figure,
-    & a,
-    & img {
-        display: block;
-        outline: none;
-        border: none;
+  }
+  & .thumb-nav {
+    //margin: -10px auto;
+    margin: auto;
+    padding: 0;
+    min-width: 0;
+    display: none;
+    @include media-breakpoint-up(xxl) {
+      max-width: 80px;
+      flex: 0 0 80px;
+      display: block;
     }
-
-    .main-img-slider {
-        aspect-ratio: 1/1;
-        overflow: hidden;
-        width: 100%;
-        height: 100%;
-        border: none;
-
-        min-width: 0;
-        background-color: $bg-placeholder;
-        //@include placeholder;
-        @include media-breakpoint-up(lg) {
-            order: 2;
-            outline: $border;
-        }
-    }
-    & .thumb-nav {
-        //margin: -10px auto;
-        margin: auto;
+    //max-width: 600px;
+    &-item {
+      display: block;
+      margin: 10px auto;
+      // margin-top: 10px;
+      cursor: pointer;
+      aspect-ratio: 1/1;
+      background-color: $bg-placeholder;
+      //@include placeholder;
+      img {
         padding: 0;
-        min-width: 0;
-        display: none;
-        @include media-breakpoint-up(xxl) {
-            max-width: 80px;
-            flex: 0 0 80px;
-            display: block;
-        }
-        //max-width: 600px;
-        &-item {
-            display: block;
-            margin: 10px auto;
-            // margin-top: 10px;
-            cursor: pointer;
-            aspect-ratio: 1/1;
-            background-color: $bg-placeholder;
-            //@include placeholder;
-            img {
-                padding: 0;
-                display: block;
-                width: 100%;
-                max-width: 100px;
-                height: auto;
-                //max-width: 100px;
-                margin: 0 auto;
-                border: none;
-                outline: $border;
-            }
-            &.slick-current img {
-                outline: $border-black;
-                //outline-width: 2px;
-                //border-color: $secondary-color;
-                //box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
-            }
-            &:hover,
-            &:focus {
-                opacity: 0.8;
-            }
-        }
-        .btn-prev {
-            top: 0;
-            left: 0;
-            right: 0;
-            margin: 0 auto;
-            transform: rotate(90deg);
-        }
-        .btn-next {
-            bottom: 0;
-            left: 0;
-            right: 0;
-            top: auto;
-            margin: 0 auto;
-            transform: rotate(90deg);
-        }
+        display: block;
+        width: 100%;
+        max-width: 100px;
+        height: auto;
+        //max-width: 100px;
+        margin: 0 auto;
+        border: none;
+        outline: $border;
+      }
+      &.slick-current img {
+        outline: $border-black;
+        //outline-width: 2px;
+        //border-color: $secondary-color;
+        //box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+      }
+      &:hover,
+      &:focus {
+        opacity: 0.8;
+      }
     }
+    .btn-prev {
+      top: 0;
+      left: 0;
+      right: 0;
+      margin: 0 auto;
+      transform: rotate(90deg);
+    }
+    .btn-next {
+      bottom: 0;
+      left: 0;
+      right: 0;
+      top: auto;
+      margin: 0 auto;
+      transform: rotate(90deg);
+    }
+  }
 }
 
 .slick-slider {
-    .btn {
-        @include media-breakpoint-up(lg) {
-            //border: $border;
-        }
-        padding: 0;
-        width: 42px;
-        height: 42px;
-        // display: block;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 0;
-        z-index: 100;
-        font-size: 2.5em;
-        margin-top: -20px;
-        position: absolute;
-        top: 50%;
-        text-align: center;
-        color: #000;
-        opacity: 0.6;
-        transition: opacity 0.25s;
-        cursor: pointer;
-        background: #ffffff;
-        &-prev {
-            left: 0;
-            span {
-                display: inline-block;
-                border-right: 1px solid black;
-                border-bottom: 1px solid black;
-                width: 10px;
-                height: 10px;
-                transform: rotate(-225deg);
-                margin-#{$end-direction}: -7px;
-            }
-        }
+  .btn {
+    @include media-breakpoint-up(lg) {
+      //border: $border;
+    }
+    padding: 0;
+    width: 42px;
+    height: 42px;
+    // display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0;
+    z-index: 100;
+    font-size: 2.5em;
+    margin-top: -20px;
+    position: absolute;
+    top: 50%;
+    text-align: center;
+    color: #000;
+    opacity: 0.6;
+    transition: opacity 0.25s;
+    cursor: pointer;
+    background: #ffffff;
+    &-prev {
+      left: 0;
+      span {
+        display: inline-block;
+        border-right: 1px solid currentColor;
+        border-bottom: 1px solid currentColor;
+        width: 10px;
+        height: 10px;
+        transform: rotate(-225deg);
+        margin-#{$end-direction}: -7px;
+      }
+    }
 
-        &-next {
-            right: 0;
-            span {
-                display: inline-block;
-                border-right: 1px solid black;
-                border-bottom: 1px solid black;
-                width: 10px;
-                height: 10px;
-                transform: rotate(-45deg);
-                margin-#{$start-direction}: -7px;
-            }
-        }
-        &:hover {
-            opacity: 1;
-        }
+    &-next {
+      right: 0;
+      span {
+        display: inline-block;
+        border-right: 1px solid currentColor;
+        border-bottom: 1px solid currentColor;
+        width: 10px;
+        height: 10px;
+        transform: rotate(-45deg);
+        margin-#{$start-direction}: -7px;
+      }
     }
-    .slick-disabled {
-        opacity: 0.1;
-        cursor: not-allowed;
-        pointer-events: none;
+    &:hover {
+      opacity: 1;
     }
+  }
+  .slick-disabled {
+    opacity: 0.1;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
 }

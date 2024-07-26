@@ -1199,6 +1199,22 @@ $(function () {
         });
     };
 
+    showLanguageDropdown = function () {
+        $.ykmodal(fcom.getLoader(), true);
+        fcom.ajax(fcom.makeUrl("Home", "languageArea"), '', function (ans) {
+            fcom.removeLoader();
+            $.ykmodal(ans, true,'','','',false);
+        });
+    };
+
+    setGeoLocation = function () {
+        $.ykmodal(fcom.getLoader(), true);
+        fcom.ajax(fcom.makeUrl("Home", "setGeoLocation"), '', function (ans) {
+            fcom.removeLoader();
+            $.ykmodal(ans, true,'','','',false);
+        });
+    };
+
     guestUserLogin = function (frm, v) {
         v.validate();
         if (!v.isValid()) return;

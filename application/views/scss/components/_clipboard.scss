@@ -1,66 +1,65 @@
 $clipboard-size: 40px;
 
 .clipboard {
-    position: relative;
-    gap: 10px;
-    flex: 1;
-    //max-width: 400px;
-    width: 100%;
-    background: $bg-gray;
-    border-color: transparent;
-    border-radius: 5px;
-    padding: 0 10px;
-    display: flex;
-    align-items: center;
-    font-size: 0.8rem;
-    //padding: 0.5rem 0.8rem;
-    line-height: 1;
+  position: relative;
+  gap: 10px;
+  flex: 1;
+  //max-width: 400px;
+  width: 100%;
+  background: $bg-gray;
+  border-color: transparent;
+  border-radius: 5px;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  font-size: 0.8rem;
+  //padding: 0.5rem 0.8rem;
+  line-height: 1;
 
-    &:hover,
-    &:focus,
-    &:active {
-        cursor: pointer;
-        background: darken($bg-gray, 05);
-
-        .copy-btn {
-            opacity: 1;
-        }
-    }
-
-    .copy-input {
-
-        //max-width: 248px;
-        width: 100%;
-        cursor: pointer;
-        background-color: transparent;
-        font-size: 0.8rem;
-        border: none;
-        border-radius: $common-radius;
-        padding: 0;
-        color: $txt-gray;
-        font-weight: 600;
-
-        &:focus {
-            outline: none;
-        }
-    }
+  &:hover,
+  &:focus,
+  &:active {
+    cursor: pointer;
+    background: darken($bg-gray, 05);
 
     .copy-btn {
-        opacity: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: $clipboard-size;
-        width: $clipboard-size;
-        background-color: transparent;
-        border: none;
-        border-radius: $common-radius;
-        font-size: 1.2rem;
-        transition: all 0.5s ease;
-
-        &:active,
-        &:focus {
-            box-shadow: none;
-        }
+      opacity: 1;
     }
+  }
+
+  .copy-input {
+    //max-width: 248px;
+    width: 100%;
+    cursor: pointer;
+    background-color: transparent;
+    font-size: 0.8rem;
+    border: none;
+    border-radius: $common-radius;
+    padding: 0;
+    color: $txt-gray;
+    font-weight: $font-weight-bold;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  .copy-btn {
+    opacity: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: $clipboard-size;
+    width: $clipboard-size;
+    background-color: transparent;
+    border: none;
+    border-radius: $common-radius;
+    font-size: 1.2rem;
+    transition: all 0.5s ease;
+
+    &:active,
+    &:focus {
+      box-shadow: none;
+    }
+  }
 }

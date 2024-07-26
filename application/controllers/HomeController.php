@@ -1247,7 +1247,11 @@ class HomeController extends MyAppController
 
                     /* fetch FAQ data[ */
                     $attr = [
-                        'faq_id', 'faqcat_id', 'IFNULL(faq_title, faq_identifier) as faq_title', 'faq_content', 'IFNULL(faqcat_name, faqcat_identifier) as faqcat_name'
+                        'faq_id',
+                        'faqcat_id',
+                        'IFNULL(faq_title, faq_identifier) as faq_title',
+                        'faq_content',
+                        'IFNULL(faqcat_name, faqcat_identifier) as faqcat_name'
                     ];
                     $faqSearchObj = Faq::getSearchObject($langId);
                     $faqSearchTempObj = clone $faqSearchObj;
@@ -1291,7 +1295,8 @@ class HomeController extends MyAppController
 
                     /* fetch FAQ data[ */
                     $attr = [
-                        'faqcat_id', 'IFNULL(faqcat_name, faqcat_identifier) as faqcat_name'
+                        'faqcat_id',
+                        'IFNULL(faqcat_name, faqcat_identifier) as faqcat_name'
                     ];
                     $faqCategorySearchObj = FaqCategory::getSearchObject($langId);
                     $faqCategorySearchObj->joinTable('tbl_faqs', 'LEFT OUTER JOIN', 'faq_faqcat_id = faqcat_id and faq_active = ' . applicationConstants::ACTIVE . '  and faq_deleted = ' . applicationConstants::NO);
@@ -1325,7 +1330,11 @@ class HomeController extends MyAppController
 
                     /* fetch Testimonial data[ */
                     $attr = [
-                        'testimonial_id', 'testimonial_user_name', 'IFNULL(testimonial_title, testimonial_identifier) as testimonial_title', 'testimonial_text', 'testimonial_added_on'
+                        'testimonial_id',
+                        'testimonial_user_name',
+                        'IFNULL(testimonial_title, testimonial_identifier) as testimonial_title',
+                        'testimonial_text',
+                        'testimonial_added_on'
                     ];
                     $testimonialSrchObj = Testimonial::getSearchObject($langId, true);
                     $testimonialSrchObj = clone $testimonialSrchObj;
@@ -1740,7 +1749,9 @@ class HomeController extends MyAppController
             $srch->setPageSize(1);
             $srch->addMultipleFields(array(
                 'meta_title',
-                'meta_keywords', 'meta_description', 'meta_other_meta_tags'
+                'meta_keywords',
+                'meta_description',
+                'meta_other_meta_tags'
             ));
 
             $rs = $srch->getResultSet();
@@ -1753,7 +1764,9 @@ class HomeController extends MyAppController
                 $srch->doNotCalculateRecords();
                 $srch->addMultipleFields(array(
                     'meta_title',
-                    'meta_keywords', 'meta_description', 'meta_other_meta_tags'
+                    'meta_keywords',
+                    'meta_description',
+                    'meta_other_meta_tags'
                 ));
                 $rs = $srch->getResultSet();
                 $metas = FatApp::getDb()->fetch($rs);
@@ -1785,6 +1798,21 @@ class HomeController extends MyAppController
         }
         echo file_get_contents($manifestFile);
         exit;
+    }
+
+    public function languageArea()
+    {
+        $languages = Language::getAllNames(false);
+        $currencies = Currency::getCurrencyAssoc($this->siteLangId);
+
+        $this->set('languages', $languages);
+        $this->set('currencies', $currencies);
+        $this->_template->render(false, false);
+    }
+
+    public function setGeoLocation()
+    {       
+        $this->_template->render(false, false);
     }
 
     public function dummy()

@@ -8,7 +8,7 @@ $showDefalultLi =  (false === $hasMultipleLangs && false === $hasMultipleCurrenc
 if ($hasMultipleLangs || $hasMultipleCurrencies) { ?>
 
     <div class="dropdown dropdown-lang">
-        <button type="button" class="btn btn-outline-gray btn-dropdown dropdown-toggle-custom btn-icon btn-language" data-bs-toggle="dropdown">
+        <button type="button" class="btn btn-outline-gray btn-icon btn-language" onclick="showLanguageDropdown()">
             <?php if ($hasMultipleLangs) {
                 if ($languages[$siteLangId]['language_country_code']) { ?>
                     <img width="14" height="14" class="svg" alt="<?php echo Labels::getLabel('LBL_Language_Flag', $siteLangId); ?>" src="<?php echo CONF_WEBROOT_URL; ?>images/flags/<?php echo FatApp::getConfig('CONF_COUNTRY_FLAG_TYPE', FatUtility::VAR_STRING, 'round'); ?>/<?php echo $languages[$siteLangId]['language_country_code'] . '.svg'; ?>">
@@ -27,43 +27,7 @@ if ($hasMultipleLangs || $hasMultipleCurrencies) { ?>
                     </span>
                 <?php } ?>
                 </span>
-                <i class="dropdown-toggle-custom-arrow"></i>
-        </button>
-        <div class="dropdown-menu dropdown-menu-fit dropdown-menu-anim">
-            <div class="select-lang-currency">
-                <?php if ($hasMultipleLangs) { ?>
-                    <h6 class="h6">
-                        <?php echo Labels::getLabel('LBL_Select_Language', $siteLangId); ?>
-                    </h6>
-                    <ul class="list-options">
-                        <?php foreach ($languages as $langId => $language) { ?>
-                            <li class="list-options-item <?php echo ($siteLangId == $langId) ? ' is-active' : ''; ?>">
-                                <button class="list-options-link" type="button" role="button" onClick="setSiteDefaultLang(<?php echo $langId; ?>)"><?php if ($language['language_country_code']) { ?>
-                                        <img width="14" height="14" class="icon" alt="<?php echo Labels::getLabel('LBL_Language_Flag', $siteLangId); ?>" src="<?php echo CONF_WEBROOT_URL; ?>images/flags/<?php echo FatApp::getConfig('CONF_COUNTRY_FLAG_TYPE', FatUtility::VAR_STRING, 'round'); ?>/<?php echo $language['language_country_code'] . '.svg'; ?>">
-                                    <?php } ?> <?php echo ' ' . $language['language_name']; ?>
-                                </button>
-                            </li>
-                        <?php } ?>
-                    </ul>
-                <?php }
-
-                echo ($hasMultipleLangs && $hasMultipleCurrencies) ? '<div class="space"></div>' : '';
-
-                if ($hasMultipleCurrencies) { ?>
-                    <h6 class="h6">
-                        <?php echo Labels::getLabel('LBL_Select_Currency', $siteLangId); ?>
-                    </h6>
-                    <ul class="list-options">
-                        <?php foreach ($currencies as $currencyId => $currency) { ?>
-                            <li class="list-options-item <?php echo (CommonHelper::getCurrencyId() == $currencyId) ? ' is-active' : ''; ?>">
-                                <button class="list-options-link" type="button" role="button" onClick="setSiteDefaultCurrency(<?php echo $currencyId; ?>)"> <?php echo $currency; ?>
-                                </button>
-                            </li>
-                        <?php } ?>
-                    </ul>
-                <?php } ?>
-            </div>
-        </div>
+        </button>        
     </div>
 
 <?php } ?>
