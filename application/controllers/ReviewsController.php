@@ -70,6 +70,7 @@ class ReviewsController extends MyAppController
 
         $withImagesOnly = FatApp::getPostedData('withImages', FatUtility::VAR_INT, 0);
         $withoutImages = FatApp::getPostedData('withoutImages', FatUtility::VAR_INT, 0);
+        $noGroupBy = FatApp::getPostedData('noGroupBy', FatUtility::VAR_INT, 0);
 
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $orderBy = FatApp::getPostedData('orderBy', FatUtility::VAR_STRING, 'most_recent');
@@ -84,7 +85,9 @@ class ReviewsController extends MyAppController
         $srch->addCondition('spr.spreview_product_id', '=', $productId);
         $srch->addCondition('spr.spreview_status', '=', SelProdReview::STATUS_APPROVED);
         $srch->addMultipleFields(array('spreview_id', 'spreview_selprod_id', 'spreview_title', 'spreview_description', 'spreview_posted_on', 'spreview_postedby_user_id', 'user_name', 'group_concat(case when sprh_helpful = 1 then concat(sprh_user_id,"~",1) else concat(sprh_user_id,"~",0) end ) usersMarked', 'sum(if(sprh_helpful = 1 , 1 ,0)) as helpful', 'sum(if(sprh_helpful = 0 , 1 ,0)) as notHelpful', 'count(sprh_spreview_id) as countUsersMarked', 'user_updated_on'));
-        $srch->addGroupBy('spr.spreview_id');
+        if (1 > $noGroupBy) {
+            $srch->addGroupBy('spr.spreview_id');
+        }
 
         if (0 < $withImagesOnly || 0 < $withoutImages) {
             $join = 0 < $withImagesOnly ? 'INNER' : 'LEFT';
@@ -114,6 +117,7 @@ class ReviewsController extends MyAppController
                 $srch->addOrder('spr.spreview_posted_on', 'desc');
                 break;
         }
+        // echo $srch->getQuery();
         $records = (array) FatApp::getDb()->fetchAll($srch->getResultSet(), 'spreview_id');
 
         $recordRatings = [];
@@ -165,7 +169,7 @@ class ReviewsController extends MyAppController
         $json['recordsToDisplay'] = count($records);
         $totalRecords = $srch->recordCount();
         $json['totalRecords'] = $totalRecords;
-        
+
         if (true === MOBILE_APP_API_CALL) {
             $this->set('totalRecords', $totalRecords);
             $this->_template->render();
