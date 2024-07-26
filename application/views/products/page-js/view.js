@@ -253,7 +253,7 @@ function setupReviewAbuse(frm) {
     reviewsWithImages = function (selprodId, page = 1) {
         riDv = '#itemRatings .reviewImagesListJs';
         $(riDv).html(fcom.getLoader());
-        data = 'productView=1&selprod_id=' + selprodId + '&withImages=1&page=' + page;
+        data = 'productView=1&selprod_id=' + selprodId + '&withImages=1&noGroupBy=1&page=' + page;
         fcom.updateWithAjax(fcom.makeUrl('Reviews', 'searchForProduct'), data, function (ans) {
             fcom.closeProcessing();
             fcom.removeLoader();
