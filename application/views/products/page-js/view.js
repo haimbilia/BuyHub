@@ -256,9 +256,9 @@ function setupReviewAbuse(frm) {
 
     reviewsWithImages = function (selprodId, page = 1) {
         riDv = '#itemRatings .reviewImagesListJs';
-        $(riDv).html(fcom.getLoader());
-        data = 'productView=1&selprod_id=' + selprodId + '&withImages=1&noGroupBy=1&page=' + page;
-        fcom.updateWithAjax(fcom.makeUrl('Reviews', 'searchForProduct'), data, function (ans) {
+        data = 'productView=1&selprod_id=' + selprodId + '&page=' + page;
+        $(riDv).prepend(fcom.getLoader());
+        fcom.updateWithAjax(fcom.makeUrl('Reviews', 'getReviewsImages'), data, function (ans) {
             fcom.closeProcessing();
             fcom.removeLoader();
             if ('' == ans.html && 1 < page) {
@@ -273,7 +273,9 @@ function setupReviewAbuse(frm) {
                 $(riDv + " [data-fancybox]").fancybox({
                     afterShow: function (instance, current) {
                         if (current.index === instance.group.length - 1) {
-                            // reviewsWithImages(selprodId, page + 1);
+                            if(ans.total_records > instance.group.length){
+                                reviewsWithImages(selprodId, page + 1);
+                            }
                         }
                     }
                 });

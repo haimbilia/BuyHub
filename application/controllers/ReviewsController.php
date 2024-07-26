@@ -186,6 +186,31 @@ class ReviewsController extends MyAppController
         FatUtility::dieJsonSuccess($json);
     }
 
+    public function getReviewsImages()
+    {
+        $selProdId = FatApp::getPostedData('selprod_id');
+        $pageSize = FatApp::getPostedData('pageSize', FatUtility::VAR_INT, 10);
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        if ($page < 2) {
+            $page = 1;
+        }
+        
+        $srch = AttachedFile::getSearchObject();
+        $srch->joinTable(SelProdReview::DB_TBL, 'LEFT OUTER JOIN', 'spreview_id = afile_record_id');
+        $srch->addCondition('afile_type', '=', AttachedFile::FILETYPE_ORDER_FEEDBACK);
+        $srch->addCondition('spreview_status', '=', SelProdReview::STATUS_APPROVED);
+        $srch->addCondition('spreview_selprod_id', '=', $selProdId);
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pageSize);
+        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
+        $totalRecords = $srch->recordCount();
+        $this->set('reviewsImages', $records);
+        $this->set('totalRecords', $totalRecords);
+        $json['html'] = $this->_template->render(false, false, 'reviews/reviews-with-images.php', true, false);
+        $json['total_records'] = $totalRecords;
+        FatUtility::dieJsonSuccess($json);
+    }
+
     public function shop($shop_id = 0, $reviewId = 0)
     {
         $shop_id = FatUtility::int($shop_id);
