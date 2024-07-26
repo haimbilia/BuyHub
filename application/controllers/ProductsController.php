@@ -812,7 +812,7 @@ class ProductsController extends MyAppController
             $this->set('productImagesArr', $productGroupImages);
 
 
-            $frmReviewSearch = $this->getReviewSearchForm(5);
+            $frmReviewSearch = $this->getReviewSearchForm();
             $frmReviewSearch->fill(array('selprod_id' => $selprod_id));
             $this->set('frmReviewSearch', $frmReviewSearch);
 
