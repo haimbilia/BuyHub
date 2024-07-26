@@ -17,6 +17,11 @@
 ## Enhancements:
     - Load all categories on ajax call instead of page load.
     - Performance optimization to handle product ratings.
+    - Geo location popup at the header section.
+    - Language and currency selection via popup.
+    - Displayed review images at the top of reviews list.
+    - Performance optimization ar admin end, product search, filters and collections list.
+    
 
 ## Bug Fixes:
     - Bug-074802 - Omise Payment gateway deprecated issue.
