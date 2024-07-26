@@ -909,7 +909,12 @@ class CheckoutController extends MyAppController
             }
         }
 
-        $paymentMethods = array_merge($splitPaymentMethodsPlugins, $regularPaymentMethodsPlugins);
+        $paymentMethods = array_merge($splitPaymentMethodsPlugins, $regularPaymentMethodsPlugins);       
+        $cashOnDeliveryKey = array_search('CashOnDelivery', array_column($paymentMethods, 'plugin_code'));       
+        if ($this->cartObj->hasServiceProduct() && false !== $cashOnDeliveryKey) {
+            unset($paymentMethods[$cashOnDeliveryKey]);
+        }   
+        
         /* ] */
 
         $opComments = FatApp::getPostedData('op_comments');
