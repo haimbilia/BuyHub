@@ -176,12 +176,7 @@ class ReviewsController extends MyAppController
         }
         $this->set('reviewId', $reviewId);
 
-        $tpl = 'reviews/search-for-product.php';
-        if (0 < $withImagesOnly && false === MOBILE_APP_API_CALL) {
-            $tpl = 'reviews/reviews-with-images.php';
-        }
-
-        $json['html'] = $this->_template->render(false, false, $tpl, true, false);
+        $json['html'] = $this->_template->render(false, false, 'reviews/search-for-product.php', true, false);
         $json['loadMoreBtnHtml'] = $this->_template->render(false, false, 'reviews/load-more-product-reviews-btn.php', true, false);
         FatUtility::dieJsonSuccess($json);
     }
@@ -194,7 +189,7 @@ class ReviewsController extends MyAppController
         if ($page < 2) {
             $page = 1;
         }
-        
+
         $srch = AttachedFile::getSearchObject();
         $srch->joinTable(SelProdReview::DB_TBL, 'LEFT OUTER JOIN', 'spreview_id = afile_record_id');
         $srch->addCondition('afile_type', '=', AttachedFile::FILETYPE_ORDER_FEEDBACK);
@@ -206,6 +201,10 @@ class ReviewsController extends MyAppController
         $totalRecords = $srch->recordCount();
         $this->set('reviewsImages', $records);
         $this->set('totalRecords', $totalRecords);
+        $this->set('pageSize', $pageSize);
+        $this->set('page', $page);
+        $this->set('pageCount', $srch->pages());
+        $json['page'] = $page;
         $json['html'] = $this->_template->render(false, false, 'reviews/reviews-with-images.php', true, false);
         $json['total_records'] = $totalRecords;
         FatUtility::dieJsonSuccess($json);
