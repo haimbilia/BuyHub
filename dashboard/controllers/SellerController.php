@@ -607,7 +607,6 @@ class SellerController extends SellerBaseController
         if ($print) {
             $print = true;
         }
-
         $this->set('canEdit', $this->userPrivilege->canEditSales(UserAuthentication::getLoggedUserId(), true));
         $this->set('print', $print);
         $urlParts = array_filter(FatApp::getParameters());

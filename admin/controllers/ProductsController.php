@@ -248,8 +248,10 @@ class ProductsController extends ListingBaseController
         }
 
         $frm = $this->getForm($langId, $productType, $recordId);
-        $prodSellerIdFld = $frm->getField('product_seller_id');
-        $prodSellerIdFld->requirements()->setRequired();
+        if (FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+            $prodSellerIdFld = $frm->getField('product_seller_id');
+            $prodSellerIdFld->requirements()->setRequired();
+        }
 
         $imgFrm = $this->getImageFrm();
         $isSelProdCreatedBySeller = false;
