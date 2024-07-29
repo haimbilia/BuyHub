@@ -2437,8 +2437,8 @@ class SellerController extends SellerBaseController
         $recordInsert = false;
         if ($shop_id > 0) {
             $post['shop_updated_on'] = date('Y-m-d H:i:s');
-            $recordInsert = true;
         } else {
+            $recordInsert = true;
             $post['shop_created_on'] = date('Y-m-d H:i:s');
         }
 
