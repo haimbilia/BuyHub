@@ -14,6 +14,6 @@ if (!empty($reviewsImages)) {
     }
 
     if ($page < $pageCount && count($reviewsImages) == $pageSize) { ?>
-        <div class="image revsMoreImagesJs">9+</div>
+        <div class="image revsMoreImagesJs txt-over">9+</div>
 <?php }
 }
