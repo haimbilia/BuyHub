@@ -194,7 +194,7 @@ class RequestForQuotesController extends MyAppController
             LibHelper::exitWithError(Labels::getLabel('ERR_DELIVERY_ADDRESS_IS_MANDATORY'), true);
         }
 
-        $selprodData = [];
+        $sellerIdArr = $selprodData = [];
         if (0 < $selprodId) {
             $selprodData = SellerProduct::getAttributesByLangId($this->siteLangId, $selprodId, ['selprod_id', 'selprod_title', 'selprod_user_id', 'selprod_product_id', 'selprod_updated_on', 'selprod_code', 'selprod_min_order_qty', 'selprod_rfq_enabled'], applicationConstants::JOIN_INNER);
             if ($post['rfq_quantity'] < $selprodData['selprod_min_order_qty']) {
@@ -206,6 +206,21 @@ class RequestForQuotesController extends MyAppController
             $shopRfqEnabled = Shop::getAttributesByUserId($selprodData['selprod_user_id'], 'shop_rfq_enabled');
             if (!RequestForQuote::isEnabled($shopRfqEnabled, $selprodData['selprod_rfq_enabled'])) {
                 LibHelper::exitWithError(Labels::getLabel('ERR_RFQ_NOT_ENABLED_FOR_THIS_SHOP_OR_PRODUCT.'), true);
+            }
+        } else {
+            $sellerIdArr = FatApp::getPostedData('rfqts_user_id', FatUtility::VAR_INT, 0);
+            $linkingType = FatApp::getPostedData('rfq_seller_linking_type', FatUtility::VAR_INT, RequestForQuote::SELLER_LINKING_OPEN);
+            if (empty($sellerIdArr)) {
+                if (RequestForQuote::SELLER_LINKING_FAVOURITE == $linkingType) {
+                    $sellersArr = Shop::getSellersAutocomplete($this->siteLangId, true, $this->loggedUserId, true);
+                    $sellersArr = $sellersArr['results'] ?? [];
+                    if (empty($sellersArr)) {
+                        LibHelper::exitWithError(Labels::getLabel('ERR_NO_FAVOURITE_SELLERS_FOUND.', $this->siteLangId), true);
+                    }
+                    $sellerIdArr = array_column($sellersArr, 'id');
+                } else {
+                    $sellerIdArr = [];
+                }
             }
         }
 
@@ -248,7 +263,6 @@ class RequestForQuotesController extends MyAppController
             $post['rfq_selprod_code'] = $selprodData['selprod_code'];
         }
 
-        $sellerIdArr = FatApp::getPostedData('rfqts_user_id', FatUtility::VAR_INT, 0);
         if (empty($sellerIdArr) && 1 > $selprodId) {
             $post['rfq_visibility_type'] = RequestForQuote::VISIBILITY_TYPE_OPEN;
         }
@@ -267,8 +281,7 @@ class RequestForQuotesController extends MyAppController
         CalculativeDataRecord::updateRfqCount();
 
         /* When buyer wants to bind with specific seller. */
-        $isOpen = FatApp::getPostedData('rfq_seller_linking_type', FatUtility::VAR_INT, RequestForQuote::SELLER_LINKING_OPEN);
-        if (0 < $sellerIdArr && RequestForQuote::SELLER_LINKING_OPEN != $isOpen) {
+        if (0 < $sellerIdArr && RequestForQuote::SELLER_LINKING_OPEN != $linkingType) {
             foreach ($sellerIdArr as $sellerId) {
                 $rfqToSeller = [
                     'rfqts_rfq_id' => $rfq->getMainTableRecordId(),
@@ -327,7 +340,7 @@ class RequestForQuotesController extends MyAppController
         }
 
         $post['rfq_number'] = $rfq->getRfqNo();
-        $catId = $post['rfq_prodcat_id'] ?? 0; 
+        $catId = $post['rfq_prodcat_id'] ?? 0;
         $catName = '';
         if (0 < $catId) {
             $catData = ProductCategory::getAttributesByLangId($this->siteLangId, $post['rfq_prodcat_id'], ['COALESCE(prodcat_name, prodcat_identifier) as prodcat_name'], applicationConstants::JOIN_RIGHT);
