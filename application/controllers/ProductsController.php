@@ -895,7 +895,7 @@ class ProductsController extends MyAppController
             $this->set('productImagesArr', $productGroupImages);
 
 
-            $frmReviewSearch = $this->getReviewSearchForm(5);
+            $frmReviewSearch = $this->getReviewSearchForm();
             $frmReviewSearch->fill(array('selprod_id' => $selprod_id));
             $this->set('frmReviewSearch', $frmReviewSearch);
 
@@ -972,7 +972,7 @@ class ProductsController extends MyAppController
             $selProdReviewObj->setPageSize(4);
             $selProdReviewObj->addOrder('spr.spreview_posted_on', 'desc');
             $selProdReviewObj->joinTable(AttachedFile::DB_TBL, 'INNER JOIN', 'af.afile_type = ' . AttachedFile::FILETYPE_ORDER_FEEDBACK . ' AND af.afile_record_id = spr.spreview_id', 'af');
-            $selProdReviewObj->addMultipleFields(array('spreview_id', 'user_updated_on', 'spreview_postedby_user_id', 'user_updated_on'));
+            $selProdReviewObj->addMultipleFields(array('spreview_id', 'user_updated_on', 'spreview_postedby_user_id'));
             $reviewsList = (array) FatApp::getDb()->fetchAll($selProdReviewObj->getResultSet(), 'spreview_id');
             $this->set('imageReviewsPageCount', $selProdReviewObj->pages());
             $this->set('imageReviewsRecordCount', $selProdReviewObj->recordCount());
@@ -1081,7 +1081,7 @@ class ProductsController extends MyAppController
 
 
         if (false === MOBILE_APP_API_CALL) {
-            $this->includeFeatherLight();
+            // $this->includeFeatherLight();
             $this->_template->addJs(['js/popper.min.js', 'js/slick.min.js', 'js/jquery.fancybox.min.js']);
         }
         $this->_template->render();

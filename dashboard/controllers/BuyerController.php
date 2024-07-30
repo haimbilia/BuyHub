@@ -377,7 +377,6 @@ class BuyerController extends BuyerBaseController
         }
 
         $orderStatusArr = Orders::getOrderPaymentStatusArr($this->siteLangId);
-
         $arr = (true == $primaryOrderDisplay) ? [$childOrderDetail] : $childOrderDetail;
         $this->set('arr', $arr);
         $orderColorClasses =  OrderStatus::getOrderStatusColorClassArray();

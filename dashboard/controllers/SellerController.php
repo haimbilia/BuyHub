@@ -607,7 +607,6 @@ class SellerController extends SellerBaseController
         if ($print) {
             $print = true;
         }
-
         $this->set('canEdit', $this->userPrivilege->canEditSales(UserAuthentication::getLoggedUserId(), true));
         $this->set('print', $print);
         $urlParts = array_filter(FatApp::getParameters());
@@ -2437,6 +2436,7 @@ class SellerController extends SellerBaseController
         if ($shop_id > 0) {
             $post['shop_updated_on'] = date('Y-m-d H:i:s');
         } else {
+            $recordInsert = true;
             $post['shop_created_on'] = date('Y-m-d H:i:s');
         }
 

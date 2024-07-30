@@ -1,6 +1,6 @@
 <div id="body" class="body">
     <?php $this->includeTemplate('_partial/page-head-section.php', ['headLabel' => Labels::getLabel('LBL_SITEMAP'), 'includeBreadcrumb' => true]); ?>
-    <section class="section">
+    <section class="section" data-section="section">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 ">
@@ -13,7 +13,8 @@
                                 <ul>
                                     <?php
                                     foreach ($contentPages as $contentId => $contentPageName) {
-                                    ?> <li>
+                                        ?>
+                                        <li>
                                             <a href="<?php echo UrlHelper::generateUrl('cms', 'view', array($contentId)); ?>">
                                                 <?php echo $contentPageName; ?>
                                             </a>
@@ -21,7 +22,7 @@
                                     <?php } ?>
                                 </ul>
                             </div>
-                        <?php
+                            <?php
                         }
                         if ($categoriesArr) { ?>
                             <h6 class="big-title">
@@ -30,7 +31,7 @@
                             <div class="item">
                                 <?php $this->includeTemplate('_partial/custom/categories-list.php', array('categoriesArr' => $categoriesArr), false); ?>
                             </div>
-                        <?php
+                            <?php
                         }
                         if (!empty($allShops)) { ?>
                             <h6 class="big-title">
@@ -39,16 +40,17 @@
                             <div class="item ">
                                 <ul>
                                     <?php foreach ($allShops as $shop) {
-                                    ?>
+                                        ?>
                                         <li>
-                                            <a href="<?php echo UrlHelper::generateUrl('Shops', 'view', array($shop['shop_id'])); ?>">
+                                            <a
+                                                href="<?php echo UrlHelper::generateUrl('Shops', 'view', array($shop['shop_id'])); ?>">
                                                 <?php echo $shop['shop_name']; ?>
                                             </a>
                                         </li>
                                     <?php } ?>
                                 </ul>
                             </div>
-                        <?php
+                            <?php
                         }
 
                         if (!empty($allBrands)) { ?>
@@ -58,16 +60,17 @@
                             <div class="item ">
                                 <ul>
                                     <?php foreach ($allBrands as $brands) {
-                                    ?>
+                                        ?>
                                         <li>
-                                            <a href="<?php echo UrlHelper::generateUrl('Brands', 'view', array($brands['brand_id'])); ?>">
+                                            <a
+                                                href="<?php echo UrlHelper::generateUrl('Brands', 'view', array($brands['brand_id'])); ?>">
                                                 <?php echo $brands['brand_name']; ?>
                                             </a>
                                         </li>
                                     <?php } ?>
                                 </ul>
                             </div>
-                        <?php
+                            <?php
                         }
                         ?>
                     </div>

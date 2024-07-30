@@ -1,216 +1,216 @@
 .zeynep {
-    bottom: 0;
-    overflow: hidden;
-    -webkit-overflow-scrolling: touch;
-    overflow-y: auto;
-    pointer-events: none;
-    position: fixed;
-    top: 0;
-    transform: translateX(-100% * $transform-direction) translateZ(0px);
-    z-index: $zindex-offcanvas;
+  bottom: 0;
+  overflow: hidden;
+  -webkit-overflow-scrolling: touch;
+  overflow-y: auto;
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  transform: translateX(-100% * $transform-direction) translateZ(0px);
+  z-index: $zindex-offcanvas;
 }
 
 .zeynep:not(.no-transition),
 .zeynep .submenu:not(.no-transition) {
-    transition: all 250ms;
+  transition: all 250ms;
 }
 
 .zeynep-overlay {
-    background-color: rgba(0, 0, 0, 0.42);
-    bottom: 0;
-    display: none;
-    #{$start-direction}: 0;
-    position: fixed;
-    #{$end-direction}: 0;
-    top: 0;
-    z-index: 1049;
+  background-color: rgba(0, 0, 0, 0.42);
+  bottom: 0;
+  display: none;
+  #{$start-direction}: 0;
+  position: fixed;
+  #{$end-direction}: 0;
+  top: 0;
+  z-index: 1049;
 }
 
 .zeynep-opened .zeynep-overlay {
-    display: block;
+  display: block;
 }
 
 .zeynep.opened {
-    pointer-events: auto;
-    transform: translateX(0px * $transform-direction) translateZ(0px);
+  pointer-events: auto;
+  transform: translateX(0px * $transform-direction) translateZ(0px);
 }
 
 .zeynep.submenu-opened {
-    overflow: hidden;
+  overflow: hidden;
 }
 
 .zeynep .submenu {
-    bottom: 0;
-    min-height: 100%;
-    overflow: hidden;
-    -webkit-overflow-scrolling: touch;
-    overflow-y: auto;
-    pointer-events: none;
-    position: fixed;
-    top: 0;
-    width: 100%;
+  bottom: 0;
+  min-height: 100%;
+  overflow: hidden;
+  -webkit-overflow-scrolling: touch;
+  overflow-y: auto;
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  width: 100%;
 }
 
 .zeynep .submenu.opened {
-    #{$start-direction}: 0;
-    pointer-events: auto;
+  #{$start-direction}: 0;
+  pointer-events: auto;
 }
 
 .zeynep .submenu.opened:not(.current) {
-    overflow: hidden;
+  overflow: hidden;
 }
 
 .lead {
-    font-size: 16px;
-    line-height: 1.44;
-    max-width: 260px;
-    margin: 0 auto;
-    margin-bottom: 25px;
+  font-size: 16px;
+  line-height: 1.44;
+  max-width: 260px;
+  margin: 0 auto;
+  margin-bottom: 25px;
 }
 
 /* zeynepjs menu styles */
 .zeynep {
-    background-color: #ffffff;
-    color: #404143;
-    width: 295px;
+  background-color: #ffffff;
+  color: #404143;
+  width: 295px;
 }
 
 .zeynep ul {
-    list-style-type: none;
-    padding: 0;
-    padding-#{$start-direction}: 0;
-    -webkit-overflow-scrolling: touch;
+  list-style-type: none;
+  padding: 0;
+  padding-#{$start-direction}: 0;
+  -webkit-overflow-scrolling: touch;
 }
 
-.zeynep ul>li {
-    display: block;
+.zeynep ul > li {
+  display: block;
 }
 
-.zeynep ul>li>a {
-    color: inherit;
-    display: block;
-    font-size: 14px;
-    font-weight: $font-weight-normal;
-    padding: 18px 20px;
-    text-decoration: none;
-    transition: all 150ms;
+.zeynep ul > li > a {
+  color: inherit;
+  display: block;
+  font-size: 14px;
+  font-weight: $font-weight-normal;
+  padding: 18px 20px;
+  text-decoration: none;
+  transition: all 150ms;
 }
 
-.zeynep ul>li>a:hover {
-    background-color: #efefef;
-    border-radius: 3px;
+.zeynep ul > li > a:hover {
+  background-color: #efefef;
+  border-radius: 3px;
 }
 
-.zeynep ul>li:not(:last-child)>a {
-    border-bottom: 1px solid #efefef;
+.zeynep ul > li:not(:last-child) > a {
+  border-bottom: 1px solid #efefef;
 }
 
-.zeynep ul>li.has-submenu>a {
-    background-image: url("../images/retina/submenu-arrow.svg");
-    background-position: right 20px center;
-    background-repeat: no-repeat;
-    background-size: 8px 14px;
+.zeynep ul > li.has-submenu > a {
+  background-image: url("../images/retina/submenu-arrow.svg");
+  background-position: right 20px center;
+  background-repeat: no-repeat;
+  background-size: 8px 14px;
 }
 
-.zeynep ul>li.has-submenu>a:hover {
-    background-image: url("../images/retina/submenu-arrow-active.svg");
+.zeynep ul > li.has-submenu > a:hover {
+  background-image: url("../images/retina/submenu-arrow-active.svg");
 }
 
 /* zeynepjs submenu styles */
 .zeynep .submenu {
-    background-color: #ffffff;
-    #{$start-direction}: 295px;
+  background-color: #ffffff;
+  #{$start-direction}: 295px;
 }
 
 .zeynep .submenu-header {
-    background-image: url("../images/retina/menu-back.svg");
-    background-position: left 20px center;
-    background-repeat: no-repeat;
-    background-size: 8px 14px;
-    border-bottom: solid 1px #efefef;
-    cursor: pointer;
-    position: relative;
+  background-image: url("../images/retina/menu-back.svg");
+  background-position: left 20px center;
+  background-repeat: no-repeat;
+  background-size: 8px 14px;
+  border-bottom: solid 1px #efefef;
+  cursor: pointer;
+  position: relative;
 }
 
-.zeynep .submenu-header>a {
-    color: inherit;
-    display: block;
-    font-size: 14px;
-    font-weight: bold;
-    padding: 18px 20px;
-    padding-#{$start-direction}: 40px;
-    text-decoration: none;
+.zeynep .submenu-header > a {
+  color: inherit;
+  display: block;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 18px 20px;
+  padding-#{$start-direction}: 40px;
+  text-decoration: none;
 }
 
-.zeynep .submenu-header>a:before {
-    background-image: url("../images/retina/submenu-arrow.svg");
-    background-position: right 20px center;
-    background-repeat: no-repeat;
-    background-size: 8px 14px;
-    content: "";
-    height: 100%;
-    #{$start-direction}: 26px;
-    position: absolute;
-    top: 0;
-    transform: rotate(-180deg);
-    width: 20px;
+.zeynep .submenu-header > a:before {
+  background-image: url("../images/retina/submenu-arrow.svg");
+  background-position: right 20px center;
+  background-repeat: no-repeat;
+  background-size: 8px 14px;
+  content: "";
+  height: 100%;
+  #{$start-direction}: 26px;
+  position: absolute;
+  top: 0;
+  transform: rotate(-180deg);
+  width: 20px;
 }
 
-.zeynep .submenu>label {
-    color: $brand-color;
-    display: block;
-    font-size: 13px;
-    font-weight: $font-weight-normal;
-    margin-bottom: 8px;
-    margin-top: 19px;
-    //opacity: 0.5;
-    padding-#{$start-direction}: 20px;
-    width: 100%;
+.zeynep .submenu > label {
+  color: $brand-color;
+  display: block;
+  font-size: 13px;
+  font-weight: $font-weight-normal;
+  margin-bottom: 8px;
+  margin-top: 19px;
+  //opacity: 0.5;
+  padding-#{$start-direction}: 20px;
+  width: 100%;
 }
 
 /* left side menu specific styles */
 body {
-    #{$start-direction}: 0;
+  #{$start-direction}: 0;
 }
 
 .zeynep-opened body {
-    overflow: hidden;
+  overflow: hidden;
 }
 
 .zeynep {
-    #{$end-direction}: auto;
-    #{$start-direction}: 0;
+  #{$end-direction}: auto;
+  #{$start-direction}: 0;
 
-    .is-mobile {
-        @include media-breakpoint-up(lg) {
-            display: none;
-        }
+  .is-mobile {
+    @include media-breakpoint-up(lg) {
+      display: none;
     }
+  }
 }
 
 .hamburger-categories {
-    background-color: transparent;
-    border: none;
-    font-size: 1rem;
-    font-weight: $font-weight-bold;
-    color: $txt-body;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+  background-color: transparent;
+  border: none;
+  font-size: 1rem;
+  font-weight: $font-weight-bold;
+  color: $txt-body;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .seemore {
-    >a {
-        font-weight: 600 !important;
-        color: $secondary-color !important;
-        border: none;
+  > a {
+    font-weight: $font-weight-bold !important;
+    color: $secondary-color !important;
+    border: none;
 
-        &::after {
-            content: " →";
+    &::after {
+      content: " →";
 
-            @include media-breakpoint-up(lg) {
-                content: " ↓";
-            }
-        }
+      @include media-breakpoint-up(lg) {
+        content: " ↓";
+      }
     }
+  }
 }

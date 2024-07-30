@@ -4,21 +4,21 @@ if ($reviewsList) { ?>
         <?php foreach ($reviewsList as $review) {
             $images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_ORDER_FEEDBACK, $review['spreview_id']);
             if (!empty($images)) { ?>
-                <h6 class="mb-4"> <?php echo Labels::getLabel('LBL_REVIEWS_WITH_IMAGES'); ?></h6>
+                <h6 class="mb-4"> <?php echo Labels::getLabel('LBL_REVIEW_WITH_IMAGES'); ?></h6>
                 <div class="review-images featherLightGalleryJs">
                     <?php
                     $i = 0;
                     foreach ($images as $image) {
                         $uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);
                         $imgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'review', array($review['spreview_id'], 0, ImageDimension::VIEW_MINI_THUMB, $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                        $largeImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'review', array($review['spreview_id'], 0, ImageDimension::VIEW_LARGE, $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');                      
+                        $largeImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'review', array($review['spreview_id'], 0, ImageDimension::VIEW_LARGE, $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                     ?>
                         <div class="image">
-                            <a class="thumbnail" href="<?php echo $largeImgUrl; ?>" data-featherlight="image">
-                                <img src="<?php echo $imgUrl; ?>" data-altimg="<?php echo $largeImgUrl; ?>">                             
+                            <a class="thumbnail" href="<?php echo $largeImgUrl; ?>" data-fancybox="gallery-<?php echo $review['spreview_id']; ?>">
+                                <img src="<?php echo $imgUrl; ?>" data-altimg="<?php echo $largeImgUrl; ?>">
                             </a>
                         </div>
-                    <?php                      
+                    <?php
                     } ?>
                 </div>
             <?php } ?>
@@ -86,11 +86,11 @@ if ($reviewsList) { ?>
                         </li>
                         <?php if (1 > $reviewId) { ?>
                             <li class="yes-no-item">
-                                <a class="btn btn-light  btn-underline" href="<?php echo UrlHelper::generateUrl('Reviews', 'shopPermalink', array($review['spreview_seller_user_id'], $review['spreview_id'])) ?>">
+                                <a class="link-brand btn-underline" href="<?php echo UrlHelper::generateUrl('Reviews', 'shopPermalink', array($review['spreview_seller_user_id'], $review['spreview_id'])) ?>">
                                     <?php echo Labels::getLabel('LBL_PERMALINK', $siteLangId); ?>
                                 </a>
                             </li>
-                        <?php  } ?>
+                        <?php } ?>
                     </ul>
                 </div>
             </div>

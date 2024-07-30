@@ -5,8 +5,8 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !em
 }
 ?>
 <div id="body" class="body">
-<?php $this->includeTemplate('_partial/page-head-section.php', ['headLabel' => Labels::getLabel("LBL_PRODUCT'S_SELLERS")]); ?>
-    <section class="section">
+    <?php $this->includeTemplate('_partial/page-head-section.php', ['headLabel' => Labels::getLabel("LBL_PRODUCT'S_SELLERS")]); ?>
+    <section class="section" data-section="section">
         <div class="container">
             <div class="grid-layout">
                 <div class="grid-layout-start">
@@ -14,14 +14,17 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !em
                         <div class="product-card">
                             <div class="product-card-start">
                                 <div class="product-card-img">
-                                    <a title="<?php echo $product['selprod_title']; ?>" href="<?php echo UrlHelper::generateUrl('products', 'view', array($product['selprod_id'])); ?>">
-                                        <img <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_SMALL); ?> alt="" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_SMALL, $product['selprod_id'], 0, $siteLangId), CONF_WEBROOT_URL), CONF_IMG_CACHE_TIME, '.jpg'); ?>">
+                                    <a title="<?php echo $product['selprod_title']; ?>"
+                                        href="<?php echo UrlHelper::generateUrl('products', 'view', array($product['selprod_id'])); ?>">
+                                        <img <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_SMALL); ?> alt=""
+                                            src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_SMALL, $product['selprod_id'], 0, $siteLangId), CONF_WEBROOT_URL), CONF_IMG_CACHE_TIME, '.jpg'); ?>">
                                     </a>
                                 </div>
                             </div>
                             <div class="product-card-end">
                                 <div class="product-card-data">
-                                    <a class="title" title="<?php echo $product['selprod_title']; ?>" href="<?php echo UrlHelper::generateUrl('products', 'view', array($product['selprod_id'])); ?>"><?php echo $product['selprod_title']; ?></a>
+                                    <a class="title" title="<?php echo $product['selprod_title']; ?>"
+                                        href="<?php echo UrlHelper::generateUrl('products', 'view', array($product['selprod_id'])); ?>"><?php echo $product['selprod_title']; ?></a>
                                     <?php if (round($product['prod_rating']) > 0 && FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) {
                                         $label = (round($product['prod_rating']) > 0) ? round($product['totReviews'], 1) . ' ' . Labels::getLabel('LBL_Reviews', $siteLangId) : Labels::getLabel('LBL_No_Reviews', $siteLangId); ?>
                                         <div class="rating-block">
@@ -29,7 +32,8 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !em
                                                 <span class="rate">
                                                     <?php echo round($product['prod_rating'], 1); ?>
                                                     <svg class="svg" width="16" height="16">
-                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
+                                                        <use
+                                                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
                                                         </use>
                                                     </svg>
                                                 </span>
@@ -47,12 +51,16 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !em
                         <?php foreach ($product['moreSellersArr'] as $sn => $moresellers) { ?>
                             <div class="seller-card">
                                 <div class="seller-card-head">
-                                    <a title="<?php echo $moresellers['shop_name']; ?>" href="<?php echo UrlHelper::generateUrl('shops', 'view', array($moresellers['shop_id'])); ?>">
-                                        <img class="seller-logo" src="<?php echo UrlHelper::generateFileUrl('image', 'shopLogo', array($moresellers['shop_id'], $siteLangId, ImageDimension::VIEW_THUMB)); ?>" alt="<?php echo $moresellers['shop_name']; ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_SHOP_LOGO, ImageDimension::VIEW_THUMB); ?>>
+                                    <a title="<?php echo $moresellers['shop_name']; ?>"
+                                        href="<?php echo UrlHelper::generateUrl('shops', 'view', array($moresellers['shop_id'])); ?>">
+                                        <img class="seller-logo"
+                                            src="<?php echo UrlHelper::generateFileUrl('image', 'shopLogo', array($moresellers['shop_id'], $siteLangId, ImageDimension::VIEW_THUMB)); ?>"
+                                            alt="<?php echo $moresellers['shop_name']; ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_SHOP_LOGO, ImageDimension::VIEW_THUMB); ?>>
                                     </a>
                                 </div>
                                 <div class="seller-card-body">
-                                    <a class="title" title="<?php echo $moresellers['shop_name']; ?>" href="<?php echo UrlHelper::generateUrl('shops', 'view', array($moresellers['shop_id'])); ?>">
+                                    <a class="title" title="<?php echo $moresellers['shop_name']; ?>"
+                                        href="<?php echo UrlHelper::generateUrl('shops', 'view', array($moresellers['shop_id'])); ?>">
                                         <?php echo $moresellers['shop_name']; ?>
                                     </a>
 
@@ -62,8 +70,11 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !em
                                     <span class="price">
                                         <?php echo CommonHelper::displayMoneyFormat($moresellers['theprice']);
                                         if ($moresellers['selprod_price'] > $moresellers['theprice']) { ?>
-                                            <span class="item__price_old"><?php echo CommonHelper::displayMoneyFormat($moresellers['selprod_price']); ?></span>
-                                            <div class="item__price_off"><?php echo CommonHelper::showProductDiscountedText($moresellers, $siteLangId); ?></div>
+                                            <span
+                                                class="item__price_old"><?php echo CommonHelper::displayMoneyFormat($moresellers['selprod_price']); ?></span>
+                                            <div class="item__price_off">
+                                                <?php echo CommonHelper::showProductDiscountedText($moresellers, $siteLangId); ?>
+                                            </div>
                                         <?php } ?>
                                     </span>
                                     <span class="payment-mode">
@@ -77,7 +88,8 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !em
                                     </span>
                                 </div>
                                 <div class="seller-card-foot">
-                                    <a class="link-underline" href="<?php echo UrlHelper::generateUrl('products', 'view', array($moresellers['selprod_id'])); ?>">
+                                    <a class="link-underline"
+                                        href="<?php echo UrlHelper::generateUrl('products', 'view', array($moresellers['selprod_id'])); ?>">
                                         <?php echo Labels::getLabel('LBL_VIEW_DETAILS'); ?>
                                     </a>
                                     <?php if (true == $displayProductNotAvailableLable && array_key_exists('availableInLocation', $product) && 0 == $product['availableInLocation']) { ?>
@@ -87,7 +99,7 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !em
                                             <button class="btn btn-outline-black btn-sm btnAddToCart--js" type="button" data-id="<?php echo $moresellers['selprod_id']; ?>" data-min-qty="<?php echo $moresellers['selprod_min_order_qty']; ?>">
                                                 <?php echo Labels::getLabel('LBL_Add_To_Cart', $siteLangId); ?>
                                             </button>
-                                    <?php } else {
+                                        <?php } else {
                                             echo CommonHelper::replaceStringData(Labels::getLabel('LBL_THIS_ITEM_WILL_BE_AVAILABLE_FROM_{AVAILABLE-DATE}', $siteLangId), ['{AVAILABLE-DATE}' => FatDate::Format($moresellers['selprod_available_from'])]);
                                         }
                                     } ?>

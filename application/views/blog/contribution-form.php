@@ -15,7 +15,7 @@ $btnSubmitFld->setFieldTagAttribute('class', 'btn btn-brand btn-wide');
 ?>
 <div id="body" class="body">
     <?php $this->includeTemplate('_partial/page-head-section.php', ['headLabel' => Labels::getLabel('LBL_BLOG_CONTRIBUTION'), 'subHeadLabel' => Labels::getLabel('LBL_BLOG_CONTRIBUTION_FORM_DESCRIPTION')]); ?>
-    <section class="section">
+    <section class="section" data-section="section">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-7 bg-gray rounded p-5">
