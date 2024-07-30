@@ -40,5 +40,6 @@
     - Bug-084137 - Please remove the duplicity in the settings
     - Bug-084136 - Need to remove Brand parameters from Inventory Missing Info when linking brand with the catalog is not mandatory
     - Bug-085143 - 404 on the product details page when the new user creates a product.
+    - Bug-085068 - cancellation is not working properly if stripe connect is on.
 ## Hit URL:
     - admin/patch-update/updateProductRating  
