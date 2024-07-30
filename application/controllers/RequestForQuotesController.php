@@ -32,7 +32,7 @@ class RequestForQuotesController extends MyAppController
             }
 
             $frm->addRadioButtons(
-                Labels::getLabel("FRM_INVITE_TO", $this->siteLangId),
+                Labels::getLabel("FRM_TARGETED_SUPPLIERS", $this->siteLangId),
                 'rfq_seller_linking_type',
                 $sellerLinkingTypeArr,
                 RequestForQuote::SELLER_LINKING_OPEN,
@@ -40,9 +40,9 @@ class RequestForQuotesController extends MyAppController
                 array('class' => '')
             );
 
-            $frm->addSelectBox(Labels::getLabel('LBL_CATEGORY'), 'rfq_prodcat_id', []);
-            $frm->addRequiredField(Labels::getLabel('LBL_LOOKING_FOR'), 'rfq_title');
-            $frm->addSelectBox(Labels::getLabel('LBL_SELLER'), 'rfqts_user_id[]', [], '', [], '');
+            $frm->addSelectBox(Labels::getLabel('LBL_PRODUCT/SERVICE_CATEGORY', $this->siteLangId), 'rfq_prodcat_id', []);
+            $frm->addRequiredField(Labels::getLabel('LBL_LOOKING_FOR', $this->siteLangId), 'rfq_title');
+            $frm->addSelectBox(Labels::getLabel('LBL_SUPPLIER`S', $this->siteLangId), 'rfqts_user_id[]', [], '', [], '');
         }
         $frm->addHiddenField('', 'rfq_selprod_id');
         return $frm;
@@ -190,7 +190,8 @@ class RequestForQuotesController extends MyAppController
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
-        if (empty($post['rfq_addr_id'])) {
+        $productType = FatApp::getPostedData('rfq_product_type', FatUtility::VAR_INT, Product::PRODUCT_TYPE_PHYSICAL);
+        if (empty($post['rfq_addr_id']) && Product::PRODUCT_TYPE_DIGITAL != $productType) {
             LibHelper::exitWithError(Labels::getLabel('ERR_DELIVERY_ADDRESS_IS_MANDATORY'), true);
         }
 
@@ -198,7 +199,7 @@ class RequestForQuotesController extends MyAppController
         if (0 < $selprodId) {
             $selprodData = SellerProduct::getAttributesByLangId($this->siteLangId, $selprodId, ['selprod_id', 'selprod_title', 'selprod_user_id', 'selprod_product_id', 'selprod_updated_on', 'selprod_code', 'selprod_min_order_qty', 'selprod_rfq_enabled'], applicationConstants::JOIN_INNER);
             if ($post['rfq_quantity'] < $selprodData['selprod_min_order_qty']) {
-                $msg = Labels::getLabel('ERR_REQUIRED_QUANTITY_SHOULD_BE_GREATER_THAN_EQUAL_TO_{QTY}');
+                $msg = Labels::getLabel('ERR_REQUIRED_QUANTITY_SHOULD_BE_GREATER_THAN_EQUAL_TO_{QTY}', $this->siteLangId);
                 $msg = CommonHelper::replaceStringData($msg, ['{QTY}' => $selprodData['selprod_min_order_qty']]);
                 LibHelper::exitWithError($msg, true);
             }
@@ -207,9 +208,12 @@ class RequestForQuotesController extends MyAppController
             if (!RequestForQuote::isEnabled($shopRfqEnabled, $selprodData['selprod_rfq_enabled'])) {
                 LibHelper::exitWithError(Labels::getLabel('ERR_RFQ_NOT_ENABLED_FOR_THIS_SHOP_OR_PRODUCT.'), true);
             }
+
+            $post['rfq_product_type'] = Product::getAttributesById($selprodData['selprod_product_id'], 'product_type');
         } else {
             $sellerIdArr = FatApp::getPostedData('rfqts_user_id', FatUtility::VAR_INT, 0);
             $linkingType = FatApp::getPostedData('rfq_seller_linking_type', FatUtility::VAR_INT, RequestForQuote::SELLER_LINKING_OPEN);
+
             if (empty($sellerIdArr)) {
                 if (RequestForQuote::SELLER_LINKING_FAVOURITE == $linkingType) {
                     $sellersArr = Shop::getSellersAutocomplete($this->siteLangId, true, $this->loggedUserId, true);
@@ -218,8 +222,8 @@ class RequestForQuotesController extends MyAppController
                         LibHelper::exitWithError(Labels::getLabel('ERR_NO_FAVOURITE_SELLERS_FOUND.', $this->siteLangId), true);
                     }
                     $sellerIdArr = array_column($sellersArr, 'id');
-                } else {
-                    $sellerIdArr = [];
+                } else if (RequestForQuote::SELLER_LINKING_ANY == $linkingType) {
+                    LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_SELECT_SUPPLIERS.', $this->siteLangId), true);
                 }
             }
         }
@@ -391,16 +395,14 @@ class RequestForQuotesController extends MyAppController
                 LibHelper::exitWithError($msg, true);
             }
 
-            if (0 < $selprodId) {
-                $sellers = RequestForQuote::getSellersByRecordId($rfq->getMainTableRecordId(), true);
-                if (is_array($sellers) && !empty($sellers)) {
-                    foreach ($sellers as $sellerData) {
-                        $sellerData += $emailData;
-                        if (false === $emailHandler->sendNewRfqAssignedNotification($this->siteLangId, $sellerData)) {
-                            // $msg = $emailHandler->getError();
-                            $msg = Labels::getLabel('ERR_UNABLE_TO_NOTIFY_SELLERS_FOR_NEW_RFQ_REQUEST.');
-                            LibHelper::exitWithError($msg, true);
-                        }
+            $sellers = RequestForQuote::getSellersByRecordId($rfq->getMainTableRecordId(), true);
+            if (is_array($sellers) && !empty($sellers)) {
+                foreach ($sellers as $sellerData) {
+                    $sellerData += $emailData;
+                    if (false === $emailHandler->sendNewRfqAssignedNotification($this->siteLangId, $sellerData)) {
+                        // $msg = $emailHandler->getError();
+                        $msg = Labels::getLabel('ERR_UNABLE_TO_NOTIFY_SELLERS_FOR_NEW_RFQ_REQUEST.');
+                        LibHelper::exitWithError($msg, true);
                     }
                 }
             }
@@ -510,6 +512,8 @@ class RequestForQuotesController extends MyAppController
             $page = 1;
         }
 
+        $excludeDuplicateNames = FatApp::getPostedData('excludeDuplicateNames', FatUtility::VAR_INT, 0);
+
         $srch = SellerProduct::getSearchObject($this->siteLangId);
         $srch->joinTable(Product::DB_TBL, 'INNER JOIN', 'p.product_id = sp.selprod_product_id', 'p');
         $srch->joinTable(Product::DB_TBL_LANG, 'LEFT OUTER JOIN', 'p.product_id = p_l.productlang_product_id AND p_l.productlang_lang_id = ' . $this->siteLangId, 'p_l');
@@ -534,10 +538,11 @@ class RequestForQuotesController extends MyAppController
             $srch->addCondition('product_type', '=', $rfqProductType);
         }
 
-        $srch->addMultipleFields(array('selprod_id as id', 'COALESCE(selprod_title ,product_name, product_identifier) as name'));
+        $srch->addMultipleFields(array('selprod_id as id', 'COALESCE(selprod_title ,product_name, product_identifier) as name', 'credential_username'));
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
         $products = FatApp::getDb()->fetchAll($srch->getResultSet());
+        $searchedItems = [];
         $json = array();
         foreach ($products as $selprod) {
             $options = SellerProduct::getSellerProductOptions($selprod['id'], true, $this->siteLangId);
@@ -545,10 +550,18 @@ class RequestForQuotesController extends MyAppController
             array_walk($options, function ($item, $key) use (&$variantsStr) {
                 $variantsStr .= ' | ' . $item['option_name'] . ' : ' . $item['optionvalue_name'];
             });
-            $userName = isset($option["credential_username"]) ? " | " . $selprod["credential_username"] : '';
+            $productName = strip_tags(html_entity_decode($selprod['name'], ENT_QUOTES, 'UTF-8')) . $variantsStr;
+            if (1 > $excludeDuplicateNames) {
+                $productName .= isset($selprod["credential_username"]) ? " | " . $selprod["credential_username"] : '';
+            }
+
+            if (0 < $excludeDuplicateNames && in_array($productName, $searchedItems)) {
+                continue;
+            }
+            $searchedItems[] = $productName;
             $json[] = array(
                 'id' => $selprod['id'],
-                'text' => strip_tags(html_entity_decode($selprod['name'], ENT_QUOTES, 'UTF-8')) . $variantsStr . $userName,
+                'text' => $productName,
             );
         }
         die(json_encode(['results' => $json]));
