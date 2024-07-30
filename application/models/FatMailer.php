@@ -83,6 +83,10 @@ class FatMailer extends FatModel
      */
     public function addAttachment($path, $name): object
     {
+        if (empty($path) || empty($name)) {
+            return $this;
+        }
+        
         array_push($this->attachments, ['path' => $path, 'name' => $name]);
         return $this;
     }

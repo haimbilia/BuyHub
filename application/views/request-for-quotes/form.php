@@ -346,6 +346,7 @@ if (null != $fld) {
                             data: {
                                 keyword: request['term'],
                                 rfq_product_type: $('#rfqProductTypeJs').val(),
+                                excludeDuplicateNames: 1,
                                 fIsAjax: 1
                             },
                             dataType: 'json',
