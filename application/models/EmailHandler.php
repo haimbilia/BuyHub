@@ -33,7 +33,7 @@ class EmailHandler extends FatModel
     }
 
     // Send mail to super Admin, Sub Admin and additonal alert emails.
-    public function sendMailToAdminAndAdditionalEmails($tpl, $arrReplacements, $additonalAlerts = 1, $onlySuperAdmin = 0, $langId = 0)
+    public function sendMailToAdminAndAdditionalEmails($tpl, $arrReplacements, $additonalAlerts = 1, $onlySuperAdmin = 0, $langId = 0, $attachmentsArr = [])
     {
         $langId = FatUtility::int($langId);
 
@@ -45,10 +45,13 @@ class EmailHandler extends FatModel
             return false;
         }
         $onlySuperAdmin = FatUtility::int($onlySuperAdmin);
+        $path = $attachmentsArr['path'] ?? '';
+        $name = $attachmentsArr['name'] ?? '';
         if (0 < $onlySuperAdmin) {
             return (new FatMailer($langId, $tpl))
                 ->setTo(FatApp::getConfig('CONF_SITE_OWNER_EMAIL'))
                 ->setVariables($arrReplacements)
+                ->addAttachment($path, $name)
                 ->send();
         }
 
@@ -92,6 +95,7 @@ class EmailHandler extends FatModel
                 $resp = (new FatMailer($langId, $tpl))
                     ->setTo($email)
                     ->setVariables($arrReplacements)
+                    ->addAttachment($path, $name)
                     ->send();
                 if (1 > $index) {
                     $superAdminResp = $resp;
@@ -3213,7 +3217,16 @@ class EmailHandler extends FatModel
             '{rfq_number}' => $data['rfq_number']
         );
 
-        if (!$this->sendMailToAdminAndAdditionalEmails('NEW_RFQ', $vars, onlySuperAdmin: static::NOT_ONLY_SUPER_ADMIN, langId: $langId)) {
+        $attachmentsArr = [];
+        $res = AttachedFile::getAttachment(AttachedFile::FILETYPE_RFQ, $data['rfq_id']);
+        if (!empty($res) && !empty($res['afile_physical_path']) && !empty($res['afile_physical_path']) && !empty($res['afile_name'])) {
+            $attachmentsArr = [
+                'path' => $res['afile_physical_path'],
+                'name' => $res['afile_name'],
+            ];
+        }
+
+        if (!$this->sendMailToAdminAndAdditionalEmails('NEW_RFQ', $vars, onlySuperAdmin: static::NOT_ONLY_SUPER_ADMIN, langId: $langId, attachmentsArr: $attachmentsArr)) {
             return false;
         }
 
@@ -3239,10 +3252,18 @@ class EmailHandler extends FatModel
             '{shop_user_name}' => $data['shop_user_name']
         );
 
+        $path = $name = '';
+        $res = AttachedFile::getAttachment(AttachedFile::FILETYPE_RFQ, $data['rfqts_rfq_id']);
+        if (!empty($res) && !empty($res['afile_physical_path']) && !empty($res['afile_physical_path']) && !empty($res['afile_name'])) {
+            $path = $res['afile_physical_path'];
+            $name = $res['afile_name'];
+        }
+
         if (!empty($data['shop_user_email'])) {
             if (!(new FatMailer($langId, 'NEW_RFQ_ASSIGNED'))
                 ->setTo($data['shop_user_email'])
                 ->setVariables($vars)
+                ->addAttachment($path, $name)
                 ->send()) {
                 return false;
             }

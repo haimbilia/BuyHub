@@ -304,7 +304,7 @@ class RequestForQuote extends MyAppModel
         $frm->addHiddenField('', self::DB_TBL_PREFIX . 'product_id');
         $frm->addHiddenField('', self::DB_TBL_PREFIX . 'addr_id');
 
-        $fld = $frm->addIntegerField(Labels::getLabel('FRM_QUANTITY'), self::DB_TBL_PREFIX . 'quantity');
+        $fld = $frm->addIntegerField(Labels::getLabel('FRM_REQUIRED_QUANTITY'), self::DB_TBL_PREFIX . 'quantity');
         $fld->requirement->setRequired(true);
         $fld->requirement->setPositive();
         $fld->requirement->setRange(1, 9999999999);

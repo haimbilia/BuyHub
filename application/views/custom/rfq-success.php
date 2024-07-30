@@ -54,27 +54,29 @@
                                     <p><?php echo  FatDate::format($rfqData['rfq_delivery_date']); ?></p>
                                 </li>
                             <?php } ?>
-                            <li class="completed-detail-item">
-                                <h4><?php echo Labels::getLabel('LBL_DELIVERY_ADDRESS', $siteLangId); ?>:</h4>
-                                <p>
-                                    <?php if (!empty($rfqData['addr_name'])) { ?>
-                                        <strong><?php echo $rfqData['addr_name']; ?></strong>
-                                        <br>
-                                    <?php } ?>
-                                    <?php echo $rfqData['addr_address1']; ?>,
-                                    <?php echo (strlen($rfqData['addr_address2']) > 0) ? $rfqData['addr_address2'] . ',' : ''; ?>
-                                    <?php echo (strlen($rfqData['addr_city']) > 0) ? $rfqData['addr_city'] . ',' : ''; ?>
-                                    <?php echo (strlen($rfqData['state_name']) > 0) ? $rfqData['state_name'] . ',' : ''; ?>
-                                    <?php echo (strlen($rfqData['country_name']) > 0) ? $rfqData['country_name'] . ',' : ''; ?>
-                                    <?php echo (strlen($rfqData['addr_zip']) > 0) ? Labels::getLabel('LBL_Zip:', $siteLangId) . $rfqData['addr_zip'] . ',' : ''; ?>
-                                    <?php $dcode = (strlen($rfqData['addr_phone_dcode']) > 0) ? ValidateElement::formatDialCode($rfqData['addr_phone_dcode']) : ''; ?>
-                                    <?php echo (strlen($rfqData['addr_phone']) > 0) ? Labels::getLabel('LBL_Phone:', $siteLangId) . $dcode . $rfqData['addr_phone'] . ',' : ''; ?>
-                                </p>
-                            </li>
+                            <?php if (Product::PRODUCT_TYPE_DIGITAL != $rfqData['rfq_product_type']) { ?>
+                                <li class="completed-detail-item">
+                                    <h4><?php echo Labels::getLabel('LBL_DELIVERY_ADDRESS', $siteLangId); ?>:</h4>
+                                    <p>
+                                        <?php if (!empty($rfqData['addr_name'])) { ?>
+                                            <strong><?php echo $rfqData['addr_name']; ?></strong>
+                                            <br>
+                                        <?php } ?>
+                                        <?php echo $rfqData['addr_address1']; ?>,
+                                        <?php echo (strlen($rfqData['addr_address2']) > 0) ? $rfqData['addr_address2'] . ',' : ''; ?>
+                                        <?php echo (strlen($rfqData['addr_city']) > 0) ? $rfqData['addr_city'] . ',' : ''; ?>
+                                        <?php echo (strlen($rfqData['state_name']) > 0) ? $rfqData['state_name'] . ',' : ''; ?>
+                                        <?php echo (strlen($rfqData['country_name']) > 0) ? $rfqData['country_name'] . ',' : ''; ?>
+                                        <?php echo (strlen($rfqData['addr_zip']) > 0) ? Labels::getLabel('LBL_Zip:', $siteLangId) . $rfqData['addr_zip'] . ',' : ''; ?>
+                                        <?php $dcode = (strlen($rfqData['addr_phone_dcode']) > 0) ? ValidateElement::formatDialCode($rfqData['addr_phone_dcode']) : ''; ?>
+                                        <?php echo (strlen($rfqData['addr_phone']) > 0) ? Labels::getLabel('LBL_Phone:', $siteLangId) . $dcode . $rfqData['addr_phone'] . ',' : ''; ?>
+                                    </p>
+                                </li>
+                            <?php } ?>
                         </ul>
                         <div class="text-center mt-5">
                             <a class="btn btn-outline-brand" href="<?php echo UrlHelper::generateUrl('', '', [], CONF_WEBROOT_FRONTEND); ?>">
-                                <?php echo Labels::getLabel('LBL_CONTINUE_SHOPPING');?>
+                                <?php echo Labels::getLabel('LBL_CONTINUE_SHOPPING'); ?>
                             </a>
                         </div>
                     </div>

@@ -516,7 +516,7 @@ class Shop extends MyAppModel
         return 0;
     }
 
-    public static function getSellersAutocomplete(int $langId, bool $favouriteOnly = false, int $userId = 0)
+    public static function getSellersAutocomplete(int $langId, bool $favouriteOnly = false, int $userId = 0, bool $noLimit = false)
     {
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $page = 1 > $page ? 1 : $page;
@@ -561,13 +561,16 @@ class Shop extends MyAppModel
         ];
         $srch->addMultipleFields($flds);
         $srch->addGroupBy('s.shop_id');
-        $srch->doNotCalculateRecords();
 
-        $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize);
+        if (false == $noLimit) {
+            $srch->setPageNumber($page);
+            $srch->setPageSize($pageSize);
+        } else {
+            $srch->doNotCalculateRecords();
+            $srch->doNotLimitRecords();
+        }
         $srch->addOrder('shop_created_on');
-        $shopRs = $srch->getResultSet();
-        $result = FatApp::getDb()->fetchAll($shopRs, 'shop_id');
+        $result = FatApp::getDb()->fetchAll($srch->getResultSet(), 'shop_id');
         $allShops = array(
             'pageCount' => $srch->pages(),
             'results' => []

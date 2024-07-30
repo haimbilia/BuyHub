@@ -89,6 +89,7 @@
     - Bug-085183 - 'Accept' button still appears for the seller's offer to the buyer even when seller has accepted the counter offer
     - Bug-085177 - 'Final Acceptance button does not appear to seller when buyer accepts the offer of seller
     - Bug-085157 - 'Request for Quote' button is displayed on the bottom of the home page also
+    - Bug-085127 - Global RFQ form, "Invite To" validation workflow
 
     - Bug-085143 - 404 on the product details page when the new user creates a product.
     - Bug-085068 - cancellation is not working properly if stripe connect is on.

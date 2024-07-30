@@ -120,11 +120,14 @@ $str = '<table width="100%" cellspacing="0" cellpadding="20" border="0" style="f
                                         </tr>';
                                     }
 
+                                    if (Product::PRODUCT_TYPE_DIGITAL != $data['rfq_product_type']) {
+                                        $str .= '<tr>
+                                            <td style="padding: color#000;font-size: 14px;padding: 5px 0;">' . Labels::getLabel('LBL_DELIVERY_ADDRESS') . '</td>
+                                            <td style="padding: color#000;font-size: 14px;padding: 5px 0;text-align: right;">' . $shippingInfo . '</td>
+                                        </tr>';
+                                    }
+
                                     $str .= '<tr>
-                                        <td style="padding: color#000;font-size: 14px;padding: 5px 0;">' . Labels::getLabel('LBL_DELIVERY_ADDRESS') . '</td>
-                                        <td style="padding: color#000;font-size: 14px;padding: 5px 0;text-align: right;">' . $shippingInfo . '</td>
-                                    </tr>
-                                    <tr>
                                         <td style="padding: color#000;font-size: 14px;padding: 5px 0;">' . Labels::getLabel('LBL_COMMENTS') . '</td>
                                         <td style="padding: color#000;font-size: 14px;padding: 5px 0;text-align: right;">' . $data['rfq_description'] . '</td>
                                     </tr>

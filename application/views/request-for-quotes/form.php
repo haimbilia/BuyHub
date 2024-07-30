@@ -282,7 +282,7 @@ if (null != $fld) {
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-8">
+                <div class="col-lg-8 addressSectionBlockJs">
                     <div class="form-group">
                         <div class="field-set">
                             <div class="caption-wraper d-flex justify-content-between align-items-center">
@@ -331,6 +331,8 @@ if (null != $fld) {
 <?php if (1 > $selprodId) { ?>
     <script>
         var SELLER_LINKING_OPEN = '<?php echo RequestForQuote::SELLER_LINKING_OPEN; ?>';
+        var SELLER_LINKING_ANY = '<?php echo RequestForQuote::SELLER_LINKING_ANY; ?>';
+        var PRODUCT_TYPE_DIGITAL = '<?php echo Product::PRODUCT_TYPE_DIGITAL; ?>';
         $(document).ready(function() {
             var rfqItemNameSelector = $("#rfqItemNameJs");
             if (0 < rfqItemNameSelector.length) {
@@ -344,6 +346,7 @@ if (null != $fld) {
                             data: {
                                 keyword: request['term'],
                                 rfq_product_type: $('#rfqProductTypeJs').val(),
+                                excludeDuplicateNames: 1,
                                 fIsAjax: 1
                             },
                             dataType: 'json',
@@ -372,6 +375,12 @@ if (null != $fld) {
                     sellerNameSelector.removeAttr('disabled');
                     sellerNameSelector.parent().show();
                 }
+
+                var reqFld = 'false';
+                if (SELLER_LINKING_ANY == $(this).val()) {
+                    reqFld = 'true';
+                }
+                sellerNameSelector.attr('data-fatreq', '{"required":' + reqFld + '}');
             });
 
             if (0 < sellerNameSelector.length) {
@@ -388,8 +397,6 @@ if (null != $fld) {
                     sellerNameSelector.parent().hide();
                 }
             }
-
-
 
             var categorySelector = $("#categoryJs");
             if (0 < categorySelector.length) {
@@ -423,6 +430,15 @@ if (null != $fld) {
             }
 
             $(document).on('change', '#rfqProductTypeJs', function() {
+                $('#rfqItemNameJs').val('');
+            });
+
+            $(document).on('change', '#rfqProductTypeJs', function() {
+                if (PRODUCT_TYPE_DIGITAL == $(this).val()) {
+                    $('.addressSectionBlockJs').hide();
+                } else {
+                    $('.addressSectionBlockJs').fadeIn();
+                }
                 $('#rfqItemNameJs').val('');
             });
         });

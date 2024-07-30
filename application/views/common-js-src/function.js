@@ -1053,7 +1053,7 @@ function saveRfq(frm) {
 	if (!$(frm).validate()) { return; }
 
 	let addrId = $('.addrIdJs', frm).val();
-	if ('undefined' == typeof addrId || '' == addrId || '0' == addrId) {
+	if (('undefined' == typeof addrId || '' == addrId || '0' == addrId) && 2 != $('#rfqProductTypeJs').val()) {
 		addAddress($('.selprodIdJs', frm).val());
 		fcom.displayErrorMessage(langLbl.deliveryAddressMandatory);
 		return false;
