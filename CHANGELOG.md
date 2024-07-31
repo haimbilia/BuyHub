@@ -101,6 +101,8 @@
     - Bug-085791 - RFQ >> No validation message is displayed when the seller clicks the 'Save' button without changing the details of the offer.
     - Bug-085819 - RFQ >> An 'Invalid Request' message is displayed to the buyer after clicking the 'Buy Now' button when the final approval for the RFQ is approved by the admin
     - Bug-085838 - RFQ >> Delivery address for digital products still appears on RFQ detail page on admin account
+    - Bug-085839 - RFQ >> Suggestion >> No icons are displayed for upload file and submit button on 'Attachments' and 'messages' panel of RFQ >> admin account
+    - Bug-085843 - RFQ >> The seller is unable to download the attachments added by either the buyer or the seller.
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  
