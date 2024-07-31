@@ -101,7 +101,7 @@
                                 </svg>',
                                     true
                                 );
-                            } else if ($isSeller && RequestForQuote::STATUS_OPEN == $row['rfq_status']) {
+                            } else if ($isSeller && in_array($row['rfq_status'], [RequestForQuote::STATUS_OPEN, RequestForQuote::STATUS_OFFERED])) {
                                 $li = $ul->appendElement("li", ['class' => 'actions-item']);
                                 $li->appendElement(
                                     'a',
