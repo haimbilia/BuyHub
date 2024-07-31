@@ -94,7 +94,7 @@ $autoTableColumWidth = FatUtility::int(($autoTableColumWidth ?? 1)); ?>
                                                 <span class="label"><?php echo Labels::getLabel('LBL_CONTACT_NAME', $siteLangId); ?></span>
                                                 <span class="value"><?php echo $rfqData['addr_name']; ?></span>
                                             </li>
-                                            <?php if (!empty($rfqData['addr_name'])) { ?>
+                                            <?php if (Product::PRODUCT_TYPE_DIGITAL != $rfqData['rfq_product_type']) { ?>
                                                 <li class="list-stats-item list-stats-item-full">
                                                     <span class="lable"><?php echo Labels::getLabel('LBL_DELIVERY_ADDRESS', $siteLangId); ?>:</span>
                                                     <span class="value">

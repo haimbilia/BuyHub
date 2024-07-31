@@ -100,6 +100,7 @@
     - Bug-085762 - RFQ >> 'Custom shipping charges' should be displayed in the 'New Offer' email received by the buyer from the seller.
     - Bug-085791 - RFQ >> No validation message is displayed when the seller clicks the 'Save' button without changing the details of the offer.
     - Bug-085819 - RFQ >> An 'Invalid Request' message is displayed to the buyer after clicking the 'Buy Now' button when the final approval for the RFQ is approved by the admin
+    - Bug-085838 - RFQ >> Delivery address for digital products still appears on RFQ detail page on admin account
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  
