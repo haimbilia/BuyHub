@@ -72,13 +72,13 @@ $str = '<table width="100%" cellspacing="0" cellpadding="20" border="0" style="f
                                                             <tr>';
                                                             if (!$isGlobal) {
                                                                 $str .= '<td style="width: 70px; padding: 10px;">
-                                                                        <a href=""' . $prodUrl . '""><img src="' . $imgSrc . '" alt="" title="" ' . HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_MINI) . ' /></a>
+                                                                        <a href=""' . $prodUrl . '""><img src="' . $imgSrc . '" ' . HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_MINI) . ' /></a>
                                                                     </td>';
                                                             }
                                                                 $str .= '<td style="padding: 10px;">
                                                                     <a href="' . $prodUrl . '" style="color: #555555;font-size: 14px;font-weight: $font-weight-bold;text-decoration: none;">' . $data['rfq_title'] . '</a>';
 
-                                                                    if (RequestForQuote::TYPE_INDIVIDUAL == FatApp::getConfig('CONF_RFQ_MODULE_TYPE', FatUtility::VAR_INT, 0) && false == $isGlobal) {
+                                                                    if (RequestForQuote::TYPE_INDIVIDUAL == FatApp::getConfig('CONF_RFQ_MODULE_TYPE', FatUtility::VAR_INT, 0) && false == $isGlobal && !empty($shopName)) {
                                                                         $str .= '<div style="color: #555555;font-size: 14px;font-weight: $font-weight-bold;">' . Labels::getLabel('Lbl_By', $siteLangId) . ':' . $shopName . '</div>';
                                                                     }
                                                         $str .= '</td>

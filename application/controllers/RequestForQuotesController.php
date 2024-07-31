@@ -195,6 +195,8 @@ class RequestForQuotesController extends MyAppController
             LibHelper::exitWithError(Labels::getLabel('ERR_DELIVERY_ADDRESS_IS_MANDATORY'), true);
         }
 
+        $linkingType = FatApp::getPostedData('rfq_seller_linking_type', FatUtility::VAR_INT, RequestForQuote::SELLER_LINKING_OPEN);
+
         $sellerIdArr = $selprodData = [];
         if (0 < $selprodId) {
             $selprodData = SellerProduct::getAttributesByLangId($this->siteLangId, $selprodId, ['selprod_id', 'selprod_title', 'selprod_user_id', 'selprod_product_id', 'selprod_updated_on', 'selprod_code', 'selprod_min_order_qty', 'selprod_rfq_enabled'], applicationConstants::JOIN_INNER);
@@ -212,7 +214,6 @@ class RequestForQuotesController extends MyAppController
             $post['rfq_product_type'] = Product::getAttributesById($selprodData['selprod_product_id'], 'product_type');
         } else {
             $sellerIdArr = FatApp::getPostedData('rfqts_user_id', FatUtility::VAR_INT, 0);
-            $linkingType = FatApp::getPostedData('rfq_seller_linking_type', FatUtility::VAR_INT, RequestForQuote::SELLER_LINKING_OPEN);
 
             if (empty($sellerIdArr)) {
                 if (RequestForQuote::SELLER_LINKING_FAVOURITE == $linkingType) {
@@ -224,6 +225,8 @@ class RequestForQuotesController extends MyAppController
                     $sellerIdArr = array_column($sellersArr, 'id');
                 } else if (RequestForQuote::SELLER_LINKING_ANY == $linkingType) {
                     LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_SELECT_SUPPLIERS.', $this->siteLangId), true);
+                } else {
+                    $sellerIdArr = [];
                 }
             }
         }

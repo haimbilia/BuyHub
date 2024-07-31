@@ -639,3 +639,5 @@ ON DUPLICATE KEY UPDATE etpl_subject = VALUES(etpl_subject), etpl_body = VALUES(
 INSERT INTO `tbl_sms_templates` (`stpl_code`, `stpl_lang_id`, `stpl_name`, `stpl_body`, `stpl_replacements`, `stpl_status`) VALUES 
 ('RFQ_OFFER_ACCEPTED_BY_SELLER',1,'RFQ offer accepted by another Seller','Dear {shop_name} Seller,\r\n{Counter offer from {user_name} accepted by another Seller for RFQ ({rfq_number}). \r\n\r\n{SITE_NAME} Team','[{\"title\":\"RFQ Number\", \"variable\":\"{rfq_number}\"},{\"title\":\"Seller`s Shop\", \"variable\":\"{shop_name}\"},{\"title\":\"Buyer Name\", \"variable\":\"{user_name}\"}, {\"title\":\"Website Name\", \"variable\":\"{SITE_NAME}\"}]',1)
 ON DUPLICATE KEY UPDATE stpl_body = VALUES(stpl_body), stpl_replacements = VALUES(stpl_replacements);
+
+UPDATE `tbl_email_templates` SET `etpl_priority` = '5' WHERE `tbl_email_templates`.`etpl_code` IN ('NEW_RFQ', 'RFQ_APPROVAL', 'RFQ_DELETION', 'NEW_RFQ_OFFER', 'NEW_RFQ_ASSIGNED', 'RFQ_OFFER_ACTION_BUYER', 'COUNTER_RFQ_OFFER_BUYER', 'RFQ_OFFER_ACTION_SELLER', 'COUNTER_RFQ_OFFER_SELLER', 'RFQ_OFFER_ACCEPTED_BY_BUYER', 'RFQ_OFFER_ACCEPTED_BY_SELLER');

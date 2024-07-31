@@ -3221,7 +3221,7 @@ class EmailHandler extends FatModel
         $res = AttachedFile::getAttachment(AttachedFile::FILETYPE_RFQ, $data['rfq_id']);
         if (!empty($res) && !empty($res['afile_physical_path']) && !empty($res['afile_physical_path']) && !empty($res['afile_name'])) {
             $attachmentsArr = [
-                'path' => $res['afile_physical_path'],
+                'path' => CONF_UPLOADS_PATH . $res['afile_physical_path'],
                 'name' => $res['afile_name'],
             ];
         }
@@ -3255,7 +3255,7 @@ class EmailHandler extends FatModel
         $path = $name = '';
         $res = AttachedFile::getAttachment(AttachedFile::FILETYPE_RFQ, $data['rfqts_rfq_id']);
         if (!empty($res) && !empty($res['afile_physical_path']) && !empty($res['afile_physical_path']) && !empty($res['afile_name'])) {
-            $path = $res['afile_physical_path'];
+            $path = CONF_UPLOADS_PATH . $res['afile_physical_path'];
             $name = $res['afile_name'];
         }
 

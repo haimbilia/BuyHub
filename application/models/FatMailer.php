@@ -186,6 +186,8 @@ class FatMailer extends FatModel
             return false;
         }
         $this->markArchiveSent();
+
+        SystemLog::system($subject . ' - Email sent to - ' . $this->toEmail, 'Email sent', SystemLog::TYPE_SUCCESS);
         return true;
     }
 
