@@ -12,6 +12,10 @@ if (isset($data['selprod_id']) && 0 < $data['selprod_id']) {
     $shopName = $data["shop_name"];
 }
 $imgSrc = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($productId, ImageDimension::VIEW_SMALL, $selProdId, 0, $siteLangId), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+
+$visibility = $data['rfq_visibility_type'] ?? RequestForQuote::VISIBILITY_TYPE_CLOSED;
+$isGlobal = (RequestForQuote::VISIBILITY_TYPE_OPEN == $visibility);
+
 $str = '<table width="100%" cellspacing="0" cellpadding="20" border="0" style="font-size: 14px;background: #f2f2f2;font-family: Arial, sans-serif;">
             <tr>
                 <td>
@@ -35,14 +39,19 @@ $str = '<table width="100%" cellspacing="0" cellpadding="20" border="0" style="f
                                                 <tr>
                                                     <td style="border-bottom:1px solid #ecf0f1;">
                                                         <table width="100%" cellspacing="0" cellpadding="0" border="0">
-                                                            <tr>
-                                                                <td style="width: 70px; padding: 10px;">
-                                                                    <a href=""' . $prodUrl . '""><img src="' . $imgSrc . '" alt="Order Detail" title="Order Detail" ' . HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_MINI) . ' /></a>
-                                                                </td>
-                                                                <td style="padding: 10px;">
-                                                                    <a href="' . $prodUrl . '" style="color: #555555;font-size: 14px;font-weight: $font-weight-bold;text-decoration: none;">' . $data['rfq_title'] . ' (' . $data['rfq_number'] . ')</a>
-                                                                    <div style="color: #555555;font-size: 14px;font-weight: $font-weight-bold;">' . Labels::getLabel('Lbl_By', $siteLangId) . ':' . $shopName . '</div>
-                                                                </td>
+                                                            <tr>';
+                                                            if (!$isGlobal) {
+                                                                $str .= '<td style="width: 70px; padding: 10px;">
+                                                                        <a href=""' . $prodUrl . '""><img src="' . $imgSrc . '" ' . HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_MINI) . ' /></a>
+                                                                    </td>';
+                                                            }
+                                                                $str .= '<td style="padding: 10px;">
+                                                                    <a href="' . $prodUrl . '" style="color: #555555;font-size: 14px;font-weight: $font-weight-bold;text-decoration: none;">' . $data['rfq_title'] . '</a>';
+
+                                                                    if (RequestForQuote::TYPE_INDIVIDUAL == FatApp::getConfig('CONF_RFQ_MODULE_TYPE', FatUtility::VAR_INT, 0) && false == $isGlobal && !empty($shopName)) {
+                                                                        $str .= '<div style="color: #555555;font-size: 14px;font-weight: $font-weight-bold;">' . Labels::getLabel('Lbl_By', $siteLangId) . ':' . $shopName . '</div>';
+                                                                    }
+                                                        $str .= '</td>
                                                             </tr>
                                                         </table>
                                                     </td>
