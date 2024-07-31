@@ -4269,7 +4269,7 @@ class SellerController extends SellerBaseController
             $fld1 = $frm->addIntegerField(Labels::getLabel('FRM_VALIDITY_(days)', $this->siteLangId), 'selprod_download_validity_in_days');
             $fld1->htmlAfterField = '<span class="note">' . Labels::getLabel('FRM_-1_FOR_UNLIMITED', $this->siteLangId) . '</span>';
             $frm->addHiddenField('', 'selprod_condition', $defaultProductCond);
-        } elseif ($productData['product_type'] != Product::PRODUCT_TYPE_SERVICE) {
+        } elseif ($productData['product_type'] != Product::PRODUCT_TYPE_PHYSICAL) {
             $frm->addHiddenField('', 'selprod_condition', $defaultProductCond);
          } else {
             $fld = $frm->addSelectBox(Labels::getLabel('FRM_PRODUCT_CONDITION', $this->siteLangId), 'selprod_condition', Product::getConditionArr($this->siteLangId), $defaultProductCond, array(), Labels::getLabel('FRM_SELECT_CONDITION', $this->siteLangId));
