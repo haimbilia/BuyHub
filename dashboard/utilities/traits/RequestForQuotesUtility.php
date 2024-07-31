@@ -113,6 +113,7 @@ trait RequestForQuotesUtility
                 $srch->addFld('rfqts_user_id');
                 $srch->addCondition('rfqts_user_id', '=', $this->userParentId);
             }
+            $srch->addCondition('rfq_added_on', '>=', $this->userInfo['user_regdate']);
         } else {
             $srch->addCondition('rfq_user_id', '=', $this->userParentId);
         }
@@ -202,6 +203,7 @@ trait RequestForQuotesUtility
                 $srch->joinSellers('INNER');
                 $srch->addCondition('rfqts_user_id', '=', $this->userParentId);
             }
+            $srch->addCondition('rfq_added_on', '>=', $this->userInfo['user_regdate']);
         } else {
             $srch->addCondition('rfq_user_id', '=', $this->userParentId);
         }

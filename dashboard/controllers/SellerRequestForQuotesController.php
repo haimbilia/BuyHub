@@ -25,8 +25,8 @@ class SellerRequestForQuotesController extends SellerBaseController
             LibHelper::exitWithError(Labels::getLabel("MSG_PLEASE_BUY_SUBSCRIPTION", $this->siteLangId));
         }
 
-        $visibilityType = RequestForQuote::getAttributesById($rfqId, 'rfq_visibility_type');
-        if (empty($visibilityType) || RequestForQuote::VISIBILITY_TYPE_CLOSED == $visibilityType) {
+        $rfqInfo = RequestForQuote::getAttributesById($rfqId, ['rfq_visibility_type', 'rfq_added_on']);
+        if (empty($rfqInfo['rfq_visibility_type']) || RequestForQuote::VISIBILITY_TYPE_CLOSED == $rfqInfo['rfq_visibility_type'] || strtotime($rfqInfo['rfq_added_on']) < strtotime($this->userInfo['user_regdate'])) {
             LibHelper::exitWithError($this->str_invalid_Action, true);
         }
         $rfqToSeller = [
