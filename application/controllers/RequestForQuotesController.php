@@ -224,6 +224,8 @@ class RequestForQuotesController extends MyAppController
                     $sellerIdArr = array_column($sellersArr, 'id');
                 } else if (RequestForQuote::SELLER_LINKING_ANY == $linkingType) {
                     LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_SELECT_SUPPLIERS.', $this->siteLangId), true);
+                } else {
+                    $sellerIdArr = [];
                 }
             }
         }
