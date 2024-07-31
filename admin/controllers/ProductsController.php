@@ -487,8 +487,10 @@ class ProductsController extends ListingBaseController
         }
 
         $frm = $this->getForm($langId, $productType, $recordId);
-        $fld = $frm->getField('product_seller_id');
-        $fld->requirements()->setRequired();
+        if (FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+            $fld = $frm->getField('product_seller_id');
+            $fld->requirements()->setRequired();
+        }
 
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (false === $post) {
