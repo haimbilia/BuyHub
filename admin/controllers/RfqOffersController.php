@@ -589,11 +589,12 @@ class RfqOffersController extends ListingBaseController
         if (1 > $selProdId && RfqOffers::STATUS_ACCEPTED == $status) {
             LibHelper::exitWithError(Labels::getLabel('ERR_INVENTORY_NOT_LINKED_WITH_THIS_OFFER'), true);
         }
+        return $selProdId;
     }
 
     public function accept(int $recordId, int $rfqId)
     {
-        $this->validateRequest($recordId, $rfqId, RfqOffers::STATUS_ACCEPTED);
+        $selProdId = $this->validateRequest($recordId, $rfqId, RfqOffers::STATUS_ACCEPTED);
         $db = FatApp::getDb();
         $db->startTransaction();
 
@@ -622,6 +623,7 @@ class RfqOffersController extends ListingBaseController
         $rfq = new RfqOffers($recordId);
         $data = [
             'rlo_primary_offer_id' => $primaryOfferId,
+            'rlo_selprod_id' => $selProdId,
             'rlo_accepted_offer_id' => $recordId,
             'rlo_status' => RfqOffers::STATUS_ACCEPTED,
             'rlo_seller_acceptance' => applicationConstants::YES,

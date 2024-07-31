@@ -99,6 +99,7 @@
     - Bug-085758 - RFQ >> The 'Assign to me' icon no longer appears for other sellers once the buyer has given counteroffers to sellers
     - Bug-085762 - RFQ >> 'Custom shipping charges' should be displayed in the 'New Offer' email received by the buyer from the seller.
     - Bug-085791 - RFQ >> No validation message is displayed when the seller clicks the 'Save' button without changing the details of the offer.
+    - Bug-085819 - RFQ >> An 'Invalid Request' message is displayed to the buyer after clicking the 'Buy Now' button when the final approval for the RFQ is approved by the admin
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  
