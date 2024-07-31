@@ -86,6 +86,7 @@
     - Bug-085157 - 'Request for Quote' button is displayed on the bottom of the home page also
     - Bug-085127 - Global RFQ form, "Invite To" validation workflow
     - Bug-085820 - RFQ >> The product image and the 'By' field should not appear in emails when a global RFQ request is submitted by the buyer or received by the seller
+    - Bug-085716 - RFQ >> Previous RFQs are also displayed to the recently registered seller
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  

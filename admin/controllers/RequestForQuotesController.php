@@ -242,7 +242,7 @@ class RequestForQuotesController extends ListingBaseController
         CalculativeDataRecord::updateRfqCount();
 
         $attr = [
-            'rfq_title', 'rfq_number', 'rfq_approved', 'rfq_user_id', 'rfq_quantity', 'rfq_quantity_unit', 'rfq_delivery_date', 'rfq_description', 'rfq_added_on', 'ba.*', 'selprod_id', 'selprod_title', 'selprod_user_id', 'selprod_product_id', 'selprod_updated_on', 'shop_name', 'bu.user_name', 'buc.credential_username', 'buc.credential_email', 'bu.user_phone_dcode', 'bu.user_phone', 'rfqts_user_id as seller_id', 'IFNULL(country_name, country_code) as country_name', 'IFNULL(state_name, state_identifier) as state_name'
+            'rfq_product_type', 'rfq_title', 'rfq_number', 'rfq_approved', 'rfq_user_id', 'rfq_quantity', 'rfq_quantity_unit', 'rfq_delivery_date', 'rfq_description', 'rfq_added_on', 'ba.*', 'selprod_id', 'selprod_title', 'selprod_user_id', 'selprod_product_id', 'selprod_updated_on', 'shop_name', 'bu.user_name', 'buc.credential_username', 'buc.credential_email', 'bu.user_phone_dcode', 'bu.user_phone', 'rfqts_user_id as seller_id', 'IFNULL(country_name, country_code) as country_name', 'IFNULL(state_name, state_identifier) as state_name'
         ];
         $rfqData = $rfq->get($this->siteLangId, $attr, 'LEFT');
         if (empty($rfqData)) {
@@ -540,16 +540,19 @@ class RequestForQuotesController extends ListingBaseController
                 'width' => '5%'
             ],
             'credential_username' => [
-                'width' => '50%'
-            ],
-            'rejectedOffers' => [
-                'width' => '5%'
+                'width' => '30%'
             ],
             'acceptedOffers' => [
                 'width' => '5%'
             ],
+            'rejectedOffers' => [
+                'width' => '5%'
+            ],
             'rfq_approved' => [
                 'width' => '20%'
+            ],
+            'rfq_status' => [
+                'width' => '10%'
             ],
             'rfq_added_on' => [
                 'width' => '10%'
@@ -584,8 +587,8 @@ class RequestForQuotesController extends ListingBaseController
             /*  'rfq_type' => Labels::getLabel('LBL_TYPE', $this->siteLangId), */
             // 'rfq_quantity' => Labels::getLabel('LBL_REQUESTED_QTY', $this->siteLangId),
             // 'rfq_delivery_date' => Labels::getLabel('LBL_EXPECTED_DELIVERY_DATE', $this->siteLangId),
-            // 'rfq_status' => Labels::getLabel('LBL_OFFERS', $this->siteLangId),
             'rfq_approved' => Labels::getLabel('LBL_APPROVAL', $this->siteLangId),
+            'rfq_status' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
             'rfq_added_on' => Labels::getLabel('LBL_REQUESTED_ON', $this->siteLangId),
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
