@@ -742,5 +742,18 @@ class RequestForQuote extends MyAppModel
         }
         return $html;
     }
-
+    public static function assignedSellersCount(array $rfqIdArr = []): array
+    {
+        $srch = new SearchBase(RequestForQuote::DB_RFQ_TO_SELLERS, 'rfqts');
+        $srch->joinTable(self::DB_TBL, 'INNER JOIN', 'rfq.rfq_id = rfqts.rfqts_rfq_id', 'rfq');
+        $srch->addCondition('rfqts_rfq_id', 'IN', $rfqIdArr);
+        $srch->addMultipleFields(['rfqts_rfq_id', 'COUNT(rfqts_user_id) as assignedGlobalRfqs']);
+        $srch->doNotCalculateRecords();
+        $srch->addCondition('rfq_approved', '=', RequestForQuote::APPROVED);
+        $srch->addCondition('rfq_deleted', '=', applicationConstants::NO);
+        $srch->addCondition('rfq_visibility_type', '=', RequestForQuote::VISIBILITY_TYPE_OPEN);
+        $srch->doNotCalculateRecords();
+        $srch->addGroupBy('rfqts_rfq_id');
+        return FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
+    }
 }

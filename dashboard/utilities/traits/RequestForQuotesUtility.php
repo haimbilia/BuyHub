@@ -14,6 +14,7 @@ trait RequestForQuotesUtility
             'acceptedOffers' => Labels::getLabel('LBL_ACCEPTED', $this->siteLangId),
             'rejectedOffers' => Labels::getLabel('LBL_REJECTED', $this->siteLangId),
             'rfq_approved' => Labels::getLabel('LBL_APPROVAL', $this->siteLangId),
+            'rfq_status' => Labels::getLabel('LBL_STATUS', $this->siteLangId),
             'rfq_added_on' => Labels::getLabel('LBL_REQUESTED_ON', $this->siteLangId),
             'action' => '',
         );
@@ -53,11 +54,13 @@ trait RequestForQuotesUtility
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD'), 'keyword', '');
         $fld->overrideFldType('search');
 
-        $approvalArr = RequestForQuote::getApprovalStatusArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('FRM_APPROVAL'), 'rfq_approved', $approvalArr);
+        if ($this->isBuyer) {
+            $approvalArr = RequestForQuote::getApprovalStatusArr($this->siteLangId);
+            $frm->addSelectBox(Labels::getLabel('FRM_APPROVAL'), 'rfq_approved', $approvalArr);
+        }
 
         $statusArr = RequestForQuote::getStatusArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('FRM_STATUS'), 'rfq_status', $statusArr);
+        $frm->addSelectBox(Labels::getLabel('FRM_STATUS'), 'rfq_status', $statusArr, '', [], Labels::getLabel('LBL_SELECT_STATUS', $this->siteLangId));
 
         $frm->addHiddenField('', 'total_record_count');
         HtmlHelper::addSearchButton($frm);
@@ -75,35 +78,13 @@ trait RequestForQuotesUtility
         $srch = new RequestForQuoteSearch();
         $srch->addCondition('rfq_deleted', '=', applicationConstants::NO);
         if ($this->isSeller) {
-            $srch->joinSellers();
             $srch->addCondition('rfq_approved', '=', RequestForQuote::APPROVED);
-            $srch->addFld('rfqts_user_id');
+            $userRegDate = User::getAttributesById($this->userParentId, 'user_regdate');
+            $srch->addCondition('rfq_added_on', '>=', $userRegDate);
         }
         $srch->joinBuyer();
         $srch->addMultipleFields([
-            'rfq_id',
-            'rfq_selprod_id',
-            'rfq_number',
-            'rfq_title',
-            'rfq_selprod_id',
-            'rfq_visibility_type',
-            'rfq_product_id',
-            'rfq_user_id',
-            'rfq_type',
-            'rfq_quantity',
-            'rfq_quantity_unit',
-            'rfq_status',
-            'rfq_approved',
-            'rfq_added_on',
-            'rfq_delivery_date',
-            'buc.credential_username as credential_username',
-            'bu.user_id as user_id',
-            'bu.user_updated_on',
-            'credential_email',
-            'bu.user_name',
-            '0 as totalOffers',
-            '0 as rejectedOffers',
-            '0 as acceptedOffers'
+            'rfq_id', 'rfq_selprod_id', 'rfq_number', 'rfq_title', 'rfq_selprod_id', 'rfq_visibility_type', 'rfq_product_id', 'rfq_user_id', 'rfq_type', 'rfq_quantity', 'rfq_quantity_unit', 'rfq_status', 'rfq_approved', 'rfq_added_on', 'rfq_delivery_date', 'buc.credential_username as credential_username', 'bu.user_id as user_id', 'bu.user_updated_on', 'buc.credential_email', 'bu.user_name', '0 as totalOffers', '0 as rejectedOffers', '0 as acceptedOffers'
         ]);
 
         $visibilityType = $post['rfq_visibility_type'];
@@ -123,22 +104,18 @@ trait RequestForQuotesUtility
         }
         $status = $post['rfq_status'] ?? -1;
         if (-1 < $status) {
-            if (RequestForQuote::STATUS_OPEN == $status) {
-                $srch->addCondition('rfq_status', '=', $status);
-            } else {
-                $rfqOfferStatuses = RequestForQuote::getOfferStatusByRfqStatus($status);
-                $srch->joinOffers();
-                $srch->addCondition('offer_status', 'IN', $rfqOfferStatuses);
-            }
+            $srch->addCondition('rfq_status', '=', $status);
         }
 
         if ($this->isSeller) {
             if (RequestForQuote::VISIBILITY_TYPE_CLOSED == $visibilityType) {
+                $srch->joinSellers();
+                $srch->addFld('rfqts_user_id');
                 $srch->addCondition('rfqts_user_id', '=', $this->userParentId);
             }
             $srch->addCondition('rfq_added_on', '>=', $this->userInfo['user_regdate']);
         } else {
-            $srch->addCondition('rfq_user_id', '=', $this->userId);
+            $srch->addCondition('rfq_user_id', '=', $this->userParentId);
         }
 
         $this->setRecordCount(clone $srch, $pagesize, $page, $post);
@@ -148,8 +125,13 @@ trait RequestForQuotesUtility
         $srch->setPageNumber($page);
         $srch->setPageSize($pagesize);
         $arrListing = FatApp::getDb()->fetchAll($srch->getDataResultSet(), 'rfq_id');
+        $assignedSellersCount = [];
         if (!empty($arrListing)) {
             $rfqIds = array_keys($arrListing);
+            if ($this->isSeller) {
+                $assignedSellersCount = RequestForQuote::assignedSellersCount($rfqIds);
+            }
+
             $srch = new SearchBase(RfqOffers::DB_RFQ_LATEST_OFFER, 'rlo');
             if ($this->isSeller) {
                 $srch->joinTable(RfqOffers::DB_TBL, 'INNER JOIN', 'ro.offer_id = rlo_primary_offer_id AND offer_user_id = ' . $this->userParentId, 'ro');
@@ -170,6 +152,8 @@ trait RequestForQuotesUtility
             }
         }
 
+        $this->set('sellerLinkingLimit', FatApp::getConfig('CONF_GLOBAL_RFQ_SELLER_LINKING_LIMIT', FatUtility::VAR_INT, 5));
+        $this->set('assignedSellersCountArr', $assignedSellersCount);
         $this->set('visibilityType', $visibilityType);
         $this->set('arrListing', $arrListing);
         $this->set('postedData', $post);
@@ -179,10 +163,15 @@ trait RequestForQuotesUtility
         $this->set("isBuyer", $this->isBuyer);
         $this->set("isSeller", $this->isSeller);
         $this->set("userParentId", $this->userParentId);
+        $this->set("isBuyer", $this->isBuyer);
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }
-        $this->set('headerCols', $this->getRequestForQuotesCols());
+        $tableCols = $this->getRequestForQuotesCols();
+        if ($this->isSeller) {
+            unset($tableCols['rfq_approved']);
+        }
+        $this->set('headerCols', $tableCols);
         $this->_template->render(false, false, 'request-for-quotes/search.php');
     }
 
@@ -216,7 +205,7 @@ trait RequestForQuotesUtility
             }
             $srch->addCondition('rfq_added_on', '>=', $this->userInfo['user_regdate']);
         } else {
-            $srch->addCondition('rfq_user_id', '=', $this->userId);
+            $srch->addCondition('rfq_user_id', '=', $this->userParentId);
         }
         $this->set("rfqData", FatApp::getDb()->fetch($srch->getDataResultSet()));
         $this->set("approvalStatusArr", RequestForQuote::getApprovalStatusArr($this->siteLangId));
@@ -256,7 +245,7 @@ trait RequestForQuotesUtility
         }
 
         $userId = RequestForQuote::getAttributesById($rfqId, 'rfq_user_id');
-        if ($userId != UserAuthentication::getLoggedUserId()) {
+        if ($userId != $this->userParentId) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
 

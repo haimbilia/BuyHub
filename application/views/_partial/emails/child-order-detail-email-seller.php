@@ -3,21 +3,21 @@ $shippingHanldedBySeller = isset($shippingHanldedBySeller) ? $shippingHanldedByS
 
 $str = '<table cellspacing="0" cellpadding="0" border="0" width="100%" style="border:1px solid #ddd; border-collapse:collapse;">
     <tr>
-    <td width="40%" style="padding:10px;background:#eee;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;">' . Labels::getLabel('LBL_Product', $siteLangId) . '</td>
+    <td width="20%" style="padding:10px;background:#eee;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;">' . Labels::getLabel('LBL_Product', $siteLangId) . '</td>
     <td width="10%" style="padding:10px;background:#eee;font-size:13px; border:1px solid #ddd;color:#333; font-weight:bold;">' . Labels::getLabel('L_Qty', $siteLangId) . '</td>
     <td width="15%" style="padding:10px;background:#eee;font-size:13px; border:1px solid #ddd;color:#333; font-weight:bold;" align="right">' . Labels::getLabel('LBL_Price', $siteLangId) . '</td>';
 
 if ($shippingHanldedBySeller) {
     $str .= '<td width="15%" style="padding:10px;background:#eee;font-size:13px; border:1px solid #ddd;color:#333; font-weight:bold;" align="right">' . Labels::getLabel('LBL_Shipping', $siteLangId) . '</td>';
 }
-$str .= '<td width="15%" style="padding:10px;background:#eee;font-size:13px; border:1px solid #ddd;color:#333; font-weight:bold;" align="right">' . Labels::getLabel('LBL_Volume/Loyalty_Discount', $siteLangId) .
+$str .= '<td width="15%" style="padding:10px;background:#eee;font-size:13px; border:1px solid #ddd;color:#333; font-weight:bold;" align="right">' . Labels::getLabel('LBL_Vol./_Loyalty_Disc.', $siteLangId) .
     '</td>';
 
 if ($orderProducts['op_tax_collected_by_seller']) {
     $str .= '<td width="15%" style="padding:10px;background:#eee;font-size:13px; border:1px solid #ddd;color:#333; font-weight:bold;" align="right">' . Labels::getLabel('LBL_Tax_Charges', $siteLangId) . '</td>';
 }
 
-$str .= '<td width="20%" style="padding:10px;background:#eee;font-size:13px; border:1px solid #ddd;color:#333; font-weight:bold;" align="right">' . Labels::getLabel('LBL_Total', $siteLangId) . '</td>
+$str .= '<td width="10%" style="padding:10px;background:#eee;font-size:13px; border:1px solid #ddd;color:#333; font-weight:bold;" align="right">' . Labels::getLabel('LBL_Total', $siteLangId) . '</td>
     </tr>';
 
 $opCustomerBuyingPrice = CommonHelper::orderProductAmount($orderProducts, 'CART_TOTAL');

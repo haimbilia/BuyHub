@@ -91,8 +91,10 @@
     - Bug-085157 - 'Request for Quote' button is displayed on the bottom of the home page also
     - Bug-085127 - Global RFQ form, "Invite To" validation workflow
     - Bug-085820 - RFQ >> The product image and the 'By' field should not appear in emails when a global RFQ request is submitted by the buyer or received by the seller
-
+    - Bug-085716 - RFQ >> Previous RFQs are also displayed to the recently registered seller
     - Bug-085143 - 404 on the product details page when the new user creates a product.
     - Bug-085068 - cancellation is not working properly if stripe connect is on.
+    - Bug-085729 - RFQ >> 'Order details section appears distorted on 'Order placed' email
+
 ## Hit URL:
     - admin/patch-update/updateProductRating  
