@@ -97,6 +97,7 @@
     - Bug-085729 - RFQ >> 'Order details section appears distorted on 'Order placed' email
     - Bug-085740 - RFQ >> Nothing happens on clicking the view button on 'RFQ detail' page of seller/buyer
     - Bug-085758 - RFQ >> The 'Assign to me' icon no longer appears for other sellers once the buyer has given counteroffers to sellers
+    - Bug-085762 - RFQ >> 'Custom shipping charges' should be displayed in the 'New Offer' email received by the buyer from the seller.
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  

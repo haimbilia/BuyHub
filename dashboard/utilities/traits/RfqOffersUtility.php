@@ -546,7 +546,7 @@ trait RfqOffersUtility
                 array_push($counterOfferFlds, 'roc.' . $fld . ' as counter_' . $fld);
             }
 
-            $dbFlds = array_merge($flds, $counterOfferFlds, ['rfq_title', 'rfq_number', 'rfq_added_on', 'rfq_approved', 'rfq_user_id', 'rfq_quantity', 'rfq_quantity_unit', 'rfq_visibility_type', 'bu.user_name as buyer_user_name', 'bu.user_id as buyer_user_id', 'buc.credential_email as buyer_credential_email', 'COALESCE(ous_l.shop_name, ous.shop_identifier) as shop_name', 'rlo_primary_offer_id', 'selprod_id', 'selprod_product_id', 'selprod_updated_on', 'bu.user_phone_dcode as buyer_phone_dcode', 'bu.user_phone as buyer_phone', 'suc.credential_email as seller_email']);
+            $dbFlds = array_merge($flds, $counterOfferFlds, ['rfq_title', 'rfq_number', 'rfq_added_on', 'rfq_approved', 'rfq_user_id', 'rfq_quantity', 'rfq_quantity_unit', 'rfq_visibility_type', 'bu.user_name as buyer_user_name', 'bu.user_id as buyer_user_id', 'buc.credential_email as buyer_credential_email', 'COALESCE(ous_l.shop_name, ous.shop_identifier) as shop_name', 'rlo_primary_offer_id', 'selprod_id', 'selprod_product_id', 'selprod_updated_on', 'bu.user_phone_dcode as buyer_phone_dcode', 'bu.user_phone as buyer_phone', 'suc.credential_email as seller_email', 'rlo_shipping_charges']);
 
             $srch = new RequestForQuoteSearch();
             $srch->doNotCalculateRecords();

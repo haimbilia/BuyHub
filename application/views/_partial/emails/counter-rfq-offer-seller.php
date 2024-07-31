@@ -95,9 +95,16 @@ $str = '<table width="100%" cellspacing="0" cellpadding="20" border="0" style="f
                                     <tr>
                                         <td style="padding: color#000;font-size: 14px;padding: 5px 0;">' . Labels::getLabel('LBL_OFFERED_PRICE_PER_' . applicationConstants::getWeightUnitName($siteLangId, $data['rfq_quantity_unit'])) . '</td>
                                         <td style="padding: color#000;font-size: 14px;padding: 5px 0;text-align: right;">' . CommonHelper::displayMoneyFormat($data['offer_price']) . '</td>
-                                    </tr>
+                                    </tr>';
 
-                                    <tr>
+                                    if (isset($data['rlo_shipping_charges']) && 0 < $data['rlo_shipping_charges']) {
+                                        $str .= '<tr>
+                                                    <td style="padding: color#000;font-size: 14px;padding: 5px 0;">' . Labels::getLabel('LBL_SHIPPING_CHARGES', $siteLangId) . '</td>
+                                                    <td style="padding: color#000;font-size: 14px;padding: 5px 0;text-align: right;">' . CommonHelper::displayMoneyFormat($data['rlo_shipping_charges']) . '</td>
+                                                </tr>';
+                                    }
+
+                                    $str .= '<tr>
                                         <td style="padding: color#000;font-size: 14px;padding: 5px 0;">' . Labels::getLabel('LBL_COMMENTS') . '</td>
                                         <td style="padding: color#000;font-size: 14px;padding: 5px 0;text-align: right;">' . $data['offer_comments'] . '</td>
                                     </tr>
