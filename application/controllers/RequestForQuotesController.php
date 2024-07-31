@@ -299,6 +299,50 @@ class RequestForQuotesController extends MyAppController
                     LibHelper::exitWithError(FatApp::getDb()->getError(), true);
                 }
             }
+
+            if (!$adminApproval) {
+                $requestForQuote = new RequestForQuote($recordId);
+                $attr = [
+                    'rfq_title',
+                    'rfq_number',
+                    'rfq_approved',
+                    'rfq_user_id',
+                    'rfq_quantity',
+                    'rfq_quantity_unit',
+                    'rfq_delivery_date',
+                    'rfq_description',
+                    'rfq_added_on',
+                    'ba.*',
+                    'selprod_id',
+                    'selprod_title',
+                    'selprod_user_id',
+                    'selprod_product_id',
+                    'selprod_updated_on',
+                    'shop_name',
+                    'bu.user_name',
+                    'buc.credential_username',
+                    'buc.credential_email',
+                    'bu.user_phone_dcode',
+                    'bu.user_phone',
+                    'rfqts_user_id as seller_id',
+                    'IFNULL(country_name, country_code) as country_name',
+                    'IFNULL(state_name, state_identifier) as state_name'
+                ];
+                $rfqData = $requestForQuote->get($this->siteLangId, $attr, 'LEFT');
+                $emailHandler = new EmailHandler();
+                if (!empty($rfqData)) {
+                    $sellers = RequestForQuote::getSellersByRecordId($recordId, true);
+                    if (is_array($sellers) && !empty($sellers)) {
+                        foreach ($sellers as $sellerData) {
+                            $sellerData += $rfqData;
+                            if (false === $emailHandler->sendNewRfqAssignedNotification($this->siteLangId, $sellerData)) {                                
+                                $msg = Labels::getLabel('ERR_UNABLE_TO_NOTIFY_SELLERS_FOR_NEW_RFQ_REQUEST.');
+                                LibHelper::exitWithError($msg, true);
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         if (0 < $selprodId) {
