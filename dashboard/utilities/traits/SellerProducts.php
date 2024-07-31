@@ -552,9 +552,11 @@ trait SellerProducts
         $post['selprod_rfq_enabled'] = FatApp::getPostedData('selprod_rfq_enabled', FatUtility::VAR_INT, 0);
         $post['selprod_min_order_qty'] = FatApp::getPostedData('selprod_min_order_qty', FatUtility::VAR_INT, 1);
         $post['selprod_stock'] = FatApp::getPostedData('selprod_stock', FatUtility::VAR_INT, 1);
+        $post['selprod_stock'] = ($post['selprod_stock'] > 0) ? $post['selprod_stock'] : 1;
+        $post['selprod_min_order_qty'] = ($post['selprod_min_order_qty'] > 0) ? $post['selprod_min_order_qty'] : 1;
 
         $keywordSlug = '';
-        $productId = SellerProduct::getAttributesById($selprod_id, 'selprod_product_id', false);
+        $productId = SellerProduct::getAttributesById($selprod_id, 'selprod_product_id', false);       
         if (empty($post['selprod_title' . $this->siteLangId])) {
             $productLangRow = Product::getProductDataById($this->siteLangId, $productId, array('product_identifier', 'product_name'));
             $keywordSlug = $productLangRow['product_name'] ?? $productLangRow['product_identifier'];

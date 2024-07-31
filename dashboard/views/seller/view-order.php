@@ -58,11 +58,10 @@ $transferBank = (isset($orderDetail['plugin_code']) && 'TransferBank' == $orderD
             <?php
             $data = $this->variables + ['childOrderDetail' => $orderDetail, 'isSellerDashboardView' => true];
             $this->includeTemplate('_partial/order/left-side-block.php', $data, false);
-            $data = $this->variables + [
+            $data =  $data + [
                 'canViewShippingCharges' => CommonHelper::canAvailShippingChargesBySeller($orderDetail['op_selprod_user_id'], $orderDetail['opshipping_by_seller_user_id']),
                 'canViewTaxCharges' => $orderDetail['op_tax_collected_by_seller'],
-                'childOrderDetail' => $orderDetail,
-                'isSellerDashboardView' => true
+                'sellerView' => true                
             ];
             $this->includeTemplate('_partial/order/right-side-block.php', $data, false);
             ?>

@@ -1,5 +1,5 @@
 <?php if (isset($collection['brands']) && count($collection['brands']) > 0) { ?>
-    <section class="section">
+    <section class="section" data-section="section">
         <div class="container">
             <div class="section-head section-head-center">
                 <?php echo ($collection['collection_name'] != '') ? ' <div class="section-heading"><h2>' . $collection['collection_name'] . '</h2></div>' : ''; ?>
@@ -28,21 +28,25 @@
                         'alt' => (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $prodcatName,
                         'siteLangId' => $siteLangId,
                     ];
-                ?>
+                    ?>
                     <a href="<?php echo UrlHelper::generateUrl('brands', 'View', array($brand['brand_id'])); ?>" class="brand">
                         <div class="brand-thumb">
                             <?php $this->includeTemplate('_partial/picture-tag.php', $pictureAttr); ?>
                         </div>
                         <div class="brand-logo">
-                            <img loading='lazy' data-ratio="<?php echo $ratio; ?>" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'brand', array($brand['brand_id'], $siteLangId, ImageDimension::VIEW_MOBILE)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo (!empty($fileData['afile_attribute_alt'])) ? $fileData['afile_attribute_alt'] : $brand['brand_name']; ?>" title="<?php echo (!empty($fileData['afile_attribute_alt'])) ? $fileData['afile_attribute_alt'] : $brand['brand_name']; ?>">
+                            <img loading='lazy' data-ratio="<?php echo $ratio; ?>"
+                                src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'brand', array($brand['brand_id'], $siteLangId, ImageDimension::VIEW_MOBILE)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>"
+                                alt="<?php echo (!empty($fileData['afile_attribute_alt'])) ? $fileData['afile_attribute_alt'] : $brand['brand_name']; ?>"
+                                title="<?php echo (!empty($fileData['afile_attribute_alt'])) ? $fileData['afile_attribute_alt'] : $brand['brand_name']; ?>">
                         </div>
                     </a>
-                <?php $i++;
+                    <?php $i++;
                 } ?>
             </div>
             <?php if ($collection['totBrands'] > Collections::LIMIT_BRAND_LAYOUT1) { ?>
                 <div class="section-foot">
-                    <a href="<?php echo UrlHelper::generateUrl('Collections', 'View', array($collection['collection_id'])); ?>" class="link-underline">
+                    <a href="<?php echo UrlHelper::generateUrl('Collections', 'View', array($collection['collection_id'])); ?>"
+                        class="link-underline">
                         <?php echo Labels::getLabel('LBL_VIEW_ALL', $siteLangId); ?></a>
                 </div>
             <?php } ?>

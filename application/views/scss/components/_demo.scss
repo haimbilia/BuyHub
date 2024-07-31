@@ -2,242 +2,293 @@ $top-space: 30%;
 $right-space: 3rem;
 
 .demo-restore-clone {
-    position: fixed;
-    z-index: 9999;
-    #{$end-direction}: $right-space;
-    top: $top-space;
+  position: fixed;
+  z-index: 9999;
+  #{$end-direction}: $right-space;
+  top: $top-space;
 }
 
 .restore-btn {
-    @include bg-brand;
-    border: none;
-    border-radius: 50px;
-    border-top-#{$end-direction}-radius: 0;
-    border-bottom-#{$end-direction}-radius: 0;
-    //box-shadow: 0 0.1rem 1rem 0.25rem rgba(0, 0, 0, 0.05);
-    position: fixed;
-    z-index: 9999;
-    #{$end-direction}: 0;
-    top: $top-space;
-    width: 40px;
-    height: 40px;
-    //transform: rotate(-90deg) translate3d(0, -40px, 0);
-    //transform-origin: right top;
-    padding: 10px;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    font-size: 0.9rem;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  @include bg-brand;
+  border: none;
+  border-radius: 50px;
+  border-top-#{$end-direction}-radius: 0;
+  border-bottom-#{$end-direction}-radius: 0;
+  //box-shadow: 0 0.1rem 1rem 0.25rem rgba(0, 0, 0, 0.05);
+  position: fixed;
+  z-index: 9999;
+  #{$end-direction}: 0;
+  top: $top-space;
+  width: 40px;
+  height: 40px;
+  //transform: rotate(-90deg) translate3d(0, -40px, 0);
+  //transform-origin: right top;
+  padding: 10px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  font-size: 0.9rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
-    &:hover,
-    &:focus,
-    &:active {
-        color: #fff;
-        width: 50px;
+  &:hover,
+  &:focus,
+  &:active {
+    color: #fff;
+    width: 50px;
+  }
+
+  .svg {
+    min-width: 1.5rem;
+    min-height: 1.5rem;
+
+    [dir="rtl"] & {
+      transform: rotate(-180deg);
+    }
+  }
+
+  &-icon {
+    animation: rotate 1.5s linear infinite;
+    border-color: transparent white;
+    border-radius: 50%;
+    border-style: solid;
+    border-width: 0.125em;
+    height: 1.2rem;
+    margin: 0.25em;
+    width: 1.2rem;
+
+    &:before,
+    &:after {
+      border-style: solid;
+      content: "";
+      display: block;
+      position: absolute;
+      width: 0;
+      transform: rotate(-45deg);
     }
 
-    .svg {
-        min-width: 1.5rem;
-        min-height: 1.5rem;
-
-        [dir="rtl"] & {
-            transform: rotate(-180deg);
-        }
+    &:after {
+      border-color: transparent transparent transparent white;
+      border-width: 0.3125em 0 0.3125em 0.5em;
+      top: -0.3125em;
+      left: 0.0625em;
     }
 
-    &-icon {
-        animation: rotate 1.5s linear infinite;
-        border-color: transparent white;
-        border-radius: 50%;
-        border-style: solid;
-        border-width: 0.125em;
-        height: 1.2rem;
-        margin: 0.25em;
-        width: 1.2rem;
-
-        &:before,
-        &:after {
-            border-style: solid;
-            content: "";
-            display: block;
-            position: absolute;
-            width: 0;
-            transform: rotate(-45deg);
-        }
-
-        &:after {
-            border-color: transparent transparent transparent white;
-            border-width: 0.3125em 0 0.3125em 0.5em;
-            top: -0.3125em;
-            left: 0.0625em;
-        }
-
-        &:before {
-            border-color: transparent white transparent transparent;
-            border-width: 0.3125em 0.5em 0.3125em 0;
-            bottom: -0.3125em;
-            right: 0.0625em;
-        }
+    &:before {
+      border-color: transparent white transparent transparent;
+      border-width: 0.3125em 0.5em 0.3125em 0;
+      bottom: -0.3125em;
+      right: 0.0625em;
     }
+  }
 
-    &-label {
-        //margin-#{$start-direction}: 8px;
-    }
+  &-label {
+    //margin-#{$start-direction}: 8px;
+  }
 }
 
 .modal-restore {
-    .modal-dialog-vertical {
-        max-width: 280px !important;
-    }
+  .modal-dialog-vertical {
+    max-width: 280px !important;
+  }
 }
 
 .offcanvas-restore {
-    max-width: 250px;
-    top: $top-space;
-    #{$end-direction}: $right-space;
-    bottom: auto;
-    background-color: transparent;
+  max-width: 250px;
+  top: $top-space;
+  #{$end-direction}: $right-space;
+  bottom: auto;
+  background-color: transparent;
 
-    .offcanvas-body {
-        padding: 0;
-    }
+  .offcanvas-body {
+    padding: 0;
+  }
 }
 
 .demo {
-    color: $txt-body;
-    height: 100%;
+  color: $txt-body;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  &-restore {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1rem;
+    margin-#{$end-direction}: 0;
+
+    &-btn {
+      font-weight: $font-weight-bold;
+      background-color: #fff;
+      box-shadow: $shadow2;
+      border-radius: 30px;
+      border: 0;
+      gap: 8px;
+      padding: 0.6rem 1rem;
+      display: flex;
+      min-width: 130px;
+    }
+
+    &-title {
+      font-size: 1rem;
+      font-weight: $font-weight-normal;
+      margin-bottom: 0.25rem;
+    }
+
+    &-counter {
+      font-size: 1rem;
+      font-weight: $font-weight-bold;
+    }
+  }
+
+  &-switch {
+    flex: 1;
+    // border-top: $border;
+    // border-bottom: $border;
+  }
+
+  &-action {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .views {
     display: flex;
     flex-direction: column;
 
-    &-restore {
-        display: flex;
-        justify-content: flex-end;
-        margin-bottom: 1rem;
-        margin-#{$end-direction}: 0;
+    &-item {
+      border-bottom: $border;
+      display: flex;
 
-        &-btn {
-            font-weight: $font-weight-bold;
-            background-color: #fff;
-            box-shadow: $shadow2;
-            border-radius: 30px;
-            border: 0;
-            gap: 8px;
-            padding: 0.6rem 1rem;
-            display: flex;
-            min-width: 130px;
+      &.is-active {
+        color: $brand-color;
+      }
 
+      &:first-child {
+        a {
+          padding-top: 0;
         }
+      }
 
-        &-title {
-            font-size: 1rem;
-            font-weight: $font-weight-normal;
-            margin-bottom: 0.25rem;
-        }
-
-        &-counter {
-            font-size: 1rem;
-            font-weight: $font-weight-bold;
-        }
+      &:last-child {
+        border-bottom: none;
+      }
     }
 
-    &-switch {
-        flex: 1;
-        // border-top: $border;
-        // border-bottom: $border;
+    &-links {
+      padding: 0.8rem 0;
+      text-decoration: none;
+      color: $txt-gray;
+      font-size: 0.85rem;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      font-weight: $font-weight-bold;
+      gap: 10px;
+
+      &:hover,
+      &:focus,
+      &:active {
+        color: $brand-color;
+      }
+
+      .svg {
+        width: 24px;
+        height: 24px;
+      }
     }
-
-    &-action {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        gap: 1rem;
-        margin-top: 1rem;
-    }
-
-    .views {
-        display: flex;
-        flex-direction: column;
-
-        &-item {
-            border-bottom: $border;
-            display: flex;
-
-            &.is-active {
-                color: $brand-color;
-            }
-
-            &:first-child {
-                a {
-                    padding-top: 0;
-                }
-            }
-
-            &:last-child {
-                border-bottom: none;
-            }
-        }
-
-        &-links {
-            padding: 0.8rem 0;
-            text-decoration: none;
-            color: $txt-gray;
-            font-size: 0.85rem;
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            font-weight: $font-weight-bold;
-            gap: 10px;
-
-            &:hover,
-            &:focus,
-            &:active {
-                color: $brand-color;
-            }
-
-            .svg {
-                width: 24px;
-                height: 24px;
-            }
-        }
-    }
+  }
 }
 
 .demo-bg-wrap {
-    background-color: #fff;
-    border-radius: 10px;
-    padding: 1.5rem;
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 1.5rem;
 }
 
 .contacts {
-    padding: 1rem 0;
-    display: flex;
-    //justify-content: center;
-    gap: 4rem;
-    margin: 0 auto;
-    flex-flow: row wrap;
+  padding: 1rem 0;
+  display: flex;
+  //justify-content: center;
+  gap: 4rem;
+  margin: 0 auto;
+  flex-flow: row wrap;
 
-    //text-align: #{$start-direction};
-    li {
-        text-align: #{$start-direction};
-        position: relative;
-        margin: 10px 0;
-        padding: 0;
-        display: block;
-    }
+  //text-align: #{$start-direction};
+  li {
+    text-align: #{$start-direction};
+    position: relative;
+    margin: 10px 0;
+    padding: 0;
+    display: block;
+  }
 }
 
 .cta {
-    text-align: center;
-    padding: 2rem;
+  text-align: center;
+  padding: 2rem;
 
-    p {
-        font-weight: $font-weight-bold;
-    }
+  p {
+    font-weight: $font-weight-bold;
+  }
 }
 
 .get-started {
-    max-width: 80%;
+  max-width: 80%;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.fixed-right-btn {
+  position: fixed;
+  z-index: 999;
+  right: 0;
+  top: calc(60% - 44px);
+  transform-origin: bottom right;
+  transform: rotate(-90deg) translateX(100%);
+  border-right: none;
+  background-color: $brand-color;
+  border-radius: 5px 5px 0 0;
+  border-bottom: none;
+  //overflow: hidden;
+
+  @media (max-width: 992px) and (min-width: 768px) and (orientation: landscape) {
+    top: 65%;
+  }
+
+  @media only screen and (max-width: 767px) {
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+    display: block;
+    bottom: 0px;
+    top: auto;
+    left: 0;
+    right: 0;
+    text-align: center;
+    transform: none;
     margin: 0 auto;
-    width: 100%;
+    padding: 0px;
+
+    a {
+      width: 100%;
+      padding: 18px ​15px;
+    }
+  }
+
+  .sticker-Btn {
+    background-color: transparent;
+    border: none;
+    color: #fff;
+    font-size: 14px;
+    display: inline-block;
+    padding: 11px 15px;
+    line-height: 1;
+    font-weight: $font-weight-bold;
+    white-space: pre;
+
+    @media (max-width: 767px) {
+      padding: 20px 15px;
+    }
+  }
 }

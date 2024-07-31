@@ -18,30 +18,31 @@ $str = '<table width="100%" cellspacing="0" cellpadding="20" border="0" style="f
                                 <table width="100%" cellspacing="0" cellpadding="0" border="0">
                                     <tr>
                                         <td>';
-                                        $taxCharged = 0;
-                                        $cartTotal = 0;
-                                        $total = 0;
-                                        $shippingTotal = 0;
-                                        $netAmount = 0;
-                                        $discountTotal = 0;
-                                        $volumeDiscountTotal = 0;
-                                        $rewardPointDiscount = 0;
-                                        $roundingOff = 0;
-                                        $selProdTotalSpecialPrice = 0;
-                                        foreach ($orderProductsData as $addrKey => $orderProducts) {
-                                            $productHtml = '<table width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color: #fff;padding: 10px 0;">';
-                                            $pickupHtml = '';
-                                            foreach ($orderProducts as $prodkey => $val) {
-                                                if (isset($val["opshipping_fulfillment_type"]) || (isset($val["op_product_type"]) && $val["op_product_type"] == Product::PRODUCT_TYPE_DIGITAL)) {
-                                                    $opCustomerBuyingPrice = CommonHelper::orderProductAmount($val, 'CART_TOTAL');
-                                                    $shippingPrice = CommonHelper::orderProductAmount($val, 'SHIPPING');
-                                                    $discountedPrice = CommonHelper::orderProductAmount($val, 'DISCOUNT');
-                                                    $taxCharged = $taxCharged + CommonHelper::orderProductAmount($val, 'TAX');
-                                                    $productTaxCharged = CommonHelper::orderProductAmount($val, 'TAX');
-                                                    $netAmount = $netAmount + CommonHelper::orderProductAmount($val, 'NETAMOUNT');
-                                                    $volumeDiscount =  CommonHelper::orderProductAmount($val, 'VOLUME_DISCOUNT');
-                                                    $volumeDiscountTotal = $volumeDiscountTotal + abs(CommonHelper::orderProductAmount($val, 'VOLUME_DISCOUNT'));
-                                                    $rewardPointDiscount = $rewardPointDiscount + abs(CommonHelper::orderProductAmount($val, 'REWARDPOINT'));
+$taxCharged = 0;
+$cartTotal = 0;
+$total = 0;
+$shippingTotal = 0;
+$netAmount = 0;
+$discountTotal = 0;
+$volumeDiscountTotal = 0;
+$rewardPointDiscount = 0;
+$roundingOff = 0;
+$selProdTotalSpecialPrice = 0;
+foreach ($orderProductsData as $addrKey => $orderProducts) {
+    $productHtml = '<table width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color: #fff;padding: 10px 0;">';
+    $pickupHtml = '';
+    foreach ($orderProducts as $prodkey => $val) {
+        
+        if (isset($val["opshipping_fulfillment_type"]) || (isset($val["op_product_type"]) && ($val["op_product_type"] == Product::PRODUCT_TYPE_DIGITAL || $val["op_product_type"] == Product::PRODUCT_TYPE_SERVICE))) {
+            $opCustomerBuyingPrice = CommonHelper::orderProductAmount($val, 'CART_TOTAL');
+            $shippingPrice = CommonHelper::orderProductAmount($val, 'SHIPPING');
+            $discountedPrice = CommonHelper::orderProductAmount($val, 'DISCOUNT');
+            $taxCharged = $taxCharged + CommonHelper::orderProductAmount($val, 'TAX');
+            $productTaxCharged = CommonHelper::orderProductAmount($val, 'TAX');
+            $netAmount = $netAmount + CommonHelper::orderProductAmount($val, 'NETAMOUNT');
+            $volumeDiscount =  CommonHelper::orderProductAmount($val, 'VOLUME_DISCOUNT');
+            $volumeDiscountTotal = $volumeDiscountTotal + abs(CommonHelper::orderProductAmount($val, 'VOLUME_DISCOUNT'));
+            $rewardPointDiscount = $rewardPointDiscount + abs(CommonHelper::orderProductAmount($val, 'REWARDPOINT'));
 
                                                     $skuCodes = $val["op_selprod_sku"];
                                                     $options = $val['op_selprod_options'];

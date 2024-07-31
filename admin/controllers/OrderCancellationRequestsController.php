@@ -355,7 +355,7 @@ class OrderCancellationRequestsController extends ListingBaseController
                                 $db->rollbackTransaction();
                                 LibHelper::exitWithError(Labels::getLabel('LBL_UNABLE_TO_PLACE_GATEWAY_REFUND_REQUEST', $row['order_language_id']), true);
                             }
-                            $dataToUpdate['ocrequest_payment_gateway_req_id'] = $resp->id;
+                            $dataToUpdate['ocrequest_payment_gateway_req_id'] = $resp->id ?? 0;
 
                             // Debit from wallet if plugin/payment method support's direct payment to card.
                             if (!empty($resp->id)) {

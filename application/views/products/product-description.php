@@ -4,28 +4,28 @@
     <?php include(CONF_THEME_PATH . 'products/product-info.php'); ?>
 
     <?php if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0) && $product['prod_rating'] > 0) { ?>
-        <?php $label = (round($product['prod_rating']) > 0) ? round($product['totReviews'], 1) . ' ' . Labels::getLabel('LBL_Reviews', $siteLangId) : Labels::getLabel('LBL_No_Reviews', $siteLangId); ?>
-        <div class="product-ratings">
-            <svg class="svg" width="14" height="14">
-                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
-                </use>
-            </svg>
-            <span class="rate"><?php echo round($product['prod_rating'], 1); ?></span>
-            <a href="#itemRatings" class="totals-review"><?php echo $label; ?></a>
-        </div>
+    <?php $label = (round($product['prod_rating']) > 0) ? round($product['totReviews'], 1) . ' ' . Labels::getLabel('LBL_Reviews', $siteLangId) : Labels::getLabel('LBL_No_Reviews', $siteLangId); ?>
+    <div class="product-ratings">
+        <svg class="svg" width="14" height="14">
+            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
+            </use>
+        </svg>
+        <span class="rate"><?php echo round($product['prod_rating'], 1); ?></span>
+        <a href="#itemRatings" class="totals-review"><?php echo $label; ?></a>
+    </div>
     <?php } ?>
 
     <?php if (FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0) && 0 == Tax::getActivatedServiceId()) { ?>
-        <p class="tax-inclusive">
-            <?php echo Labels::getLabel('LBL_Inclusive_All_Taxes', $siteLangId); ?>
-        </p>
+    <p class="tax-inclusive">
+        <?php echo Labels::getLabel('LBL_Inclusive_All_Taxes', $siteLangId); ?>
+    </p>
     <?php } ?>
 
 
     <!-- Option block -->
 
     <?php if (!empty($optionRows)) { ?>
-        <?php $selectedOptionsArr = $product['selectedOptionValues'] ?? [];
+    <?php $selectedOptionsArr = $product['selectedOptionValues'] ?? [];
         $count = 0;
         foreach ($optionRows as $key => $option) {
             $selectedOptionValue = [];
@@ -39,14 +39,15 @@
                 $selectedOptionColor = ("#" == $selectedOptionColor[0] ? $selectedOptionColor : "#" . $selectedOptionColor);
             }
         ?>
-            <div class="options-block">
-                <div class="options-block-head">
-                    <h6 class="h6"><?php echo $option['option_name']; ?></h6>
-                </div>
-                <?php if ($option['values']) { ?>
-                    <div class="options-block-body">
-                        <ul class="select-options <?php echo ($option['option_is_color']) ? 'select-options-color' : 'select-options-size'; ?>">
-                            <?php foreach ($option['values'] as $opVal) {
+    <div class="options-block">
+        <div class="options-block-head">
+            <h6 class="h6"><?php echo $option['option_name']; ?></h6>
+        </div>
+        <?php if ($option['values']) { ?>
+        <div class="options-block-body">
+            <ul
+                class="select-options <?php echo ($option['option_is_color']) ? 'select-options-color' : 'select-options-size'; ?>">
+                <?php foreach ($option['values'] as $opVal) {
                                 $isAvailable = true;
                                 if (in_array($opVal['optionvalue_id'], $product['selectedOptionValues'])) {
                                     $optionUrl = UrlHelper::generateUrl('Products', 'view', array($product['selprod_id']));
@@ -74,17 +75,23 @@
                                     $title = Labels::getLabel('LBL_Not_Available', $siteLangId);
                                 }
                             ?>
-                                <li class="select-options-item <?php echo (in_array($opVal['optionvalue_id'], $product['selectedOptionValues'])) ? 'selected' : ''; ?>">
-                                    <a class="btn-option <?php echo (!$optionUrl) ? ' is-disabled' : ''; ?>" data-optionValueId="<?php echo $opVal['optionvalue_id']; ?>" data-selectedOptionValues="<?php echo implode("_", $selectedOptionsArr); ?>" title="<?php echo $title; ?>" href="<?php echo ($optionUrl) ? $optionUrl : 'javascript:void(0)'; ?>" <?php echo $colorStyle; ?>>
-                                        <?php echo ($option['option_is_color']) ? '' : $opVal['optionvalue_name'];  ?>
-                                    </a>
-                                </li>
-                            <?php } ?>
-                        </ul>
-                    </div>
+                <li
+                    class="select-options-item <?php echo (in_array($opVal['optionvalue_id'], $product['selectedOptionValues'])) ? 'selected' : ''; ?>">
+                    <a class="btn-option <?php echo (!$optionUrl) ? ' is-disabled' : ''; ?>"
+                        data-optionValueId="<?php echo $opVal['optionvalue_id']; ?>"
+                        data-selectedOptionValues="<?php echo implode("_", $selectedOptionsArr); ?>"
+                        title="<?php echo $title; ?>"
+                        href="<?php echo ($optionUrl) ? $optionUrl : 'javascript:void(0)'; ?>"
+                        <?php echo $colorStyle; ?>>
+                        <?php echo ($option['option_is_color']) ? '' : $opVal['optionvalue_name'];  ?>
+                    </a>
+                </li>
                 <?php } ?>
-            </div>
-        <?php $count++;
+            </ul>
+        </div>
+        <?php } ?>
+    </div>
+    <?php $count++;
         } ?>
 
     <?php } ?>
@@ -101,10 +108,10 @@
 
     if (0 < $currentStock && !$isOutOfMinOrderQty) {
         if (true == $displayProductNotAvailableLable && array_key_exists('availableInLocation', $product) && 0 == $product['availableInLocation']) {  ?>
-            <button type="button" disabled="disabled" class="btn btn-brand btn-block mt-3">
-                <?php echo Labels::getLabel('LBL_NOT_AVAILABLE_FOR_YOUR_LOCATION', $siteLangId); ?>
-            </button>
-            <?php } else {
+    <button type="button" disabled="disabled" class="btn btn-brand btn-block mt-3">
+        <?php echo Labels::getLabel('LBL_NOT_AVAILABLE_FOR_YOUR_LOCATION', $siteLangId); ?>
+    </button>
+    <?php } else {
             echo $frmBuyProduct->getFormTag();
             $qtyField =  $frmBuyProduct->getField('quantity');
             $qtyField->value = $product['selprod_min_order_qty'];
@@ -220,10 +227,11 @@
     <!-- More Sellers -->
 
     <?php if ($product['product_type'] == Product::PRODUCT_TYPE_PHYSICAL) { ?>
-        <div class="side-blocks delivery-options">
-            <h5 class="h5"><?php echo Labels::getLabel('LBL_DELIVERY_OPTIONS'); ?></h5>
-            <?php include(CONF_THEME_PATH . '_partial/product/shipping-rates.php'); ?>
-        </div>
+    <div class="side-blocks delivery-options">
+        <h5 class="h5"><?php echo Labels::getLabel('LBL_DELIVERY_OPTIONS'); ?></h5>
+        <div class="side-blocks-body">
+            <?php include(CONF_THEME_PATH . '_partial/product/shipping-rates.php'); ?></div>
+    </div>
     <?php } ?>
 
     <?php
@@ -234,25 +242,30 @@
                 <?php foreach ($volumeDiscountRows as $volumeDiscountRow) {
                     $volumeDiscount = $product['theprice'] * ($volumeDiscountRow['voldiscount_percentage'] / 100);
                     $price = ($product['theprice'] - $volumeDiscount); ?>
-                    <li class="wholesale-slider-item">
-                        <span class="wholesale-slider-value"> <?php echo ($volumeDiscountRow['voldiscount_min_qty']); ?>
-                            <?php echo Labels::getLabel('LBL_OR_MORE_PIECES', $siteLangId); ?></span>
-                        <div class="products-price">
-                            <span class="products-price-new"><?php echo CommonHelper::displayMoneyFormat($price, true, false, true, false, false, true); ?></span>
-                            <del class="products-price-old"><?php echo CommonHelper::displayMoneyFormat($product['theprice'], true, false, true, false, false, true); ?></del>
-                            <span class="products-price-off"><?php echo $volumeDiscountRow['voldiscount_percentage'] . '%'; ?> <?php echo Labels::getLabel('LBL_OFF', $siteLangId); ?></span>
-                        </div>
-                    </li>
+                <li class="wholesale-slider-item">
+                    <span class="wholesale-slider-value"> <?php echo ($volumeDiscountRow['voldiscount_min_qty']); ?>
+                        <?php echo Labels::getLabel('LBL_OR_MORE_PIECES', $siteLangId); ?></span>
+                    <div class="products-price">
+                        <span
+                            class="products-price-new"><?php echo CommonHelper::displayMoneyFormat($price, true, false, true, false, false, true); ?></span>
+                        <del
+                            class="products-price-old"><?php echo CommonHelper::displayMoneyFormat($product['theprice'], true, false, true, false, false, true); ?></del>
+                        <span
+                            class="products-price-off"><?php echo $volumeDiscountRow['voldiscount_percentage'] . '%'; ?>
+                            <?php echo Labels::getLabel('LBL_OFF', $siteLangId); ?></span>
+                    </div>
+                </li>
                 <?php } ?>
             </ul>
         </div>
+    </div>
     <?php }  ?>
 
     <!-- Upsell Products -->
     <?php if (count($upsellProducts) > 0) { ?>
-        <div class="side-blocks product-add-ons">
-            <h5 class="h5"> <?php echo Labels::getLabel('LBL_Product_Add-ons', $siteLangId); ?></h5>
-
+    <div class="side-blocks product-add-ons">
+        <h5 class="h5"> <?php echo Labels::getLabel('LBL_Product_Add-ons', $siteLangId); ?></h5>
+        <div class="side-blocks-body">
             <ul class="list-addons list-addons--js">
                 <?php foreach ($upsellProducts as $usproduct) {
                     $cancelClass = '';
@@ -295,9 +308,20 @@
                                     </div>
                                 <?php } ?>
                             </div>
-                            <?php if ($usproduct['selprod_stock'] <= 0) { ?>
-                                <div class="out-of-stock-txt">
-                                    <?php echo Labels::getLabel('LBL_SOLD_OUT', $siteLangId); ?>
+                            <div class="quantity quantity-2" data-stock="<?php echo $usproduct['selprod_stock']; ?>">
+                                <button class="decrease decrease-js disabled" type="button">
+                                    <svg class="svg" width="16" height="16">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
+                                        </use>
+                                    </svg>
+                                </button>
+                                <div class="qty-input-wrapper" data-stock="<?php echo $usproduct['selprod_stock']; ?>">
+                                    <input type="text" value="<?php echo $usproduct['selprod_min_order_qty']; ?>"
+                                        data-min-qty="<?php echo $usproduct['selprod_min_order_qty']; ?>"
+                                        data-page="product-view" placeholder="Qty"
+                                        class="qty-input cartQtyTextBox productQty-js"
+                                        data-lang="addons[<?php echo $usproduct['selprod_id'] ?>]"
+                                        name="addons[<?php echo $usproduct['selprod_id'] ?>]">
                                 </div>
                             <?php } ?>
                         </div>
@@ -310,5 +334,7 @@
                 <?php } ?>
             </ul>
         </div>
+
+    </div>
     <?php } ?>
 </div>

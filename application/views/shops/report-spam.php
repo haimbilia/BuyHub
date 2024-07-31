@@ -8,7 +8,7 @@ $frm->setFormTagAttribute('onSubmit', 'setUpShopSpam(this); return false;');
 $btnFld = $frm->getField('btn_submit');
 if (null != $btnFld) {
     $btnFld->addFieldTagAttribute('class', 'btn btn-brand');
-} 
+}
 
 $userParentId = $userParentId ?? 0;
 ?>
@@ -18,12 +18,13 @@ $userParentId = $userParentId ?? 0;
     $variables = array('shop' => $shop, 'siteLangId' => $siteLangId, 'template_id' => $template_id, 'action' => $action, 'shopTotalReviews' => $shopTotalReviews, 'shopRating' => $shopRating, 'socialPlatforms' => $socialPlatforms, 'userParentId' => $userParentId);
     $this->includeTemplate('shops/templates/' . $template_id . '.php', $variables, false);
     ?>
-    <section class="section">
+    <section class="section" data-section="section">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-7">
                     <div class="section__head">
-                        <h4><?php echo Labels::getLabel('LBL_Why_are_you_reporting_this_shop_as_spam', $siteLangId); ?></h4>
+                        <h4><?php echo Labels::getLabel('LBL_Why_are_you_reporting_this_shop_as_spam', $siteLangId); ?>
+                        </h4>
                     </div>
                     <div class="">
                         <div class="bg-gray rounded p-5"> <?php echo $frm->getFormHtml(); ?> </div>

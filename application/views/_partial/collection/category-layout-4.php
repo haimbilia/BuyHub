@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 if (isset($collection['categories']) && count($collection['categories'])) { ?>
-    <section class="section">
+    <section class="section" data-section="section">
         <div class="container">
             <div class="section-head category-product">
                 <?php echo ($collection['collection_name'] != '') ? ' <div class="section-heading"><h2>' . $collection['collection_name'] . '</h2></div>' : ''; ?>
@@ -11,11 +11,13 @@ if (isset($collection['categories']) && count($collection['categories'])) { ?>
                         foreach ($collection['categories'] as $key => $category) {
                             $x++; ?>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link <?php echo 1 == $x ? 'active' : ''; ?>" data-bs-toggle="tab" data-bs-target="#tb-<?php echo $key . "-" . $collection['collection_id']; ?>" role="tab" aria-controls="tabpanel-<?php echo $key . "-" . $collection['collection_id']; ?>">
+                                <button class="nav-link <?php echo 1 == $x ? 'active' : ''; ?>" data-bs-toggle="tab"
+                                    data-bs-target="#tb-<?php echo $key . "-" . $collection['collection_id']; ?>" role="tab"
+                                    aria-controls="tabpanel-<?php echo $key . "-" . $collection['collection_id']; ?>">
                                     <?php echo $category['catData']['prodcat_name']; ?>
                                 </button>
                             </li>
-                        <?php if (4 == $x) {
+                            <?php if (4 == $x) {
                                 break;
                             }
                         } ?>
@@ -39,15 +41,16 @@ if (isset($collection['categories']) && count($collection['categories'])) { ?>
                                 if (array_key_exists($product['selprod_id'], $tRightRibbons)) {
                                     $selProdRibbons[] = $tRightRibbons[$product['selprod_id']];
                                 }
-                            ?>
+                                ?>
                                 <div class="item">
-                                    <div class="products <?php echo (isset($layoutClass)) ? $layoutClass : ''; ?> <?php if ($product['selprod_stock'] <= 0) { ?> out-of-stock <?php } ?>">
+                                    <div
+                                        class="products <?php echo (isset($layoutClass)) ? $layoutClass : ''; ?> <?php if ($product['selprod_stock'] <= 0) { ?> out-of-stock <?php } ?>">
                                         <div class="products-body">
                                             <?php if ($product['selprod_stock'] <= 0) { ?>
                                                 <div class="out-of-stock-txt">
                                                     <?php echo Labels::getLabel('LBL_SOLD_OUT', $siteLangId); ?>
                                                 </div>
-                                            <?php  } ?>
+                                            <?php } ?>
                                             <?php
                                             if (!empty($selProdRibbons)) {
                                                 foreach ($selProdRibbons as $ribbRow) {
@@ -57,7 +60,8 @@ if (isset($collection['categories']) && count($collection['categories'])) { ?>
                                             <?php if (true == $displayProductNotAvailableLable && array_key_exists('availableInLocation', $product) && 0 == $product['availableInLocation']) { ?>
                                                 <div class="not-available">
                                                     <svg class="svg">
-                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#linkedinfo">
+                                                        <use
+                                                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#linkedinfo">
                                                         </use>
                                                     </svg>
                                                     <?php echo Labels::getLabel('LBL_NOT_AVAILABLE', $siteLangId); ?>
@@ -66,7 +70,8 @@ if (isset($collection['categories']) && count($collection['categories'])) { ?>
 
                                             <?php $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']); ?>
                                             <div class="products-img">
-                                                <a title="<?php echo $product['selprod_title']; ?>" href="<?php echo !isset($product['promotion_id']) ? UrlHelper::generateUrl('Products', 'View', array($product['selprod_id'])) : UrlHelper::generateUrl('Products', 'track', array($product['promotion_record_id'])); ?>">
+                                                <a title="<?php echo $product['selprod_title']; ?>"
+                                                    href="<?php echo !isset($product['promotion_id']) ? UrlHelper::generateUrl('Products', 'View', array($product['selprod_id'])) : UrlHelper::generateUrl('Products', 'track', array($product['promotion_record_id'])); ?>">
                                                     <?php
                                                     $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_PRODUCT_IMAGE, $product['product_id']);
                                                     $pictureAttr = [
@@ -93,27 +98,29 @@ if (isset($collection['categories']) && count($collection['categories'])) { ?>
                                         </div>
                                         <div class="products-foot">
                                             <div class="products-title">
-                                                <a title="<?php echo $product['selprod_title']; ?>" href="<?php echo UrlHelper::generateUrl('Products', 'View', array($product['selprod_id'])); ?>"><?php echo $product['selprod_title']; ?>
+                                                <a title="<?php echo $product['selprod_title']; ?>"
+                                                    href="<?php echo UrlHelper::generateUrl('Products', 'View', array($product['selprod_id'])); ?>"><?php echo $product['selprod_title']; ?>
                                                 </a>
                                             </div>
-                                            <?php include(CONF_THEME_PATH . '_partial/collection/product-price.php'); ?>
+                                            <?php include (CONF_THEME_PATH . '_partial/collection/product-price.php'); ?>
                                         </div>
                                     </div>
                                 </div>
-                            <?php $i++;
+                                <?php $i++;
                             } ?>
                         </div>
                     </div>
-                <?php if (4 == $j) {
+                    <?php if (4 == $j) {
                         break;
                     }
                 } ?>
             </div>
             <?php if (count($collection['categories']) > 4) { ?>
                 <div class="section-foot">
-                    <a href="<?php echo UrlHelper::generateUrl('Collections', 'View', array($collection['collection_id'])); ?>" class="link-underline"><?php echo Labels::getLabel('LBL_VIEW_ALL', $siteLangId); ?></a>
+                    <a href="<?php echo UrlHelper::generateUrl('Collections', 'View', array($collection['collection_id'])); ?>"
+                        class="link-underline"><?php echo Labels::getLabel('LBL_VIEW_ALL', $siteLangId); ?></a>
                 </div>
-            <?php }  ?>
+            <?php } ?>
 
         </div>
     </section>

@@ -1,39 +1,39 @@
 $offcanvas-space: 1rem 2rem;
 .offcanvas {
-    &-backdrop {
-        opacity: 1 !important;
-        background-color: rgba(0, 0, 0, 0.5);
-        backdrop-filter: blur(4px);
-    }
+  &-backdrop {
+    opacity: 1 !important;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+  }
 
-    &-header {
-        padding: $offcanvas-space;
-    }
-    &-body {
-        padding: $offcanvas-space;
-    }
-    &-foot {
-        padding: $offcanvas-space;
-    }
-    &-start {
-        border: none;
-        #{$end-direction}: auto;
-        #{$start-direction}: 0;
-    }
-    &-end {
-        border: none;
-        #{$start-direction}: auto;
-        #{$end-direction}: 0;
-        transform: translateX(100% * $transform-direction);
-    }
+  &-header {
+    padding: $offcanvas-space;
+  }
+  &-body {
+    padding: $offcanvas-space;
+  }
+  &-foot {
+    padding: $offcanvas-space;
+  }
+  &-start {
+    border: none;
+    #{$end-direction}: auto;
+    #{$start-direction}: 0;
+  }
+  &-end {
+    border: none;
+    #{$start-direction}: auto;
+    #{$end-direction}: 0;
+    transform: translateX(100% * $transform-direction);
+  }
 
-    &-gps-location {
-        height: 50vh;
+  &-gps-location {
+    height: 50vh;
+  }
+  &-side-cart {
+    width: 500px;
+    .cart-summary {
+      margin-bottom: 2rem;
     }
-    &-side-cart {
-        width: 500px;
-        .cart-summary {
-            margin-bottom: 2rem;
-        }
-    }
+  }
 }

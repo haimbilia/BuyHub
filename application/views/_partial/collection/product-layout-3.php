@@ -1,10 +1,10 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 if (isset($collection['products']) && count($collection['products']) > 0) { ?>
-    <section class="section bg-gray">
+    <section class="section bg-gray" data-section="section">
         <div class="container">
             <div class="section-head section-head-center">
                 <div class="section-heading">
-                    <h2><?php echo ($collection['collection_name'] != '') ?  $collection['collection_name'] : ''; ?></h2>
+                    <h2><?php echo ($collection['collection_name'] != '') ? $collection['collection_name'] : ''; ?></h2>
                 </div>
             </div>
             <div class="product-layout-3">
@@ -22,17 +22,18 @@ if (isset($collection['products']) && count($collection['products']) > 0) { ?>
                         $displayProductNotAvailableLable = true;
                     }
                     $prodImgSize = ImageDimension::VIEW_LARGE;
-                    include('product-layout-3-list.php');
+                    include ('product-layout-3-list.php');
                     $i++;
                 } ?>
             </div>
             <?php if ($collection['totProducts'] > $collection['collection_primary_records']) { ?>
                 <div class="section-foot">
-                    <a href="<?php echo UrlHelper::generateUrl('Collections', 'View', array($collection['collection_id'])); ?>" class="link-underline">
+                    <a href="<?php echo UrlHelper::generateUrl('Collections', 'View', array($collection['collection_id'])); ?>"
+                        class="link-underline">
                         <?php echo Labels::getLabel('LBL_VIEW_ALL', $siteLangId); ?>
                     </a>
                 </div>
-            <?php }  ?>
+            <?php } ?>
         </div>
     </section>
 <?php }

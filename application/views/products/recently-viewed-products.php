@@ -4,7 +4,7 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !em
     $displayProductNotAvailableLable = true;
 }
 if ($recentViewedProducts) { ?>
-    <section class="section bg-gray">
+    <section class="section bg-gray" data-section="section">
         <div class="container">
             <div class="section-head">
                 <div class="section-heading">
@@ -21,7 +21,8 @@ if ($recentViewedProducts) { ?>
                     </div>
                 </div>
             </div>
-            <div class="product-listing js-carousel recently-viewed-products" id="product-listing-rvp" data-slides="4,4,3,2" dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
+            <div class="product-listing js-carousel recently-viewed-products" id="product-listing-rvp" data-slides="4,4,3,2"
+                dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
                 <?php
                 $tRightRibbons = isset($recentlyViewedRibbons['tRightRibbons']) ? $recentlyViewedRibbons['tRightRibbons'] : [];
                 foreach ($recentViewedProducts as $rProduct) {
@@ -50,7 +51,8 @@ if ($recentViewedProducts) { ?>
                                 <?php } ?>
 
                                 <div class="products-img">
-                                    <a title="<?php echo CommonHelper::renderHtml($rProduct['selprod_title'], true); ?>" href="<?php echo !isset($rProduct['promotion_id']) ? UrlHelper::generateUrl('Products', 'View', array($rProduct['selprod_id'])) : UrlHelper::generateUrl('Products', 'track', array($rProduct['promotion_record_id'])); ?>">
+                                    <a title="<?php echo CommonHelper::renderHtml($rProduct['selprod_title'], true); ?>"
+                                        href="<?php echo !isset($rProduct['promotion_id']) ? UrlHelper::generateUrl('Products', 'View', array($rProduct['selprod_id'])) : UrlHelper::generateUrl('Products', 'track', array($rProduct['promotion_record_id'])); ?>">
                                         <?php $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_PRODUCT_IMAGE, $rProduct['product_id']); ?>
                                         <?php
                                         $pictureAttr = [
@@ -67,9 +69,12 @@ if ($recentViewedProducts) { ?>
                                 </div>
                             </div>
                             <div class="products-foot">
-                                <div class="products-category"><a href="<?php echo UrlHelper::generateUrl('Category', 'View', array($rProduct['prodcat_id'])); ?>"><?php echo CommonHelper::renderHtml($rProduct['prodcat_name'], true); ?>
+                                <div class="products-category"><a
+                                        href="<?php echo UrlHelper::generateUrl('Category', 'View', array($rProduct['prodcat_id'])); ?>"><?php echo CommonHelper::renderHtml($rProduct['prodcat_name'], true); ?>
                                     </a></div>
-                                <div class="products-title"><a title="<?php echo CommonHelper::renderHtml($rProduct['selprod_title'], true); ?>" href="<?php echo UrlHelper::generateUrl('Products', 'View', array($rProduct['selprod_id'])); ?>"><?php echo (mb_strlen($rProduct['selprod_title']) > 50) ? mb_substr(CommonHelper::renderHtml($rProduct['selprod_title'], true), 0, 50) . "..." : CommonHelper::renderHtml($rProduct['selprod_title'], true); ?>
+                                <div class="products-title"><a
+                                        title="<?php echo CommonHelper::renderHtml($rProduct['selprod_title'], true); ?>"
+                                        href="<?php echo UrlHelper::generateUrl('Products', 'View', array($rProduct['selprod_id'])); ?>"><?php echo (mb_strlen($rProduct['selprod_title']) > 50) ? mb_substr(CommonHelper::renderHtml($rProduct['selprod_title'], true), 0, 50) . "..." : CommonHelper::renderHtml($rProduct['selprod_title'], true); ?>
                                     </a></div>
                                 <?php $this->includeTemplate('_partial/collection-product-price.php', array('product' => $rProduct, 'siteLangId' => $siteLangId), false); ?>
                             </div>
@@ -79,5 +84,5 @@ if ($recentViewedProducts) { ?>
             </div>
         </div>
     </section>
-<?php
+    <?php
 }

@@ -195,56 +195,81 @@ class PaymentMethods
                     return false;
                 }
 
-                $txnData = $this->getTransferTxnData();
+                $txnTypes = [
+                    Transactions::TYPE_TRANSFER_TO_THIRD_PARTY_ACCOUNT,
+                    Transactions::TYPE_ADMIN_COMMISSION,
+                ];
+                $txnData = $this->getTransferTxnData(type: $txnTypes);
                 $transferAmtArr = [];
-                if (!empty($txnData)) {
+                $transferAmtCmtsArr = [];
+                if (!empty($txnData) && array_search(Transactions::TYPE_TRANSFER_TO_THIRD_PARTY_ACCOUNT, array_column($txnData, 'utxn_type')) !== FALSE) {
                     foreach ($txnData as $txn) {
-                        if (empty($txn['utxn_gateway_txn_id'])) {
-                            continue;
+                        if (!empty($txn['utxn_gateway_txn_id'])) {
+                            $transferAmtArr[$txn['utxn_gateway_txn_id']] = $txn['utxn_debit'];
+                            $transferAmtCmtsArr[$txn['utxn_gateway_txn_id']]['utxn_comments'] = $txn['utxn_comments'];
+                            if (self::REFUND_TYPE_RETURN == $refundType) {
+                                if ($txn['utxn_debit'] >= $deductableSellerAmount) {
+                                    $transferAmtArr[$txn['utxn_gateway_txn_id']] = $deductableSellerAmount;
+                                    $deductableSellerAmount = 0;
+                                } else {
+                                    $deductableSellerAmount = $deductableSellerAmount - $transferAmtArr[$txn['utxn_gateway_txn_id']];
+                                }
+                            }
+                        } else if (Transactions::TYPE_ADMIN_COMMISSION == $txn['utxn_type']) {
+                            $comments = Labels::getLabel('MSG_REFUND_OF_COMMISSION_CHARGED_FOR_#{INVOICE}', $this->langId);
+                            $comments = CommonHelper::replaceStringData($comments, ['{INVOICE}' => $this->invoiceNumber]);
+                            Transactions::creditWallet($this->sellerId, Transactions::TYPE_ORDER_REFUND, $txn['utxn_debit'], $this->langId, $comments, $this->opId);
                         }
+                    }
+                    if (!empty($transferAmtArr)) {
+                        foreach ($transferAmtArr as $transferId => $txnAmt) {
+                            $this->transferId = $transferId;
+                            $this->sellerTxnAmount = $txnAmt;
 
-                        $transferAmtArr[$txn['utxn_gateway_txn_id']] = $txn['utxn_debit'];
-                        if (self::REFUND_TYPE_RETURN == $refundType) {
-                            if ($txn['utxn_debit'] >= $deductableSellerAmount) {
-                                $transferAmtArr[$txn['utxn_gateway_txn_id']] = $deductableSellerAmount;
-                                $deductableSellerAmount = 0;
-                            } else {
-                                $deductableSellerAmount = $deductableSellerAmount - $transferAmtArr[$txn['utxn_gateway_txn_id']];
+                            $this->refundFromWallet();
+
+                            $comments = Labels::getLabel('MSG_REFUND_INITIATE_-', $this->langId) .  $transferAmtCmtsArr[$transferId]['utxn_comments'];
+                            $requestParam = [
+                                'transferId' => $this->transferId,
+                                'data' => [
+                                    'amount' => $this->convertInPaisa($this->sellerTxnAmount), // In Paisa
+                                    'description' => $comments,
+                                    'metadata' => [
+                                        'op_id' => $this->opId
+                                    ],
+                                ],
+                            ];
+                            $respStatus = $this->paymentPlugin->revertTransfer($requestParam);
+                            if (false == $respStatus) {
+                                $this->error = $this->paymentPlugin->getError();
+                                return false;
+                            }
+
+                            //To get response object
+                            $this->resp = $this->paymentPlugin->getResponse();
+                            if (!empty($this->resp->id)) {
+                                $this->remoteTxnId = $this->resp->id;
+                                // Credit to wallet if successfully refund from remote account
+                                $this->returnRefundAmount($comments);
                             }
                         }
                     }
-                }
-
-                if (!empty($transferAmtArr)) {
-                    foreach ($transferAmtArr as $transferId => $txnAmt) {
-                        $this->transferId = $transferId;
-                        $this->sellerTxnAmount = $txnAmt;
-
-                        $this->refundFromWallet();
-
-                        $comments = Labels::getLabel('MSG_REFUND_INITIATE_-', $this->langId) .  $txnData[$transferId]['utxn_comments'];
-                        $requestParam = [
-                            'transferId' => $this->transferId,
-                            'data' => [
-                                'amount' => $this->convertInPaisa($this->sellerTxnAmount), // In Paisa
-                                'description' => $comments,
-                                'metadata' => [
-                                    'op_id' => $this->opId
-                                ],
-                            ],
-                        ];
-                        $respStatus = $this->paymentPlugin->revertTransfer($requestParam);
-                        if (false == $respStatus) {
-                            $this->error = $this->paymentPlugin->getError();
-                            return false;
-                        }
-
-                        //To get response object
-                        $this->resp = $this->paymentPlugin->getResponse();
-                        if (!empty($this->resp->id)) {
-                            $this->remoteTxnId = $this->resp->id;
-                            // Credit to wallet if successfully refund from remote account
-                            $this->returnRefundAmount($comments);
+                } else {
+                    $txnTypes = [
+                        Transactions::TYPE_PRODUCT_SALE,
+                        Transactions::TYPE_ADMIN_COMMISSION,
+                    ];
+                    $txnData = $this->getTransferTxnData(type: $txnTypes);
+                    if (!empty($txnData)) {
+                        foreach ($txnData as $txn) {
+                            if (Transactions::TYPE_PRODUCT_SALE == $txn['utxn_type']) {
+                                $this->sellerTxnAmount = $txn['utxn_credit'];
+                                $this->refundFromWallet();
+                            } else if (Transactions::TYPE_ADMIN_COMMISSION == $txn['utxn_type']) {
+                                $comments = Labels::getLabel('MSG_REFUND_OF_COMMISSION_CHARGED_FOR_#{INVOICE}', $this->langId);
+                                $comments = CommonHelper::replaceStringData($comments, ['{INVOICE}' => $this->invoiceNumber]);
+                                Transactions::creditWallet($this->sellerId, Transactions::TYPE_ORDER_REFUND, $txn['utxn_debit'], $this->langId, $comments, $this->opId);
+                            }
                         }
                     }
                 }
@@ -279,19 +304,23 @@ class PaymentMethods
      *
      * @return void
      */
-    public function getTransferTxnData(int $sellerId = 0, int $opId = 0)
+    public function getTransferTxnData(int $sellerId = 0, int $opId = 0, array $type = [])
     {
         $sellerId = 0 < $sellerId ? $sellerId : $this->sellerId;
         $opId = 0 < $opId ? $opId : $this->opId;
 
+        if (empty($type)) {
+            $type = [Transactions::TYPE_TRANSFER_TO_THIRD_PARTY_ACCOUNT];
+        }
+
         $db = FatApp::getDb();
         $srch = Transactions::getUserTransactionsObj($sellerId);
-        $srch->addCondition('utxn.utxn_type', '=', Transactions::TYPE_TRANSFER_TO_THIRD_PARTY_ACCOUNT);
+        $srch->addCondition('utxn.utxn_type', 'IN', $type);
         $srch->addCondition('utxn.utxn_op_id', '=', $opId);
         $srch->addOrder('utxn_debit', 'DESC');
         $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
-        $records = $db->fetchAll($rs, 'utxn_gateway_txn_id');
+        $records = $db->fetchAll($rs);
         if (!$records) {
             $this->error = $db->getError();
             return false;

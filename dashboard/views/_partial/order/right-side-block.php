@@ -2,6 +2,7 @@
 $canViewShippingCharges = isset($canViewShippingCharges) ? $canViewShippingCharges : false;
 $canViewTaxCharges = isset($canViewTaxCharges) ? $canViewTaxCharges : false;
 $primaryOrder = isset($primaryOrder) ? $primaryOrder : true;
+$sellerView = isset($sellerView) ? $sellerView : false;
 
 $transferBank = (isset($orderDetail['plugin_code']) && 'TransferBank' == $orderDetail['plugin_code']);
 $cartTotal = $shippingCharges = $totalTax = $selProdTotalSpecialPrice = 0;
@@ -252,7 +253,13 @@ $totalSaving = $selProdTotalSpecialPrice + $discount + $volDiscount;
                 </h4>
                 <div class="collapse" id="order-block-comments">
                     <div class="order-block-data">
-                        <?php echo $childOrderDetail['op_comments']; ?>
+                        <?php
+                        if ($sellerView) {
+                            echo FatUtility::decodeHtmlEntities($childOrderDetail['op_comments']);                            
+                        } else {
+                            echo $childOrderDetail['op_comments'];
+                        }
+                        ?>
                     </div>
                 </div>
             </div>
