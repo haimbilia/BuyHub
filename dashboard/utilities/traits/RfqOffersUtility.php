@@ -436,11 +436,15 @@ trait RfqOffersUtility
         $post['offer_user_type'] = $this->isSeller ? User::USER_TYPE_SELLER : User::USER_TYPE_BUYER;
         $post['offer_negotiable'] = $negotiable;
 
+
         $rfqOfferData = RfqOffers::getAttributesById($recordId, ['offer_status', 'offer_price', 'offer_quantity', 'offer_counter_offer_id']);
+        $changeInOffer = (!empty($rfqOfferData) && ($post['offer_quantity'] != $rfqOfferData['offer_quantity'] || $post['offer_price'] != $rfqOfferData['offer_price']));
+
+        $canSendEmail = (1 > $recordId || $changeInOffer);
         $ifRejected = !empty($rfqOfferData) ? (RfqOffers::STATUS_REJECTED == $rfqOfferData['offer_status']) : false;
         if ($ifRejected) {
             $post['offer_status'] = $rfqOfferData['offer_status'];
-            if ($post['offer_quantity'] != $rfqOfferData['offer_quantity'] || $post['offer_price'] != $rfqOfferData['offer_price']) {
+            if ($changeInOffer) {
                 $post['offer_status'] = RfqOffers::STATUS_OPEN;
             }
         }
@@ -537,8 +541,7 @@ trait RfqOffersUtility
         }
 
         /* For New/Counter. Not on edit. */
-        // if (1 > $recordId) 
-        {
+        if ($canSendEmail) {
             $sellerId = (int)RfqOffers::getAttributesById($primaryOfferId, 'offer_user_id');
             $flds = LibHelper::addPrefixInArrValues(RfqOffers::FIELDS, 'ro.');
             $counterOfferFlds = [];
