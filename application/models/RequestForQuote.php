@@ -699,23 +699,16 @@ class RequestForQuote extends MyAppModel
     /**
      * Gets the names of the product categories associated with the given categories string.
      *
-     * @param string $categories A JSON-encoded string of product category IDs.
+     * @param int $categoryId product category ID.
      * @return string The comma-separated list of product category names.
      */
-    public static function getRfqCategoriesName(string $categories, int $siteLangId): string
+    public static function getRfqCategoriesName(int $categoryId, int $siteLangId): string
     {
         if (empty($categories)) {
             return '';
         }
-        $categories = json_decode($categories, true);
-        $catName = '';
-        if (!empty($categories)) {
-            foreach ($categories as $catId) {
-                $catData = ProductCategory::getAttributesByLangId($siteLangId, $catId, ['COALESCE(prodcat_name, prodcat_identifier) as prodcat_name'], applicationConstants::JOIN_RIGHT);
-                $catName .= $catData['prodcat_name'] . ', ';
-            }
-            $catName = rtrim($catName, ', ');
-        }
+        $catData = ProductCategory::getAttributesByLangId($siteLangId, $categoryId, ['COALESCE(prodcat_name, prodcat_identifier) as prodcat_name'], applicationConstants::JOIN_RIGHT);
+        $catName = $catData['prodcat_name'];
         return $catName;
     }
 

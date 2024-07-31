@@ -95,6 +95,7 @@
     - Bug-085143 - 404 on the product details page when the new user creates a product.
     - Bug-085068 - cancellation is not working properly if stripe connect is on.
     - Bug-085729 - RFQ >> 'Order details section appears distorted on 'Order placed' email
+    - Bug-085740 - RFQ >> Nothing happens on clicking the view button on 'RFQ detail' page of seller/buyer
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  
