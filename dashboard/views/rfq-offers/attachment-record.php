@@ -33,7 +33,7 @@ if (1 > $row['rom_buyer_access']) {
 
         <?php if (0 < $row['afile_id']) { ?>
             <div class="attachments">
-                <a class="attachments-item" target="blank" title="<?php echo Labels::getLabel('LBL_DOWNLOAD_FILE', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('RfqOffers', 'downloadAttachmentFile', array($row['rom_id'], $row['rom_primary_offer_id'])); ?>">
+                <a class="attachments-item" target="blank" title="<?php echo Labels::getLabel('LBL_DOWNLOAD_FILE', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl(($isSeller ? 'Seller' : '') . 'RfqOffers', 'downloadAttachmentFile', array($row['rom_id'], $row['rom_primary_offer_id'])); ?>">
                     <span class="attachments-thumb">
                         <svg class="svg" width="14" height="14">
                             <use xlink:href="<?php echo CONF_WEBROOT_BACKEND; ?>images/retina/sprite.svg#download"></use>
