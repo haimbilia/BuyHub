@@ -441,6 +441,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
 
         setTimeout(() => {
             isAjaxRunning = false;
+            $(frm).attr('onsubmit', onSubmitFn);
         }, 5000);
     };
 
