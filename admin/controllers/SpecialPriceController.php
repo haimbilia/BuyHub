@@ -243,13 +243,14 @@ class SpecialPriceController extends ListingBaseController
             LibHelper::exitWithError(Labels::getLabel('ERR_Invalid_Dates', $this->siteLangId), true);
         }
 
-        $prodSrch = new ProductSearch($this->siteLangId);
-        $prodSrch->joinSellerProducts();
+        /* $prodSrch = new ProductSearch(0);
+        $prodSrch->joinSellerProducts(0,'',[], false);
         $prodSrch->addCondition('selprod_id', '=', $selprod_id);
         $prodSrch->addMultipleFields(array('product_min_selling_price', 'selprod_price'));
-        $prodSrch->setPageSize(1);
+        $prodSrch->doNotCalculateRecords();
+        $prodSrch->setPageSize(1);       
         $rs = $prodSrch->getResultSet();
-        $product = FatApp::getDb()->fetch($rs);
+        $product = FatApp::getDb()->fetch($rs);        
         if (!isset($post['splprice_price']) || $post['splprice_price'] < $product['product_min_selling_price'] || $post['splprice_price'] > $product['selprod_price']) {
 
             $str = Labels::getLabel('ERR_PRICE_MUST_BETWEEN_MIN_SELLING_PRICE_{MINSELLINGPRICE}_AND_SELLING_PRICE_{SELLINGPRICE}', $this->siteLangId);
@@ -258,7 +259,7 @@ class SpecialPriceController extends ListingBaseController
 
             $message = CommonHelper::replaceStringData($str, array('{MINSELLINGPRICE}' => $minSellingPrice, '{SELLINGPRICE}' => $sellingPrice));
             LibHelper::exitWithError($message);
-        }
+        } */
 
         /* Check if same date already exists [ */
         $tblRecord = new TableRecord(SellerProduct::DB_TBL_SELLER_PROD_SPCL_PRICE);
