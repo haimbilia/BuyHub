@@ -1022,7 +1022,7 @@ class Cronjob extends FatModel
 
         $srch = new searchBase(Orders::DB_TBL, 'o');
         $srch->joinTable('(' . $sSrch->getQuery() . ')', 'INNER JOIN', 'otemp.currentOrderId=o.order_id', 'otemp');
-        $srch->joinTable(OrderSubscription::DB_TBL, 'INNER JOIN', 'o.order_id = oss.ossubs_order_id and oss.ossubs_status_id =' . FatApp::getConfig('CONF_DEFAULT_SUBSCRIPTION_PAID_ORDER_STATUS') . " and oss.ossubs_till_date > '" . date('Y-m-d') . "'", 'oss');
+        $srch->joinTable(OrderSubscription::DB_TBL, 'INNER JOIN', 'o.order_id = oss.ossubs_order_id and oss.ossubs_status_id =' . FatApp::getConfig('CONF_DEFAULT_SUBSCRIPTION_PAID_ORDER_STATUS') . " and oss.ossubs_till_date < '" . date('Y-m-d') . "'", 'oss');
         $srch->joinTable(User::DB_TBL, 'INNER JOIN', 'o.order_user_id = u.user_id', 'u');
 
         $srch->addCondition('u.user_has_valid_subscription', '= ', applicationConstants::YES);
