@@ -28,10 +28,16 @@
                                     title="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, FatUtility::VAR_STRING, '') ?>">
                             </a>
                         </div>
-                        <?php if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, '')) && $controllerName != 'Cart') { ?>
+                        <?php
+                        $diplayGeoLocation = ($controllerName != 'Cart') ? true : false;
+                          if($controllerName == 'Cart' && !isset($_COOKIE['_ykGeoLat'])){
+                            $diplayGeoLocation = true;
+                          }
+                        
+                        if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, '')) && $diplayGeoLocation ) { ?>
                         <div class="geo-location">
                             <div class="geo-location_inner">
-                                <div class="dropdown">
+                                <div class="dropdown"> 
                                     <?php
                                         $geoAddress = '';
                                         if ((!isset($_COOKIE['_ykGeoLat']) || !isset($_COOKIE['_ykGeoLng']) || !isset($_COOKIE['_ykGeoCountryCode'])) && FatApp::getConfig('CONF_DEFAULT_GEO_LOCATION', FatUtility::VAR_INT, 0)) {

@@ -229,7 +229,7 @@ class ConfigurationsController extends ListingBaseController
         }
 
 
-        if (isset($post['CONF_WITHOUT_PROD_VARIANTS']) && 1 == $post['CONF_WITHOUT_PROD_VARIANTS']) {
+        if (isset($post['CONF_WITHOUT_PROD_VARIANTS']) && FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0) != $post['CONF_WITHOUT_PROD_VARIANTS']) {
             $srch = new ProductSearch(0, '', '', false, false, false);
             $srch->joinProductVariant('INNER JOIN');
             $srch->addFld(1);
@@ -238,7 +238,7 @@ class ConfigurationsController extends ListingBaseController
             $rs = $srch->getResultSet();
             $row = FatApp::getDb()->fetch($rs);
             if (!empty($row)) {
-                LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_REMOVE_PRODUCT_VARIANTS_LINKED_WITH_PRODUCTS', $this->siteLangId), true);
+                LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_REMOVE_PRODUCTS_DATA_TO_CHANGE_THIS_SETTINGS', $this->siteLangId), true);
             }
         }
 
@@ -1669,7 +1669,7 @@ class ConfigurationsController extends ListingBaseController
                 HtmlHelper::configureSwitchForCheckbox($fld);
 
                 $fld = $frm->addCheckBox(Labels::getLabel("FRM_WITHOUT_PRODUCT_VARIANTS", $langId), 'CONF_WITHOUT_PROD_VARIANTS', 1, array(), false, 0);
-                $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("FRM_IT_WILL_MERGE_PROD_ADD_FORM_&_REMOVE_PROD_VARIANTS", $langId) . '.</span>';
+                $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("FRM_IT_WILL_MERGE_PROD_ADD_FORM_&_REMOVE_PROD_VARIANTS", $langId) . '.</span><span class="form-text text-muted">' . Labels::getLabel('ERR_PLEASE_REMOVE_PRODUCTS_DATA_TO_CHANGE_THIS_SETTINGS', $this->siteLangId) . '.</span>';
                 HtmlHelper::configureSwitchForCheckbox($fld);
 
                 $fld = $frm->addHtmlEditor(Labels::getLabel('FRM_MAINTENANCE_TEXT', $this->siteLangId), 'CONF_MAINTENANCE_TEXT_' . $langId);
