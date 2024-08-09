@@ -583,7 +583,7 @@ class ProductsController extends ListingBaseController
             $prodObj::tblFld('youtube_video') => $post[$prodObj::tblFld('youtube_video')]
         ], $langId);
 
-        if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+        if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {            
             $selProdId = $this->setupInventory($recordId, $db);
             if (1 > $selProdId) {
                 $db->rollbackTransaction();

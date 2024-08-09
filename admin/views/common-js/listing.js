@@ -445,7 +445,8 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
                 $("." + $.ykmodal.element + ' .submitBtnJs').removeClass('loading').removeAttr('disabled');
             }
             isAjaxRunning = false;
-        }, 3000);
+            $(frm).attr('onsubmit', onSubmitFn);
+        }, 5000);
     };
 
     saveLangData = function (frm) {
