@@ -442,9 +442,14 @@ trait RfqOffersUtility
 
         $canSendEmail = (1 > $recordId || $changeInOffer);
         $ifRejected = !empty($rfqOfferData) ? (RfqOffers::STATUS_REJECTED == $rfqOfferData['offer_status']) : false;
+        
         if ($ifRejected) {
+            $pOfferId = (int)RfqOffers::getAttributesById($recordId, 'offer_primary_offer_id');
+            $oldShippingCharges = RfqOffers::getShippingCharges($pOfferId);
+            $shippingcharges = FatApp::getPostedData('rlo_shipping_charges', FatUtility::VAR_FLOAT, 0);
+            
             $post['offer_status'] = $rfqOfferData['offer_status'];
-            if ($changeInOffer) {
+            if ($changeInOffer || $oldShippingCharges != $shippingcharges) {
                 $post['offer_status'] = RfqOffers::STATUS_OPEN;
             }
         }

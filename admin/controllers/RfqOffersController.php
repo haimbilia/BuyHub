@@ -398,6 +398,7 @@ class RfqOffersController extends ListingBaseController
         }
 
         $recordId = FatApp::getPostedData('offer_id', FatUtility::VAR_INT, 0);
+        $shippingcharges = FatApp::getPostedData('rlo_shipping_charges', FatUtility::VAR_FLOAT, 0);
 
         $primaryOfferId = 0;
         if (1 > $counterOfferId) {
@@ -427,8 +428,14 @@ class RfqOffersController extends ListingBaseController
         $rfqOfferData = RfqOffers::getAttributesById($recordId, ['offer_status', 'offer_price', 'offer_quantity', 'offer_counter_offer_id']);
         $ifRejected = !empty($rfqOfferData) ? (RfqOffers::STATUS_REJECTED == $rfqOfferData['offer_status']) : false;
         if ($ifRejected) {
+            $pOfferId = $primaryOfferId;
+            if (1 > $primaryOfferId) {
+                $pOfferId = (int)RfqOffers::getAttributesById($recordId, 'offer_primary_offer_id');
+            }
+            $oldShippingCharges = RfqOffers::getShippingCharges($pOfferId);
+
             $post['offer_status'] = $rfqOfferData['offer_status'];
-            if ($post['offer_quantity'] != $rfqOfferData['offer_quantity'] || $post['offer_price'] != $rfqOfferData['offer_price']) {
+            if ($post['offer_quantity'] != $rfqOfferData['offer_quantity'] || $post['offer_price'] != $rfqOfferData['offer_price'] || $oldShippingCharges != $shippingcharges) {
                 $post['offer_status'] = RfqOffers::STATUS_OPEN;
             }
         }
@@ -458,7 +465,6 @@ class RfqOffersController extends ListingBaseController
             $rloStatus = RfqOffers::STATUS_COUNTERED;
         }
 
-        $shippingcharges = FatApp::getPostedData('rlo_shipping_charges', FatUtility::VAR_FLOAT, 0);
         /* Update Offers buyer/seller latest record Id corresponding to primary Id*/
         $data = [
             'rlo_primary_offer_id' => $primaryOfferId,

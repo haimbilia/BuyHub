@@ -103,6 +103,7 @@
     - Bug-085838 - RFQ >> Delivery address for digital products still appears on RFQ detail page on admin account
     - Bug-085839 - RFQ >> Suggestion >> No icons are displayed for upload file and submit button on 'Attachments' and 'messages' panel of RFQ >> admin account
     - Bug-085843 - RFQ >> The seller is unable to download the attachments added by either the buyer or the seller.
+    - Bug-086140 - RFQ >> Suggestion >> 'Accept' and 'Reject' buttons should appear to the buyer when the seller edits the shipping charges of the rejected offer
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  
