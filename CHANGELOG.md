@@ -104,6 +104,7 @@
     - Bug-085839 - RFQ >> Suggestion >> No icons are displayed for upload file and submit button on 'Attachments' and 'messages' panel of RFQ >> admin account
     - Bug-085843 - RFQ >> The seller is unable to download the attachments added by either the buyer or the seller.
     - Bug-086140 - RFQ >> Suggestion >> 'Accept' and 'Reject' buttons should appear to the buyer when the seller edits the shipping charges of the rejected offer
+    - Bug-086054 - Branch 1 >> 'Share and earn' page vibrates or shakes while scrolling
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  
