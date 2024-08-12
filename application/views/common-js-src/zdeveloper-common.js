@@ -1208,10 +1208,11 @@ $(function () {
     };
 
     setGeoLocation = function () {
-        $.ykmodal(fcom.getLoader(), true);
+        fcom.displayProcessing();
         fcom.ajax(fcom.makeUrl("Home", "setGeoLocation"), '', function (ans) {
-            fcom.removeLoader();
+            fcom.closeProcessing();
             $.ykmodal(ans, true,'','','',false);
+            googleAddressAutocomplete('ga-autoComplete-header');
         });
     };
 

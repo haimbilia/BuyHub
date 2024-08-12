@@ -45,6 +45,7 @@
     - Bug-085928 - RTL >> 'Product Listing' Page Appears in English When Buyer Has Selected Arabic Language
     - Bug-085916 - RTL >> Issue on 'Inventory setup form
     - Bug-085851 - Deprecation appears on the reviews listing page on the front end.
+    - Bug-085849 - Suggestion listing does not appear in the location popup on the homepage
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  
