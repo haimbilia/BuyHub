@@ -47,6 +47,7 @@
     - Bug-085851 - Deprecation appears on the reviews listing page on the front end.
     - Bug-085849 - Suggestion listing does not appear in the location popup on the homepage
     - Bug-085923 - "Without product variant" seller inventory listing still appears
+    - Bug-085914 - A fatal error occurs on the checkout page when the admin enables the shipping plugin
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  
