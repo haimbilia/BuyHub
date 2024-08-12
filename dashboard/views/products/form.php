@@ -15,6 +15,11 @@ if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0))
 ?>
 <div class="content-wrapper content-space mainJs" <?php echo CommonHelper::getLayoutDirection() != $formLayout ? 'dir="' . $formLayout . '"' : ''; ?>>
     <?php
+    $prodUrl = UrlHelper::generateUrl('seller', 'products');
+    if (FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+        $prodUrl = UrlHelper::generateUrl('seller', 'catalog');
+    }
+
     $frm->setFormTagAttribute('class', 'form');
     $frm->setFormTagAttribute('id', 'addProductfrm');
     $frm->setFormTagAttribute('onsubmit', 'setup($(\'#addProductfrm\'));return false;');
@@ -22,7 +27,7 @@ if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0))
     <div class="content-header">
         <div class="content-header-title">
             <h2>
-                <a class="btn btn-back" href="<?php echo UrlHelper::generateUrl('seller', 'products'); ?>">
+                <a class="btn btn-back" href="<?php echo $prodUrl; ?>">
                     <svg class="svg" width="24" height="24">
                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#back">
                         </use>

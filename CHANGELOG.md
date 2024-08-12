@@ -46,6 +46,7 @@
     - Bug-085916 - RTL >> Issue on 'Inventory setup form
     - Bug-085851 - Deprecation appears on the reviews listing page on the front end.
     - Bug-085849 - Suggestion listing does not appear in the location popup on the homepage
+    - Bug-085923 - "Without product variant" seller inventory listing still appears
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  
