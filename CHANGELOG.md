@@ -42,8 +42,9 @@
     - Bug-085143 - 404 on the product details page when the new user creates a product.
     - Bug-085068 - cancellation is not working properly if stripe connect is on.
     - Bug-086054 - 'Share and earn' page vibrates or shakes while scrolling
-    - Bug-085928 - Branch 1 RTL >> 'Product Listing' Page Appears in English When Buyer Has Selected Arabic Language
-    - Bug-085916 - Branch 1 RTL >> Issue on 'Inventory setup form
+    - Bug-085928 - RTL >> 'Product Listing' Page Appears in English When Buyer Has Selected Arabic Language
+    - Bug-085916 - RTL >> Issue on 'Inventory setup form
+    - Bug-085851 - Deprecation appears on the reviews listing page on the front end.
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  
