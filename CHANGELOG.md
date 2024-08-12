@@ -48,6 +48,7 @@
     - Bug-085849 - Suggestion listing does not appear in the location popup on the homepage
     - Bug-085923 - "Without product variant" seller inventory listing still appears
     - Bug-085914 - A fatal error occurs on the checkout page when the admin enables the shipping plugin
+    - Bug-085880 - Seller-added pickup address is visible on the checkout page even if shipped by admin only setting is enabled
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  
