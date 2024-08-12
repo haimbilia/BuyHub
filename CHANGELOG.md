@@ -43,6 +43,7 @@
     - Bug-085068 - cancellation is not working properly if stripe connect is on.
     - Bug-086054 - 'Share and earn' page vibrates or shakes while scrolling
     - Bug-085928 - Branch 1 RTL >> 'Product Listing' Page Appears in English When Buyer Has Selected Arabic Language
+    - Bug-085916 - Branch 1 RTL >> Issue on 'Inventory setup form
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  
