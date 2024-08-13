@@ -49,6 +49,7 @@
     - Bug-085923 - "Without product variant" seller inventory listing still appears
     - Bug-085914 - A fatal error occurs on the checkout page when the admin enables the shipping plugin
     - Bug-085880 - Seller-added pickup address is visible on the checkout page even if shipped by admin only setting is enabled
+    - Bug-085921 - Without product variants >> minimum selling price language label should be managebale for both conditions
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  

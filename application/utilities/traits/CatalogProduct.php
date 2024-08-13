@@ -58,7 +58,13 @@ trait CatalogProduct
             $costPrice->requirements()->setPositive();
         }
 
-        $fld = $frm->addFloatField(Labels::getLabel('FRM_MINIMUM_SELLING_PRICE', $langId) . ' [' . CommonHelper::getCurrencySymbol(true) . ']', 'product_min_selling_price', '');
+
+        if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+            $lbl = Labels::getLabel('FRM_SELLING_PRICE', $langId);
+        } else {
+            $lbl = Labels::getLabel('FRM_MINIMUM_SELLING_PRICE', $langId);
+        }
+        $fld = $frm->addFloatField($lbl . ' [' . CommonHelper::getCurrencySymbol(true) . ']', 'product_min_selling_price', '');
         $fld->requirements()->setRange('0.01', '99999999.99');
 
         if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
@@ -126,8 +132,8 @@ trait CatalogProduct
                 $orderReturnAgeUnReqFld = new FormFieldRequirement('selprod_return_age', Labels::getLabel('FRM_PRODUCT_ORDER_RETURN_PERIOD_(Days)', $this->siteLangId));
                 $orderReturnAgeUnReqFld->setRequired(false);
                 $orderReturnAgeUnReqFld->setPositive();
-            }else{
-                $frm->addHiddenField('','selprod_return_age',0);
+            } else {
+                $frm->addHiddenField('', 'selprod_return_age', 0);
             }
             $fld = $frm->addIntegerField(Labels::getLabel('FRM_PRODUCT_ORDER_CANCELLATION_PERIOD_(Days)', $this->siteLangId), 'selprod_cancellation_age');
             $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('FRM_PERIOD_IN_DAYS', $this->siteLangId) . ' </span>';
@@ -173,11 +179,11 @@ trait CatalogProduct
             $frm->addSelectBox(Labels::getLabel('FRM_COUNTRY_OF_ORIGIN', $langId), 'ps_from_country_id', []);
         }
         if ($productType == Product::PRODUCT_TYPE_DIGITAL) {
-            if(!FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+            if (!FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
                 $fld = $frm->addRadioButtons(Labels::getLabel('FRM_PRODUCT_DOWNLOAD_ATTACHEMENTS_AT_INVENTORY_LEVEL', $this->siteLangId), 'product_attachements_with_inventory', applicationConstants::getYesNoArr($langId), applicationConstants::NO);
                 $fld->requirements()->setRequired();
             } else {
-                $frm->addHiddenField('','product_attachements_with_inventory',0);
+                $frm->addHiddenField('', 'product_attachements_with_inventory', 0);
             }
         } else {
             if ($productType != Product::PRODUCT_TYPE_SERVICE) {
