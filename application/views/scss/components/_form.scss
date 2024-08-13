@@ -163,7 +163,6 @@ $input-border-focus: #000;
       }
 
       [dir="rtl"] & {
-        padding-#{$end-direction}: 40px;
         background-position: calc(100% - 13px) center;
       }
     }
@@ -358,7 +357,7 @@ $input-border-focus: #000;
   background-position: calc(13px) center;
 
   [dir="rtl"] & {
-    padding-#{$end-direction}: 40px;
+    // padding-#{$end-direction}: 40px;
     background-position: calc(100% - 13px) center;
   }
 }

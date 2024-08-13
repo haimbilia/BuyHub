@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid usage');
-$totReviews = $avgRating  = $pixelToFillRight = 0;
+$totReviews = $avgRating = $pixelToFillRight = 0;
 if (!empty($reviews)) {
     $totReviews = (!empty($reviews['totReviews'])) ? FatUtility::int($reviews['totReviews']) : 0;
     $avgRating = (!empty($reviews['prod_rating'])) ? FatUtility::convertToType($reviews['prod_rating'], FatUtility::VAR_FLOAT) : 0;
@@ -20,26 +20,34 @@ $productView = $productView ?? false;
                             <div>
                                 <h2 class="title"><?php echo Labels::getLabel('LBL_CUSTOMER_REVIEWS', $siteLangId); ?></h2>
                                 <?php if (1 > $totReviews) { ?>
-                                    <p class="mb-0"><?php echo Labels::getLabel('LBL_SHARE_YOUR_THOUGHTS_WITH_OTHER_CUSTOMERS', $siteLangId); ?></p>
+                                    <p class="mb-0">
+                                        <?php echo Labels::getLabel('LBL_SHARE_YOUR_THOUGHTS_WITH_OTHER_CUSTOMERS', $siteLangId); ?>
+                                    </p>
                                 <?php } ?>
                             </div>
                             <?php if ($totReviews > 0) { ?>
                                 <div class="">
-                                    <div class="sort-by" title="<?php echo Labels::getLabel("LBL_SORT_BY", $siteLangId); ?>" data-bs-toggle="tooltip">
+                                    <div class="sort-by" title="<?php echo Labels::getLabel("LBL_SORT_BY", $siteLangId); ?>"
+                                        data-bs-toggle="tooltip">
                                         <div class="dropdown">
-                                            <button class="dropdown-toggle-custom btn btn-outline-gray btn-dropdown" type="button" data-bs-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
-                                                <span class="sortByTxtJs"><?php echo Labels::getLabel('LBL_MOST_HELPFUL', $siteLangId); ?></span>
+                                            <button class="dropdown-toggle-custom btn btn-outline-gray btn-dropdown"
+                                                type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                                                data-display="static" aria-haspopup="true" aria-expanded="false">
+                                                <span
+                                                    class="sortByTxtJs"><?php echo Labels::getLabel('LBL_MOST_HELPFUL', $siteLangId); ?></span>
                                                 <i class="dropdown-toggle-custom-arrow"></i>
                                             </button>
 
                                             <ul class="dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim">
                                                 <li class="dropdown-menu-item">
-                                                    <a class="dropdown-menu-link sortByEleJs active" href="javascript:void(0);" data-sort='most_helpful' onclick="getSortedReviews(this);return false;">
+                                                    <a class="dropdown-menu-link sortByEleJs active" href="javascript:void(0);"
+                                                        data-sort='most_helpful' onclick="getSortedReviews(this);return false;">
                                                         <?php echo Labels::getLabel('LBL_MOST_HELPFUL', $siteLangId); ?>
                                                     </a>
                                                 </li>
                                                 <li class="dropdown-menu-item">
-                                                    <a class="dropdown-menu-link sortByEleJs" href="javascript:void(0);" data-sort='most_recent' onclick="getSortedReviews(this);return false;">
+                                                    <a class="dropdown-menu-link sortByEleJs" href="javascript:void(0);"
+                                                        data-sort='most_recent' onclick="getSortedReviews(this);return false;">
                                                         <?php echo Labels::getLabel('LBL_MOST_RECENT', $siteLangId); ?>
                                                     </a>
                                                 </li>
@@ -50,7 +58,8 @@ $productView = $productView ?? false;
                             <?php } else { ?>
                                 <div class="rating-block m-0">
                                     <div class="review-cta">
-                                        <button class="btn btn-brand btn-wide" type="button" onclick="rateAndReviewProduct(<?php echo $product_id; ?>)">
+                                        <button class="btn btn-brand btn-wide" type="button"
+                                            onclick="rateAndReviewProduct(<?php echo $product_id; ?>)">
                                             <?php echo Labels::getLabel('LBL_WRITE_A_REVIEW', $siteLangId); ?>
                                         </button>
                                     </div>
@@ -61,7 +70,7 @@ $productView = $productView ?? false;
                     <?php if ($totReviews > 0) { ?>
                         <div class="customer-reviews-body">
                             <div class="all-reviews-images">
-                                <h4 class="mb-4"> <?php echo Labels::getLabel('LBL_REVIEWS_WITH_IMAGES'); ?></h4>
+                                <h6 class="h6"> <?php echo Labels::getLabel('LBL_REVIEWS_WITH_IMAGES'); ?></h6>
                                 <div class="review-images reviewImagesListJs"></div>
                                 <script>
                                     reviewsWithImages(<?php echo $product['selprod_id']; ?>);
@@ -76,7 +85,9 @@ $productView = $productView ?? false;
                                             <?php if (false === $productView && !empty($product)) { ?>
                                                 <div class="product-card-start">
                                                     <div class="product-card-img">
-                                                        <img alt="<?php echo $product['product_name']; ?>" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_SMALL, $product['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg'); ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_SMALL); ?>>
+                                                        <img alt="<?php echo $product['product_name']; ?>"
+                                                            src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_SMALL, $product['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.jpg'); ?>"
+                                                            <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_SMALL); ?>>
                                                     </div>
                                                 </div>
                                             <?php } ?>
@@ -84,18 +95,20 @@ $productView = $productView ?? false;
                                                 <?php
                                                 if (!empty($product) && !$productView) { ?>
                                                     <div class="product-description">
-                                                        <?php include(CONF_THEME_PATH . 'products/product-info.php'); ?>
+                                                        <?php include (CONF_THEME_PATH . 'products/product-info.php'); ?>
                                                     </div>
                                                 <?php } ?>
                                                 <div class="rating-block">
                                                     <div class="average-rating">
                                                         <span class="rate"><?php echo round($avgRating, 1); ?>
                                                             <svg class="svg" width="16" height="16">
-                                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
+                                                                <use
+                                                                    xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
                                                                 </use>
                                                             </svg>
                                                         </span>
-                                                        <span class="totals"><?php echo $totReviews . ' ' . Labels::getLabel("LBL_REVIEWS", $siteLangId); ?></span>
+                                                        <span
+                                                            class="totals"><?php echo $totReviews . ' ' . Labels::getLabel("LBL_REVIEWS", $siteLangId); ?></span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -140,7 +153,7 @@ $productView = $productView ?? false;
         'clip': 'rect(0px, <?php echo $pixelToFillRight; ?>px, 160px, 0px)'
     });
 
-    $(function() {
+    $(function () {
         function DropDown(el) {
             this.dd = el;
             this.placeholder = this.dd.children('span');
@@ -151,14 +164,14 @@ $productView = $productView ?? false;
         }
 
         DropDown.prototype = {
-            initEvents: function() {
+            initEvents: function () {
                 var obj = this;
-                obj.dd.on('click', function(e) {
+                obj.dd.on('click', function (e) {
                     e.preventDefault();
                     e.stopPropagation();
                     $(this).toggleClass('active');
                 });
-                obj.opts.on('click', function() {
+                obj.opts.on('click', function () {
                     var opt = $(this);
                     obj.val = opt.text();
                     obj.index = opt.index();
@@ -167,17 +180,17 @@ $productView = $productView ?? false;
                     opt.filter(':contains("' + obj.val + '")').addClass('selected');
                 }).change();
             },
-            getValue: function() {
+            getValue: function () {
                 return this.val;
             },
-            getIndex: function() {
+            getIndex: function () {
                 return this.index;
             }
         };
 
         // create new variable for each menu
         var dd1 = new DropDown($('.js-wrap-drop-reviews'));
-        $(document).on('click', function() {
+        $(document).on('click', function () {
             // close menu on document click
             $('.wrap-drop').removeClass('active');
         });

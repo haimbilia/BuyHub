@@ -1,27 +1,27 @@
 :root {
-    --brand-color: #0073cf;
-    --brand-color-inverse: #ffffff;
-    --primary-color: #0073cf;
-    --primary-color-inverse: #ffffff;
-    --third-color: #0073cf;
-    --third-color-inverse: #ffffff;
+  --brand-color: #0073cf;
+  --brand-color-inverse: #ffffff;
+  --primary-color: #0073cf;
+  --primary-color-inverse: #ffffff;
+  --third-color: #0073cf;
+  --third-color-inverse: #ffffff;
 }
 
 [data-theme="dark"] {
-    body {
-        background: var(--bg-gray);
-    }
+  body {
+    background: var(--bg-gray);
+  }
 
-    &:root {
-        --txt-body: #fff;
-        --txt-gray: #888;
-        --bg-white: #000;
-        --bg-white-inverse: #fff;
-        --bg-black: #fff;
-        --bg-black-inverse: #000;
-        --bg-gray: #1d1d1d;
-        --border-color: #232323;
-    }
+  &:root {
+    --txt-body: #fff;
+    --txt-gray: #888;
+    --bg-white: #000;
+    --bg-white-inverse: #fff;
+    --bg-black: #fff;
+    --bg-black-inverse: #000;
+    --bg-gray: #1d1d1d;
+    --border-color: #232323;
+  }
 }
 
 //default colors
@@ -35,16 +35,20 @@ $primary-color-inverse: var(--primary-color-inverse);
 // $secondary-color-inverse: #FFFFFF;
 $third-color: var(--third-color);
 $third-color-inverse: var(--third-color-inverse);
+
 //fixed theme colors
+$txt-brand: $brand-color;
 $txt-body: rgba(0, 0, 0, 0.87);
 $txt-gray: rgba(0, 0, 0, 0.67);
 $text-muted: #888888 !default;
+
 //border colors
 $border-color: #dee2e6;
 $border: solid 1px $border-color;
 $border-light: solid 1px lighten($border-color, 5);
 $border-transparent: solid 1px transparent;
 $focus-outline: 1px solid #888;
+
 //backgrounds colors
 $bg-white: #fff;
 $bg-white-inverse: $txt-body;
@@ -67,9 +71,12 @@ $shadow5: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 $shadow6: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 $shadow7: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 $shadow8: rgba(0, 0, 0, 0.16) 0px 1px 4px, rgb(51, 51, 51) 0px 0px 0px 3px;
-$shadow9: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+$shadow9: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+  rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
 $shadow10: rgba(0, 0, 0, 0.1) 0px 4px 12px;
-$shadow11: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+$shadow11: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px,
+  rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px,
+  rgba(0, 0, 0, 0.09) 0px -3px 5px;
 
 //radius
 $common-radius: 1px;
@@ -85,88 +92,103 @@ $danger-color: #fd397a;
 
 //Bg brand
 @mixin bg-brand {
-    background-color: $brand-color;
-    color: $brand-color-inverse;
+  background-color: $brand-color;
+  color: $brand-color-inverse;
 }
 
 //Push auto
 @mixin push--auto {
-    margin: {
-        left: auto;
-        right: auto;
-    }
+  margin: {
+    left: auto;
+    right: auto;
+  }
 }
 
 //Pseudo
 @mixin pseudo($display: block, $pos: absolute, $content: "") {
-    content: $content;
-    display: $display;
-    position: $pos;
+  content: $content;
+  display: $display;
+  position: $pos;
 }
 
 //Responsive ratio
 @mixin responsive-ratio($x, $y, $pseudo: false) {
-    $padding: unquote(($y / $x) * 100 + "%");
+  $padding: unquote(($y / $x) * 100 + "%");
 
-    @if $pseudo {
-        &:before {
-            @include pseudo($pos: relative);
-            width: 100%;
-            padding-top: $padding;
-        }
+  @if $pseudo {
+    &:before {
+      @include pseudo($pos: relative);
+      width: 100%;
+      padding-top: $padding;
     }
-
-    @else {
-        padding-top: $padding;
-    }
+  } @else {
+    padding-top: $padding;
+  }
 }
 
 // img absolute
 @mixin img-absolute {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 //Truncate
 @mixin truncate($truncation-boundary) {
-    max-width: $truncation-boundary;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  max-width: $truncation-boundary;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 @mixin placeholder {
-    animation: placeholderShimmer 2s linear;
-    animation-iteration-count: infinite;
-    background-color: #fff;
-    background-image: -webkit-gradient(linear, left top, right top, from(rgba(0, 0, 0, 0.08)), color-stop(15%, rgba(0, 0, 0, 0.15)), color-stop(30%, rgba(0, 0, 0, 0.08)));
-    background-image: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.08) 0, rgba(0, 0, 0, 0.15) 15%, rgba(0, 0, 0, 0.08) 30%);
-    background-image: linear-gradient(to right, rgba(0, 0, 0, 0.08) 0, rgba(0, 0, 0, 0.15) 15%, rgba(0, 0, 0, 0.08) 30%);
-    background-size: 1200px 100%;
+  animation: placeholderShimmer 2s linear;
+  animation-iteration-count: infinite;
+  background-color: #fff;
+  background-image: -webkit-gradient(
+    linear,
+    left top,
+    right top,
+    from(rgba(0, 0, 0, 0.08)),
+    color-stop(15%, rgba(0, 0, 0, 0.15)),
+    color-stop(30%, rgba(0, 0, 0, 0.08))
+  );
+  background-image: -webkit-linear-gradient(
+    left,
+    rgba(0, 0, 0, 0.08) 0,
+    rgba(0, 0, 0, 0.15) 15%,
+    rgba(0, 0, 0, 0.08) 30%
+  );
+  background-image: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.08) 0,
+    rgba(0, 0, 0, 0.15) 15%,
+    rgba(0, 0, 0, 0.08) 30%
+  );
+  background-size: 1200px 100%;
 }
 
 @-webkit-keyframes placeholderShimmer {
-    0% {
-        background-position: -1200px 0;
-    }
+  0% {
+    background-position: -1200px 0;
+  }
 
-    100% {
-        background-position: 1200px 0;
-    }
+  100% {
+    background-position: 1200px 0;
+  }
 }
 
 @keyframes placeholderShimmer {
-    0% {
-        background-position: -1200px 0;
-    }
+  0% {
+    background-position: -1200px 0;
+  }
 
-    100% {
-        background-position: 1200px 0;
-    }
+  100% {
+    background-position: 1200px 0;
+  }
 }

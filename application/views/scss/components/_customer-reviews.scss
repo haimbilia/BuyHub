@@ -243,38 +243,37 @@
   }
 }
 
-.review-images {
-  display: flex;
+//all-reviews-images
+.all-reviews-images {
+  .review-images {
+    display: flex;
+    gap: 10px;
 
-  .image {
-    background: $bg-placeholder;
-    position: relative;
-    max-width: 125px;
-    margin-#{$start-direction}: 10px;
-
-    &:first-child {
-      margin-#{$start-direction}: 0;
-    }
-
-    img {
-      mix-blend-mode: multiply;
-    }
-
-    .txt-over {
-      position: absolute;
-      z-index: 1;
+    .image {
+      background: $bg-placeholder;
+      border-radius: $radius;
+      position: relative;
+      max-width: 56px;
       width: 100%;
-      height: 100%;
-      left: 0;
-      right: 0;
-      top: 0;
-      bottom: 0;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: $font-weight-bold;
-      background: rgba(0, 0, 0, 0.5);
+      aspect-ratio: $product-ratio;
+      overflow: hidden;
+
+      img {
+        aspect-ratio: $product-ratio;
+        mix-blend-mode: multiply;
+      }
+      .thumbnail {
+      }
+      &.txt-over {
+        background: rgba(0, 0, 0, 0.5);
+        color: #fff;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: $font-weight-bold;
+      }
     }
   }
 }
