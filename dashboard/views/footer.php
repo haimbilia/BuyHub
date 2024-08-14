@@ -43,7 +43,7 @@ if (!$userActiveTab) {
             </a>
         </div>
         <div class="mobile-actions-item">
-            <button class="mobile-actions-link" type="button" data-trigger="sidebar">
+            <button class="mobile-actions-link  <?php echo (trim($_SERVER['REQUEST_URI'], '/') != trim($dashboardOrgUrl, '/') ? 'active' : ''); ?>" type="button" data-trigger="sidebar">
                 <svg class="svg" width="24" height="24">
                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#menu">
                     </use>
@@ -52,7 +52,7 @@ if (!$userActiveTab) {
             </button>
         </div>
         <div class="mobile-actions-item">
-            <button class="mobile-actions-link" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas-account" aria-controls="offcanvas-account">
+            <button class="mobile-actions-link <?php echo (trim($_SERVER['REQUEST_URI'], '/') == trim($dashboardOrgUrl, '/') ? 'active' : ''); ?>" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas-account" aria-controls="offcanvas-account">
                 <svg class="svg" width="24" height="24">
                     <use xlink:href="<?php echo CONF_WEBROOT_FRONT_URL; ?>images/retina/sprite-header.svg#mbl-account">
                     </use>
