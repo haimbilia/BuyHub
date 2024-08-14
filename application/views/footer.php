@@ -113,7 +113,9 @@ if ('' !=  $pixelId) {  ?>
     <?php }
     if ('cart' != strtolower($controllerName)) {
         $currentUrl = $_SERVER['REQUEST_SCHEME'] . '://';
-        $currentUrl .= $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME']; ?>
+        $currentUrl .= $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'];
+        $currentUrl .= $_SERVER['REQUEST_URI'];
+        ?>
         <!-- Mobile menu -->
         <div class="mobile-actions">
             <div class="mobile-actions-item">
@@ -126,7 +128,7 @@ if ('' !=  $pixelId) {  ?>
                 </a>
             </div>
             <div class="mobile-actions-item">
-                <button class="mobile-actions-link first" type="button" data-bs-toggle="offcanvas" data-bs-target="#categories-menu" aria-controls="categories-menu" onclick="openMobileMenu();">
+                <button class="mobile-actions-link first <?php echo (rtrim($currentUrl, '/') != rtrim(UrlHelper::generateFullUrl(), '/') ? 'active' : '') ?>" type="button" data-bs-toggle="offcanvas" data-bs-target="#categories-menu" aria-controls="categories-menu" onclick="openMobileMenu();">
                     <svg class="svg" width="24" height="24">
                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#mbl-category">
                         </use>
