@@ -51,6 +51,7 @@
     - Bug-085880 - Seller-added pickup address is visible on the checkout page even if shipped by admin only setting is enabled
     - Bug-085921 - Without product variants >> minimum selling price language label should be managebale for both conditions
     - Bug-085951 - Admin's default order-level shipping profile should get linked with seller products when "Shipped by admin" setting is enabled.
+    - Bug-086019 - Suggestion >> The currently selected tab is not visually highlighted
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  
