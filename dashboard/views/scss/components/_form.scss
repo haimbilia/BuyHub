@@ -191,7 +191,7 @@ $input-border-focus: #000;
       background-repeat: no-repeat;
       background-position: calc(100% - 11px) center;
       [dir="rtl"] & {
-        padding-#{$start-direction}: 38px !important;
+        // padding-#{$start-direction}: 38px !important;
         background-position: calc(0% - -11px) center;
       }
     }

@@ -12,11 +12,15 @@ if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0))
 <div class="add-stock-column column-main">
     <div class="add-stock-column-head">
         <div class="add-stock-column-head-label">
-            <h2 class="h2"><?php echo $recordId > 0 ? Labels::getLabel('FRM_EDIT_PRODUCT', $langId) : Labels::getLabel('FRM_ADD_PRODUCT', $langId); ?></h2>
-            <span class="text-muted"> <span class="required"></span><?php echo CommonHelper::replaceStringData(Labels::getLabel('FRM_FIELDS_WITH_{*}_ARE_MANDATORY', $langId), ['{*}' => '(<span class="spn_must_field">*</span>)']); ?> </span>
+            <h2 class="h2">
+                <?php echo $recordId > 0 ? Labels::getLabel('FRM_EDIT_PRODUCT', $langId) : Labels::getLabel('FRM_ADD_PRODUCT', $langId); ?>
+            </h2>
+            <span class="text-muted"> <span
+                    class="required"></span><?php echo CommonHelper::replaceStringData(Labels::getLabel('FRM_FIELDS_WITH_{*}_ARE_MANDATORY', $langId), ['{*}' => '(<span class="spn_must_field">*</span>)']); ?>
+            </span>
         </div>
         <?php
-        $langFld =  $frm->getField('lang_id');
+        $langFld = $frm->getField('lang_id');
         if (0 < $recordId) {
             $langFld->setfieldTagAttribute('class', 'form-control form-select select-language');
             $langFld->setfieldTagAttribute('onchange', 'langForm()');
@@ -24,7 +28,7 @@ if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0))
             if (!empty($translatorSubscriptionKey) && $langId != CommonHelper::getDefaultFormLangId()) {
                 $langFld->developerTags['fldWidthValues'] = ['d-flex', '', '', ''];
                 $langFld->htmlAfterField = '<div class="input-group-append">
-                                                            <a href="javascript:void(0);"  class="btn btn-brand" onclick="langForm(' . $langId . ',1)" class="btn" title="' .  Labels::getLabel('BTN_AUTOFILL_LANGUAGE_DATA', $langId) . '">
+                                                            <a href="javascript:void(0);"  class="btn btn-brand" onclick="langForm(' . $langId . ',1)" class="btn" title="' . Labels::getLabel('BTN_AUTOFILL_LANGUAGE_DATA', $langId) . '">
                                                                 <svg class="svg" width="18" height="18">
                                                                     <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.yokart.svg#icon-translate">
                                                                     </use>
@@ -47,7 +51,8 @@ if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0))
         <div class="card-head">
             <div class="card-head-label">
                 <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_BASIC_DETAILS', $langId); ?></h3>
-                <span class="text-muted"><?php echo Labels::getLabel('MSG_MANAGE_PRODUCT_BASIC_INFORMATIONS', $langId); ?></span>
+                <span
+                    class="text-muted"><?php echo Labels::getLabel('MSG_MANAGE_PRODUCT_BASIC_INFORMATIONS', $langId); ?></span>
             </div>
         </div>
         <div class="card-body">
@@ -66,28 +71,32 @@ if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0))
 
                 $fld = $frm->getField('product_warranty');
                 if (null !== $fld) {
-                ?>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <?php
+                    ?>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php
                             $warrantTypes = Product::getWarrantyUnits($langId);
                             ?>
-                            <label class="label"><?php echo $fld->getCaption(); ?><span class="spn_must_field">*</span></label>
-                            <div class="input-group">
-                                <?php echo $fld->getHtml(); ?>
-                                <div class="input-group-append">
-                                    <button type="button" class="btn btn-input dropdown-toggle warrantyTypeButtonJs" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                        <?php echo $warrantTypes[$frm->getField('product_warranty_unit')->value] ?? current($warrantTypes); ?>
-                                    </button>
-                                    <div class="dropdown-menu">
-                                        <?php foreach ($warrantTypes as $type => $name) { ?>
-                                            <a class="dropdown-item warrantyTypeJs" href="javascript:void(0)" data-type="<?php echo $type; ?>"><?php echo $name; ?></a>
-                                        <?php } ?>
-                                    </div>
+                        <label class="label"><?php echo $fld->getCaption(); ?><span
+                                class="spn_must_field">*</span></label>
+                        <div class="input-group">
+                            <?php echo $fld->getHtml(); ?>
+                            <div class="input-group-append">
+                                <button type="button" class="btn btn-input dropdown-toggle warrantyTypeButtonJs"
+                                    data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true"
+                                    aria-expanded="true">
+                                    <?php echo $warrantTypes[$frm->getField('product_warranty_unit')->value] ?? current($warrantTypes); ?>
+                                </button>
+                                <div class="dropdown-menu">
+                                    <?php foreach ($warrantTypes as $type => $name) { ?>
+                                    <a class="dropdown-item warrantyTypeJs" href="javascript:void(0)"
+                                        data-type="<?php echo $type; ?>"><?php echo $name; ?></a>
+                                    <?php } ?>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
                 <?php }
                 echo HtmlHelper::getFieldHtml($frm, 'selprod_cost', 6);
 
@@ -104,28 +113,29 @@ if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0))
         </div>
     </div>
     <?php if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) { ?>
-        <div class="card card-toggle" id="inventory">
-            <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#inventory-block1" aria-expanded="false" aria-controls="inventory-block1">
-                <div class="card-head-label">
-                    <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_INVENTORY', $langId); ?>
-                    </h3>
-                    <span class="text-muted"><?php echo Labels::getLabel('MSG_SET_UP_NEW_INVENTORY', $langId); ?></span>
-                </div>
-                <div class="card-toolbar"> <i class="dropdown-toggle-custom-arrow"></i></div>
+    <div class="card card-toggle" id="inventory">
+        <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#inventory-block1"
+            aria-expanded="false" aria-controls="inventory-block1">
+            <div class="card-head-label">
+                <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_INVENTORY', $langId); ?>
+                </h3>
+                <span class="text-muted"><?php echo Labels::getLabel('MSG_SET_UP_NEW_INVENTORY', $langId); ?></span>
             </div>
-            <div class="show" id="inventory-block1">
-                <div class="card-body p-0">
-                    <div class="px-4">
-                        <div class="row justify-content-between">
-                            <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_stock', 4); ?>
-                            <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_min_order_qty', 4); ?>
-                            <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_available_from', 4); ?>
-                            <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_sku', 6, [], Labels::getLabel('LBL_STOCK_KEEPING_UNIT', $siteLangId)); ?>
-                            <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_max_download_times', 6); ?>
-                            <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_download_validity_in_days', 6); ?>
-                            <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_condition', 6); ?>
+            <div class="card-toolbar"> <i class="dropdown-toggle-custom-arrow"></i></div>
+        </div>
+        <div class="show" id="inventory-block1">
+            <div class="card-body p-0">
+                <div class="px-4">
+                    <div class="row justify-content-between">
+                        <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_stock', 4); ?>
+                        <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_min_order_qty', 4); ?>
+                        <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_available_from', 4); ?>
+                        <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_sku', 6, [], Labels::getLabel('LBL_STOCK_KEEPING_UNIT', $siteLangId)); ?>
+                        <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_max_download_times', 6); ?>
+                        <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_download_validity_in_days', 6); ?>
+                        <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_condition', 6); ?>
 
-                            <?php
+                        <?php
                             $fld = $frm->getField('selprod_subtract_stock');
                             if (null != $fld) {
                                 HtmlHelper::configureSwitchForCheckbox($fld);
@@ -133,7 +143,7 @@ if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0))
                                 echo '<div class="col-md-12"><div class="form-group"><div class="setting-block">' . $fld->getHtml() . '</div></div></div>';
                             }
                             ?>
-                            <?php
+                        <?php
                             $fld = $frm->getField('selprod_track_inventory');
                             if (null != $fld) {
                                 HtmlHelper::configureSwitchForCheckbox($fld);
@@ -142,8 +152,8 @@ if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0))
                                 echo '<div class="col-md-12"><div class="form-group"><div class="setting-block">' . $fld->getHtml() . '</div></div></div>';
                             }
                             ?>
-                            <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_threshold_stock_level', 6); ?>
-                            <?php
+                        <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_threshold_stock_level', 6); ?>
+                        <?php
                             $fld = $frm->getField('use_shop_policy');
                             if (null != $fld) {
                                 $fld->setFieldTagAttribute('class', "fieldsVisibilityJs");
@@ -152,62 +162,65 @@ if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0))
                                 echo '<div class="col-md-12"><div class="form-group"><div class="setting-block">' . $fld->getHtml() . '</div></div></div>';
                             }
                             ?>
-                            <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_return_age', 6); ?>
-                            <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_cancellation_age', 6); ?>
-                            <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_comments', 12); ?>
-                        </div>
+                        <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_return_age', 6); ?>
+                        <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_cancellation_age', 6); ?>
+                        <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_comments', 12); ?>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
     <?php } else { ?>
-        <div class="card card-toggle" id="variants-options">
-            <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block1" aria-expanded="false" aria-controls="stock-block1">
-                <div class="card-head-label">
-                    <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_VARIANTS_&_OPTIONS', $langId); ?>
-                    </h3>
-                    <span class="text-muted"><?php echo Labels::getLabel('MSG_CUSTOMIZE_PRODUCT_VARIENTS_INCLUDING_SIZE_COLOR_ETC', $langId); ?></span>
-                </div>
-                <div class="card-toolbar"> <i class="dropdown-toggle-custom-arrow"></i></div>
+    <div class="card card-toggle" id="variants-options">
+        <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block1"
+            aria-expanded="false" aria-controls="stock-block1">
+            <div class="card-head-label">
+                <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_VARIANTS_&_OPTIONS', $langId); ?>
+                </h3>
+                <span
+                    class="text-muted"><?php echo Labels::getLabel('MSG_CUSTOMIZE_PRODUCT_VARIENTS_INCLUDING_SIZE_COLOR_ETC', $langId); ?></span>
             </div>
-            <div class="show" id="stock-block1">
-                <div class="card-table p-0 ">
-                    <?php
+            <div class="card-toolbar"> <i class="dropdown-toggle-custom-arrow"></i></div>
+        </div>
+        <div class="show" id="stock-block1">
+            <div class="card-table p-0 ">
+                <?php
                     if (0 < $recordId) {
                         echo HtmlHelper::getErrorMessageHtml(Labels::getLabel('ERR_IF_INVENTORY_IS_ALREADY_ADDED_THEN_YOU_CANNOT_BIND_FURTHER_OPTIONS.'));
                     } ?>
-                    <div class="table-responsive table-scrollable js-scrollable">
-                        <table class="table table-variants" id="variantsJs" data-auto-column-width="0">
-                            <thead class="tableHeadJs">
-                                <tr>
-                                    <th width="40%"><?php echo Labels::getLabel('FRM_OPTIONS', $langId) ?></th>
-                                    <th width="40%"><?php echo Labels::getLabel('FRM_OPTION_VALUES', $langId) ?></th>
-                                    <?php if (false === $hasInventory) { ?>
-                                        <th class="align-right" width="20%"></th>
-                                    <?php } ?>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
+                <div class="table-responsive table-scrollable js-scrollable">
+                    <table class="table table-variants" id="variantsJs" data-auto-column-width="0">
+                        <thead class="tableHeadJs">
+                            <tr>
+                                <th width="40%"><?php echo Labels::getLabel('FRM_OPTIONS', $langId) ?></th>
+                                <th width="40%"><?php echo Labels::getLabel('FRM_OPTION_VALUES', $langId) ?></th>
+                                <?php if (false === $hasInventory) { ?>
+                                <th class="align-right" width="20%"></th>
+                                <?php } ?>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
                                 $optionCount = count($productOptions);
-                                for ($i = 0; $i <=  (1 > $optionCount ? 0 : $optionCount - 1); $i++) {
+                                for ($i = 0; $i <= (1 > $optionCount ? 0 : $optionCount - 1); $i++) {
                                     $prodOption = $productOptions[$i] ?? [];
                                     $this->includeTemplate('products/get-variant-row.php', ['langId' => $langId, 'index' => $i, 'hasInventory' => $hasInventory, 'productOption' => $prodOption]);
                                 }
                                 ?>
-                            </tbody>
-                        </table>
-                    </div>
+                        </tbody>
+                    </table>
                 </div>
-                <div class="card-body p-0">
-                    <div class="separator separator-dashed my-4"></div>
-                    <div class="px-4">
-                        <div class="row justify-content-between">
-                            <div class="col">
-                                <label class="label"><?php echo Labels::getLabel('LBL_PRODUCT_HAS_SAME_EAN/UPC_CODE_FOR_ALL_VARIENTS', $langId); ?></label>
-                            </div>
-                            <div class="col-auto">
-                                <?php
+            </div>
+            <div class="card-body p-0">
+                <div class="separator separator-dashed my-4"></div>
+                <div class="px-4">
+                    <div class="row justify-content-between">
+                        <div class="col">
+                            <label
+                                class="label"><?php echo Labels::getLabel('LBL_PRODUCT_HAS_SAME_EAN/UPC_CODE_FOR_ALL_VARIENTS', $langId); ?></label>
+                        </div>
+                        <div class="col-auto">
+                            <?php
                                 $fld = $frm->getField('upc_type');
                                 HtmlHelper::configureSwitchForRadio($fld);
                                 $fld->addOptionListTagAttribute('class', 'list-radio my-2');
@@ -215,32 +228,35 @@ if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0))
                                 $fld->addFieldTagAttribute('class', 'upc_type');
                                 echo $fld->getHtml();
                                 ?>
-                            </div>
                         </div>
                     </div>
-                    <div id="variantsListJs"></div>
                 </div>
-                <div class="card-foot">
-                    <div class="row justify-content-end">
-                        <div class="col-auto">
-                            <a class="btn btn-icon btn-outline-brand" href="<?php echo UrlHelper::generateUrl('options') ?>" target="_blank">
-                                <svg class="svg btn-icon-start" width="18" height="18">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
-                                    </use>
-                                </svg>
-                                <span><?php echo Labels::getLabel('NAV_ADD_PRODUCT_OPTION', $langId); ?></span>
-                            </a>
-                        </div>
+                <div id="variantsListJs"></div>
+            </div>
+            <div class="card-foot">
+                <div class="row justify-content-end">
+                    <div class="col-auto">
+                        <a class="btn btn-icon btn-outline-brand" href="<?php echo UrlHelper::generateUrl('options') ?>"
+                            target="_blank">
+                            <svg class="svg btn-icon-start" width="18" height="18">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
+                                </use>
+                            </svg>
+                            <span><?php echo Labels::getLabel('NAV_ADD_PRODUCT_OPTION', $langId); ?></span>
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
     <?php } ?>
     <div class="card card-toggle" id="media">
-        <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block2" aria-expanded="false" aria-controls="stock-block2">
+        <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block2"
+            aria-expanded="false" aria-controls="stock-block2">
             <div class="card-head-label">
                 <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_MEDIA', $langId); ?> </h3>
-                <span class="text-muted"><?php echo Labels::getLabel('MSG_MANAGE_YOUR_PRODUCT_IMAGES_GALLERY', $langId); ?></span>
+                <span
+                    class="text-muted"><?php echo Labels::getLabel('MSG_MANAGE_YOUR_PRODUCT_IMAGES_GALLERY', $langId); ?></span>
             </div>
             <div class="card-toolbar">
                 <i class="dropdown-toggle-custom-arrow"></i>
@@ -250,25 +266,33 @@ if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0))
             <div>
                 <div class="d-flex justify-content-between mb-3">
                     <h6 class="h6 "><?php echo Labels::getLabel('LBL_UPLOADED_MEDIA', $langId); ?></h6>
-                    <a href="javascript:void(0)" onclick="imageForm();" class="link"><?php echo Labels::getLabel('LBL_ADVANCED_MEDIA', $langId); ?></a>
+                    <a href="javascript:void(0)" onclick="imageForm();"
+                        class="link"><?php echo Labels::getLabel('LBL_ADVANCED_MEDIA', $langId); ?></a>
                 </div>
                 <!-- <h6 class="h6 mb-3">Uploaded media</h6> -->
                 <ul class="uploaded-stocks" id="productDefaultImagesJs">
-                    <li class="browse unsortableJs"><button type="button" class="browse-button" onclick="$('#hiddenMediaFrmFileJs').click();">
+                    <li class="browse unsortableJs"><button type="button" class="browse-button"
+                            onclick="$('#hiddenMediaFrmFileJs').click();">
                             <strong> <?php echo Labels::getLabel('LBL_UPLOAD_IMAGES(S)', $langId); ?></strong>
-                            <span class="text-muted form-text"><?php echo Labels::getLabel('MSG_PNG,JPEG_ACCEPTED', $langId); ?></span></button></li>
+                            <span
+                                class="text-muted form-text"><?php echo Labels::getLabel('MSG_PNG,JPEG_ACCEPTED', $langId); ?></span></button>
+                    </li>
                 </ul>
 
-                <div class="form-text text-muted pt-2"><?php echo sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), $imgFrm->getField('min_width')->value . ' x ' . $imgFrm->getField('min_height')->value); ?></div>
+                <div class="form-text text-muted pt-2">
+                    <?php echo sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), $imgFrm->getField('min_width')->value . ' x ' . $imgFrm->getField('min_height')->value); ?>
+                </div>
             </div>
         </div>
     </div>
     <div class="card card-toggle" id="specifications">
-        <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#specifications-block" aria-expanded="false" aria-controls="specifications-block">
+        <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse"
+            data-bs-target="#specifications-block" aria-expanded="false" aria-controls="specifications-block">
             <div class="card-head-label">
                 <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_SPECIFICATIONS', $langId); ?>
                 </h3>
-                <span class="text-muted"><?php echo Labels::getLabel('MSG_MANAGE_PRODUCT_RELATED_SPECIFICATIONS', $langId); ?></span>
+                <span
+                    class="text-muted"><?php echo Labels::getLabel('MSG_MANAGE_PRODUCT_RELATED_SPECIFICATIONS', $langId); ?></span>
             </div>
             <div class="card-toolbar"> <i class="dropdown-toggle-custom-arrow"></i></div>
         </div>
@@ -305,10 +329,16 @@ if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0))
                         <div class="form-group">
                             <label class="label"></label>
                             <input type="hidden" name="sp_id" id="sp_id" value="0" data-required="0">
-                            <button type="button" id="btnAddSpecJs" class="btn btn-brand btn-wide" onclick="addSpecification()" data-updateLbl="<?php echo Labels::getLabel('BTN_UPDATE', $langId); ?>" data-addLbl="<?php echo Labels::getLabel('BTN_ADD', $langId); ?>">
+                            <button type="button" id="btnAddSpecJs" class="btn btn-brand btn-wide"
+                                onclick="addSpecification()"
+                                data-updateLbl="<?php echo Labels::getLabel('BTN_UPDATE', $langId); ?>"
+                                data-addLbl="<?php echo Labels::getLabel('BTN_ADD', $langId); ?>">
                                 <?php echo Labels::getLabel('BTN_ADD', $langId); ?>
                             </button>
-                            <button type="button" id="btnClearSpecJs" class="btn btn-outline-brand btn-wide" onclick="clearProdSpecForm()" data-updateLbl="<?php echo Labels::getLabel('BTN_UPDATE', $langId); ?>" data-addLbl="<?php echo Labels::getLabel('BTN_ADD', $langId); ?>">
+                            <button type="button" id="btnClearSpecJs" class="btn btn-outline-brand btn-wide"
+                                onclick="clearProdSpecForm()"
+                                data-updateLbl="<?php echo Labels::getLabel('BTN_UPDATE', $langId); ?>"
+                                data-addLbl="<?php echo Labels::getLabel('BTN_ADD', $langId); ?>">
                                 <?php echo Labels::getLabel('BTN_CLEAR', $langId); ?>
                             </button>
                         </div>
@@ -321,11 +351,13 @@ if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0))
         </div>
     </div>
     <div class="card card-toggle" id="tax-shipping">
-        <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block4" aria-expanded="false" aria-controls="stock-block4">
+        <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#stock-block4"
+            aria-expanded="false" aria-controls="stock-block4">
             <div class="card-head-label">
                 <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_TAX_AND_SHIPPING', $siteLangId); ?>
                 </h3>
-                <span class="text-muted"><?php echo Labels::getLabel('MSG_SETUP_TAX_AND_SHIPPING_INFORMATION_OF_THE_PRODUCT', $siteLangId); ?></span>
+                <span
+                    class="text-muted"><?php echo Labels::getLabel('MSG_SETUP_TAX_AND_SHIPPING_INFORMATION_OF_THE_PRODUCT', $siteLangId); ?></span>
             </div>
             <div class="card-toolbar"> <i class="dropdown-toggle-custom-arrow"></i></div>
         </div>
@@ -345,89 +377,96 @@ if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0))
     </div>
 
     <div class="card card-toggle digitalDownloadSectionJS hide" id="digital-files">
-        <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#digital-file-block" aria-expanded="false" aria-controls="stock-block2">
+        <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse"
+            data-bs-target="#digital-file-block" aria-expanded="false" aria-controls="stock-block2">
             <div class="card-head-label">
                 <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_DIGITAL_FILES', $siteLangId); ?></h3>
-                <span class="text-muted"><?php echo Labels::getLabel('MSG_MANAGE_PRODUCT_DIGITIAL_FILES', $siteLangId); ?></span>
+                <span
+                    class="text-muted"><?php echo Labels::getLabel('MSG_MANAGE_PRODUCT_DIGITIAL_FILES', $siteLangId); ?></span>
             </div>
             <?php if ($displayDigitalDownloadList) { ?>
-                <div class="card-toolbar"> <i class="dropdown-toggle-custom-arrow"></i></div>
+            <div class="card-toolbar"> <i class="dropdown-toggle-custom-arrow"></i></div>
             <?php } ?>
         </div>
         <?php if ($displayDigitalDownloadList) { ?>
-            <div class="card-body show" id="digital-file-block">
-                <div id="digitalFilesDefaultListJs">
+        <div class="card-body show" id="digital-file-block">
+            <div id="digitalFilesDefaultListJs">
+            </div>
+        </div>
+        <?php if ($displayDigitalDownloadAddBtn) { ?>
+        <div class="card-foot">
+            <div class="row justify-content-end">
+                <div class="col-auto">
+                    <a class="btn btn-icon btn-outline-brand" href="javascript:void(0)"
+                        onclick="digitalDownloadsForm(<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>);">
+                        <svg class="svg btn-icon-start" width="18" height="18">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
+                            </use>
+                        </svg>
+                        <span><?php echo Labels::getLabel('BTN_DIGITAL_FILES', $langId); ?></span>
+                    </a>
                 </div>
             </div>
-            <?php if ($displayDigitalDownloadAddBtn) { ?>
-                <div class="card-foot">
-                    <div class="row justify-content-end">
-                        <div class="col-auto">
-                            <a class="btn btn-icon btn-outline-brand" href="javascript:void(0)" onclick="digitalDownloadsForm(<?php echo applicationConstants::DIGITAL_DOWNLOAD_FILE; ?>);">
-                                <svg class="svg btn-icon-start" width="18" height="18">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
-                                    </use>
-                                </svg>
-                                <span><?php echo Labels::getLabel('BTN_DIGITAL_FILES', $langId); ?></span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            <?php } ?>
+        </div>
+        <?php } ?>
         <?php } else { ?>
-            <div class="card-body show">
-                <?php
+        <div class="card-body show">
+            <?php
                 if (1 > $sellerId) {
                     echo HtmlHelper::getErrorMessageHtml(Labels::getLabel('ERR_YOU_CAN_UPLOAD_DIGITAL_FILES_AFTER_SETUP.'));
                 } else {
                     echo HtmlHelper::getErrorMessageHtml(Labels::getLabel('ERR_YOU_ARE_NOT_ALLOWED_TO_UPLOAD_AS_THIS_PRODUCT_BELONGS_TO_SELLER.'));
                 }
                 ?>
-            </div>
+        </div>
         <?php } ?>
     </div>
     <div class="card card-toggle digitalDownloadSectionJS hide" id="digital-links">
-        <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse" data-bs-target="#digital-link-block" aria-expanded="false" aria-controls="stock-block2">
+        <div class="card-head dropdown-toggle-custom show" data-bs-toggle="collapse"
+            data-bs-target="#digital-link-block" aria-expanded="false" aria-controls="stock-block2">
             <div class="card-head-label">
                 <h3 class="card-head-title"><?php echo Labels::getLabel('NAV_DIGITAL_LINKS', $siteLangId); ?></h3>
-                <span class="text-muted"><?php echo Labels::getLabel('MSG_MANAGE_PRODUCT_DIGITIAL_LINKS', $siteLangId); ?> </span>
+                <span
+                    class="text-muted"><?php echo Labels::getLabel('MSG_MANAGE_PRODUCT_DIGITIAL_LINKS', $siteLangId); ?>
+                </span>
             </div>
 
             <?php if ($displayDigitalDownloadList) { ?>
-                <div class="card-toolbar"> <i class="dropdown-toggle-custom-arrow"></i></div>
+            <div class="card-toolbar"> <i class="dropdown-toggle-custom-arrow"></i></div>
             <?php } ?>
         </div>
 
         <?php if ($displayDigitalDownloadList) { ?>
-            <div class="card-body show" id="digital-link-block">
-                <div id="digitalLinksDefaultListJs">
+        <div class="card-body show" id="digital-link-block">
+            <div id="digitalLinksDefaultListJs">
+            </div>
+        </div>
+        <?php if ($displayDigitalDownloadAddBtn) { ?>
+        <div class="card-foot">
+            <div class="row justify-content-end">
+                <div class="col-auto">
+                    <a class="btn btn-icon btn-outline-brand" href="javascript:void(0)"
+                        onclick="digitalDownloadsForm(<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>);">
+                        <svg class="svg btn-icon-start" width="18" height="18">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
+                            </use>
+                        </svg>
+                        <span><?php echo Labels::getLabel('BTN_DIGITAL_LINKS', $langId); ?></span>
+                    </a>
                 </div>
             </div>
-            <?php if ($displayDigitalDownloadAddBtn) { ?>
-                <div class="card-foot">
-                    <div class="row justify-content-end">
-                        <div class="col-auto">
-                            <a class="btn btn-icon btn-outline-brand" href="javascript:void(0)" onclick="digitalDownloadsForm(<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>);">
-                                <svg class="svg btn-icon-start" width="18" height="18">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#add">
-                                    </use>
-                                </svg>
-                                <span><?php echo Labels::getLabel('BTN_DIGITAL_LINKS', $langId); ?></span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            <?php } ?>
+        </div>
+        <?php } ?>
         <?php } else { ?>
-            <div class="card-body show">
-                <?php
+        <div class="card-body show">
+            <?php
                 if (1 > $sellerId) {
                     echo HtmlHelper::getErrorMessageHtml(Labels::getLabel('ERR_YOU_CAN_ADD_DIGITAL_LINKS_AFTER_SETUP.'));
                 } else {
                     echo HtmlHelper::getErrorMessageHtml(Labels::getLabel('ERR_YOU_ARE_NOT_ALLOWED_TO_ADD_AS_THIS_PRODUCT_BELONGS_TO_SELLER.'));
                 }
                 ?>
-            </div>
+        </div>
         <?php } ?>
     </div>
 </div>
@@ -435,23 +474,24 @@ if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0))
     <div class="sticky-top">
         <div class="card">
             <div class="card-body">
-                <button type="submit" class="btn btn-brand btn-block submitBtnJs"><?php echo Labels::getLabel('FRM_SAVE', $langId); ?></button>
+                <button type="submit"
+                    class="btn btn-brand btn-block submitBtnJs"><?php echo Labels::getLabel('FRM_SAVE', $langId); ?></button>
                 <div class="mt-3">
                     <?php
                     $fld = $frm->getField('product_active');
-                    if (null !=  $fld) {
+                    if (null != $fld) {
                         HtmlHelper::configureSwitchForCheckbox($fld);
                         echo '<div class="form-group"><div class="setting-block">' . $fld->getHtml() . '</div></div>';
                     }
                     $fld = $frm->getField('product_approved');
                     $uLangDatafld = $frm->getField('auto_update_other_langs_data');
 
-                    if (null !=  $fld) {
+                    if (null != $fld) {
                         HtmlHelper::configureSwitchForCheckbox($fld);
-                        echo null ==  $uLangDatafld ? '<div class="setting-block">' . $fld->getHtml() . '</div>' : '<div class="form-group"><div class="setting-block">' . $fld->getHtml() . '</div></div>';
+                        echo null == $uLangDatafld ? '<div class="setting-block">' . $fld->getHtml() . '</div>' : '<div class="form-group"><div class="setting-block">' . $fld->getHtml() . '</div></div>';
                     }
 
-                    if (null !=  $uLangDatafld) {
+                    if (null != $uLangDatafld) {
                         HtmlHelper::configureSwitchForCheckbox($uLangDatafld);
                         echo '<div class="setting-block">' . $uLangDatafld->getHtml() . '</div>';
                     }
@@ -467,17 +507,17 @@ if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0))
                     $fld = $frm->getField('product_featured');
                     $codFld = $frm->getField('product_cod_enabled');
 
-                    if (null !=  $publishInventory) {
+                    if (null != $publishInventory) {
                         HtmlHelper::configureSwitchForCheckbox($publishInventory);
                         echo '<li><div class="form-group"><div class="setting-block">' . $publishInventory->getHtml() . '</div></div></li>';
                     }
 
-                    if (null !=  $fld) {
+                    if (null != $fld) {
                         HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel('FRM_PRODUCT_DISPLAYED_UNDER_FEATURED_ON_STOREFRONT', $langId));
-                        echo null !=  $fld && $codEnabled ? '<li><div class="form-group"><div class="setting-block">' . $fld->getHtml() . '</div></div></li>' : '<li><div class="setting-block">' . $fld->getHtml() . '</div></li>';
+                        echo null != $fld && $codEnabled ? '<li><div class="form-group"><div class="setting-block">' . $fld->getHtml() . '</div></div></li>' : '<li><div class="setting-block">' . $fld->getHtml() . '</div></li>';
                     }
 
-                    if (null !=  $codFld && $codEnabled) {
+                    if (null != $codFld && $codEnabled) {
                         HtmlHelper::configureSwitchForCheckbox($codFld, Labels::getLabel('FRM_PRODUCT_AVAILABLE_FOR_CASH_ON_DELIVERY', $langId));
                         echo '<li><div class="setting-block">' . $codFld->getHtml() . '</div></li>';
                     }
@@ -490,20 +530,20 @@ if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0))
         if (null != $fld) {
             $fld->addFieldTagAttribute('class', 'form-tagify');
             $fld->addFieldTagAttribute('id', 'product_tags');
-        ?>
-            <div class="card">
-                <div class="card-head">
-                    <div class="card-head-label">
-                        <h3 class="card-head-title"><?php echo Labels::getLabel('FRM_TAGS', $langId); ?></h3>
-                        <span class="text-muted">
-                            <?php echo Labels::getLabel('FRM_CREATE_KEYWORD_TAGS_TO_MAKE_IT_EASIER_FOR_BUYERS', $langId); ?>
-                        </span>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <?php echo $fld->getHtml(); ?>
+            ?>
+        <div class="card">
+            <div class="card-head">
+                <div class="card-head-label">
+                    <h3 class="card-head-title"><?php echo Labels::getLabel('FRM_TAGS', $langId); ?></h3>
+                    <span class="text-muted">
+                        <?php echo Labels::getLabel('FRM_CREATE_KEYWORD_TAGS_TO_MAKE_IT_EASIER_FOR_BUYERS', $langId); ?>
+                    </span>
                 </div>
             </div>
+            <div class="card-body">
+                <?php echo $fld->getHtml(); ?>
+            </div>
+        </div>
         <?php } ?>
     </div>
 </div>

@@ -82,6 +82,7 @@ if (!empty($columnButtons)) {
             'class' => 'btn btn-icon btn-link',
             'title' => Labels::getLabel('LBL_COLUMNS', $siteLangId),
             'data-bs-toggle' => 'dropdown',
+            'data-bs-display' => 'static',
             'aria-expanded' => false
         ],
         '<svg class="svg" width="18" height="18">

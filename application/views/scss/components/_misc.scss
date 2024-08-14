@@ -55,7 +55,8 @@ h2,
 h3,
 h4,
 h5,
-h6 {}
+h6 {
+}
 
 p {
   margin: 0;
@@ -188,7 +189,7 @@ mark,
 .-inline-link {
   text-decoration: underline;
   font-size: 0.9em;
-  color: $brand-color  !important;
+  color: $brand-color !important;
 }
 
 .gap {
@@ -431,7 +432,6 @@ mark,
   }
 
   &--white {
-
     &:before,
     &:after {
       background-color: #fff;
@@ -513,7 +513,6 @@ mark,
   }
 }
 
-
 //.dropdown-toggle-custom
 .dropdown-toggle-custom {
   text-align: #{$start-direction};
@@ -592,8 +591,8 @@ mark,
 
     &-prev span {
       display: inline-block;
-      border-#{$end-direction}: 1px solid black;
-      border-bottom: 1px solid black;
+      border-#{$end-direction}: 1px solid currentColor;
+      border-bottom: 1px solid currentColor;
       width: 10px;
       height: 10px;
       transform: rotate(136deg * $transform-direction);
@@ -602,8 +601,8 @@ mark,
 
     &-next span {
       display: inline-block;
-      border-#{$end-direction}: 1px solid black;
-      border-bottom: 1px solid black;
+      border-#{$end-direction}: 1px solid currentColor;
+      border-bottom: 1px solid currentColor;
       width: 10px;
       height: 10px;
       transform: rotate(-45deg * $transform-direction);
@@ -724,10 +723,12 @@ mark,
 // }
 
 .skeleton {
-  background: linear-gradient(to right,
+  background: linear-gradient(
+      to right,
       rgba(255, 255, 255, 0),
       rgba(255, 255, 255, 0.5) 50%,
-      rgba(255, 255, 255, 0) 80%),
+      rgba(255, 255, 255, 0) 80%
+    ),
     lightgray;
   border-radius: 2px;
   height: 10px;
@@ -743,10 +744,12 @@ mark,
     top: 0;
     height: 100%;
     width: 150px;
-    background: linear-gradient(to right,
-        transparent 0%,
-        #e8e8e8 50%,
-        transparent 100%);
+    background: linear-gradient(
+      to right,
+      transparent 0%,
+      #e8e8e8 50%,
+      transparent 100%
+    );
     animation: load 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
   }
 }
@@ -795,13 +798,13 @@ mark,
   font-family: inherit;
   box-shadow: $shadow1;
   z-index: 1060;
-  border: $border  !important;
+  border: $border !important;
   border-radius: 4px;
 
   .pac-item {
     cursor: pointer;
     padding: 8px 10px;
-    border-top: $border  !important;
+    border-top: $border !important;
   }
 
   .pac-icon {
