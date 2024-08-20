@@ -1,4 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
+
 <div class="js-scrollable table-wrap table-responsive">
     <?php $arr_flds = array(
         'utxn_id'    =>    Labels::getLabel('LBL_TXN_ID', $siteLangId),
@@ -56,7 +57,7 @@
                     $td->appendElement('plaintext', array(), $txt, true);
                     break;
                 case 'utxn_comments':
-                    $row[$key] = $row[$key].(!empty($row['utxn_gateway_txn_id']) ? "".Labels::getLabel('LBL_GATEWAY_TXN_ID', $siteLangId).": ".$row['utxn_gateway_txn_id'] :''  );
+                    $row[$key] = $row[$key] . (!empty($row['utxn_gateway_txn_id']) ? "" . Labels::getLabel('LBL_GATEWAY_TXN_ID', $siteLangId) . ": " . $row['utxn_gateway_txn_id'] : '');
                     $comments = Transactions::formatTransactionComments($row[$key]);
                     $commentsTxt = "<span class='lessText'>" . CommonHelper::truncateCharacters($comments, 150, '', '', true) . "</span>";
                     if (strlen($comments) > 150) {

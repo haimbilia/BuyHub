@@ -310,7 +310,9 @@ mark,
     font-weight: 400;
     font-size: 0.8rem !important;
     border: $border;
-    animation: dropdown-menu-fade-in 0.3s ease 1, dropdown-menu-move-up 0.3s ease-out 1;
+    animation:
+        dropdown-menu-fade-in 0.3s ease 1,
+        dropdown-menu-move-up 0.3s ease-out 1;
     .ui-menu-item {
         border-bottom: $border;
         .ui-menu-item-wrapper {
@@ -1275,7 +1277,13 @@ mark,
 }
 
 .skeleton {
-    background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0) 80%), lightgray;
+    background: linear-gradient(
+            to right,
+            rgba(255, 255, 255, 0),
+            rgba(255, 255, 255, 0.5) 50%,
+            rgba(255, 255, 255, 0) 80%
+        ),
+        lightgray;
     border-radius: 2px;
     height: 20px;
     margin: 2px 0;
@@ -1317,7 +1325,9 @@ mark,
     stroke: #4bb71b;
     stroke-miterlimit: 10;
     box-shadow: inset 0px 0px 0px #4bb71b;
-    animation: fill 0.4s ease-in-out 0.4s forwards, scale 0.3s ease-in-out 0.9s both;
+    animation:
+        fill 0.4s ease-in-out 0.4s forwards,
+        scale 0.3s ease-in-out 0.9s both;
     position: relative;
     top: 5px;
     right: 5px;

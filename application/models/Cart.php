@@ -1,4 +1,7 @@
 <?php
+
+use Google\Service\AnalyticsReporting\Resource\UserActivity;
+
 class Cart extends FatModel
 {
     private $products = array();
@@ -1513,6 +1516,42 @@ class Cart extends FatModel
         return $cartSummary;
     }
 
+
+    public function getCartGiftFinancialSummary($langId, $order_id)
+    {
+
+        $cartTotal = 0;
+        $orderPaymentGatewayCharges = 0;
+        $orderNetAmount = 0;
+        $cartRewardPoints = $this->getCartRewardPoint();
+        $userWalletBalance = User::getUserBalance(UserAuthentication::getLoggedUserId());
+        $srch = Orders::getSearchObject();
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
+        $srch->addCondition('order_id', '=', $order_id);
+        $srch->addCondition('order_payment_status', '=', 'mysql_func_' . Orders::ORDER_PAYMENT_PENDING, 'AND', true);
+        $rs = $srch->getResultSet();
+        $orderInfo = FatApp::getDb()->fetch($rs);
+        if (!$orderInfo) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId));
+        }
+        $orderNetAmount = $orderInfo['order_net_amount'];
+        $WalletAmountCharge = ($this->isCartUserGiftWalletSelected()) ? min($orderNetAmount, $userWalletBalance) : 0;
+        $orderPaymentGatewayCharges = $orderNetAmount - $WalletAmountCharge;
+        $netChargeAmt = $cartTotal;
+        $cartSummary = array(
+            'cartTotal' => $cartTotal,
+            'cartRewardPoints' => $cartRewardPoints,
+            'cartWalletSelected' => $this->isCartUserGiftWalletSelected(),
+            'orderNetAmount' => $orderNetAmount,
+            'WalletAmountCharge' => $WalletAmountCharge,
+            'orderPaymentGatewayCharges' => $orderPaymentGatewayCharges,
+            'netChargeAmount' => $netChargeAmt,
+        );
+        return $cartSummary;
+    }
+
+
     public function getCouponDiscounts()
     {
         $couponObj = new DiscountCoupons();
@@ -1746,6 +1785,12 @@ class Cart extends FatModel
         return true;
     }
 
+    public function updateCartGiftWalletOption($val)
+    {
+        $this->SYSTEM_ARR['shopping_cart']['gift_Pay_from_wallet'] = $val;
+        $this->updateUserCart();
+        return true;
+    }
     public function updateCartDiscountCoupon($val)
     {
         $this->SYSTEM_ARR['shopping_cart']['discount_coupon'] = $val;
@@ -1820,6 +1865,11 @@ class Cart extends FatModel
     public function isCartUserWalletSelected()
     {
         return (isset($this->SYSTEM_ARR['shopping_cart']['Pay_from_wallet']) && intval($this->SYSTEM_ARR['shopping_cart']['Pay_from_wallet']) == 1) ? 1 : 0;
+    }
+
+    public function isCartUserGiftWalletSelected()
+    {
+        return (isset($this->SYSTEM_ARR['shopping_cart']['gift_Pay_from_wallet']) && intval($this->SYSTEM_ARR['shopping_cart']['gift_Pay_from_wallet']) == 1) ? 1 : 0;
     }
 
     public function updateUserCart()
