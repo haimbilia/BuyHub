@@ -7,6 +7,7 @@
     - Maintain Single seller products to buyer cart.
     - Collect customer comments on order product while checkout.
     - Hide product variants and merge product catalog and inventory form.
+    - Product type as a service is added under product type.
 
 ## Known Issues and Problems :
 
