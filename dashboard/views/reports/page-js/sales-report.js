@@ -21,8 +21,8 @@ $(function () {
   $("#sortable")
     .sortable({
       helper: fixWidthHelper,
-      start: fixPlaceholderStyle,
       handle: ".handleJs",
+      start: fixPlaceholderStyle,
       stop: function () {
         reloadList(false);
       },

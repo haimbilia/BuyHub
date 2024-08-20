@@ -11,7 +11,7 @@ if (isset($actionItemsData['formColumns']) && !empty($actionItemsData['formColum
             $checked = 'checked="checked"';
         }
         $actionItemsData['columnButtons'] .= '<li>
-            <svg class="svg" width="18" height="18">
+            <svg class="svg handleJs" width="18" height="18">
                 <use
                     xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#drag">
                 </use>

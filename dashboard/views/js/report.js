@@ -20,6 +20,7 @@ $(document).on("click", ".headerColumnJs", function (e) {
 $(function () {
     $("#sortable").sortable({
         helper: fixWidthHelper,
+        handle: ".handleJs",
         start: fixPlaceholderStyle,
         stop: function () {
             reloadList(false);

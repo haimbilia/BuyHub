@@ -53,6 +53,7 @@
     - Bug-085951 - Admin's default order-level shipping profile should get linked with seller products when "Shipped by admin" setting is enabled.
     - Bug-086019 - Suggestion >> The currently selected tab is not visually highlighted
     - Bug-085989 - Responsive >> Issue on sub modules of 'Reports' module
+    - Bug-085957 - Branch 1 RTL >> Issues on ' Order Invoice' page on both buyer and seller end
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  

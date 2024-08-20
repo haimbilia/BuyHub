@@ -19,6 +19,7 @@ $(document).on("click", ".headerColumnJs", function (e) {
 
 $(function () {
 	$("#sortable").sortable({
+		handle: ".handleJs",
         helper: fixWidthHelper,
         start: fixPlaceholderStyle,
 		stop: function () {
