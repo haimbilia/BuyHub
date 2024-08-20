@@ -60,8 +60,9 @@ class RfqOffersController extends ListingBaseController
         $srch->joinBuyerAddress($this->siteLangId);
         $srch->joinCountry(true);
         $srch->joinState(true);
+        $srch->joinRfqCategory(true);
 
-        $dbFlds = array_merge(RequestForQuote::FIELDS, ['addr_name', 'addr_address1', 'addr_address2', 'addr_city', 'state_name', 'country_name', 'addr_zip', 'addr_phone_dcode', 'addr_phone', 'buc.credential_username', 'buc.credential_email', 'bu.user_id as user_id', 'bu.user_updated_on', 'bu.user_name', 'IFNULL(country_name, country_code) as country_name', 'IFNULL(state_name, state_identifier) as state_name', 'rfq.rfq_product_id', 'rfq_selprod_code']);
+        $dbFlds = array_merge(RequestForQuote::FIELDS, ['addr_name', 'addr_address1', 'addr_address2', 'addr_city', 'state_name', 'country_name', 'addr_zip', 'addr_phone_dcode', 'addr_phone', 'buc.credential_username', 'buc.credential_email', 'bu.user_id as user_id', 'bu.user_updated_on', 'bu.user_name', 'IFNULL(country_name, country_code) as country_name', 'IFNULL(state_name, state_identifier) as state_name', 'rfq.rfq_product_id', 'rfq_selprod_code', 'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name']);
         $srch->addMultipleFields($dbFlds);
 
         $srch->addCondition('rfq_id', '=', $rfqId);
@@ -70,7 +71,6 @@ class RfqOffersController extends ListingBaseController
             LibHelper::exitWithError($this->str_invalid_request, false, true);
             CommonHelper::redirectUserReferer();
         }
-        $rfqData['prodcat_name'] = RequestForQuote::getRfqCategoriesName($rfqData['rfq_prodcat_id'], $this->siteLangId);
 
         $selProdId = SellerProduct::getSellerProductIdByCode($rfqData['rfq_selprod_code']);
         $frmSearch->fill(['offer_rfq_id' => $rfqId, 'rfq_product_id' => $rfqData['rfq_product_id']]);
@@ -568,6 +568,11 @@ class RfqOffersController extends ListingBaseController
         $this->offerData = RfqOffers::getAttributesById($recordId, ['offer_user_type', 'offer_rfq_id', 'offer_primary_offer_id']);
         if (!is_array($this->offerData) || empty($this->offerData) || $rfqId != $this->offerData['offer_rfq_id']) {
             LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
+        $isClosed = RequestForQuote::getAttributesById($rfqId, 'rfq_status');
+        if (RequestForQuote::STATUS_CLOSED == $isClosed) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_THIS_RFQ_IS_CLOSED_BY_THE_BUYER'), true);
         }
 
         $srch = new SearchBase(RfqOffers::DB_RFQ_LATEST_OFFER);

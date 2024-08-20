@@ -186,7 +186,7 @@ if (!isset($tbody)) {
                 </div>
                 <div class="offer-block actions-block">
                     <div class="actions-block-body">
-                        <?php if ($canEdit && !in_array(RfqOffers::STATUS_ACCEPTED, [$row['offer_status'], $row['counter_offer_status']])) {
+                        <?php if ($canEdit && RequestForQuote::STATUS_CLOSED != $row['rfq_status'] && !in_array(RfqOffers::STATUS_ACCEPTED, [$row['offer_status'], $row['counter_offer_status']])) {
                             $counterOfferId = FatUtility::int($row['counter_offer_id']);
                             $counterOfferId = 1 > $counterOfferId ? $row['offer_id'] : $counterOfferId;
                             $buyerOffered = $row['rlo_buyer_offer_id'] > $row['rlo_seller_offer_id'];

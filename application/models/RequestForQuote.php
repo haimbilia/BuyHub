@@ -388,14 +388,46 @@ class RequestForQuote extends MyAppModel
         $prodSrch->addCondition('selprod_user_id', '=', $sellerId);
 
         $fields = array(
-            'rfq_quantity as quantity', 'rfq_quantity_unit', 'product_id', 'product_type', 'product_length', 'product_width', 'product_height',
-            'product_dimension_unit', 'product_weight', 'product_weight_unit', 'product_model',
-            'selprod_id', 'selprod_user_id', 'selprod_stock', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'selprod_sku',
-            'selprod_condition', 'selprod_code',
-            'special_price_found', 'theprice', 'shop_id', 'IFNULL(product_name, product_identifier) as product_name', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'IFNULL(brand_name, brand_identifier) as brand_name', 'shop_name',
-            'seller_user.user_name as shop_onwer_name', 'seller_user_cred.credential_username as shop_owner_username',
-            'seller_user.user_phone_dcode as shop_owner_phone_dcode', 'seller_user.user_phone as shop_owner_phone', 'seller_user_cred.credential_email as shop_owner_email', 'selprod_download_validity_in_days', 'selprod_max_download_times', 'ps.product_warranty', 'COALESCE(sps.selprod_return_age, ss.shop_return_age) as return_age', 'COALESCE(sps.selprod_cancellation_age, ss.shop_cancellation_age) as cancellation_age',
-            'prodcat_id', 'product_attachements_with_inventory', 'selprod_product_id', 'product_seller_id', 'shipkg.*'
+            'rfq_quantity as quantity',
+            'rfq_quantity_unit',
+            'product_id',
+            'product_type',
+            'product_length',
+            'product_width',
+            'product_height',
+            'product_dimension_unit',
+            'product_weight',
+            'product_weight_unit',
+            'product_model',
+            'selprod_id',
+            'selprod_user_id',
+            'selprod_stock',
+            'IF(selprod_stock > 0, 1, 0) AS in_stock',
+            'selprod_sku',
+            'selprod_condition',
+            'selprod_code',
+            'special_price_found',
+            'theprice',
+            'shop_id',
+            'IFNULL(product_name, product_identifier) as product_name',
+            'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title',
+            'IFNULL(brand_name, brand_identifier) as brand_name',
+            'shop_name',
+            'seller_user.user_name as shop_onwer_name',
+            'seller_user_cred.credential_username as shop_owner_username',
+            'seller_user.user_phone_dcode as shop_owner_phone_dcode',
+            'seller_user.user_phone as shop_owner_phone',
+            'seller_user_cred.credential_email as shop_owner_email',
+            'selprod_download_validity_in_days',
+            'selprod_max_download_times',
+            'ps.product_warranty',
+            'COALESCE(sps.selprod_return_age, ss.shop_return_age) as return_age',
+            'COALESCE(sps.selprod_cancellation_age, ss.shop_cancellation_age) as cancellation_age',
+            'prodcat_id',
+            'product_attachements_with_inventory',
+            'selprod_product_id',
+            'product_seller_id',
+            'shipkg.*'
         );
         $prodSrch->addMultipleFields($fields);
         return (array)FatApp::getDb()->fetchAll($prodSrch->getResultSet(), 'selprod_id');
@@ -421,26 +453,25 @@ class RequestForQuote extends MyAppModel
 
     public static function getBadgeClass(int $status): string
     {
+        $class = 'badge badge-info';
         switch ($status) {
             case self::STATUS_ACCEPTED:
-                return 'badge badge-success';
+                $class = 'badge badge-success';
                 break;
             case self::STATUS_COMPLETED:
-                return 'badge badge-brand';
+                $class = 'badge badge-brand';
                 break;
             case self::STATUS_CLOSED:
-                return 'badge badge-danger';
+                $class = 'badge badge-danger';
                 break;
             case self::STATUS_OFFERED:
-                return 'badge badge-warning';
+                $class = 'badge badge-warning';
                 break;
             case self::STATUS_OPEN:
-                return 'badge badge-info';
-                break;
-            default:
-                return 'badge badge-info';
+                $class = 'badge badge-info';
                 break;
         }
+        return $class;
     }
 
     /**
@@ -451,20 +482,22 @@ class RequestForQuote extends MyAppModel
      */
     public static function getApprovalStatusBadge(int $status): string
     {
+        $class = 'badge badge-info';
         switch ($status) {
             case self::PENDING:
-                return 'badge badge-info';
+                $class = 'badge badge-info';
                 break;
             case self::APPROVED:
-                return 'badge badge-success';
+                $class = 'badge badge-success';
                 break;
             case self::REJECTED:
-                return 'badge badge-warning';
+                $class = 'badge badge-warning';
                 break;
             default:
-                return 'badge badge-info';
+                $class = 'badge badge-info';
                 break;
         }
+        return $class;
     }
 
     /**

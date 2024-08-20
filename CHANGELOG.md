@@ -105,6 +105,8 @@
     - Bug-085843 - RFQ >> The seller is unable to download the attachments added by either the buyer or the seller.
     - Bug-086140 - RFQ >> Suggestion >> 'Accept' and 'Reject' buttons should appear to the buyer when the seller edits the shipping charges of the rejected offer
     - Bug-086054 - Branch 1 >> 'Share and earn' page vibrates or shakes while scrolling
+    - Bug-085857 - RFQ >> Product category name does not appear under RFQ detail section on RFQ offer detail page on admin account
+    - Bug-085859 - RFQ >> Issue when buyer closes the RFQ before final acceptance of seller
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  
