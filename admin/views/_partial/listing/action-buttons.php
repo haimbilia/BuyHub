@@ -61,17 +61,6 @@ if (isset($deleteButton) && true === $deleteButton && $canEdit) {
     );
 }
 
-if (isset($otherButtons) && is_array($otherButtons)) {
-    foreach ($otherButtons as $attr) {
-        $liAttr = [];
-        if (isset($attr['attr']['title'])) {
-            $liAttr = ['title' => $attr['attr']['title'], 'data-bs-toggle' => 'tooltip', 'data-placement' => 'top'];
-            unset($attr['attr']['title']);
-        }
-        $li = $ul->appendElement('li', $liAttr);
-        $li->appendElement('a', str_replace('&#039;', "'", $attr['attr']), html_entity_decode($attr['label'], ENT_QUOTES, 'utf-8'), true);
-    }
-}
 
 if (!empty($columnButtons)) {
     $li = $ul->appendElement('li', ['class' => 'dropdown custom-drag-drop']);
@@ -95,6 +84,19 @@ if (!empty($columnButtons)) {
 
     $li->appendElement('div', ['class' => 'dropdown-menu dropdown-menu-right dropdown-menu-anim dropdown-menu-fit dropdown-menu-anim scroll scroll-y'], $columnButtons, true);
 }
+
+if (isset($otherButtons) && is_array($otherButtons)) {
+    foreach ($otherButtons as $attr) {
+        $liAttr = [];
+        if (isset($attr['attr']['title'])) {
+            $liAttr = ['title' => $attr['attr']['title'], 'data-bs-toggle' => 'tooltip', 'data-placement' => 'top'];
+            unset($attr['attr']['title']);
+        }
+        $li = $ul->appendElement('li', $liAttr);
+        $li->appendElement('a', str_replace('&#039;', "'", $attr['attr']), html_entity_decode($attr['label'], ENT_QUOTES, 'utf-8'), true);
+    }
+}
+
 if (!empty($htmlContent) || !empty($statusButtons) || !empty($deleteButton) || !empty($otherButtons) || !empty($columnButtons)) {
     echo '<div class="card-toolbar">';
     echo $ul->getHtml();
