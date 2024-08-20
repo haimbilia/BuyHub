@@ -50,7 +50,8 @@ class WalletPayController extends MyAppController
         if (!empty($subsSessionOrderId)) {
             $srch->addCondition('order_type', '=', Orders::ORDER_SUBSCRIPTION);
         } else {
-            $srch->addCondition('order_type', '=', Orders::ORDER_PRODUCT);
+            $cond =   $srch->addCondition('order_type', '=', Orders::ORDER_PRODUCT);
+            $cond->attachCondition('order_type', '=', Orders::GIFT_CARD_TYPE);
         }
         $rs = $srch->getResultSet();
         $orderInfo = FatApp::getDb()->fetch($rs);
@@ -69,7 +70,7 @@ class WalletPayController extends MyAppController
 
         if ($orderPaymentFinancials["order_credits_charge"] > 0) {
             $orderPaymentObj = new OrderPayment($orderId);
-            $orderPaymentObj->chargeUserWallet($orderPaymentFinancials["order_credits_charge"]);            
+            $orderPaymentObj->chargeUserWallet($orderPaymentFinancials["order_credits_charge"]);
         }
 
         if (!empty($subsSessionOrderId)) {

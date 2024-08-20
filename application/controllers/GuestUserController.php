@@ -501,6 +501,7 @@ class GuestUserController extends MyAppController
             $frm->expireSecurityToken(FatApp::getPostedData());
         }
 
+
         $data = [];
         $emailVerification = FatApp::getConfig('CONF_EMAIL_VERIFICATION_REGISTRATION', FatUtility::VAR_INT, 1);
         if (1 > $signUpWithPhone && !$emailVerification) {

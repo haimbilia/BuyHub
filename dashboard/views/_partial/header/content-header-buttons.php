@@ -72,6 +72,7 @@ if ($canEdit) { ?>
                 </li>
             <?php } ?>
 
+
             <?php if (isset($otherButtons) && is_array($otherButtons) && !empty($otherButtons)) {
                 $class = 'btn ';
                 if (count($otherButtons) == count($otherButtons, COUNT_RECURSIVE)) {
@@ -131,7 +132,7 @@ if ($canEdit) { ?>
             ?>
                 <li>
                     <a href="<?php echo $href; ?>" class="btn btn-outline-gray btn-icon" onclick="<?php echo $onclick; ?>" title="<?php echo $title; ?>" data-bs-toggle='tooltip' data-placement='top'>
-                        <?php echo $label; ?>
+                        <?php echo html_entity_decode($label); ?>
                     </a>
                 </li>
             <?php } ?>

@@ -1320,7 +1320,7 @@ class OrdersController extends ListingBaseController
         if (empty($orderDetail)) {
             LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
         }
-        
+
         $orderObj = new Orders();
         $notAllowedStatues = $orderObj->getNotAllowedOrderCancellationStatuses();
 

@@ -53,6 +53,7 @@ class OrderPayment extends Orders
         
         $addresses = $this->getOrderAddresses($orderInfo["order_id"]);
         $currencyArr = Currency::getCurrencyAssoc($this->orderLangId);
+
         $orderCurrencyCode = !empty($currencyArr[FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1)]) ? $currencyArr[FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1)] : '';
 
         $billingArr = array(
@@ -79,6 +80,8 @@ class OrderPayment extends Orders
             "customer_shipping_phone" => '',
         );
 
+
+
         $arrOrder = array(
             "id" => $orderInfo["order_id"],
             "order_number" => $orderInfo["order_number"],
@@ -103,6 +106,7 @@ class OrderPayment extends Orders
             "paypal_bn" => "FATbit_SP",
             "order_pmethod_id" => $orderInfo['order_pmethod_id'],
         );
+
 
         /* if (empty($orderInfo) || empty($userInfo) || empty($addresses)){
         return $arrOrder;
@@ -140,7 +144,10 @@ class OrderPayment extends Orders
             //$shippingArr = $billingArr;
         }
 
+
+
         $arrOrder = array_merge($arrOrder, $billingArr, $shippingArr);
+
         return $arrOrder;
     }
 
@@ -269,6 +276,11 @@ class OrderPayment extends Orders
                 $emailNotificationObj = new EmailHandler();
                 $emailNotificationObj->sendTxnNotification($txnId, $defaultSiteLangId);
                 /* ] */
+            }
+
+            if ($orderDetails['order_type'] == Orders::GIFT_CARD_TYPE) {
+                $emailNotificationObj = new EmailHandler();
+                $emailNotificationObj->sendMailToAdminAndRecipient($orderDetails['order_id']);
             }
             /* ] */
             return true;
