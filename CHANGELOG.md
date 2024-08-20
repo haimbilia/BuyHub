@@ -54,6 +54,7 @@
     - Bug-086019 - Suggestion >> The currently selected tab is not visually highlighted
     - Bug-085989 - Responsive >> Issue on sub modules of 'Reports' module
     - Bug-085957 - Branch 1 RTL >> Issues on ' Order Invoice' page on both buyer and seller end
+    - Bug-085899 - Branch 1 RTL >> Month navigation icon on calendar does not appear in correct direction
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  
