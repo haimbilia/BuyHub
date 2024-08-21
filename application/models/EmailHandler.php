@@ -3239,6 +3239,8 @@ class EmailHandler extends FatModel
             return false;
         }
         /* Send Notification To Buyer about Bank Transfer transaction status.  */
+        return true;
+    }
 
     public function sendMailToAdminAndRecipient($orderId)
     {
