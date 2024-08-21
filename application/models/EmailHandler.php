@@ -1382,7 +1382,13 @@ class EmailHandler extends FatModel
         $srch->joinTable(User::DB_TBL_USR_WITHDRAWAL_REQ_SPEC, 'LEFT JOIN', User::DB_TBL_USR_WITHDRAWAL_REQ_SPEC_PREFIX . 'withdrawal_id = tuwr.withdrawal_id');
         $srch->addMultipleFields(
             array(
-                'tuwr.*', 'GROUP_CONCAT(CONCAT(`uwrs_key`, ":", `uwrs_value`)) as payout_detail', 'user_name', 'credential_email as user_email', 'credential_username as user_username', 'user_phone_dcode', 'user_phone'
+                'tuwr.*',
+                'GROUP_CONCAT(CONCAT(`uwrs_key`, ":", `uwrs_value`)) as payout_detail',
+                'user_name',
+                'credential_email as user_email',
+                'credential_username as user_username',
+                'user_phone_dcode',
+                'user_phone'
             )
         );
         $srch->addCondition('tuwr.withdrawal_id', '=', 'mysql_func_' . $requestId, 'AND', true);
@@ -1624,10 +1630,26 @@ class EmailHandler extends FatModel
         $srch->addCondition('orrmsg_id', '=', 'mysql_func_' . $orrmsg_id, 'AND', true);
         $srch->addMultipleFields(
             array(
-                'op_selprod_id', 'op_selprod_user_id', 'op_is_batch', 'orrmsg_orrequest_id', 'op_product_name', 'op_selprod_title',
-                'op_shop_owner_name', 'buyer_cred.credential_username as buyer_username', 'orrequest_qty', 'orrequest_type', 'orrequest_reference',
-                'IFNULL(orreason_title, orreason_identifier) as orreason_title', 'orrmsg_msg', 'op_shop_owner_email', 'op_shop_owner_phone_dcode', 'op_shop_owner_phone',
-                'op_selprod_options', 'op_brand_name', 'op_invoice_number', 'orrequest_user_id'
+                'op_selprod_id',
+                'op_selprod_user_id',
+                'op_is_batch',
+                'orrmsg_orrequest_id',
+                'op_product_name',
+                'op_selprod_title',
+                'op_shop_owner_name',
+                'buyer_cred.credential_username as buyer_username',
+                'orrequest_qty',
+                'orrequest_type',
+                'orrequest_reference',
+                'IFNULL(orreason_title, orreason_identifier) as orreason_title',
+                'orrmsg_msg',
+                'op_shop_owner_email',
+                'op_shop_owner_phone_dcode',
+                'op_shop_owner_phone',
+                'op_selprod_options',
+                'op_brand_name',
+                'op_invoice_number',
+                'orrequest_user_id'
             )
         );
         $rs = $srch->getResultSet();
@@ -1758,13 +1780,35 @@ class EmailHandler extends FatModel
         $srch->addCondition('orrmsg_id', '=', 'mysql_func_' . $orrmsg_id, 'AND', true);
         $srch->addMultipleFields(
             array(
-                'op_selprod_id', 'op_is_batch', 'op_product_name', 'op_selprod_title',
-                'op_shop_owner_name', 'op_shop_owner_username', 'op_shop_owner_email', 'op_shop_owner_phone_dcode', 'op_shop_owner_phone', 'op_selprod_user_id',
-                'buyer_cred.credential_username as buyer_username', 'buyer_cred.credential_email as buyer_email',
-                'orrequest_id', 'orrequest_qty', 'orrequest_reference', 'orrequest_type', 'orrequest_user_id', 'orrmsg_from_user_id',
+                'op_selprod_id',
+                'op_is_batch',
+                'op_product_name',
+                'op_selprod_title',
+                'op_shop_owner_name',
+                'op_shop_owner_username',
+                'op_shop_owner_email',
+                'op_shop_owner_phone_dcode',
+                'op_shop_owner_phone',
+                'op_selprod_user_id',
+                'buyer_cred.credential_username as buyer_username',
+                'buyer_cred.credential_email as buyer_email',
+                'orrequest_id',
+                'orrequest_qty',
+                'orrequest_reference',
+                'orrequest_type',
+                'orrequest_user_id',
+                'orrmsg_from_user_id',
                 'IFNULL(orreason_title, orreason_identifier) as orreason_title',
-                'orrmsg_msg', 'orrequest_status', 'buyer.user_name as buyer_name', 'buyer.user_phone_dcode as buyer_phone_dcode', 'buyer.user_phone as buyer_phone', 'buyer.user_id as buyer_id', 'op_selprod_user_id as seller_id',
-                'orrmsg_from_admin_id', 'admin_name', 'admin_username'
+                'orrmsg_msg',
+                'orrequest_status',
+                'buyer.user_name as buyer_name',
+                'buyer.user_phone_dcode as buyer_phone_dcode',
+                'buyer.user_phone as buyer_phone',
+                'buyer.user_id as buyer_id',
+                'op_selprod_user_id as seller_id',
+                'orrmsg_from_admin_id',
+                'admin_name',
+                'admin_username'
             )
         );
         $rs = $srch->getResultSet();
@@ -1895,8 +1939,15 @@ class EmailHandler extends FatModel
         $srch->addMultipleFields(
             array(
                 'scatrequestmsg_from_user_id',
-                'scatrequestmsg_msg', 'scatrequest_status', 'scatrequest_id', 'scatrequest_user_id',
-                'scatrequestmsg_from_admin_id', 'admin_name', 'admin_username', 'receiver_user.user_name', 'receiver_user_cred.credential_email'
+                'scatrequestmsg_msg',
+                'scatrequest_status',
+                'scatrequest_id',
+                'scatrequest_user_id',
+                'scatrequestmsg_from_admin_id',
+                'admin_name',
+                'admin_username',
+                'receiver_user.user_name',
+                'receiver_user_cred.credential_email'
             )
         );
         $rs = $srch->getResultSet();
@@ -1962,8 +2013,14 @@ class EmailHandler extends FatModel
         $srch->addCondition('orrequest_id', '=', 'mysql_func_' . $orrequest_id, 'AND', true);
         $srch->addMultipleFields(
             array(
-                'orrequest_id', 'orrequest_user_id', 'orrequest_status', 'orrequest_reference',
-                'buyer.user_name as buyer_name', 'buyer_cred.credential_email as buyer_email', 'op_selprod_user_id', 'seller.user_name as seller_name',
+                'orrequest_id',
+                'orrequest_user_id',
+                'orrequest_status',
+                'orrequest_reference',
+                'buyer.user_name as buyer_name',
+                'buyer_cred.credential_email as buyer_email',
+                'op_selprod_user_id',
+                'seller.user_name as seller_name',
                 'seller_cred.credential_email as seller_email'
             )
         );
@@ -1985,8 +2042,14 @@ class EmailHandler extends FatModel
         $msgSrch->setPageSize(1);
         $msgSrch->addMultipleFields(
             array(
-                'orrmsg_id', 'orrmsg_from_user_id', 'user_name', 'user_phone_dcode', 'user_phone',
-                'orrmsg_from_admin_id', 'admin_name', 'admin_username'
+                'orrmsg_id',
+                'orrmsg_from_user_id',
+                'user_name',
+                'user_phone_dcode',
+                'user_phone',
+                'orrmsg_from_admin_id',
+                'admin_name',
+                'admin_username'
             )
         );
         $msgRs = $msgSrch->getResultSet();
@@ -2094,8 +2157,16 @@ class EmailHandler extends FatModel
         $srch->doNotLimitRecords();
         $srch->addMultipleFields(
             array(
-                'ocrequest_id', 'ocrequest_op_id', 'ocrequest_ocreason_id', 'ocrequest_status',
-                'op_invoice_number', 'buyer.user_name as buyer_name', 'buyer.user_phone_dcode as buyer_phone_dcode', 'buyer.user_phone as buyer_phone', 'buyer_cred.credential_email as buyer_email', 'buyer.user_id as buyer_id'
+                'ocrequest_id',
+                'ocrequest_op_id',
+                'ocrequest_ocreason_id',
+                'ocrequest_status',
+                'op_invoice_number',
+                'buyer.user_name as buyer_name',
+                'buyer.user_phone_dcode as buyer_phone_dcode',
+                'buyer.user_phone as buyer_phone',
+                'buyer_cred.credential_email as buyer_email',
+                'buyer.user_id as buyer_id'
             )
         );
         $rs = $srch->getResultSet();
@@ -2154,8 +2225,11 @@ class EmailHandler extends FatModel
         $srch->addCondition('sreport_id', '=', 'mysql_func_' . $sreport_id, 'AND', true);
         $srch->addMultipleFields(
             array(
-                'sreport_id', 'sreport_reportreason_id', 'IFNULL(shop_name, shop_identifier) as shop_name',
-                'credential_username', 'sreport_message'
+                'sreport_id',
+                'sreport_reportreason_id',
+                'IFNULL(shop_name, shop_identifier) as shop_name',
+                'credential_username',
+                'sreport_message'
             )
         );
         $rs = $srch->getResultSet();
@@ -2849,11 +2923,34 @@ class EmailHandler extends FatModel
         $prodSrch->doNotLimitRecords();
         $prodSrch->addMultipleFields(
             array(
-                'product_id', 'product_identifier', 'IFNULL(product_name,product_identifier) as product_name', 'product_seller_id', 'product_model', 'product_type', 'prodcat_id', 'IFNULL(prodcat_name,prodcat_identifier) as prodcat_name', 'product_upc', 'product_isbn',
-                'selprod_id', 'selprod_user_id', 'selprod_condition', 'selprod_price', 'special_price_found', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title',
-                'theprice', 'selprod_stock', 'selprod_threshold_stock_level', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'brand_id', 'IFNULL(brand_name, brand_identifier) as brand_name', 'user_name',
-                'shop_id', 'shop_name',
-                'splprice_display_dis_type', 'splprice_display_dis_val', 'splprice_display_list_price'
+                'product_id',
+                'product_identifier',
+                'IFNULL(product_name,product_identifier) as product_name',
+                'product_seller_id',
+                'product_model',
+                'product_type',
+                'prodcat_id',
+                'IFNULL(prodcat_name,prodcat_identifier) as prodcat_name',
+                'product_upc',
+                'product_isbn',
+                'selprod_id',
+                'selprod_user_id',
+                'selprod_condition',
+                'selprod_price',
+                'special_price_found',
+                'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title',
+                'theprice',
+                'selprod_stock',
+                'selprod_threshold_stock_level',
+                'IF(selprod_stock > 0, 1, 0) AS in_stock',
+                'brand_id',
+                'IFNULL(brand_name, brand_identifier) as brand_name',
+                'user_name',
+                'shop_id',
+                'shop_name',
+                'splprice_display_dis_type',
+                'splprice_display_dis_val',
+                'splprice_display_list_price'
             )
         );
         $productRs = $prodSrch->getResultSet();
@@ -2908,11 +3005,35 @@ class EmailHandler extends FatModel
         $prodSrch->setPageSize(9);
         $prodSrch->addMultipleFields(
             array(
-                'product_id', 'selprod_product_id', 'product_identifier', 'IFNULL(product_name,product_identifier) as product_name', 'product_seller_id', 'product_model', 'product_type', 'prodcat_id', 'IFNULL(prodcat_name,prodcat_identifier) as prodcat_name', 'product_upc', 'product_isbn',
-                'selprod_id', 'selprod_user_id', 'selprod_condition', 'selprod_price', 'special_price_found', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title',
-                'theprice', 'selprod_stock', 'selprod_threshold_stock_level', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'brand_id', 'IFNULL(brand_name, brand_identifier) as brand_name', 'user_name',
-                'shop_id', 'shop_name',
-                'splprice_display_dis_type', 'splprice_display_dis_val', 'splprice_display_list_price'
+                'product_id',
+                'selprod_product_id',
+                'product_identifier',
+                'IFNULL(product_name,product_identifier) as product_name',
+                'product_seller_id',
+                'product_model',
+                'product_type',
+                'prodcat_id',
+                'IFNULL(prodcat_name,prodcat_identifier) as prodcat_name',
+                'product_upc',
+                'product_isbn',
+                'selprod_id',
+                'selprod_user_id',
+                'selprod_condition',
+                'selprod_price',
+                'special_price_found',
+                'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title',
+                'theprice',
+                'selprod_stock',
+                'selprod_threshold_stock_level',
+                'IF(selprod_stock > 0, 1, 0) AS in_stock',
+                'brand_id',
+                'IFNULL(brand_name, brand_identifier) as brand_name',
+                'user_name',
+                'shop_id',
+                'shop_name',
+                'splprice_display_dis_type',
+                'splprice_display_dis_val',
+                'splprice_display_list_price'
             )
         );
         $productRs = $prodSrch->getResultSet();
@@ -3540,8 +3661,12 @@ class EmailHandler extends FatModel
         $srch->joinTable(User::DB_TBL_CRED, 'INNER JOIN', 'user.user_id = usercred.credential_user_id', 'usercred');
         $srch->addCondition('ogcards_order_id', '=', $orderId);
         $srch->addMultipleFields([
-            'ogcards_receiver_email', 'ogcards_receiver_name', 'ogcards_code', 'order_net_amount',
-            'user.user_name', 'usercred.credential_email'
+            'ogcards_receiver_email',
+            'ogcards_receiver_name',
+            'ogcards_code',
+            'order_net_amount',
+            'user.user_name',
+            'usercred.credential_email'
         ]);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
@@ -3627,6 +3752,45 @@ class EmailHandler extends FatModel
             $this->error = Labels::getLabel("ERR_UNABLE_TO_SEND_EMAIL", $langId);
             return false;
         }
+        return true;
+    }
+
+    public function sendTransferBankActionNotification($langId, $d)
+    {
+        $tpl = 'BANK_TRANSFER_ORDER_PAYMENT_ACTIONS';
+        $vars = array(
+            '{USER_NAME}' => $d['user_name'],
+            '{ORDER_ID}' => $d['order_number'],
+            '{STATUS}' => $d['txn_status'],
+        );
+
+        if (!(new FatMailer($langId, $tpl))
+            ->setTo($d['credential_email'])
+            ->setVariables($vars)
+            ->send()) {
+            return false;
+        }
+
+        if (!empty($d['user_phone']) && !empty($d['user_phone_dcode'])) {
+            $phone = ValidateElement::formatDialCode($d['user_phone_dcode']) . $d['user_phone'];
+            $this->sendSms($tpl, $phone, $vars, $langId);
+        }
+
+        /* Send Notification To Buyer about Bank Transfer transaction status.  */
+        $msg = Labels::getLabel('MSG_ORDER_#{ORDER-ID}_TXN._HAS_BEEN_{STATUS}', $langId);
+        $msg = CommonHelper::replaceStringData($msg, $vars);
+        $notificationObj = new Notifications();
+        $notificationDataArr = array(
+            'unotification_user_id' => $d["order_user_id"],
+            'unotification_body' => $msg,
+            'unotification_type' => 'BANK_TRANSFER_ORDER_PAYMENT_APPROVAL',
+            'unotification_data' => json_encode(array('orderId' => $d['order_id'])),
+        );
+        if (!$notificationObj->addNotification($notificationDataArr)) {
+            $this->error = $notificationObj->getError();
+            return false;
+        }
+        /* Send Notification To Buyer about Bank Transfer transaction status.  */
         return true;
     }
 }

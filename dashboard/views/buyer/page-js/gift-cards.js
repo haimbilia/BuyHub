@@ -1,18 +1,17 @@
-$(document).ready(function() {
+$(document).ready(function () {
     searchRecords(document.frmOfferSrch);
 });
-(function() {
-
-    searchRecords = function(frm) {
+(function () {
+    searchRecords = function (frm) {
         var data = fcom.frmData(frm);
         $("#listing").html(fcom.getLoader());
-        fcom.ajax(fcom.makeUrl('Buyer', 'searchGiftCards'), data, function(res) {
+        fcom.ajax(fcom.makeUrl('Buyer', 'searchGiftCards'), data, function (res) {
             $("#listing").html(res);
             fcom.removeLoader();
         });
     };
 
-    goToSearchPage = function(page) {
+    goToSearchPage = function (page) {
         if (typeof page == undefined || page == null) {
             page = 1;
         }
@@ -21,23 +20,21 @@ $(document).ready(function() {
         searchRecords(frm);
     };
 
-
-
-    addGiftCards = function() {
+    addGiftCards = function () {
         $.ykmodal(fcom.getLoader(), true);
-        fcom.ajax(fcom.makeUrl('Buyer', 'giftCardForm'), '', function(t) {
+        fcom.ajax(fcom.makeUrl('Buyer', 'giftCardForm'), '', function (t) {
             $.ykmodal(t, true);
             fcom.removeLoader();
         });
     };
 
-    setup = function(frm) {
+    setup = function (frm) {
         if (!$(frm).validate()) {
             return false;
         }
-        fcom.updateWithAjax(fcom.makeUrl('Buyer', 'setupGiftCard'), fcom.frmData(frm), function(response) {
+        fcom.updateWithAjax(fcom.makeUrl('Buyer', 'setupGiftCard'), fcom.frmData(frm), function (response) {
             if (response.redirectUrl) {
-                setTimeout(function() {
+                setTimeout(function () {
                     window.location.href = response.redirectUrl
                 }, 1000);
             }

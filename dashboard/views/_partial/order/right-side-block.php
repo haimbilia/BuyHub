@@ -172,7 +172,7 @@ $totalSaving = $selProdTotalSpecialPrice + $discount + $volDiscount;
             </div>
         <?php } ?>
 
-        <?php if (!empty($orderDetail['shippingAddress']) && $productType != Product::PRODUCT_TYPE_DIGITAL) { ?>
+        <?php if (!empty($orderDetail['shippingAddress']) && ($productType != Product::PRODUCT_TYPE_DIGITAL && $productType != Product::PRODUCT_TYPE_SERVICE)) { ?>
             <div class="order-block">
                 <h4><?php echo Labels::getLabel('LBL_Shipping_ADDRESS', $siteLangId); ?></h4>
                 <div class="order-block-data">

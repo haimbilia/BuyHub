@@ -96,6 +96,11 @@
     - Bug-085716 - RFQ >> Previous RFQs are also displayed to the recently registered seller
     - Bug-085143 - 404 on the product details page when the new user creates a product.
     - Bug-085068 - cancellation is not working properly if stripe connect is on.
+    - Bug-086044 - Branch 1: The image added in the review also appears in the product images gallery.
+    - Bug-086039 - Branch 1: Admin sellers should not be able to add Volume discounts for services.
+    - Bug-086030 - Branch 1: Order status changed to Paid if admin approves any transaction of less amount than the order amount.
+    - Bug-086026 - Delivery Address field appears on the service order details page if ordered with physical products.
+    - Bug-086006 - Branch 1: The deleted file also appears again if the user adds a new product with the same details as the deleted one.
     - Bug-086054 - 'Share and earn' page vibrates or shakes while scrolling
     - Bug-085928 - RTL >> 'Product Listing' Page Appears in English When Buyer Has Selected Arabic Language
     - Bug-085916 - RTL >> Issue on 'Inventory setup form
@@ -110,6 +115,5 @@
     - Bug-085989 - Responsive >> Issue on sub modules of 'Reports' module
     - Bug-085957 - Branch 1 RTL >> Issues on ' Order Invoice' page on both buyer and seller end
     - Bug-085899 - Branch 1 RTL >> Month navigation icon on calendar does not appear in correct direction
-
 ## Hit URL:
     - admin/patch-update/updateProductRating  

@@ -94,10 +94,7 @@ $action = strtolower($action); ?>
                             <span class="menu-sub-title navTextJs"><?php echo Labels::getLabel("LBL_Gift_Cards", $siteLangId); ?></span>
                         </a>
                     </li>
-                <?php
-                }
-                ?>
-
+                <?php } ?>
             </ul>
         </li>
     <?php } ?>

@@ -3904,7 +3904,7 @@ class AccountController extends LoggedUserController
         if (!$giftcard->redeem($post['giftcard_code'], UserAuthentication::getLoggedUserId(), $this->siteLangId)) {
             FatUtility::dieJsonError($giftcard->getError());
         }
-        FatUtility::dieJsonSuccess(Labels::getLabel('MSG_GIFTCARD_REDEEM_SUCCESSFULLY'));
+        FatUtility::dieJsonSuccess(Labels::getLabel('MSG_GIFTCARD_REDEEMED_SUCCESSFULLY'));
     }
 
     public function guestActivate()
