@@ -119,8 +119,8 @@
     &:before {
       content: "";
       display: inline-block;
-      border-#{$end-direction}: 2px solid black;
-      border-bottom: 2px solid black;
+      border-#{$end-direction}: 2px solid currentColor;
+      border-bottom: 2px solid currentColor;
       width: 24px;
       height: 24px;
     }

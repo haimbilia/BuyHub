@@ -6,11 +6,8 @@ if ($selprod_id > 0 || empty($productOptions)) {
     $frmSellerProduct->setFormTagAttribute('onsubmit', 'setUpMultipleSellerProducts(this); return(false);');
 }
 $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
-$frmSellerProduct->setFormTagAttribute('class', 'form form--horizontal inventoryForm-js');
-if (CommonHelper::getLayoutDirection() != Language::getLayoutDirection($siteDefaultLangId)) {
-    $frmSellerProduct->addFormTagAttribute('class', "layout--" . Language::getLayoutDirection($siteDefaultLangId));
-    $frmSellerProduct->setFormTagAttribute('dir', Language::getLayoutDirection($siteDefaultLangId));
-}
+$frmSellerProduct->setFormTagAttribute('class', 'form form--horizontal inventoryForm-js layout--' . Language::getLayoutDirection($siteLangId));
+$frmSellerProduct->setFormTagAttribute('dir', Language::getLayoutDirection($siteLangId));
 
 $autoUpdateFld = $frmSellerProduct->getField('auto_update_other_langs_data');
 if (null != $autoUpdateFld) {
@@ -21,11 +18,11 @@ if (null != $autoUpdateFld) {
 $returnAgeFld = $frmSellerProduct->getField('selprod_return_age');
 if (null != $returnAgeFld) {
     $returnAge = FatUtility::int($returnAgeFld->value);
-    $returnAgeFld->htmlAfterField = '<br/><small>' . Labels::getLabel('FRM_IN_DAYS', $siteLangId) . ' </small>';
+    $returnAgeFld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('FRM_IN_DAYS', $siteLangId) . ' </span>';
 }
 $cancellationAgeFld = $frmSellerProduct->getField('selprod_cancellation_age');
 if (null != $cancellationAgeFld) {
-    $cancellationAgeFld->htmlAfterField = '<br/><small>' . Labels::getLabel('FRM_WARRANTY_IN_DAYS', $siteLangId) . ' </small>';
+    $cancellationAgeFld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('FRM_WARRANTY_IN_DAYS', $siteLangId) . ' </span>';
 }
 
 $hidden = '';

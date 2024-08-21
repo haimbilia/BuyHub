@@ -99,23 +99,25 @@ $('[ripple]').on('click', function (e) {
 
 /*Tabs*/
 $(function () {
-	$(".tabs-content-js").hide();
-	$(".tabs--flat-js li:first").addClass("is-active").show();
-	$(".section").find(".tabs-content-js:first").show();
-	$(".tabs--flat-js li").on('click', function () {
-		$(this).parent().find("li").removeClass("is-active");
-		$(this).addClass("is-active");
-		$(".tabs-content-js").hide();
-		var activeTab = $(this).find("a").attr("href");
-		$(activeTab).fadeIn();
-		return false;
-	});
+  $(".tabs-content-js").hide();
+  $(".tabs--flat-js li:first").addClass("is-active").show();
+  $(".section").find(".tabs-content-js:first").show();
+  $(".tabs--flat-js li").on("click", function () {
+    $(this).parent().find("li").removeClass("is-active");
+    $(this).addClass("is-active");
+    $(".tabs-content-js").hide();
+    var activeTab = $(this).find("a").attr("href");
+    $(activeTab).fadeIn();
+    return false;
+  });
 
-	if (CONF_ENABLE_GEO_LOCATION && className != 'CheckoutController' && className != 'CartController') {
-		googleAddressAutocomplete('ga-autoComplete-header');
-		googleAddressAutocomplete('ga-autoComplete-mobile');
-	}
-
+  if (
+    CONF_ENABLE_GEO_LOCATION &&
+    className != "CheckoutController" &&
+    className != "CartController"
+  ) {
+    googleAddressAutocomplete("ga-autoComplete-mobile");
+  }
 });
 
 /* for search form */
@@ -229,7 +231,23 @@ $(function () {
 		e.stopPropagation();
 	});
 
+  /* for cart area */
+  $(".cart").on("click", function () {
+    if ($("html").hasClass("toggled-user")) {
+      $(".dropdown__trigger-js").parent(".dropdown").removeClass("is-active");
+      $("html").removeClass("toggled-user");
+    }
+  });
+  $("html").on("click", function () {
+    if ($(".collection__container").hasClass("open-menu")) {
+      $(".open-menu").parent().toggleClass("is-active");
+      $(".open-menu").toggleClass("open-menu");
+    }
+  });
 
+  $(".cart").on("click", function (e) {
+    e.stopPropagation();
+  });
 });
 
 /*back-top*/
@@ -287,7 +305,6 @@ $(function () {
 		}, 100);
 	});
 });
-
 
 $(document).ajaxComplete(function () {
 	markCatLinkActive();
@@ -407,7 +424,11 @@ function animation(obj) {
 })();
 
 /* scroll tab active function */
-moveToTargetDiv('.tabs--scroll ul li.is-active', '.tabs--scroll ul', langLbl.layoutDirection);
+moveToTargetDiv(
+  ".tabs--scroll ul li.is-active",
+  ".tabs--scroll ul",
+  langLbl.layoutDirection
+);
 
 $(document).on('click', '.tabs--scroll ul li', function () {
 	if ($(this).hasClass('fat-inactive')) { return; }
@@ -985,7 +1006,7 @@ function clearMoreSellerMarkers() {
 	});
 }
 
-let sidebarHtml = '';
+let sidebarHtml = "";
 function openMobileMenu() {
 	if ('' == sidebarHtml) {
 		fcom.ajax(fcom.makeUrl("Category", "sidebarCategoriesList"), '',

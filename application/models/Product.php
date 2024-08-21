@@ -1184,8 +1184,12 @@ class Product extends MyAppModel
 
     public static function isProductShippedBySeller($productId, $productAddedBySellerId, $selProdSellerId)
     {
-        $productId = FatUtility::int($productId);
         $productAddedBySellerId = FatUtility::int($productAddedBySellerId);
+        if (1 > $productAddedBySellerId && 0 < FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0)) {
+            return false;
+        }
+        
+        $productId = FatUtility::int($productId);
         $selProdSellerId = FatUtility::int($selProdSellerId);
         if ($productAddedBySellerId && $productAddedBySellerId == $selProdSellerId) {
             return true;

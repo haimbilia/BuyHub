@@ -132,7 +132,6 @@ class StripePayController extends PaymentController
         }
         $this->set('paymentAmount', $this->paymentAmount);
         $this->set('orderInfo', $this->orderInfo);
-
         if ($this->error) {
             $this->set('error', $this->error);
         }
@@ -206,7 +205,6 @@ class StripePayController extends PaymentController
 
         try {
             if (!empty(trim($this->settings['privateKey'])) && !empty(trim($this->settings['publishableKey']))) {
-
                 $orderDetails = [
                     'order_id' => $orderId,
                     'customer_name' => $this->orderInfo['customer_name'],

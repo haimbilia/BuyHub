@@ -1265,13 +1265,14 @@ $(function () {
 		});
 	};
 
-	setGeoLocation = function () {
-		$.ykmodal(fcom.getLoader(), true);
-		fcom.ajax(fcom.makeUrl("Home", "setGeoLocation"), '', function (ans) {
-			fcom.removeLoader();
-			$.ykmodal(ans, true, '', '', '', false);
-		});
-	};
+    setGeoLocation = function () {
+        fcom.displayProcessing();
+        fcom.ajax(fcom.makeUrl("Home", "setGeoLocation"), '', function (ans) {
+            fcom.closeProcessing();
+            $.ykmodal(ans, true,'','','',false);
+            googleAddressAutocomplete('ga-autoComplete-header');
+        });
+    };
 
 	guestUserLogin = function (frm, v) {
 		v.validate();

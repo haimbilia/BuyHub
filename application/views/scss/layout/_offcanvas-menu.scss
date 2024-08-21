@@ -43,9 +43,9 @@
         height: 20px;
         // fill: $secondary-color;
       }
-
-      &:hover {
-        color: currentColor;
+      &:hover,
+      &.active {
+        color: $txt-brand;
       }
     }
   }

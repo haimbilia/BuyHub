@@ -2,7 +2,7 @@
 $htm = '';
 if (!empty($fields)) {
     $htm = '<div class="dropdown custom-drag-drop">
-                        <button class="btn btn-outline-gray btn-icon dropdown-toggle no-after" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button class="btn btn-outline-gray btn-icon dropdown-toggle no-after" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" data-bs-auto-close="outside"  aria-haspopup="true" aria-expanded="false">
                         <svg class="svg btn-icon-start" width="18" height="18">
                         <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#columns">
                         </use>
@@ -20,7 +20,7 @@ if (!empty($fields)) {
                                             <input class="filterColumn-js" type="checkbox" name="reportColumns" value="' . $key . '" ' . $checked . $disabled . ' onclick=reloadList(false)>
                                             ' . $label . '
                                         </label>
-                                        <i class="icn fas fa-grip-lines"></i>
+                                        <i class="icn fas fa-grip-lines handleJs"></i>
                                     </li>';
     }
     $htm .= '</ul>
@@ -61,9 +61,11 @@ if (!empty($fields)) {
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
-                    <?php require_once(CONF_THEME_PATH . '_partial/listing/listing-search-form.php'); ?>
+                    <?php require_once (CONF_THEME_PATH . '_partial/listing/listing-search-form.php'); ?>
                     <div class="card-body p-0">
-                        <div class="listing-tbl" id="listingDiv"> <?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?> </div>
+                        <div class="listing-tbl" id="listingDiv">
+                            <?php echo Labels::getLabel('LBL_Loading..', $siteLangId); ?>
+                        </div>
                     </div>
                 </div>
             </div>

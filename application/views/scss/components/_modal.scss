@@ -123,12 +123,12 @@ button.close {
 .btn-close-start {
   position: absolute;
   top: 1rem;
-  left: 1rem;
+  #{$start-direction}: 1rem;
 }
 .btn-close-end {
   position: absolute;
   top: 1rem;
-  right: 1rem;
+  #{$end-direction}: 1rem;
 }
 
 .custom-modal {

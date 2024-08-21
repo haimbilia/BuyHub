@@ -26,7 +26,7 @@ $(document).ready(function() {
     addGiftCards = function() {
         $.ykmodal(fcom.getLoader(), true);
         fcom.ajax(fcom.makeUrl('Buyer', 'giftCardForm'), '', function(t) {
-            $.ykmodal(t, true, "modal-lg");
+            $.ykmodal(t, true);
             fcom.removeLoader();
         });
     };

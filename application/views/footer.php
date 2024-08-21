@@ -111,11 +111,15 @@ if ('' !=  $pixelId) {  ?>
             </div>
         </section>
     <?php }
-    if ('cart' != strtolower($controllerName)) { ?>
+    if ('cart' != strtolower($controllerName)) {
+        $currentUrl = $_SERVER['REQUEST_SCHEME'] . '://';
+        $currentUrl .= $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'];
+        $currentUrl .= $_SERVER['REQUEST_URI'];
+        ?>
         <!-- Mobile menu -->
         <div class="mobile-actions">
             <div class="mobile-actions-item">
-                <a class="mobile-actions-link" href="<?php echo UrlHelper::generateUrl(); ?>">
+                <a class="mobile-actions-link <?php echo (rtrim($currentUrl, '/') == rtrim(UrlHelper::generateFullUrl(), '/') ? 'active' : '') ?>" href="<?php echo UrlHelper::generateUrl(); ?>">
                     <svg class="svg" width="24" height="24">
                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#mbl-home">
                         </use>
@@ -124,7 +128,7 @@ if ('' !=  $pixelId) {  ?>
                 </a>
             </div>
             <div class="mobile-actions-item">
-                <button class="mobile-actions-link first" type="button" data-bs-toggle="offcanvas" data-bs-target="#categories-menu" aria-controls="categories-menu" onclick="openMobileMenu();">
+                <button class="mobile-actions-link first <?php echo (rtrim($currentUrl, '/') != rtrim(UrlHelper::generateFullUrl(), '/') ? 'active' : '') ?>" type="button" data-bs-toggle="offcanvas" data-bs-target="#categories-menu" aria-controls="categories-menu" onclick="openMobileMenu();">
                     <svg class="svg" width="24" height="24">
                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#mbl-category">
                         </use>
@@ -142,16 +146,16 @@ if ('' !=  $pixelId) {  ?>
                 </button>
             </div>
             <div class="mobile-actions-item">
-                <?php if ((!UserAuthentication::isUserLogged() && UserAuthentication::isGuestUserLogged()) ||  UserAuthentication::isUserLogged()) {        ?>
-                    <button class="mobile-actions-link" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas-account">
-                    <?php } else { ?>
+                <?php if ((!UserAuthentication::isUserLogged() && UserAuthentication::isGuestUserLogged()) ||  UserAuthentication::isUserLogged()) { ?>
+                        <button class="mobile-actions-link" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas-account">
+                <?php } else { ?>
                         <button class="mobile-actions-link sign-in-popup-js" type="button">
-                        <?php  } ?>
-                        <svg class="svg" width="24" height="24">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#mbl-account">
-                            </use>
-                        </svg>
-                        <span class="txt"><?php echo Labels::getLabel("LBL_Account", $siteLangId); ?></span>
+                <?php  } ?>
+                            <svg class="svg" width="24" height="24">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#mbl-account">
+                                </use>
+                            </svg>
+                            <span class="txt"><?php echo Labels::getLabel("LBL_Account", $siteLangId); ?></span>
                         </button>
             </div>
 
@@ -235,29 +239,29 @@ if (FatApp::getConfig("CONF_ENABLE_ENGAGESPOT_PUSH_NOTIFICATION", FatUtility::VA
                 s1.setAttribute('crossorigin', '*');
                 s0.parentNode.insertBefore(s1, s0);
             })();
-             // Custom styling of Offset starts here
+            // Custom styling of Offset starts here
             Tawk_API.customStyle = {
-            zIndex:'1048!important', 
-            visibility: {
-                //for desktop only
-                desktop: {
-                position: 'br', // bottom-right
-                xOffset: 15, // 15px away from right
-                yOffset: 60, // 40px up from bottom
-                },
-                // for mobile only
-                mobile: {
-                position: 'bl', // bottom-left
-                xOffset: 5, // 5px away from left
-                yOffset: 90, // 50px up from bottom
-                },
-                // change settings of bubble if necessary
-                bubble: {
-                rotate: '0deg',
-                xOffset: -20,
-                yOffset: 0,
+                zIndex: '1048!important',
+                visibility: {
+                    //for desktop only
+                    desktop: {
+                        position: 'br', // bottom-right
+                        xOffset: 15, // 15px away from right
+                        yOffset: 60, // 40px up from bottom
+                    },
+                    // for mobile only
+                    mobile: {
+                        position: 'bl', // bottom-left
+                        xOffset: 5, // 5px away from left
+                        yOffset: 90, // 50px up from bottom
+                    },
+                    // change settings of bubble if necessary
+                    bubble: {
+                        rotate: '0deg',
+                        xOffset: -20,
+                        yOffset: 0,
+                    }
                 }
-            }
             }
             $(document).ready(function() {
                 function displayDemoBannerPopup() {

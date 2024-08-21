@@ -143,7 +143,8 @@ class User extends MyAppModel
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $userId);
         $this->objMainTableRecord->setSensitiveFields(
             array(
-                'user_regdate', 'user_id'
+                'user_regdate',
+                'user_id'
             )
         );
 
@@ -3258,6 +3259,14 @@ class User extends MyAppModel
         return '';
     }
 
+    public function updateShopValidUser()
+    {
+        if (1 > $this->mainTableRecordId) {
+            return;
+        }
+        FatApp::getDb()->query("UPDATE tbl_shops SET shop_user_valid = 1 WHERE shop_user_id = ( SELECT u.user_id FROM tbl_users u INNER JOIN tbl_user_credentials c ON u.user_id = c.credential_user_id WHERE u.user_id = " . $this->mainTableRecordId . " AND u.user_is_supplier = 1 AND u.user_deleted = 0 AND c.credential_active = 1 AND c.credential_verified = 1 LIMIT 1 )");
+    }
+    
     /* Get By Email
      * 
      * @param string $email
@@ -3268,7 +3277,10 @@ class User extends MyAppModel
         $srch = new SearchBase(User::DB_TBL, 'u');
         $srch->joinTable(static::DB_TBL_CRED, 'LEFT OUTER JOIN', 'uc.' . static::DB_TBL_CRED_PREFIX . 'user_id = u.user_id', 'uc');
         $srch->addMultipleFields([
-            'u.user_id as user_id', 'user_name', 'credential_email', 'user_deleted'
+            'u.user_id as user_id',
+            'user_name',
+            'credential_email',
+            'user_deleted'
         ]);
         $srch->addCondition('credential_email', '=', $email);
         //  $srch->addCondition('user_deleted', '=', applicationConstants::NO);
@@ -3283,13 +3295,5 @@ class User extends MyAppModel
             return false;
         }
         return true;
-    }
-    
-    public function updateShopValidUser()
-    {
-        if (1 > $this->mainTableRecordId) {
-            return;
-        }
-        FatApp::getDb()->query("UPDATE tbl_shops SET shop_user_valid = 1 WHERE shop_user_id = ( SELECT u.user_id FROM tbl_users u INNER JOIN tbl_user_credentials c ON u.user_id = c.credential_user_id WHERE u.user_id = " . $this->mainTableRecordId . " AND u.user_is_supplier = 1 AND u.user_deleted = 0 AND c.credential_active = 1 AND c.credential_verified = 1 LIMIT 1 )");
     }
 }

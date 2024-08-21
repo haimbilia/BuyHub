@@ -3309,7 +3309,7 @@ class BuyerController extends BuyerBaseController
             FatUtility::dieJsonError(Labels::getLabel('LBL_INVALID_REQUEST'));
         }
         if (FatUtility::int($post['order_total_amount']) < $minAmount) {
-            $str = str_replace("{min-amount}", $minAmount, Labels::getLabel('LBL_MOUNT_SHOULD_BE_GREATER_THEN_({min-amount})'));
+            $str = str_replace("{min-amount}", $minAmount, Labels::getLabel('LBL_AMOUNT_SHOULD_BE_GREATER_THEN_({min-amount})'));
             FatUtility::dieJsonError($str);
         }
         $post['order_language_id'] = $this->siteLangId;

@@ -55,7 +55,8 @@ h2,
 h3,
 h4,
 h5,
-h6 {}
+h6 {
+}
 
 p {
 	margin: 0;
@@ -186,9 +187,9 @@ mark,
 }
 
 .-inline-link {
-	text-decoration: underline;
-	font-size: 0.9em;
-	color: $brand-color !important;
+  text-decoration: underline;
+  font-size: 0.9em;
+  color: $brand-color !important;
 }
 
 .gap {
@@ -430,13 +431,12 @@ mark,
 		transform: rotate(-45deg);
 	}
 
-	&--white {
-
-		&:before,
-		&:after {
-			background-color: #fff;
-		}
-	}
+  &--white {
+    &:before,
+    &:after {
+      background-color: #fff;
+    }
+  }
 
 	&-sm {
 		width: 20px;
@@ -512,7 +512,6 @@ mark,
 		padding: 1.5rem 2rem;
 	}
 }
-
 
 //.dropdown-toggle-custom
 .dropdown-toggle-custom {
@@ -590,25 +589,25 @@ mark,
 		align-items: center;
 		justify-content: center;
 
-		&-prev span {
-			display: inline-block;
-			border-#{$end-direction}: 1px solid black;
-			border-bottom: 1px solid black;
-			width: 10px;
-			height: 10px;
-			transform: rotate(136deg * $transform-direction);
-			margin-#{$end-direction}: -7px;
-		}
+    &-prev span {
+      display: inline-block;
+      border-#{$end-direction}: 1px solid currentColor;
+      border-bottom: 1px solid currentColor;
+      width: 10px;
+      height: 10px;
+      transform: rotate(136deg * $transform-direction);
+      margin-#{$end-direction}: -7px;
+    }
 
-		&-next span {
-			display: inline-block;
-			border-#{$end-direction}: 1px solid black;
-			border-bottom: 1px solid black;
-			width: 10px;
-			height: 10px;
-			transform: rotate(-45deg * $transform-direction);
-			margin-#{$start-direction}: -7px;
-		}
+    &-next span {
+      display: inline-block;
+      border-#{$end-direction}: 1px solid currentColor;
+      border-bottom: 1px solid currentColor;
+      width: 10px;
+      height: 10px;
+      transform: rotate(-45deg * $transform-direction);
+      margin-#{$start-direction}: -7px;
+    }
 
 		&:hover {
 			border-color: $brand-color;
@@ -792,17 +791,17 @@ mark,
 
 //google locations
 .pac-container {
-	font-family: inherit;
-	box-shadow: $shadow1;
-	z-index: 1040;
-	border: $border !important;
-	border-radius: 4px;
+  font-family: inherit;
+  box-shadow: $shadow1;
+  z-index: 1060;
+  border: $border !important;
+  border-radius: 4px;
 
-	.pac-item {
-		cursor: pointer;
-		padding: 8px 10px;
-		border-top: $border !important;
-	}
+  .pac-item {
+    cursor: pointer;
+    padding: 8px 10px;
+    border-top: $border !important;
+  }
 
 	.pac-icon {
 		background-image: url(images/retina/geo-alt.svg) !important;

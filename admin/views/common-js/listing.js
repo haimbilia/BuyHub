@@ -51,6 +51,7 @@ $(document).on("click", ".headerColumnJs", function (e) {
 
 $(function () {
     $("#sortable").sortable({
+		handle: ".handleJs",
         stop: function () {
             reloadList();
         }

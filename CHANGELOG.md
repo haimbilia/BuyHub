@@ -7,6 +7,8 @@
     - Maintain Single seller products to buyer cart.
     - Collect customer comments on order product while checkout.
     - Hide product variants and merge product catalog and inventory form.
+    - Product type as a service is added under product type.
+    - Gift card feature added for buyers.
 
 ## Known Issues and Problems :
 
@@ -94,19 +96,20 @@
     - Bug-085716 - RFQ >> Previous RFQs are also displayed to the recently registered seller
     - Bug-085143 - 404 on the product details page when the new user creates a product.
     - Bug-085068 - cancellation is not working properly if stripe connect is on.
-    - Bug-085729 - RFQ >> 'Order details section appears distorted on 'Order placed' email
-    - Bug-085740 - RFQ >> Nothing happens on clicking the view button on 'RFQ detail' page of seller/buyer
-    - Bug-085758 - RFQ >> The 'Assign to me' icon no longer appears for other sellers once the buyer has given counteroffers to sellers
-    - Bug-085762 - RFQ >> 'Custom shipping charges' should be displayed in the 'New Offer' email received by the buyer from the seller.
-    - Bug-085791 - RFQ >> No validation message is displayed when the seller clicks the 'Save' button without changing the details of the offer.
-    - Bug-085819 - RFQ >> An 'Invalid Request' message is displayed to the buyer after clicking the 'Buy Now' button when the final approval for the RFQ is approved by the admin
-    - Bug-085838 - RFQ >> Delivery address for digital products still appears on RFQ detail page on admin account
-    - Bug-085839 - RFQ >> Suggestion >> No icons are displayed for upload file and submit button on 'Attachments' and 'messages' panel of RFQ >> admin account
-    - Bug-085843 - RFQ >> The seller is unable to download the attachments added by either the buyer or the seller.
-    - Bug-086140 - RFQ >> Suggestion >> 'Accept' and 'Reject' buttons should appear to the buyer when the seller edits the shipping charges of the rejected offer
-    - Bug-086054 - Branch 1 >> 'Share and earn' page vibrates or shakes while scrolling
-    - Bug-085857 - RFQ >> Product category name does not appear under RFQ detail section on RFQ offer detail page on admin account
-    - Bug-085859 - RFQ >> Issue when buyer closes the RFQ before final acceptance of seller
+    - Bug-086054 - 'Share and earn' page vibrates or shakes while scrolling
+    - Bug-085928 - RTL >> 'Product Listing' Page Appears in English When Buyer Has Selected Arabic Language
+    - Bug-085916 - RTL >> Issue on 'Inventory setup form
+    - Bug-085851 - Deprecation appears on the reviews listing page on the front end.
+    - Bug-085849 - Suggestion listing does not appear in the location popup on the homepage
+    - Bug-085923 - "Without product variant" seller inventory listing still appears
+    - Bug-085914 - A fatal error occurs on the checkout page when the admin enables the shipping plugin
+    - Bug-085880 - Seller-added pickup address is visible on the checkout page even if shipped by admin only setting is enabled
+    - Bug-085921 - Without product variants >> minimum selling price language label should be managebale for both conditions
+    - Bug-085951 - Admin's default order-level shipping profile should get linked with seller products when "Shipped by admin" setting is enabled.
+    - Bug-086019 - Suggestion >> The currently selected tab is not visually highlighted
+    - Bug-085989 - Responsive >> Issue on sub modules of 'Reports' module
+    - Bug-085957 - Branch 1 RTL >> Issues on ' Order Invoice' page on both buyer and seller end
+    - Bug-085899 - Branch 1 RTL >> Month navigation icon on calendar does not appear in correct direction
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  

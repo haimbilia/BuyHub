@@ -36,10 +36,10 @@
       .svg {
         width: 20px;
         height: 20px;
-        //  fill: $secondary-color;
       }
-      &:hover {
-        color: currentColor;
+      &:hover,
+      &.active {
+        color: $txt-brand;
       }
     }
   }
@@ -95,6 +95,9 @@
       font-weight: $font-weight-light;
       font-size: 0.8rem;
     }
+  }
+  .offcanvas-foot {
+    padding: 1rem 2rem;
   }
 }
 
