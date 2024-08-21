@@ -420,7 +420,7 @@ class PatchUpdateController extends ListingBaseController
                 'tbl_badges_lang', 'tbl_badge_link_conditions', 'tbl_badge_links', 'tbl_badge_requests', 'tbl_order_product_shipment_pickup', 'tbl_system_logs', 'tbl_order_product_plugin_specifics',
                 'tbl_order_product_responses', 'tbl_unique_check_failed_attempt', 'tbl_upc_codes', 'tbl_user_cookies_preferences', 'tbl_user_meta', 'tbl_user_notifications', 'tbl_user_withdrawal_requests_specifics', 'tbl_order_product_specifics', 'tbl_shop_specifics', 'tbl_shop_stats'
             );
-            FatApp::getDb()->query("DELETE FROM `tbl_attached_files` WHERE `afile_type` in (1,2,3,4,5,7,8,9,10,11,12,13,14,22,23,24,25,26,27,28,29,30,32,33,41,42,43,48,50,52,53,60)");
+            FatApp::getDb()->query("DELETE FROM `tbl_attached_files` WHERE `afile_type` in (1,2,3,4,5,7,8,9,10,11,12,13,14,22,23,24,25,26,27,28,29,30,32,33,41,42,43,48,50,52,53,60,63)");
 
             /*
             Delete FROM `tbl_navigation_links` where nlink_nav_id != 1

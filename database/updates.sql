@@ -89,6 +89,34 @@ SET s.shop_user_valid = 1;
 ALTER TABLE `tbl_shops` ADD INDEX( `shop_user_valid`);
 ALTER TABLE `tbl_states` ADD INDEX( `state_active`);
 
+INSERT INTO `tbl_email_templates` (`etpl_code`, `etpl_lang_id`, `etpl_name`, `etpl_subject`, `etpl_body`, `etpl_replacements`, `etpl_priority`, `etpl_status`) VALUES
+('BANK_TRANSFER_ORDER_PAYMENT_ACTIONS', 1, 'Bank Transfer Order Payment Transaction Action', 'Order #{ORDER_ID} payment has been {STATUS}', '<table width="600px" cellspacing="0" cellpadding="0" style="margin: 0 auto; table-layout: fixed; background: #ffffff; border-radius: 4px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.04)">
+	<tbody>
+		<tr>                        
+			<td style="background:#fff;padding:20px 0 10px; text-align:center;">                            
+				<h4 style="font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;"></h4>                            
+				<h2 style="margin:0; font-size:34px; padding:0;">Bank Transfer</h2></td>                    
+		</tr>
+		<tr>                        
+			<td style="background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;">                            
+				<table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">                                
+					<tbody>                                    
+						<tr>                                        
+							<td style="padding:20px 0 30px;" colspan="2"><strong style="font-size:18px;color:#333;">Dear {USER_NAME}</strong><br />
+								Your bank transfer transaction belongs to Order #{ORDER_ID} has been {STATUS}.
+                            </td>                                    
+						</tr>                               
+					</tbody>                            
+				</table>
+			</td>                    
+		</tr>
+	</tbody>
+</table>', '{USER_NAME} - Name of the User.<br>\r\n{ORDER_ID} - Order Id.<br>\r\n{STATUS} - Status of the transaction.<br>', 5, 1)
+ON DUPLICATE KEY UPDATE etpl_subject = VALUES(etpl_subject), etpl_body = VALUES(etpl_body), etpl_replacements = VALUES(etpl_replacements);
+
+INSERT INTO `tbl_sms_templates` (`stpl_code`, `stpl_lang_id`, `stpl_name`, `stpl_body`, `stpl_replacements`, `stpl_status`) VALUES
+('BANK_TRANSFER_ORDER_PAYMENT_ACTIONS', 1, 'Bank Transfer Order Payment Transaction Action', 'Dear {USER_NAME},\r\n\r\nPayment txn. of order #{ORDER_ID} has been {STATUS}.\r\nFor #{ORDER_ID}.\r\n\r\n{SITE_NAME} Team', '[{\"title\":\"User Name\", \"variable\":\"{USER_NAME}\"},{\"title\":\"Order Id\", \"variable\":\"{ORDER_ID}\"},{\"title\":\"Transaction Status\", \"variable\":\"{STATUS}\"}, {\"title\":\"Website Name\", \"variable\":\"{SITE_NAME}\"}]', 1)
+ON DUPLICATE KEY UPDATE stpl_name = VALUES(stpl_name), stpl_body = VALUES(stpl_body), stpl_replacements = VALUES(stpl_replacements);
 /* GIFT CARDS */
 CREATE TABLE `tbl_order_gift_cards` ( 
     `ogcards_id` INT NOT NULL AUTO_INCREMENT,

@@ -1064,37 +1064,65 @@ class OrdersController extends ListingBaseController
 
     public function approvePayment(int $orderPaymentId)
     {
-        $orederObj = new Orders();
-        $result = current($orederObj->getOrderPayments(['id' => $orderPaymentId]));
+        $orderObj = new Orders();
+        $result = current($orderObj->getOrderPayments(['id' => $orderPaymentId]));
         if (!empty($result)) {
+            $orderDetail = $orderObj->getOrderById($result['opayment_order_id'], $this->siteLangId);
+            $paymentAmount = $orderDetail['order_net_amount'];
+            $paidAmount = $orderObj->getOrderPaymentPaid($result['opayment_order_id']);
+
             $db = FatApp::getDb();
             $db->startTransaction();
-            if (!$db->updateFromArray(
-                Orders::DB_TBL,
-                array('order_payment_status' => Orders::ORDER_PAYMENT_PAID, 'order_date_updated' => date('Y-m-d H:i:s')),
-                array('smt' => 'order_id = ? ', 'vals' => array($result['opayment_order_id']))
-            )) {
-                $db->rollbackTransaction();
-                LibHelper::exitWithError($db->getError(), true);
+
+            if (($paidAmount + $result['opayment_amount']) >= $paymentAmount) {
+                if (!$db->updateFromArray(
+                    Orders::DB_TBL,
+                    array('order_payment_status' => Orders::ORDER_PAYMENT_PAID, 'order_date_updated' => date('Y-m-d H:i:s')),
+                    array('smt' => 'order_id = ? ', 'vals' => array($result['opayment_order_id']))
+                )) {
+                    $db->rollbackTransaction();
+                    LibHelper::exitWithError($db->getError(), true);
+                }
             }
 
             if (!$db->updateFromArray(
                 Orders::DB_TBL_ORDER_PAYMENTS,
                 array('opayment_txn_status' => Orders::ORDER_PAYMENT_PAID),
-                array('smt' => 'opayment_id = ? ', 'vals' => array($orderPaymentId))
+                array('smt' => 'opayment_id = ? ', 'vals' => [$orderPaymentId])
             )) {
                 $db->rollbackTransaction();
                 LibHelper::exitWithError($db->getError(), true);
             }
 
-            if (!$db->updateFromArray(
-                Orders::DB_TBL_ORDER_PRODUCTS,
-                array('op_status_id' => FatApp::getConfig("CONF_DEFAULT_PAID_ORDER_STATUS")),
-                array('smt' => 'op_order_id = ? ', 'vals' => array($result['opayment_order_id']))
-            )) {
-                $db->rollbackTransaction();
-                LibHelper::exitWithError($db->getError(), true);
+            $orderObj = new Orders();
+            $orderProducts = $orderObj->getChildOrders(['order_id' => $result['opayment_order_id']], langId: $this->siteLangId);
+
+            $storeOrderNetAmount = 0;
+            foreach ($orderProducts as $op) {
+                $storeOrderNetAmount += CommonHelper::orderProductAmount($op);
             }
+
+            if ($storeOrderNetAmount <= OrderPayment::getApprovedAmountTotal($result['opayment_order_id'])) {
+                if (!$db->updateFromArray(
+                    Orders::DB_TBL_ORDER_PRODUCTS,
+                    array('op_status_id' => FatApp::getConfig("CONF_DEFAULT_PAID_ORDER_STATUS")),
+                    array('smt' => 'op_order_id = ?', 'vals' => [$result['opayment_order_id']])
+                )) {
+                    $db->rollbackTransaction();
+                    LibHelper::exitWithError($db->getError(), true);
+                }
+            }
+
+            $userObj = new User($orderDetail['order_user_id']);
+            $vars = $userObj->getUserInfo(['user_name', 'user_phone_dcode', 'user_phone', 'credential_email'], false, false, true);
+            $vars += array(
+                'txn_status' => Labels::getLabel('LBL_APPROVED', $this->siteLangId),
+                'order_id' => $result['opayment_order_id'],
+            );
+            $vars += $orderDetail;
+
+            $emailObj = new EmailHandler();
+            $emailObj->sendTransferBankActionNotification($this->siteLangId, $vars);
         }
 
         $db->commitTransaction();
@@ -1109,14 +1137,6 @@ class OrdersController extends ListingBaseController
         if (!empty($result)) {
             $db = FatApp::getDb();
             $db->startTransaction();
-            if (!$db->updateFromArray(
-                Orders::DB_TBL,
-                array('order_payment_status' => Orders::ORDER_PAYMENT_CANCELLED, 'order_date_updated' => date('Y-m-d H:i:s')),
-                array('smt' => 'order_id = ? ', 'vals' => array($result['opayment_order_id']))
-            )) {
-                $db->rollbackTransaction();
-                LibHelper::exitWithError($db->getError(), true);
-            }
 
             if (!$db->updateFromArray(
                 Orders::DB_TBL_ORDER_PAYMENTS,
@@ -1127,14 +1147,17 @@ class OrdersController extends ListingBaseController
                 LibHelper::exitWithError($db->getError(), true);
             }
 
-            if (!$db->updateFromArray(
-                Orders::DB_TBL_ORDER_PRODUCTS,
-                array('op_status_id' => FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS")),
-                array('smt' => 'op_order_id = ? ', 'vals' => array($result['opayment_order_id']))
-            )) {
-                $db->rollbackTransaction();
-                LibHelper::exitWithError($db->getError(), true);
-            }
+            $orderData = Orders::getAttributesById($result['opayment_order_id'], ['order_number', 'order_net_amount', 'order_user_id']);
+            $userObj = new User($orderData['order_user_id']);
+            $vars = $userObj->getUserInfo(['user_name', 'user_phone_dcode', 'user_phone', 'credential_email'], false, false, true);
+            $vars += array(
+                'txn_status' => Labels::getLabel('MSG_REJECTED', $this->siteLangId),
+                'order_id' => $result['opayment_order_id'],
+            );
+            $vars += $orderData;
+
+            $emailObj = new EmailHandler();
+            $emailObj->sendTransferBankActionNotification($this->siteLangId, $vars);
         }
         $db->commitTransaction();
         $this->set('msg', Labels::getLabel("MSG_REJECTED", $this->siteLangId));

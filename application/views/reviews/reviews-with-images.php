@@ -6,7 +6,7 @@ if (!empty($reviewsImages)) {
         $largeImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'review', array($image['spreview_id'], 0, ImageDimension::VIEW_LARGE, $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
 ?>
         <div class="image">
-            <a class="thumbnail" href="<?php echo $largeImgUrl; ?>" data-fancybox="gallery">
+            <a class="thumbnail" href="<?php echo $largeImgUrl; ?>" data-fancybox="gallery-reviews">
                 <img src="<?php echo $imgUrl; ?>" data-altimg="<?php echo $largeImgUrl; ?>">
             </a>
         </div>

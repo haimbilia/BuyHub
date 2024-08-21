@@ -22,7 +22,7 @@
                         $mainImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'product', array($product['product_id'], ImageDimension::VIEW_LARGE, 0, $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                         $thumbImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($product['product_id'], ImageDimension::VIEW_THUMB, 0, $image['afile_id'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                 ?>
-                        <a data-fancybox="gallery" href="<?php echo $mainImgUrl; ?>">
+                        <a data-fancybox="gallery-product-detail" href="<?php echo $mainImgUrl; ?>">
                             <img loading="lazy" class="img-fluid" title="<?php echo $image['afile_attribute_title']; ?>" alt="<?php echo $image['afile_attribute_alt']; ?>" src="<?php echo $mainImgUrl; ?>" data-xoriginal="<?php echo $originalImgUrl; ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_ORIGINAL); ?>>
                         </a>
                     <?php
