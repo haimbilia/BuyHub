@@ -20,7 +20,11 @@ trait OrdersPackage
                 $this->viewPageKey = 'SUBSCRIPTION_ORDER_VIEW';
                 $this->tblHeadingKey = 'subscriptionOrdersTblHeadingCols';
                 break;
-
+            case Orders::GIFT_CARD_TYPE:
+                $this->directory = 'gift-card-orders';
+                $this->viewPageKey = 'GIFT_CARD_ORDER_VIEW';
+                $this->tblHeadingKey = 'giftCardOrdersTblHeadingCols';
+                break;
             default:
                 Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ORDER_TYPE', $this->siteLangId));
                 CommonHelper::redirectUserReferer();
@@ -30,6 +34,7 @@ trait OrdersPackage
 
     public function index()
     {
+
         $this->initVariables();
 
         $fields = $this->getFormColumns();
@@ -56,6 +61,7 @@ trait OrdersPackage
         $this->_template->addJs(array('js/select2.js', $this->directory . '/page-js/index.js'));
         $this->_template->addCss(array('css/select2.min.css'));
         $this->includeFeatherLightJsCss();
+
         $this->_template->render(true, true, '_partial/listing/index.php');
     }
 
@@ -74,6 +80,7 @@ trait OrdersPackage
     private function getListingData()
     {
         $fields = $this->getFormColumns();
+
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
         $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
         $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
@@ -83,25 +90,24 @@ trait OrdersPackage
         if (!array_key_exists($sortBy, $fields)) {
             $sortBy = 'order_date_added';
         }
-
         $sortOrder = applicationConstants::getSortOrder(FatApp::getPostedData('sortOrder', FatUtility::VAR_STRING), applicationConstants::SORT_DESC);
 
         $srchFrm = $this->getSearchForm($fields);
         $postedData = FatApp::getPostedData();
         $post = $srchFrm->getFormDataFromArray($postedData);
-
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $page = ($page <= 0) ? 1 : $page;
-
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
-
         $srch = new OrderSearch();
         $srch->joinOrderBuyerUser();
         $srch->joinOrderPaymentMethod($this->siteLangId);
         $srch->addCondition('order_type', '=', $this->ordersType);
+        if ($this->ordersType == Orders::GIFT_CARD_TYPE) {
+            $srch->joinTable(GiftCards::DB_TBL, 'INNER JOIN', 'ogcards.ogcards_order_id = order_id', 'ogcards');
+        }
         $keyword = FatApp::getPostedData('keyword', null, '');
         if (!empty($keyword)) {
-            $srch->addKeywordSearch($keyword);
+            $srch->addKeywordSearch($keyword, $this->ordersType);
         }
 
         $user_id = FatApp::getPostedData('user_id', FatUtility::VAR_INT, -1);
@@ -156,12 +162,17 @@ trait OrdersPackage
 
         $this->setRecordCount(clone $srch, $pageSize, $page, $post);
         $srch->doNotCalculateRecords();
+        $fieldsearch = ['order_number', 'order_id', 'order_date_added', 'order_payment_status', 'order_status', 'buyer.user_id', 'buyer.user_name as buyer_user_name', 'buyer_cred.credential_email as buyer_email', 'order_net_amount', 'order_wallet_amount_charge', 'order_pmethod_id', 'IFNULL(plugin_name, plugin_identifier) as plugin_name', 'plugin_code', 'order_is_wallet_selected', 'order_deleted', 'order_cart_data', 'buyer.user_name', 'user_updated_on', 'user_id', 'credential_username', 'buyer_cred.credential_email'];
+        if ($this->ordersType == Orders::GIFT_CARD_TYPE) {
+            $fieldsearch[] = 'ogcards_receiver_name';
+            $fieldsearch[] = 'ogcards_receiver_email';
+            $fieldsearch[] = 'ogcards_status';
+        }
 
-        $srch->addMultipleFields(['order_number', 'order_id', 'order_date_added', 'order_payment_status', 'order_status', 'buyer.user_id', 'buyer.user_name as buyer_user_name', 'buyer_cred.credential_email as buyer_email', 'order_net_amount', 'order_wallet_amount_charge', 'order_pmethod_id', 'IFNULL(plugin_name, plugin_identifier) as plugin_name', 'plugin_code', 'order_is_wallet_selected', 'order_deleted', 'order_cart_data', 'buyer.user_name', 'user_updated_on', 'user_id', 'credential_username', 'buyer_cred.credential_email']);
+        $srch->addMultipleFields($fieldsearch);
         $srch->addOrder($sortBy, $sortOrder);
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
-
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
         $this->set("arrListing", $records);
@@ -330,17 +341,33 @@ trait OrdersPackage
         if ($tblHeadingCols) {
             return json_decode($tblHeadingCols, true);
         }
+        if ($this->ordersType == Orders::GIFT_CARD_TYPE) {
+            $arr = [
+                'select_all' => Labels::getLabel('LBL_Select_all', $this->siteLangId),
+                /* 'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
+                'order_number' => Labels::getLabel('LBL_Order_ID', $this->siteLangId),
+                'buyer_user_name' => Labels::getLabel('LBL_BUYER_NAME', $this->siteLangId),
+                'ogcards_receiver_name' => Labels::getLabel('LBL_RECEIVER_NAME', $this->siteLangId),
+                'ogcards_receiver_email' => Labels::getLabel('LBL_RECEIVER_EMAIL', $this->siteLangId),
+                'order_date_added' => Labels::getLabel('LBL_ORDER_DATE_&_TIME', $this->siteLangId),
+                'order_net_amount' => Labels::getLabel('LBL_Total', $this->siteLangId),
+                'order_payment_status' => Labels::getLabel('LBL_Payment_Status', $this->siteLangId),
+                'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
+            ];
+        } else {
+            $arr = [
+                'select_all' => Labels::getLabel('LBL_Select_all', $this->siteLangId),
+                /* 'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
+                'order_number' => Labels::getLabel('LBL_Order_ID', $this->siteLangId),
+                'buyer_user_name' => Labels::getLabel('LBL_BUYER_NAME', $this->siteLangId),
+                'order_date_added' => Labels::getLabel('LBL_ORDER_DATE_&_TIME', $this->siteLangId),
+                'order_net_amount' => Labels::getLabel('LBL_Total', $this->siteLangId),
+                'order_payment_status' => Labels::getLabel('LBL_Payment_Status', $this->siteLangId),
+                'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
+            ];
+        }
 
-        $arr = [
-            'select_all' => Labels::getLabel('LBL_Select_all', $this->siteLangId),
-            /* 'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
-            'order_number' => Labels::getLabel('LBL_Order_ID', $this->siteLangId),
-            'buyer_user_name' => Labels::getLabel('LBL_BUYER_NAME', $this->siteLangId),
-            'order_date_added' => Labels::getLabel('LBL_ORDER_DATE_&_TIME', $this->siteLangId),
-            'order_net_amount' => Labels::getLabel('LBL_Total', $this->siteLangId),
-            'order_payment_status' => Labels::getLabel('LBL_Payment_Status', $this->siteLangId),
-            'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
-        ];
+
 
         CacheHelper::create($this->tblHeadingKey . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
         return $arr;
@@ -348,16 +375,32 @@ trait OrdersPackage
 
     protected function getDefaultColumns(): array
     {
-        return [
-            'select_all',
-            /*  'listSerial', */
-            'order_number',
-            'buyer_user_name',
-            'order_date_added',
-            'order_net_amount',
-            'order_payment_status',
-            'action'
-        ];
+
+        if ($this->ordersType == Orders::GIFT_CARD_TYPE) {
+            return [
+                'select_all',
+                /*  'listSerial', */
+                'order_number',
+                'buyer_user_name',
+                'ogcards_receiver_name',
+                'ogcards_receiver_email',
+                'order_date_added',
+                'order_net_amount',
+                'order_payment_status',
+                'action'
+            ];
+        } else {
+            return [
+                'select_all',
+                /*  'listSerial', */
+                'order_number',
+                'buyer_user_name',
+                'order_date_added',
+                'order_net_amount',
+                'order_payment_status',
+                'action'
+            ];
+        }
     }
 
     protected function excludeKeysForSort($fields = []): array

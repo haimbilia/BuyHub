@@ -223,7 +223,7 @@
         padding-#{$start-direction}: 45px;
 
         [dir="rtl"] & {
-          padding-#{$end-direction}: 45px;
+          //padding-#{$end-direction}: 45px;
           background-position: calc(100% - 10px) center;
         }
       }

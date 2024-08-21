@@ -74,7 +74,7 @@ $secondaryColorInverse = (false === strpos($secondaryColorInverse, 'rgb') ? 'rgb
     }
 </style>
 <script>
-    <?php $productSearchUrl = CacheHelper::get('productSearchUrl', CONF_DEF_CACHE_TIME, '.txt');
+    <?php $productSearchUrl = CacheHelper::get('productSearchUrl' . $siteLangId, CONF_DEF_CACHE_TIME, '.txt');
     if (!$productSearchUrl) {
         $productSearchUrl = UrlHelper::generateUrl('products', 'search');
         CacheHelper::create('productSearchUrl', $productSearchUrl, CacheHelper::TYPE_META_TAGS);

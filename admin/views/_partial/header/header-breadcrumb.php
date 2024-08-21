@@ -32,7 +32,7 @@
 
     if ($headerHtmlContent && $newRecordBtn) {
         echo '<div class="btn-group">';
-    } 
+    }
 
 
     if ($headerHtmlContent && !$newRecordBtn) {
@@ -67,6 +67,6 @@
     }
     if ($headerHtmlContent && $newRecordBtn) {
         echo '</div>';
-    } 
+    }
     ?>
 </div>

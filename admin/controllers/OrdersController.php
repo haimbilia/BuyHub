@@ -1138,14 +1138,6 @@ class OrdersController extends ListingBaseController
         if (!empty($result)) {
             $db = FatApp::getDb();
             $db->startTransaction();
-            /* if (!$db->updateFromArray(
-                Orders::DB_TBL,
-                array('order_payment_status' => Orders::ORDER_PAYMENT_CANCELLED, 'order_date_updated' => date('Y-m-d H:i:s')),
-                array('smt' => 'order_id = ? ', 'vals' => array($result['opayment_order_id']))
-            )) {
-                $db->rollbackTransaction();
-                LibHelper::exitWithError($db->getError(), true);
-            } */
 
             if (!$db->updateFromArray(
                 Orders::DB_TBL_ORDER_PAYMENTS,
@@ -1155,15 +1147,6 @@ class OrdersController extends ListingBaseController
                 $db->rollbackTransaction();
                 LibHelper::exitWithError($db->getError(), true);
             }
-
-            /* if (!$db->updateFromArray(
-                Orders::DB_TBL_ORDER_PRODUCTS,
-                array('op_status_id' => FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS")),
-                array('smt' => 'op_order_id = ? ', 'vals' => array($result['opayment_order_id']))
-            )) {
-                $db->rollbackTransaction();
-                LibHelper::exitWithError($db->getError(), true);
-            } */
 
             $orderData = Orders::getAttributesById($result['opayment_order_id'], ['order_number', 'order_net_amount', 'order_user_id']);
             $userObj = new User($orderData['order_user_id']);
@@ -1361,7 +1344,7 @@ class OrdersController extends ListingBaseController
         if (empty($orderDetail)) {
             LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
         }
-        
+
         $orderObj = new Orders();
         $notAllowedStatues = $orderObj->getNotAllowedOrderCancellationStatuses();
 

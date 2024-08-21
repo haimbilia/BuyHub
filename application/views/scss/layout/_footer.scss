@@ -141,26 +141,12 @@
       font-size: 1rem;
       font-weight: $font-weight-normal;
       padding: 5px 0;
-      margin-bottom: 20px;
-      border-radius: $common-radius;
+      margin-bottom: 10px;
+      border-radius: $radius;
 
       @include media-breakpoint-up(lg) {
-        cursor: default;
+        pointer-events: none;
       }
-
-      .dropdown-toggle-custom {
-        cursor: default;
-      }
-
-      .dropdown-toggle-custom-arrow {
-        #{$end-direction}: 1rem;
-        display: none;
-
-        @include media-breakpoint-down(sm) {
-          display: block;
-        }
-      }
-
       @include media-breakpoint-down(sm) {
         background-color: $bg-gray;
         padding: 1rem;
@@ -169,11 +155,23 @@
           background-color: darken($bg-gray, 10);
         }
       }
+      .dropdown-toggle-custom-arrow {
+        #{$end-direction}: 2rem;
+        display: none;
+
+        @include media-breakpoint-down(sm) {
+          display: block;
+        }
+      }
     }
 
     .footer-nav {
+      display: block;
       @include media-breakpoint-down(sm) {
         display: none;
+        &.show {
+          display: block;
+        }
       }
 
       &-item {

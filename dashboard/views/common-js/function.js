@@ -27,10 +27,8 @@ markNavActive = function (ele) {
     if (!ele.hasClass("active")) {
         ele.addClass("active");
     }
-    var menuLink = ele.parents("li").find(".menuLinkJs");
-    menuLink.addClass("active").removeClass('collapsed');
-    var target = menuLink.data('bsTarget');
-    $(target).addClass('show');
+
+    $(ele).closest('.dropdownJs').find(".menuLinkJs").click();
 };
 
 /*Tabs*/
@@ -38,6 +36,7 @@ $(document).ready(function () {
     $(".tabs-content-js").hide();
     $(".tabs--flat-js li:first").addClass("is-active").show();
     $(".section").find(".tabs-content-js:first").show();
+    $(".menuLinkJs.collapsed").attr('aria-expanded', false);
     $(".tabs--flat-js li").click(function () {
         $(this).parent().find("li").removeClass("is-active");
         $(this).addClass("is-active");

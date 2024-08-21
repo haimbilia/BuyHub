@@ -427,4 +427,14 @@ class Plugin extends PluginCommon
         }
         return true;
     }
+
+    public static function isSplitPaymentEnabled(int $langId): bool
+    {
+
+        $splitPaymentMethodsPlugins = Plugin::getDataByType(Plugin::TYPE_SPLIT_PAYMENT_METHOD, $langId);
+        if (empty($splitPaymentMethodsPlugins)) {
+            return false;
+        }
+        return true;
+    }
 }

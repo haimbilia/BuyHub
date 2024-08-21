@@ -396,19 +396,36 @@ class ProductsController extends SellerBaseController
         }
 
         if (isset($post['shipping_profile'])) {
-            $shipProProdData = array(
-                'shippro_shipprofile_id' => !empty($post['shipping_profile']) ? $post['shipping_profile'] : ShippingProfile::getDefaultProfileId($post['product_seller_id']),
-                'shippro_product_id' => $recordId,
-                'shippro_user_id' => $post['product_seller_id'],
-            );
+            $sellerShippingProfile = false;
+            if (1 > FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0) && 0 < $post['product_seller_id']) {
+                $defaultShippingProfileId = ShippingProfile::getDefaultProfileId($post['product_seller_id']);
+                $shipProProdData = array(
+                    'shippro_shipprofile_id' => !empty($post['shipping_profile']) ? $post['shipping_profile'] : $defaultShippingProfileId,
+                    'shippro_product_id' => $recordId,
+                    'shippro_user_id' => $post['product_seller_id'],
+                );
+                $spObj = new ShippingProfileProduct();
+                if (!$spObj->addProduct($shipProProdData)) {
+                    $db->rollbackTransaction();
+                    LibHelper::exitWithError($spObj->getError(), true);
+                }
+                $sellerShippingProfile = true;
+            }
 
+            $defaultShippingProfileId = ShippingProfile::getDefaultProfileId(0);
+            $shipProProdData = array(
+                'shippro_shipprofile_id' => !empty($post['shipping_profile']) && false == $sellerShippingProfile ? $post['shipping_profile'] : $defaultShippingProfileId,
+                'shippro_product_id' => $recordId,
+                'shippro_user_id' => 0,
+            );
             $spObj = new ShippingProfileProduct();
             if (!$spObj->addProduct($shipProProdData)) {
                 $db->rollbackTransaction();
                 LibHelper::exitWithError($spObj->getError(), true);
             }
-        }
 
+        }
+        
         $productSpecifics = new ProductSpecifics($recordId);
         $productSpecifics->assignValues(($post + ['ps_product_id' => $recordId]));
         $data = $productSpecifics->getFlds();

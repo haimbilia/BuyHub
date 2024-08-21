@@ -44,7 +44,7 @@ $products = $orderInfo['orderProducts'];
                             <?php if (!CommonHelper::isAppUser()) { ?>
                                 <p><?php echo CommonHelper::renderHtml($textMessage); ?></p>
                             <?php } ?>
-                            <?php if ($orderInfo['order_type'] != Orders::ORDER_WALLET_RECHARGE) { ?>
+                            <?php if ($orderInfo['order_type'] != Orders::ORDER_WALLET_RECHARGE && $orderInfo['order_type'] != Orders::GIFT_CARD_TYPE) { ?>
                                 <p>
                                     <svg class="svg" width="22px" height="22px">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#TimePlaced" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#TimePlaced">
@@ -187,7 +187,7 @@ $products = $orderInfo['orderProducts'];
                         <?php } ?>
                     </div>
                     <?php if (true === $showOrderDetails) {
-                        if ($orderInfo['order_type'] != Orders::ORDER_WALLET_RECHARGE) { ?>
+                        if ($orderInfo['order_type'] != Orders::ORDER_WALLET_RECHARGE && $orderInfo['order_type'] != Orders::GIFT_CARD_TYPE) { ?>
                             <div class="pagebreak"> </div>
                             <div class="row justify-content-center">
                                 <div class="col-md-12">

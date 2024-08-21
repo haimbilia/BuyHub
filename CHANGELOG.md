@@ -7,6 +7,8 @@
     - Maintain Single seller products to buyer cart.
     - Collect customer comments on order product while checkout.
     - Hide product variants and merge product catalog and inventory form.
+    - Product type as a service is added under product type.
+    - Gift card feature added for buyers.
 
 ## Known Issues and Problems :
 
@@ -46,5 +48,19 @@
     - Bug-086030 - Branch 1: Order status changed to Paid if admin approves any transaction of less amount than the order amount.
     - Bug-086026 - Delivery Address field appears on the service order details page if ordered with physical products.
     - Bug-086006 - Branch 1: The deleted file also appears again if the user adds a new product with the same details as the deleted one.
+    - Bug-086054 - 'Share and earn' page vibrates or shakes while scrolling
+    - Bug-085928 - RTL >> 'Product Listing' Page Appears in English When Buyer Has Selected Arabic Language
+    - Bug-085916 - RTL >> Issue on 'Inventory setup form
+    - Bug-085851 - Deprecation appears on the reviews listing page on the front end.
+    - Bug-085849 - Suggestion listing does not appear in the location popup on the homepage
+    - Bug-085923 - "Without product variant" seller inventory listing still appears
+    - Bug-085914 - A fatal error occurs on the checkout page when the admin enables the shipping plugin
+    - Bug-085880 - Seller-added pickup address is visible on the checkout page even if shipped by admin only setting is enabled
+    - Bug-085921 - Without product variants >> minimum selling price language label should be managebale for both conditions
+    - Bug-085951 - Admin's default order-level shipping profile should get linked with seller products when "Shipped by admin" setting is enabled.
+    - Bug-086019 - Suggestion >> The currently selected tab is not visually highlighted
+    - Bug-085989 - Responsive >> Issue on sub modules of 'Reports' module
+    - Bug-085957 - Branch 1 RTL >> Issues on ' Order Invoice' page on both buyer and seller end
+    - Bug-085899 - Branch 1 RTL >> Month navigation icon on calendar does not appear in correct direction
 ## Hit URL:
     - admin/patch-update/updateProductRating  

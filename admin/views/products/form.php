@@ -125,6 +125,8 @@ if (0 < $recordId) {
                     langId
                 }, function(e) {
                     getShippingProfileOptions(e.params.args.data.id)
+                }, function () {
+                    getShippingProfileOptions(0)
                 });
             <?php } else { ?>
                 $('select[name=\'product_seller_id\']').attr('disabled', true);

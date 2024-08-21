@@ -2,79 +2,83 @@ $quantity-height: 40px;
 $quantity-size: 26px;
 
 .quantity {
+  display: flex;
+  align-items: center;
+  padding: 0;
+  font-size: 0.7rem;
+  .decrease,
+  .increase {
+    background-color: $bg-white;
+    color: $txt-gray;
+    border: $border-black;
+    border-radius: 50%;
+    padding: 0;
+    margin: 0;
     display: flex;
     align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    width: $quantity-size;
+    height: $quantity-size;
+    min-width: $quantity-size;
+    aspect-ratio: 1/1;
+
+    &:hover,
+    &:focus,
+    &:active {
+      background-color: $secondary-color;
+      color: $secondary-color-inverse;
+      border-color: currentColor;
+    }
+    &:focus {
+      color: #fff;
+      outline: none !important;
+      box-shadow: $btn-focus-shadow;
+    }
+    &:active {
+      box-shadow: $btn-active-shadow;
+    }
+    &.disabled {
+      color: $txt-gray;
+      pointer-events: none;
+      background-color: transparent;
+      opacity: 0.5;
+    }
+    .svg {
+      width: 10px;
+      height: 10px;
+    }
+  }
+  .qty-input {
+    background-color: transparent;
+    border: none;
+    text-align: center;
+    padding: 0 8px;
+    width: 100%;
+    height: 100%;
+    max-width: 50px;
+    font-size: 0.85rem;
+  }
+  &-sm {
+    max-width: 100px;
+    height: $quantity-height - 10px;
+    .svg {
+      width: 10px;
+      height: 10px;
+    }
+  }
+  &-2 {
+    max-width: 90px;
+    //height: 24px;
     padding: 0;
-    font-size: 0.7rem;
-    .decrease,
-    .increase {
-        border: $border-black;
-        border-radius: 50%;
-        background-color: $bg-white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        width: $quantity-size;
-        height: $quantity-size;
-        min-width: $quantity-size;
-        color: $txt-gray;
-        &:hover,
-        &:focus,
-        &:active {
-            background-color: $secondary-color;
-            color: $secondary-color-inverse;
-            border-color: currentColor;
-        }
-        &:focus {
-            color: #fff;
-            outline: none !important;
-            box-shadow: $btn-focus-shadow;
-        }
-        &:active {
-            box-shadow: $btn-active-shadow;
-        }
-        &.disabled {
-            color: $txt-gray;
-            pointer-events: none;
-            background-color: transparent;
-            opacity: 0.5;
-        }
-        .svg {
-            width: 10px;
-            height: 10px;
-        }
+    border: none;
+    span {
+      width: 24px;
+      height: 24px;
+      flex: 0 0 24px;
+      max-width: 24px;
+      background-color: $bg-gray;
+      border-radius: $common-radius;
     }
-    .qty-input {
-        background-color: transparent;
-        border: none;
-        text-align: center;
-        padding: 0 8px;
-        width: 100%;
-        height: 100%;
-        max-width: 50px;
-        font-size: 0.85rem;
-    }
-    &-sm {
-        max-width: 100px;
-        height: $quantity-height - 10px;
-        .svg {
-            width: 10px;
-            height: 10px;
-        }
-    }
-    &-2 {
-        max-width: 90px;
-        //height: 24px;
-        padding: 0;
-        border: none;
-        span {
-            width: 24px;
-            height: 24px;
-            flex: 0 0 24px;
-            max-width: 24px;
-            background-color: $bg-gray;
-            border-radius: $common-radius;
-        }
-    }
+  }
 }

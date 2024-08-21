@@ -22,27 +22,36 @@ if (false === $canViewAdminDashboard) {
                     <div class="card">
                         <div class="card-head">
                             <div class="card-head-label">
-                                <h3 class="card-head-title"><?php echo Labels::getLabel('LBL_STATISTICS', $siteLangId); ?></h3>
+                                <h3 class="card-head-title"><?php echo Labels::getLabel('LBL_STATISTICS', $siteLangId); ?>
+                                </h3>
                             </div>
                             <div class="card-head-toolbar">
                                 <div class="dropdown">
-                                    <button type="button" class="btn btn-gray btn-icon dropdown-toggle dropdownBtnJs" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <button type="button" class="btn btn-gray btn-icon dropdown-toggle dropdownBtnJs"
+                                        data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true"
+                                        aria-expanded="false">
                                         <?php echo Labels::getLabel('NAV_SALES', $siteLangId); ?>
                                     </button>
-                                    <div class="nav nav-tabs navTabsJs dropdown-menu dropdown-menu-right dropdown-menu-anim" role="tablist">
-                                        <a class="dropdown-item tabsJs active" data-bs-toggle="tab" href="#tabs_1" data-tab="tabs_1" data-chart="true" role="tab">
+                                    <div class="nav nav-tabs navTabsJs dropdown-menu dropdown-menu-right dropdown-menu-anim"
+                                        role="tablist">
+                                        <a class="dropdown-item tabsJs active" data-bs-toggle="tab" href="#tabs_1"
+                                            data-tab="tabs_1" data-chart="true" role="tab">
                                             <?php echo Labels::getLabel('NAV_SALES', $siteLangId); ?>
                                         </a>
-                                        <a class="dropdown-item tabsJs" data-bs-toggle="tab" href="#tabs_2" data-tab="tabs_2" data-chart="true" role="tab">
+                                        <a class="dropdown-item tabsJs" data-bs-toggle="tab" href="#tabs_2"
+                                            data-tab="tabs_2" data-chart="true" role="tab">
                                             <?php echo Labels::getLabel('NAV_SALES_EARNINGS', $siteLangId); ?>
                                         </a>
-                                        <a class="dropdown-item tabsJs" data-bs-toggle="tab" href="#tabs_3" data-tab="tabs_3" data-chart="true" role="tab">
+                                        <a class="dropdown-item tabsJs" data-bs-toggle="tab" href="#tabs_3"
+                                            data-tab="tabs_3" data-chart="true" role="tab">
                                             <?php echo Labels::getLabel('NAV_BUYER/Seller_Signups', $siteLangId); ?>
                                         </a>
-                                        <a class="dropdown-item tabsJs" data-bs-toggle="tab" href="#tabs_4" data-tab="tabs_4" data-chart="true" role="tab">
+                                        <a class="dropdown-item tabsJs" data-bs-toggle="tab" href="#tabs_4"
+                                            data-tab="tabs_4" data-chart="true" role="tab">
                                             <?php echo Labels::getLabel('NAV_PRODUCTS', $siteLangId); ?>
                                         </a>
-                                        <a class="dropdown-item tabsJs" data-bs-toggle="tab" href="#tabs_5" data-tab="tabs_5" data-chart="true" role="tab">
+                                        <a class="dropdown-item tabsJs" data-bs-toggle="tab" href="#tabs_5"
+                                            data-tab="tabs_5" data-chart="true" role="tab">
                                             <?php echo Labels::getLabel('NAV_AFFILIATE_SIGNUPS', $siteLangId); ?>
                                         </a>
                                     </div>
@@ -74,10 +83,12 @@ if (false === $canViewAdminDashboard) {
                         <div class="card">
                             <div class="card-head">
                                 <div class="card-head-label">
-                                    <h3 class="card-head-title"><?php echo Labels::getLabel('LBL_LATEST_ORDERS', $siteLangId); ?></h3>
+                                    <h3 class="card-head-title">
+                                        <?php echo Labels::getLabel('LBL_LATEST_ORDERS', $siteLangId); ?></h3>
                                 </div>
                                 <div class="card-head-toolbar">
-                                    <a class="btn btn-gray" target='_new' href="<?php echo UrlHelper::generateUrl('Orders'); ?>">
+                                    <a class="btn btn-gray" target='_new'
+                                        href="<?php echo UrlHelper::generateUrl('Orders'); ?>">
                                         <?php echo Labels::getLabel('LBL_VIEW_ALL', $siteLangId); ?></a>
                                 </div>
                             </div>
@@ -89,21 +100,26 @@ if (false === $canViewAdminDashboard) {
                     <div class="card">
                         <div class="card-head">
                             <div class="card-head-label">
-                                <h3 class="card-head-title"> <?php echo Labels::getLabel('LBL_CONVERSIONS_STATISTICS', $siteLangId); ?></h3>
-                                <span class="text-muted"> <?php echo Labels::getLabel('LBL_RECENT_CONVERSIONS_STATISTICS', $siteLangId); ?></span>
+                                <h3 class="card-head-title">
+                                    <?php echo Labels::getLabel('LBL_CONVERSIONS_STATISTICS', $siteLangId); ?></h3>
+                                <span class="text-muted">
+                                    <?php echo Labels::getLabel('LBL_RECENT_CONVERSIONS_STATISTICS', $siteLangId); ?></span>
                             </div>
                         </div>
                         <div class="card-body">
                             <ul class="list-stats list-stats-double">
                                 <li class="list-stats-item">
-                                    <span class="label"><?php echo Labels::getLabel('LBL_ADDED_TO_CART', $siteLangId); ?></span>
+                                    <span
+                                        class="label"><?php echo Labels::getLabel('LBL_ADDED_TO_CART', $siteLangId); ?></span>
                                     <span class="value">
                                         <?php echo $dashboardInfo['conversionStats']['added_to_cart']['%age']; ?>%</span>
                                 </li>
                                 <li class="list-stats-item">
-                                    <span class="label"><?php echo Labels::getLabel('LBL_REACHED_CHECKOUT', $siteLangId); ?></span>
+                                    <span
+                                        class="label"><?php echo Labels::getLabel('LBL_REACHED_CHECKOUT', $siteLangId); ?></span>
                                     <span class="value">
-                                        <?php echo $dashboardInfo['conversionStats']['reached_checkout']['%age']; ?>% </span>
+                                        <?php echo $dashboardInfo['conversionStats']['reached_checkout']['%age']; ?>%
+                                    </span>
                                 </li>
                                 <li class="list-stats-item">
                                     <span class="label"><?php echo Labels::getLabel('LBL_PURCHASED', $siteLangId); ?></span>
@@ -127,7 +143,8 @@ if (false === $canViewAdminDashboard) {
                     <div class="card">
                         <div class="card-head">
                             <div class="card-head-label">
-                                <h3 class="card-head-title"> <?php echo Labels::getLabel('LBL_Visitors_Statistics', $siteLangId); ?></h3>
+                                <h3 class="card-head-title">
+                                    <?php echo Labels::getLabel('LBL_Visitors_Statistics', $siteLangId); ?></h3>
                             </div>
                         </div>
                         <div class="card-body">
@@ -139,17 +156,20 @@ if (false === $canViewAdminDashboard) {
                                             <?php echo $dashboardInfo['visitsCount']['today'] ?></span>
                                     </li>
                                     <li class="list-stats-item">
-                                        <span class="label"><?php echo Labels::getLabel('LBL_PAST_7_DAYS', $siteLangId); ?></span>
+                                        <span
+                                            class="label"><?php echo Labels::getLabel('LBL_PAST_7_DAYS', $siteLangId); ?></span>
                                         <span class="value">
                                             <?php echo $dashboardInfo['visitsCount']['weekly'] ?></span>
                                     </li>
                                     <li class="list-stats-item">
-                                        <span class="label"><?php echo Labels::getLabel('LBL_last_Month', $siteLangId); ?></span>
+                                        <span
+                                            class="label"><?php echo Labels::getLabel('LBL_last_Month', $siteLangId); ?></span>
                                         <span class="value">
                                             <?php echo $dashboardInfo['visitsCount']['lastMonth'] ?></span>
                                     </li>
                                     <li class="list-stats-item">
-                                        <span class="label"><?php echo Labels::getLabel('LBL_Last_3_Months', $siteLangId); ?></span>
+                                        <span
+                                            class="label"><?php echo Labels::getLabel('LBL_Last_3_Months', $siteLangId); ?></span>
                                         <span class="value">
                                             <?php echo $dashboardInfo['visitsCount']['last3Month'] ?></span>
                                     </li>
@@ -165,7 +185,8 @@ if (false === $canViewAdminDashboard) {
                     <div class="card">
                         <div class="card-head">
                             <div class="card-head-label">
-                                <h3 class="card-head-title"><?php echo Labels::getLabel('LBL_TOP_SELLING_PRODUCTS', $siteLangId); ?></h3>
+                                <h3 class="card-head-title">
+                                    <?php echo Labels::getLabel('LBL_TOP_SELLING_PRODUCTS', $siteLangId); ?></h3>
                             </div>
                         </div>
                         <div class="card-table">
@@ -179,14 +200,15 @@ if (false === $canViewAdminDashboard) {
                     <div class="card">
                         <div class="card-head">
                             <div class="card-head-label">
-                                <h3 class="card-head-title"><?php echo Labels::getLabel('LBL_TOTAL_SALES', $siteLangId); ?> </h3>
+                                <h3 class="card-head-title"><?php echo Labels::getLabel('LBL_TOTAL_SALES', $siteLangId); ?>
+                                </h3>
                             </div>
                             <div class="card-head-toolbar">
                                 <select class="form-select form-select-sm" onchange="totalSales(this.value)">
                                     <?php foreach ($intervalsArr as $key => $val) { ?>
                                         <option value="<?php echo $key; ?>" <?php if ($defaultStatsInterval == $key) {
-                                                                                echo 'selected="selected"';
-                                                                            } ?>><?php echo $val; ?></option>
+                                               echo 'selected="selected"';
+                                           } ?>><?php echo $val; ?></option>
                                     <?php } ?>
                                 </select>
                             </div>
@@ -197,14 +219,18 @@ if (false === $canViewAdminDashboard) {
                     <div class="card">
                         <div class="card-head">
                             <div class="card-head-label">
-                                <h3 class="card-head-title"><?php echo Labels::getLabel('LBL_TRAFFIC', $siteLangId); ?> </h3>
+                                <h3 class="card-head-title"><?php echo Labels::getLabel('LBL_TRAFFIC', $siteLangId); ?>
+                                </h3>
                             </div>
                             <div class="card-head-toolbar">
                                 <select class="form-select form-select-sm" onChange="traficSource(this.value)">
                                     <option value="today"><?php echo Labels::getLabel('LBL_TODAY', $siteLangId); ?></option>
-                                    <option value="Weekly"><?php echo Labels::getLabel('LBL_PAST_7_DAYS', $siteLangId); ?></option>
-                                    <option value="Monthly"><?php echo Labels::getLabel('LBL_PAST_30_DAYS', $siteLangId); ?></option>
-                                    <option value="Yearly" selected="selected"><?php echo Labels::getLabel('LBL_YEARLY', $siteLangId); ?></option>
+                                    <option value="Weekly"><?php echo Labels::getLabel('LBL_PAST_7_DAYS', $siteLangId); ?>
+                                    </option>
+                                    <option value="Monthly"><?php echo Labels::getLabel('LBL_PAST_30_DAYS', $siteLangId); ?>
+                                    </option>
+                                    <option value="Yearly" selected="selected">
+                                        <?php echo Labels::getLabel('LBL_YEARLY', $siteLangId); ?></option>
                                 </select>
                             </div>
 
@@ -216,14 +242,18 @@ if (false === $canViewAdminDashboard) {
                     <div class="card">
                         <div class="card-head">
                             <div class="card-head-label">
-                                <h3 class="card-head-title"><?php echo Labels::getLabel('LBL_VISITORS_BY_COUNTRIES', $siteLangId); ?> </h3>
+                                <h3 class="card-head-title">
+                                    <?php echo Labels::getLabel('LBL_VISITORS_BY_COUNTRIES', $siteLangId); ?> </h3>
                             </div>
                             <div class="card-head-toolbar">
                                 <select class="form-select form-select-sm" onChange="topCountries(this.value)">
                                     <option value="today"><?php echo Labels::getLabel('LBL_TODAY', $siteLangId); ?></option>
-                                    <option value="Weekly"><?php echo Labels::getLabel('LBL_PAST_7_DAYS', $siteLangId); ?></option>
-                                    <option value="Monthly"><?php echo Labels::getLabel('LBL_PAST_30_DAYS', $siteLangId); ?></option>
-                                    <option value="Yearly" selected="selected"><?php echo Labels::getLabel('LBL_YEARLY', $siteLangId); ?></option>
+                                    <option value="Weekly"><?php echo Labels::getLabel('LBL_PAST_7_DAYS', $siteLangId); ?>
+                                    </option>
+                                    <option value="Monthly"><?php echo Labels::getLabel('LBL_PAST_30_DAYS', $siteLangId); ?>
+                                    </option>
+                                    <option value="Yearly" selected="selected">
+                                        <?php echo Labels::getLabel('LBL_YEARLY', $siteLangId); ?></option>
                                 </select>
                             </div>
 
@@ -235,14 +265,18 @@ if (false === $canViewAdminDashboard) {
                     <div class="card">
                         <div class="card-head">
                             <div class="card-head-label">
-                                <h3 class="card-head-title"><?php echo Labels::getLabel('LBL_TOP_REFERERS', $siteLangId); ?> </h3>
+                                <h3 class="card-head-title"><?php echo Labels::getLabel('LBL_TOP_REFERERS', $siteLangId); ?>
+                                </h3>
                             </div>
                             <div class="card-head-toolbar">
                                 <select class="form-select form-select-sm" onChange="topReferers(this.value)">
                                     <option value="today"><?php echo Labels::getLabel('LBL_TODAY', $siteLangId); ?></option>
-                                    <option value="Weekly"><?php echo Labels::getLabel('LBL_PAST_7_DAYS', $siteLangId); ?></option>
-                                    <option value="Monthly"><?php echo Labels::getLabel('LBL_PAST_30_DAYS', $siteLangId); ?></option>
-                                    <option value="Yearly" selected="selected"><?php echo Labels::getLabel('LBL_YEARLY', $siteLangId); ?></option>
+                                    <option value="Weekly"><?php echo Labels::getLabel('LBL_PAST_7_DAYS', $siteLangId); ?>
+                                    </option>
+                                    <option value="Monthly"><?php echo Labels::getLabel('LBL_PAST_30_DAYS', $siteLangId); ?>
+                                    </option>
+                                    <option value="Yearly" selected="selected">
+                                        <?php echo Labels::getLabel('LBL_YEARLY', $siteLangId); ?></option>
                                 </select>
                             </div>
 
@@ -253,14 +287,18 @@ if (false === $canViewAdminDashboard) {
                     <div class="card">
                         <div class="card-head">
                             <div class="card-head-label">
-                                <h3 class="card-head-title"><?php echo Labels::getLabel('LBL_TOP_SEARCH_KEYWORDS', $siteLangId); ?> </h3>
+                                <h3 class="card-head-title">
+                                    <?php echo Labels::getLabel('LBL_TOP_SEARCH_KEYWORDS', $siteLangId); ?> </h3>
                             </div>
                             <div class="card-head-toolbar">
                                 <select class="form-select form-select-sm" onChange="getTopSearchKeyword(this.value)">
                                     <option value="today"><?php echo Labels::getLabel('LBL_TODAY', $siteLangId); ?></option>
-                                    <option value="Weekly"><?php echo Labels::getLabel('LBL_PAST_7_DAYS', $siteLangId); ?></option>
-                                    <option value="Monthly"><?php echo Labels::getLabel('LBL_PAST_30_DAYS', $siteLangId); ?></option>
-                                    <option value="Yearly" selected="selected"><?php echo Labels::getLabel('LBL_YEARLY', $siteLangId); ?></option>
+                                    <option value="Weekly"><?php echo Labels::getLabel('LBL_PAST_7_DAYS', $siteLangId); ?>
+                                    </option>
+                                    <option value="Monthly"><?php echo Labels::getLabel('LBL_PAST_30_DAYS', $siteLangId); ?>
+                                    </option>
+                                    <option value="Yearly" selected="selected">
+                                        <?php echo Labels::getLabel('LBL_YEARLY', $siteLangId); ?></option>
                                 </select>
                             </div>
 

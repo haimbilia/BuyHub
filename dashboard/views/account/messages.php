@@ -22,7 +22,8 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn-block');
                         <div class="not-found">
                             <img width="100" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/no-data-cuate.svg" alt="">
                             <h3><?php echo Labels::getLabel('MSG_SORRY,_NO_MATCHING_RESULT_FOUND'); ?></h3>
-                            <p><?php echo Labels::getLabel('MSG_TRY_CHECKING_YOUR_SPELLING_OR_USER_MORE_GENERAL_TERMS'); ?></p>
+                            <p><?php echo Labels::getLabel('MSG_TRY_CHECKING_YOUR_SPELLING_OR_USER_MORE_GENERAL_TERMS'); ?>
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -49,10 +50,12 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn-block');
                         <div class="d-flex align-items-center">
                             <?php echo $frmSearch->getFieldHtml('keyword'); ?>
                             <div class="dropdown">
-                                <button type="button" class="btn dropdown-toggle no-after" data-bs-toggle="dropdown">
+                                <button type="button" class="btn dropdown-toggle no-after" data-bs-toggle="dropdown"
+                                    data-bs-auto-close="outside">
                                     <span class="icon">
                                         <svg class="svg" width="20" height="20">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-filters">
+                                            <use
+                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-filters">
                                             </use>
                                         </svg>
                                     </span>
@@ -62,7 +65,8 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn-block');
                                         <label class="label">
                                             <?php
                                             $fld = $frmSearch->getField('date_from');
-                                            echo $fld->getCaption();;
+                                            echo $fld->getCaption();
+                                            ;
                                             ?>
                                         </label>
                                         <?php echo $frmSearch->getFieldHtml('date_from'); ?>
@@ -71,7 +75,8 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn-block');
                                         <label class="label">
                                             <?php
                                             $fld = $frmSearch->getField('date_to');
-                                            echo $fld->getCaption();;
+                                            echo $fld->getCaption();
+                                            ;
                                             ?>
                                         </label>
                                         <?php echo $frmSearch->getFieldHtml('date_to'); ?>
@@ -85,7 +90,7 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn-block');
                     </div>
                     <?php
                     $activeIndex = 0;
-                    require_once(CONF_THEME_PATH . '/account/message-search.php');
+                    require_once (CONF_THEME_PATH . '/account/message-search.php');
 
                     $lastRecord = current(array_reverse($arrListing));
                     $data = [
@@ -101,7 +106,7 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn-block');
             <?php
             $doNotshowMessages = true;
             $threadListing = [current($arrListing)];
-            require_once(CONF_THEME_PATH . 'account/view-thread.php');
+            require_once (CONF_THEME_PATH . 'account/view-thread.php');
             ?>
         </div>
     <?php } ?>
