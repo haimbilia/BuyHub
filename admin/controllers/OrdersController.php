@@ -1101,7 +1101,6 @@ class OrdersController extends ListingBaseController
             foreach ($orderProducts as $op) {
                 $storeOrderNetAmount += CommonHelper::orderProductAmount($op);
             }
-            // CommonHelper::printArray(OrderPayment::getApprovedAmountTotal($result['opayment_order_id']), 1);
 
             if ($storeOrderNetAmount <= OrderPayment::getApprovedAmountTotal($result['opayment_order_id'])) {
                 if (!$db->updateFromArray(
