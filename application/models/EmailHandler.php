@@ -3202,4 +3202,44 @@ class EmailHandler extends FatModel
 
         return true;
     }
+
+    public function sendTransferBankActionNotification($langId, $d)
+    {
+        $tpl = 'BANK_TRANSFER_ORDER_PAYMENT_ACTIONS';
+        $vars = array(
+            '{USER_NAME}' => $d['user_name'],
+            '{ORDER_ID}' => $d['order_number'],
+            '{STATUS}' => $d['txn_status'],
+        );
+
+        if (!(new FatMailer($langId, $tpl))
+            ->setTo($d['credential_email'])
+            ->setVariables($vars)
+            ->send()) {
+            return false;
+        }
+
+        if (!empty($d['user_phone']) && !empty($d['user_phone_dcode'])) {
+            $phone = ValidateElement::formatDialCode($d['user_phone_dcode']) . $d['user_phone'];
+            $this->sendSms($tpl, $phone, $vars, $langId);
+        }
+
+        /* Send Notification To Buyer about Bank Transfer transaction status.  */
+        $msg = Labels::getLabel('MSG_ORDER_#{ORDER-ID}_TXN._HAS_BEEN_{STATUS}', $langId);
+        $msg = CommonHelper::replaceStringData($msg, $vars);
+        $notificationObj = new Notifications();
+        $notificationDataArr = array(
+            'unotification_user_id' => $d["order_user_id"],
+            'unotification_body' => $msg,
+            'unotification_type' => 'BANK_TRANSFER_ORDER_PAYMENT_APPROVAL',
+            'unotification_data' => json_encode(array('orderId' => $d['order_id'])),
+        );
+        if (!$notificationObj->addNotification($notificationDataArr)) {
+            $this->error = $notificationObj->getError();
+            return false;
+        }
+        /* Send Notification To Buyer about Bank Transfer transaction status.  */
+
+        return true;
+    }
 }

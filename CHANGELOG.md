@@ -41,5 +41,10 @@
     - Bug-084136 - Need to remove Brand parameters from Inventory Missing Info when linking brand with the catalog is not mandatory
     - Bug-085143 - 404 on the product details page when the new user creates a product.
     - Bug-085068 - cancellation is not working properly if stripe connect is on.
+    - Bug-086044 - Branch 1: The image added in the review also appears in the product images gallery.
+    - Bug-086039 - Branch 1: Admin sellers should not be able to add Volume discounts for services.
+    - Bug-086030 - Branch 1: Order status changed to Paid if admin approves any transaction of less amount than the order amount.
+    - Bug-086026 - Delivery Address field appears on the service order details page if ordered with physical products.
+    - Bug-086006 - Branch 1: The deleted file also appears again if the user adds a new product with the same details as the deleted one.
 ## Hit URL:
     - admin/patch-update/updateProductRating  

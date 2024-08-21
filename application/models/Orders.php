@@ -2381,13 +2381,11 @@ class Orders extends MyAppModel
             array('sum(opayment_amount) as totalPaid')
         );
         $srch->addCondition('opayment_order_id', '=', $orderId);
+        $srch->addCondition('opayment_txn_status', '=', Orders::ORDER_PAYMENT_PAID);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $row = FatApp::getDb()->fetch($srch->getResultSet());
-        if (!empty($row)) {
-            return ($row['totalPaid'] != null) ? $row['totalPaid'] : 0;
-        }
-        return 0;
+        return $row['totalPaid'] ?? 0;
     }
 
     public function getOrderPayments($criteria = array())

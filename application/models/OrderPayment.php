@@ -424,4 +424,18 @@ class OrderPayment extends Orders
 
         return [$data['opayment_gateway_response']];
     }
+
+    public static function getApprovedAmountTotal(int $orderId): float
+    {
+        $srch = new SearchBase(Orders::DB_TBL_ORDER_PAYMENTS, 'opay');
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $srch->addMultipleFields(['IFNULL(SUM((CASE WHEN opayment_txn_status = 1 THEN opayment_amount ELSE 0 END)), 0) as approvedAmount']);
+        $srch->addCondition('opayment_order_id', '=', $orderId);
+        $paymentRecord = FatApp::getDb()->fetch($srch->getResultSet());
+        if (empty($paymentRecord)) {
+            return 0;
+        }
+        return $paymentRecord['approvedAmount'];
+    }
 }
