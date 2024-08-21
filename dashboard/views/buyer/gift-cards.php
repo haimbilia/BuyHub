@@ -1,4 +1,6 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?> <?php $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); 
+$this->includeTemplate('_partial/dashboardNavigation.php'); ?>
+
 <div class="content-wrapper content-space">
     <?php
     $data = [
@@ -28,8 +30,3 @@
         </div>
     </div>
 </div>
-
-<script>
-    var $linkMoreText = '<?php echo Labels::getLabel('Lbl_SHOW_MORE', $siteLangId); ?>';
-    var $linkLessText = '<?php echo Labels::getLabel('Lbl_SHOW_LESS', $siteLangId); ?>';
-</script>

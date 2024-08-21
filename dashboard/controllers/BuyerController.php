@@ -1,7 +1,4 @@
 <?php
-
-use Google\Service\AndroidManagement\Application;
-
 class BuyerController extends BuyerBaseController
 {
 
@@ -3165,26 +3162,22 @@ class BuyerController extends BuyerBaseController
 
     public function giftCards()
     {
-
         $isSplitPaymentMethod = Plugin::isSplitPaymentEnabled($this->siteLangId);
         if ($isSplitPaymentMethod) {
-            Message::addErrorMessage(Labels::getLabel('LBL_INVALID_REQUEST'));
-            FatApp::redirectUser(UrlHelper::generateUrl('buyer', ''));
+            LibHelper::exitWithError(Labels::getLabel('ERR_UNAUTHORISED_ACCESS'), false, true);
+            CommonHelper::redirectUserReferer();
         }
         $frm = $this->getGiftCardSearchForm($this->siteLangId);
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_RECEIVER_NAME,_EMAIL_OR_CODE', $this->siteLangId));
         $this->set('frmSearch', $frm);
         $this->_template->render(true, true);
     }
 
-
     public function searchGiftCards()
     {
-
-
         $isSplitPaymentMethod = Plugin::isSplitPaymentEnabled($this->siteLangId);
         if ($isSplitPaymentMethod) {
-            Message::addErrorMessage(Labels::getLabel('LBL_INVALID_REQUEST'));
-            FatApp::redirectUser(UrlHelper::generateUrl('buyer', ''));
+            LibHelper::exitWithError(Labels::getLabel('ERR_UNAUTHORISED_ACCESS'));
         }
         $frm = $this->getGiftCardSearchForm($this->siteLangId);
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
@@ -3208,7 +3201,6 @@ class BuyerController extends BuyerBaseController
             $cond = $srch->addCondition('ogcards_status', '=', $orderUsed);
         }
 
-
         $paymetType = FatApp::getPostedData('order_payment_status', FatUtility::VAR_INT, -1);
         if ($paymetType >= 0) {
             $cond = $srch->addCondition('order_payment_status', '=', $paymetType);
@@ -3223,7 +3215,6 @@ class BuyerController extends BuyerBaseController
             $cond = $srch->addCondition('ogcards_created_on', '<=', $toDate, 'and', true);
         }
 
-
         $srch->addMultipleFields(array('ogcards_id', 'ogcards_order_id', 'ogcards_code', 'ogcards_sender_id', 'ogcards_receiver_name', 'ogcards_receiver_email', 'ogcards_status', 'ogcards_created_on', 'order_payment_status', 'ogcards_created_on'));
 
         $srch->doNotCalculateRecords();
@@ -3235,25 +3226,35 @@ class BuyerController extends BuyerBaseController
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
 
         $this->setRecordCount($recordCountSrch, $pagesize, $page, $post, false);
+        $orderPaymentStatusArr = Orders::getOrderPaymentStatusArr($this->siteLangId);
+        unset($orderPaymentStatusArr[Orders::ORDER_PAYMENT_CANCELLED]);
+        $this->set('orderPaymentStatusArr', $orderPaymentStatusArr);
+        $this->set('useStatusArr', GiftCards::getStatusArr($this->siteLangId));
         $this->set('arrListing', $records);
         $this->set('postedData', $post);
         $this->set('siteLangId', $this->siteLangId);
 
-        if (empty($records)) {
-            $this->set('noRecordsHtml', $this->_template->render(false, false, '_partial/no-record-found.php', true));
+        if (MOBILE_APP_API_CALL) {
+            $this->_template->render();
+            return;
         }
-        $this->_template->render(false, false, 'buyer/search-gift-cards.php');
+        
+        $this->_template->render(false, false);
     }
 
     private function getGiftCardSearchForm($langId)
     {
-
         $frm = new Form('frmRecordSearch');
         $frm->addHiddenField('', 'total_record_count', '');
         $frm->addHiddenField('', 'page');
         $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $langId), 'keyword', '');
-        $frm->addSelectBox(Labels::getLabel('FRM_GIFT_CARD_USED', $langId), 'ogcards_status', array(-1 => Labels::getLabel('FRM_GIFT_CARD_USED', $langId)) + array(GiftCards::STATUS_USED => Labels::getLabel('FRM_USED', $langId), GiftCards::STATUS_UNUSED => Labels::getLabel('FRM_UNUSED', $langId)), -1, array(), '');
-        $frm->addSelectBox(Labels::getLabel('FRM_PAYMENT_TYPE', $langId), 'order_payment_status', array(-1 => Labels::getLabel('FRM_PAYMENT_TYPE', $langId)) + array(OrderPayment::ORDER_PAYMENT_PAID => Labels::getLabel('FRM_PAYMENT_PAID', $langId), OrderPayment::ORDER_PAYMENT_PENDING => Labels::getLabel('FRM_PAYMENT_UNPAID', $langId)), -1, array(), '');
+
+        $useStatusArr = GiftCards::getStatusArr($langId);
+        $frm->addSelectBox(Labels::getLabel('FRM_GIFT_CARD_USED', $langId), 'ogcards_status', array(-1 => Labels::getLabel('FRM_SELECT', $langId)) + $useStatusArr, -1, array(), '');
+
+        $orderStatusArr = Orders::getOrderPaymentStatusArr($langId);
+        unset($orderStatusArr[Orders::ORDER_PAYMENT_CANCELLED]);
+        $frm->addSelectBox(Labels::getLabel('FRM_PAYMENT_TYPE', $langId), 'order_payment_status', array(-1 => Labels::getLabel('FRM_SELECT', $langId)) + $orderStatusArr, -1, array(), '');
         $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $langId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
         $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $langId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
         HtmlHelper::addSearchButton($frm);
@@ -3263,13 +3264,11 @@ class BuyerController extends BuyerBaseController
 
     public function giftCardForm()
     {
-
-        $splitPaymentMethodsPlugins = Plugin::getDataByType(Plugin::TYPE_SPLIT_PAYMENT_METHOD, $this->siteLangId);
-        if (!empty($splitPaymentMethodsPlugins)) {
-            Message::addErrorMessage(Labels::getLabel('LBL_INVALID_REQUEST'));
-            FatApp::redirectUser(UrlHelper::generateUrl('buyer', ''));
+        $isSplitPaymentMethod = Plugin::isSplitPaymentEnabled($this->siteLangId);
+        if ($isSplitPaymentMethod) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_UNAUTHORISED_ACCESS'));
         }
-        $this->set('form', $this->getForm());
+        $this->set('frm', $this->getForm());
         $this->set('currency',  Currency::getAttributesById(CommonHelper::getCurrencyId()));
         $this->set('minAmount', FatApp::getConfig('CONF_MINIMUM_GIFT_CARD_AMOUNT', FatUtility::VAR_FLOAT, 100));
         $this->_template->render(false, false);
@@ -3277,47 +3276,48 @@ class BuyerController extends BuyerBaseController
 
     private function getForm(): Form
     {
-
         $currency = Currency::getAttributesById(CommonHelper::getCurrencyId());
+        $lbl = CommonHelper::replaceStringData(Labels::getLabel('LBL_ENTER_AMOUNT_({CURRENCY-CODE})'), ['{CURRENCY-CODE}' => $currency['currency_code']]);
+
         $frm = new Form('frmAddMoney');
-        $str = str_replace("{currency-code}", $currency['currency_code'], Labels::getLabel('LBL_ENTER_AMOUNT_({currency-code})'));
-        $frm->addRequiredField($str, 'order_total_amount', '', ['placeholder' => ""]);
-        $frm->addRequiredField(Labels::getLabel('LBL_RECEIVER_NAME'), 'ogcards_receiver_name', '', ['placeholder' => Labels::getLabel('LBL_RECEIVER_NAME')]);
-        $frm->addEmailField(Labels::getLabel('LBL_RECEIVER_EMAIL'), 'ogcards_receiver_email', '', ['placeholder' => Labels::getLabel('LBL_RECEIVER_EMAIL')]);
-        $frm->addSubmitButton('', 'submit', Labels::getLabel('LBL_SEND_GIFT_CARD'));
+        $frm->addRequiredField($lbl, 'order_total_amount');
+        $frm->addRequiredField(Labels::getLabel('LBL_RECEIVER_NAME'), 'ogcards_receiver_name');
+        $frm->addEmailField(Labels::getLabel('LBL_RECEIVER_EMAIL'), 'ogcards_receiver_email');
         return $frm;
     }
 
     public function setupGiftCard()
     {
-
         $isSplitPaymentMethod = Plugin::isSplitPaymentEnabled($this->siteLangId);
         if ($isSplitPaymentMethod) {
-            Message::addErrorMessage(Labels::getLabel('LBL_INVALID_REQUEST'));
-            FatApp::redirectUser(UrlHelper::generateUrl('buyer', ''));
+            LibHelper::exitWithError(Labels::getLabel('ERR_UNAUTHORISED_ACCESS'), true);
         }
         $frm = $this->getForm();
         if (!$post = $frm->getFormDataFromArray(FatApp::getPostedData())) {
-            FatUtility::dieJsonError(current($frm->getValidationErrors()));
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
         $userData = $this->userInfo;
         $minAmount = FatApp::getConfig('CONF_MINIMUM_GIFT_CARD_AMOUNT', FatUtility::VAR_FLOAT, 100);
         if ($post['ogcards_receiver_email'] == $userData['credential_email']) {
-            FatUtility::dieJsonError(Labels::getLabel('LBL_INVALID_REQUEST'));
+            LibHelper::exitWithError(Labels::getLabel('ERR_YOU_CANNOT_BUY_GIFTCARD_FOR_YOURSELF'), true);
         }
+
         if (FatUtility::int($post['order_total_amount']) < $minAmount) {
-            $str = str_replace("{min-amount}", $minAmount, Labels::getLabel('LBL_AMOUNT_SHOULD_BE_GREATER_THEN_({min-amount})'));
-            FatUtility::dieJsonError($str);
+            $lbl = Labels::getLabel('LBL_AMOUNT_SHOULD_BE_GREATER_THEN_({MIN-AMOUNT})');
+            $lbl = CommonHelper::replaceStringData($lbl, ['{MIN-AMOUNT}' => $minAmount]);
+            LibHelper::exitWithError($lbl, true);
         }
+
         $post['order_language_id'] = $this->siteLangId;
         $post['order_language_code'] = CommonHelper::getLangCode();
         $order = new Orders(0);
         $orderId  = $order->placeGiftcardOrder($post);
         if (empty($orderId)) {
-            FatUtility::dieJsonError($order->getError());
+            LibHelper::exitWithError($order->getError(), true);
         }
-        $redirectUrl = UrlHelper::generateFullUrl('checkout', 'giftCharge', [$orderId], CONF_WEBROOT_FRONT_URL);
+
+        $redirectUrl = UrlHelper::generateFullUrl('Checkout', 'giftCharge', [$orderId], CONF_WEBROOT_FRONT_URL);
         FatUtility::dieJsonSuccess(['msg' => Labels::getLabel('MSG_REDIRECTING_PLEASE_WAIT'), 'redirectUrl' => $redirectUrl]);
     }
 }
