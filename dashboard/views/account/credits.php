@@ -34,7 +34,6 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
     }
 
     if ($canRedeemGiftCard) {
-
         $data['otherButtons'] = [
             [
                 'attr' => [
@@ -47,9 +46,6 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
             ]
         ];
     }
-
-
-
 
     $this->includeTemplate('_partial/header/content-header.php', $data, false); ?>
     <div class="content-body">

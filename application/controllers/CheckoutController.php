@@ -2463,6 +2463,10 @@ class CheckoutController extends MyAppController
         $userWalletBalance = User::getUserBalance($userId, true);
         /* Payment Methods[ */
         $paymentMethods = Plugin::getDataByType(Plugin::TYPE_REGULAR_PAYMENT_METHOD, $this->siteLangId);
+        $paymentMethods = array_filter($paymentMethods, function($pm) {
+            return $pm['plugin_code'] != 'TransferBank';
+        });
+        
         /* ] */
         $canUseWallet = PaymentMethods::canUseWalletForPayment();
         $orderData = Orders::getOrderPaymentStatus($order_id, Orders::GIFT_CARD_TYPE, Orders::ORDER_PAYMENT_PENDING);

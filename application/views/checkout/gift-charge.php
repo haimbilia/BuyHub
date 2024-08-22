@@ -177,8 +177,8 @@ if ($noPaymentMethod && $rewardsCurrAmtCanBeUsed < $orderData['order_net_amount'
         <?php
         $siteKey = FatApp::getConfig('CONF_RECAPTCHA_SITEKEY', FatUtility::VAR_STRING, '');
         $secretKey = FatApp::getConfig('CONF_RECAPTCHA_SECRETKEY', FatUtility::VAR_STRING, '');
-        $paymentMethods = new PaymentMethods();
-        if (!empty($siteKey) && !empty($secretKey) && true === $paymentMethods->cashOnDeliveryIsActive()) { ?>
+        $pm = new PaymentMethods();
+        if (!empty($siteKey) && !empty($secretKey) && true === $pm->cashOnDeliveryIsActive()) { ?>
             <script src='https://www.google.com/recaptcha/api.js?onload=googleCaptcha&render=<?php echo $siteKey; ?>'></script>
             <script>
                 var enableGcaptcha = true;
