@@ -3318,19 +3318,18 @@ class BuyerController extends BuyerBaseController
         }
 
         if (true === MOBILE_APP_API_CALL) {
+            $excludePaymentGatewaysArr = applicationConstants::getExcludePaymentGatewayArr(applicationConstants::CHECKOUT_GIFT_CARD);            
             /* Payment Methods[ */
             $pmSrch = PaymentMethods::getSearchObject($this->siteLangId);
             $pmSrch->doNotCalculateRecords();
             $pmSrch->doNotLimitRecords();
-            $pmSrch->addMultipleFields(Plugin::ATTRS);
-            $pmSrch->addCondition('plugin_code', '!=', 'CashOnDelivery');
-
+            $pmSrch->addMultipleFields(Plugin::ATTRS);            
+            $pmSrch->addCondition('plugin_code', 'not in ', $excludePaymentGatewaysArr);
             $pmRs = $pmSrch->getResultSet();
             $paymentMethods = FatApp::getDb()->fetchAll($pmRs);
-            $excludePaymentGatewaysArr = applicationConstants::getExcludePaymentGatewayArr();
+            
             /* ] */
             $this->set('paymentMethods', $paymentMethods);
-            $this->set('excludePaymentGatewaysArr', $excludePaymentGatewaysArr);
             $this->set('order_id', $orderId);
             $this->set('orderType', Orders::GIFT_CARD_TYPE);
             $this->_template->render();

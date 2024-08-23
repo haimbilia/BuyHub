@@ -335,9 +335,9 @@ class applicationConstants
         );
     }
 
-    public static function getExcludePaymentGatewayArr()
+    public static function getExcludePaymentGatewayArr($key =  '')
     {
-        return array(
+        $arr =  array(
             static::CHECKOUT_PRODUCT => array(''),
             static::CHECKOUT_SUBSCRIPTION => array(
                 'CashOnDelivery',
@@ -360,6 +360,12 @@ class applicationConstants
                 'PayAtStore'
             )
         );
+
+        if(!empty($key) && isset($arr[$key])){
+            return $arr[$key];
+        }
+
+        return $arr;
     }
 
     public static function getCatalogTypeArr($langId)
