@@ -195,6 +195,17 @@ class RequestForQuotesController extends MyAppController
             LibHelper::exitWithError(Labels::getLabel('ERR_DELIVERY_ADDRESS_IS_MANDATORY'), true);
         }
 
+        $existingAddressUserId = Address::getAttributesById($post['rfq_addr_id'], 'addr_record_id');
+        $this->loggedUserId = UserAuthentication::getLoggedUserId(true);
+        if (
+            0 < $existingAddressUserId && (
+                (0 == $this->loggedUserId) || 
+                (0 < $this->loggedUserId && $this->loggedUserId != $existingAddressUserId)
+            )) 
+        {
+            LibHelper::exitWithError(Labels::getLabel('ERR_DELIVERY_ADDRESS_SHOULD_BELONGS_TO_CURRENT_USER'), true);
+        }
+
         $linkingType = FatApp::getPostedData('rfq_seller_linking_type', FatUtility::VAR_INT, RequestForQuote::SELLER_LINKING_OPEN);
 
         $sellerIdArr = $selprodData = [];
@@ -460,6 +471,11 @@ class RequestForQuotesController extends MyAppController
         $this->set('email', $email);
         $this->set('record_id', $rfq->getMainTableRecordId());
         $this->set('msg', Labels::getLabel('MGS_REQUESTED_SUCCESSFULLY', $this->siteLangId));
+        
+        if (true === MOBILE_APP_API_CALL) {
+            $this->_template->render();
+        }
+        
         $this->set('redirectUrl', UrlHelper::generateUrl('Custom', 'rfqSuccess', [], CONF_WEBROOT_FRONTEND) . '?rfq_id=' . $rfq->getMainTableRecordId());
         $this->_template->render(false, false, 'json-success.php', false, false);
     }
