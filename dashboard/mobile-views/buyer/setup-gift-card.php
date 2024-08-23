@@ -9,5 +9,9 @@ foreach ($paymentMethods as $key => $val) {
 $data = array(
     'orderId' => $order_id,
     'orderType' => $orderType,
+    'userWalletBalance' => $userWalletBalance,
+    'displayUserWalletBalance' => $displayUserWalletBalance,
+    'canUseWalletForPayment' => $canUseWalletForPayment,
+    'orderNetAmount' => $orderNetAmount,
     'paymentMethods' => array_values($paymentMethods),
 );
