@@ -23,8 +23,8 @@ class GiftCards extends MyAppModel
     public static function getStatusArr(int $langId)
     {
         return [
+            self::STATUS_UNUSED => Labels::getLabel('FRM_UNUSED', $langId),
             self::STATUS_USED => Labels::getLabel('FRM_USED', $langId),
-            self::STATUS_UNUSED => Labels::getLabel('FRM_UNUSED', $langId)
         ];
     }
 

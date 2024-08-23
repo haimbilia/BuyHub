@@ -17,6 +17,7 @@ $data = array(
     'page' => $page,
     'pageCount' => $pageCount,
     'recordCount' => $recordCount,
+    'canRedeemGiftCard' => $canRedeemGiftCard ? 1 : 0,
     'userWalletBalance' => CommonHelper::displayMoneyFormat($userWalletBalance, false, false, false),
     'displayUserWalletBalance' => CommonHelper::displayMoneyFormat($userWalletBalance),    
     'userTotalWalletBalance' => CommonHelper::displayMoneyFormat($userTotalWalletBalance),
