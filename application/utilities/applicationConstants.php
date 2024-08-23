@@ -42,6 +42,7 @@ class applicationConstants
     public const CHECKOUT_SUBSCRIPTION = 2;
     public const CHECKOUT_PPC = 3;
     public const CHECKOUT_ADD_MONEY_TO_WALLET = 4;
+    public const CHECKOUT_GIFT_CARD = 5;
     public const SMTP_TLS = 'tls';
     public const SMTP_SSL = 'ssl';
     public const LAYOUT_LTR = 'ltr';
@@ -349,6 +350,11 @@ class applicationConstants
                 'PayAtStore'
             ),
             static::CHECKOUT_ADD_MONEY_TO_WALLET => array(
+                'CashOnDelivery',
+                'TransferBank',
+                'PayAtStore'
+            ),
+            static::CHECKOUT_GIFT_CARD => array(
                 'CashOnDelivery',
                 'TransferBank',
                 'PayAtStore'
