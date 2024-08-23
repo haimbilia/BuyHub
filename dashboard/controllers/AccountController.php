@@ -424,17 +424,12 @@ class AccountController extends LoggedUserController
 
     private function canRedeemGiftCard(): bool
     {
-        $canRedeemGiftCard = false;
         if (User::isAffiliate()) {
-            $canRedeemGiftCard = false;
-        } else {
-            $giftCard = GiftCards::getGiftCards(UserAuthentication::getLoggedUserId());
-
-            if (!empty($giftCard)) {
-                $canRedeemGiftCard = true;
-            }
+            return false;
         }
-        return $canRedeemGiftCard;
+        
+        $giftCard = GiftCards::getGiftCards($this->userParentId);
+        return !empty($giftCard);
     }
 
     public function walletRechargeForm()
@@ -670,6 +665,7 @@ class AccountController extends LoggedUserController
         $this->set('siteLangId', $this->siteLangId);
         $this->set('statusArr', Transactions::getStatusArr($this->siteLangId));
         $this->set('statusClassArr', Transactions::getStatusClassArr());
+        $this->set('canRedeemGiftCard', $this->canRedeemGiftCard());
         if (true === MOBILE_APP_API_CALL) {
             $this->creditsInfo();
             $this->_template->render();
