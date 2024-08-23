@@ -71,7 +71,7 @@ class Address extends MyAppModel
      * getData
      *
      * @param  int $type
-     * @param  string $recordId
+     * @param  string $recordId // Address belongs to
      * @param  int $isDefault
      * @param  string $sessionId
      * @return array
