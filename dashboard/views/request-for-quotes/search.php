@@ -2,6 +2,7 @@
 <div class="card-table">
     <div class="js-scrollable table-wrap table-responsive">
         <?php
+        $labelArr = RequestForQuote::getSellerLinkingTypeArr($siteLangId);
         $tbl = new HtmlElement('table', array('class' => 'table table-justified'));
         $th = $tbl->appendElement('thead')->appendElement('tr', array('class' => ''));
         foreach ($headerCols as $val) {
@@ -24,7 +25,6 @@
                         $global = '';
                         $class = '';
                         if (RequestForQuote::VISIBILITY_TYPE_OPEN == $row['rfq_visibility_type']) {
-                            $labelArr = RequestForQuote::getSellerLinkingTypeArr($siteLangId);
                             $global = HtmlHelper::getStatusHtml(HtmlHelper::INFO, $labelArr[$row['rfq_visibility_type']]);
                         }
 
@@ -35,8 +35,8 @@
 
                         $htm = '<div>
                                     <span class="product-profile__title ' . $class . '">'
-                                    . $title .
-                                    '</span>
+                            . $title .
+                            '</span>
                                     ' . $global . '
                                     <div>' . Labels::getLabel('LBL_QTY') . ': ' . $row['rfq_quantity'] . ' ' . applicationConstants::getWeightUnitName($siteLangId, $row['rfq_quantity_unit'], true) . '</div>
                                 </div>';

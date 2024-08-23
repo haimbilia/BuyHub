@@ -330,6 +330,16 @@ class Cart extends FatModel
         $this->basketProducts = [];
         return false;
     }
+    
+    public function hasValidStripeOnboardedSellers()
+    {
+        foreach ($this->getBasketProducts($this->cart_lang_id) as $product) {
+            if (empty(User::getUserMeta($product['selprod_user_id'], 'stripe_account_id'))) {
+                return false; 
+            }
+        }
+        return true;
+    }
 
     public function getBasketProducts($siteLangId = 0)
     {

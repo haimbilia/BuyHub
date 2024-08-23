@@ -210,7 +210,12 @@ trait RequestForQuotesUtility
         $this->set("rfqData", FatApp::getDb()->fetch($srch->getDataResultSet()));
         $this->set("approvalStatusArr", RequestForQuote::getApprovalStatusArr($this->siteLangId));
         $this->set("statusArr", RequestForQuote::getStatusArr($this->siteLangId));
+        $this->set("productTypes", Product::getProductTypes($this->siteLangId));
         $this->set('recordId', $recordId);
+
+        if (MOBILE_APP_API_CALL) {
+            $this->_template->render();
+        }
 
         $this->set('html', $this->_template->render(false, false, 'request-for-quotes/view.php', true));
         $this->_template->render(false, false, 'json-success.php', true, false);

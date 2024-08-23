@@ -10,7 +10,7 @@
             <?php if (!empty($rfqData['rfq_product_type'])) { ?>
                 <li class="list-stats-item">
                     <span class="lable"><?php echo Labels::getLabel('LBL_PRODUCT_TYPE', $siteLangId); ?>:</span>
-                    <span class="value"><?php echo Product::getProductTypes($siteLangId)[$rfqData['rfq_product_type']] ?? Labels::getLabel('LBL_N/A', $siteLangId); ?></span>
+                    <span class="value"><?php echo $productTypes[$rfqData['rfq_product_type']] ?? Labels::getLabel('LBL_N/A', $siteLangId); ?></span>
                 </li>
             <?php } ?>
             <li class="list-stats-item list-stats-item-full">

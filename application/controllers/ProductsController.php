@@ -1781,7 +1781,6 @@ class ProductsController extends MyAppController
         $prodCatObj = new ProductCategory();
         $search_keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
         $search_keyword = urldecode($search_keyword);
-        //$categories = $prodCatObj->getAutoCompleteProdCatTreeStructure(0, $this->siteLangId, $search_keyword);
         $categories = $prodCatObj->getProdCatAutoSuggest($search_keyword, 20, $this->siteLangId);
         $json = array();
         foreach ($categories as $key => $product) {
@@ -1789,6 +1788,10 @@ class ProductsController extends MyAppController
                 'id' => $key,
                 'text' => strip_tags(html_entity_decode($product, ENT_QUOTES, 'UTF-8'))
             );
+        }
+        if (MOBILE_APP_API_CALL) {
+            $this->set('data', ['categories' => $json['results'] ?? []]);
+            $this->_template->render();
         }
         die(json_encode($json));
     }

@@ -199,10 +199,10 @@ class RequestForQuotesController extends MyAppController
         $this->loggedUserId = UserAuthentication::getLoggedUserId(true);
         if (
             0 < $existingAddressUserId && (
-                (0 == $this->loggedUserId) || 
+                (0 == $this->loggedUserId) ||
                 (0 < $this->loggedUserId && $this->loggedUserId != $existingAddressUserId)
-            )) 
-        {
+            )
+        ) {
             LibHelper::exitWithError(Labels::getLabel('ERR_DELIVERY_ADDRESS_SHOULD_BELONGS_TO_CURRENT_USER'), true);
         }
 
@@ -346,7 +346,7 @@ class RequestForQuotesController extends MyAppController
                     if (is_array($sellers) && !empty($sellers)) {
                         foreach ($sellers as $sellerData) {
                             $sellerData += $rfqData;
-                            if (false === $emailHandler->sendNewRfqAssignedNotification($this->siteLangId, $sellerData)) {                                
+                            if (false === $emailHandler->sendNewRfqAssignedNotification($this->siteLangId, $sellerData)) {
                                 $msg = Labels::getLabel('ERR_UNABLE_TO_NOTIFY_SELLERS_FOR_NEW_RFQ_REQUEST.');
                                 LibHelper::exitWithError($msg, true);
                             }
@@ -471,11 +471,11 @@ class RequestForQuotesController extends MyAppController
         $this->set('email', $email);
         $this->set('record_id', $rfq->getMainTableRecordId());
         $this->set('msg', Labels::getLabel('MGS_REQUESTED_SUCCESSFULLY', $this->siteLangId));
-        
+
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }
-        
+
         $this->set('redirectUrl', UrlHelper::generateUrl('Custom', 'rfqSuccess', [], CONF_WEBROOT_FRONTEND) . '?rfq_id=' . $rfq->getMainTableRecordId());
         $this->_template->render(false, false, 'json-success.php', false, false);
     }
@@ -627,6 +627,10 @@ class RequestForQuotesController extends MyAppController
                 'text' => $productName,
             );
         }
+        if (MOBILE_APP_API_CALL) {
+            $this->set('data', ['autocomplete' => $json]);
+            $this->_template->render();
+        }
         die(json_encode(['results' => $json]));
     }
 
@@ -635,6 +639,10 @@ class RequestForQuotesController extends MyAppController
         $isFavourite = FatApp::getPostedData('rfq_seller_linking_type', FatUtility::VAR_INT, RequestForQuote::SELLER_LINKING_OPEN);
         $isFavourite = (RequestForQuote::SELLER_LINKING_FAVOURITE == $isFavourite);
         $json = Shop::getSellersAutocomplete($this->siteLangId, $isFavourite, $this->loggedUserId);
+        if (MOBILE_APP_API_CALL) {
+            $this->set('data', ['pageCount' => $json['pageCount'], 'sellers' => $json['results'] ?? []]);
+            $this->_template->render();
+        }
         die(FatUtility::convertToJson($json));
     }
 }
