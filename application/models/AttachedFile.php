@@ -78,6 +78,7 @@ class AttachedFile extends MyAppModel
     public const FILETYPE_PRODUCT_IMAGE_TEMP = 64;
     public const FILETYPE_CUSTOM_PRODUCT_IMAGE_TEMP = 65;
     public const FILETYPE_CATEGORY_THUMB = 66; /* Used in category detail page */
+    public const FILETYPE_SHIPPING_COMPANY_USER_DOCUMENT = 67;
 
     public const APP_IMAGE_WIDTH = 640;
     public const APP_IMAGE_HEIGHT = 480;
@@ -161,7 +162,7 @@ class AttachedFile extends MyAppModel
             return json_decode($imgAttrTypeCacheVar, true);
         }
 
-        return $arr = array(
+        $arr = array(
             static::FILETYPE_PRODUCT_IMAGE => Labels::getLabel('LBL_PRODUCTS', $langId),
             static::FILETYPE_BRAND_LOGO => Labels::getLabel('LBL_BRAND_LOGO', $langId),
             static::FILETYPE_BRAND_IMAGE => Labels::getLabel('LBL_BRAND_BANNER', $langId),
@@ -229,11 +230,13 @@ class AttachedFile extends MyAppModel
         $srch->addCondition('afile_record_id', '=', 'mysql_func_' . $recordId, 'AND', true);
 
         $attr = ['afile_id', 'afile_type', 'afile_record_id', 'afile_record_subid', 'afile_lang_id', 'afile_screen', 'afile_physical_path', 'afile_name', 'afile_attribute_title', 'afile_attribute_alt', 'afile_aspect_ratio', 'afile_display_order', 'afile_updated_at'];
+
         if ($fileType != AttachedFile::FILETYPE_PRODUCT_IMAGE_TEMP && $fileType != AttachedFile::FILETYPE_CUSTOM_PRODUCT_IMAGE_TEMP) {
             $attr[] = 'afile_downloaded_times';
         }
 
         $srch->addMultipleFields($attr);
+        $orderBy = [];
 
         if ($recordSubid || $recordSubid == -1 || $haveSubIdZero) {
             if ($recordSubid == -1) {
@@ -247,14 +250,17 @@ class AttachedFile extends MyAppModel
             $cnd = $srch->addCondition('afile_lang_id', '=', 'mysql_func_' . $langId, 'AND', true);
             if ($displayUniversalImage) {
                 $cnd->attachCondition('afile_lang_id', '=', '0');
-                $srch->addOrder('afile_lang_id', 'DESC');
+                // $srch->addOrder('afile_lang_id', 'DESC');
+                $orderBy['afile_lang_id'] = "DESC";
             }
         }
 
-        $srch->addOrder('afile_display_order');
+        // $srch->addOrder('afile_display_order');
+        $orderBy['afile_display_order'] = "ASC";
 
         if ($recordId == 0) {
-            $srch->addOrder('afile_id', 'desc');
+            // $srch->addOrder('afile_id', 'desc');
+            $orderBy['afile_id'] = "desc";
         }
 
         if ($screen > 0) {
@@ -266,13 +272,21 @@ class AttachedFile extends MyAppModel
             $cnd->attachCondition('afile_lang_id', '=', 'mysql_func_0', 'OR', true);
         }
 
+        $tmpSrch = new SearchBase("(" . $srch->getQuery() . ")", 't');
+        $tmpSrch->doNotCalculateRecords();
+
         if ($size > 0) {
-            $srch->setPageSize($size);
+            //$srch->setPageSize($size);
+            $tmpSrch->setPageSize($size);
         }
 
-        $rs = $srch->getResultSet();
-        echo $srch->getError();
-        return FatApp::getDb()->fetchAll($rs, 'afile_id');
+        if (!empty($orderBy)) {
+            foreach ($orderBy as $key => $val) {
+                $tmpSrch->addOrder($key, $val);
+            }
+        }
+
+        return FatApp::getDb()->fetchAll($tmpSrch->getResultSet(), 'afile_id');
     }
 
     public static function getAttachment($fileType, $recordId, $recordSubid = 0, $langId = 0, $displayUniversalImage = true, $screen = 0)
@@ -504,7 +518,7 @@ class AttachedFile extends MyAppModel
         return $this->saveAttachment($fl, $fileType, $recordId, $recordSubid, $name, $displayOrder, $uniqueRecord, $lang_id, $screen, $aspectRatio);
     }
 
-    public static function displayWebpImage($imageName, $w, $h, $noImage = 'no_image.jpg', $uploadedFilePath = '', $resizeType = ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, $apply_watermark = false, $cache = true, $imageCompression = true)
+    public static function displayWebpImage($imageName, $w, $h, $noImage = 'no_image.jpg', $uploadedFilePath = '', $resizeType = ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, $apply_watermark = false, $cache = true, $imageCompression = false)
     {
         ob_end_clean();
         ini_set('memory_limit', '-1');
@@ -551,9 +565,9 @@ class AttachedFile extends MyAppModel
         $newWidth = $w;
         $newHeight = $h;
         if ($w / $h > $ratio_orig) {
-            $newWidth = $h * $ratio_orig;
+            $newWidth = floor($h * $ratio_orig);
         } else {
-            $newHeight = $w / $ratio_orig;
+            $newHeight = floor($w / $ratio_orig);
         }
 
         switch ($fileMimeType) {
@@ -611,8 +625,8 @@ class AttachedFile extends MyAppModel
             }
         }
 
-        $xPosition = ($w - $newWidth) / 2;
-        $yPosition = ($h - $newHeight) / 2;
+        $xPosition = floor(($w - $newWidth) / 2);
+        $yPosition = floor(($h - $newHeight) / 2);
         imagecopyresampled($thumb, $img, $xPosition, $yPosition, 0, 0, $newWidth, $newHeight, $width, $height);
 
         if (CONF_USE_FAT_CACHE && $cache) {
@@ -633,7 +647,7 @@ class AttachedFile extends MyAppModel
     }
 
     /* always call this function using image controller and pass relavant arguments. */
-    public static function displayImage($imageName, $w, $h, $noImage = 'no_image.jpg', $uploadedFilePath = '', $resizeType = ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, $apply_watermark = false, $cache = true, $imageCompression = true)
+    public static function displayImage($imageName, $w, $h, $noImage = 'no_image.jpg', $uploadedFilePath = '', $resizeType = ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, $apply_watermark = false, $cache = true, $imageCompression = false)
     {
 
         if (substr($imageName, 0, 5) == 'webp/') {
@@ -803,7 +817,7 @@ class AttachedFile extends MyAppModel
             echo file_get_contents($image_name);
             exit;
         }
-        return $img = new ImageResize($image_name);
+        return  new ImageResize($image_name);
     }
 
     public static function displayOriginalImageWebp($imageName, $noImage = 'no_image.jpg', $uploadedFilePath = '', $cache = false)
@@ -1218,8 +1232,12 @@ class AttachedFile extends MyAppModel
         $client->registerStreamWrapper();
     }
 
-    public static function setTimeParam($dateTime)
+    public static function setTimeParam($dateTime = '')
     {
+        if (empty($dateTime)) {
+            return;
+        }
+
         $time = strtotime($dateTime);
         if (0 < $time) {
             return '?t=' . $time;

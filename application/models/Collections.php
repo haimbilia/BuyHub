@@ -11,6 +11,8 @@ class Collections extends MyAppModel
     public const DB_TBL_COLLECTION_TO_RECORDS = 'tbl_collection_to_records';
     public const DB_TBL_COLLECTION_TO_RECORDS_PREFIX = 'ctr_';
 
+    public const HOMEPAGE_COLLECTION_LIMIT = 5;
+
     //public const TYPE_PRODUCT = 1;
     public const COLLECTION_TYPE_PRODUCT = 1;
     public const COLLECTION_TYPE_CATEGORY = 2;
@@ -25,31 +27,43 @@ class Collections extends MyAppModel
     public const COLLECTION_TYPE_CONTENT_BLOCK = 11;
     public const COLLECTION_TYPE_REVIEWS = 12;
     public const COLLECTION_TYPE_FAQ_CATEGORY = 13;
+    public const COLLECTION_TYPE_HERO_SLIDES = 14;
 
     //public const SUBTYPE_PRODUCT_LAYOUT1 = 1;
     public const TYPE_PRODUCT_LAYOUT1 = 1;
     public const TYPE_PRODUCT_LAYOUT2 = 2;
     public const TYPE_PRODUCT_LAYOUT3 = 3;
     public const TYPE_PRODUCT_LAYOUT4 = 24;
+    public const TYPE_PRODUCT_LAYOUT5 = 29; /* Applicable For Apps only. */
+
     public const TYPE_CATEGORY_LAYOUT1 = 4;
     public const TYPE_CATEGORY_LAYOUT2 = 5;
     public const TYPE_CATEGORY_LAYOUT3 = 20;
     public const TYPE_CATEGORY_LAYOUT4 = 23;
+    public const TYPE_CATEGORY_LAYOUT5 = 26; /* Applicable For Apps only. */
+    public const TYPE_CATEGORY_LAYOUT6 = 27; /* Applicable For Apps only. */
+
     public const TYPE_SHOP_LAYOUT1 = 6;
     public const TYPE_SHOP_LAYOUT2 = 22;
+
     public const TYPE_BRAND_LAYOUT1 = 7;
     public const TYPE_BRAND_LAYOUT2 = 21;
+    public const TYPE_BRAND_LAYOUT3 = 28; /* Applicable For Apps only. */
+
     public const TYPE_BLOG_LAYOUT1 = 8;
     public const TYPE_SPONSORED_PRODUCT_LAYOUT = 9;
     public const TYPE_SPONSORED_SHOP_LAYOUT = 10;
+
     public const TYPE_BANNER_LAYOUT1 = 11;
     public const TYPE_BANNER_LAYOUT2 = 12;
-    public const TYPE_BANNER_LAYOUT3 = 13;
+    // public const TYPE_BANNER_LAYOUT3 = 13; /* Applicable For Apps only. */
+
     public const TYPE_FAQ_LAYOUT1 = 14;
     public const TYPE_TESTIMONIAL_LAYOUT1 = 15;
     public const TYPE_CONTENT_BLOCK_LAYOUT1 = 16;
-    public const TYPE_PENDING_REVIEWS1 = 17; // Applicable For Apps only.
-    public const TYPE_FAQ_CATEGORY_LAYOUT1 = 18; // Applicable For Apps only.
+    public const TYPE_PENDING_REVIEWS1 = 17; /* Applicable For Apps only. */
+    // public const TYPE_FAQ_CATEGORY_LAYOUT1 = 18; /* Applicable For Apps only. */
+    public const TYPE_HERO_SLIDES_LAYOUT1 = 25;
 
     public const LIMIT_PRODUCT_LAYOUT1 = 12;
     public const LIMIT_PRODUCT_LAYOUT2 = 6;
@@ -60,10 +74,13 @@ class Collections extends MyAppModel
     public const LIMIT_CATEGORY_LAYOUT2 = 4;
     public const LIMIT_CATEGORY_LAYOUT3 = 4;
     public const LIMIT_CATEGORY_LAYOUT4 = 4;
+    public const LIMIT_CATEGORY_LAYOUT5 = 5;
+    public const LIMIT_CATEGORY_LAYOUT6 = 4;
     public const LIMIT_SHOP_LAYOUT1 = 4;
     public const LIMIT_SHOP_LAYOUT2 = 3;
     public const LIMIT_BRAND_LAYOUT1 = 5;
     public const LIMIT_BRAND_LAYOUT2 = 5;
+    public const LIMIT_BRAND_LAYOUT3 = 4;
     public const LIMIT_BLOG_LAYOUT1 = 3;
     public const LIMIT_FAQ_LAYOUT1 = 3;
     public const LIMIT_TESTIMONIAL_LAYOUT1 = 10;
@@ -78,6 +95,7 @@ class Collections extends MyAppModel
     /*   layout applicable types ]*/
 
     public const COLLECTION_WITHOUT_MEDIA = [
+        self::COLLECTION_TYPE_HERO_SLIDES,
         self::COLLECTION_TYPE_SHOP,
         self::COLLECTION_TYPE_BRAND,
         self::COLLECTION_TYPE_BLOG,
@@ -92,6 +110,7 @@ class Collections extends MyAppModel
     ];
 
     public const COLLECTION_WITHOUT_RECORDS = [
+        self::COLLECTION_TYPE_HERO_SLIDES,
         self::COLLECTION_TYPE_SPONSORED_PRODUCTS,
         self::COLLECTION_TYPE_SPONSORED_SHOPS,
         self::COLLECTION_TYPE_BANNER,
@@ -100,17 +119,24 @@ class Collections extends MyAppModel
     ];
 
     public const COLLECTIONS_FOR_APP_ONLY = [
-        self::TYPE_BANNER_LAYOUT3,
+        // self::TYPE_BANNER_LAYOUT3,
         self::TYPE_PENDING_REVIEWS1,
-        self::TYPE_FAQ_CATEGORY_LAYOUT1
+        self::TYPE_CATEGORY_LAYOUT5,
+        self::TYPE_CATEGORY_LAYOUT6,
+        self::TYPE_BRAND_LAYOUT3,
+        self::TYPE_PRODUCT_LAYOUT5,
     ];
 
     public const COLLECTIONS_NOT_FOR_APP = [
-        self::TYPE_FAQ_CATEGORY_LAYOUT1,
+        self::TYPE_CATEGORY_LAYOUT2,
         self::TYPE_CATEGORY_LAYOUT3,
         self::TYPE_CATEGORY_LAYOUT4,
         self::TYPE_BRAND_LAYOUT2,
         self::TYPE_SHOP_LAYOUT2,
+        self::TYPE_PRODUCT_LAYOUT3,
+        self::TYPE_FAQ_LAYOUT1,
+        self::TYPE_TESTIMONIAL_LAYOUT1,
+        self::TYPE_BLOG_LAYOUT1,
     ];
 
     /**
@@ -168,6 +194,7 @@ class Collections extends MyAppModel
             trigger_error(Labels::getLabel('ERR_LANGUAGE_ID_NOT_SPECIFIED.', $langId), E_USER_ERROR);
         }
         return [
+            self::COLLECTION_TYPE_HERO_SLIDES => Labels::getLabel('LBL_HERO_SLIDES', $langId),
             self::COLLECTION_TYPE_PRODUCT => Labels::getLabel('LBL_PRODUCT', $langId),
             self::COLLECTION_TYPE_CATEGORY => Labels::getLabel('LBL_CATEGORY', $langId),
             self::COLLECTION_TYPE_SHOP => Labels::getLabel('LBL_SHOP', $langId),
@@ -207,29 +234,34 @@ class Collections extends MyAppModel
         }
 
         return [
+            self::TYPE_HERO_SLIDES_LAYOUT1 => Labels::getLabel('LBL_HERO_SLIDES_LAYOUT1', $langId),
             self::TYPE_PRODUCT_LAYOUT1 => Labels::getLabel('LBL_PRODUCT_LAYOUT1', $langId),
             self::TYPE_PRODUCT_LAYOUT2 => Labels::getLabel('LBL_PRODUCT_LAYOUT2', $langId),
             self::TYPE_PRODUCT_LAYOUT3 => Labels::getLabel('LBL_PRODUCT_LAYOUT3', $langId),
             self::TYPE_PRODUCT_LAYOUT4 => Labels::getLabel('LBL_PRODUCT_LAYOUT4', $langId),
+            self::TYPE_PRODUCT_LAYOUT5 => Labels::getLabel('LBL_MOBILE_PRODUCT_LAYOUT5', $langId),
             self::TYPE_CATEGORY_LAYOUT1 => Labels::getLabel('LBL_CATEGORY_LAYOUT1', $langId),
             self::TYPE_CATEGORY_LAYOUT2 => Labels::getLabel('LBL_CATEGORY_LAYOUT2', $langId),
             self::TYPE_CATEGORY_LAYOUT3 => Labels::getLabel('LBL_CATEGORY_LAYOUT3', $langId),
             self::TYPE_CATEGORY_LAYOUT4 => Labels::getLabel('LBL_CATEGORY_LAYOUT4', $langId),
+            self::TYPE_CATEGORY_LAYOUT5 => Labels::getLabel('LBL_MOBILE_CATEGORY_LAYOUT5', $langId),
+            self::TYPE_CATEGORY_LAYOUT6 => Labels::getLabel('LBL_MOBILE_CATEGORY_LAYOUT6', $langId),
             self::TYPE_SHOP_LAYOUT1 => Labels::getLabel('LBL_SHOP_LAYOUT1', $langId),
             self::TYPE_SHOP_LAYOUT2 => Labels::getLabel('LBL_SHOP_LAYOUT2', $langId),
             self::TYPE_BRAND_LAYOUT1 => Labels::getLabel('LBL_BRAND_LAYOUT1', $langId),
             self::TYPE_BRAND_LAYOUT2 => Labels::getLabel('LBL_BRAND_LAYOUT2', $langId),
+            self::TYPE_BRAND_LAYOUT3 => Labels::getLabel('LBL_MOBILE_BRAND_LAYOUT3', $langId),
             self::TYPE_BLOG_LAYOUT1 => Labels::getLabel('LBL_BLOG_LAYOUT1', $langId),
             self::TYPE_SPONSORED_PRODUCT_LAYOUT => Labels::getLabel('LBL_SPONSORED_PRODUCTS', $langId),
             self::TYPE_SPONSORED_SHOP_LAYOUT => Labels::getLabel('LBL_SPONSORED_SHOPS', $langId),
             self::TYPE_BANNER_LAYOUT1 => Labels::getLabel('LBL_BANNER_LAYOUT1', $langId),
             self::TYPE_BANNER_LAYOUT2 => Labels::getLabel('LBL_BANNER_LAYOUT2', $langId),
-            self::TYPE_BANNER_LAYOUT3 => Labels::getLabel('LBL_MOBILE_BANNER_LAYOUT', $langId),
+            // self::TYPE_BANNER_LAYOUT3 => Labels::getLabel('LBL_MOBILE_BANNER_LAYOUT', $langId),
             self::TYPE_FAQ_LAYOUT1 => Labels::getLabel('LBL_FAQ_LAYOUT1', $langId),
             self::TYPE_TESTIMONIAL_LAYOUT1 => Labels::getLabel('LBL_TESTIMONIAL_LAYOUT1', $langId),
             self::TYPE_CONTENT_BLOCK_LAYOUT1 => Labels::getLabel('LBL_CONTENT_BLOCK_LAYOUT1', $langId),
             self::TYPE_PENDING_REVIEWS1 => Labels::getLabel('LBL_PENDING_REVIEWS1', $langId),
-            self::TYPE_FAQ_CATEGORY_LAYOUT1 => Labels::getLabel('LBL_FAQ_CATEGORIES', $langId),
+            // self::TYPE_FAQ_CATEGORY_LAYOUT1 => Labels::getLabel('LBL_FAQ_CATEGORIES', $langId),
         ];
     }
 
@@ -242,14 +274,18 @@ class Collections extends MyAppModel
     public static function getTypeSpecificLayouts(int $langId): array
     {
         return [
+            self::COLLECTION_TYPE_HERO_SLIDES => [
+                self::TYPE_HERO_SLIDES_LAYOUT1 => Labels::getLabel('LBL_HERO_SLIDES_LAYOUT1', $langId),
+            ],
             self::COLLECTION_TYPE_BANNER => [
                 self::TYPE_BANNER_LAYOUT1 => Labels::getLabel('LBL_BANNER_LAYOUT1', $langId),
                 self::TYPE_BANNER_LAYOUT2 => Labels::getLabel('LBL_BANNER_LAYOUT2', $langId),
-                self::TYPE_BANNER_LAYOUT3 => Labels::getLabel('LBL_MOBILE_BANNER_LAYOUT', $langId),
+                // self::TYPE_BANNER_LAYOUT3 => Labels::getLabel('LBL_MOBILE_BANNER_LAYOUT', $langId),
             ],
             self::COLLECTION_TYPE_BRAND => [
                 self::TYPE_BRAND_LAYOUT1 => Labels::getLabel('LBL_BRAND_LAYOUT1', $langId),
                 self::TYPE_BRAND_LAYOUT2 => Labels::getLabel('LBL_BRAND_LAYOUT2', $langId),
+                self::TYPE_BRAND_LAYOUT3 => Labels::getLabel('LBL_MOBILE_BRAND_LAYOUT3', $langId),
             ],
             self::COLLECTION_TYPE_BLOG => [
                 self::TYPE_BLOG_LAYOUT1 => Labels::getLabel('LBL_BLOG_LAYOUT1', $langId),
@@ -259,12 +295,15 @@ class Collections extends MyAppModel
                 self::TYPE_CATEGORY_LAYOUT2 => Labels::getLabel('LBL_CATEGORY_LAYOUT2', $langId),
                 self::TYPE_CATEGORY_LAYOUT3 => Labels::getLabel('LBL_CATEGORY_LAYOUT3', $langId),
                 self::TYPE_CATEGORY_LAYOUT4 => Labels::getLabel('LBL_CATEGORY_LAYOUT4', $langId),
+                self::TYPE_CATEGORY_LAYOUT5 => Labels::getLabel('LBL_MOBILE_CATEGORY_LAYOUT5', $langId),
+                self::TYPE_CATEGORY_LAYOUT6 => Labels::getLabel('LBL_MOBILE_CATEGORY_LAYOUT6', $langId),
             ],            
             self::COLLECTION_TYPE_PRODUCT => [
                 self::TYPE_PRODUCT_LAYOUT1 => Labels::getLabel('LBL_PRODUCT_LAYOUT1', $langId),
                 self::TYPE_PRODUCT_LAYOUT2 => Labels::getLabel('LBL_PRODUCT_LAYOUT2', $langId),
                 self::TYPE_PRODUCT_LAYOUT3 => Labels::getLabel('LBL_PRODUCT_LAYOUT3', $langId),
                 self::TYPE_PRODUCT_LAYOUT4 => Labels::getLabel('LBL_PRODUCT_LAYOUT4', $langId),
+                self::TYPE_PRODUCT_LAYOUT5 => Labels::getLabel('LBL_MOBILE_PRODUCT_LAYOUT5', $langId),
             ],
             self::COLLECTION_TYPE_SHOP => [
                 self::TYPE_SHOP_LAYOUT1 => Labels::getLabel('LBL_SHOP_LAYOUT1', $langId),
@@ -282,13 +321,13 @@ class Collections extends MyAppModel
             self::COLLECTION_TYPE_FAQ => [
                 self::TYPE_FAQ_LAYOUT1 => Labels::getLabel('LBL_FAQ', $langId),
             ],
-            self::COLLECTION_TYPE_FAQ_CATEGORY => [
+            /* self::COLLECTION_TYPE_FAQ_CATEGORY => [
                 self::TYPE_FAQ_CATEGORY_LAYOUT1 => Labels::getLabel('LBL_FAQ_CATEGORY', $langId),
-            ],
+            ], 
             self::COLLECTION_TYPE_REVIEWS => [
                 self::TYPE_PENDING_REVIEWS1 => Labels::getLabel('LBL_PENDING_REVIEWS1', $langId),
             ]
-            /* self::COLLECTION_TYPE_CONTENT_BLOCK => [
+            self::COLLECTION_TYPE_CONTENT_BLOCK => [
                 self::TYPE_CONTENT_BLOCK_LAYOUT1 => Labels::getLabel('LBL_Content_Block', $langId),
             ] */
         ];
@@ -304,7 +343,7 @@ class Collections extends MyAppModel
         return [
             self::TYPE_BANNER_LAYOUT1 => 1,
             self::TYPE_BANNER_LAYOUT2 => 2,
-            self::TYPE_BANNER_LAYOUT3 => 1
+            // self::TYPE_BANNER_LAYOUT3 => 1
         ];
     }
 
@@ -335,7 +374,7 @@ class Collections extends MyAppModel
                     'width' => 920,
                     'height' => 690
                 ],
-                /*
+                
                 applicationConstants::SCREEN_IPAD => [
                     'width' => 660,
                     'height' => 198
@@ -344,9 +383,9 @@ class Collections extends MyAppModel
                     'width' => 640,
                     'height' => 360
                 ],
-                */
+               
             ],
-            self::TYPE_BANNER_LAYOUT3 => [
+            /* self::TYPE_BANNER_LAYOUT3 => [
                 applicationConstants::SCREEN_DESKTOP => [
                     'width' => 600,
                     'height' => 338
@@ -359,7 +398,7 @@ class Collections extends MyAppModel
                     'width' => 640,
                     'height' => 360
                 ],
-            ]
+            ] */
         ];
     }
 
@@ -371,12 +410,16 @@ class Collections extends MyAppModel
     public static function getLayoutImagesArr(): array
     {
         return [
+            self::TYPE_HERO_SLIDES_LAYOUT1 => 'Hero-Slides-Layout-1.png',
             self::TYPE_PRODUCT_LAYOUT1 => 'Product-Layout-1.png',
             self::TYPE_PRODUCT_LAYOUT2 => 'Product-Layout-2.png',
             self::TYPE_PRODUCT_LAYOUT3 => 'Product-Layout-3.png',
             self::TYPE_PRODUCT_LAYOUT4 => 'Product-Layout-4.png',
+            self::TYPE_PRODUCT_LAYOUT5 => 'Product-Layout-5.png',
             self::TYPE_CATEGORY_LAYOUT1 => 'Category-Layout-1.png',
             self::TYPE_CATEGORY_LAYOUT2 => 'Category-Layout-2.png',
+            self::TYPE_CATEGORY_LAYOUT5 => 'Category-Layout-5.png',
+            self::TYPE_CATEGORY_LAYOUT6 => 'Category-Layout-6.png',
             self::TYPE_SHOP_LAYOUT1 => 'Shop-Layout-1.png',
             self::TYPE_BRAND_LAYOUT1 => 'Brand-Layout-1.png',
             self::TYPE_BLOG_LAYOUT1 => 'Blog-Layout-1.png',
@@ -384,9 +427,9 @@ class Collections extends MyAppModel
             self::TYPE_SPONSORED_SHOP_LAYOUT => 'Sponsored-Shops.png',
             self::TYPE_BANNER_LAYOUT1 => 'Banner-Layout-1.png',
             self::TYPE_BANNER_LAYOUT2 => 'Banner-Layout-2.png',
-            self::TYPE_BANNER_LAYOUT3 => 'Banner-Layout-2.png',
+            // self::TYPE_BANNER_LAYOUT3 => 'Banner-Layout-2.png',
             self::TYPE_FAQ_LAYOUT1 => 'Faq-Layout-1.png',
-            self::TYPE_FAQ_CATEGORY_LAYOUT1 => 'Faq-Layout-1.png',
+            // self::TYPE_FAQ_CATEGORY_LAYOUT1 => 'Faq-Layout-1.png',
             self::TYPE_TESTIMONIAL_LAYOUT1 => 'Testimonial-layout-1.png',
             self::TYPE_CONTENT_BLOCK_LAYOUT1 => 'Content-Block-layout-1.png',
             self::TYPE_PENDING_REVIEWS1 => 'Pending-Reviews-1.png',
@@ -943,29 +986,34 @@ class Collections extends MyAppModel
     public static function layoutIconClass(int $layoutId): string
     {
         $classArr = [
+            self::TYPE_HERO_SLIDES_LAYOUT1 => 'hero-slides-layout-1',
             self::TYPE_PRODUCT_LAYOUT1 => 'product-layout-1',
             self::TYPE_PRODUCT_LAYOUT2 => 'product-layout-2',
             self::TYPE_PRODUCT_LAYOUT3 => 'product-layout-3',
             self::TYPE_PRODUCT_LAYOUT4 => 'product-layout-4',
+            self::TYPE_PRODUCT_LAYOUT5 => 'product-layout-5',
             self::TYPE_CATEGORY_LAYOUT1 => 'category-layout-1',
             self::TYPE_CATEGORY_LAYOUT2 => 'category-layout-2',
             self::TYPE_CATEGORY_LAYOUT3 => 'category-layout-3',
             self::TYPE_CATEGORY_LAYOUT4 => 'category-layout-4',
+            self::TYPE_CATEGORY_LAYOUT5 => 'category-layout-5',
+            self::TYPE_CATEGORY_LAYOUT6 => 'category-layout-6',
             self::TYPE_SHOP_LAYOUT1 => 'shop-layout-1',
             self::TYPE_SHOP_LAYOUT2 => 'shop-layout-2',
             self::TYPE_BRAND_LAYOUT1 => 'brand-layout-1',
             self::TYPE_BRAND_LAYOUT2 => 'brand-layout-2',
+            self::TYPE_BRAND_LAYOUT3 => 'brand-layout-3',
             self::TYPE_BLOG_LAYOUT1 => 'blog-layout-1',
             self::TYPE_SPONSORED_PRODUCT_LAYOUT => 'sponsored-product-layout',
             self::TYPE_SPONSORED_SHOP_LAYOUT => 'sponsored-shop-layout',
             self::TYPE_BANNER_LAYOUT1 => 'banner-layout-1',
             self::TYPE_BANNER_LAYOUT2 => 'banner-layout-2',
-            self::TYPE_BANNER_LAYOUT3 => 'banner-layout-3',
+            // self::TYPE_BANNER_LAYOUT3 => 'banner-layout-3',
             self::TYPE_FAQ_LAYOUT1 => 'faq-layout-1',
             self::TYPE_TESTIMONIAL_LAYOUT1 => 'testimonial-layout-1',
             self::TYPE_CONTENT_BLOCK_LAYOUT1 => 'content-block-layout-1',
             self::TYPE_PENDING_REVIEWS1 => 'pending-reviews-1',
-            self::TYPE_FAQ_CATEGORY_LAYOUT1 => 'faq-category-layout-1',
+            // self::TYPE_FAQ_CATEGORY_LAYOUT1 => 'faq-category-layout-1',
         ];
         return $classArr[$layoutId] ?? '';
     }

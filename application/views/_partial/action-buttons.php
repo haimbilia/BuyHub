@@ -30,7 +30,7 @@ if (isset($otherButtons) && is_array($otherButtons)) {
     foreach ($otherButtons as $attr) {
         $class = isset($attr['attr']['class']) ? $attr['attr']['class'] : '';
         $attr['attr']['class'] = 'btn btn-outline-brand btn-sm ' . $class;
-        $btnGrp->appendElement('a', $attr['attr'], (string) $attr['label'], true);
+        $btnGrp->appendElement('a', str_replace('&#039;', "'", $attr['attr']), (string) $attr['label'], true);
     }
 }
 echo $div->getHtml();

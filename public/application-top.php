@@ -3,7 +3,7 @@ if (!array_key_exists('screenWidth', $_COOKIE)) {
     setcookie('screenWidth', 769, 0, CONF_WEBROOT_URL);
 }
 
-if (substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) {
+if (isset($_SERVER['HTTP_ACCEPT_ENCODING']) && substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) {
     ob_start("ob_gzhandler");
 } else {
     ob_start();
@@ -59,8 +59,9 @@ FatApp::getDb()->logQueries(true,CONF_UPLOADS_PATH.'logQuery.txt'); */
 
 $_SESSION['WYSIWYGFileManagerRequirements'] = CONF_INSTALLATION_PATH . 'public/WYSIWYGFileManagerRequirements.php';
 if (strpos(CONF_UPLOADS_PATH, 's3://') !== false) {
-    require_once CONF_INSTALLATION_PATH . 'library/aws/aws-autoloader.php';
+    require_once CONF_INSTALLATION_PATH . 'vendor/autoload.php';
     AttachedFile::registerS3ClientStream();
 }
 define('SYSTEM_INIT', true);
-define('CONF_WEB_APP_VERSION', 'RV-10.0.0.20230102');
+define('WHITE_LABELED', false);
+define('CONF_WEB_APP_VERSION', 'RV-10.0.0.20230809');

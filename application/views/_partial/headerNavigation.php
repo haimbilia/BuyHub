@@ -30,10 +30,10 @@ if ($headerNavigation || $isMegaMenuEnabled) {
     }
     
     if ($layoutType == applicationConstants::SCREEN_DESKTOP) {
-        require_once('desktop-nav.php');
+        require('desktop-nav.php');
     }
 
     if ($layoutType == applicationConstants::SCREEN_MOBILE) {
-        require_once('mobile-nav.php');
+        require_once('navigation/mobile-nav.php');
     }
 }

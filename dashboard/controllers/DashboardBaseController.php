@@ -23,10 +23,9 @@ class DashboardBaseController extends FatController
             }
             FatApp::redirectUser(UrlHelper::generateUrl('maintenance', '', [], CONF_WEBROOT_FRONTEND));
         }
-
+        $this->checkTempTokenLogin();
         CommonHelper::initCommonVariables();
         $this->initCommonVariables();
-        $this->tempTokenLogin();
         $this->_template->addCss(CONF_MAIN_CSS_DIR_PATH . '/main-' . CommonHelper::getLayoutDirection() . '.css');
     }
 
@@ -121,7 +120,7 @@ class DashboardBaseController extends FatController
                     'charactersSupportedFor' => Labels::getLabel('VLBL_Only_characters_are_supported_for', $this->siteLangId),
                     'pleaseEnterIntegerValue' => Labels::getLabel('VLBL_Please_enter_integer_value_for', $this->siteLangId),
                     'pleaseEnterNumericValue' => Labels::getLabel('VLBL_Please_enter_numeric_value_for', $this->siteLangId),
-                    'startWithLetterOnlyAlphanumeric' => Labels::getLabel('VLBL_must_start_with_a_letter_and_can_contain_only_alphanumeric_characters._Length_must_be_between_4_to_20_characters', $this->siteLangId),
+                    'startWithLetterOnlyAlphanumeric' => Labels::getLabel('ERR_INVALID_USERNAME', $this->siteLangId),
                     'mustBeBetweenCharacters' => Labels::getLabel('VLBL_Length_Must_be_between_6_to_20_characters', $this->siteLangId),
                     'invalidValues' => Labels::getLabel('VLBL_Length_Invalid_value_for', $this->siteLangId),
                     'shouldNotBeSameAs' => Labels::getLabel('VLBL_should_not_be_same_as', $this->siteLangId),
@@ -373,7 +372,6 @@ class DashboardBaseController extends FatController
 
     public function setUpNewsLetter()
     {
-        include_once CONF_INSTALLATION_PATH . 'library/Mailchimp.php';
         $siteLangId = CommonHelper::getLangId();
         $post = FatApp::getPostedData();
         $frm = Common::getNewsLetterForm(CommonHelper::getLangId());
@@ -386,13 +384,10 @@ class DashboardBaseController extends FatController
             FatUtility::dieWithError(Message::getHtml());
         }
 
-        $MailchimpObj = new Mailchimp($api_key);
-        $Mailchimp_ListsObj = new Mailchimp_Lists($MailchimpObj);
-
         try {
-            $subscriber = $Mailchimp_ListsObj->subscribe($list_id, array('email' => htmlentities($post['email'])));
-            if (empty($subscriber['leid'])) {
-                Message::addErrorMessage(Labels::getLabel('ERR_NEWSLETTER_SUBSCRIPTION_VALID_EMAIL', $siteLangId));
+            MailchimpHelper::subscribe(['email' => htmlentities($post['email'])], $this->siteLangId);
+            if (!empty($subscriber['msg'])) {
+                Message::addErrorMessage($subscriber['msg']);
                 FatUtility::dieWithError(Message::getHtml());
             }
         } catch (Mailchimp_Error $e) {
@@ -685,44 +680,6 @@ class DashboardBaseController extends FatController
         return $this->app_user['temp_user_id'] = $generatedTempId;
     }
 
-    public function tempTokenLogin()
-    {
-        $forTempTokenBasedGetActions = array('downloadDigitalFile');
-        if (!in_array($this->action, $forTempTokenBasedGetActions)) {
-            return;
-        }
-
-        $get = FatApp::getQueryStringData();
-        if (empty($get) || !array_key_exists('ttk', $get)) {
-            return;
-        }
-
-        $ttk = ($get['ttk'] != '') ? $get['ttk'] : '';
-
-        if (strlen($ttk) != UserAuthentication::TOKEN_LENGTH) {
-            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_TEMP_TOKEN', CommonHelper::getLangId()));
-        }
-
-        $userId = 0;
-        if (!empty($get) && array_key_exists('user_id', $get)) {
-            $userId = FatUtility::int($get['user_id']);
-        }
-
-        $uObj = new User($userId);
-        if (!$user_temp_token_data = $uObj->validateAPITempToken($ttk)) {
-            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_TOKEN_DATA', CommonHelper::getLangId()));
-        }
-
-        if (!$user = $uObj->getUserInfo(array('credential_username', 'credential_password', 'user_id'), true, true)) {
-            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', CommonHelper::getLangId()));
-        }
-
-        $authentication = new UserAuthentication();
-        if ($authentication->login($user['credential_username'], $user['credential_password'], $_SERVER['REMOTE_ADDR'], false)) {
-            $uObj->deleteUserAPITempToken();
-        }
-    }
-
     public function translateLangFields($tbl, $data)
     {
         if (!empty($tbl) && !empty($data)) {
@@ -892,5 +849,46 @@ class DashboardBaseController extends FatController
         $this->set('recordCount', $recordCount);
         $this->set('pageSize', $pageSize);
         $this->set('page', $page);
+    }
+
+    private function checkTempTokenLogin()
+    {
+        if (!in_array($this->_controllerName, ['BuyerController', 'StripeConnectPayController'])) {
+            return;
+        }
+
+        if (in_array($this->_controllerName, ['BuyerController']) && !in_array($this->_actionName, ['downloadDigitalFile', 'downloadDigitalFiles', 'downloadAttachedFileForReturn'])) {
+            return;
+        }
+
+        $get = FatApp::getQueryStringData();
+        if (empty($get) || !array_key_exists('ttk', $get)) {
+            return;
+        }
+
+        $ttk = ($get['ttk'] != '') ? $get['ttk'] : '';
+
+        if (strlen($ttk) != UserAuthentication::TOKEN_LENGTH) {
+            FatUtility::dieJSONError(Labels::getLabel('ERR_INVALID_TEMP_TOKEN', CommonHelper::getLangId()));
+        }
+
+        $userId = 0;
+        if (!empty($get) && array_key_exists('user_id', $get)) {
+            $userId = FatUtility::int($get['user_id']);
+        }
+
+        $uObj = new User($userId);
+        if (!$uObj->validateAPITempToken($ttk)) {
+            FatUtility::dieJSONError(Labels::getLabel('ERR_INVALID_TOKEN_DATA', CommonHelper::getLangId()));
+        }
+
+        if (!$user = $uObj->getUserInfo(array('credential_username', 'credential_password', 'user_id'), true, true)) {
+            FatUtility::dieJSONError(Labels::getLabel('ERR_INVALID_REQUEST', CommonHelper::getLangId()));
+        }
+
+        $authentication = new UserAuthentication();
+        if ($authentication->login($user['credential_username'], $user['credential_password'], $_SERVER['REMOTE_ADDR'], false)) {
+            $uObj->deleteUserAPITempToken();
+        }
     }
 }

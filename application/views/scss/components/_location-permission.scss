@@ -1,10 +1,12 @@
 .geo-location {
     display: none;
+
     @include media-breakpoint-up(lg) {
         display: block;
         position: relative;
         padding-#{$start-direction}: 1.5rem;
     }
+
     &::before {
         content: "";
         background: $border-color;
@@ -13,10 +15,12 @@
         position: absolute;
         #{$start-direction}: 0;
     }
+
     &_inner {
         display: block;
         align-items: center;
     }
+
     &_trigger {
         text-align: inherit;
         background: none;
@@ -26,18 +30,20 @@
         color: currentColor;
         padding: 0;
         width: 100%;
+
         .svg {
             margin-#{$end-direction}: 6px;
             fill: $secondary-color;
         }
     }
+
     &-selected {
         white-space: nowrap;
         max-width: 212px;
         overflow: hidden;
         text-overflow: ellipsis;
         display: block;
-        font-weight: $font-weight-light;
+        font-weight: $font-weight-regular;
     }
 
     &_body {
@@ -45,20 +51,24 @@
         // width: 100%;
         padding: 2rem;
     }
+
     .btn-detect {
         display: flex;
         align-items: center;
         text-align: #{$start-direction};
-        font-weight: 600;
+        font-weight: $font-weight-bold;
         white-space: nowrap;
+
         .svg {
             fill: $secondary-color;
             margin-#{$end-direction}: 8px;
         }
     }
+
     .or {
         margin: 1.5rem 0;
     }
+
     &_input {
         border: $input-border-style $input-border-width $input-border-color;
         background-color: transparent;
@@ -77,15 +87,18 @@
         margin-bottom: 2rem;
     }
 }
+
 .geo-location-mobile {
     .button-geo-location {
         margin-bottom: 1.5rem;
     }
+
     .geo-location_body {
         //border: $border;
         padding: 0;
     }
 }
+
 .location-popup-width {
     max-width: 630px;
     padding: 0 !important;
@@ -99,21 +112,25 @@
     background-size: contain;
     padding-top: 30px;
     padding-bottom: 100px;
+
     &_head {
         max-width: 450px;
         margin: 0 auto;
         padding: 0 3rem;
+
         h5 {
-            font-weight: 500;
+            font-weight: $font-weight-normal;
             margin-bottom: 1rem;
             line-height: 1.5;
         }
+
         p {
             font-size: 0.89rem;
             margin-bottom: 2rem;
             color: $txt-gray;
         }
     }
+
     &_body {
         .default {
             border: $border;
@@ -126,7 +143,8 @@
             margin: 0 1rem;
             position: relative;
             min-width: 300px;
-            font-weight: $font-weight-light;
+            font-weight: $font-weight-regular;
+
             &:after {
                 position: absolute;
                 #{$end-direction}: 1.2rem;
@@ -139,39 +157,48 @@
                 border-top: 2px solid $brand-color;
                 border-right: 2px solid $brand-color;
                 transform: rotate(45deg);
+
                 [dir="rtl"] & {
                     #{$start-direction}: 1.2rem;
                     transform: rotate(-135deg);
                 }
             }
+
             .icn {
                 max-width: 30px;
                 margin-#{$end-direction}: 1rem;
             }
+
             .location-name {
                 font-size: 0.85rem;
+
                 strong {
-                    font-weight: 600;
+                    font-weight: $font-weight-bold;
                     color: $txt-body;
                 }
             }
+
             &:hover {
                 border-color: $brand-color;
             }
         }
+
         .or {
             max-width: none;
             margin: 1.5rem auto;
-            font-weight: 400;
+            font-weight: $font-weight-regular;
+
             &:after,
             &:before {
                 width: 45%;
                 background: $border-color;
             }
         }
+
         .location-search {
             max-width: 300px;
             margin: 0 auto;
+
             input {
                 font-size: 0.8rem;
                 background-image: url(images/retina/magni-gray.svg);
@@ -180,6 +207,7 @@
                 background-size: 20px;
                 padding: 1.5rem;
                 padding-#{$start-direction}: 45px;
+
                 [dir="rtl"] & {
                     padding-#{$end-direction}: 45px;
                     background-position: calc(100% - 10px) center;

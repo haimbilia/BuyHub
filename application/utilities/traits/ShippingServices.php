@@ -22,7 +22,7 @@ trait ShippingServices
             LibHelper::dieJsonError(Labels::getLabel("ERR_INVALID_ORDER", $this->langId));
         }
 
-        if ((in_array(strtolower($orderData['plugin_code']), ['cashondelivery', 'payatstore']) ||  in_array($orderData['op_status_id'], (new Orders())->getAdminAllowedUpdateShippingUser())) && !CommonHelper::canAvailShippingChargesBySeller($orderData['op_selprod_user_id'], $orderData['opshipping_by_seller_user_id']) && !$orderData['optsu_user_id']) {
+        if (((isset($orderData['plugin_code']) && in_array(strtolower($orderData['plugin_code']), ['cashondelivery', 'payatstore'])) ||  in_array($orderData['op_status_id'], (new Orders())->getAdminAllowedUpdateShippingUser())) && !CommonHelper::canAvailShippingChargesBySeller($orderData['op_selprod_user_id'], $orderData['opshipping_by_seller_user_id']) && !$orderData['optsu_user_id']) {
             LibHelper::dieJsonError([
                 'msg' =>  Labels::getLabel('ERR_PLEASE_ASSIGN_SHIPPING_USER', $this->langId),
                 'status' => 0,
@@ -229,7 +229,7 @@ trait ShippingServices
             LibHelper::dieJsonError($msg);
         }
 
-        if ((in_array(strtolower($data['plugin_code']), ['cashondelivery', 'payatstore']) || in_array($data['op_status_id'], (new Orders())->getAdminAllowedUpdateShippingUser())) && !CommonHelper::canAvailShippingChargesBySeller($data['op_selprod_user_id'], $data['opshipping_by_seller_user_id']) && !$data['optsu_user_id']) {
+        if (((isset($data['plugin_code']) && in_array(strtolower($data['plugin_code']), ['cashondelivery', 'payatstore'])) || in_array($data['op_status_id'], (new Orders())->getAdminAllowedUpdateShippingUser())) && !CommonHelper::canAvailShippingChargesBySeller($data['op_selprod_user_id'], $data['opshipping_by_seller_user_id']) && !$data['optsu_user_id']) {
             LibHelper::dieJsonError([
                 'msg' =>  Labels::getLabel('ERR_PLEASE_ASSIGN_SHIPPING_USER', $this->langId),
                 'status' => 0,
@@ -241,18 +241,18 @@ trait ShippingServices
 
         $this->validateShippingService($data);
 
-        if (empty($data["opship_orderid"]) && 'ShipStationShipping' == $this->shippingService->keyName) {
+        /* if (empty($data["opship_orderid"]) && 'ShipStationShipping' == $this->shippingService->keyName) {
             $msg = Labels::getLabel("MSG_MUST_GENERATE_LABEL_BEFORE_SHIPMENT", $this->langId);
             LibHelper::dieJsonError($msg);
-        }
+        } */
 
-        if ('ShipStationShipping' == $this->shippingService->keyName) {
+        /* if ('ShipStationShipping' == $this->shippingService->keyName) {
             $opshipmentId = $data["opship_orderid"];
         } else {
-            $opshipmentId = $data["opshipping_service_code"];
-        }
+        } */
+        $opshipmentId = $data["opshipping_service_code"];
 
-        if (method_exists($this->shippingService, 'loadOrder')) {
+        if (method_exists($this->shippingService, 'loadOrder') && 'ShipStationShipping' != $this->shippingService->keyName) {
             if (false === $this->shippingService->loadOrder($opshipmentId)) {
                 LibHelper::dieJsonError($this->shippingService->getError());
             }
@@ -284,7 +284,7 @@ trait ShippingServices
 
         $orderInfo = $this->shippingService->getResponse();
 
-        $trackingNumber = ('ShipStationShipping' == $this->shippingService->keyName) ? $data['opship_tracking_number'] : $orderInfo['tracking_code'];
+        $trackingNumber = ('ShipStationShipping' == $this->shippingService->keyName) ? $requestParam['trackingNumber'] : $orderInfo['tracking_code'];
         $updateData = [
             'opship_op_id' => $opId,
             'opship_order_number' => $orderInfo['orderNumber'],
@@ -655,7 +655,7 @@ trait ShippingServices
         $shippingAddress = [];
         if (!empty($addresses)) {
             $shippingAddress = (!empty($addresses[Orders::SHIPPING_ADDRESS_TYPE])) ? $addresses[Orders::SHIPPING_ADDRESS_TYPE] : array();
-            $this->shippingService->setAddress($shippingAddress['oua_name'], $shippingAddress['oua_address1'], $shippingAddress['oua_address2'], $shippingAddress['oua_city'], $shippingAddress['oua_state'], $shippingAddress['oua_zip'], $shippingAddress['oua_country_code'], $shippingAddress['oua_phone']);
+            $this->shippingService->setAddress($shippingAddress['oua_name'], $shippingAddress['oua_address1'], $shippingAddress['oua_address2'], $shippingAddress['oua_city'], $shippingAddress['oua_state'], $shippingAddress['oua_zip'], $shippingAddress['oua_country_code'], $shippingAddress['oua_phone'], $shippingAddress['oua_state_code']);
         }
 
         $shippingHandledBySeller = CommonHelper::canAvailShippingChargesBySeller($orderData['op_selprod_user_id'], $orderData['opshipping_by_seller_user_id']);
@@ -664,6 +664,11 @@ trait ShippingServices
             $referenceId = str_pad($shopAddress['shop_id'], 6, "0", STR_PAD_LEFT);
             $this->shippingService->setAddressReference($referenceId);
         }
+
+        if (method_exists($this->shippingService, 'setShopSellerId')) {
+            $this->shippingService->setShopSellerId($orderData['op_selprod_user_id']);
+        }
+        
         if (method_exists($this->shippingService, 'setFromAddress')) {
             $this->shippingService->setFromAddress($shopAddress['shop_name'], $shopAddress['line1'], $shopAddress['line2'], $shopAddress['city'], $shopAddress['state'], $shopAddress['postalCode'], $shopAddress['countryCode'], $shopAddress['phone']);
         }

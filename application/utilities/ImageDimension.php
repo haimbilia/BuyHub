@@ -233,8 +233,8 @@ class ImageDimension extends FatUtility
         $arr =  [
             self::VIEW_DESKTOP => [self::WIDTH => 2000, self::HEIGHT => 666],
             self::VIEW_MOBILE => [self::WIDTH => 640, self::HEIGHT => 360],
-            self::VIEW_TABLET => [self::WIDTH => 1024, self::HEIGHT => 360],
-            self::VIEW_THUMB => [self::WIDTH => 200, self::HEIGHT => 66],
+            self::VIEW_TABLET => [self::WIDTH => 1024, self::HEIGHT => 576],
+            self::VIEW_THUMB => [self::WIDTH => 200, self::HEIGHT => 112],
         ];
 
         return self::returnData($arr, self::VIEW_DESKTOP, $sizeType);
@@ -309,7 +309,7 @@ class ImageDimension extends FatUtility
         $arr =  [
             self::VIEW_DESKTOP => [self::WIDTH => 2048, self::HEIGHT => 512],
             self::VIEW_MOBILE => [self::WIDTH => 640, self::HEIGHT => 360],
-            self::VIEW_TABLET => [self::WIDTH => 1024, self::HEIGHT => 360],
+            self::VIEW_TABLET => [self::WIDTH => 1024, self::HEIGHT => 576],
             self::VIEW_THUMB => [self::WIDTH => 250, self::HEIGHT => 100],
         ];
 
@@ -360,9 +360,9 @@ class ImageDimension extends FatUtility
     public static function getBrandImageData(string $sizeType = ''): array
     {
         $arr =  [
-            self::VIEW_THUMB => [self::WIDTH => 250, self::HEIGHT => 100],
+            self::VIEW_THUMB => [self::WIDTH => 200, self::HEIGHT => 112],
             self::VIEW_MOBILE => [self::WIDTH => 640, self::HEIGHT => 360],
-            self::VIEW_TABLET => [self::WIDTH => 1024, self::HEIGHT => 360],
+            self::VIEW_TABLET => [self::WIDTH => 1024, self::HEIGHT => 576],
             self::VIEW_DESKTOP => [self::WIDTH => 2000, self::HEIGHT => 500],
         ];
 
@@ -741,10 +741,10 @@ class ImageDimension extends FatUtility
     public static function getCategoryBanner(string $sizeType = ''): array
     {
         $arr =  [
-            self::VIEW_THUMB => [self::WIDTH => 252, self::HEIGHT => 63],
-            self::VIEW_MEDIUM => [self::WIDTH => 300, self::HEIGHT => 75],
+            self::VIEW_THUMB => [self::WIDTH => 200, self::HEIGHT => 112],
+            self::VIEW_MEDIUM => [self::WIDTH => 300, self::HEIGHT => 168],
             self::VIEW_MOBILE => [self::WIDTH => 640, self::HEIGHT => 360],
-            self::VIEW_TABLET => [self::WIDTH => 1024, self::HEIGHT => 360],
+            self::VIEW_TABLET => [self::WIDTH => 1024, self::HEIGHT => 576],
             self::VIEW_DESKTOP => [self::WIDTH => 2000, self::HEIGHT => 500],
         ];
 
@@ -785,35 +785,34 @@ class ImageDimension extends FatUtility
             $arr =  [
                 self::VIEW_DESKTOP => [self::WIDTH => 2000, self::HEIGHT => 666],
                 self::VIEW_MOBILE => [self::WIDTH => 640, self::HEIGHT => 360],
-                self::VIEW_TABLET => [self::WIDTH => 1024, self::HEIGHT => 360],
-                self::VIEW_THUMB => [self::WIDTH => 200, self::HEIGHT => 66],
+                self::VIEW_TABLET => [self::WIDTH => 1024, self::HEIGHT => 576],
+                self::VIEW_THUMB => [self::WIDTH => 200, self::HEIGHT => 112],
             ];
         }
 
         if ($layout == Collections::TYPE_BANNER_LAYOUT2) {
             $arr =  [
                 self::VIEW_DESKTOP => [self::WIDTH => 920, self::HEIGHT => 690],
-                self::VIEW_MOBILE => [self::WIDTH => 920, self::HEIGHT => 690],
-                self::VIEW_TABLET => [self::WIDTH => 920, self::HEIGHT => 690],
-                self::VIEW_THUMB => [self::WIDTH => 200, self::HEIGHT => 150],
+                self::VIEW_MOBILE => [self::WIDTH => 640, self::HEIGHT => 360],
+                self::VIEW_TABLET => [self::WIDTH => 1024, self::HEIGHT => 576],
+                self::VIEW_THUMB => [self::WIDTH => 200, self::HEIGHT => 112],
             ];
         }
 
-        if ($layout == Collections::TYPE_BANNER_LAYOUT3) {
+        /* if ($layout == Collections::TYPE_BANNER_LAYOUT3) {
             $arr =  [
-                self::VIEW_DESKTOP => [self::WIDTH => 920, self::HEIGHT => 690],
-                self::VIEW_MOBILE => [self::WIDTH => 920, self::HEIGHT => 690],
-                self::VIEW_TABLET => [self::WIDTH => 920, self::HEIGHT => 690],
-                self::VIEW_THUMB => [self::WIDTH => 200, self::HEIGHT => 150],
+                self::VIEW_DESKTOP => [self::WIDTH => 640, self::HEIGHT => 360],
+                self::VIEW_MOBILE => [self::WIDTH => 640, self::HEIGHT => 360],
+                self::VIEW_TABLET => [self::WIDTH => 1024, self::HEIGHT => 576],
+                self::VIEW_THUMB => [self::WIDTH => 200, self::HEIGHT => 112],
             ];
-        }
+        } */
 
         if (empty($layout)) {
             $arr =  [
                 self::VIEW_DESKTOP => [self::WIDTH => 2000, self::HEIGHT => 666],
                 self::VIEW_MOBILE => [self::WIDTH => 640, self::HEIGHT => 360],
-                self::VIEW_TABLET => [self::WIDTH => 1024, self::HEIGHT => 360],
-
+                self::VIEW_TABLET => [self::WIDTH => 1024, self::HEIGHT => 576],
             ];
         }
 

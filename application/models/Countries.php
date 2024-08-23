@@ -83,6 +83,11 @@ class Countries extends MyAppModel
         $langId = FatUtility::int($langId);
 
         $srch = $this->searchCountriesObj($langId, $isActive);
+
+        if(!in_array($idCol,['country_id','country_code','country_code_alpha3'])){
+            $idCol = 'country_code';
+        }
+
         $srch->addMultipleFields(
             array(
                 $idCol,
@@ -181,6 +186,7 @@ class Countries extends MyAppModel
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
         $rs = $srch->getResultSet();
-        return (array) FatApp::getDb()->fetch($rs);
+        $row = FatApp::getDb()->fetch($rs);
+        return (is_array($row) ? $row : []);
     }
 }

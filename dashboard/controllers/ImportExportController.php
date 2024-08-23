@@ -79,7 +79,7 @@ class ImportExportController extends SellerBaseController
         if (!is_uploaded_file($_FILES['import_file']['tmp_name'])) {
             FatUtility::dieJsonError(Labels::getLabel('ERR_PLEASE_SELECT_A_CSV_FILE', $this->siteLangId));
         }
-        
+
         $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
         $obj = new Importexport();
         if (!$obj->isUploadedFileValidMimes($_FILES['import_file'])) {
@@ -477,7 +477,7 @@ class ImportExportController extends SellerBaseController
         return $frm;
     }
 
-    private function getImportExportForm($langId, $type = 'EXPORT', $actionType)
+    private function getImportExportForm($langId, $type, $actionType)
     {
         $frm = new Form('frmImportExport', array('id' => 'frmImportExport'));
         $languages = Language::getAllNames();
@@ -603,7 +603,7 @@ class ImportExportController extends SellerBaseController
             $rangeTypeFld->requirements()->addOnChangerequirementUpdate(Importexport::BY_BATCHES, 'eq', 'batch_count', $batchCountReqObj);
             $rangeTypeFld->requirements()->addOnChangerequirementUpdate(Importexport::BY_BATCHES, 'eq', 'batch_number', $batchNumberReqObj);
         }
-		$this->set('displayRangeFields',$displayRangeFields);
+        $this->set('displayRangeFields', $displayRangeFields);
         return $frm;
     }
 

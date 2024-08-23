@@ -578,7 +578,6 @@ $("document").ready(function () {
         $(pageContent).prepend(fcom.getLoader(true));
         fcom.ajax(action, data, function (t) {
             submitBtn.val(btnText);
-            /* debugger; */
             try {
                 var json = $.parseJSON(t);
                 if (typeof json.status != "undefined" && 1 > json.status) {

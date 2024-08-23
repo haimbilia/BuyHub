@@ -66,31 +66,3 @@ $(document).ready(function () {
         });
     };
 })();
-
-function fbSubmit() {
-    FB.getLoginStatus(function (response) {
-        if (response.status === 'connected') {
-            facebook_redirect(response);
-        } else if (response.status === 'not_authorized') {
-            FB.login(function (response) {
-                facebook_redirect(response);
-            }, {
-                scope: facebookScope
-            });
-        } else {
-            FB.login(function (response) {
-                if (response.authResponse) {
-
-                    //$(window.parent.document).find("#facebook_btn2").trigger("click");;
-
-                    /* window.parent.$('#facebook_btn2').trigger('click'); */
-                    //window.parent.document.getElementById("facebook_btn2").onclick();
-                    //window.parent.fbSubmit();
-                    facebook_redirect(response);
-                }
-            }, {
-                scope: facebookScope
-            });
-        }
-    });
-}

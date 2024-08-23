@@ -127,6 +127,7 @@ $(function () {
         },
 
         displayProcessing: function () {
+            $.ykmsg.clear();
             fcom.processingCounter++;
             $.ykmsg.info(langLbl.processing, -1, fcom.processingClass + " " + fcom.processingClass + '-' + fcom.processingCounter);
         },
@@ -386,6 +387,14 @@ $(function () {
         });
     };
 
+    getCountryIso2CodeFromDialCode = function (dialCode) {
+        var countriesData = window.intlTelInputGlobals.getCountryData();
+        var countryData = countriesData.filter(function (country) {
+            return country.dialCode == dialCode;
+        });
+        return countryData[0].iso2;
+    }
+
     installJsColor = function () {
         if (0 < $(".jscolor").length) {
             $(".jscolor").each(function () {
@@ -462,6 +471,17 @@ $(function () {
         /* Binding Feather Light gallery */
         bindFeatherLight();
         /* Binding Feather Light gallery */
+
+        let textArea = $('textarea');
+        if(textArea.length > 0) {
+            $.each(textArea, function (key, item) {
+                let id = $(item).attr('id');
+                let editorEle = $('#idContentWordoEdit_' + id);
+                if('undefined' != id && item.style.display == 'none' && 0 < editorEle.length) {
+                    editorEle.css('left', '0');
+                }
+            });
+        }
     });
 })();
 
@@ -680,19 +700,12 @@ $(document).on("shown.bs.modal", "#search-main", function () {
 
 $(window).keydown(function (e) {
     if ((e.ctrlKey || e.metaKey) && e.keyCode === 70) {
-        if (0 == $.cookie("quickSearchCtrlJs") || "undefined" == typeof $.cookie("quickSearchCtrlJs")) {
-            $("#search-main").modal("show");
-            e.preventDefault();
+        if ($("#search-main").is(':visible')) {
+            $("#search-main").modal("hide");
+            return;
         }
-    }
-});
-
-$(document).on("click", "#quickSearchCtrlJs", function () {
-    if ($(this).is(":checked")) {
-        $.cookie("quickSearchCtrlJs", 1, { expires: 30, path: siteConstants.rooturl });
-        $("#search-main").modal("hide");
-    } else {
-        $.cookie("quickSearchCtrlJs", 0, { path: siteConstants.rooturl });
+        $("#search-main").modal("show");
+        e.preventDefault();
     }
 });
 

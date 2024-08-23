@@ -135,9 +135,8 @@ class ProductsController extends MyAppController
 
         $data = array_merge($data, $common, $arr);
 
-        $analyticsId = FatApp::getConfig("CONF_ANALYTICS_ID");
-        if (!empty($analyticsId) && 0 < $data['recordCount'] && FatApp::getConfig('CONF_ANALYTICS_ADVANCE_ECOMMERCE', FatUtility::VAR_INT, 0)) {
-            $et = new EcommerceTracking($analyticsId, $method, UserAuthentication::getLoggedUserId(true));
+        if (0 < $data['recordCount'] && FatApp::getConfig('CONF_ANALYTICS_ADVANCE_ECOMMERCE', FatUtility::VAR_INT, 0)) {
+            $et = new EcommerceTracking($method, UserAuthentication::getLoggedUserId(true));
             $et->addImpression(($method == 'search' ? Labels::getLabel('MSG_SEARCH_RESULTS', $this->siteLangId) : $arr['pageTitle']));
             $productPostion = 1;
             foreach ($data['products'] as $product) {
@@ -201,6 +200,14 @@ class ProductsController extends MyAppController
             $brandsArr = unserialize($brandFilter);
         }
 
+        if (true === MOBILE_APP_API_CALL) {
+            $this->set('data', [
+                'brandsArr' => $brandsArr,
+                'brandsCheckedArr' => $brandsCheckedArr,
+            ]);
+            $this->_template->render();
+        }
+
         $this->set('brandsArr', $brandsArr);
         $this->set('brandsCheckedArr', $brandsCheckedArr);
 
@@ -227,6 +234,7 @@ class ProductsController extends MyAppController
         $cacheKey = FilterHelper::getCacheKey($this->siteLangId, $headerFormParamsAssocArr);
 
         $headerFormParamsAssocArr['doNotJoinSpecialPrice'] = true;
+        $headerFormParamsAssocArr['joinWithRelationTableInstead'] = true;
 
         /* Categories Data[ ToDO need to update logic fetch from prodsrch obj or catid only*/
         $categoriesArr = array();
@@ -247,7 +255,7 @@ class ProductsController extends MyAppController
 
         /* Brand Filters Data[ */
         $brandsCheckedArr = FilterHelper::selectedBrands($headerFormParamsAssocArr);
-        $brandsArr = FilterHelper::brands($prodSrchObj, $this->siteLangId, $headerFormParamsAssocArr, false, true);
+        $brandsArr = FilterHelper::brands($prodSrchObj, $this->siteLangId, $headerFormParamsAssocArr, MOBILE_APP_API_CALL, true);
         /* ] */
 
         /* {Can modify the logic fetch data directly from query . will implement later}
@@ -404,21 +412,21 @@ class ProductsController extends MyAppController
         exit;
     }
 
-    private function getSelProdReviewObj()
+    private function getSelProdReviewObj($forReviewsRating = true)
     {
         $selProdReviewObj = new SelProdReviewSearch();
         $selProdReviewObj->joinProducts($this->siteLangId);
         $selProdReviewObj->joinSellerProducts($this->siteLangId);
         $selProdReviewObj->joinSelProdRating();
         $selProdReviewObj->joinUser();
-        // $selProdReviewObj->joinSelProdReviewHelpful();
         $selProdReviewObj->addCondition('ratingtype_type', 'IN', [RatingType::TYPE_PRODUCT, RatingType::TYPE_OTHER]);
-        $selProdReviewObj->doNotCalculateRecords();
-        $selProdReviewObj->doNotLimitRecords();
-        $selProdReviewObj->addGroupBy('spr.spreview_product_id');
-        // $selProdReviewObj->addGroupBy('sprh_spreview_id');
         $selProdReviewObj->addCondition('spr.spreview_status', '=', SelProdReview::STATUS_APPROVED);
-        $selProdReviewObj->addMultipleFields(array('spr.spreview_selprod_id', 'spr.spreview_product_id', "ROUND(AVG(sprating_rating),2) as prod_rating", "COUNT(DISTINCT(spreview_id)) AS totReviews"));
+        if (true == $forReviewsRating) {
+            $selProdReviewObj->doNotCalculateRecords();
+            $selProdReviewObj->doNotLimitRecords();
+            $selProdReviewObj->addGroupBy('spr.spreview_product_id');
+            $selProdReviewObj->addMultipleFields(array('spr.spreview_selprod_id', 'spr.spreview_product_id', "ROUND(AVG(sprating_rating),2) as prod_rating", "COUNT(DISTINCT(spreview_id)) AS totReviews"));
+        }
         return $selProdReviewObj;
     }
 
@@ -477,24 +485,18 @@ class ProductsController extends MyAppController
             )
         );
         $productRs = $prodSrch->getResultSet();
-        return (array) FatApp::getDb()->fetch($productRs);
+        $row = FatApp::getDb()->fetch($productRs);
+        return (is_array($row) ? $row : []);
     }
 
-    public function view($selprod_id = 0)
+    public function view(int $selprod_id)
     {
-        $selprod_id = FatUtility::int($selprod_id);
-        if (1 > $selprod_id) {
-            if (true === MOBILE_APP_API_CALL) {
-                FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
-            }
-            FatUtility::exitWithErrorCode(404);
-        }
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        $this->set('page', $page);
 
         $product = $this->getProductDetail($selprod_id);
         if (!$product) {
-            if (true === MOBILE_APP_API_CALL) {
-                FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
-            }
+            LibHelper::exitWithError(Labels::getLabel('ERR_CURRENTLY_THE_PRODUCT_IS_UNAVAILABLE', $this->siteLangId), false, true);
             FatUtility::exitWithErrorCode(404);
         }
 
@@ -537,14 +539,16 @@ class ProductsController extends MyAppController
             );
         }
 
-        /* over all catalog product reviews */
-        $selProdReviewObj = $this->getSelProdReviewObj();
-        $selProdReviewObj->addCondition('spreview_product_id', '=', $product['product_id']);
-        $selProdReviewObj->addMultipleFields(array('sum(if(sprating_rating=1,1,0)) rated_1', 'sum(if(sprating_rating=2,1,0)) rated_2', 'sum(if(sprating_rating=3,1,0)) rated_3', 'sum(if(sprating_rating=4,1,0)) rated_4', 'sum(if(sprating_rating=5,1,0)) rated_5', 'SUM(sprating_rating) as totRatings', 'count(distinct(ratingtype_id)) as totalType'));
-        $selProdReviewObj->doNotCalculateRecords();
-        $selProdReviewObj->setPageSize(1);
-        $reviews = FatApp::getDb()->fetch($selProdReviewObj->getResultSet());
-        $this->set('reviews', $reviews);
+        if (1 < $page || false == MOBILE_APP_API_CALL) {
+            /* over all catalog product reviews */
+            $selProdReviewObj = $this->getSelProdReviewObj();
+            $selProdReviewObj->addCondition('spreview_product_id', '=', $product['product_id']);
+            $selProdReviewObj->addMultipleFields(array('sum(if(sprating_rating=1,1,0)) rated_1', 'sum(if(sprating_rating=2,1,0)) rated_2', 'sum(if(sprating_rating=3,1,0)) rated_3', 'sum(if(sprating_rating=4,1,0)) rated_4', 'sum(if(sprating_rating=5,1,0)) rated_5', 'SUM(sprating_rating) as totRatings', 'count(distinct(ratingtype_id)) as totalType'));
+            $selProdReviewObj->doNotCalculateRecords();
+            $selProdReviewObj->setPageSize(1);
+            $reviews = FatApp::getDb()->fetch($selProdReviewObj->getResultSet());
+            $this->set('reviews', $reviews);
+        }
 
         $subscription = false;
         $allowed_images = -1;
@@ -554,200 +558,181 @@ class ProductsController extends MyAppController
             $subscription = true;
         }
 
-        /* Product::recordProductWeightage($product['selprod_code'],SmartWeightageSettings::PRODUCT_VIEW);
-        Product::addUpdateProductBrowsingHistory($product['selprod_code'],SmartWeightageSettings::PRODUCT_VIEW); */
-
-        /* Current Product option Values[ */
-        $options = SellerProduct::getSellerProductOptions($selprod_id, false);
-        $productSelectedOptionValues = array();
-        $productGroupImages = array();
-        $productImagesArr = array();
-
-        if (count($options) > 0) {
-            foreach ($options as $op) {
-                /* Product UPC code [ */
-                $product['product_upc'] = UpcCode::getUpcCode($product['product_id'], $op['selprodoption_optionvalue_id']);
-                /* ] */
-                $images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_PRODUCT_IMAGE, $product['product_id'], $op['selprodoption_optionvalue_id'], $this->siteLangId, true, '', $allowed_images);
-                if ($images) {
-                    $productImagesArr += $images;
-                }
-                $productSelectedOptionValues[$op['selprodoption_option_id']] = $op['selprodoption_optionvalue_id'];
-            }
-        }
-
-        if (count($productImagesArr) > 0) {
-            foreach ($productImagesArr as $image) {
-                $afileId = $image['afile_id'];
-                if (!array_key_exists($afileId, $productGroupImages)) {
-                    $productGroupImages[$afileId] = array();
-                }
-                $productGroupImages[$afileId] = $image;
-            }
-        }
-
-        $product['selectedOptionValues'] = $productSelectedOptionValues;
-        /* ] */
-
-        if (isset($allowed_images) && $allowed_images > 0) {
-            $universal_allowed_images_count = $allowed_images - count($productImagesArr);
-        }
-
-        $productUniversalImagesArr = array();
-        if (empty($productGroupImages) || !$subscription || isset($universal_allowed_images_count)) {
-            $universalImages = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_PRODUCT_IMAGE, $product['product_id'], -1, $this->siteLangId, true, '');
-            /* CommonHelper::printArray($universalImages); die; */
-            if ($universalImages) {
-                if (isset($universal_allowed_images_count)) {
-                    $images = array_slice($universalImages, 0, $universal_allowed_images_count);
-                    $productUniversalImagesArr = $images;
-                    $universal_allowed_images_count = $universal_allowed_images_count - count($productUniversalImagesArr);
-                } elseif (!$subscription) {
-                    $productUniversalImagesArr = $universalImages;
-                }
-            }
-        }
-
-        if ($productUniversalImagesArr) {
-            foreach ($productUniversalImagesArr as $image) {
-                $afileId = $image['afile_id'];
-                if (!array_key_exists($afileId, $productGroupImages)) {
-                    $productGroupImages[$afileId] = array();
-                }
-                $productGroupImages[$afileId] = $image;
-            }
-        }
-
-        //abled and Get Shipping Rates [*/
-        $codEnabled = false;
-        $isProductShippedBySeller = Product::isProductShippedBySeller($product['product_id'], $product['product_seller_id'], $product['selprod_user_id']);
-        if ($isProductShippedBySeller) {
-            $walletBalance = User::getUserBalance($product['selprod_user_id']);
-            if ($product['selprod_cod_enabled']) {
-                $codEnabled = true;
-            }
-            $codMinWalletBalance = -1;
-            $shop_cod_min_wallet_balance = Shop::getAttributesByUserId($product['selprod_user_id'], 'shop_cod_min_wallet_balance');
-            if ($shop_cod_min_wallet_balance > -1) {
-                $codMinWalletBalance = $shop_cod_min_wallet_balance;
-            } elseif (FatApp::getConfig('CONF_COD_MIN_WALLET_BALANCE', FatUtility::VAR_FLOAT, -1) > -1) {
-                $codMinWalletBalance = FatApp::getConfig('CONF_COD_MIN_WALLET_BALANCE', FatUtility::VAR_FLOAT, -1);
-            }
-            if ($codMinWalletBalance > -1 && $codMinWalletBalance > $walletBalance) {
-                $codEnabled = false;
-            }
-            // $shippingRates = Product::getProductShippingRates($product['product_id'], $this->siteLangId, 0, $product['selprod_user_id']);
-            // $shippingDetails = Product::getProductShippingDetails($product['product_id'], $this->siteLangId, $product['selprod_user_id']);
-        } else {
-            if ($product['product_cod_enabled']) {
-                $codEnabled = true;
-            }
-            // $shippingRates = Product::getProductShippingRates($product['product_id'], $this->siteLangId, 0, 0);
-            // $shippingDetails = Product::getProductShippingDetails($product['product_id'], $this->siteLangId, 0);
-        }
-
-        if ($product['product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
-            $shippingRates = array();
-            // $shippingDetails = array();
-        }
-
-        $fulfillmentType = $product['selprod_fulfillment_type'];
-        if (true == $isProductShippedBySeller) {
-            if ($product['shop_fulfillment_type'] != Shipping::FULFILMENT_ALL) {
-                $fulfillmentType = $product['shop_fulfillment_type'];
-                $product['selprod_fulfillment_type'] = $fulfillmentType;
-            }
-        } else {
-            $fulfillmentType = isset($product['product_fulfillment_type']) ? $product['product_fulfillment_type'] : Shipping::FULFILMENT_SHIP;
-            $product['selprod_fulfillment_type'] = $fulfillmentType;
-            if (FatApp::getConfig('CONF_FULFILLMENT_TYPE', FatUtility::VAR_INT, -1) != Shipping::FULFILMENT_ALL) {
-                $fulfillmentType = FatApp::getConfig('CONF_FULFILLMENT_TYPE', FatUtility::VAR_INT, -1);
-                $product['selprod_fulfillment_type'] = $fulfillmentType;
-            }
-        }
-
-        if ($product['product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
-            $fulfillmentType = Shipping::FULFILMENT_ALL;
-        }
-
-        $this->set('fulfillmentType', $fulfillmentType);
-        $this->set('codEnabled', $codEnabled);
-        // $this->set('shippingRates', $shippingRates);
-        // $this->set('shippingDetails', $shippingDetails);
-        /*]*/
-
-        /*[ Product shipping cost */
-        $shippingCost = 0;
-        /*]*/
-        $sellerId = (false === MOBILE_APP_API_CALL) ? $product['selprod_user_id'] : 0;
-        $product['moreSellersArr'] = Product::getMoreSeller($product['selprod_code'], $this->siteLangId, $sellerId);
-
-        /* $product['selprod_return_policies'] = SellerProduct::getSelprodPolicies($product['selprod_id'], PolicyPoint::PPOINT_TYPE_RETURN, $this->siteLangId);
-        $product['selprod_warranty_policies'] = SellerProduct::getSelprodPolicies($product['selprod_id'], PolicyPoint::PPOINT_TYPE_WARRANTY, $this->siteLangId); */
-
-        /* Form buy product[ */
-        $frm = $this->getCartForm($this->siteLangId);
-        $frm->fill(array('selprod_id' => $selprod_id));
-        $this->set('frmBuyProduct', $frm);
-        /* ] */
-
-        $optionSrchObj = new ProductSearch($this->siteLangId);
-        $optionSrchObj->setDefinedCriteria();
-        $optionSrchObj->doNotCalculateRecords();
-        $optionSrchObj->doNotLimitRecords();
-        $optionSrchObj->joinTable(SellerProduct::DB_TBL_SELLER_PROD_OPTIONS, 'LEFT OUTER JOIN', 'selprod_id = tspo.selprodoption_selprod_id', 'tspo');
-        $optionSrchObj->joinTable(OptionValue::DB_TBL, 'LEFT OUTER JOIN', 'tspo.selprodoption_optionvalue_id = opval.optionvalue_id', 'opval');
-        $optionSrchObj->joinTable(Option::DB_TBL, 'LEFT OUTER JOIN', 'opval.optionvalue_option_id = op.option_id', 'op');
-        if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
-            $validDateCondition = " and oss.ossubs_till_date >= '" . date('Y-m-d') . "'";
-            $optionSrchObj->joinTable(Orders::DB_TBL, 'INNER JOIN', 'o.order_user_id=seller_user.user_id AND o.order_type=' . ORDERS::ORDER_SUBSCRIPTION . ' AND o.order_payment_status =1', 'o');
-            $optionSrchObj->joinTable(OrderSubscription::DB_TBL, 'INNER JOIN', 'o.order_id = oss.ossubs_order_id and oss.ossubs_status_id=' . FatApp::getConfig('CONF_DEFAULT_SUBSCRIPTION_PAID_ORDER_STATUS') . $validDateCondition, 'oss');
-        }
-        $optionSrchObj->addCondition('product_id', '=', $product['product_id']);
-
-        $optionSrch = clone $optionSrchObj;
-        $optionSrch->joinTable(Option::DB_TBL . '_lang', 'LEFT OUTER JOIN', 'op.option_id = op_l.optionlang_option_id AND op_l.optionlang_lang_id = ' . $this->siteLangId, 'op_l');
-        $optionSrch->addMultipleFields(array('option_id', 'option_is_color', 'COALESCE(option_name,option_identifier) as option_name'));
-        $optionSrch->addCondition('option_id', '!=', 'NULL');
-        $optionSrch->addCondition('selprodoption_selprod_id', '=', $selprod_id);
-        $optionSrch->addGroupBy('option_id');
-
-        $optionRs = $optionSrch->getResultSet();
-        if (true === MOBILE_APP_API_CALL) {
-            $optionRows = FatApp::getDb()->fetchAll($optionRs);
-        } else {
-            $optionRows = FatApp::getDb()->fetchAll($optionRs, 'option_id');
-        }
-
-        if (count($optionRows) > 0) {
-            foreach ($optionRows as &$option) {
-                $optionValueSrch = clone $optionSrchObj;
-                $optionValueSrch->joinTable(OptionValue::DB_TBL . '_lang', 'LEFT OUTER JOIN', 'opval.optionvalue_id = opval_l.optionvaluelang_optionvalue_id AND opval_l.optionvaluelang_lang_id = ' . $this->siteLangId, 'opval_l');
-                $optionValueSrch->addCondition('product_id', '=', $product['product_id']);
-                $optionValueSrch->addCondition('option_id', '=', $option['option_id']);
-                $optionValueSrch->addMultipleFields(array('COALESCE(product_name, product_identifier) as product_name', 'selprod_id', 'selprod_user_id', 'selprod_code', 'option_id', 'COALESCE(optionvalue_name,optionvalue_identifier) as optionvalue_name ', 'theprice', 'optionvalue_id', 'optionvalue_color_code'));
-                $optionValueSrch->addGroupBy('optionvalue_id');
-                $optionValueSrch->addOrder('optionvalue_display_order');
-                $optionValueRs = $optionValueSrch->getResultSet();
-                if (true === MOBILE_APP_API_CALL) {
-                    $optionValueRows = FatApp::getDb()->fetchAll($optionValueRs);
-                } else {
-                    $optionValueRows = FatApp::getDb()->fetchAll($optionValueRs, 'optionvalue_id');
-                }
-                $option['values'] = $optionValueRows;
-            }
-        }
-
-        $this->set('optionRows', $optionRows);
-
         $sellerProduct = new SellerProduct($selprod_id);
-        $upsellProducts = $sellerProduct->getUpsellProducts($product['selprod_id'], $this->siteLangId, $loggedUserId);
-        $upSellSelProdIdsArr = array_column($upsellProducts, 'selprod_id');
-        $upsellProductsRibbons = [
-            'tRightRibbons' => Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $upSellSelProdIdsArr)
-        ];
+        if (1 == $page) {
+            /* Current Product option Values[ */
+            $options = SellerProduct::getSellerProductOptions($selprod_id, false);
+            $productSelectedOptionValues = array();
+            $productGroupImages = array();
+            $productImagesArr = array();
 
-        if (true === MOBILE_APP_API_CALL) {
+            if (count($options) > 0) {
+                foreach ($options as $op) {
+                    /* Product UPC code [ */
+                    $product['product_upc'] = UpcCode::getUpcCode($product['product_id'], $op['selprodoption_optionvalue_id']);
+                    /* ] */
+                    $images = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_PRODUCT_IMAGE, $product['product_id'], $op['selprodoption_optionvalue_id'], $this->siteLangId, true, '', $allowed_images);
+                    if ($images) {
+                        $productImagesArr += $images;
+                    }
+                    $productSelectedOptionValues[$op['selprodoption_option_id']] = $op['selprodoption_optionvalue_id'];
+                }
+            }
+
+            if (count($productImagesArr) > 0) {
+                foreach ($productImagesArr as $image) {
+                    $afileId = $image['afile_id'];
+                    if (!array_key_exists($afileId, $productGroupImages)) {
+                        $productGroupImages[$afileId] = array();
+                    }
+                    $productGroupImages[$afileId] = $image;
+                }
+            }
+
+            $product['selectedOptionValues'] = $productSelectedOptionValues;
+            /* ] */
+
+            if (isset($allowed_images) && $allowed_images > 0) {
+                $universal_allowed_images_count = $allowed_images - count($productImagesArr);
+            }
+
+            $productUniversalImagesArr = array();
+            if (empty($productGroupImages) || !$subscription || isset($universal_allowed_images_count)) {
+                $universalImages = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_PRODUCT_IMAGE, $product['product_id'], -1, $this->siteLangId, true, '');
+                if ($universalImages) {
+                    if (isset($universal_allowed_images_count)) {
+                        $images = array_slice($universalImages, 0, $universal_allowed_images_count);
+                        $productUniversalImagesArr = $images;
+                        $universal_allowed_images_count = $universal_allowed_images_count - count($productUniversalImagesArr);
+                    } elseif (!$subscription) {
+                        $productUniversalImagesArr = $universalImages;
+                    }
+                }
+            }
+
+            if ($productUniversalImagesArr) {
+                foreach ($productUniversalImagesArr as $image) {
+                    $afileId = $image['afile_id'];
+                    if (!array_key_exists($afileId, $productGroupImages)) {
+                        $productGroupImages[$afileId] = array();
+                    }
+                    $productGroupImages[$afileId] = $image;
+                }
+            }
+
+            //abled and Get Shipping Rates [*/
+            $codEnabled = false;
+            $isProductShippedBySeller = Product::isProductShippedBySeller($product['product_id'], $product['product_seller_id'], $product['selprod_user_id']);
+            if ($isProductShippedBySeller) {
+                $walletBalance = User::getUserBalance($product['selprod_user_id']);
+                if ($product['selprod_cod_enabled']) {
+                    $codEnabled = true;
+                }
+                $codMinWalletBalance = -1;
+                $shop_cod_min_wallet_balance = Shop::getAttributesByUserId($product['selprod_user_id'], 'shop_cod_min_wallet_balance');
+                if ($shop_cod_min_wallet_balance > -1) {
+                    $codMinWalletBalance = $shop_cod_min_wallet_balance;
+                } elseif (FatApp::getConfig('CONF_COD_MIN_WALLET_BALANCE', FatUtility::VAR_FLOAT, -1) > -1) {
+                    $codMinWalletBalance = FatApp::getConfig('CONF_COD_MIN_WALLET_BALANCE', FatUtility::VAR_FLOAT, -1);
+                }
+                if ($codMinWalletBalance > -1 && $codMinWalletBalance > $walletBalance) {
+                    $codEnabled = false;
+                }
+            } else {
+                if ($product['product_cod_enabled']) {
+                    $codEnabled = true;
+                }
+            }
+
+            $fulfillmentType = $product['selprod_fulfillment_type'];
+            if (true == $isProductShippedBySeller) {
+                if ($product['shop_fulfillment_type'] != Shipping::FULFILMENT_ALL) {
+                    $fulfillmentType = $product['shop_fulfillment_type'];
+                    $product['selprod_fulfillment_type'] = $fulfillmentType;
+                }
+            } else {
+                $fulfillmentType = isset($product['product_fulfillment_type']) ? $product['product_fulfillment_type'] : Shipping::FULFILMENT_SHIP;
+                $product['selprod_fulfillment_type'] = $fulfillmentType;
+                if (FatApp::getConfig('CONF_FULFILLMENT_TYPE', FatUtility::VAR_INT, -1) != Shipping::FULFILMENT_ALL) {
+                    $fulfillmentType = FatApp::getConfig('CONF_FULFILLMENT_TYPE', FatUtility::VAR_INT, -1);
+                    $product['selprod_fulfillment_type'] = $fulfillmentType;
+                }
+            }
+
+            if ($product['product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
+                $fulfillmentType = Shipping::FULFILMENT_ALL;
+            }
+
+            $this->set('fulfillmentType', $fulfillmentType);
+            $this->set('codEnabled', $codEnabled);
+            /*]*/
+
+            $sellerId = (false === MOBILE_APP_API_CALL) ? $product['selprod_user_id'] : 0;
+            $product['moreSellersArr'] = Product::getMoreSeller($product['selprod_code'], $this->siteLangId, $sellerId);
+
+            /* Form buy product[ */
+            $frm = $this->getCartForm($this->siteLangId);
+            $frm->fill(array('selprod_id' => $selprod_id));
+            $this->set('frmBuyProduct', $frm);
+            /* ] */
+
+            $optionSrchObj = new ProductSearch($this->siteLangId);
+            $optionSrchObj->setDefinedCriteria();
+            $optionSrchObj->doNotCalculateRecords();
+            $optionSrchObj->doNotLimitRecords();
+            $optionSrchObj->joinTable(SellerProduct::DB_TBL_SELLER_PROD_OPTIONS, 'LEFT OUTER JOIN', 'selprod_id = tspo.selprodoption_selprod_id', 'tspo');
+            $optionSrchObj->joinTable(OptionValue::DB_TBL, 'LEFT OUTER JOIN', 'tspo.selprodoption_optionvalue_id = opval.optionvalue_id', 'opval');
+            $optionSrchObj->joinTable(Option::DB_TBL, 'LEFT OUTER JOIN', 'opval.optionvalue_option_id = op.option_id', 'op');
+            if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
+                $validDateCondition = " and oss.ossubs_till_date >= '" . date('Y-m-d') . "'";
+                $optionSrchObj->joinTable(Orders::DB_TBL, 'INNER JOIN', 'o.order_user_id=seller_user.user_id AND o.order_type=' . ORDERS::ORDER_SUBSCRIPTION . ' AND o.order_payment_status =1', 'o');
+                $optionSrchObj->joinTable(OrderSubscription::DB_TBL, 'INNER JOIN', 'o.order_id = oss.ossubs_order_id and oss.ossubs_status_id=' . FatApp::getConfig('CONF_DEFAULT_SUBSCRIPTION_PAID_ORDER_STATUS') . $validDateCondition, 'oss');
+            }
+            $optionSrchObj->addCondition('product_id', '=', $product['product_id']);
+
+            $optionSrch = clone $optionSrchObj;
+            $optionSrch->joinTable(Option::DB_TBL . '_lang', 'LEFT OUTER JOIN', 'op.option_id = op_l.optionlang_option_id AND op_l.optionlang_lang_id = ' . $this->siteLangId, 'op_l');
+            $optionSrch->addMultipleFields(array('option_id', 'option_is_color', 'COALESCE(option_name,option_identifier) as option_name'));
+            $optionSrch->addCondition('option_id', '!=', 'NULL');
+            $optionSrch->addCondition('selprodoption_selprod_id', '=', $selprod_id);
+            $optionSrch->addGroupBy('option_id');
+
+            $optionRs = $optionSrch->getResultSet();
+            if (true === MOBILE_APP_API_CALL) {
+                $optionRows = FatApp::getDb()->fetchAll($optionRs);
+            } else {
+                $optionRows = FatApp::getDb()->fetchAll($optionRs, 'option_id');
+            }
+
+            if (count($optionRows) > 0) {
+                foreach ($optionRows as &$option) {
+                    $optionValueSrch = clone $optionSrchObj;
+                    $optionValueSrch->joinTable(OptionValue::DB_TBL . '_lang', 'LEFT OUTER JOIN', 'opval.optionvalue_id = opval_l.optionvaluelang_optionvalue_id AND opval_l.optionvaluelang_lang_id = ' . $this->siteLangId, 'opval_l');
+                    $optionValueSrch->addCondition('product_id', '=', $product['product_id']);
+                    $optionValueSrch->addCondition('option_id', '=', $option['option_id']);
+                    $optionValueSrch->addMultipleFields(array('COALESCE(product_name, product_identifier) as product_name', 'selprod_id', 'selprod_user_id', 'selprod_code', 'option_id', 'COALESCE(optionvalue_name,optionvalue_identifier) as optionvalue_name ', 'theprice', 'optionvalue_id', 'optionvalue_color_code'));
+                    $optionValueSrch->addGroupBy('optionvalue_id');
+                    $optionValueSrch->addOrder('optionvalue_display_order');
+                    $optionValueRs = $optionValueSrch->getResultSet();
+                    if (true === MOBILE_APP_API_CALL) {
+                        $optionValueRows = FatApp::getDb()->fetchAll($optionValueRs);
+                    } else {
+                        $optionValueRows = FatApp::getDb()->fetchAll($optionValueRs, 'optionvalue_id');
+                    }
+                    $option['values'] = $optionValueRows;
+                }
+            }
+
+            $this->set('optionRows', $optionRows);
+
+            $upsellProducts = $sellerProduct->getUpsellProducts($product['selprod_id'], $this->siteLangId, $loggedUserId);
+            $upSellSelProdIdsArr = array_column($upsellProducts, 'selprod_id');
+            $upsellProductsRibbons = [
+                'tRightRibbons' => Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $upSellSelProdIdsArr)
+            ];
+        }
+
+        if (1 < $page && true === MOBILE_APP_API_CALL) {
             $relatedProducts = $sellerProduct->getRelatedProducts($this->siteLangId, $product['selprod_id'], ['selprod_id']);
             $relatedProductsRs = $this->relatedProductsById(array_keys($relatedProducts));
             $relSelProdIdsArr = array_column($relatedProducts, 'selprod_id');
@@ -756,29 +741,35 @@ class ProductsController extends MyAppController
             ];
         }
 
-        $srch = new ShopSearch($this->siteLangId);
-        $srch->setDefinedCriteria($this->siteLangId);
-        $srch->doNotCalculateRecords();
-        $srch->addMultipleFields(
-            array('shop_id', 'shop_user_id', 'shop_ltemplate_id', 'shop_created_on', 'COALESCE(shop_name, shop_identifier) as shop_name', 'shop_description', 'shop_payment_policy', 'shop_delivery_policy', 'shop_refund_policy',  'COALESCE(shop_country_l.country_name,shop_country.country_code) as shop_country_name', 'COALESCE(shop_state_l.state_name,state_identifier) as shop_state_name', 'shop_city'/* , 'shop_free_ship_upto' */)
-        );
-        $srch->addCondition('shop_id', '=', $product['shop_id']);
-        $srch->setPageSize(1);
-        $shopRs = $srch->getResultSet();
-        $shop = FatApp::getDb()->fetch($shopRs);
+        if (1 == $page || false === MOBILE_APP_API_CALL) {
+            $srch = new ShopSearch($this->siteLangId);
+            $srch->setDefinedCriteria($this->siteLangId);
+            $srch->doNotCalculateRecords();
+            $srch->addMultipleFields(
+                array('shop_id', 'shop_user_id', 'shop_ltemplate_id', 'shop_created_on', 'COALESCE(shop_name, shop_identifier) as shop_name', 'shop_description', 'shop_payment_policy', 'shop_delivery_policy', 'shop_refund_policy',  'COALESCE(shop_country_l.country_name,shop_country.country_code) as shop_country_name', 'COALESCE(shop_state_l.state_name,state_identifier) as shop_state_name', 'shop_city')
+            );
+            $srch->addCondition('shop_id', '=', $product['shop_id']);
+            $srch->setPageSize(1);
+            $shopRs = $srch->getResultSet();
+            $shop = FatApp::getDb()->fetch($shopRs);
 
-        $shop_rating = 0;
-        if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) {
-            $shop_rating = SelProdRating::getSellerRating($shop['shop_user_id'], true);
+            $shop_rating = 0;
+            if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) {
+                $shop_rating = SelProdRating::getSellerRating($shop['shop_user_id'], true);
+            }
+
+
+            /* Get Product Specifications */
+            $this->set('productSpecifications', $this->getProductSpecifications($product['product_id'], $this->siteLangId));
+            /* End of Product Specifications */
         }
 
-        /*   [ Promotional Banner   */
-        $banners = BannerLocation::getPromotionalBanners(0, $this->siteLangId);
-        /* End of Prmotional Banner  ]*/
-
-        /* Get Product Specifications */
-        $this->set('productSpecifications', $this->getProductSpecifications($product['product_id'], $this->siteLangId));
-        /* End of Product Specifications */
+        if (1 < $page || false == MOBILE_APP_API_CALL) {
+            /*   [ Promotional Banner   */
+            $banners = BannerLocation::getPromotionalBanners(0, $this->siteLangId);
+            /* End of Prmotional Banner  ]*/
+            $this->set('banners', $banners);
+        }
 
         $canSubmitFeedback = true;
         if ($loggedUserId) {
@@ -805,51 +796,55 @@ class ProductsController extends MyAppController
         $this->set('ratingAspects', $ratingAspects);
         $this->set('productView', true);
         $this->set('displayProductNotAvailableLable', $displayProductNotAvailableLable);
-
-        //$currSellerArr = Product::getMoreSeller($product['selprod_code'], $this->siteLangId, $product['selprod_user_id'], true);
         $this->set('sellers', [$product]);
 
         $this->set('currSelprodId', $selprod_id);
         $this->set('canSubmitFeedback', $canSubmitFeedback);
-        $this->set('upsellProducts', !empty($upsellProducts) ? $upsellProducts : array());
 
-        $this->set('upsellProductsRibbons', $upsellProductsRibbons);
+        if (1 == $page || false === MOBILE_APP_API_CALL) {
+            $this->set('upsellProducts', !empty($upsellProducts) ? $upsellProducts : array());
+            $this->set('upsellProductsRibbons', $upsellProductsRibbons);
 
-        if (true === MOBILE_APP_API_CALL) {
+            $this->set('product', $product);
+            $this->set('shop_rating', $shop_rating);
+            $this->set('shop', $shop);
+            $this->set('shopTotalReviews', SelProdReview::getSellerTotalReviews($shop['shop_user_id'], true));
+            $this->set('productImagesArr', $productGroupImages);
+
+
+            $frmReviewSearch = $this->getReviewSearchForm(5);
+            $frmReviewSearch->fill(array('selprod_id' => $selprod_id));
+            $this->set('frmReviewSearch', $frmReviewSearch);
+
+            $currentStock = $product['selprod_stock'] - Product::tempHoldStockCount($selprod_id);
+            $this->set('currentStock', $currentStock);
+            $this->set('isOutOfMinOrderQty', ((int)($product['selprod_min_order_qty'] > $currentStock)));
+
+            /* Get Product Volume Discount (if any)[ */
+            $this->set('volumeDiscountRows', $sellerProduct->getVolumeDiscounts());
+            /* ] */
+
+            if (!empty($product)) {
+                $afile_id = !empty($productGroupImages) ? array_keys($productGroupImages)[0] : 0;
+                $this->set('socialShareContent', $this->getOgTags($product, $afile_id));
+            }
+        }
+
+        if (1 < $page && true === MOBILE_APP_API_CALL) {
             $this->set('relatedProductsRs', !empty($relatedProductsRs) ? $relatedProductsRs : array());
             $this->set('relatedProductsRibbons', $relatedProductsRibbons);
-        }
-
-        $this->set('banners', $banners);
-        $this->set('product', $product);
-        $this->set('shop_rating', $shop_rating);
-        $this->set('shop', $shop);
-        $this->set('shopTotalReviews', SelProdReview::getSellerTotalReviews($shop['shop_user_id'], true));
-        $this->set('productImagesArr', $productGroupImages);
-
-
-        $frmReviewSearch = $this->getReviewSearchForm(5);
-        $frmReviewSearch->fill(array('selprod_id' => $selprod_id));
-        $this->set('frmReviewSearch', $frmReviewSearch);
-
-        $currentStock = $product['selprod_stock'] - Product::tempHoldStockCount($selprod_id);
-        $this->set('currentStock', $currentStock);
-        $this->set('isOutOfMinOrderQty', ((int)($product['selprod_min_order_qty'] > $currentStock)));
-
-        /* Get Product Volume Discount (if any)[ */
-        $this->set('volumeDiscountRows', $sellerProduct->getVolumeDiscounts());
-        /* ] */
-
-        if (!empty($product)) {
-            $afile_id = !empty($productGroupImages) ? array_keys($productGroupImages)[0] : 0;
-            $this->set('socialShareContent', $this->getOgTags($product, $afile_id));
-        }
-
-        if (true === MOBILE_APP_API_CALL) {
-            /* Recommnended Products [ */
+            /* Recommended Products */
             $loggedUserId = UserAuthentication::getLoggedUserId(true);
             $recommendedProducts = (array) $this->getRecommendedProducts($selprod_id, $this->siteLangId, $loggedUserId);
             $recommendedProducts = (0 < count(array_filter($recommendedProducts)) ? array_filter($recommendedProducts) : []);
+            $extraRecCount = (5 - count($recommendedProducts));
+            if (0 < $extraRecCount) {
+                $srch = Product::getListingObj(['category' => $product['prodcat_id']], $this->siteLangId);
+                $srch->setPageSize($extraRecCount);
+                $srch->doNotCalculateRecords();
+                $products = FatApp::getDb()->fetchAll($srch->getResultSet());
+                $recommendedProducts = array_merge($recommendedProducts, $products);
+            }
 
             $recSelProdIdsArr = array_column($recommendedProducts, 'selprod_id');
             $recommendedProductsRibbons = [
@@ -857,7 +852,98 @@ class ProductsController extends MyAppController
             ];
             $this->set('recommendedProducts', $recommendedProducts);
             $this->set('recommendedProductsRibbons', $recommendedProductsRibbons);
-            /* ]  */
+            /* ----------------- */
+
+            /* Recently Viewed Products */
+            $recentViewedProducts = $recentlyViewedRibbons = [];
+            $recentlyViewed = FatApp::getPostedData('recentlyViewed');
+            if (is_array($recentlyViewed) && 0 < count($recentlyViewed)) {
+                if ($selprod_id && in_array($selprod_id, $recentlyViewed)) {
+                    $pos = array_search($selprod_id, $recentlyViewed);
+                    unset($recentlyViewed[$pos]);
+                }
+
+                $recentlyViewed = array_map('intval', $recentlyViewed);
+                $recentlyViewed = array_reverse($recentlyViewed);
+
+                $recentViewedProducts = $this->getRecentlyViewedProductsDetail($recentlyViewed);
+
+                if (!empty($recentViewedProducts)) {
+                    $recentSelProdIdsArr = array_column($recentViewedProducts, 'selprod_id');
+                    $recentlyViewedRibbons = [
+                        'tRightRibbons' => Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $recentSelProdIdsArr)
+                    ];
+                }
+            }
+
+            $this->set('recentlyViewedRibbons', $recentlyViewedRibbons);
+            $this->set('recentlyViewed', $recentViewedProducts);
+            /* ----------------- */
+
+            /* Reviews with Images*/
+            $selProdReviewObj = $this->getSelProdReviewObj(false);
+            $selProdReviewObj = $this->getSelProdReviewObj(false);
+            $selProdReviewObj->joinSelProdReviewHelpful();
+            $selProdReviewObj->addGroupBy('spr.spreview_id');
+            $selProdReviewObj->addCondition('spr.spreview_product_id', '=', $product['product_id']);
+            $selProdReviewObj->setPageNumber(1);
+            $selProdReviewObj->setPageSize(4);
+            $selProdReviewObj->addOrder('spr.spreview_posted_on', 'desc');
+            $selProdReviewObj->joinTable(AttachedFile::DB_TBL, 'INNER JOIN', 'af.afile_type = ' . AttachedFile::FILETYPE_ORDER_FEEDBACK . ' AND af.afile_record_id = spr.spreview_id', 'af');
+            $selProdReviewObj->addMultipleFields(array('spreview_id', 'user_updated_on', 'spreview_postedby_user_id', 'user_updated_on'));
+            $reviewsList = (array) FatApp::getDb()->fetchAll($selProdReviewObj->getResultSet(), 'spreview_id');
+            $this->set('imageReviewsPageCount', $selProdReviewObj->pages());
+            $this->set('imageReviewsRecordCount', $selProdReviewObj->recordCount());
+            $this->set('imageReviewsList', array_values($reviewsList));
+            /* ----------------- */
+
+            /* Reviews without Images*/
+            $selProdReviewObj = new SelProdReviewSearch();
+            $selProdReviewObj->joinProducts($this->siteLangId);
+            $selProdReviewObj->joinSellerProducts($this->siteLangId);
+            $selProdReviewObj->joinUser();
+            $selProdReviewObj->joinSelProdReviewHelpful();
+            $selProdReviewObj->addCondition('spr.spreview_status', '=', SelProdReview::STATUS_APPROVED);
+            $selProdReviewObj->addGroupBy('spr.spreview_id');
+            $selProdReviewObj->addCondition('spr.spreview_product_id', '=', $product['product_id']);
+            $selProdReviewObj->addCondition('af.afile_id', 'IS', 'mysql_func_null', 'AND', true);
+            $selProdReviewObj->setPageNumber(1);
+            $selProdReviewObj->setPageSize(3);
+            $selProdReviewObj->addOrder('helpful', 'desc');
+            $selProdReviewObj->joinTable(AttachedFile::DB_TBL, 'LEFT JOIN', 'af.afile_type = ' . AttachedFile::FILETYPE_ORDER_FEEDBACK . ' AND af.afile_record_id = spr.spreview_id', 'af');
+            $selProdReviewObj->addMultipleFields(array('spreview_id', 'spreview_selprod_id', 'spreview_title', 'spreview_description', 'spreview_posted_on', 'spreview_postedby_user_id', 'user_name', 'group_concat(case when sprh_helpful = 1 then concat(sprh_user_id,"~",1) else concat(sprh_user_id,"~",0) end ) usersMarked', 'sum(if(sprh_helpful = 1 , 1 ,0)) as helpful', 'sum(if(sprh_helpful = 0 , 1 ,0)) as notHelpful', 'count(sprh_spreview_id) as countUsersMarked', 'user_updated_on'));
+
+            $reviewsList = (array) FatApp::getDb()->fetchAll($selProdReviewObj->getResultSet(), 'spreview_id');
+            $this->set('reviewsPageCount', $selProdReviewObj->pages());
+            $this->set('reviewsRecordCount', $selProdReviewObj->recordCount());
+            $this->set('reviewsList', array_values($reviewsList));
+
+            $recordRatings = [];
+            if (0 < count($reviewsList)) {
+                $ratings = SelProdRating::getSearchObj();
+                $ratings->joinTable(
+                    RatingType::DB_TBL,
+                    'INNER JOIN',
+                    'rt.ratingtype_id = sprating_ratingtype_id AND rt.ratingtype_active = ' . applicationConstants::ACTIVE,
+                    'rt'
+                );
+                $ratings->joinTable(
+                    RatingType::DB_TBL_LANG,
+                    'LEFT OUTER JOIN',
+                    'rt_l.ratingtypelang_ratingtype_id = rt.ratingtype_id AND rt_l.ratingtypelang_lang_id = ' . $this->siteLangId,
+                    'rt_l'
+                );
+
+                $ratings->addMultipleFields(['sprating_spreview_id', 'ratingtype_id', 'COALESCE(ratingtype_name, ratingtype_identifier) as ratingtype_name', 'sprating_rating']);
+
+                $ratings->addCondition('sprating_spreview_id', 'IN', array_keys($reviewsList));
+                $ratings->addCondition('ratingtype_type', 'IN', [RatingType::TYPE_PRODUCT, RatingType::TYPE_OTHER]);
+                $ratings->doNotLimitRecords();
+                $ratings->doNotCalculateRecords();
+                $recordRatings = (array) FatApp::getDb()->fetchAll($ratings->getResultSet());
+            }
+            $this->set('recordRatings', $recordRatings);
+            /* ----------------- */
         }
 
         if (false === MOBILE_APP_API_CALL) {
@@ -865,30 +951,10 @@ class ProductsController extends MyAppController
                 $this->setRecentlyViewedItem($selprod_id);
             }
 
-            $this->_template->addJs(array('js/slick.js', 'js/modaal.js', 'js/product-detail.js', 'js/magnific-popup.js', 'js/jw-player.js', 'js/slick-carousels.js'));
+            $this->_template->addJs(array('js/slick.min.js', 'js/modaal.js', 'js/product-detail.js', 'js/magnific-popup.js', 'js/jw-player.js', 'js/slick-carousels.js'));
         }
 
-        if (true === MOBILE_APP_API_CALL) {
-            $recentlyViewed = FatApp::getPostedData('recentlyViewed');
-            $recentlyViewed = is_array($recentlyViewed) && 0 < count($recentlyViewed) ? FatUtility::int($recentlyViewed) : array();
-            if (in_array($selprod_id, $recentlyViewed)) {
-                unset($recentlyViewed[$selprod_id]);
-            }
-
-            $recentlyViewed = (array) $this->getRecentlyViewedProductsDetail($recentlyViewed);
-            $recentlyViewed = (0 < count(array_filter($recentlyViewed)) ? array_filter($recentlyViewed) : []);
-
-            $recentSelProdIdsArr = array_column($recentlyViewed, 'selprod_id');
-            $recentlyViewedRibbons = [
-                'tRightRibbons' => Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $recentSelProdIdsArr)
-            ];
-            $this->set('recentlyViewed', $recentlyViewed);
-            $this->set('recentlyViewedRibbons', $recentlyViewedRibbons);
-        }
-
-
-        $analyticsId = FatApp::getConfig("CONF_ANALYTICS_ID");
-        if (!empty($analyticsId) && FatApp::getConfig('CONF_ANALYTICS_ADVANCE_ECOMMERCE', FatUtility::VAR_INT, 0)) {
+        if (FatApp::getConfig('CONF_ANALYTICS_ADVANCE_ECOMMERCE', FatUtility::VAR_INT, 0)) {
             /* [product click event from search page */
             $refererParseUrl = parse_url(CommonHelper::redirectUserReferer(true));
             if (isset($refererParseUrl['path'])) {
@@ -906,7 +972,7 @@ class ProductsController extends MyAppController
                 }
             }
             if (!empty($productAction)) {
-                $et = new EcommerceTracking($analyticsId, null, UserAuthentication::getLoggedUserId(true));
+                $et = new EcommerceTracking(null, UserAuthentication::getLoggedUserId(true));
                 $et->addProductAction(EcommerceTracking::PROD_ACTION_TYPE_CLICK);
                 $et->addProductActionList($productAction);
                 $et->addProduct($product['selprod_id'], $product['selprod_title'], $product['prodcat_name'], $product['brand_name'], 1, $product['selprod_price']);
@@ -916,7 +982,7 @@ class ProductsController extends MyAppController
             /* product click event from search page] */
 
             /* [product view */
-            $et = new EcommerceTracking($analyticsId, Labels::getLabel('MSG_Product_Detail', $this->siteLangId), UserAuthentication::getLoggedUserId(true));
+            $et = new EcommerceTracking(Labels::getLabel('MSG_Product_Detail', $this->siteLangId), UserAuthentication::getLoggedUserId(true));
             $et->addProductAction(EcommerceTracking::PROD_ACTION_TYPE_DETAIL);
             $et->addProduct($product['selprod_id'], $product['selprod_title'], $product['prodcat_name'], $product['brand_name'], 1, $product['selprod_price']);
 
@@ -1016,10 +1082,6 @@ class ProductsController extends MyAppController
             return false;
         }
 
-        /*if($recommendedProducts =  FatCache::get('recommProds'.$selprod_id.'-'.$langId.'-'.$userId, CONF_HOME_PAGE_CACHE_TIME, '.txt')){
-            return  unserialize($recommendedProducts);
-        }*/
-
         $productId = SellerProduct::getAttributesById($selprod_id, 'selprod_product_id', false);
 
         $srch = new ProductSearch($langId);
@@ -1076,14 +1138,6 @@ class ProductsController extends MyAppController
 
         $srch->addGroupBy('product_id');
 
-        /* if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
-            $srch->joinFavouriteProducts($userId);
-            $srch->addFld('IFNULL(ufp_id, 0) as ufp_id');
-        } else {
-            $srch->joinUserWishListProducts($userId);
-            $srch->addFld('COALESCE(uwlp.uwlp_selprod_id, 0) as is_in_any_wishlist');
-        } */
-
         $srch->addCondition('selprod_id', '!=', $selprod_id);
         $srch->addCondition('product_id', 'in', array_keys($recommendedProds));
         $srch->setPageSize(5);
@@ -1121,16 +1175,9 @@ class ProductsController extends MyAppController
         return $socialShareContent;
     }
 
-    public function getProductShippingRates()
-    {
-        $post = FatApp::getPostedData();
-        $productId = $post['productId'];
-        $sellerId = $post['sellerId'];
-    }
-
     private function getRecentlyViewedProductsDetail($cookiesProductsArr = array())
     {
-        if (User::checkPersonalizedCookiesEnabled() == false) {
+        if (false === MOBILE_APP_API_CALL && User::checkPersonalizedCookiesEnabled() == false) {
             return false;
         }
 
@@ -1147,18 +1194,6 @@ class ProductsController extends MyAppController
         $prodSrch->joinProductToCategory();
         $prodSrch->doNotCalculateRecords();
         $prodSrch->doNotLimitRecords();
-        /* 
-        $loggedUserId = 0;
-        if (UserAuthentication::isUserLogged()) {
-            $loggedUserId = UserAuthentication::getLoggedUserId();
-        }
-        if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
-            $prodSrch->joinFavouriteProducts($loggedUserId);
-            $prodSrch->addFld('IFNULL(ufp_id, 0) as ufp_id');
-        } else {
-            $prodSrch->joinUserWishListProducts($loggedUserId);
-            $prodSrch->addFld('COALESCE(uwlp.uwlp_selprod_id, 0) as is_in_any_wishlist');
-        } */
         $prodSrch->addCondition('selprod_id', 'IN', $cookiesProductsArr);
         $prodSrch->addMultipleFields(
             array(
@@ -1167,8 +1202,6 @@ class ProductsController extends MyAppController
                 'special_price_found', 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'selprod_sold_count', 'COALESCE(selprod_title, product_name, product_identifier) as selprod_title', 'selprod_price', 'shop_id'
             )
         );
-        // echo $prodSrch->getQuery(); die;
-
         $productRs = $prodSrch->getResultSet();
         $recentViewedProducts = FatApp::getDb()->fetchAll($productRs, 'selprod_id');
         uksort(
@@ -1182,11 +1215,6 @@ class ProductsController extends MyAppController
 
     public function relatedProductsById($ids = array())
     {
-        $loggedUserId = 0;
-        if (UserAuthentication::isUserLogged()) {
-            $loggedUserId = UserAuthentication::getLoggedUserId();
-        }
-
         if (isset($ids) && is_array($ids) && count($ids)) {
             $prodSrch = new ProductSearch($this->siteLangId);
             $prodSrch->setDefinedCriteria();
@@ -1201,14 +1229,6 @@ class ProductsController extends MyAppController
             }
 
             $prodSrch->doNotLimitRecords();
-            /* if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
-                $prodSrch->joinFavouriteProducts($loggedUserId);
-                $prodSrch->addFld('IFNULL(ufp_id, 0) as ufp_id');
-            } else {
-                $prodSrch->joinUserWishListProducts($loggedUserId);
-                $prodSrch->addFld('COALESCE(uwlp.uwlp_selprod_id, 0) as is_in_any_wishlist');
-            } */
-            // $prodSrch->joinProductRating();
             $prodSrch->addCondition('selprod_id', 'IN', $ids);
             $prodSrch->addMultipleFields(
                 array(
@@ -1224,7 +1244,7 @@ class ProductsController extends MyAppController
             uksort(
                 $products,
                 function ($key1, $key2) use ($ids) {
-                    return (array_search($key1, $ids) > array_search($key2, $ids));
+                    return (array_search($key1, $ids) <=> array_search($key2, $ids));
                 }
             );
             return $products;
@@ -1491,17 +1511,8 @@ class ProductsController extends MyAppController
         FatUtility::exitWithErrorCode(404);
     }
 
-    public function track($productId = 0)
+    public function track(int $selprod_id)
     {
-        $productId = FatUtility::int($productId);
-        if (1 > $productId) {
-            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
-            FatApp::redirectUser(UrlHelper::generateUrl(''));
-        }
-        $loggedUserId = 0;
-        if (UserAuthentication::isUserLogged()) {
-            $loggedUserId = UserAuthentication::getLoggedUserId();
-        }
         /* Track Click */
         $prodObj = new PromotionSearch($this->siteLangId, true);
         $prodObj->joinProducts();
@@ -1514,22 +1525,14 @@ class ProductsController extends MyAppController
         $prodObj->addBudgetCondition();
         $prodObj->doNotCalculateRecords();
         $prodObj->addMultipleFields(array('selprod_id as proSelProdId', 'promotion_id'));
-        $prodObj->addCondition('promotion_record_id', '=', $productId);
+        $prodObj->addCondition('promotion_record_id', '=', $selprod_id);
         $prodObj->addCondition('promotion_deleted', '=', applicationConstants::NO);
-        $sponsoredProducts = array();
+
         $productSrchObj = new ProductSearch($this->siteLangId);
         $productSrchObj->joinProductToCategory($this->siteLangId);
         $productSrchObj->doNotCalculateRecords();
         $productSrchObj->setPageSize(1);
         $productSrchObj->setDefinedCriteria();
-
-        /* if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
-            $productSrchObj->joinFavouriteProducts($loggedUserId);
-            $productSrchObj->addFld('IFNULL(ufp_id, 0) as ufp_id');
-        } else {
-            $productSrchObj->joinUserWishListProducts($loggedUserId);
-            $productSrchObj->addFld('COALESCE(uwlp.uwlp_selprod_id, 0) as is_in_any_wishlist');
-        } */
         $productSrchObj->joinProductRating();
         $productSrchObj->addMultipleFields(
             array(
@@ -1538,11 +1541,6 @@ class ProductsController extends MyAppController
                 'theprice', 'selprod_price', 'selprod_stock', 'selprod_condition', 'prodcat_id', 'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name', 'COALESCE(sq_sprating.prod_rating,0) prod_rating ', 'selprod_sold_count'
             )
         );
-
-        /*  $productCatSrchObj = ProductCategory::getSearchObject(false, $this->siteLangId);
-        $productCatSrchObj->addOrder('m.prodcat_active', 'DESC');
-        $productCatSrchObj->doNotCalculateRecords();       
-        $productCatSrchObj->addMultipleFields(array('prodcat_id', 'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name', 'prodcat_description')); */
 
         $productSrchObj->joinTable('(' . $prodObj->getQuery() . ') ', 'INNER JOIN', 'selprod_id = ppr.proSelProdId ', 'ppr');
         $productSrchObj->addFld(array('promotion_id'));
@@ -1553,17 +1551,13 @@ class ProductsController extends MyAppController
         $rs = $productSrchObj->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
 
-        $url = UrlHelper::generateFullUrl('products', 'view', array($productId));
+        $url = UrlHelper::generateFullUrl('products', 'view', array($selprod_id));
         if ($row == false) {
-            if (!filter_var($url, FILTER_VALIDATE_URL) === false) {
-                FatApp::redirectUser($url);
-            }
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId), false, true);
+            FatApp::redirectUser($url);
         }
 
-        $userId = 0;
-        if (UserAuthentication::isUserLogged()) {
-            $userId = UserAuthentication::getLoggedUserId();
-        }
+        $userId = UserAuthentication::getLoggedUserId(true);
 
         if (Promotion::isUserClickCountable($userId, $row['promotion_id'], $_SERVER['REMOTE_ADDR'], session_id())) {
             $promotionClickData = array(
@@ -1596,10 +1590,14 @@ class ProductsController extends MyAppController
             FatApp::getDb()->insertFromArray(Promotion::DB_TBL_LOGS, $promotionLogData, true, array(), $onDuplicatePromotionLogData);
         }
 
+
+        if (MOBILE_APP_API_CALL) {
+            FatUtility::dieJsonSuccess(Labels::getLabel('LBL_SUCCESS'));
+        }
+
         if (!filter_var($url, FILTER_VALIDATE_URL) === false) {
             FatApp::redirectUser($url);
         }
-
         FatApp::redirectUser(UrlHelper::generateUrl(''));
     }
 
@@ -1959,7 +1957,7 @@ class ProductsController extends MyAppController
         $keyName = $plugin->getDefaultPluginKeyName(Plugin::TYPE_SHIPPING_SERVICES);
 
         $error = '';
-        $shippingService = PluginHelper::callPlugin($keyName, [$this->siteLangId], $error, $this->siteLangId);
+        $shippingService = LibHelper::callPlugin($keyName, [$this->siteLangId], $error, $this->siteLangId);
         if (false === $shippingService) {
             FatUtility::dieJsonError($error);
         }
@@ -2043,7 +2041,6 @@ class ProductsController extends MyAppController
     public function interRelatedProducts(int $selprodId)
     {
         $prodData = $this->getProductDetail($selprodId);
-        // CommonHelper::printArray($prodData);
         $this->set('product', $prodData);
 
         /* Related Products */

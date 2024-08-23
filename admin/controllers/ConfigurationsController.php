@@ -223,6 +223,8 @@ class ConfigurationsController extends ListingBaseController
             LibHelper::exitWithError($record->getError(), true);
         }
 
+        $this->set('form_type', $frmType);
+        $this->set('lang_id', $langId);
         $this->set('msg', Labels::getLabel('MSG_SETTINGS_SAVED!!', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
@@ -554,13 +556,12 @@ class ConfigurationsController extends ListingBaseController
 
                 $fld = $frm->addCheckBox(Labels::getLabel("FRM_ENABLE_THIS_SETTING_TO_ADD_WEIGHT_AND_WEIGHT_UNIT", $langId), 'CONF_PRODUCT_WEIGHT_ENABLE', 1, array(), false, 0);
                 HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("FRM_YOU_CAN_ADD_WEIGHT_AND_WEIGHT_UNIT_TO_PRODUCT_IF_THIS_SETTING_IS_ENABLED.", $langId));
-                
+
                 $fld = $frm->addCheckBox(Labels::getLabel("FRM_BRANDS_REQUESTED_BY_SELLERS_WILL_REQUIRE_APPROVAL", $langId), 'CONF_BRAND_REQUEST_APPROVAL', 1, array(), false, 0);
                 HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("FRM_ON_ENABLING_THIS_FEATURE,_Admin_Need_To_Approve_the_brand_requests_(User_Cannot_link_the_requested_brand_with_any_product_until_it_gets_approved_by_Admin)", $langId));
 
                 $fld = $frm->addCheckBox(Labels::getLabel("FRM_CATEGORIES_REQUESTED_BY_SELLERS_WILL_REQUIRE_APPROVAL", $langId), 'CONF_PRODUCT_CATEGORY_REQUEST_APPROVAL', 1, array(), false, 0);
                 HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("FRM_ON_ENABLING_THIS_FEATURE,_Admin_Need_To_Approve_the_Product_category_requests_(User_Cannot_link_the_requested_category_with_any_product_until_it_gets_approved_by_Admin)", $langId));
-
 
                 $fld = $frm->addCheckBox(Labels::getLabel("FRM_BRAND_WILL_BE_MANDATORY_FOR_PRODUCTS", $langId), 'CONF_PRODUCT_BRAND_MANDATORY', 1, array(), false, 0);
                 HtmlHelper::configureSwitchForCheckbox($fld);
@@ -802,8 +803,12 @@ class ConfigurationsController extends ListingBaseController
                 }
                 HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("FRM_ON_ENABLING_THIS_FEATURE,_tax_will_be_applicable_after_discounts", $langId));
 
-                $fld = $frm->addCheckBox(Labels::getLabel("FRM_RETURN_SHIPPING_CHARGES_TO_CUSTOMER", $langId), 'CONF_RETURN_SHIPPING_CHARGES_TO_CUSTOMER', 1, array(), false, 0);
-                HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("FRM_ON_ENABLING_RETURN_SHIPPING_CHARGES_TO_CUSTOMER", $langId));
+
+                $splitPaymentMethodActive = Plugin::isActiveByType(Plugin::TYPE_SPLIT_PAYMENT_METHOD);
+                if (!$splitPaymentMethodActive) {
+                    $fld = $frm->addCheckBox(Labels::getLabel("FRM_RETURN_SHIPPING_CHARGES_TO_CUSTOMER", $langId), 'CONF_RETURN_SHIPPING_CHARGES_TO_CUSTOMER', 1, array(), false, 0);
+                    HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("FRM_ON_ENABLING_RETURN_SHIPPING_CHARGES_TO_CUSTOMER", $langId));
+                }
 
                 $fld = $frm->addCheckBox(Labels::getLabel("FRM_SHIPPED_BY_ADMIN_ONLY", $langId), 'CONF_SHIPPED_BY_ADMIN_ONLY', 1, array(), false, 0);
                 HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("FRM_ON_ENABLING_SHIPPING_CHARGES_MANGED_BY_ADMIN_ONLY", $langId));
@@ -980,7 +985,7 @@ class ConfigurationsController extends ListingBaseController
                 $fld->developerTags['cbHtmlBeforeCheckbox'] = '';
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_SET_ORDER_STATUSES_TO_ALLOW_SELLER_OR_ADMIN_TO_ATTACH_MORE_FILES_WITH_ORDER_PRODUCTS", $langId) . "</span>";
 
-               /*  $fld = $frm->addCheckBoxes(Labels::getLabel("FRM_ORDER_STATUSES_TO_CALCULATE_BADGE_COUNT_(For_Admin)", $langId), 'CONF_BADGE_COUNT_ORDER_STATUS', $orderStatusArr, [], array('class' => 'list-checkboxes'));
+                /*  $fld = $frm->addCheckBoxes(Labels::getLabel("FRM_ORDER_STATUSES_TO_CALCULATE_BADGE_COUNT_(For_Admin)", $langId), 'CONF_BADGE_COUNT_ORDER_STATUS', $orderStatusArr, [], array('class' => 'list-checkboxes'));
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 $fld->developerTags['cbLabelAttributes'] = ['class' => 'checkbox'];
                 $fld->developerTags['cbHtmlBeforeCheckbox'] = '';
@@ -1248,10 +1253,15 @@ class ConfigurationsController extends ListingBaseController
             case Configurations::FORM_THIRD_PARTY_API:
                 $frm->addHtml('', 'GooglePushNotification', '<h3 class="form-section-head">' . Labels::getLabel("FRM_GOOGLE_PUSH_NOTIFICATION", $langId) . '</h3>');
 
-                $frm->addHtml('', 'FaceBookPixel', '<h3 class="form-section-head">' . Labels::getLabel("FRM_FACEBOOK_PIXEL", $langId) . '</h3>');
+                $fld = $frm->addTextarea(Labels::getLabel('FRM_FIREBASE_SERVICE_ACCOUNT_PRIVATE_KEY_JSON_FILE'), 'CONF_FIREBASE_SERVICE_ACCOUNT_JSON_KEY');
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
+                $link = '<a href="javascript:void(0)" title="' . Labels::getLabel('FRM_FIREBASE_SERVICE_ACCOUNT_PRIVATE_KEY_JSON_FILE_STEPS') . '" data-bs-toggle="modal" data-bs-target="#firebaseServiceAccountStepsJs">' . Labels::getLabel('LBL_STEPS', $this->siteLangId) . '</a>';
+                $link .= HtmlHelper::getModalStructure('firebaseServiceAccountStepsJs', Labels::getLabel('LBL_FIREBASE_SERVICE_ACCOUNT_PRIVATE_KEY_JSON', $this->siteLangId), Extrapage::getFirebaseServiceAccountSteps($this->siteLangId));
+                $lbl = CommonHelper::replaceStringData(Labels::getLabel("LBL_PLEASE_FOLLOW_{STEPS}_TO_GET_FIREBASE_SERVICE_ACCOUNT_JSON_KEY", $this->siteLangId), ['{STEPS}' => $link]);
+                $fld->htmlAfterField = "<small class='form-text text-muted'>" . $lbl . "</small>";
 
-                $fld = $frm->addTextBox(Labels::getLabel("FRM_GOOGLE_PUSH_NOTIFICATION_API_KEY", $langId), 'CONF_GOOGLE_PUSH_NOTIFICATION_API_KEY');
-                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_THIS_IS_THE_API_KEY_USED_IN_PUSH_NOTIFICATIONS.", $langId) . "</span>";
+                $fld = $frm->addHtml('', 'FaceBookPixel', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("FRM_FACEBOOK_PIXEL", $langId) . '</h3>');
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
                 $fld = $frm->addTextBox(Labels::getLabel("FRM_FACEBOOK_PIXEL_ID", $langId), 'CONF_FACEBOOK_PIXEL_ID');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_THIS_IS_THE_FACEBOOK_PIXEL_ID_USED_IN_TRACK_EVENTS.", $langId) . "</span>";
@@ -1291,7 +1301,7 @@ class ConfigurationsController extends ListingBaseController
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_THIS_IS_THE_MAILCHIMP's_application_key_used_in_subscribe_and_send_newsletters.", $langId) . "</span>";
 
                 $fld = $frm->addTextBox(Labels::getLabel("FRM_MAILCHIMP_LIST_ID", $langId), 'CONF_MAILCHIMP_LIST_ID');
-                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_THIS_IS_THE_MAILCHIMP's_subscribers_List_ID.", $langId) . "</span>";
+                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_THIS_IS_THE_MAILCHIMP'S_SUBSCRIBERS_LIST_ID.", $langId) . "</span>";
 
                 $fld = $frm->addTextarea(Labels::getLabel("FRM_AWEBER_SIGNUP_FORM_CODE", $langId), 'CONF_AWEBER_SIGNUP_CODE');
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
@@ -1299,6 +1309,24 @@ class ConfigurationsController extends ListingBaseController
 
                 $fld = $frm->addHtml('', 'Analytics', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("FRM_GOOGLE_ANALYTICS", $langId) . '</h3>');
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
+
+                $ga4Fld = $frm->addCheckBox(
+                    Labels::getLabel("LBL_ACTIVATE_GOOGLE_ANALYTICS_4", $this->siteLangId),
+                    'CONF_GOOGLE_ANALYTICS_4',
+                    1,
+                    array('class' => 'fieldsVisibilityJs onlyShowHideJs ga4ToggleEleJs'),
+                    false,
+                    0
+                );
+                $ga4Fld->developerTags['colWidthValues'] = [null, '12', null, null];
+                HtmlHelper::configureSwitchForCheckbox($ga4Fld, Labels::getLabel("LBL_WHEN_DISABLED_CODE_WILL_BE_IN_SYNC_WITH_THE_OLDER_GOOGLE_ANALYTICS_VERSION.", $this->siteLangId));
+
+
+                $fld = $frm->addRadioButtons(Labels::getLabel("FRM_ADVANCE_ECOMMERCE_TRACKING", $langId), 'CONF_ANALYTICS_ADVANCE_ECOMMERCE', applicationConstants::getYesNoArr($langId), applicationConstants::NO, array('class' => 'list-radio'));
+                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_INCASE_OF_GOOGLE_ANALYTICS_4_YOU_NEED_TO_UPDATE_JS_TRACKING_CODE_IN_SEO_TAB.", $langId) . "</span>";
+                HtmlHelper::configureSwitchForRadio($fld);
+
+
                 $fld = $frm->addTextBox(Labels::getLabel("FRM_CLIENT_ID", $langId), 'CONF_ANALYTICS_CLIENT_ID');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_THIS_IS_THE_APPLICATION_CLIENT_ID_USED_IN_ANALYTICS_DASHBOARD.", $langId) . "</span>";
 
@@ -1308,32 +1336,91 @@ class ConfigurationsController extends ListingBaseController
                 $fld = $frm->addTextBox(Labels::getLabel("FRM_ANALYTICS_ID", $langId), 'CONF_ANALYTICS_ID');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_THIS_IS_THE_GOOGLE_ANALYTICS_ID._Ex._UA-xxxxxxx-xx.", $langId) . "</span>";
 
-                $fld = $frm->addRadioButtons(Labels::getLabel("FRM_ADVANCE_ECOMMERCE_TRACKING", $langId), 'CONF_ANALYTICS_ADVANCE_ECOMMERCE', applicationConstants::getYesNoArr($langId), applicationConstants::NO, array('class' => 'list-radio'));
-                HtmlHelper::configureSwitchForRadio($fld);
+                $fld = $frm->addTextBox(Labels::getLabel("LBL_GOOGLE_ANALYTICS_PROPERTY_ID", $this->siteLangId), 'CONF_PROPERTY_ID');
+                $link = '<a href="javascript:void(0)" title="' . Labels::getLabel('LBL_GOOGLE_ANALYTICS_PROPERTY_ID') . '" data-bs-toggle="modal" data-bs-target="#propertyIdStepsJs">' . Labels::getLabel('LBL_STEPS', $this->siteLangId) . '</a>';
+                $link .= HtmlHelper::getModalStructure('propertyIdStepsJs', Labels::getLabel('LBL_GA4_PROPERTY_ID', $this->siteLangId), Extrapage::getGoogleAnalyticsPropertyIdSteps($this->siteLangId));
+                $lbl = CommonHelper::replaceStringData(Labels::getLabel("LBL_PLEASE_FOLLOW_{STEPS}_TO_GET_GA4_PROPERTY_ID:", $this->siteLangId), ['{STEPS}' => $link]);
+                $fld->htmlAfterField = "<small class='form-text text-muted'>" . $lbl . "</small>";
 
-                $accessToken = FatApp::getConfig("CONF_ANALYTICS_ACCESS_TOKEN", FatUtility::VAR_STRING, '');
-
-                include_once CONF_INSTALLATION_PATH . 'library/analytics/analyticsapi.php';
-                $analyticArr = array(
-                    'clientId' => FatApp::getConfig("CONF_ANALYTICS_CLIENT_ID", FatUtility::VAR_STRING, ''),
-                    'clientSecretKey' => FatApp::getConfig("CONF_ANALYTICS_SECRET_KEY", FatUtility::VAR_STRING, ''),
-                    'redirectUri' => UrlHelper::generateFullUrl('configurations', 'redirect', array(), '', false),
-                    'googleAnalyticsID' => FatApp::getConfig("CONF_ANALYTICS_ID", FatUtility::VAR_STRING, '')
-                );
-                try {
-                    $analytics = new Ykart_analytics($analyticArr);
-                    $authUrl = $analytics->buildAuthUrl();
-                } catch (exception $e) {
-                    $authUrl = '';
-                }
-
-                if ($authUrl) {
-                    $authenticateText = ($accessToken == '') ? 'Authenticate' : 'Re-Authenticate';
-                    $fld = $frm->addHTML('', 'accessToken', 'Please save your settings & <a href="' . $authUrl . '" >click here</a> to ' . $authenticateText . ' settings.<div class="gap"></div>', '', 'class="medium"');
-                } else {
-                    $fld = $frm->addHTML('', 'accessToken', 'Please configure your settings and then authenticate them', '', 'class="medium"');
-                }
+                $fld = $frm->addTextarea(Labels::getLabel('LBL_GOOGLE_SERVICE_ACCOUNT_JSON'), 'CONF_GOOGLE_ANALYTICS_CLIENT_JSON');
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
+
+                $link = '<a href="javascript:void(0)" title="' . Labels::getLabel('LBL_GOOGLE_SERVICE_ACCOUNT_JSON') . '" data-bs-toggle="modal" data-bs-target="#serviceAccountStepsJs">' . Labels::getLabel('LBL_STEPS', $this->siteLangId) . '</a>';
+                $link .= HtmlHelper::getModalStructure('serviceAccountStepsJs', Labels::getLabel('LBL_GOOGLE_SERVICE_ACCOUNT_DETAIL', $this->siteLangId), Extrapage::getGoogleServiceAccountSteps($this->siteLangId));
+                $lbl = CommonHelper::replaceStringData(Labels::getLabel("LBL_PLEASE_FOLLOW_{STEPS}_TO_GET_SERVICE_ACCOUNT_DETAIL_:", $this->siteLangId), ['{STEPS}' => $link]);
+                $fld->htmlAfterField = "<small class='form-text text-muted'>" . $lbl . "</small>";
+
+                if (!isset($_POST['CONF_ANALYTICS_ID'])) {
+                    $aClientId = new FormFieldRequirement('CONF_ANALYTICS_CLIENT_ID', 'value');
+                    $aClientId->setRequired(false);
+                    $reqaClientId = new FormFieldRequirement('CONF_ANALYTICS_CLIENT_ID', 'value');
+                    $reqaClientId->setRequired(true);
+
+                    $aSecretKey = new FormFieldRequirement('CONF_ANALYTICS_SECRET_KEY', 'value');
+                    $aSecretKey->setRequired(false);
+                    $reqaSecretKey = new FormFieldRequirement('CONF_ANALYTICS_SECRET_KEY', 'value');
+                    $reqaSecretKey->setRequired(true);
+
+                    $analyticsId = new FormFieldRequirement('CONF_ANALYTICS_ID', 'value');
+                    $analyticsId->setRequired(false);
+                    $reqAnalyticsId = new FormFieldRequirement('CONF_ANALYTICS_ID', 'value');
+                    $reqAnalyticsId->setRequired(true);
+
+                    $propertyId = new FormFieldRequirement('CONF_PROPERTY_ID', 'value');
+                    $propertyId->setRequired(false);
+                    $reqPropertyId = new FormFieldRequirement('CONF_PROPERTY_ID', 'value');
+                    $reqPropertyId->setRequired(true);
+
+                    $ga4ClientJson = new FormFieldRequirement('CONF_GOOGLE_ANALYTICS_CLIENT_JSON', 'value');
+                    $ga4ClientJson->setRequired(false);
+                    $reqGa4ClientJson = new FormFieldRequirement('CONF_GOOGLE_ANALYTICS_CLIENT_JSON', 'value');
+                    $reqGa4ClientJson->setRequired(true);
+
+                    $ga4Fld->requirements()->addOnChangerequirementUpdate(applicationConstants::YES, 'eq', 'CONF_PROPERTY_ID', $reqPropertyId);
+                    $ga4Fld->requirements()->addOnChangerequirementUpdate(applicationConstants::YES, 'eq', 'CONF_GOOGLE_ANALYTICS_CLIENT_JSON', $reqGa4ClientJson);
+                    $ga4Fld->requirements()->addOnChangerequirementUpdate(applicationConstants::YES, 'eq', 'CONF_ANALYTICS_CLIENT_ID', $aClientId);
+                    $ga4Fld->requirements()->addOnChangerequirementUpdate(applicationConstants::YES, 'eq', 'CONF_ANALYTICS_SECRET_KEY', $aSecretKey);
+                    $ga4Fld->requirements()->addOnChangerequirementUpdate(applicationConstants::YES, 'eq', 'CONF_ANALYTICS_ID', $analyticsId);
+
+                    $ga4Fld->requirements()->addOnChangerequirementUpdate(applicationConstants::NO, 'eq', 'CONF_PROPERTY_ID', $propertyId);
+                    $ga4Fld->requirements()->addOnChangerequirementUpdate(applicationConstants::NO, 'eq', 'CONF_GOOGLE_ANALYTICS_CLIENT_JSON', $ga4ClientJson);
+                    $ga4Fld->requirements()->addOnChangerequirementUpdate(applicationConstants::NO, 'eq', 'CONF_ANALYTICS_CLIENT_ID', $reqaClientId);
+                    $ga4Fld->requirements()->addOnChangerequirementUpdate(applicationConstants::NO, 'eq', 'CONF_ANALYTICS_SECRET_KEY', $reqaSecretKey);
+                    $ga4Fld->requirements()->addOnChangerequirementUpdate(applicationConstants::NO, 'eq', 'CONF_ANALYTICS_ID', $reqGa4ClientJson);
+                }
+
+                if (0 == FatApp::getConfig('CONF_GOOGLE_ANALYTICS_4', FatUtility::VAR_INT, 0)) {
+                    $accessToken = FatApp::getConfig("CONF_ANALYTICS_ACCESS_TOKEN", FatUtility::VAR_STRING, '');
+
+                    include_once CONF_INSTALLATION_PATH . 'library/analytics/analyticsapi.php';
+                    $analyticArr = array(
+                        'clientId' => FatApp::getConfig("CONF_ANALYTICS_CLIENT_ID", FatUtility::VAR_STRING, ''),
+                        'clientSecretKey' => FatApp::getConfig("CONF_ANALYTICS_SECRET_KEY", FatUtility::VAR_STRING, ''),
+                        'redirectUri' => UrlHelper::generateFullUrl('configurations', 'redirect', array(), '', false),
+                        'googleAnalyticsID' => FatApp::getConfig("CONF_ANALYTICS_ID", FatUtility::VAR_STRING, '')
+                    );
+                    try {
+                        $analytics = new Ykart_analytics($analyticArr);
+                        $authUrl = $analytics->buildAuthUrl();
+                    } catch (exception $e) {
+                        $authUrl = '';
+                    }
+
+                    if ($authUrl) {
+                        $authenticateText = ($accessToken == '') ? 'Authenticate' : 'Re-Authenticate';
+                        $lbl = Labels::getLabel('LBL_{CLICK-HERE}_TO_{TXT}_SETTINGS.', $this->siteLangId);
+                        $lbl = CommonHelper::replaceStringData($lbl, [
+                            '{CLICK-HERE}' => '<a class="link-underline" href="' . $authUrl . '" >' . Labels::getLabel('LBL_CLICK_HERE', $this->siteLangId) . '</a>',
+                            '{TXT}' => $authenticateText,
+                        ]);
+
+                        $fld = $frm->addHTML('', 'accessToken', '<div class="cta-settings gaAccessTokenJs">' . $lbl . '</div>', '', 'class="medium"');
+                    } else {
+                        $fld = $frm->addHTML('', 'accessToken', '<div class="cta-settings gaAccessTokenJs">' . Labels::getLabel('LBL_PLEASE_CONFIGURE_YOUR_SETTINGS_AND_THEN_AUTHENTICATE_THEM', $this->siteLangId) . '</div>', '', 'class="medium"');
+                    }
+
+                    $fld->developerTags['colWidthValues'] = [null, '12', null, null];
+                }
 
                 $fld = $frm->addHtml('', 'seperator', '<div class="separator separator-dashed my-2"></div>');
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
@@ -1382,7 +1469,7 @@ class ConfigurationsController extends ListingBaseController
                 $string = Labels::getLabel("FRM_DAYS,_after_which_Referrer_Url_is_Expired.", $langId);
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . $string . "</span>";
 
-                $fld = $frm->addHtml('', 'RewardsOnRegistration', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("FRM_REWARD_BENEFITS_ON_REGISTRATION", $langId) . '</h3>');
+                $fld = $frm->addHtml('', 'RewardsOnRegistration', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("FRM_REWARD_BENEFITS_ON_REGISTRATION_(_APPLICABLE_FOR_WEB_INTERFACE_ONLY_)", $langId) . '</h3>');
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
                 $fld = $frm->addTextBox(Labels::getLabel("FRM_REFERRER_REWARD_POINTS", $langId), 'CONF_REGISTRATION_REFERRER_REWARD_POINTS');
@@ -1401,7 +1488,7 @@ class ConfigurationsController extends ListingBaseController
                 $fld->requirements()->setIntPositive();
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_REWARDS_POINTS_VALIDITY_IN_DAYS_FROM_THE_DATE_OF_CREDIT", $langId) . "</span>";
 
-                $fld =  $frm->addHtml('', 'RewardsonPurchase', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("FRM_REWARD_BENEFITS_ON_FIRST_PURCHASE", $langId) . '</h3>');
+                $fld =  $frm->addHtml('', 'RewardsonPurchase', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("FRM_REWARD_BENEFITS_ON_FIRST_PURCHASE_(_APPLICABLE_FOR_WEB_INTERFACE_ONLY_)", $langId) . '</h3>');
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
                 $fld = $frm->addTextBox(Labels::getLabel("FRM_REFERRER_REWARD_POINTS", $langId), 'CONF_SALE_REFERRER_REWARD_POINTS');
@@ -1869,21 +1956,13 @@ class ConfigurationsController extends ListingBaseController
                 $fld = $frm->addTextBox(Labels::getLabel("FRM_FACEBOOK_APP_SECRET", $langId), 'CONF_FACEBOOK_APP_SECRET');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_THIS_IS_THE_FACEBOOK_SECRET_KEY_USED_FOR_AUTHENTICATION_AND_OTHER_FACEBOOK_RELATED_PLUGINS_SUPPORT.", $langId) . "</span>";
 
-                $fld = $frm->addTextbox(Labels::getLabel("FRM_FACEBOOK_POST_TITLE", $langId), 'CONF_SOCIAL_FEED_FACEBOOK_POST_TITLE_' . $langId);
-                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_THIS_TITLE_SHARED_ON_FACEBOOK", $langId) . "</span>";
-                $fld = $frm->addTextbox(Labels::getLabel("FRM_FACEBOOK_POST_CAPTION", $langId), 'CONF_SOCIAL_FEED_FACEBOOK_POST_CAPTION_' . $langId);
-                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_THIS_CAPTION_SHARED_ON_FACEBOOK", $langId) . "</span>";
-                $fld = $frm->addTextarea(Labels::getLabel("FRM_FACEBOOK_POST_DESCRIPTION", $langId), 'CONF_SOCIAL_FEED_FACEBOOK_POST_DESCRIPTION_' . $langId);
-                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_THIS_DESCRIPTION_SHARED_ON_FACEBOOK", $langId) . "</span>";
-                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
-
                 $fld = $frm->addTextBox(Labels::getLabel('FRM_TWITTER_USERNAME', $langId), 'CONF_TWITTER_USERNAME');
                 $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("FRM_TWITTER_USERNAME_MSG", $langId) . '</span>';
 
-                $fld = $frm->addTextBox(Labels::getLabel("FRM_TWITTER_APP_KEY", $langId), 'CONF_TWITTER_API_KEY');
+                $fld = $frm->addTextBox(Labels::getLabel("FRM_TWITTER_API_KEY", $langId), 'CONF_TWITTER_API_KEY');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_THIS_IS_THE_APPLICATION_ID_USED_IN_POST.", $langId) . "</span>";
 
-                $fld = $frm->addTextBox(Labels::getLabel("FRM_TWITTER_APP_SECRET", $langId), 'CONF_TWITTER_API_SECRET');
+                $fld = $frm->addTextBox(Labels::getLabel("FRM_TWITTER_API_SECRET", $langId), 'CONF_TWITTER_API_SECRET');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_THIS_IS_THE_TWITTER_SECRET_KEY_USED_FOR_AUTHENTICATION_AND_OTHER_TWITTER_RELATED_PLUGINS_SUPPORT.", $langId) . "</span>";
 
                 $fld = $frm->addTextarea(Labels::getLabel("FRM_TWITTER_POST_DESCRIPTION", $langId), 'CONF_SOCIAL_FEED_TWITTER_POST_TITLE' . $langId);

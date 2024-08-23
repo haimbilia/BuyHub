@@ -1,6 +1,7 @@
 .detail-page {
     .breadcrumb {
         margin: 1rem 0;
+
         @include media-breakpoint-up(lg) {
             margin: 2rem 0;
         }
@@ -19,6 +20,7 @@
     position: relative;
     margin-bottom: 2rem;
     min-width: 0;
+
     @include media-breakpoint-up(lg) {
         margin-bottom: 4rem;
     }
@@ -36,14 +38,14 @@
 
     .brand-title {
         font-size: 1rem;
-        font-weight: $font-weight-light;
+        font-weight: $font-weight-regular;
         color: $txt-gray;
     }
 
     .product-title {
         font-size: 1.625rem;
         line-height: 1.5;
-        font-weight: $font-weight-light;
+        font-weight: $font-weight-regular;
         color: #000;
         overflow-wrap: break-word;
         word-wrap: break-word;
@@ -52,6 +54,7 @@
         hyphens: auto;
         margin-bottom: 1.5rem;
         padding: 0;
+
         //display: flex;
         //align-items: center;
         &_badge {
@@ -65,22 +68,26 @@
         display: flex;
         align-items: center;
         margin: 1rem 0;
+
         &-new {
-            font-weight: 600;
+            font-weight: $font-weight-bold;
             font-size: 1.625rem;
         }
+
         &-old {
-            font-weight: $font-weight-light;
+            font-weight: $font-weight-regular;
             font-size: 1.125rem;
             text-decoration: line-through;
         }
+
         &-off {
-            font-weight: 500;
+            font-weight: $font-weight-normal;
             font-size: 1.125rem;
             color: $secondary-color;
             white-space: nowrap;
         }
     }
+
     .tax-inclusive {
         color: $txt-gray;
         font-size: 0.8rem;
@@ -91,16 +98,19 @@
     border-top: $border;
     padding-top: 2rem;
     margin-top: 2rem;
+
     &-head {
         display: flex;
         align-items: center;
         margin-bottom: 1rem;
+
         .h6 {
             margin: 0;
             font-size: 1rem;
-            font-weight: 500;
+            font-weight: $font-weight-normal;
             color: $txt-body;
         }
+
         .view-chart {
             background-color: transparent;
             border: none;
@@ -110,6 +120,7 @@
             margin-left: 1rem;
             position: relative;
             font-size: 12px;
+
             &::before {
                 content: "";
                 background-color: $border-color;
@@ -119,6 +130,7 @@
                 #{$start-direction}: 0;
             }
         }
+
         .quantity {
             margin-#{$start-direction}: auto;
         }
@@ -132,10 +144,12 @@
     grid-gap: 0.5rem;
     margin: 0;
     padding: 0;
+
     &-item {
         margin: 0;
         padding: 0;
     }
+
     &-size {
         .btn-option {
             display: block;
@@ -150,6 +164,7 @@
             min-width: 50px;
             text-align: center;
         }
+
         .selected {
             .btn-option {
                 background-color: $black;
@@ -158,8 +173,10 @@
             }
         }
     }
+
     &-color {
         grid-gap: 1rem;
+
         .btn-option {
             box-shadow: $shadow2;
             display: block;
@@ -169,6 +186,7 @@
             border-radius: 50%;
             border: solid 3px #fff;
         }
+
         .selected {
             .btn-option {
                 border-color: #000;
@@ -179,11 +197,13 @@
 
 //product-sharing
 $sharing-height: 50px;
+
 .product-sharing {
     margin-top: 1rem;
     display: flex;
     grid-gap: 15px;
     align-items: center;
+
     .btn-favorite {
         min-width: 120px;
         height: $sharing-height;
@@ -191,17 +211,21 @@ $sharing-height: 50px;
         border-radius: $common-radius;
         background-color: transparent;
         color: $brand-color;
+
         .svg {
             fill: #888;
         }
+
         &.active,
         &:hover {
+
             // @include bg-brand;
             .svg {
                 fill: $brand-color;
             }
         }
     }
+
     .via-social-sharing {
         flex: 1;
         display: flex;
@@ -211,9 +235,11 @@ $sharing-height: 50px;
         border-radius: $common-radius;
         background-color: transparent;
         height: $sharing-height;
+
         &-item {
             margin: auto;
         }
+
         &-link {
             padding: 0.6rem 0.75rem;
             display: block;
@@ -232,7 +258,7 @@ $sharing-height: 50px;
         padding: 1.5rem 1.5rem;
         padding-bottom: 0;
         color: $txt-body;
-        font-weight: 600;
+        font-weight: $font-weight-bold;
         font-size: 1rem;
     }
 }
@@ -241,6 +267,7 @@ $sharing-height: 50px;
     ul {
         padding: 1rem 1.5rem;
         padding-top: 0;
+
         li {
             padding: 4px 0;
             color: $txt-gray;
@@ -250,6 +277,7 @@ $sharing-height: 50px;
         }
     }
 }
+
 .wholesale-slider {
     display: flex;
     flex-direction: column;
@@ -265,26 +293,32 @@ $sharing-height: 50px;
             border-bottom: none;
         }
     }
+
     &-value {
         color: $txt-gray;
         font-size: 0.875rem;
-        font-weight: $font-weight-light;
+        font-weight: $font-weight-regular;
         margin-bottom: 10px;
     }
+
     .products-price {
         margin: 0;
+
         .products-price-new {
-            font-weight: 600;
+            font-weight: $font-weight-bold;
             font-size: 1.125rem;
         }
+
         .products-price-old {
             font-size: 12px;
         }
     }
 }
+
 .list-addons {
     max-height: 350px;
     overflow-y: auto;
+
     &-item {
         padding: 1rem 1.5rem;
         border-bottom: $border;
@@ -292,6 +326,7 @@ $sharing-height: 50px;
         gap: 8px;
         justify-content: space-between;
         position: relative;
+
         &:last-child {
             border-bottom: none;
         }
@@ -299,13 +334,14 @@ $sharing-height: 50px;
 
     .title {
         font-size: 0.875rem;
-        font-weight: $font-weight-light;
+        font-weight: $font-weight-regular;
         color: $txt-gray;
     }
+
     .products-price {
         font-size: 1rem;
         color: $txt-body;
-        font-weight: 500;
+        font-weight: $font-weight-normal;
     }
 }
 
@@ -320,16 +356,19 @@ $sharing-height: 50px;
         border-bottom: $border;
         padding-bottom: 1.5rem;
         margin-bottom: 1.5rem;
+
         &:last-child {
             border-bottom: none;
         }
     }
+
     &-head {
         font-size: 1.375rem;
         margin-bottom: 0;
         position: relative;
         display: flex;
         cursor: pointer;
+
         .plus {
             color: $txt-black;
             position: absolute;
@@ -337,30 +376,37 @@ $sharing-height: 50px;
             top: 5px;
             transition: transform 0.2s ease-in-out;
         }
+
         &:not(.collapsed) {
+
             //color: $secondary-color;
             .plus {
                 transform: rotate(227deg);
             }
         }
     }
+
     &-data {
         padding: 2rem 0;
         overflow-x: auto;
     }
 }
+
 .specification-group {
     margin: 3rem 0;
+
     h6 {
         margin-bottom: 0;
-        font-weight: 600;
+        font-weight: $font-weight-bold;
         font-size: 0.85rem;
         color: rgba(0, 0, 0, 0.4);
     }
+
     .label {
         color: $txt-gray;
     }
-    & + & {
+
+    &+& {
         margin: 3rem 0;
     }
 }
@@ -374,9 +420,11 @@ $sharing-height: 50px;
         font-size: 0.85rem;
         color: $txt-gray;
         border-bottom: dashed 1px $border-color;
+
         &:first-child {
             // padding-top: 0;
         }
+
         &:last-child {
             // border-bottom: none;
             // padding-bottom: 0;
@@ -391,11 +439,11 @@ $sharing-height: 50px;
             max-width: 30%;
             font-size: inherit;
             color: $txt-body;
-            font-weight: 600;
+            font-weight: $font-weight-bold;
             text-align: #{$start-direction};
         }
-        .value {
-        }
+
+        .value {}
     }
 }
 
@@ -417,6 +465,7 @@ $sharing-height: 50px;
     align-items: center;
     justify-content: space-between;
     flex: 1;
+
     .add-to-cart {
         min-height: 38px;
     }
@@ -429,7 +478,7 @@ $sharing-height: 50px;
 
 .options-name {
     text-transform: uppercase;
-    font-weight: 600;
+    font-weight: $font-weight-bold;
     font-size: 0.875em;
     line-height: 1;
     margin-#{$end-direction}: 10px;
@@ -438,10 +487,11 @@ $sharing-height: 50px;
 .condition-txt {
     position: relative;
     font-size: 0.8rem;
-    font-weight: 600;
+    font-weight: $font-weight-bold;
     margin: 0.5rem 0;
     opacity: 0.5;
     padding-#{$start-direction}: 20px;
+
     &:before {
         background: url(images/retina/tick-gray.svg) no-repeat center;
         content: "";
@@ -457,6 +507,7 @@ $sharing-height: 50px;
 .shop-owner-detail {
     display: flex;
     align-items: center;
+
     .owner_logo {
         background: #fff;
         border-radius: 50%;
@@ -477,14 +528,17 @@ $sharing-height: 50px;
 .owener_info {
     .owener_info_mame {
         color: $txt-body;
+
         a {
             color: inherit;
         }
     }
+
     .owener_info_location {
         color: #000;
         font-size: 0.875em;
     }
+
     .products__rating {
         justify-content: flex-start;
     }
@@ -492,6 +546,7 @@ $sharing-height: 50px;
 
 .shop-reviews-wrapper {
     position: relative;
+
     .shop-reviews {
         display: flex;
         align-items: center;
@@ -500,6 +555,7 @@ $sharing-height: 50px;
         height: 130px;
         position: relative;
         margin: 0 auto;
+
         .svg {
             fill: $brand-color;
             width: 130px;
@@ -507,10 +563,11 @@ $sharing-height: 50px;
             position: absolute;
         }
     }
+
     .shop-reviews-points {
         line-height: 1;
         font-size: 1.6rem;
-        font-weight: 600;
+        font-weight: $font-weight-bold;
         padding-top: 15px;
     }
 }
@@ -529,11 +586,13 @@ $sharing-height: 50px;
 .reviews-lisitng {
     border: $border;
     border-radius: $common-radius;
-    > ul {
-        > li {
+
+    >ul {
+        >li {
             border-bottom: $border;
             padding-bottom: 10px;
             margin-bottom: 10px;
+
             &:last-child {
                 padding-bottom: 0;
                 margin-bottom: 0;
@@ -547,26 +606,32 @@ $sharing-height: 50px;
     background: #fff;
     border-radius: $common-radius;
     border: $border;
+
     .profile-avatar {
         border: none;
         flex-direction: row;
         height: auto;
         padding: 0;
         align-items: center;
+
         .dated {
             font-size: 0.625rem;
         }
+
         .profile-dp {
             margin: 0;
         }
+
         .profile-bio {
             text-align: #{$start-direction};
             padding-#{$start-direction}: 0.875rem;
         }
     }
-    > li {
+
+    >li {
         border-bottom: $border;
         padding: 1rem 1.5rem;
+
         &:last-child {
             border-bottom: none;
         }
@@ -598,7 +663,7 @@ $sharing-height: 50px;
 }
 
 .profile-bio .deg {
-    font-weight: $font-weight-light;
+    font-weight: $font-weight-regular;
     color: lighten($txt-body, 50%);
     font-size: 0.875rem;
 }
@@ -613,12 +678,15 @@ $sharing-height: 50px;
     position: sticky;
     /*top: 146px;*/
     z-index: 1;
+
     ul {
         display: flex;
         flex-wrap: nowrap;
         overflow-x: auto;
+
         li {
             padding: 0 20px;
+
             a {
                 color: inherit;
                 display: block;
@@ -629,7 +697,7 @@ $sharing-height: 50px;
                 text-overflow: ellipsis;
                 white-space: nowrap;
                 line-height: 1;
-                font-weight: 400;
+                font-weight: $font-weight-regular;
                 text-rendering: optimizeLegibility;
                 transition: color 0.3s ease-in-out;
                 background-image: linear-gradient(currentColor, currentColor);
@@ -637,6 +705,7 @@ $sharing-height: 50px;
                 background-repeat: no-repeat;
                 background-size: 0% 2px;
                 transition: background-size 0.3s;
+
                 &:hover,
                 &.is-active {
                     background-size: 100% 2px;
@@ -665,15 +734,17 @@ $sharing-height: 50px;
     opacity: 0;
     visibility: hidden;
     cursor: pointer;
+
     @include media-breakpoint-down(lg) {
         & {
             display: none;
         }
     }
-    > a {
+
+    >a {
         border-radius: $radius2;
         padding: 5px 14px;
-        font-weight: 600;
+        font-weight: $font-weight-bold;
         font-size: 0.7rem;
         color: #fff !important;
         text-transform: uppercase;
@@ -681,6 +752,7 @@ $sharing-height: 50px;
         background: #000;
         display: flex;
         align-items: center;
+
         .svg-icon {
             width: 18px;
             height: 18px;
@@ -688,6 +760,7 @@ $sharing-height: 50px;
             vertical-align: top;
             position: relative;
             margin-#{$end-direction}: 10px;
+
             svg {
                 fill: #fff;
                 width: 100%;
@@ -712,6 +785,7 @@ $sharing-height: 50px;
     width: 2.5rem;
     height: 2.5rem;
     display: block;
+
     svg {
         width: 16px;
         height: 16px;
@@ -724,24 +798,29 @@ $sharing-height: 50px;
     @include media-breakpoint-down(sm) {
         padding-top: 1rem;
     }
+
     li {
         padding: 5px 0;
+
         .progress {
             align-items: center;
             background-color: transparent;
             font-size: 1rem;
             height: auto;
+
             &__lbl {
                 flex: 1;
                 font-size: 0.875rem;
                 text-align: #{$end-direction};
             }
+
             &__count {
                 font-size: 0.875em;
                 min-width: 60px;
-                font-weight: 500;
+                font-weight: $font-weight-normal;
                 color: $txt-gray;
             }
+
             &__bar {
                 background: #ddd;
                 height: 6px;
@@ -749,6 +828,7 @@ $sharing-height: 50px;
                 display: flex;
                 overflow: hidden;
                 margin: 0 1rem;
+
                 .progress__fill {
                     background: #616161;
                 }
@@ -760,16 +840,19 @@ $sharing-height: 50px;
 .certified-bar {
     background: $bg-gray;
     border-top: $border;
+
     ul {
         display: flex;
         flex-wrap: nowrap;
         justify-content: center;
+
         @include media-breakpoint-down(lg) {
             & {
                 overflow-x: auto;
                 justify-content: flex-start;
             }
         }
+
         li {
             @include media-breakpoint-down(md) {
                 & {
@@ -780,6 +863,7 @@ $sharing-height: 50px;
             }
         }
     }
+
     .certified-box {
         display: flex;
         align-items: center;
@@ -788,21 +872,25 @@ $sharing-height: 50px;
         -ms-flex-direction: column;
         flex-direction: column;
         margin: 0 1rem;
+
         .icn {
             margin: 0 auto;
             margin-bottom: 10px;
+
             svg {
                 width: 24px;
                 height: 24px;
                 fill: #575757;
             }
         }
+
         p {
             font-size: 0.875rem;
             color: #575757;
-            font-weight: 400;
+            font-weight: $font-weight-regular;
             text-align: center;
             text-transform: uppercase;
+
             a {
                 color: #575757;
             }
@@ -815,6 +903,7 @@ $sharing-height: 50px;
     @include placeholder;
     @include responsive-ratio(16, 9);
     position: relative;
+
     iframe {
         @include img-absolute;
     }
@@ -835,6 +924,7 @@ $sharing-height: 50px;
     position: relative;
     margin: 0 auto;
     text-align: center;
+
     .svg {
         fill: $brand-color;
         position: relative;
@@ -843,9 +933,10 @@ $sharing-height: 50px;
         padding: 0px 0 8px 0;
         margin: 0;
     }
+
     .rate {
         font-size: 1.6rem;
-        font-weight: 600;
+        font-weight: $font-weight-bold;
         position: absolute;
         left: 50%;
         top: 50%;
@@ -857,8 +948,9 @@ $sharing-height: 50px;
     span {
         color: $txt-gray;
     }
+
     strong {
-        font-weight: 700;
+        font-weight: $font-weight-boldest;
     }
 }
 
@@ -867,6 +959,7 @@ $sharing-height: 50px;
     flex-wrap: wrap;
     padding-top: 1rem;
     margin: 0 -0.5rem;
+
     li {
         padding: 0.5rem;
     }
@@ -874,10 +967,12 @@ $sharing-height: 50px;
 
 .review-container {
     padding-top: 1.25rem;
+
     p {
         color: $txt-gray;
         line-height: 1.6;
     }
+
     .readMore {
         margin-top: 10px;
         display: inline-block;
@@ -887,6 +982,7 @@ $sharing-height: 50px;
 .list-services {
     margin-#{$start-direction}: auto;
     display: flex;
+
     //flex-wrap: wrap;
     &-item {
         background-color: lighten($bg-gray, 02);
@@ -899,9 +995,11 @@ $sharing-height: 50px;
         display: flex;
         align-items: center;
         justify-content: center;
+
         &:last-child {
             margin-#{$end-direction}: 0;
         }
+
         &:hover {
             background-color: $bg-gray;
         }
@@ -912,15 +1010,19 @@ $sharing-height: 50px;
     margin-top: 2rem;
     display: flex;
     flex-direction: column;
+
     &-list {
         display: flex;
         align-items: center;
+
         li {
             margin-#{$end-direction}: 10px;
             margin-bottom: 5px;
+
             &:last-child {
                 margin-#{$end-direction}: 0;
             }
+
             a {
                 text-align: center;
                 border: $border;
@@ -930,6 +1032,7 @@ $sharing-height: 50px;
                 display: block;
                 color: $txt-gray;
                 padding: 10px;
+
                 .svg {
                     width: 20px;
                     height: 20px;
@@ -960,6 +1063,7 @@ $sharing-height: 50px;
     /* (16:9 ratio) */
     width: 100%;
     max-width: 500px;
+
     //height: 338px;
     @include media-breakpoint-down(md) {
         width: 100%;

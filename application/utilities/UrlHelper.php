@@ -1,4 +1,5 @@
 <?php
+$rewriteUrlsData = [];
 class UrlHelper extends FatUtility
 {
     public static function getCurrUrl()
@@ -13,11 +14,12 @@ class UrlHelper extends FatUtility
             $pageURL .= "s";
         }
         $pageURL .= "://";
-        if ($_SERVER["SERVER_PORT"] != "80") {
+       /*  if ($_SERVER["SERVER_PORT"] != "80") {
             $pageURL .= $_SERVER["SERVER_NAME"] . ":" . $_SERVER["SERVER_PORT"];
         } else {
             $pageURL .= $_SERVER["SERVER_NAME"];
-        }
+        } */
+        $pageURL .= $_SERVER["SERVER_NAME"];
         return $pageURL;
     }
 
@@ -25,6 +27,9 @@ class UrlHelper extends FatUtility
     {
         $useRootUrl = $use_root_url;
         if (true == $useLangCode && FatApp::getConfig('CONF_LANG_SPECIFIC_URL', FatUtility::VAR_INT, 0) && count(LANG_CODES_ARR) > 1 && $langId  != FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1)) {
+            if (!$use_root_url) {
+                $use_root_url = CONF_WEBROOT_URL;
+            }
             $use_root_url = rtrim($use_root_url, '/') . '/' . strtolower(LANG_CODES_ARR[$langId]) . '/';
         }
         $url = FatUtility::generateUrl($controller, $action, $queryData, $use_root_url, $url_rewriting);
@@ -45,8 +50,16 @@ class UrlHelper extends FatUtility
             return $url;
         }
 
-        $urlForString = FatUtility::generateUrl($controller, $action, $queryData, $useRootUrl, $url_rewriting);
-        $urlString = trim(ltrim($urlForString, CONF_WEBROOT_FRONTEND), '/');
+        /* trim handled to faced issue with /folderName/ in base URL */
+        $urlForString = trim(FatUtility::generateUrl($controller, $action, $queryData, $useRootUrl, $url_rewriting),'/');
+        $urlString = trim(ltrim($urlForString, trim(CONF_WEBROOT_FRONTEND,'/')), '/');
+
+        global $rewriteUrlsData;
+        $key = $urlString . '-' . $langId . '-' . $useLangCode.'-'.$encodeUrl;
+        if (isset($rewriteUrlsData[$key]) && !empty($rewriteUrlsData[$key])) {
+            return $rewriteUrlsData[$key];
+        }
+
         $srch = UrlRewrite::getSearchObject();
         $srch->addFld('urlrewrite_custom');
         if (true == $useLangCode && FatApp::getConfig('CONF_LANG_SPECIFIC_URL', FatUtility::VAR_INT, 0) && count(LANG_CODES_ARR) > 1 && $langId  != FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1)) {
@@ -67,7 +80,7 @@ class UrlHelper extends FatUtility
                 $url .=  $row['urlrewrite_custom'];
             }
         }
-        return $url;
+        return $rewriteUrlsData[$key] = $url;
     }
 
     public static function generateFullUrl($controller = '', $action = '', $queryData = array(), $use_root_url = '', $url_rewriting = null, $encodeUrl = false, $getOriginalUrl = false, $useLangCode = true, $langId = SYSTEM_LANG_ID)

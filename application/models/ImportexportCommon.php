@@ -392,14 +392,17 @@ class ImportexportCommon extends FatModel
             } else {
                 $arr['product_dimension_unit_identifier'] = Labels::getLabel('LBL_Dimension_Unit_Identifier', $langId);
             } */
+            
             if (FatApp::getConfig("CONF_PRODUCT_WEIGHT_ENABLE", FatUtility::VAR_INT, 1)) {
                 $arr['product_weight'] = Labels::getLabel('LBL_Weight', $langId);
+
                 if ($this->settings['CONF_USE_WEIGHT_UNIT_ID']) {
                     $arr['product_weight_unit'] = Labels::getLabel('LBL_WEIGHT_UNIT_ID', $langId);
                 } else {
                     $arr['product_weight_unit_identifier'] = Labels::getLabel('LBL_WEIGHT_UNIT_IDENTIFIER', $langId);
                 }
             }
+
             $arr['product_warranty'] = Labels::getLabel('LBL_PRODUCT_WARRANTY_(DAYS)', $langId);
             $arr['product_upc'] = Labels::getLabel('LBL_EAN/UPC/GTIN_CODE', $langId);
 

@@ -364,15 +364,16 @@ class UserAuthentication extends FatModel
         /* [To Do - need to remove credential_password_old in next release */
         if (false === $this->loginWithOtp && false === $this->loginWithSocialAccount) {
             if ($row['credential_verified'] == applicationConstants::YES  && !$isAdmin) {
+                if (empty($row['credential_email']) && !empty($row['user_phone_dcode']) && !empty($row['user_phone'])) {
+                    $this->error = Labels::getLabel('MSG_THIS_ACCOUNT_IS_LINKED_WITH_PHONE._PLEASE_LINK_YOUR_EMAIL_FROM_YOUR_ACCOUNT_TO_LOGIN_USING_PASSWORD.', $this->commonLangId);
+                    return false;
+                }
+
                 if (empty($row['credential_password'])) {
-                    ///Forced user to update password
-                    $emailErrorMsg = str_replace("{clickhere}", '<a href="javascript:void(0)" onclick="sendResetPasswordLink(' . "'" . $username . "'" . ')">' . Labels::getLabel('LBL_Click_Here', $this->commonLangId) . '</a>', Labels::getLabel('MSG_For_Security_Reason_{clickhere}_to_reset_your_password.', $this->commonLangId));
-                    $this->error = $emailErrorMsg;
-                    if (FatUtility::isAjaxCall() || true === MOBILE_APP_API_CALL) {
-                        $json['status'] = 0;
-                        $json['msg'] = $this->error;
-                        $json['notVerified'] = 1;
-                        die(json_encode($json));
+                    if (MOBILE_APP_API_CALL) {
+                        $this->error = Labels::getLabel('MSG_FOR_SECURITY_REASON_RESET_YOUR_PASSWORD.', $this->commonLangId);
+                    } else {
+                        $this->error = CommonHelper::replaceStringData(Labels::getLabel('MSG_FOR_SECURITY_REASON_{CLICKHERE}_TO_RESET_YOUR_PASSWORD.', $this->commonLangId), ["{clickhere}" => '<a href="javascript:void(0)" onclick="sendResetPasswordLink(' . "'" . $username . "'" . ')">' . Labels::getLabel('LBL_Click_Here', $this->commonLangId) . '</a>']);
                     }
                     return false;
                 }
@@ -487,7 +488,10 @@ class UserAuthentication extends FatModel
         unset($_SESSION['shopping_cart']["order_id"]);
         unset($_SESSION["order_id"]);
 
-        session_regenerate_id();
+        if (!MOBILE_APP_API_CALL) {
+            session_regenerate_id();
+        }
+
         $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME] = array(
             'user_id' => $data['user_id'],
             'user_name' => $data['user_name'],
@@ -559,7 +563,7 @@ class UserAuthentication extends FatModel
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $rs = $srch->getResultSet();
-        return $db->fetch($rs);
+        return (array)$db->fetch($rs);
     }
 
     public static function clearLoggedUserLoginCookie()
@@ -578,8 +582,7 @@ class UserAuthentication extends FatModel
                 )
             );
         }
-
-        setcookie($_COOKIE[static::SYSTEMUSER_COOKIE_NAME], '', time() - 3600, CONF_WEBROOT_URL);
+        setcookie($_COOKIE[static::SYSTEMUSER_COOKIE_NAME], '', time() - 3600, CONF_WEBROOT_URL);       
         return true;
     }
 
@@ -638,7 +641,7 @@ class UserAuthentication extends FatModel
     {
         if ($ip == '') {
             $ip = CommonHelper::getClientIp();
-        }        
+        }
 
         if (
             isset($_SESSION[static::SESSION_ELEMENT_NAME])
@@ -789,7 +792,7 @@ class UserAuthentication extends FatModel
         $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
         if (!$row = $db->fetch($rs, User::tblFld('id'))) {
-            $this->error = Labels::getLabel('ERR_INVALID_USERNAME', $this->commonLangId);
+            $this->error = Labels::getLabel('ERR_INVALID_USERNAME/EMAIL', $this->commonLangId);
             return false;
         }
 

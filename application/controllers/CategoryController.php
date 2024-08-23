@@ -54,8 +54,19 @@ class CategoryController extends MyAppController
             }
             FatUtility::exitWithErrorCode(404);
         }
-        $bannerDetail = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_BANNER, $categoryId);
-        $category['banner'] = empty($bannerDetail) ? (object) array() : $bannerDetail;
+
+        if (false === MOBILE_APP_API_CALL) {
+            $bannerDetail = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_BANNER, $categoryId);
+            $category['banner'] = empty($bannerDetail) ? (object) array() : $bannerDetail;
+        } else {
+            $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_CATEGORY_BANNER, $categoryId, 0, 0, applicationConstants::SCREEN_MOBILE);
+            $uploadedTime = AttachedFile::setTimeParam($fileRow['afile_updated_at']);
+            $category['banner']['mobile'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Category', 'Banner', array($categoryId, $this->siteLangId, ImageDimension::VIEW_MOBILE, $fileRow['afile_id'], applicationConstants::SCREEN_MOBILE)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+
+            $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_CATEGORY_BANNER, $categoryId, 0, 0, applicationConstants::SCREEN_IPAD);
+            $uploadedTime = AttachedFile::setTimeParam($fileRow['afile_updated_at']);
+            $category['banner']['ipad'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Category', 'Banner', array($categoryId, $this->siteLangId, ImageDimension::VIEW_TABLET, $fileRow['afile_id'], applicationConstants::SCREEN_IPAD)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+        }
         /* ] */
 
         $userId = 0;
@@ -310,8 +321,8 @@ class CategoryController extends MyAppController
             $result[$key] = $val;
             $isLastChildCategory = ProductCategory::isLastChildCategory($val['prodcat_id']);
             $result[$key]['isLastChildCategory'] = $isLastChildCategory ? 1 : 0;
-            $result[$key]['icon'] = UrlHelper::generateFullUrl('Category', 'icon', array($val['prodcat_id'], $langId, 'COLLECTION_PAGE') ). $uploadedTime;
-            $result[$key]['image'] = UrlHelper::generateFullUrl('Category', 'banner', array($val['prodcat_id'], $langId, 'MOBILE', applicationConstants::SCREEN_MOBILE) ). $uploadedTime;
+            $result[$key]['icon'] = UrlHelper::generateFullUrl('Category', 'icon', array($val['prodcat_id'], $langId, 'COLLECTION_PAGE')) . $uploadedTime;
+            $result[$key]['image'] = UrlHelper::generateFullUrl('Category', 'banner', array($val['prodcat_id'], $langId, 'MOBILE', applicationConstants::SCREEN_MOBILE)) . $uploadedTime;
             $childernArr = array();
             if (!empty($val['children'])) {
                 $array = array_values($val['children']);
@@ -322,28 +333,16 @@ class CategoryController extends MyAppController
         return array_values($result);
     }
 
+    /**
+     * (For API only)
+     */
     public function structure()
     {
-        $prodSrchObj = (true === MOBILE_APP_API_CALL ? false : new ProductCategorySearch($this->siteLangId));
         $parentId = FatApp::getPostedData('parentId', FatUtility::VAR_INT, 0);
-        $includeChild = true;
-        if (true === MOBILE_APP_API_CALL && 0 == $parentId) {
-            $includeChild = false;
-        }
-
-        $categoriesArr = ProductCategory::getProdCatParentChildWiseArr($this->siteLangId, $parentId, $includeChild, false, false, $prodSrchObj, true);
-
-        if (false === MOBILE_APP_API_CALL) {
-            $productCategory = new ProductCategory();
-            $categoriesArr = $productCategory->getCategoryTreeArr($this->siteLangId, $categoriesArr, array('prodcat_id', 'IFNULL(prodcat_name,prodcat_identifier ) as prodcat_name', 'substr(GETCATCODE(prodcat_id),1,6) AS prodrootcat_code', 'prodcat_content_block', 'prodcat_active', 'prodcat_parent', 'GETCATCODE(prodcat_id) as prodcat_code', 'prodcat_updated_on'));
-        }
+        $categoriesArr = ProductCategory::getProdCatParentChildWiseArr($this->siteLangId, $parentId, true, false, false, false, true);
 
         $categoriesArr = $this->resetKeyValues(array_values($categoriesArr), $this->siteLangId);
-        if (empty($categoriesArr)) {
-            $categoriesArr = array();
-        }
-
-        $this->set('categoriesData', $categoriesArr);
+        $this->set('categoriesData', (array)$categoriesArr);
         $this->_template->render();
     }
 
@@ -373,5 +372,15 @@ class CategoryController extends MyAppController
             FatUtility::dieJsonError(sprintf(Labels::getLabel('ERR_%S_NOT_AVAILABLE', $this->siteLangId), $categoryName));
         }
         FatUtility::dieJsonSuccess(array());
+    }
+    public function sidebarCategoriesList()
+    {
+        $sidebarHtml = CacheHelper::get('headerSidebarHtml' . $this->siteLangId, CONF_DEF_CACHE_TIME, '.txt');
+        if (empty($sidebarHtml)) {
+            $sidebarHtml = $this->_template->render(false, false, NULL, true);
+            CacheHelper::create('headerSidebarHtml' . $this->siteLangId, $sidebarHtml, CacheHelper::TYPE_HEADER_SIDEBAR);
+        }
+        $this->set('html', $sidebarHtml);
+        $this->_template->render(false, false, 'json-success.php', true, false);
     }
 }

@@ -59,6 +59,10 @@ class Extrapage extends MyAppModel
 
     /* EXTRA INFO Column types ]*/
 
+    public const GOOGLE_SERVICE_ACCOUNT_STEPS = 84;
+    public const GOOGLE_ANALYTICS_PROPERTY_ID_STEPS = 85;
+    public const FIREBASE_SERVICE_ACCOUNT_STEPS = 86; /* Used for Push Notification */
+
     public function __construct($epageId = 0)
     {
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $epageId);
@@ -138,7 +142,7 @@ class Extrapage extends MyAppModel
         $flds = ['epage_id', 'epage_identifier', 'epage_type', 'epage_content_for', 'epage_active', 'epage_default', 'epage_default_content', 'epage_extra_info', 'epage_updated_on'];
         $langId = FatUtility::int($langId);
         if (0 < $langId) {
-            $flds = array_merge($flds, ['epagelang_epage_id', 'epagelang_lang_id', 'epage_label', 'epage_content']);
+            $flds = array_merge($flds, ['epagelang_epage_id', 'epagelang_lang_id', 'epage_label', 'COALESCE(epage_content, epage_default_content) as epage_content']);
         }
 
         $srch = self::getSearchObject($langId);
@@ -287,4 +291,23 @@ class Extrapage extends MyAppModel
 
         return in_array($block, $arr);
     }
+
+    public static function getGoogleServiceAccountSteps(int $langId): string
+    {
+        $obj = new Extrapage();
+        return (string)(($obj->getContentByPageType(self::GOOGLE_SERVICE_ACCOUNT_STEPS, $langId))['epage_content'] ?? '');
+    }
+    
+    public static function getFirebaseServiceAccountSteps(int $langId): string
+    {
+        $obj = new Extrapage();
+        return (string)(($obj->getContentByPageType(self::FIREBASE_SERVICE_ACCOUNT_STEPS, $langId))['epage_content'] ?? '');
+    }
+    
+    public static function getGoogleAnalyticsPropertyIdSteps(int $langId): string
+    {
+        $obj = new Extrapage();
+        return (string)(($obj->getContentByPageType(self::GOOGLE_ANALYTICS_PROPERTY_ID_STEPS, $langId))['epage_content'] ?? '');
+    }
 }
+

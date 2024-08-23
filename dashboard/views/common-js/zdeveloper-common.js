@@ -647,6 +647,7 @@ function defaultSetUpLogin(frm, v) {
         },
 
         displayProcessing: function () {
+            $.ykmsg.clear();
             fcom.processingCounter++;
             $.ykmsg.info(langLbl.processing, -1, fcom.processingClass + " " + fcom.processingClass + '-' + fcom.processingCounter);
         },
@@ -1462,19 +1463,12 @@ $(document).on("shown.bs.modal", "#search-main", function () {
 
 $(window).keydown(function (e) {
     if ((e.ctrlKey || e.metaKey) && e.keyCode === 70) {
-        if (0 == $.cookie("quickSearchCtrlJs") || "undefined" == typeof $.cookie("quickSearchCtrlJs")) {
-            $("#search-main").modal("show");
-            e.preventDefault();
+        if ($("#search-main").is(':visible')) {
+            $("#search-main").modal("hide");
+            return;
         }
-    }
-});
-
-$(document).on("click", "#quickSearchCtrlJs", function () {
-    if ($(this).is(":checked")) {
-        $.cookie("quickSearchCtrlJs", 1, { expires: 30, path: siteConstants.rooturl });
-        $("#search-main").modal("hide");
-    } else {
-        $.cookie("quickSearchCtrlJs", 0, { path: siteConstants.rooturl });
+        $("#search-main").modal("show");
+        e.preventDefault();
     }
 });
 

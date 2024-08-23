@@ -2,26 +2,31 @@
     display: grid;
     grid-gap: 2rem;
     grid-template-columns: repeat(2, 1fr);
+
     @include media-breakpoint-up(lg) {
         grid-template-columns: repeat(4, 1fr);
         grid-gap: 4rem;
     }
+
     .incentives {
         display: flex;
         flex-direction: column;
         text-align: center;
         max-width: 220px;
         margin: 0 auto;
+
         &-icon {
             width: 30px;
             margin: 1.5rem auto;
         }
+
         &-title {
             margin-bottom: 0.5rem;
             font-size: 1rem;
-            font-weight: 600;
+            font-weight: $font-weight-bold;
             color: $txt-body;
         }
+
         &-text {
             font-size: 0.8rem;
             color: $txt-gray;

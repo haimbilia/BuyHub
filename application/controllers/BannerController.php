@@ -6,13 +6,8 @@ class BannerController extends MyAppController
     {
     }
 
-    public function url($bannerId = 0)
+    public function track(int $bannerId)
     {
-        $bannerId = FatUtility::int($bannerId);
-        if (1 > $bannerId) {
-            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
-            FatApp::redirectUser(UrlHelper::generateUrl('home'));
-        }
         $srch = new BannerSearch($this->siteLangId, true);
         $srch->joinLocations($this->siteLangId, true);
         $srch->joinPromotions();
@@ -24,7 +19,7 @@ class BannerController extends MyAppController
         $rs = $srch->getResultSet();
         $row = FatApp::getDb()->fetch($rs);
         if ($row == false) {
-            Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId));
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId), false, true);
             FatApp::redirectUser(UrlHelper::generateUrl('home'));
         }
 
@@ -37,7 +32,6 @@ class BannerController extends MyAppController
         if (Promotion::isUserClickCountable($userId, $row['banner_record_id'], $_SERVER['REMOTE_ADDR'], session_id())) {
             switch ($row['banner_type']) {
                 case Banner::TYPE_BANNER:
-
                     break;
 
                 case Banner::TYPE_PPC:
@@ -77,6 +71,11 @@ class BannerController extends MyAppController
                     break;
             }
         }
+
+        if (MOBILE_APP_API_CALL) {
+            FatUtility::dieJsonSuccess(Labels::getLabel('LBL_SUCCESS'));
+        }
+
         if (!filter_var($url, FILTER_VALIDATE_URL) === false) {
             FatApp::redirectUser($url);
         }

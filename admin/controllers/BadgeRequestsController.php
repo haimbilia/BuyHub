@@ -2,7 +2,6 @@
 
 class BadgeRequestsController extends ListingBaseController
 {
-
     protected string $pageKey = 'MANAGE_BADGE_REQUESTS';
     private array $recordData = [];
 
@@ -94,6 +93,7 @@ class BadgeRequestsController extends ListingBaseController
                 'COALESCE(' . Badge::DB_TBL_PREFIX . 'name, ' . Badge::DB_TBL_PREFIX . 'identifier) as ' . Badge::DB_TBL_PREFIX . 'name',
                 'shop_name',
                 'shop_id',
+                'shop_user_id',
                 'shop_updated_on',
                 'user_name',
                 Badge::DB_TBL_PREFIX . 'id'
@@ -318,8 +318,8 @@ class BadgeRequestsController extends ListingBaseController
 
             $recordId = $badgeLink['badgelink_record_id'];
             $recordName = $badgeLink['record_name'];
-            $optionName = explode('|', $badgeLink['option_name']);
-            $optionValueName = explode('|', $badgeLink['option_value_name']);
+            $optionName = !empty($badgeLink['option_name']) ? explode('|', $badgeLink['option_name']) : [];
+            $optionValueName = !empty($badgeLink['option_value_name']) ? explode('|', $badgeLink['option_value_name']) : [];
             $seller = $badgeLink['seller'];
             unset($badgeLink['badgelink_record_id'], $badgeLink['record_name'], $badgeLink['option_name'], $badgeLink['option_value_name'], $badgeLink['seller']);
 

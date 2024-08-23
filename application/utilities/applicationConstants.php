@@ -297,6 +297,11 @@ class applicationConstants
         return array(/* 'qt',  */'mov', 'mp4', 'webm');
     }
 
+    public static function allowedImageFileExtensions()
+    {
+        return ['png', 'jpeg', 'jpg', 'gif'];
+    }
+
     public static function allowedVideoMimeTypes()
     {
         return array('video/quicktime', 'video/mp4', 'video/x-m4v', 'video/webm');
@@ -456,8 +461,11 @@ class applicationConstants
         );
     }
 
-    public static function getClassColor(string $class): string
+    public static function getClassColor(int $class): string
     {
+        $classArr = self::getClassArr();
+        $class = $classArr[$class] ?? '';
+        
         switch ($class) {
             case applicationConstants::CLASS_INFO:
                 return '#5578eb';

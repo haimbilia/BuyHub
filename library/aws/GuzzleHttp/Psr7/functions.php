@@ -1,4 +1,5 @@
 <?php
+
 namespace GuzzleHttp\Psr7;
 
 use Psr\Http\Message\MessageInterface;
@@ -19,7 +20,7 @@ function str(MessageInterface $message)
 {
     if ($message instanceof RequestInterface) {
         $msg = trim($message->getMethod() . ' '
-                . $message->getRequestTarget())
+            . $message->getRequestTarget())
             . ' HTTP/' . $message->getProtocolVersion();
         if (!$message->hasHeader('host')) {
             $msg .= "\r\nHost: " . $message->getUri()->getHost();
@@ -217,7 +218,7 @@ function modify_request(RequestInterface $request, array $changes)
                 $standardPorts = ['http' => 80, 'https' => 443];
                 $scheme = $changes['uri']->getScheme();
                 if (isset($standardPorts[$scheme]) && $port != $standardPorts[$scheme]) {
-                    $changes['set_headers']['Host'] .= ':'.$port;
+                    $changes['set_headers']['Host'] .= ':' . $port;
                 }
             }
         }
@@ -248,10 +249,10 @@ function modify_request(RequestInterface $request, array $changes)
                 : $request->getProtocolVersion(),
             $request->getServerParams()
         ))
-        ->withParsedBody($request->getParsedBody())
-        ->withQueryParams($request->getQueryParams())
-        ->withCookieParams($request->getCookieParams())
-        ->withUploadedFiles($request->getUploadedFiles());
+            ->withParsedBody($request->getParsedBody())
+            ->withQueryParams($request->getQueryParams())
+            ->withCookieParams($request->getCookieParams())
+            ->withUploadedFiles($request->getUploadedFiles());
     }
 
     return new Request(
@@ -542,7 +543,9 @@ function parse_query($str, $urlEncoding = true)
     } elseif ($urlEncoding === PHP_QUERY_RFC1738) {
         $decoder = 'urldecode';
     } else {
-        $decoder = function ($str) { return $str; };
+        $decoder = function ($str) {
+            return $str;
+        };
     }
 
     foreach (explode('&', $str) as $kvp) {
@@ -582,7 +585,9 @@ function build_query(array $params, $encoding = PHP_QUERY_RFC3986)
     }
 
     if ($encoding === false) {
-        $encoder = function ($str) { return $str; };
+        $encoder = function ($str) {
+            return $str;
+        };
     } elseif ($encoding === PHP_QUERY_RFC3986) {
         $encoder = 'rawurlencode';
     } elseif ($encoding === PHP_QUERY_RFC1738) {

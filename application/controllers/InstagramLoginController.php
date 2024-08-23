@@ -10,7 +10,7 @@ class InstagramLoginController extends SocialMediaAuthController
         parent::__construct($action);
         
         $error = '';
-        $this->insta = PluginHelper::callPlugin(self::KEY_NAME, [$this->siteLangId], $error, $this->siteLangId);
+        $this->insta = LibHelper::callPlugin(self::KEY_NAME, [$this->siteLangId], $error, $this->siteLangId);
         if (false === $this->insta) {
             $this->setErrorAndRedirect($error, true);
         }

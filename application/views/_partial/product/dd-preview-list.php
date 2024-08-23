@@ -2,7 +2,7 @@
     <div class="section-head">
         <div class="section-heading" id="prev-files">
             <h2>
-                <?php echo Labels::getLabel('LBL_Prev_files', $siteLangId); ?>
+                <?php echo Labels::getLabel('LBL_Preview_files', $siteLangId); ?>
             </h2>
         </div>
     </div>
@@ -44,7 +44,9 @@
                         if (0 < strlen($attachment['preview'])) {
                             $fileExt = pathinfo($attachment['preview'], PATHINFO_EXTENSION);
                             $fileExt = strtolower($fileExt);
-                            $videoPath = AttachedFile::getProductPreviewVideoUrl($attachment['prev_afile_id']); ?>
+                            $videoPath = AttachedFile::getProductPreviewVideoUrl($attachment['prev_afile_id']);
+                            $imagePath = UrlHelper::generateFullUrl('image', 'previewImage', array($attachment['prev_afile_id'])) . '?' . time(); 
+                            ?>
                             <li>
                                 <div class="clipboard">
                                     <div class="copy-input">
@@ -54,12 +56,20 @@
                                         <?php if (in_array($fileExt, applicationConstants::allowedVideoFileExtensions())) { ?>
                                             <button class="copy-btn play-preview" type="button" title="<?php echo $attachment['preview']; ?>" onclick="playVideo('<?php echo $videoPath; ?>', '<?php echo $fileExt; ?>','<?php echo $attachment['preview']; ?>','<?php echo $attachment['preview']; ?>'); return false;">
                                                 <svg class="svg" width="18" height="18">
-                                                    <use xlink:href="<?php echo  CONF_WEBROOT_FRONTEND; ?>images/retina/sprite.svg#icon-preview">
+                                                    <use xlink:href="<?php echo  CONF_WEBROOT_FRONTEND; ?>images/retina/sprite.svg#view">
                                                     </use>
                                                 </svg>
                                             </button>
                                         <?php } ?>
-                                        <a class="copy-btn download-preview" target="_blank" href="<?php echo UrlHelper::generateFullUrl('Products', 'downloadPreview', array($attachment['prev_afile_id'], $product['selprod_id'])) . '/' . $attachment['preview']; ?>" title="<?php echo $attachment['preview']; ?>">
+                                        <?php if (in_array($fileExt, applicationConstants::allowedImageFileExtensions())) { ?>
+                                            <a class="copy-btn play-preview" href=<?php echo $imagePath; ?>  title="<?php echo $attachment['preview']; ?>" data-featherlight="image">
+                                                <svg class="svg" width="18" height="18">
+                                                    <use xlink:href="<?php echo  CONF_WEBROOT_FRONTEND; ?>images/retina/sprite.svg#view">
+                                                    </use>
+                                                </svg>
+                                            </a>
+                                        <?php } ?>
+                                        <a class="copy-btn download-preview" target="_blank" href="<?php echo UrlHelper::generateFullUrl('Products', 'downloadPreview', array($attachment['prev_afile_id'], $product['selprod_id'])); ?>" title="<?php echo $attachment['preview']; ?>">
                                             <svg class="svg" width="18" height="18">
                                                 <use xlink:href="<?php echo  CONF_WEBROOT_FRONTEND; ?>images/retina/sprite.svg#icon-download">
                                                 </use>

@@ -12,6 +12,9 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
             return  $b['fulfillment_type'] - $a['fulfillment_type'];
         });
     ?>
+        <script>
+            var productData = [];
+        </script>
         <ul class="list-cart <?php echo (count($fulfillmentProdArr[Shipping::FULFILMENT_PICKUP]) != $productsCount) ? '' : 'list-cart-page'; ?>">
             <?php
             //if (count($fulfillmentProdArr[Shipping::FULFILMENT_PICKUP]) > 0 && count($fulfillmentProdArr[Shipping::FULFILMENT_PICKUP]) != $productsCount) {
@@ -31,7 +34,7 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                                 </button>
                             <?php } ?>
                         </span>
-                        <button class="btn-close" onClick="removeShippedOnlyProducts();">
+                        <button class="btn-close" onClick="removeShippedOnlyProducts();" data-bs-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('MSG_REMOVE_SHIP_ONLY_PRODUCTS', $siteLangId); ?>">
                         </button>
                     </div>
                 </li>
@@ -44,7 +47,7 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                     $shopUrl = UrlHelper::generateUrl('Shops', 'View', array($product['shop_id']));
                     $imageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_THUMB, $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                     $imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], 'WEBP' . ImageDimension::VIEW_THUMB, $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp');
-                    $productTitle =  ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name'];
+                    $productTitle =  ($product['selprod_title']) ? CommonHelper::renderHtml($product['selprod_title'], true) : CommonHelper::renderHtml($product['product_name'], true);
                 ?>
                     <li class="list-cart-item block-cart <?php echo md5($product['key']); ?> <?php echo (!$product['in_stock']) ? 'disabled' : ''; ?> list-saved-later">
                         <div class="block-cart-img">
@@ -74,22 +77,27 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                                     <div class="product-profile-data">
                                         <div class="item__category">
                                             <a class="stores-link" href="<?php echo UrlHelper::generateUrl('shops', 'view', array($product['shop_id'])); ?>">
-                                                <span class="text--dark"><?php echo $product['shop_name']; ?></span>
+                                                <span class="text--dark"><?php echo CommonHelper::renderHtml($product['shop_name'], true); ?></span>
                                             </a>
                                         </div>
                                         <a class="title" href="<?php echo $productUrl; ?>"><?php echo $productTitle; ?></a>
                                         <div class="options">
-                                            <?php
-                                            if (isset($product['options']) && count($product['options'])) {
-                                                foreach ($product['options'] as $key => $option) {
-                                                    if (0 < $key) {
-                                                        echo ' | ';
-                                                    }
-                                                    echo $option['option_name'] . ':'; ?> <span class="text--dark"><?php echo $option['optionvalue_name']; ?></span>
-                                            <?php }
-                                            } ?>
+                                            <p class="">
+                                                <?php
+                                                if (isset($product['options']) && count($product['options'])) {
+                                                    foreach ($product['options'] as $key => $option) {
+                                                        if (0 < $key) {
+                                                            echo ' | ';
+                                                        }
+                                                        echo CommonHelper::renderHtml($option['option_name'], true) . ':'; ?> <span class="text--dark"><?php echo CommonHelper::renderHtml($option['optionvalue_name'], true); ?></span>
+                                                <?php }
+                                                } ?>
+                                            </p>
                                         </div>
 
+                                        <p class="text-danger pt-2">
+                                            <?php echo Labels::getLabel('LBL_NOT_AVAILABLE_FOR_PICKUP', $siteLangId); ?>
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -101,9 +109,6 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                                         </button>
                                     </li>
                                 </ul>
-                                <p class="not-available-txt">
-                                    <?php echo Labels::getLabel('LBL_NOT_AVAILABLE_FOR_PICKUP', $siteLangId); ?>
-                                </p>
                             </div>
 
                         </div>
@@ -122,7 +127,7 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
             $shopUrl = UrlHelper::generateUrl('Shops', 'View', array($product['shop_id']));
             $imageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_THUMB, $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
             $imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], 'WEBP' . ImageDimension::VIEW_THUMB, $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp');
-            $productTitle =  ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name'];
+            $productTitle =  ($product['selprod_title']) ? CommonHelper::renderHtml($product['selprod_title'], true) : CommonHelper::renderHtml($product['product_name'], true);
 
         ?>
 
@@ -152,7 +157,7 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                             <div class="product-profile-data">
                                 <div class="item__category">
                                     <a class="stores-link" href="<?php echo UrlHelper::generateUrl('shops', 'view', array($product['shop_id'])); ?>">
-                                        <span class="text--dark"><?php echo $product['shop_name']; ?></span>
+                                        <span class="text--dark"><?php echo CommonHelper::renderHtml($product['shop_name'], true); ?></span>
                                     </a>
                                 </div>
                                 <a class="title" href="<?php echo $productUrl; ?>"><?php echo $productTitle; ?></a>
@@ -171,7 +176,7 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                                                 if (0 < $key) {
                                                     echo ' | ';
                                                 }
-                                                echo $option['option_name'] . ':'; ?> <span class="text--dark"><?php echo $option['optionvalue_name']; ?></span>
+                                                echo CommonHelper::renderHtml($option['option_name'], true) . ':'; ?> <span class="text--dark"><?php echo CommonHelper::renderHtml($option['optionvalue_name'], true); ?></span>
                                         <?php }
                                         } ?>
                                     </p>
@@ -242,6 +247,19 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                         </ul>
                     </div>
                 </div>
+
+                <script type="text/javascript">
+                    productData.push({
+                        item_id: "<?php echo $product['selprod_id']; ?>",
+                        item_name: "<?php echo CommonHelper::renderHtml($product['selprod_title'], true); ?>",
+                        discount: "<?php echo ($product['selprod_price'] - $product['theprice']); ?>",
+                        index: "<?php echo $product['selprod_id']; ?>",
+                        item_brand: "<?php echo CommonHelper::renderHtml($product['brand_name'], true); ?>",
+                        item_category: "<?php echo CommonHelper::renderHtml($product['prodcat_name'], true); ?>",
+                        price: "<?php echo $product['theprice']; ?>",
+                        quantity: "<?php echo $product['quantity']; ?>"
+                    })
+                </script>
             </li>
         <?php } ?>
         </ul>
@@ -256,7 +274,7 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                 $productTitle =  ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name'];
                 $imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], 'WEBP' . ImageDimension::VIEW_THUMB, $product['selprod_id'], 0, $siteLangId)), CONF_IMG_CACHE_TIME, '.webp');
             ?>
-                <li class="list-cart-item block-cart <?php echo md5($product['key']); ?> <?php echo (!$product['in_stock']) ? 'disabled' : ''; ?>">
+                <li class="list-cart-item block-cart <?php echo isset($product['key']) ? md5($product['key']) : ''; ?> <?php echo (!$product['in_stock']) ? 'disabled' : ''; ?>">
                     <div class="block-cart-img">
                         <div class="products-img">
                             <a href="<?php echo $productUrl; ?>">
@@ -282,7 +300,7 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                                 <div class="product-profile-data">
                                     <div class="item__category">
                                         <a class="stores-link" href="<?php echo UrlHelper::generateUrl('shops', 'view', array($product['shop_id'])); ?>">
-                                            <span class="text--dark"><?php echo $product['shop_name']; ?></span>
+                                            <span class="text--dark"><?php echo CommonHelper::renderHtml($product['shop_name'], true); ?></span>
                                         </a>
                                     </div>
                                     <a class="title" href="<?php echo $productUrl; ?>">
@@ -297,7 +315,7 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
                                                 if (0 < $key) {
                                                     echo ' | ';
                                                 }
-                                                echo $option['option_name'] . ':'; ?> <span class="text-muted"><?php echo $option['optionvalue_name']; ?></span>
+                                                echo CommonHelper::renderHtml($option['option_name'], true) . ':'; ?> <span class="text-muted"><?php echo CommonHelper::renderHtml($option['optionvalue_name'], true); ?></span>
                                         <?php }
                                         } ?>
                                     </div>
@@ -324,3 +342,12 @@ if (UserAuthentication::isUserLogged() && (!User::isBuyer())) {
         </ul>
     <?php } ?>
 </div>
+<?php $netChargeAmt = $cartSummary['cartTotal'] - ((0 < $cartSummary['cartVolumeDiscount']) ? $cartSummary['cartVolumeDiscount'] : 0);
+$netChargeAmt = $netChargeAmt - ((isset($cartSummary['cartDiscounts']['coupon_discount_total']) && 0 < $cartSummary['cartDiscounts']['coupon_discount_total']) ? $cartSummary['cartDiscounts']['coupon_discount_total'] : 0); ?>
+<script type="text/javascript">
+    ykevents.viewCart({
+        currency: currencyCode,
+        value: "<?php echo $netChargeAmt; ?>",
+        items: productData
+    });
+</script>

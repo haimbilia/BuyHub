@@ -7,7 +7,7 @@ function setSiteDefaultLang(langId) {
             fcom.displaySuccessMessage(t.msg);
             setTimeout(function () {
                 window.location.reload(1);
-            }, 6000);
+            }, 1500);
         }
     );
 }

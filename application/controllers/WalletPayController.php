@@ -69,7 +69,7 @@ class WalletPayController extends MyAppController
 
         if ($orderPaymentFinancials["order_credits_charge"] > 0) {
             $orderPaymentObj = new OrderPayment($orderId);
-            $orderPaymentObj->chargeUserWallet($orderPaymentFinancials["order_credits_charge"]);
+            $orderPaymentObj->chargeUserWallet($orderPaymentFinancials["order_credits_charge"]);            
         }
 
         if (!empty($subsSessionOrderId)) {
@@ -88,7 +88,7 @@ class WalletPayController extends MyAppController
         }
 
         if ($isAjaxCall) {
-            $this->set('redirectUrl', UrlHelper::generateUrl('Custom', 'paymentSuccess', array($orderId)));
+            $this->set('redirectUrl', UrlHelper::generateUrl('Custom', 'paymentSuccess', array($orderPaymentObj->getOrderNo())));
             $this->set('msg', Labels::getLabel("MSG_PAYMENT_FROM_WALLET_MADE_SUCCESSFULLY", $this->siteLangId));
             $this->_template->render(false, false, 'json-success.php');
         }
@@ -252,7 +252,7 @@ class WalletPayController extends MyAppController
         $frm = new Form('frmPaymentTabForm');
         $frm->setFormTagAttribute('id', 'frmPaymentTabForm');
 
-        if (in_array(strtolower($paymentMethodCode), ['cashondelivery', 'payatstore'])) {
+        if (isset($paymentMethodCode) && in_array(strtolower($paymentMethodCode), ['cashondelivery', 'payatstore'])) {
             CommonHelper::addCaptchaField($frm);
         }
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_CONFIRM_PAYMENT', $langId));
@@ -333,7 +333,7 @@ class WalletPayController extends MyAppController
             FatUtility::dieWithError(Message::getHtml());
         }
 
-        if (in_array(strtolower($paymentMethodRow['plugin_code']), ['cashondelivery', 'payatstore']) && FatApp::getConfig('CONF_RECAPTCHA_SITEKEY', FatUtility::VAR_STRING, '') != '' && FatApp::getConfig('CONF_RECAPTCHA_SECRETKEY', FatUtility::VAR_STRING, '') != '') {
+        if (isset($paymentMethodRow['plugin_code']) && in_array(strtolower($paymentMethodRow['plugin_code']), ['cashondelivery', 'payatstore']) && FatApp::getConfig('CONF_RECAPTCHA_SITEKEY', FatUtility::VAR_STRING, '') != '' && FatApp::getConfig('CONF_RECAPTCHA_SECRETKEY', FatUtility::VAR_STRING, '') != '') {
             if (!CommonHelper::verifyCaptcha()) {
                 Message::addErrorMessage(Labels::getLabel('ERR_THAT_CAPTCHA_WAS_INCORRECT', $this->siteLangId));
                 FatUtility::dieWithError(Message::getHtml());

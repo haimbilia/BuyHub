@@ -603,8 +603,6 @@ class PromotionsController extends ListingBaseController
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
-        $promotionType = 0;
-
         $srch = new PromotionSearch($this->siteLangId);
         $srch->joinBannersAndLocation($this->siteLangId, Promotion::TYPE_BANNER, 'b');
         $srch->joinTable(
@@ -844,7 +842,7 @@ class PromotionsController extends ListingBaseController
         $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'date_to', '', array('placeholder' => Labels::getLabel('FRM_DATE_TO', $this->siteLangId), 'readonly' => 'readonly', 'class' => 'small dateTimeFld field--calender'));
 
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('FRM_ACTIVE', $this->siteLangId), 'active', array(-1 => 'Does not Matter') + $activeInactiveArr, '', array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_ACTIVATION_STATUS', $this->siteLangId), 'active', array(-1 => 'Does not Matter') + $activeInactiveArr, '', array(), '');
 
         $yesNoArr = applicationConstants::getYesNoArr($this->siteLangId);
         $frm->addSelectBox(Labels::getLabel('FRM_APPROVED', $this->siteLangId), 'approve', array(-1 => 'Does not Matter') + $yesNoArr, '', array(), '');
@@ -1028,13 +1026,8 @@ class PromotionsController extends ListingBaseController
             $frm->addHiddenField('', 'lang_id', $lang_id);
         }
 
-        if ($layoutType == Collections::TYPE_BANNER_LAYOUT2) {
-            $frm->addHiddenField('', 'banner_screen', applicationConstants::SCREEN_DESKTOP);
-        } else {
-            $screenArr = applicationConstants::getDisplaysArr($this->siteLangId);
-            $frm->addSelectBox(Labels::getLabel("FRM_Display_For", $this->siteLangId), 'banner_screen', $screenArr, '', array(), '');
-        }
-
+        $screenArr = applicationConstants::getDisplaysArr($this->siteLangId);
+        $frm->addSelectBox(Labels::getLabel("FRM_Display_For", $this->siteLangId), 'banner_screen', $screenArr, '', array(), '');
 
         $frm->addHtml('', 'banner_image', '');
 
@@ -1106,7 +1099,7 @@ class PromotionsController extends ListingBaseController
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
             /* 'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'promotion_name' => Labels::getLabel('LBL_PROMOTION_NAME', $this->siteLangId),
-            'user_name' => Labels::getLabel('LBL_SELLER', $this->siteLangId),
+            'user_name' => Labels::getLabel('LBL_PROMOTION_ADVERTISER', $this->siteLangId),
             'promotion_type' => Labels::getLabel('LBL_TYPE', $this->siteLangId),
             'blocation_promotion_cost' => Labels::getLabel('LBL_CPC', $this->siteLangId),
             'promotion_budget' => Labels::getLabel('LBL_BUDGET', $this->siteLangId),

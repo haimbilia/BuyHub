@@ -4,12 +4,14 @@ class FcmPushNotificationSettingsController extends PushNotificationSettingsCont
 {
     public static function getConfigurationKeys()
     {
+        $htmlAfterField = '<div class="m-4">' . Extrapage::getFirebaseServiceAccountSteps(CommonHelper::getLangId()) . '</div>';
         return [
-                'server_api_key' => [
-                    'type' => PluginSetting::TYPE_STRING,
-                    'required' => true,
-                    'label' => "FCM Server API Key",
-                ]
-            ];
+            'firebase_service_account_json_key' => [
+                'type' => PluginSetting::TYPE_TEXTAREA,
+                'label' => Labels::getLabel('FRM_FIREBASE_SERVICE_ACCOUNT_PRIVATE_KEY_JSON'),
+                'required' => true,
+                'htmlAfterField' => $htmlAfterField
+            ]
+        ];
     }
 }

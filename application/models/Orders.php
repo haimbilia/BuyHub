@@ -57,7 +57,7 @@ class Orders extends MyAppModel
 
     public function __construct($id = 0)
     {
-        parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'no', $id);
+        parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $id);
     }
 
     public static function getOrderPaymentStatusArr($langId)
@@ -1048,7 +1048,7 @@ class Orders extends MyAppModel
         return FatApp::getDb()->fetch($srch->getResultSet());
     }
 
-    public static function getOrderByOrderNo($order_no, $langId = 0)
+    public static function getOrderByOrderNo($order_no, $langId = 0, $attr = [])
     {
         if (empty($order_no)) {
             trigger_error(Labels::getLabel('ERR_ORDER_NO_IS_NOT_PASSED', CommonHelper::getLangId()), E_USER_ERROR);
@@ -1058,10 +1058,15 @@ class Orders extends MyAppModel
         if (0 < $langId) {
             $srch->joinTable(Plugin::DB_TBL_LANG, 'LEFT OUTER JOIN', 'plugin_id = pm_l.pluginlang_plugin_id AND pm_l.pluginlang_lang_id = ' . $langId, 'pm_l');
         }
+
         $srch->addCondition('order_number', '=', $order_no);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
-        return FatApp::getDb()->fetch($srch->getResultSet());
+        if (!empty($attr)) {
+            $srch->addMultipleFields($attr);
+        }
+        $row = FatApp::getDb()->fetch($srch->getResultSet());
+        return (is_array($row) ? $row : []);
     }
 
     public function getOrderAddresses($order_id, $opId = 0)
@@ -1076,7 +1081,7 @@ class Orders extends MyAppModel
         return FatApp::getDb()->fetchAll($srch->getResultSet(), 'oua_type');
     }
 
-    public function addOrderHistory($order_id, $order_status_id, $comment = '', $notify = false, $langId)
+    public function addOrderHistory($order_id, $order_status_id, $comment = '', $notify = false, $langId = 0)
     {
         $notify = FatUtility::int($notify);
         $langId = FatUtility::int($langId);
@@ -1158,7 +1163,6 @@ class Orders extends MyAppModel
                     $srch->joinTable(SellerProduct::DB_TBL_LANG, 'LEFT OUTER JOIN', 'sp_l.selprodlang_selprod_id = sp.selprod_id AND sp_l.selprodlang_lang_id = ' . $langId, 'sp_l');
                 }
             }
-
             $srch->addOrder("op_id", "desc");
             $rs = $srch->getResultSet();
 
@@ -1216,7 +1220,7 @@ class Orders extends MyAppModel
         $srch->joinTable('(' . $qryOtherCharges . ')', 'LEFT OUTER JOIN', 'torp.op_id = opcc.' . OrderProduct::DB_TBL_CHARGES_PREFIX . 'op_id', 'opcc');
         if ($langId > 0) {
             $srch->joinTable(Orders::DB_TBL_ORDER_PRODUCTS_LANG, 'LEFT OUTER JOIN', 'torp_l.oplang_op_id = torp.op_id and torp_l.oplang_lang_id = ' . $langId, 'torp_l');
-            $srch->addMultipleFields(array('op_product_name', 'op_selprod_options', 'op_brand_name', 'op_shop_name', 'op_other_charges', 'op_shipping_duration_name', 'op_product_tax_options'));
+            $srch->addMultipleFields(array('op_selprod_title', 'op_product_name', 'op_selprod_options', 'op_brand_name', 'op_shop_name', 'op_other_charges', 'op_shipping_duration_name', 'op_product_tax_options'));
         }
 
         $srch->joinTable(Orders::DB_TBL, 'LEFT OUTER JOIN', 'torp.op_order_id = tor.order_id', 'tor');
@@ -1293,11 +1297,11 @@ class Orders extends MyAppModel
     public function addOrderPaymentHistory($orderId, $orderPaymentStatus, $comment = '', $notify = false)
     {
         $orderInfo = $this->getOrderById($orderId);
-
+        $orderPaymentStatus = FatUtility::int($orderPaymentStatus);
         if ($orderInfo) {
             if (!FatApp::getDb()->updateFromArray(
                 Orders::DB_TBL,
-                array('order_payment_status' => FatUtility::int($orderPaymentStatus), 'order_date_updated' => date('Y-m-d H:i:s')),
+                array('order_payment_status' => $orderPaymentStatus, 'order_date_updated' => date('Y-m-d H:i:s')),
                 array('smt' => 'order_id = ? ', 'vals' => array($orderId))
             )) {
                 $this->error = FatApp::getDb()->getError();
@@ -1313,6 +1317,10 @@ class Orders extends MyAppModel
         if ($orderInfo['order_type'] == ORDERS::ORDER_PRODUCT) {
             $this->addProductOrderPayment($orderId, $orderInfo, $orderPaymentStatus, $comment, $notify);
         } elseif ($orderInfo['order_type'] == ORDERS::ORDER_SUBSCRIPTION) {
+            if (Orders::ORDER_PAYMENT_PAID == $orderPaymentStatus) {
+                $assignValues = ['user_has_valid_subscription' => applicationConstants::YES];
+                FatApp::getDb()->updateFromArray(User::DB_TBL, $assignValues, array('smt' => 'user_id = ? ', 'vals' => array((int) $orderInfo['order_user_id'])));
+            }
             $this->addSubscriptionOrderPayment($orderId, $orderInfo, $orderPaymentStatus, $comment, $notify);
         }
 
@@ -1395,7 +1403,7 @@ class Orders extends MyAppModel
             $this->error = Labels::getLabel("ERR_INVALID_ACCESS", $langId);
             return false;
         }
-  
+
         $currentPlanData = OrderSubscription::getUserCurrentActivePlanDetails($langId, $childOrderInfo['order_user_id'], array(OrderSubscription::DB_TBL_PREFIX . 'id'));
         if (false != $currentPlanData) {
             $currentActiveSubscrId = $currentPlanData[OrderSubscription::DB_TBL_PREFIX . 'id'];
@@ -1451,7 +1459,7 @@ class Orders extends MyAppModel
             $emailNotificationObj->sendCancelSubscriptionNotification($userId, $ossubs_id, $orderInfo['order_language_id']);
         }
 
-        if (!$db->insertFromArray(Orders::DB_TBL_ORDER_STATUS_HISTORY, array('oshistory_op_id' => $ossubs_id, 'oshistory_order_id' => $orderId, 'oshistory_orderstatus_id' => $opStatusId, 'oshistory_date_added' => date('Y-m-d H:i:s'), 'oshistory_customer_notified' => (int) $notify, 'oshistory_comments' => Labels::getLabel("LBL_Plan_Canceled", CommonHelper::getLangId())), true)) {
+        if (!$db->insertFromArray(Orders::DB_TBL_ORDER_STATUS_HISTORY, array('oshistory_op_id' => $ossubs_id, 'oshistory_order_id' => $orderId, 'oshistory_orderstatus_id' => $opStatusId, 'oshistory_date_added' => date('Y-m-d H:i:s'), 'oshistory_customer_notified' => (int) $notify, 'oshistory_comments' => Labels::getLabel("LBL_Plan_Cancelled", CommonHelper::getLangId())), true)) {
             $this->error = $db->getError();
             return false;
         }
@@ -1477,9 +1485,8 @@ class Orders extends MyAppModel
         }
 
         $subOrders = $this->getChildOrders(array("order" => $orderId), $orderInfo['order_type'], CommonHelper::getLangId());
-        $analyticsId = FatApp::getConfig("CONF_ANALYTICS_ID");
-        if (!empty($analyticsId) && FatApp::getConfig('CONF_ANALYTICS_ADVANCE_ECOMMERCE', FatUtility::VAR_INT, 0)) {
-            $et = new EcommerceTracking($analyticsId, Labels::getLabel('LBL_ORDER_PLACED', CommonHelper::getLangId()), $orderInfo['order_user_id']);
+        if (FatApp::getConfig('CONF_ANALYTICS_ADVANCE_ECOMMERCE', FatUtility::VAR_INT, 0)) {
+            $et = new EcommerceTracking(Labels::getLabel('LBL_ORDER_PLACED', CommonHelper::getLangId()), $orderInfo['order_user_id']);
             $et->addProductAction(EcommerceTracking::PROD_ACTION_TYPE_PURCHASE);
             foreach ($subOrders as $op) {
                 $productTitle = ($op['op_selprod_title']) ? $op['op_selprod_title'] : $op['op_product_name'];
@@ -1510,7 +1517,7 @@ class Orders extends MyAppModel
             $paymentMethodRow = Plugin::getAttributesById($orderInfo['order_pmethod_id']);
 
             /* Use Reward Point [ */
-            if ($orderInfo['order_reward_point_used'] > 0 && (0 < $walletSelected || (is_array($paymentMethodRow) && !empty($paymentMethodRow) && !in_array(strtolower($paymentMethodRow['plugin_code']), ['cashondelivery', 'payatstore'])))) {
+            if ($orderInfo['order_reward_point_used'] > 0 && (0 < $walletSelected || (is_array($paymentMethodRow) && !empty($paymentMethodRow) && (isset($paymentMethodRow['plugin_code']) && !in_array(strtolower($paymentMethodRow['plugin_code']), ['cashondelivery', 'payatstore']))))) {
                 UserRewards::debit($orderInfo['order_user_id'], $orderInfo['order_reward_point_used'], $orderId, $orderInfo['order_language_id']);
             }
             /*]*/
@@ -1636,7 +1643,7 @@ class Orders extends MyAppModel
         }
 
         // If current order status is not paid up but new status is paid then commence updating the product's weightage
-        if (!in_array($childOrderInfo['op_status_id'], (array) FatApp::getConfig("CONF_DEFAULT_PAID_ORDER_STATUS", FatUtility::VAR_INT, 0)) && in_array($opStatusId, (array) FatApp::getConfig("CONF_DEFAULT_PAID_ORDER_STATUS", FatUtility::VAR_INT, 0)) && in_array(strtolower($childOrderInfo['plugin_code']), ['cashondelivery', 'payatstore'])) {
+        if (!in_array($childOrderInfo['op_status_id'], (array) FatApp::getConfig("CONF_DEFAULT_PAID_ORDER_STATUS", FatUtility::VAR_INT, 0)) && in_array($opStatusId, (array) FatApp::getConfig("CONF_DEFAULT_PAID_ORDER_STATUS", FatUtility::VAR_INT, 0)) && (isset($childOrderInfo['plugin_code']) && (isset($childOrderInfo['plugin_code']) && in_array(strtolower($childOrderInfo['plugin_code']), ['cashondelivery', 'payatstore'])))) {
             if ($childOrderInfo['op_is_batch']) {
                 $opSelprodCodeArr = explode('|', $childOrderInfo['op_selprod_code']);
             } else {
@@ -1810,7 +1817,7 @@ class Orders extends MyAppModel
         /* ] */
 
         /* If current order status is not return request approved but new status is return request approved then commence the order operation [ */
-        if (!in_array($childOrderInfo['op_status_id'], (array) FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS", FatUtility::VAR_INT, 0)) && in_array($opStatusId, (array) FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS", FatUtility::VAR_INT, 0)) && ($childOrderInfo["order_payment_status"] == Orders::ORDER_PAYMENT_PAID || in_array(strtolower($childOrderInfo['plugin_code']), ['cashondelivery', 'payatstore']))) {
+        if (!in_array($childOrderInfo['op_status_id'], (array) FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS", FatUtility::VAR_INT, 0)) && in_array($opStatusId, (array) FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS", FatUtility::VAR_INT, 0)) && ($childOrderInfo["order_payment_status"] == Orders::ORDER_PAYMENT_PAID || (isset($childOrderInfo['plugin_code']) && (isset($childOrderInfo['plugin_code']) && in_array(strtolower($childOrderInfo['plugin_code']), ['cashondelivery', 'payatstore']))))) {
             if ($moveRefundToWallet) {
                 $formattedRequestValue = "#" . $childOrderInfo["op_invoice_number"];
                 $comments = sprintf(Labels::getLabel('LBL_RETURN_REQUEST_APPROVED', $langId), $formattedRequestValue);
@@ -1890,9 +1897,9 @@ class Orders extends MyAppModel
                 /* ]
                 */
             }
-            $analyticsId = FatApp::getConfig("CONF_ANALYTICS_ID");
-            if (!empty($analyticsId) && FatApp::getConfig('CONF_ANALYTICS_ADVANCE_ECOMMERCE', FatUtility::VAR_INT, 0)) {
-                $et = new EcommerceTracking($analyticsId, Labels::getLabel('LBL_REFUND_ORDER', $langId), $childOrderInfo['order_user_id']);
+
+            if (FatApp::getConfig('CONF_ANALYTICS_ADVANCE_ECOMMERCE', FatUtility::VAR_INT, 0)) {
+                $et = new EcommerceTracking(Labels::getLabel('LBL_REFUND_ORDER', $langId), $childOrderInfo['order_user_id']);
                 $et->addProductAction(EcommerceTracking::PROD_ACTION_TYPE_REFUND);
                 $et->addProduct($childOrderInfo['op_selprod_id'], $childOrderInfo['op_refund_qty']);
                 $et->addTransaction($childOrderInfo['op_order_id']);
@@ -1913,7 +1920,7 @@ class Orders extends MyAppModel
         /* ] */
 
         /* If current order status is not delivered but new Status is delivered and the order is of COD, then, check if delivered by seller then debiting transaction entry from seller wallet [ */
-        if (!in_array($childOrderInfo['op_status_id'], (array) FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS")) && in_array($opStatusId, (array) FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS")) && in_array(strtolower($childOrderInfo['plugin_code']), ['cashondelivery', 'payatstore'])) {
+        if (!in_array($childOrderInfo['op_status_id'], (array) FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS")) && in_array($opStatusId, (array) FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS")) && (isset($childOrderInfo['plugin_code']) && (isset($childOrderInfo['plugin_code']) && in_array(strtolower($childOrderInfo['plugin_code']), ['cashondelivery', 'payatstore'])))) {
             if (CommonHelper::canAvailShippingChargesBySeller($childOrderInfo['op_selprod_user_id'], $childOrderInfo['opshipping_by_seller_user_id'])) {
                 $formattedInvoiceNumber = "#" . $childOrderInfo["op_invoice_number"];
                 $comments = Labels::getLabel('LBL_CASH_COLLECTED_FOR_COD_ORDER', $langId) . ' ' . $formattedInvoiceNumber;
@@ -1944,7 +1951,7 @@ class Orders extends MyAppModel
         /*]*/
 
         // If COD order and shipping user not set then assign shipping company  user seller/admin shiping company.
-        if (in_array(strtolower($childOrderInfo['plugin_code']), ['cashondelivery', 'payatstore']) && !$childOrderInfo['optsu_user_id'] && CommonHelper::canAvailShippingChargesBySeller($childOrderInfo['op_selprod_user_id'], $childOrderInfo['opshipping_by_seller_user_id'])) {
+        if (isset($childOrderInfo['plugin_code']) &&  (isset($childOrderInfo['plugin_code']) && (isset($childOrderInfo['plugin_code']) && in_array(strtolower($childOrderInfo['plugin_code']), ['cashondelivery', 'payatstore']))) && !$childOrderInfo['optsu_user_id'] && CommonHelper::canAvailShippingChargesBySeller($childOrderInfo['op_selprod_user_id'], $childOrderInfo['opshipping_by_seller_user_id'])) {
             if (CommonHelper::canAvailShippingChargesBySeller($childOrderInfo['op_selprod_user_id'], $childOrderInfo['opshipping_by_seller_user_id'])) {
                 $shippingUserdata = array('optsu_op_id' => $childOrderInfo['op_id'], 'optsu_user_id' => $childOrderInfo['op_selprod_user_id']);
                 $db->insertFromArray(OrderProduct::DB_TBL_OP_TO_SHIPPING_USERS, $shippingUserdata, false, array('IGNORE'));
@@ -1952,10 +1959,10 @@ class Orders extends MyAppModel
         }
 
         // If current order status is not completed but new status is completed then commence completing the order
-        if (!in_array($childOrderInfo['op_status_id'], (array) $this->getVendorOrderPaymentCreditedStatuses()) && in_array($opStatusId, (array) $this->getVendorOrderPaymentCreditedStatuses()) && ($childOrderInfo["order_payment_status"] == Orders::ORDER_PAYMENT_PAID || in_array(strtolower($childOrderInfo['plugin_code']), ['cashondelivery', 'payatstore']))) {
+        if (!in_array($childOrderInfo['op_status_id'], (array) $this->getVendorOrderPaymentCreditedStatuses()) && in_array($opStatusId, (array) $this->getVendorOrderPaymentCreditedStatuses()) && ($childOrderInfo["order_payment_status"] == Orders::ORDER_PAYMENT_PAID || (isset($childOrderInfo['plugin_code']) && (isset($childOrderInfo['plugin_code']) && in_array(strtolower($childOrderInfo['plugin_code']), ['cashondelivery', 'payatstore']))))) {
             /* If shipped by admin credit to shipping user as COD order payment deposited by them[*/
             $amt = CommonHelper::orderProductAmount($childOrderInfo);
-            if (!CommonHelper::canAvailShippingChargesBySeller($childOrderInfo['op_selprod_user_id'], $childOrderInfo['opshipping_by_seller_user_id']) && in_array(strtolower($childOrderInfo['plugin_code']), ['cashondelivery', 'payatstore'])) {
+            if (!CommonHelper::canAvailShippingChargesBySeller($childOrderInfo['op_selprod_user_id'], $childOrderInfo['opshipping_by_seller_user_id']) && (isset($childOrderInfo['plugin_code']) && (isset($childOrderInfo['plugin_code']) && in_array(strtolower($childOrderInfo['plugin_code']), ['cashondelivery', 'payatstore'])))) {
                 $formattedInvoiceNumber = "#" . $childOrderInfo["op_invoice_number"];
                 $comments = Labels::getLabel('LBL_CASH_DEPOSITED_FOR_COD_ORDER', $langId) . ' ' . $formattedInvoiceNumber;
 
@@ -1974,7 +1981,7 @@ class Orders extends MyAppModel
             /*]*/
 
             /* add payment in tbl_order_payments in case of cod and paystore order*/
-            if (in_array(strtolower($childOrderInfo['plugin_code']), ['cashondelivery', 'payatstore'])) {
+            if (isset($childOrderInfo['plugin_code']) && in_array(strtolower($childOrderInfo['plugin_code']), ['cashondelivery', 'payatstore'])) {
                 !$db->updateFromArray(
                     Orders::DB_TBL_ORDER_PAYMENTS,
                     array('opayment_txn_status' => Orders::ORDER_PAYMENT_PAID),
@@ -2619,12 +2626,11 @@ class Orders extends MyAppModel
 
     private function generateOrderNo()
     {
-        $orderNo =  'O' . mt_rand(1000000000, 9999999999);
+        $orderNo = 'O' . mt_rand(1000000000, 9999999999);
 
-        if ($this->checkUniqueOrderId($orderNo)) {
+        if (empty(self::getOrderByOrderNo($orderNo, attr: ['order_id']))) {
             return $orderNo;
         }
-
         $this->generateOrderNo();
     }
 
@@ -2660,15 +2666,6 @@ class Orders extends MyAppModel
         return $row;
     }
 
-    private function checkUniqueOrderId($order_id)
-    {
-        $row = Orders::getAttributesById($order_id, array('order_id'));
-        if ($row == false) {
-            return true;
-        }
-        return false;
-    }
-
     /* For Subscription Module  Get latest Subscription Order */
     public static function getLatestSubscriptionOrder($userId = 0, $langId = 0)
     {
@@ -2685,7 +2682,7 @@ class Orders extends MyAppModel
         return true;
     }
 
-    public static function getOrderCommentById($orderId = 0, $langId)
+    public static function getOrderCommentById($orderId, $langId)
     {
         $srch = new  OrderSearch($langId);
         $srch->addCondition('order_id', '=', $orderId);

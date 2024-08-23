@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Elasticsearch\Connections;
 
@@ -65,8 +65,8 @@ class Connection implements ConnectionInterface
     protected $path;
 
     /**
-    * @var int
-    */
+     * @var int
+     */
     protected $port;
 
     /**
@@ -137,12 +137,14 @@ class Connection implements ConnectionInterface
         }
 
         // Only Set the Basic if API Key is not set and setBasicAuthentication was not called prior
-        if (isset($connectionParams['client']['headers']['Authorization']) === false
-                && isset($connectionParams['client']['curl'][CURLOPT_HTTPAUTH]) === false
-                && isset($hostDetails['user'])
-                && isset($hostDetails['pass'])) {
+        if (
+            isset($connectionParams['client']['headers']['Authorization']) === false
+            && isset($connectionParams['client']['curl'][CURLOPT_HTTPAUTH]) === false
+            && isset($hostDetails['user'])
+            && isset($hostDetails['pass'])
+        ) {
             $connectionParams['client']['curl'][CURLOPT_HTTPAUTH] = CURLAUTH_BASIC;
-            $connectionParams['client']['curl'][CURLOPT_USERPWD] = $hostDetails['user'].':'.$hostDetails['pass'];
+            $connectionParams['client']['curl'][CURLOPT_USERPWD] = $hostDetails['user'] . ':' . $hostDetails['pass'];
         }
 
         $connectionParams['client']['curl'][CURLOPT_PORT] = $hostDetails['port'];
@@ -205,7 +207,7 @@ class Connection implements ConnectionInterface
             'body'        => $body,
             'headers'     => array_merge(
                 [
-                'Host'  => [$this->host]
+                    'Host'  => [$this->host]
                 ],
                 $this->headers
             )
@@ -307,7 +309,7 @@ class Connection implements ConnectionInterface
                         // Skip 404 if succeeded true in the body (e.g. clear_scroll)
                         $body = $response['body'] ?? '';
                         if (strpos($body, '"succeeded":true') !== false) {
-                             $ignore[] = 404;
+                            $ignore[] = 404;
                         }
                         $this->process4xxError($request, $response, $ignore);
                     } elseif ($response['status'] >= 500) {
@@ -332,7 +334,7 @@ class Connection implements ConnectionInterface
         if (isset($params) === true && !empty($params)) {
             array_walk(
                 $params,
-                function (&$value, &$key) {
+                function (&$value, $key) {
                     if ($value === true) {
                         $value = 'true';
                     } elseif ($value === false) {
@@ -411,7 +413,7 @@ class Connection implements ConnectionInterface
     public function logRequestFail(array $request, array $response, \Exception $exception): void
     {
         $this->log->debug('Request Body', array($request['body']));
-        
+
         $this->log->warning(
             'Request Failure:',
             array(
@@ -600,8 +602,8 @@ class Connection implements ConnectionInterface
         $responseBody = $response['body'];
 
         /**
- * @var \Exception $exception
-*/
+         * @var \Exception $exception
+         */
         $exception = $this->tryDeserialize400Error($response);
 
         if (array_search($response['status'], $ignore) !== false) {
@@ -620,7 +622,7 @@ class Connection implements ConnectionInterface
         } elseif ($statusCode === 409) {
             $exception = new Conflict409Exception($responseBody, $statusCode);
         } elseif ($statusCode === 400 && strpos($responseBody, 'script_lang not supported') !== false) {
-            $exception = new ScriptLangNotSupportedException($responseBody. $statusCode);
+            $exception = new ScriptLangNotSupportedException($responseBody . $statusCode);
         } elseif ($statusCode === 408) {
             $exception = new RequestTimeout408Exception($responseBody, $statusCode);
         } else {
@@ -638,11 +640,11 @@ class Connection implements ConnectionInterface
         $responseBody = $response['body'];
 
         /**
- * @var \Exception $exception
-*/
+         * @var \Exception $exception
+         */
         $exception = $this->tryDeserialize500Error($response);
 
-        $exceptionText = "[$statusCode Server Exception] ".$exception->getMessage();
+        $exceptionText = "[$statusCode Server Exception] " . $exception->getMessage();
         $this->log->error($exceptionText);
         $this->log->error($exception->getTraceAsString());
 
@@ -685,7 +687,7 @@ class Connection implements ConnectionInterface
                 // added json_encode to convert into a string
                 return new $errorClass(json_encode($response['body']), (int) $response['status']);
             }
-            
+
             // 2.0 structured exceptions
             if (is_array($error['error']) && array_key_exists('reason', $error['error']) === true) {
                 // Try to use root cause first (only grabs the first root cause)
@@ -705,7 +707,7 @@ class Connection implements ConnectionInterface
             // <2.0 semi-structured exceptions
             // added json_encode to convert into a string
             $original = new $errorClass(json_encode($response['body']), $response['status']);
-            
+
             $errorEncoded = $error['error'];
             if (is_array($errorEncoded)) {
                 $errorEncoded = json_encode($errorEncoded);

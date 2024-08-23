@@ -40,7 +40,7 @@ abstract class PaymentController extends MyAppController
         if (defined('static::KEY_NAME')) {
             $pluginKeyName = static::KEY_NAME;
             
-            $this->plugin = PluginHelper::callPlugin($pluginKeyName, [$this->siteLangId], $error, $this->siteLangId);
+            $this->plugin = LibHelper::callPlugin($pluginKeyName, [$this->siteLangId], $error, $this->siteLangId);
             if (false === $this->plugin) {
                 Message::addErrorMessage($error);
                 CommonHelper::redirectUserReferer();

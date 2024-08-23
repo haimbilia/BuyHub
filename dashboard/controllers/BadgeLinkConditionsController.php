@@ -101,8 +101,8 @@ class BadgeLinkConditionsController extends SellerBaseController
 
             $recordId = $badgeLink['badgelink_record_id'];
             $recordName = $badgeLink['record_name'];
-            $optionName = explode('|', $badgeLink['option_name']);
-            $optionValueName = explode('|', $badgeLink['option_value_name']);
+            $optionName = (isset($badgeLink['option_name'])) ? explode('|', $badgeLink['option_name']) : [];
+            $optionValueName = (isset($badgeLink['option_value_name'])) ? explode('|', $badgeLink['option_value_name']) : [];
             unset($badgeLink['badgelink_record_id'], $badgeLink['record_name'], $badgeLink['option_name'], $badgeLink['option_value_name'], $badgeLink['seller']);
 
             $recordType = $badgeLink['blinkcond_record_type'];
@@ -318,8 +318,8 @@ class BadgeLinkConditionsController extends SellerBaseController
 
                 $recordId = $badgeLink['badgelink_record_id'];
                 $recordName = $badgeLink['record_name'];
-                $optionName = explode('|', $badgeLink['option_name']);
-                $optionValueName = explode('|', $badgeLink['option_value_name']);
+                $optionName = isset($badgeLink['option_name']) ? explode('|', $badgeLink['option_name']) : [];
+                $optionValueName = isset($badgeLink['option_value_name']) ? explode('|', $badgeLink['option_value_name']) : [];
 
                 $seller = $badgeLink['seller'];
                 unset($badgeLink['badgelink_record_id'], $badgeLink['record_name'], $badgeLink['option_name'], $badgeLink['option_value_name'], $badgeLink['seller']);
@@ -418,7 +418,8 @@ class BadgeLinkConditionsController extends SellerBaseController
             'badge_display_inside',
         ]);
         $badgeSearch->getResultSet();
-        return (array) FatApp::getDb()->fetch($badgeSearch->getResultSet());
+        $row = FatApp::getDb()->fetch($badgeSearch->getResultSet());
+        return (is_array($row) ? $row : []);
     }
 
     public function conditionForm(int $badgeId, int $badgeType, int $badgeLinkCondId = 0)
@@ -797,7 +798,7 @@ class BadgeLinkConditionsController extends SellerBaseController
             $this->nodes[] = ['title' => $pageTitle, 'href' => UrlHelper::generateUrl('badgeLinkConditions', 'list', [$params[0], $params[1]])];
             $this->nodes[] = ['title' => $title];
         } else {
-            $action = str_replace('-', '_', FatUtility::camel2dashed($action));            
+            $action = str_replace('-', '_', FatUtility::camel2dashed($action));
             $this->nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $action)));
         }
         return $this->nodes;

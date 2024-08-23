@@ -55,7 +55,7 @@ $(window).on('load', function () {
 
     /* Product Gallery */
     $("#detail .main-img-slider").slick({
-        rtl: false,
+        rtl: ('rtl' == langLbl.layoutDirection) ? true : false,
         slidesToShow: 1,
         slidesToScroll: 1,
         infinite: false,
@@ -93,7 +93,7 @@ $(window).on('load', function () {
 
     /* Thumbnail/alternates slider for product page */
     $(".thumb-nav").slick({
-        rtl: ('rtl' == langLbl.layoutDirection),
+        rtl: ('rtl' == langLbl.layoutDirection) ? true : false,
         slidesToShow: 5,
         slidesToScroll: 1,
         infinite: false,
@@ -275,22 +275,7 @@ function setupReviewAbuse(frm) {
             reviews(document.frmReviewSearch);
         });
     }
-
-    shareSocialReferEarn = function (selprod_id, socialMediaName) {
-        if (isUserLogged() == 0) {
-            loginPopUpBox();
-            return false;
-        }
-        var data = 'selprod_id=' + selprod_id + '&socialMediaName=' + socialMediaName;
-
-        $.facebox(function () {
-            fcom.ajax(fcom.makeUrl('Account', 'shareSocialReferEarn'), data, function (t) {
-                $.facebox(t);
-            });
-        });
-        return false;
-    }
-
+    
     rateAndReviewProduct = function (product_id) {
         if (isUserLogged() == 0) {
             loginPopUpBox();

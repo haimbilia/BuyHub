@@ -124,18 +124,18 @@ $tableClass = (0 < count($arrListing)) ? "table-justified" : ''; ?>
                     }
 
                     $li = $ul->appendElement("li");
-                        $li->appendElement(
-                            'a',
-                            array('href' => 'javascript:void(0)', 'title' => Labels::getLabel('LBL_PRODUCT_MISSING_INFO', $siteLangId), "onclick" => "productMissingInfo(".$row['selprod_id'].")"),
-                            '<i class="icn">
+                    $li->appendElement(
+                        'a',
+                        array('href' => 'javascript:void(0)', 'title' => Labels::getLabel('LBL_PRODUCT_MISSING_INFO', $siteLangId), "onclick" => "productMissingInfo(" . $row['selprod_id'] . ")"),
+                        '<i class="icn">
                             <svg class="svg" width="18" height="18">
                                 <use
                                     xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#warning">
                                 </use>
                             </svg>
                         </i>',
-                            true
-                        );
+                        true
+                    );
 
                     break;
                 default:

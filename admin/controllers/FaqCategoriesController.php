@@ -207,7 +207,7 @@ class FaqCategoriesController extends ListingBaseController
         if ($langId == 0) {
             $langId = $this->siteLangId;
         }
-        $langData = FaqCategory::getAttributesByLangId($langId, $recordId);
+        $langData = [];
         $faqCatLangFrm = $this->getLangForm($recordId, $langId);
         if (0 < $autoFillLangData) {
             $updateLangDataobj = new TranslateLangData(FaqCategory::DB_TBL_LANG);
@@ -217,7 +217,7 @@ class FaqCategoriesController extends ListingBaseController
             }
             $langData = current($translatedData);
         } else {
-            $langData = FaqCategory::getAttributesByLangId($langId, $recordId);
+            $langData = (array) FaqCategory::getAttributesByLangId($langId, $recordId);
         }
 
         $langData['faqcat_id'] = $recordId;
@@ -444,7 +444,7 @@ class FaqCategoriesController extends ListingBaseController
         $arr = [
             'dragdrop' => '',
             'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
-           /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
+            /*  'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
             'faqcat_id' => Labels::getLabel('LBL_ID', $this->siteLangId),
             'faqcat_name' => Labels::getLabel('LBL_category_Name', $this->siteLangId),
             'faqcat_active' => Labels::getLabel('LBL_Status', $this->siteLangId),

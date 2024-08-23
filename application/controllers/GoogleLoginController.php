@@ -9,7 +9,7 @@ class GoogleLoginController extends SocialMediaAuthController
         parent::__construct($action);
 
         $error = '';
-        $this->google = PluginHelper::callPlugin(self::KEY_NAME, [$this->siteLangId], $error, $this->siteLangId);
+        $this->google = LibHelper::callPlugin(self::KEY_NAME, [$this->siteLangId], $error, $this->siteLangId);
         if (false === $this->google) {
             $this->setErrorAndRedirect($error, true);
         }

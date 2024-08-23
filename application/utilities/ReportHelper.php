@@ -81,7 +81,7 @@ class ReportHelper
 
     public function setPaidCondition()
     {
-        $cnd = $this->srch->addCondition('o.order_is_paid', '=', Orders::ORDER_PAYMENT_PAID);
+        $cnd = $this->srch->addCondition('o.order_payment_status', '=', Orders::ORDER_PAYMENT_PAID);
         $cnd->attachCondition('plugin_code', '=', 'cashondelivery');
         $cnd->attachCondition('plugin_code', '=', 'payatstore');
     }

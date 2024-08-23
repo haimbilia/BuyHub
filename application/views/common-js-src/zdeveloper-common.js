@@ -833,6 +833,7 @@ sendResetPasswordLink = function (user) {
             }
         },
         displayProcessing: function () {
+            $.ykmsg.clear();
             fcom.processingCounter++;
             $.ykmsg.info(langLbl.processing, -1, fcom.processingClass + " " + fcom.processingClass + '-' + fcom.processingCounter);
         },
@@ -861,7 +862,7 @@ sendResetPasswordLink = function (user) {
         removeLoader: function (cls) {
             $(document.body).css({ cursor: "default" });
             $(".loaderJs").remove();
-            $(".submitBtnJs").removeClass("loading");
+            $(".submitBtnJs").removeClass("loading").removeAttr('disabled');
         },
         getRowSpinner: function () {
             return '<div class="spinner spinner--v2 spinner--sm spinner--brand"></div>';
@@ -1970,13 +1971,13 @@ $.extend(fcom, {
     },
 });
 
-copyText = function (obj, applyToolTipInfo = true) {    
-    if(applyToolTipInfo){
+copyText = function (obj, applyToolTipInfo = true) {
+    if (applyToolTipInfo) {
         var title = $(obj).data("title");
-    }else{
+    } else {
         var title = $(obj).attr("data-url");
     }
-    
+
     if (!navigator.clipboard) {
         console.warn('clipboard API only works on localhost and https');
         // Clipboard API  only works on localhost anf https as per doc

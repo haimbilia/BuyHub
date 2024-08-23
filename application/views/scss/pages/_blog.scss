@@ -1,15 +1,19 @@
 $blog-header-height: 58px;
+
 .header-blog {
     min-height: $blog-header-height;
+
     &-inner {
         display: flex;
         align-items: center;
         justify-content: space-between;
     }
+
     &-right {
         display: flex;
         flex-direction: row;
         flex-wrap: nowrap;
+
         .svg {
             fill: $secondary-color;
         }
@@ -34,6 +38,7 @@ $blog-header-height: 58px;
         visibility: visible;
     }
 }
+
 .menu-nav {
     @include media-breakpoint-down(lg) {
         position: fixed;
@@ -48,6 +53,7 @@ $blog-header-height: 58px;
         background: #fff;
         box-shadow: $shadow1;
         transition: all 0.5s ease;
+
         &.open {
             visibility: visible;
             left: 0;
@@ -57,9 +63,11 @@ $blog-header-height: 58px;
         .nav-blog {
             flex-direction: column;
             align-items: inherit;
+
             &-item {
                 margin: 0;
             }
+
             &-link {
                 padding: 18px 20px;
                 display: block;
@@ -73,16 +81,20 @@ $blog-header-height: 58px;
         }
     }
 }
+
 .nav-blog {
     display: flex;
     align-items: center;
     font-size: 0.85rem;
+
     &-item {
         margin: 0 1rem;
+
         &:last-child {
             //margin-#{$end-direction}: 0;
         }
     }
+
     &-link {
         text-rendering: optimizeLegibility;
         transition: color 0.3s ease-in-out;
@@ -91,32 +103,38 @@ $blog-header-height: 58px;
         background-repeat: no-repeat;
         background-size: 0% 2px;
         transition: background-size 0.3s;
-        font-weight: 600;
+        font-weight: $font-weight-bold;
         color: $txt-body;
         padding: 22px 0;
+
         &:hover {
             text-decoration: none;
             background-size: 100% 2px;
         }
     }
+
     &-more {
         &::after {
             content: " ↓";
         }
     }
 }
+
 .btn-menu {
     background: transparent;
     border: none;
     margin: 0 0.5rem;
+
     @include media-breakpoint-up(lg) {
         display: none;
     }
 }
+
 .btn-blog-search {
     background: transparent;
     border: none;
     margin: 0 0.5rem;
+
     @include media-breakpoint-up(lg) {
         padding-#{$start-direction}: 1rem;
         border-#{$start-direction}: $border;
@@ -131,6 +149,7 @@ $blog-header-height: 58px;
     background-color: #fff;
     border-bottom: $border;
     transition: all 0.1s ease-out;
+
     ul {
         padding: 3rem 2rem;
         max-width: 1100px;
@@ -148,9 +167,10 @@ $blog-header-height: 58px;
                 background-repeat: no-repeat;
                 background-size: 0% 2px;
                 transition: background-size 0.3s;
-                font-weight: 600;
+                font-weight: $font-weight-bold;
                 color: $txt-body;
                 padding: 22px 0;
+
                 &:hover {
                     color: $brand-color;
                     text-decoration: none;
@@ -160,10 +180,12 @@ $blog-header-height: 58px;
         }
     }
 }
+
 .offcanvas-blog-nav {
     display: flex;
     flex-direction: column;
     font-size: 1rem;
+
     &-item {
         border-bottom: $border;
     }
@@ -187,6 +209,7 @@ $blog-header-height: 58px;
         font-size: 0.8rem;
         transform: scale(1);
         margin-#{$start-direction}: auto;
+
         &::before {
             content: "";
             display: block;
@@ -205,6 +228,7 @@ $blog-header-height: 58px;
 
 .offcanvas-blog-search {
     height: 100%;
+
     @include media-breakpoint-up(lg) {
         height: 70vh;
     }
@@ -218,12 +242,14 @@ $blog-header-height: 58px;
     padding: 3rem 2rem;
     position: relative;
     flex-flow: row wrap;
+
     @include media-breakpoint-down(lg) {
         text-align: center;
         gap: 2rem;
         justify-content: center;
         flex-direction: column;
     }
+
     &-inner {
         flex: 1;
         width: 100%;
@@ -237,6 +263,7 @@ $blog-header-height: 58px;
     &-form {
         flex: 1;
     }
+
     &-input {
         padding: 10px 1rem;
         padding-#{$start-direction}: 40px;
@@ -253,6 +280,7 @@ $blog-header-height: 58px;
         height: 40px;
         width: 100%;
         margin-bottom: 2rem;
+
         [dir="rtl"] & {
             padding-#{$end-direction}: 40px;
             background-position: calc(-15px) center;
@@ -270,6 +298,7 @@ $blog-header-height: 58px;
         padding: 0;
         //border: solid 1px $black;
         border-radius: 50%;
+
         @include media-breakpoint-down(lg) {
             margin: 0 auto;
         }
@@ -283,16 +312,19 @@ $blog-header-height: 58px;
     margin: 0;
     display: flex;
     flex-direction: column;
+
     &-body {
         flex: 1;
         display: flex;
         flex-direction: column;
         padding-top: 1.5rem;
     }
+
     &-foot {
         margin-top: 1rem;
         padding-bottom: 1.5rem;
     }
+
     &-media {
         position: relative;
         margin: 0;
@@ -308,6 +340,7 @@ $blog-header-height: 58px;
             width: 100%;
             height: 100%;
         }
+
         iframe {
             display: block;
             position: absolute;
@@ -322,6 +355,7 @@ $blog-header-height: 58px;
         display: flex;
         //margin-bottom: 1rem;
         flex-wrap: wrap;
+
         &-tag {
             a {
                 display: block;
@@ -338,11 +372,12 @@ $blog-header-height: 58px;
 
     &-title {
         line-height: 1.5;
-        font-weight: 600;
+        font-weight: $font-weight-bold;
         font-size: 1.3rem;
         // margin-bottom: 1.5rem;
         color: $txt-body;
         flex: 1;
+
         a {
             color: inherit;
         }
@@ -357,13 +392,16 @@ $blog-header-height: 58px;
     &-link {
         color: $brand-color;
         font-size: 1rem;
+
         &:after {
             transition: all 0.5s ease-out;
             padding-#{$start-direction}: 4px;
             content: "\2192";
         }
+
         &:hover {
             text-decoration: none;
+
             &:after {
                 padding-#{$start-direction}: 8px;
             }
@@ -375,6 +413,7 @@ $blog-header-height: 58px;
     .post {
         margin-bottom: 2rem;
         flex-direction: column;
+
         @include media-breakpoint-up(lg) {
             flex-direction: row;
         }
@@ -382,21 +421,25 @@ $blog-header-height: 58px;
         &:last-child {
             margin-bottom: 0;
         }
+
         &-head {
             @include media-breakpoint-up(lg) {
                 flex: 0 0 50%;
                 max-width: 50%;
             }
         }
+
         &-body {
             background-color: $bg-gray;
             padding: 3rem;
         }
+
         &-title {
             flex: 0;
         }
     }
 }
+
 .collection-2 {
     display: grid;
     grid-gap: 2rem;
@@ -407,24 +450,29 @@ $blog-header-height: 58px;
     .blog_author {
         font-size: 0.8rem;
         margin-bottom: 0.8rem;
+
         .article__author {
             color: $txt-body;
             margin-#{$end-direction}: 10px;
-            font-weight: 600;
+            font-weight: $font-weight-bold;
         }
+
         .article__date {
             color: lighten($txt-body, 50%);
         }
     }
+
     .article-title {
         margin-bottom: 1rem;
         line-height: 1.5;
-        font-weight: 600;
+        font-weight: $font-weight-bold;
         font-size: 1.25rem;
     }
+
     a {
         color: inherit;
         text-decoration: none;
+
         &:hover {
             text-decoration: underline;
             color: inherit;
@@ -435,25 +483,31 @@ $blog-header-height: 58px;
 .blog-detail {
     display: grid;
     grid-gap: 4rem;
+
     @include media-breakpoint-up(lg) {
         grid-template-columns: 2fr 1fr;
     }
+
     &-left {
         overflow: hidden;
         padding-top: 1rem;
+
         @include media-breakpoint-up(lg) {
             padding-top: 2rem;
             padding-bottom: 4rem;
         }
+
         // padding-#{$end-direction}: 3rem;
 
         .posted-media {
             margin-bottom: 2rem;
             overflow: hidden;
+
             .post__pic {
                 .media-wrapper {
                     position: relative;
                     padding-bottom: 56.25%;
+
                     iframe {
                         position: absolute;
                         top: 0;
@@ -461,6 +515,7 @@ $blog-header-height: 58px;
                         width: 100%;
                         height: 100%;
                     }
+
                     img {
                         @extend iframe;
                     }
@@ -468,6 +523,7 @@ $blog-header-height: 58px;
             }
         }
     }
+
     &-right {
         padding-top: 4rem;
 
@@ -476,6 +532,7 @@ $blog-header-height: 58px;
             padding-#{$start-direction}: 4rem;
             border-#{$start-direction}: $border;
         }
+
         @include media-breakpoint-down(lg) {
             padding-bottom: 4rem;
         }
@@ -486,7 +543,7 @@ $blog-header-height: 58px;
     .title {
         color: $txt-body;
         font-size: calc(112.5% + 1vw);
-        font-weight: 600;
+        font-weight: $font-weight-bold;
         line-height: 1.3;
         margin-bottom: 2rem;
     }
@@ -501,6 +558,7 @@ $blog-header-height: 58px;
     text-transform: uppercase;
     flex-flow: row wrap;
     gap: 10px;
+
     span {
         border-#{$end-direction}: $border;
         padding-#{$end-direction}: 1rem;
@@ -509,6 +567,7 @@ $blog-header-height: 58px;
 
     .share-blog {
         margin-top: 10px;
+
         @include media-breakpoint-up(lg) {
             margin: 0;
             margin-#{$start-direction}: auto;
@@ -519,6 +578,7 @@ $blog-header-height: 58px;
 .user-profile {
     display: flex;
     align-items: center;
+
     &_photo {
         margin: 0;
         margin-#{$end-direction}: 1rem;
@@ -529,7 +589,8 @@ $blog-header-height: 58px;
         position: relative;
         width: 40px;
         height: 40px;
-        > img {
+
+        >img {
             width: inherit;
             height: inherit;
             border-radius: 50%;
@@ -538,12 +599,14 @@ $blog-header-height: 58px;
             background: $bg-placeholder;
         }
     }
+
     &_data {
         display: flex;
         flex-direction: column;
     }
+
     &_title {
-        font-weight: 600;
+        font-weight: $font-weight-bold;
         font-size: 0.875rem;
         margin: 0;
         color: $txt-body;
@@ -552,11 +615,13 @@ $blog-header-height: 58px;
 
 .arrows {
     cursor: pointer;
+
     svg {
         width: 30px;
         height: auto;
         fill: #b8b8b7;
     }
+
     &:hover {
         svg {
             fill: $brand-color;
@@ -574,6 +639,7 @@ $blog-header-height: 58px;
     align-items: center;
     justify-content: space-between;
     width: 100%;
+
     input {
         &[type="text"] {
             flex: 1;
@@ -591,6 +657,7 @@ $blog-header-height: 58px;
             border-top-#{$start-direction}-radius: 50px;
             border-bottom-#{$start-direction}-radius: 50px;
         }
+
         &[type="submit"] {
             font-size: 1em;
             background: #000;
@@ -603,7 +670,7 @@ $blog-header-height: 58px;
             border: none;
             color: #fff;
             vertical-align: top;
-            font-weight: $font-weight-light;
+            font-weight: $font-weight-regular;
             border-radius: 0;
             border-top-#{$end-direction}-radius: 50px;
             border-bottom-#{$end-direction}-radius: 50px;
@@ -618,57 +685,67 @@ $blog-header-height: 58px;
     color: $txt-gray;
     font-size: 1rem;
     line-height: 1.6;
-    font-weight: $font-weight-light;
+    font-weight: $font-weight-regular;
+
     blockquote {
         margin-top: 10px;
         margin-bottom: 10px;
         margin-#{$start-direction}: 32px;
         padding: 12px 0 0 45px;
         font-size: 25px;
-        font-weight: 600;
+        font-weight: $font-weight-bold;
         line-height: normal;
         font-style: italic;
         color: $brand-color;
+
         p {
             font-size: 25px;
-            font-weight: 600;
+            font-weight: $font-weight-bold;
             line-height: normal;
             font-style: italic;
             color: $brand-color;
         }
     }
+
     p {
         color: #666;
-        font-weight: $font-weight-light;
+        font-weight: $font-weight-regular;
         line-height: 1.6;
         padding: 0 0 15px 0;
     }
+
     a {
         color: $brand-color;
         text-decoration: underline;
     }
+
     img {
         border-radius: $common-radius;
     }
+
     .roll {
         display: inline-block;
         overflow: hidden;
         vertical-align: top;
         perspective: 400px;
         perspective-origin: 50% 50%;
+
         &:hover {
             background: none;
             text-shadow: none;
         }
     }
+
     ul {
         margin: 10px 0 10px 0;
         padding: 0;
+
         li {
             position: relative;
             line-height: 30px;
             padding: 0 0 8px 24px;
             letter-spacing: 0.02em;
+
             &:before {
                 position: absolute;
                 #{$start-direction}: 0;
@@ -679,40 +756,48 @@ $blog-header-height: 58px;
                 display: inline-block;
                 background-color: currentColor;
             }
+
             a {
                 color: $brand-color;
                 text-decoration: none;
             }
         }
     }
+
     ol {
         margin: 10px 0 10px 20px;
         padding: 0;
         width: 100%;
         display: inline-block;
+
         li {
             list-style: decimal outside;
             line-height: normal;
             padding: 0 0 10px 0;
             letter-spacing: 0.02em;
 
-            font-weight: $font-weight-light;
+            font-weight: $font-weight-regular;
         }
+
         &.list-spl {
             list-style-type: none;
+
             li {
                 font-size: 15px;
                 position: relative;
                 margin: 0px 0 15px 0;
                 list-style-type: none !important;
+
                 &.highlighted-point {
                     .highlighted-info {
                         margin: 0 0 0 56px;
+
                         .sub-info {
                             display: block;
                             margin: 5px 0 0 0;
                         }
                     }
+
                     p {
                         background: #fbf8da;
                         color: #272727;
@@ -727,24 +812,29 @@ $blog-header-height: 58px;
             }
         }
     }
+
     table {
         border-collapse: collapse;
         width: auto;
         text-align: #{$start-direction};
+
         th {
             border: $border;
             padding: 5px 10px;
             vertical-align: top;
             color: $secondary-color;
         }
+
         td {
             border: $border;
             padding: 5px 10px;
             vertical-align: top;
+
             strong {
-                font-weight: 600;
+                font-weight: $font-weight-bold;
             }
         }
+
         p {
             padding: 0px;
         }
@@ -753,13 +843,16 @@ $blog-header-height: 58px;
 
 .post__author {
     margin: 2rem 0;
+
     .media {
         display: flex;
         align-items: flex-start;
     }
+
     .media__image {
         margin-#{$end-direction}: 2rem;
     }
+
     .avatar {
         display: block;
         width: 100px;
@@ -767,9 +860,10 @@ $blog-header-height: 58px;
         border-radius: 50%;
         overflow: hidden;
     }
+
     .name {
         font-size: 1.25em;
-        font-weight: 600;
+        font-weight: $font-weight-bold;
     }
 }
 
@@ -782,14 +876,17 @@ $blog-header-height: 58px;
     border-radius: $common-radius;
     margin: 2rem 0;
     padding: 2rem;
+
     h2 {
-        font-weight: 600;
+        font-weight: $font-weight-bold;
         font-size: 1.5rem;
         color: $txt-body;
     }
+
     &:last-child {
         border-bottom: none;
     }
+
     &.odd {
         padding-#{$start-direction}: 110px;
     }
@@ -799,6 +896,7 @@ $blog-header-height: 58px;
     padding: 2rem;
     display: flex;
     border-top: $border;
+
     .avatar {
         border-radius: 50%;
         overflow: hidden;
@@ -812,21 +910,24 @@ $blog-header-height: 58px;
 
 .comment-by {
     flex: 1;
+
     cite {
         display: block;
         font-style: normal;
     }
+
     time {
         display: block;
         font-style: normal;
         color: lighten($txt-body, 50%);
-        font-weight: $font-weight-light;
+        font-weight: $font-weight-regular;
         font-size: 0.875rem;
     }
 }
 
 .comment-content {
     margin: 1rem 0 0 0;
+
     p {
         margin: 0;
     }
@@ -834,6 +935,7 @@ $blog-header-height: 58px;
 
 .comment-respond {
     margin-top: 4rem;
+
     h4 {
         margin: 0;
         font-size: 1.2rem;
@@ -843,20 +945,24 @@ $blog-header-height: 58px;
 .blog-subscribers-inner {
     background: $brand-color;
     color: $brand-color-inverse;
+
     h3 {
         color: inherit;
-        font-weight: 600;
+        font-weight: $font-weight-bold;
     }
+
     p {
         color: inherit;
         font-size: 0.9em;
     }
+
     .form-subscribe {
         margin-bottom: 0;
         -webkit-box-orient: vertical;
 
         -ms-flex-direction: column;
         flex-direction: column;
+
         input {
             &[type="text"] {
                 -ms-flex: none;
@@ -865,6 +971,7 @@ $blog-header-height: 58px;
                 margin: 0.5rem 0;
                 text-align: center;
             }
+
             &[type="submit"] {
                 -ms-flex: none;
                 flex: none;
@@ -881,17 +988,20 @@ $blog-header-height: 58px;
     display: flex;
     align-items: center;
     justify-content: space-between;
+
     li {
         flex: 1;
+
         a {
             background-color: $bg-gray;
             display: block;
             padding: 15px 10px;
             color: $txt-body;
             font-size: 1rem;
-            font-weight: 400;
+            font-weight: $font-weight-regular;
             text-align: center;
         }
+
         &.is--active {
             a {
                 background: $secondary-color;
@@ -906,16 +1016,18 @@ $blog-header-height: 58px;
 }
 
 .content-data {
-    > ul {
-        > li {
+    >ul {
+        >li {
             border-bottom: $border;
             margin-bottom: 1rem;
             padding-bottom: 1rem;
+
             &:last-child {
                 border-bottom: none;
             }
         }
     }
+
     .post-category {
         margin: 0;
     }
@@ -974,7 +1086,7 @@ $blog-header-height: 58px;
     display: inline-block;
     line-height: 1;
     vertical-align: top;
-    font-weight: $font-weight-light;
+    font-weight: $font-weight-regular;
     color: #000;
     font-size: 0.875em;
 }
@@ -992,8 +1104,9 @@ $blog-header-height: 58px;
 
 .right-side-bar .post_title {
     font-size: 1.1rem;
-    font-weight: 500;
+    font-weight: $font-weight-normal;
 }
+
 [dir="rtl"] {
     .form-subscribe {
         input[type="text"] {

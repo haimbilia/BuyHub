@@ -164,6 +164,7 @@ class Paypal extends PaymentMethodBase
         $pu_amount["currency_code"] = $this->systemCurrencyCode;
         $pu_amount["value"] =  number_format((float)$paymentAmount, 2, '.', '');
         $purchase_units["reference_id"] = $orderId;
+        $purchase_units["invoice_id"] = $orderInfo['order_number'];
         $purchase_units["amount"] = $pu_amount;
      
         if ($orderInfo['order_type'] == Orders::ORDER_PRODUCT && !empty($shippingAddress)) {
@@ -213,12 +214,12 @@ class Paypal extends PaymentMethodBase
      * validatePaymentRequest
      *
      * @param  string $paypalOrderId
-     * @param  string $orderId
+     * @param  string $orderInvoiceId
      * @param  string $currencyCode
      * @param  float $totalAmount
      * @return bool
      */
-    public function validatePaymentRequest(string $paypalOrderId, string $orderId, string $currencyCode, float $totalAmount): bool
+    public function validatePaymentRequest(string $paypalOrderId, string $orderInvoiceId, string $currencyCode, float $totalAmount): bool
     {
         if (!empty(Orders::isExistTransactionId($paypalOrderId))) {
             $this->error = Labels::getLabel('ERR_INVALID_TXN_REQUEST._THIS_TRANSACTION_ALREADY_PROCESSED', $this->langId);
@@ -250,7 +251,7 @@ class Paypal extends PaymentMethodBase
             return false;
         }
 
-        if ($purchaseUnit->reference_id != $orderId) {
+        if ($purchaseUnit->invoice_id != $orderInvoiceId) {
             $this->error = Labels::getLabel('ERR_INVALID_ORDER.', $this->langId);
             return false;
         }
@@ -291,7 +292,7 @@ class Paypal extends PaymentMethodBase
             //=== Return a response to the client.
             $this->resp = $client->execute($request);
         } catch (Exception $e) {
-            // Something else happened, completely unrelated to Stripe
+            // Something else happened, completely unrelated to Paypal
             $msg = LibHelper::isJson($e->getMessage()) ? json_decode($e->getMessage(), true) : $e->getMessage();
             $this->error = $msg;
             return false;

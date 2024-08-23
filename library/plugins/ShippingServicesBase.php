@@ -89,7 +89,7 @@ class ShippingServicesBase extends PluginBase
     {
         if (0 < $sellerId) {            
             $shopId = Shop::getAttributesByUserId($sellerId, 'shop_id');
-            $fields = array('shop_postalcode as postalCode', 'shop_address_line_1 as line1', 'shop_address_line_2 as line2', 'shop_city as city', 'state_name as state', 'state_code as stateCode', 'country_code as countryCode', 'country_name as country', 'shop_phone as phone', 'shop_name', 'shop_id');
+            $fields = array('shop_postalcode as postalCode', 'shop_address_line_1 as line1', 'shop_address_line_2 as line2', 'shop_city as city', 'COALESCE(state_name, state_identifier) as state', 'state_code as stateCode', 'country_code as countryCode', 'country_name as country', 'shop_phone as phone', 'COALESCE(shop_name, shop_identifier) as shop_name', 'shop_id');
             return (array) Shop::getShopAddress($shopId, false, $this->langId, $fields);
         }
 

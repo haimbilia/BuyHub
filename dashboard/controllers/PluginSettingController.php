@@ -111,7 +111,7 @@ class PluginSettingController extends LoggedUserController
         if (empty($keyName)) {
             LibHelper::dieJsonError(Labels::getLabel('ERR_INVALID_KEY_NAME', $langId));
         }
-        $plugin = PluginHelper::callPlugin($keyName, [$langId], $error, $langId, false);
+        $plugin = LibHelper::callPlugin($keyName, [$langId], $error, $langId, false);
         if (false == method_exists($plugin, 'getFormFieldsArr')) {
             FatUtility::dieJsonError(Labels::getLabel('ERR_UNABLE_TO_LOAD_SETTINGS_FORM', $langId));
         }

@@ -243,7 +243,7 @@ class PushNotification extends MyAppModel
             return false;
         }
 
-        $notificationObj = PluginHelper::callPlugin($keyName, [CommonHelper::getLangId()], $error, CommonHelper::getLangId(), false);
+        $notificationObj = LibHelper::callPlugin($keyName, [CommonHelper::getLangId()], $error, CommonHelper::getLangId(), false);
         if (false === $notificationObj) {
             return false;
         }
@@ -319,7 +319,6 @@ class PushNotification extends MyAppModel
             } else {
                 static::updateDetail($recordId, static::STATUS_PROCESSING, $lastUserAccessTime);
             }
-            // CommonHelper::printArray($response);
         }
         return true;
     }

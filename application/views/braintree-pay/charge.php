@@ -59,6 +59,7 @@
         </div>
     </div>
 </section>
+<?php include(CONF_THEME_PATH . '_partial/footer-part/fonts.php'); ?>
 <?php
 if (isset($clientToken)) {
     if (!FatUtility::isAjaxCall()) {

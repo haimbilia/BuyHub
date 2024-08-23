@@ -55,47 +55,47 @@ if (Product::FILTER_POSITION_DEFAULT == $position) {
     $data['brandsArr'] = $brandsArr;
     $data['options'] = array_values($optionsResult);
     $data['priceArr'] = $priceArr;
-
 } else if (Product::FILTER_POSITION_ALTERNATE == $position) {
-    $data['filters'] = [
-        [
+    $data['filters'] = [];
+
+    if (count($categoriesArr) > 0) {
+        $data['filters'][] = [
             'title' => Labels::getLabel('LBL_CATEGORIES', $siteLangId),
             'type' => Product::FILTER_TYPE_CATEGORY,
             'data' => $categoriesArr,
-        ],
-        [
+        ];
+    }
+    if (count($brandsArr) > 0) {
+        $data['filters'][] = [
             'title' => Labels::getLabel('LBL_BRANDS', $siteLangId),
             'type' => Product::FILTER_TYPE_BRAND,
             'data' => $brandsArr,
-        ],
-        [
-            'title' => Labels::getLabel('LBL_SORT_BY', $siteLangId),
-            'type' => Product::FILTER_TYPE_SORT_BY,
-            'data' => [
-                [
-                    'title' => Labels::getLabel('LBL_PRICE_(LOW_TO_HIGH)', $siteLangId),
-                    'value' => 'price_asc',
-                ],
-                [
-                    'title' => Labels::getLabel('LBL_PRICE_(HIGH_TO_LOW)', $siteLangId),
-                    'value' => 'price_desc',
-                ],
-                [
-                    'title' => Labels::getLabel('LBL_SORT_BY_POPULARITY', $siteLangId),
-                    'value' => 'popularity_desc',
-                ],
-                [
-                    'title' => Labels::getLabel('LBL_MOST_DISCOUNTED', $siteLangId),
-                    'value' => 'discounted',
-                ],
-            ],
-        ],
-        [
+        ];
+    }
+
+    if (!empty($priceArr)) {
+        $data['filters'][] = [
             'title' => Labels::getLabel('LBL_PRICE_FILTER', $siteLangId),
             'type' => Product::FILTER_TYPE_PRICE,
             'data' => [$priceArr],
-        ],
-    ];
+        ];
+    }
+
+    if (count($conditions) > 1) {
+        $data['filters'][] = [
+            'title' => Labels::getLabel('LBL_CONDITION_FILTER', $siteLangId),
+            'type' => Product::FILTER_TYPE_CONDITION,
+            'data' => $conditions,
+        ];
+    }
+
+    if (count($availabilityArr) > 1) {
+        $data['filters'][] = [
+            'title' => Labels::getLabel('LBL_AVAILABILITY_FILTER', $siteLangId),
+            'type' => Product::FILTER_TYPE_AVAILABILITY,
+            'data' => [$availabilityArr],
+        ];
+    }
 
     if (is_array($optionsResult) && !empty($optionsResult)) {
         foreach (array_values($optionsResult) as $option) {

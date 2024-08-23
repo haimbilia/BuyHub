@@ -13,7 +13,7 @@ You will require the following server specifications for setting up the Yokart s
    - Supported Web Servers: 
        - Apache 2.4.x
        - Nginx
-   - PHP Compatibility: 7.4
+   - PHP Compatibility: 8.1
    - Server Hosting :
        - Ability to run scheduled jobs.
        - Ability to override options in .htaccess files
@@ -30,6 +30,7 @@ You will require the following server specifications for setting up the Yokart s
        - Ioncube Loader
        - PHP Composer should be installed
        - Memory_limit 64M or more (Some pages with advanced feature may need upto 128M)
+       - bcmath
    - My SQL:
        - 5.7 or greater
        - sql_mode - strict_trans_tables should be disabled.
@@ -45,7 +46,7 @@ You will require the following server specifications for setting up the Yokart s
 
 	- You are able to aceess the server using **SSH**.
 	- You have installed **Apache** , **MySql** and **PHP** on linux server.
-	- You have installed ioncube loader compatible to **Fatbit library v2.3**
+	- You have installed ioncube loader compatible to **Fatbit library v2.4**
 
 1. **Clone Yo!Kart**
 
@@ -68,7 +69,7 @@ You will require the following server specifications for setting up the Yokart s
 
     Download and install Fatbit library and unzip to library directory.
 
-		wget http://fatlib.4livedemo.com/download/v2.3/core.zip
+		wget http://fatlib.4livedemo.com/download/v2.4/core.zip
 		unzip core.zip -d library
 		rm core.zip
 
@@ -185,3 +186,4 @@ You will require the following server specifications for setting up the Yokart s
 - Login to admin account and Open url https://yourdomain.com/admin/patch-update/update-shops-avg-rating to update reviews and ratings.
 - Labels table shall be updated from the sample.sql file which is placed under /path/to/your/rootdir/database/ directory 
 - user-uploads directory shall be remain same.
+- Hit /admin/patch-update/update-valid-subscription to update user_has_valid_subscription column for seller who has valid subscription plan.

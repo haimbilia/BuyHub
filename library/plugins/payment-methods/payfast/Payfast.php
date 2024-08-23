@@ -9,7 +9,7 @@ class Payfast extends PaymentMethodBase
     public const KEY_NAME = __CLASS__;
     public const PRODUCTION_HOST = 'https://payfast.co.za';
     public const PRODUCTION_URL = self::PRODUCTION_HOST . '/eng/process';
-    
+
     public const SANDBOX_HOST = 'https://sandbox.payfast.co.za';
     public const SANDBOX_URL = self::SANDBOX_HOST . '/eng/process';
 
@@ -140,18 +140,18 @@ class Payfast extends PaymentMethodBase
         /*if (!empty($this->settings['signature'])) {
             $this->signature = $this->settings['signature'];
             return true;
-        }*/		
-		
+        }*/
 
-		$signature = md5(http_build_query($this->getRequestBody()));
 
-       /*  if (false === $this->updateSettings($this->settings["plugin_id"], ['signature' => $signature], $this->error)) {
+        $signature = md5(http_build_query($this->getRequestBody()));
+
+        /*  if (false === $this->updateSettings($this->settings["plugin_id"], ['signature' => $signature], $this->error)) {
             return false;
         } */
-		if(empty($signature)){
-			return false;
-		}
-		
+        if (empty($signature)) {
+            return false;
+        }
+
         $this->signature = $signature;
         return true;
     }
@@ -177,8 +177,8 @@ class Payfast extends PaymentMethodBase
             // Merchant details
             'merchant_id' => $this->getmerchantId(),
             'merchant_key' => $this->getMerchantKey(),
-            'return_url' => CommonHelper::generateFullUrl('Custom', 'paymentSuccess', [$orderId]),
-			'cancel_url' => CommonHelper::generateFullUrl('Custom', 'paymentFailed'),
+            'return_url' => CommonHelper::generateFullUrl('Custom', 'paymentSuccess', [$orderPaymentObj->getOrderNo()]),
+            'cancel_url' => CommonHelper::generateFullUrl('Custom', 'paymentFailed'),
             'notify_url' => CommonHelper::generateFullUrl(self::KEY_NAME . 'Pay', 'callback', [$orderId]),
             // Buyer details
             'name_first' => $this->userData['user_name'],
@@ -193,10 +193,10 @@ class Payfast extends PaymentMethodBase
         if (false === $this->loadSignature()) {
             return false;
         }
-        $this->requestBody['signature'] = $this->getSignature();	
+        $this->requestBody['signature'] = $this->getSignature();
         return true;
     }
-    
+
     /**
      * validateResponseSignature
      *
@@ -204,14 +204,14 @@ class Payfast extends PaymentMethodBase
      * @return bool
      */
     public function validateResponseSignature(array $response): bool
-    {		
-		$responseSignature = $response['signature'];
-		unset($response['signature']);
-		if(!empty($this->passphrase)) {
-			$response['passphrase'] = $this->passphrase;
+    {
+        $responseSignature = $response['signature'];
+        unset($response['signature']);
+        if (!empty($this->passphrase)) {
+            $response['passphrase'] = $this->passphrase;
         }
         $this->requestBody = $response;
-        return ($responseSignature === $this->getSignature());		
+        return ($responseSignature === $this->getSignature());
     }
 
     /**

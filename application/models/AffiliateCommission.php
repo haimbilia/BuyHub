@@ -45,10 +45,12 @@ class AffiliateCommission extends MyAppModel
         }
 
         $sql = "SELECT afcommsetting_fees,
-		CASE
-			WHEN afcommsetting_prodcat_id > 0 " . $categoryArrCondition . " THEN 1
-			WHEN afcommsetting_prodcat_id = 0 THEN 2
-		END
+        CASE 
+			WHEN (afcommsetting_prodcat_id > 0 ".$categoryArrCondition.") AND afcommsetting_user_id = '".$affiliateUserId."' THEN 1 
+			WHEN afcommsetting_prodcat_id = 0 AND afcommsetting_user_id = '".$affiliateUserId."' THEN 2
+			WHEN (afcommsetting_prodcat_id > 0 ".$categoryArrCondition.") AND afcommsetting_user_id = '0' THEN 3
+			WHEN afcommsetting_prodcat_id = 0 AND afcommsetting_user_id = '0' THEN 4
+		END 		
 		AS matches FROM " . static::DB_TBL . " where afcommsetting_user_id = " . $affiliateUserId . " or afcommsetting_user_id = 0
 		ORDER BY matches ASC, afcommsetting_user_id DESC, afcommsetting_fees DESC LIMIT 0,1";
 

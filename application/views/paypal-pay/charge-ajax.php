@@ -9,9 +9,12 @@
 <script type="text/javascript">
     function loadPayPalButtons() {
         //=== Render paypal Buttons
+        var errorOccurred = false;
         paypal.Buttons({
             onError: function(err) {
-                fcom.displayErrorMessage(err.message);
+                if (false == errorOccurred) {
+                    fcom.displayErrorMessage(err.message);
+                }
                 return;
             },
             style: {
@@ -27,6 +30,7 @@
                 }).then(function(data) {
                     $.ykmsg.info(langLbl.waitingForResponse, -1);
                     if (!data.success && (data.message || data.msg)) {
+                        errorOccurred = true;
                         fcom.removeLoader();
                         var msg = typeof data.msg != 'undefined' ? data.msg : data.message;
                         fcom.displayErrorMessage(msg);

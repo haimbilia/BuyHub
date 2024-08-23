@@ -2,28 +2,34 @@
     display: grid;
     grid-gap: 1rem;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    > li {
+
+    >li {
         border-radius: $common-radius;
         border: $border;
         background: #fff;
         padding: 1rem;
         position: relative;
+
         &.selected,
         &:hover {
             background: #005eff url(images/visa-bg.jpg) no-repeat center;
             border-color: #005eff;
             box-shadow: 0 2px 4px 0 #cfd7df;
+
             .list-actions {
                 opacity: 1;
                 transform: translateY(0);
             }
+
             .cards-detail {
+
                 h6,
                 p {
                     color: #fff;
                 }
             }
         }
+
         .radio {
             input {
                 width: 20px !important;
@@ -35,6 +41,7 @@
                 vertical-align: inherit;
             }
         }
+
         .cards-detail {
             h6 {
                 color: $txt-gray;
@@ -43,12 +50,14 @@
                 letter-spacing: 1px;
                 margin-bottom: 2px;
             }
+
             p {
                 color: $txt-body;
                 font-size: 0.9rem;
-                font-weight: 600;
+                font-weight: $font-weight-bold;
             }
         }
+
         .list-actions {
             position: absolute;
             top: 19px;
@@ -57,18 +66,24 @@
             transform: translateY(0.5rem);
             transition: all 0.1s ease-in-out;
             transition-property: -webkit-transform, transform, opacity;
+
             li {
                 margin: 0;
                 display: flex;
+
                 a {
                     color: #fff;
+
                     .svg {
                         width: 20px;
                         height: 20px;
                         opacity: 1;
                         vertical-align: inherit;
                     }
-                    &:hover {
+
+                    &:hover,
+                    &:focus,
+                    &:active {
                         .svg {
                             fill: #fff;
                         }
@@ -76,6 +91,7 @@
                 }
             }
         }
+
         label {
             display: block;
             cursor: pointer;

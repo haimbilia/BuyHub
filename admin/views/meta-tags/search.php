@@ -14,7 +14,7 @@ require_once(CONF_THEME_PATH . '_partial/listing/listing-column-head.php');
 $serialNo = ($page - 1) * $pageSize + 1;
 foreach ($arrListing as $sn => $row) {
     $cls = (($serialNo % 2) == 0) ? 'even' : 'odd';
-    $tr = $tbody->appendElement('tr', ['class' => $cls, 'data-row' => $serialNo, 'id' => $row['meta_id']]);
+    $tr = $tbody->appendElement('tr', ['class' => $cls, 'data-row' => $serialNo, 'id' => $row['meta_id'] ?? 0]);
     $metaId = FatUtility::int($row['meta_id']);
     $metaRecordId = FatUtility::int($row['meta_record_id']);
     foreach ($fields as $key => $val) {

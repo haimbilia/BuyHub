@@ -4,6 +4,10 @@ header("Content-Security-Policy: frame-ancestors 'self'");
 header('X-Frame-Options: SAMEORIGIN');
 header("X-XSS-Protection: 1; mode=block");
 header("X-Content-Type-Options: nosniff");
+$host = isset ($_SERVER ['HTTP_HOST']) ? $_SERVER ['HTTP_HOST'] : '';
+if ($host == '' && isset ($_SERVER ['SERVER_NAME'])) {
+    $_SERVER['HTTP_HOST'] = $_SERVER ['SERVER_NAME'];
+}
 $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
 define('HTTP_YOKART_PUBLIC', $protocol . $_SERVER['HTTP_HOST'] . rtrim(rtrim(dirname($_SERVER['SCRIPT_NAME']), 'install'), '/.\\') . '/');
 define('HTTP_YOKART', preg_replace('~/[^/]*/([^/]*)$~', '/\1', HTTP_YOKART_PUBLIC));
@@ -34,7 +38,7 @@ if (strpos(CONF_UPLOADS_PATH, 's3://') === false) {
     $filename = CONF_UPLOADS_PATH . 'database-restore-progress.txt';
     if (file_exists($filename)) {
         $filelastmodified = filemtime($filename);
-        if ((time() - $filelastmodified) < 8 * 60) {
+        if ((time() - $filelastmodified) < 3 * 60) {
             if (!strpos($_SERVER['REQUEST_URI'], 'app-api') === false) {
                 $arr = array('status' => 0, 'msg' => 'We are restoring database as a scheduled process. Please try in about a minute.');
                 die(json_encode($arr));

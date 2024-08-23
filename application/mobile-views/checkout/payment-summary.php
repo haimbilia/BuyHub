@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 foreach ($paymentMethods as $key => $val) {
-    if ($cartHasDigitalProduct && in_array(strtolower($val['plugin_code']), ['cashondelivery', 'payatstore'])) {
+    if ($cartHasDigitalProduct && isset($val['plugin_code']) && in_array(strtolower($val['plugin_code']), ['cashondelivery', 'payatstore'])) {
         unset($paymentMethods[$key]);
         continue;
     }
@@ -18,6 +18,7 @@ $data = array(
     'orderId' => $orderId,
     'orderType' => $orderType,
     'canUseWalletForPayment' => (true == $canUseWalletForPayment ? 1 : 0),
+    'cartSummary' => $cartSummary,
     'paymentMethods' => array_values($paymentMethods),
 );
 

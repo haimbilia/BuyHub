@@ -10,29 +10,35 @@
     border-radius: $common-radius;
     max-width: 500px;
     padding: 2rem;
+
     @include media-breakpoint-up(lg) {
         //margin: 4rem;
         padding: 4rem;
     }
+
     display: flex;
     flex-direction: column;
+
     &-head {
         margin-bottom: 1.5rem;
 
         h3 {
             margin-bottom: 1rem;
-            font-weight: 600;
+            font-weight: $font-weight-bold;
         }
+
         h6 {
             font-size: 0.8rem;
-            font-weight: $font-weight-light;
+            font-weight: $font-weight-regular;
             max-width: 337px;
         }
     }
+
     &-form {
         display: flex;
         align-items: center;
         border-bottom: solid 2px #000;
+
         &-input {
             flex: 1;
             background: none;
@@ -46,6 +52,7 @@
             color: $txt-body;
             vertical-align: top;
         }
+
         &-submit {
             height: 2.5rem;
             width: 2.5rem;

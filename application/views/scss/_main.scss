@@ -3,7 +3,7 @@
 //
 @import "themes/variables";
 
-//
+//layout
 @import "layout/header";
 @import "layout/mega-menu";
 @import "layout/offcanvas-menu";
@@ -11,11 +11,15 @@
 //@import "layout/stack-menu";
 //@import "layout/mega-nav";
 @import "layout/footer";
-//
 
+
+
+//components
+@import "components/site-demo";
 @import "components/main-search";
 @import "components/carousels";
 @import "components/accordion";
+@import "components/grouping";
 //@import "components/tagify";
 @import "components/auto-complete";
 @import "components/avtar";
@@ -54,6 +58,7 @@
 @import "components/ratings";
 @import "components/steps";
 //@import "components/table";
+@import "components/actions";
 @import "components/tabs";
 @import "components/wrap-drop";
 @import "components/cards";
@@ -97,7 +102,9 @@
 @import "components/alert";
 @import "components/misc";
 @import "components/system-messages";
-//
+
+
+//vendors
 //@import "vendors/animate";
 //@import "vendors/fontawesome";
 //@import "vendors/chartist";
@@ -112,7 +119,9 @@
 //@import "vendors/tagify";
 @import "vendors/intlTelInput.min";
 @import "vendors/nouislider.min";
-//
+
+
+//pages
 @import "pages/offline";
 @import "pages/collections";
 @import "pages/login";

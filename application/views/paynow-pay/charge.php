@@ -40,6 +40,7 @@ if (null != $btn) {
         </div>
     </div>
 </section>
+<?php include(CONF_THEME_PATH . '_partial/footer-part/fonts.php'); ?>
 <script type="text/javascript">
     $("form#paymentForm-js").submit();
 

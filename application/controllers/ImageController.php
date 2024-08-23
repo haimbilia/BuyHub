@@ -96,7 +96,7 @@ class ImageController extends FatController
         if ($selprod_id) {
             $srch = SellerProduct::getSearchObject();
             $srch->doNotCalculateRecords();
-            $srch->joinTable(SellerProduct::DB_TBL_SELLER_PROD_OPTIONS, 'INNER JOIN', 'selprod_id = selprodoption_selprod_id', 'tspo');
+            $srch->joinTable(SellerProduct::DB_TBL_SELLER_PROD_OPTIONS, 'INNER JOIN', 'selprod_id = selprodoption_selprod_id and selprodoption_selprod_id = ' . $selprod_id, 'tspo');
             $srch->joinTable(OptionValue::DB_TBL, 'INNER JOIN', 'tspo.selprodoption_optionvalue_id = opval.optionvalue_id', 'opval');
             $srch->joinTable(Option::DB_TBL, 'INNER JOIN', 'opval.optionvalue_option_id = op.option_id', 'op');
             $srch->joinTable(AttachedFile::DB_TBL, 'INNER JOIN', 'sp.selprod_product_id = af.afile_record_id AND af.afile_record_subid =  tspo.selprodoption_optionvalue_id', 'af');
@@ -121,13 +121,15 @@ class ImageController extends FatController
             /* CommonHelper::printArray($row); die(); */
         }
         /* ] */
+        
         $objectName = 'AttachedFile';
         if ($fileType == $objectName::FILETYPE_PRODUCT_IMAGE_TEMP) {
             $objectName = 'AttachedFileTemp';
         } else {
             $fileType =  $objectName::FILETYPE_PRODUCT_IMAGE;
         }
-
+        
+        $file_row = false;
         if ($selprod_id && $row) {
             $file_row = $objectName::getAttachment($fileType, $row['afile_record_id'], $row['afile_record_subid'], $lang_id);
         } elseif ($afile_id > 0) {
@@ -136,7 +138,7 @@ class ImageController extends FatController
                 $file_row = $res;
             }
         }
-
+        
         if ($file_row == false) { 
             $file_row = $objectName::getAttachment($fileType, $recordId, -1, $lang_id);
         }
@@ -145,6 +147,7 @@ class ImageController extends FatController
         $image_name = $objectName::setNamePrefix($image_name, $sizeType);
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_PRODUCTS, $sizeType);
         $apply_watermark  = $imageDimensions['width'] > 400 || $imageDimensions['width'] > 400;
+        
         if ($sizeType) {
             $objectName::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'], $default_image, '', ImageResize::IMG_RESIZE_EXTRA_ADDSPACE, $apply_watermark);
         } else {
@@ -640,7 +643,7 @@ class ImageController extends FatController
         }
     }
 
-    public function slide($slide_id, $screen = 0, $lang_id, $sizeType = '', $displayUniversalImage = true)
+    public function slide($slide_id, $screen = 0, $lang_id = 0, $sizeType = '', $displayUniversalImage = true)
     {
         $default_image = 'hero_deafult_image.jpg';
         $slide_id = FatUtility::int($slide_id);
@@ -857,7 +860,7 @@ class ImageController extends FatController
         }
     }
 
-    public function cblockBackgroundImage($cblockId, $langId = 0, $sizeType = '', $fileType)
+    public function cblockBackgroundImage($cblockId, $langId = 0, $sizeType = '', $fileType = '')
     {
         $cblockId = FatUtility::int($cblockId);
         $langId = FatUtility::int($langId);
@@ -967,6 +970,28 @@ class ImageController extends FatController
         }
 
         echo AttachedFile::getVideo($res['afile_physical_path']);
+        exit;
+    }
+
+    public function previewImage(int $afileId)
+    {
+        if ($afileId < 0) {
+            return false;
+        }
+
+        $res = AttachedFile::getAttributesById($afileId);
+
+        if (false === $res) {
+            return false;
+        }
+        if ($res['afile_type'] != AttachedFile::FILETYPE_SELLER_PRODUCT_DIGITAL_DOWNLOAD_PREVIEW) {
+            return false;
+        }
+        $imageName = (isset($res['afile_physical_path']) && 0 < $res['afile_id']) ? $res['afile_physical_path'] : '';
+        $w = 500;
+        $h = 500;
+
+        echo AttachedFile::displayImage($imageName, $w, $h);
         exit;
     }
 

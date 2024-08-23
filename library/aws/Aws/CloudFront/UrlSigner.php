@@ -1,4 +1,5 @@
 <?php
+
 namespace Aws\CloudFront;
 
 use GuzzleHttp\Psr7;
@@ -64,7 +65,7 @@ class UrlSigner
             $policy
         );
         $uri = $uri->withQuery(
-            http_build_query($query + $signature, null, '&', PHP_QUERY_RFC3986)
+            http_build_query($query + $signature, '', '&', PHP_QUERY_RFC3986)
         );
 
         return $scheme === 'rtmp'

@@ -87,6 +87,19 @@ $buyQuantity->addFieldTagAttribute('data-page', 'product-view'); ?>
         });
         /* ] */
     });
+
+    $(document).ready(function() {
+        ykevents.viewItem({
+            item_id: "<?php echo $product['selprod_id']; ?>",
+            item_name: "<?php echo $product['selprod_title']; ?>",
+            discount: "<?php echo ($product['selprod_price'] - $product['theprice']); ?>",
+            index: 0,
+            item_brand: "<?php echo $product['brand_name']; ?>",
+            item_category: "<?php echo $product['prodcat_name']; ?>",
+            price: "<?php echo $product['theprice']; ?>",
+            quantity: 1
+        });
+    });
 </script>
 
 <!-- Product Schema Code -->

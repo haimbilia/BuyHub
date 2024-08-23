@@ -63,7 +63,8 @@ class Address extends MyAppModel
         $srch->doNotCalculateRecords();
         $srch->addOrder(self::tblFld('is_default'), 'DESC');
         $rs = $srch->getResultSet();
-        return (array) FatApp::getDb()->fetch($rs);
+        $row = FatApp::getDb()->fetch($rs);
+        return (is_array($row) ? $row : []);
     }
 
     /**
@@ -84,6 +85,7 @@ class Address extends MyAppModel
         $srch->addMultipleFields(array('addr.*', 'state_code', 'country_code', 'country_code_alpha3', 'IFNULL(country_name, country_code) as country_name', 'IFNULL(state_name, state_identifier) as state_name'));
         $srch->addCondition('country_active', '=', applicationConstants::ACTIVE);
         $srch->addCondition('state_active', '=', applicationConstants::ACTIVE);
+        $srch->addCondition('addr_deleted', '=', applicationConstants::NO);
         $srch->addCondition(self::tblFld('type'), '=', $type);
         $srch->addCondition(self::tblFld('record_id'), '=', $recordId);
 
@@ -103,7 +105,8 @@ class Address extends MyAppModel
         if (0 < $this->mainTableRecordId) {
             $srch->addCondition(self::tblFld('id'), '=', $this->mainTableRecordId);
             $rs = $srch->getResultSet();
-            return (array) FatApp::getDb()->fetch($rs);
+            $row = FatApp::getDb()->fetch($rs);
+            return (is_array($row) ? $row : []);
         }
 
         $rs = $srch->getResultSet();

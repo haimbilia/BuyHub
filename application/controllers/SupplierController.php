@@ -113,7 +113,9 @@ class SupplierController extends MyAppController
             $frm = $this->getSellerForm();
             $post = $frm->getFormDataFromArray(FatApp::getPostedData());
             $registrationFrm = $this->getSellerRegistrationForm();
-            unset($post['btn_submit']);
+            if (isset($post['btn_submit'])) {
+                unset($post['btn_submit']);
+            }
             $registrationFrm->fill($post);
             $this->set('termsAndConditionsLinkHref', $termsAndConditionsLinkHref);
             $this->set('frm', $registrationFrm);
@@ -198,7 +200,6 @@ class SupplierController extends MyAppController
         $userObj->setUpRewardEntry($userObj->getMainTableRecordId(), $this->siteLangId, $referrerCodeSignup, $affiliateReferrerCodeSignup);
 
         if (FatApp::getPostedData('user_newsletter_signup')) {
-            include_once CONF_INSTALLATION_PATH . 'library/Mailchimp.php';
             $api_key = FatApp::getConfig("CONF_MAILCHIMP_KEY");
             $list_id = FatApp::getConfig("CONF_MAILCHIMP_LIST_ID");
             if ($api_key == '' || $list_id == '') {
@@ -206,11 +207,9 @@ class SupplierController extends MyAppController
                 FatUtility::dieWithError(Message::getHtml());
             }
 
-            $MailchimpObj = new Mailchimp($api_key);
-            $Mailchimp_ListsObj = new Mailchimp_Lists($MailchimpObj);
             try {
-                $subscriber = $Mailchimp_ListsObj->subscribe($list_id, array('email' => htmlentities($post['user_email'])));
-                /* if ( empty( $subscriber['leid'] ) ) {
+                MailchimpHelper::subscribe(['email' => htmlentities($post['user_email'])], $this->siteLangId);
+                /* if ( empty( $subscriber['msg'] ) ) {
                 Message::addErrorMessage( Labels::getLabel('MSG_Newsletter_subscription_valid_email', $siteLangId) );
                 FatUtility::dieWithError( Message::getHtml() );
                 } */

@@ -82,7 +82,8 @@ class OrderReturnRequestsController extends ListingBaseController
         $srch->addCondition('orrequest_id', '=', $recordId);
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
-        return (array) FatApp::getDb()->fetch($srch->getResultSet());
+        $row = FatApp::getDb()->fetch($srch->getResultSet());
+        return (is_array($row) ? $row : []);
     }
 
     private function getListingData()

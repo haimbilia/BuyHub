@@ -5,7 +5,7 @@ $header-height: 122px;
     z-index: $zindex-fixed;
     top: 0;
     width: 100%;
-    font-weight: $font-weight-light;
+    font-weight: $font-weight-regular;
     font-size: 0.875rem;
     background: $bg-white;
     border-bottom: $border;
@@ -68,8 +68,7 @@ $header-height: 122px;
             flex: 1;
             padding: 0;
 
-            @include media-breakpoint-down(sm) {
-            }
+            @include media-breakpoint-down(sm) {}
         }
     }
 
@@ -203,7 +202,7 @@ $quick-nav-gap: 1.5rem;
         padding: 6px 0;
         background: none;
         border: none;
-        font-weight: 500;
+        font-weight: $font-weight-normal;
         line-height: 1;
         display: flex;
         align-items: center;
@@ -322,7 +321,8 @@ $quick-nav-gap: 1.5rem;
 .btn-engagespot {
     .sc-jOrMOR {
         border-radius: 50% !important;
-        > svg {
+
+        >svg {
             fill: $secondary-color;
             stroke: $secondary-color !important;
         }

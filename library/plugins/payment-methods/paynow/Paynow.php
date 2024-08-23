@@ -149,7 +149,7 @@ class Paynow extends PaymentMethodBase
         $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
         $customerEmail = !isset($orderInfo['customer_email']) || empty($orderInfo['customer_email']) ? $this->userData['credential_email'] : $orderInfo['customer_email'];
 
-        $returnUrl = UrlHelper::generateFullUrl(self::KEY_NAME . 'Pay', "paymentSuccess", [$this->orderId]); /* The URL that the buyer will be redirected to, after making payment. This URL overrides return_url value from PoS configuration. */
+        $returnUrl = UrlHelper::generateFullUrl(self::KEY_NAME . 'Pay', "paymentSuccess", [$orderPaymentObj->getOrderNo()]); /* The URL that the buyer will be redirected to, after making payment. This URL overrides return_url value from PoS configuration. */
 
         $this->requestBody = [
             "amount" => $this->formatPaymentAmount($paymentAmount),

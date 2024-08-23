@@ -63,7 +63,7 @@ if (!in_array($collection_type, Collections::COLLECTION_WITHOUT_RECORDS)) {
     ];
 }
 
-if (!in_array($collection_type, Collections::COLLECTION_WITHOUT_MEDIA)) {
+if (!in_array($collection_type, Collections::COLLECTION_WITHOUT_MEDIA) && !in_array($collection_layout_type, Collections::COLLECTIONS_NOT_FOR_APP)) {
     $otherButtons[] = [
         'attr' => [
             'href' => 'javascript:void(0)',

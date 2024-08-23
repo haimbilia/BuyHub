@@ -7,6 +7,7 @@ $right-space: 3rem;
     #{$end-direction}: $right-space;
     top: $top-space;
 }
+
 .restore-btn {
     @include bg-brand;
     border: none;
@@ -28,10 +29,14 @@ $right-space: 3rem;
     align-items: center;
     font-size: 0.9rem;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    &:hover {
+
+    &:hover,
+    &:focus,
+    &:active {
         color: #fff;
         width: 50px;
     }
+
     .svg {
         min-width: 1.5rem;
         min-height: 1.5rem;
@@ -50,6 +55,7 @@ $right-space: 3rem;
         height: 1.2rem;
         margin: 0.25em;
         width: 1.2rem;
+
         &:before,
         &:after {
             border-style: solid;
@@ -59,12 +65,14 @@ $right-space: 3rem;
             width: 0;
             transform: rotate(-45deg);
         }
+
         &:after {
             border-color: transparent transparent transparent white;
             border-width: 0.3125em 0 0.3125em 0.5em;
             top: -0.3125em;
             left: 0.0625em;
         }
+
         &:before {
             border-color: transparent white transparent transparent;
             border-width: 0.3125em 0.5em 0.3125em 0;
@@ -72,6 +80,7 @@ $right-space: 3rem;
             right: 0.0625em;
         }
     }
+
     &-label {
         //margin-#{$start-direction}: 8px;
     }
@@ -82,52 +91,62 @@ $right-space: 3rem;
         max-width: 280px !important;
     }
 }
+
 .offcanvas-restore {
     max-width: 250px;
     top: $top-space;
     #{$end-direction}: $right-space;
     bottom: auto;
     background-color: transparent;
+
     .offcanvas-body {
         padding: 0;
     }
 }
+
 .demo {
     color: $txt-body;
     height: 100%;
     display: flex;
     flex-direction: column;
+
     &-restore {
         display: flex;
         justify-content: flex-end;
         margin-bottom: 1rem;
         margin-#{$end-direction}: 0;
+
         &-btn {
-            font-weight: 600;
+            font-weight: $font-weight-bold;
             background-color: #fff;
+            box-shadow: $shadow2;
             border-radius: 30px;
             border: 0;
             gap: 8px;
             padding: 0.6rem 1rem;
             display: flex;
             min-width: 130px;
+
         }
 
         &-title {
             font-size: 1rem;
-            font-weight: 500;
+            font-weight: $font-weight-normal;
             margin-bottom: 0.25rem;
         }
+
         &-counter {
             font-size: 1rem;
-            font-weight: 600;
+            font-weight: $font-weight-bold;
         }
     }
+
     &-switch {
         flex: 1;
         // border-top: $border;
         // border-bottom: $border;
     }
+
     &-action {
         display: flex;
         flex-direction: column;
@@ -135,6 +154,7 @@ $right-space: 3rem;
         gap: 1rem;
         margin-top: 1rem;
     }
+
     .views {
         display: flex;
         flex-direction: column;
@@ -142,18 +162,22 @@ $right-space: 3rem;
         &-item {
             border-bottom: $border;
             display: flex;
+
             &.is-active {
                 color: $brand-color;
             }
+
             &:first-child {
                 a {
                     padding-top: 0;
                 }
             }
+
             &:last-child {
                 border-bottom: none;
             }
         }
+
         &-links {
             padding: 0.8rem 0;
             text-decoration: none;
@@ -162,12 +186,15 @@ $right-space: 3rem;
             display: flex;
             flex-direction: row;
             align-items: center;
-            font-weight: 600;
+            font-weight: $font-weight-bold;
             gap: 10px;
 
-            &:hover {
+            &:hover,
+            &:focus,
+            &:active {
                 color: $brand-color;
             }
+
             .svg {
                 width: 24px;
                 height: 24px;
@@ -175,11 +202,13 @@ $right-space: 3rem;
         }
     }
 }
+
 .demo-bg-wrap {
     background-color: #fff;
     border-radius: 10px;
     padding: 1.5rem;
 }
+
 .contacts {
     padding: 1rem 0;
     display: flex;
@@ -187,6 +216,7 @@ $right-space: 3rem;
     gap: 4rem;
     margin: 0 auto;
     flex-flow: row wrap;
+
     //text-align: #{$start-direction};
     li {
         text-align: #{$start-direction};
@@ -202,6 +232,64 @@ $right-space: 3rem;
     padding: 2rem;
 
     p {
+        font-weight: $font-weight-bold;
+    }
+}
+
+.get-started {
+    max-width: 80%;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.fixed-right-btn {
+    position: fixed;
+    z-index: 999;
+    right: 0;
+    top: calc(60% - 44px);
+    transform-origin: bottom right;
+    transform: rotate(-90deg) translateX(100%);
+    border-right: none;
+    background-color: $brand-color;
+    border-radius: 5px 5px 0 0;
+    border-bottom: none;
+    //overflow: hidden;
+
+    @media (max-width: 992px) and (min-width: 768px) and (orientation: landscape) {
+        top: 65%;
+    }
+
+    @media only screen and (max-width: 767px) {
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+        display: block;
+        bottom: 0px;
+        top: auto;
+        left: 0;
+        right: 0;
+        text-align: center;
+        transform: none;
+        margin: 0 auto;
+        padding: 0px;
+
+        a {
+            width: 100%;
+            padding: 18px ​15px;
+        }
+    }
+
+    .sticker-Btn {
+        background-color: transparent;
+        border: none;
+        color: #fff;
+        font-size: 14px;
+        display: inline-block;
+        padding: 11px 15px;
+        line-height: 1;
         font-weight: 600;
+        white-space: pre;
+
+        @media (max-width: 767px) {
+            padding: 20px 15px;
+        }
     }
 }

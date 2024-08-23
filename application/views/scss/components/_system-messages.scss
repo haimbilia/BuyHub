@@ -71,7 +71,7 @@
 }
 
 .div_info li {
-    font-weight: $font-weight-light;
+    font-weight: $font-weight-regular;
     font-size: 1em;
     position: relative;
     padding: 0 0 5px 0;
@@ -101,14 +101,16 @@
 
 .div_msg {
     li {
-        font-weight: $font-weight-light;
+        font-weight: $font-weight-regular;
         font-size: 1em;
         position: relative;
         padding: 0 0 10px 0;
         color: inherit;
+
         &:last-child {
             padding-bottom: 0;
         }
+
         a {
             font-weight: normal;
             font-size: 13px;
@@ -203,6 +205,7 @@
     0% {
         transform: rotate(0deg);
     }
+
     100% {
         transform: rotate(360deg);
     }
@@ -212,18 +215,21 @@
     0% {
         transform: rotate(0deg);
     }
+
     100% {
         transform: rotate(360deg);
     }
 }
 
 @media (max-width: 767px) {
+
     #mbsmessage,
     .system_message {
         #{$start-direction}: 10px;
         #{$end-direction}: 10px;
         width: auto;
     }
+
     #mbsmessage .content,
     .system_message .content {
         min-width: inherit;

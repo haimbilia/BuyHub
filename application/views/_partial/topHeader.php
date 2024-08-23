@@ -14,7 +14,7 @@
                 <div class="top-bar__inner">
                     <div class="top-bar__left">
                         <div class="logo">
-                            <a href="<?php echo UrlHelper::generateUrl(); ?>">
+                            <a href="<?php echo UrlHelper::generateUrl('', '', [], CONF_WEBROOT_FRONTEND); ?>">
                                 <?php
                                 $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_FRONT_LOGO, 0, 0, $siteLangId, false);
                                 $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
@@ -24,7 +24,7 @@
                                 <img <?php if ($fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?> src="<?php echo $siteLogo; ?>" alt="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, FatUtility::VAR_STRING, '') ?>" title="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, FatUtility::VAR_STRING, '') ?>">
                             </a>
                         </div>
-                        <?php if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) { ?>
+                        <?php if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, '')) && $controllerName != 'Cart') { ?>
                             <div class="geo-location">
                                 <div class="geo-location_inner">
                                     <div class="dropdown">
@@ -88,7 +88,7 @@
                                 </button>
                             </li>
                             <li class="quick-nav-item item-mobile">
-                                <button class="quick-nav-link btn-mega-search toggle--search" data-bs-backdrop="true" data-bs-toggle="offcanvas" data-bs-target="#mega-nav-search" aria-label="mega-nav-search">
+                                <button class="quick-nav-link btn-mega-search toggle--search" role="button" data-bs-backdrop="true" data-bs-toggle="offcanvas" data-bs-target="#mega-nav-search" aria-label="search">
                                     <svg class="svg" width="20" height="20">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#magnifying">
                                         </use>
@@ -121,13 +121,9 @@
                             <?php }
 
                             if (CommonHelper::demoUrl()) { ?>
-                                <li class="quick-nav-item item-desktop quick-nav-pipe">
-                                    <a class="quick-nav-link btn-cta-outline" href="https://www.yo-kart.com/request-demo.html" rel="noopener" title="Get a Free demo of Yo!Kart system by an expert"> Request a Demo </a>
-                                </li>
                                 <li class="quick-nav-item item-desktop">
-                                    <a class="quick-nav-link btn-cta" href="https://www.yo-kart.com/contact-us.html?demo-cta" rel="noopener" target="_blank" title="Connect with Yo!Kart team to build a Multivendor Marketplace">Start Your Marketplace</a>
-                                </li>
-
+                                    <a class="quick-nav-link btn-cta-outline" href="https://www.yo-kart.com/contact-us.html?demo-cta" rel="noopener" target="_blank" title="Connect with Yo!Kart team to build a Multivendor Marketplace">Start Your Marketplace</a>
+                                </li>                                
                             <?php } ?>
 
                         </ul>
@@ -140,7 +136,7 @@
                 <div class="main-bar__inner">
                     <?php $this->includeTemplate('_partial/headerNavigation.php', ['layoutType' => applicationConstants::SCREEN_DESKTOP]); ?>
                     <div class="main-search">
-                        <button class="btn-mega-search toggle--search" data-bs-backdrop="true" data-bs-toggle="offcanvas" data-bs-target="#mega-nav-search">
+                        <button class="btn-mega-search toggle--search" data-bs-backdrop="true" data-bs-toggle="offcanvas" data-bs-target="#mega-nav-search" aria-label="search">
                             <svg class="svg" width="20" height="20">
                                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#magnifying">
                                 </use>

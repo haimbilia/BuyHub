@@ -1,10 +1,4 @@
 <?php
-
-require_once CONF_INSTALLATION_PATH . 'library/APIs/twitteroauth-master/autoload.php';
-
-use Abraham\TwitterOAuth\TwitterOAuth;
-use Avalara\RateType;
-
 class BuyerController extends BuyerBaseController
 {
 
@@ -227,7 +221,7 @@ class BuyerController extends BuyerBaseController
                 'ocr.ocrequest_op_id = op.op_id',
                 'ocr'
             );
-            $srch->addFld(array('*', 'IFNULL(orrequest_id, 0) as return_request', 'IFNULL(ocrequest_id, 0) as cancel_request'));
+            $srch->addFld(array('*', 'IFNULL(orrequest_id, 0) as return_request', 'IFNULL(ocrequest_id, 0) as cancel_request', 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name'));
         }
         $childOrderDetail = FatApp::getDb()->fetchAll($srch->getResultSet(), 'op_id');
 
@@ -458,8 +452,8 @@ class BuyerController extends BuyerBaseController
         $zip = new ZipArchive();
 
         # create a temp file & open it
-        $tmp_file = tempnam('.', '');
-        $zip->open($tmp_file, ZipArchive::CREATE);
+        $tmp_file = tempnam(sys_get_temp_dir(), '');
+        $zip->open($tmp_file, ZipArchive::OVERWRITE);
 
         $fileId = [];
         foreach ($downloads as $ind => $row) {
@@ -482,7 +476,9 @@ class BuyerController extends BuyerBaseController
         /* Remove Temp File from public folder. */
 
         /* Update downlod count */
-        FatApp::getDb()->query("UPDATE " . AttachedFile::DB_TBL . " SET afile_downloaded_times = (afile_downloaded_times+1) where afile_record_id = " . $opId . " AND afile_id IN (" . implode(',', $fileId) . ")");
+        if (!empty($fileId)) {
+            FatApp::getDb()->query("UPDATE " . AttachedFile::DB_TBL . " SET afile_downloaded_times = (afile_downloaded_times+1) where afile_record_id = " . $opId . " AND afile_id IN (" . implode(',', $fileId) . ")");
+        }
         /* Update downlod count */
         exit;
     }
@@ -716,8 +712,8 @@ class BuyerController extends BuyerBaseController
         foreach ($orders as &$order) {
             $charges = $oObj->getOrderProductChargesArr($order['op_id'], MOBILE_APP_API_CALL);
             $order['charges'] = $charges;
-            $order['orderstatus_color_code'] = applicationConstants::getClassColor((string) $order['orderstatus_color_class']);
-            $order['product_image_url'] = UrlHelper::generateFullUrl('image', 'product', array($order['selprod_product_id'], ImageDimension::VIEW_THUMB, $order['op_selprod_id'], 0, $this->siteLangId), CONF_WEBROOT_FRONTEND);
+            $order['orderstatus_color_code'] = applicationConstants::getClassColor((int)$order['orderstatus_color_class']);
+            $order['product_image_url'] = UrlHelper::generateFullUrl('image', 'product', array($order['selprod_product_id'] ?? 0, ImageDimension::VIEW_THUMB, $order['op_selprod_id'], 0, $this->siteLangId), CONF_WEBROOT_FRONTEND);
         }
         $this->set('orders', $orders);
         $this->set('postedData', $post);
@@ -780,7 +776,7 @@ class BuyerController extends BuyerBaseController
 
         foreach ($orderProducts as &$op) {
             $uploadedTime = AttachedFile::setTimeParam($op['product_updated_on']);
-            $op['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($op['selprod_product_id'], ImageDimension::VIEW_CLAYOUT3, $op['op_selprod_id'], 0, $this->siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+            $op['product_image_url'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'product', array($op['selprod_product_id'], ImageDimension::VIEW_CLAYOUT3, $op['op_selprod_id'], 0, $this->siteLangId), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
 
             $files = AttachedFile::getMultipleAttachments(AttachedFile::FILETYPE_ORDER_PRODUCT_DIGITAL_DOWNLOAD, $op['op_id'], 0, $this->siteLangId, true);
             foreach ($files as &$file) {
@@ -805,7 +801,8 @@ class BuyerController extends BuyerBaseController
                         $file['downloadable'] = false;
                     }
                 }
-                $file['downloadUrl'] = UrlHelper::generateFullUrl() . 'public/index.php?url=buyer/download-digital-file/' . $file['afile_id'] . '/' . $file['afile_record_id'];
+
+                $file['downloadUrl'] = UrlHelper::generateFullUrl('Buyer', 'downloadDigitalFile', array($file['afile_id'], $file['afile_record_id']));
             }
 
             $op['files'] = (true === MOBILE_APP_API_CALL) ? array_values($files) : $files;
@@ -2043,7 +2040,7 @@ class BuyerController extends BuyerBaseController
         if (!empty($_FILES) && array_key_exists('spreview_image', $_FILES) && is_array($_FILES['spreview_image']['tmp_name'])) {
             foreach ($_FILES['spreview_image']['tmp_name'] as $index => $tmpName) {
                 if (!is_uploaded_file($tmpName)) {
-                    FatUtility::dieJsonError(Labels::getLabel('ERR_PLEASE_SELECT_A_FILE', $this->adminLangId));
+                    FatUtility::dieJsonError(Labels::getLabel('ERR_PLEASE_SELECT_A_FILE', $this->siteLangId));
                 }
 
                 $fileHandlerObj = new AttachedFile();
@@ -2231,6 +2228,7 @@ class BuyerController extends BuyerBaseController
             }
         }
 
+        $opDetail['opcharge_amount'] = $opDetail['opcharge_amount'] ?? 0;
         if (abs($opDetail['opcharge_amount']) > 0) {
             $orrequestQty = FatUtility::int($post['orrequest_qty']);
             $volumeDiscountPerItem = abs($opDetail['opcharge_amount']) / $opDetail['op_qty'];
@@ -2538,128 +2536,6 @@ class BuyerController extends BuyerBaseController
         $this->_template->render(false, false, 'buyer/search-offers.php');
     }
 
-    public function twitterCallback()
-    {
-        include_once CONF_INSTALLATION_PATH . 'library/APIs/twitteroauth-master/autoload.php';
-        $get = FatApp::getQueryStringData();
-
-        if (!empty($get['oauth_verifier']) && !empty($_SESSION['oauth_token']) && !empty($_SESSION['oauth_token_secret'])) {
-            $twitteroauth = new TwitterOAuth(FatApp::getConfig("CONF_TWITTER_API_KEY"), FatApp::getConfig("CONF_TWITTER_API_SECRET"), $_SESSION['oauth_token'], $_SESSION['oauth_token_secret']);
-            try {
-                $access_token = $twitteroauth->oauth("oauth/access_token", ["oauth_verifier" => $get['oauth_verifier']]);
-            } catch (exception $e) {
-                $this->set('errors', $e->getMessage());
-                $this->_template->render(false, false, 'buyer/twitter-response.php');
-                return;
-            }
-
-            $twitteroauth = new TwitterOAuth(FatApp::getConfig("CONF_TWITTER_API_KEY"), FatApp::getConfig("CONF_TWITTER_API_SECRET"), $access_token['oauth_token'], $access_token['oauth_token_secret']);
-
-            $info = $twitteroauth->get('account/verify_credentials', array("include_entities" => false));
-            $anchor_tag = CommonHelper::referralTrackingUrl(UserAuthentication::getLoggedUserAttribute('user_referral_code'));
-            $urlapi = "http://tinyurl.com/api-create.php?url=" . $anchor_tag;
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $urlapi);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            $shorturl = curl_exec($ch);
-            curl_close($ch);
-            $anchor_length = strlen($shorturl);
-
-            //$message = substr($shorturl." Twitter Message will go here ",0,(140-$anchor_length-6));
-            $message = substr($shorturl . " " . sprintf(FatApp::getConfig("CONF_SOCIAL_FEED_TWITTER_POST_TITLE" . $this->siteLangId), FatApp::getConfig("CONF_WEBSITE_NAME_" . $this->siteLangId)), 0, 134 - $anchor_length);
-
-            $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_SOCIAL_FEED_IMAGE, 0, 0, $this->siteLangId);
-            $error = false;
-            $postMedia = false;
-            if (!empty($file_row)) {
-                $image_path = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
-                $image_path = CONF_UPLOADS_PATH . $image_path;
-                if (filesize($image_path) <= (5 * 1000000)) { /* Max 5mb size image can be uploaded by Twitter */
-                    $handle = fopen($image_path, 'rb');
-                    $image = fread($handle, filesize($image_path));
-                    fclose($handle);
-                    $twitteroauth->setTimeouts(60, 30);
-                    try {
-                        $result = $twitteroauth->upload('media/upload', array('media' => $image_path));
-                        if ($twitteroauth->getLastHttpCode() == 200) {
-                            $parameters = array('Name' => FatApp::getConfig("CONF_WEBSITE_NAME_" . $this->siteLangId), 'status' => $message, 'media_ids' => $result->media_id_string);
-                            try {
-                                $post = $twitteroauth->post('statuses/update', $parameters);
-                                $postMedia = true;
-                            } catch (exception $e) {
-                                $error = $e->getMessage();
-                            }
-                        }
-                    } catch (exception $e) {;
-                        $error = $e->getMessage();
-                    }
-                }
-            }
-
-            if (!$postMedia) {
-                $parameters = array('Name' => FatApp::getConfig("CONF_WEBSITE_NAME_" . $this->siteLangId), 'status' => $message);
-                try {
-                    $post = $twitteroauth->post('statuses/update', $parameters, false);
-                } catch (exception $e) {
-                    $error = $e->getMessage();
-                }
-            }
-
-            $this->set('errors', isset($post->errors) ? $post->errors : $error);
-            $this->_template->render(false, false, 'buyer/twitter-response.php');
-        }
-    }
-
-    public function twitterCallback_old()
-    {
-        include_once CONF_INSTALLATION_PATH . 'library/APIs/twitter/twitteroauth.php';
-        $get = FatApp::getQueryStringData();
-
-        if (!empty($get['oauth_verifier']) && !empty($_SESSION['oauth_token']) && !empty($_SESSION['oauth_token_secret'])) {
-            // We've got everything we need
-            $twitteroauth = new TwitterOAuth(FatApp::getConfig("CONF_TWITTER_API_KEY"), FatApp::getConfig("CONF_TWITTER_API_SECRET"), $_SESSION['oauth_token'], $_SESSION['oauth_token_secret']);
-            // Let's request the access token
-            $access_token = $twitteroauth->getAccessToken($get['oauth_verifier']);
-            // Save it in a session var
-            $_SESSION['access_token'] = $access_token;
-            // Let's get the user's info
-            $twitter_info = $twitteroauth->get('account/verify_credentials');
-            //$twitter_info->id
-            $anchor_tag = CommonHelper::referralTrackingUrl(UserAuthentication::getLoggedUserAttribute('user_referral_code'));
-            $urlapi = "http://tinyurl.com/api-create.php?url=" . $anchor_tag;
-            /*             * *
-             * activate cURL for URL shortening
-             * * */
-
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $urlapi);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            $shorturl = curl_exec($ch);
-            curl_close($ch);
-            $anchor_length = strlen($shorturl);
-            //$message = substr($shorturl." Twitter Message will go here ",0,(140-$anchor_length-6));
-            $message = substr($shorturl . " " . sprintf(FatApp::getConfig("CONF_SOCIAL_FEED_TWITTER_POST_TITLE" . $this->siteLangId), FatApp::getConfig("CONF_WEBSITE_NAME_" . $this->siteLangId)), 0, 134 - $anchor_length);
-            $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_SOCIAL_FEED_IMAGE, 0, 0, $this->siteLangId);
-            $post = '';
-            if (!empty($file_row)) {
-                $image_path = isset($file_row['afile_physical_path']) ? $file_row['afile_physical_path'] : '';
-                $image_path = CONF_UPLOADS_PATH . $image_path;
-                $handle = fopen($image_path, 'rb');
-                $image = fread($handle, filesize($image_path));
-                fclose($handle);
-                /* $parameters = array('media[]' => "{$image};type=image/jpeg;filename={$image_path}",'status' => $message);
-                  $post = $twitteroauth->post('statuses/update_with_media', $parameters, true); */
-                $parameters = array('media_type' => 'image/jpeg', 'media' => $image);
-                $post = $twitteroauth->post('media/upload', $parameters, true);
-            } else {
-                $parameters = array('Name' => FatApp::getConfig("CONF_WEBSITE_NAME_" . $this->siteLangId), 'status' => $message);
-                $post = $twitteroauth->post('statuses/update', $parameters, false);
-            }
-            $this->set('errors', isset($post->errors) ? $post->errors : '');
-            $this->_template->render(false, false, 'buyer/twitter-response.php');
-        }
-    }
-
     public function shareEarn()
     {
         if (!FatApp::getConfig("CONF_ENABLE_REFERRER_MODULE", FatUtility::VAR_INT, 1)) {
@@ -2669,21 +2545,6 @@ class BuyerController extends BuyerBaseController
         if (empty(UserAuthentication::getLoggedUserAttribute('user_referral_code'))) {
             Message::addErrorMessage(Labels::getLabel('ERR_REFERRAL_CODE_IS_EMPTY', $this->siteLangId));
             CommonHelper::redirectUserReferer();
-        }
-
-        $get_twitter_url = $_SESSION["TWITTER_URL"] = UrlHelper::generateFullUrl('Buyer', 'twitterCallback');
-
-        try {
-            $twitteroauth = new TwitterOAuth(FatApp::getConfig("CONF_TWITTER_API_KEY"), FatApp::getConfig("CONF_TWITTER_API_SECRET"));
-
-            $request_token = $twitteroauth->oauth('oauth/request_token', array('oauth_callback' => $get_twitter_url));
-
-            $_SESSION['oauth_token'] = $request_token['oauth_token'];
-            $_SESSION['oauth_token_secret'] = $request_token['oauth_token_secret'];
-            $twitterUrl = $twitteroauth->url('oauth/authorize', array('oauth_token' => $request_token['oauth_token']));
-            $this->set('twitterUrl', $twitterUrl);
-        } catch (\Exception $e) {
-            $this->set('twitterUrl', false);
         }
 
         $this->set('referralTrackingUrl', CommonHelper::referralTrackingUrl(UserAuthentication::getLoggedUserAttribute('user_referral_code')));
@@ -2846,107 +2707,30 @@ class BuyerController extends BuyerBaseController
         return $frm;
     }
 
-    public function getFbToken()
-    {
-        $userId = UserAuthentication::getLoggedUserId();
-        if (isset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['redirect_user'])) {
-            $redirectUrl = $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['redirect_user'];
-            unset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['redirect_user']);
-        } else {
-            $redirectUrl = UrlHelper::generateUrl('Buyer', 'ShareEarn');
-        }
-
-
-        include_once CONF_INSTALLATION_PATH . 'library/Fbapi.php';
-
-        $config = array(
-            'app_id' => FatApp::getConfig('CONF_FACEBOOK_APP_ID', FatUtility::VAR_STRING, ''),
-            'app_secret' => FatApp::getConfig('CONF_FACEBOOK_APP_SECRET', FatUtility::VAR_STRING, ''),
-        );
-        $fb = new Fbapi($config);
-        $fbObj = $fb->getInstance();
-
-        $helper = $fb->getRedirectLoginHelper();
-
-        try {
-            $accessToken = $helper->getAccessToken();
-        } catch (Facebook\Exceptions\FacebookResponseException $e) {
-            Message::addErrorMessage($e->getMessage());
-            FatApp::redirectUser($redirectUrl);
-        } catch (Facebook\Exceptions\FacebookSDKException $e) {
-            Message::addErrorMessage($e->getMessage());
-            FatApp::redirectUser($redirectUrl);
-        }
-
-        if (!isset($accessToken)) {
-            if ($helper->getError()) {
-                Message::addErrorMessage($helper->getErrorDescription());
-                //Message::addErrorMessage($helper->getErrorReason());
-            } else {
-                Message::addErrorMessage(Labels::getLabel('ERR_BAD_REQUEST', $this->siteLangId));
-            }
-        } else {
-            // The OAuth 2.0 client handler helps us manage access tokens
-            $oAuth2Client = $fbObj->getOAuth2Client();
-
-            if (!$accessToken->isLongLived()) {
-                try {
-                    $accessToken = $oAuth2Client->getLongLivedAccessToken($accessToken);
-                } catch (Facebook\Exceptions\FacebookSDKException $e) {
-                    Message::addErrorMessage($helper->getMessage());
-                    FatApp::redirectUser($redirectUrl);
-                }
-            }
-
-            $fbAccessToken = $accessToken->getValue();
-
-            unset($_SESSION['fb_' . FatApp::getConfig("CONF_FACEBOOK_APP_ID") . '_code']);
-            unset($_SESSION['fb_' . FatApp::getConfig("CONF_FACEBOOK_APP_ID") . '_access_token']);
-            unset($_SESSION['fb_' . FatApp::getConfig("CONF_FACEBOOK_APP_ID") . '_user_id']);
-
-            $userObj = new User($userId);
-            $userData = array('user_fb_access_token' => $fbAccessToken);
-            $userObj->assignValues($userData);
-            if (!$userObj->save()) {
-                Message::addErrorMessage(Labels::getLabel("ERR_Token_COULD_NOT_BE_SET", $this->siteLangId) . $userObj->getError());
-            }
-        }
-        FatApp::redirectUser($redirectUrl);
-    }
-
     public function addItemsToCart($orderId)
     {
         if (!$orderId) {
             $message = Labels::getLabel('MSG_Invalid_Access', $this->siteLangId);
-            if (true === MOBILE_APP_API_CALL) {
-                LibHelper::dieJsonError($message);
-            }
-            Message::addErrorMessage($message);
-            return;
+            LibHelper::exitWithError($message, true);
         }
-
         $userId = UserAuthentication::getLoggedUserId();
 
         $orderObj = new Orders();
         $orderDetail = $orderObj->getOrderById($orderId, $this->siteLangId);
         if (!$orderDetail || ($orderDetail && $orderDetail['order_user_id'] != $userId)) {
             $message = Labels::getLabel('MSG_Invalid_Access', $this->siteLangId);
-            if (true === MOBILE_APP_API_CALL) {
-                LibHelper::dieJsonError($message);
-            }
-            Message::addErrorMessage($message);
-            return;
+            LibHelper::exitWithError($message, true);
         }
 
         $cartObj = new Cart();
         $cartInfo = LibHelper::isJson($orderDetail['order_cart_data']) ? json_decode($orderDetail['order_cart_data'], true) : unserialize($orderDetail['order_cart_data']);
         unset($cartInfo['shopping_cart']);
         $outOfStock = false;
+        $notAvailable = 0;
         foreach ($cartInfo as $key => $quantity) {
             $keyDecoded = LibHelper::isJson($orderDetail['order_cart_data']) ? json_decode(base64_decode($key), true) : unserialize(base64_decode($key));
 
             $selprod_id = 0;
-
             if (strpos($keyDecoded, Cart::CART_KEY_PREFIX_PRODUCT) !== false) {
                 $selprod_id = FatUtility::int(str_replace(Cart::CART_KEY_PREFIX_PRODUCT, '', $keyDecoded));
             }
@@ -2955,19 +2739,28 @@ class BuyerController extends BuyerBaseController
                 $outOfStock = true;
                 continue;
             }
+
+            $product = $this->getProductDetail($selprod_id);
+            if (!$product) {
+                $notAvailable++;
+            }
             $cartObj->add($selprod_id, $quantity);
         }
 
         if ($outOfStock) {
             $message = Labels::getLabel('MSG_Product_not_available_or_out_of_stock_so_removed_from_cart_listing', $this->siteLangId);
-            if (true === MOBILE_APP_API_CALL) {
-                $error['status'] = 0;
-                $error['msg'] = strip_tags($message);
-                $error['cartItemsCount'] = $this->cartItemsCount;
-                FatUtility::dieJsonError($error);
+            LibHelper::exitWithError($message, true);
+        }
+
+        if (0 < $notAvailable) {
+            $message = Labels::getLabel('ERR_CURRENTLY_THE_PRODUCT_IS_UNAVAILABLE', $this->siteLangId);
+            if (1 < $notAvailable) {
+                $message = Labels::getLabel('ERR_CURRENTLY_THE_PRODUCTS_ARE_UNAVAILABLE', $this->siteLangId);
+                if (count($cartInfo) > $notAvailable) {
+                    $message = Labels::getLabel('ERR_SOME_OF_THE_PRODUCTS_ARE_UNAVAILABLE', $this->siteLangId);
+                }
             }
-            Message::addErrorMessage($message);
-            return false;
+            LibHelper::exitWithError($message, true);
         }
 
         $cartObj->removeUsedRewardPoints();
@@ -2976,11 +2769,7 @@ class BuyerController extends BuyerBaseController
 
         LibHelper::sendAsyncRequest('POST', UrlHelper::generateFullUrl('Cart', 'loadRates'), ['sessionId' => LibHelper::getSessionId()]);
 
-        if (true === MOBILE_APP_API_CALL) {
-            $this->_template->render();
-        }
-
-        return;
+        FatUtility::dieJsonSuccess(Labels::getLabel('LBL_SUCCESS'));
     }
 
     public function shareEarnUrl()
@@ -3086,6 +2875,83 @@ class BuyerController extends BuyerBaseController
         $this->set('comments', OrderCancelRequest::getAttributesById($recordId, 'ocrequest_message'));
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
+    }
+
+    private function getSelProdReviewObj()
+    {
+        $selProdReviewObj = new SelProdReviewSearch();
+        $selProdReviewObj->joinProducts($this->siteLangId);
+        $selProdReviewObj->joinSellerProducts($this->siteLangId);
+        $selProdReviewObj->joinSelProdRating();
+        $selProdReviewObj->joinUser();
+        // $selProdReviewObj->joinSelProdReviewHelpful();
+        $selProdReviewObj->addCondition('ratingtype_type', 'IN', [RatingType::TYPE_PRODUCT, RatingType::TYPE_OTHER]);
+        $selProdReviewObj->doNotCalculateRecords();
+        $selProdReviewObj->doNotLimitRecords();
+        $selProdReviewObj->addGroupBy('spr.spreview_product_id');
+        // $selProdReviewObj->addGroupBy('sprh_spreview_id');
+        $selProdReviewObj->addCondition('spr.spreview_status', '=', SelProdReview::STATUS_APPROVED);
+        $selProdReviewObj->addMultipleFields(array('spr.spreview_selprod_id', 'spr.spreview_product_id', "ROUND(AVG(sprating_rating),2) as prod_rating", "COUNT(DISTINCT(spreview_id)) AS totReviews"));
+        return $selProdReviewObj;
+    }
+
+    private function getProductDetail(int $selprod_id)
+    {
+        $prodSrchObj = new ProductSearch($this->siteLangId);
+        $productId = SellerProduct::getAttributesById($selprod_id, 'selprod_product_id');
+        if (empty($productId)) {
+            if (true === MOBILE_APP_API_CALL) {
+                LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_PRODUCT'));
+            }
+            FatUtility::exitWithErrorCode(404);
+        }
+        /* fetch requested product[ */
+        $prodSrch = clone $prodSrchObj;
+        $prodSrch->setLocationBasedInnerJoin(false);
+        $prodSrch->setGeoAddress();
+        $prodSrch->setDefinedCriteria(0, 0, array('product_id' => $productId), false);
+        $prodSrch->joinProductToCategory();
+        $prodSrch->joinShopSpecifics();
+        $prodSrch->joinProductSpecifics();
+        $prodSrch->joinSellerProductSpecifics();
+        $prodSrch->joinSellerSubscription();
+        $prodSrch->addSubscriptionValidCondition();
+        $prodSrch->validateAndJoinDeliveryLocation(false);
+        $prodSrch->joinProductToTax();
+        $prodSrch->doNotCalculateRecords();
+        $prodSrch->addCondition('selprod_id', '=', $selprod_id);
+        $prodSrch->addCondition('selprod_deleted', '=', applicationConstants::NO);
+        $prodSrch->doNotLimitRecords();
+
+        /* sub query to find out that logged user have marked current product as in wishlist or not[ */
+        $loggedUserId = 0;
+        if (UserAuthentication::isUserLogged()) {
+            $loggedUserId = UserAuthentication::getLoggedUserId();
+        }
+        if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
+            $prodSrch->joinFavouriteProducts($loggedUserId);
+            $prodSrch->addFld('IFNULL(ufp_id, 0) as ufp_id');
+        } else {
+            $prodSrch->joinUserWishListProducts($loggedUserId);
+            $prodSrch->addFld('COALESCE(uwlp.uwlp_selprod_id, 0) as is_in_any_wishlist');
+        }
+
+        $selProdReviewObj = $this->getSelProdReviewObj();
+        $selProdReviewObj->addCondition('spr.spreview_product_id', '=', 'mysql_func_' . $productId, 'AND', true);
+        $prodSrch->joinTable('(' . $selProdReviewObj->getQuery() . ')', 'LEFT OUTER JOIN', 'sq_sprating.spreview_product_id = product_id', 'sq_sprating');
+        $prodSrch->addMultipleFields(
+            array(
+                'product_id', 'selprod_sku', 'product_identifier', 'COALESCE(product_name,product_identifier) as product_name', 'product_seller_id', 'product_model', 'product_type', 'prodcat_id', 'COALESCE(prodcat_name,prodcat_identifier) as prodcat_name', 'product_upc', 'product_isbn', 'product_short_description', 'product_description',
+                'selprod_id', 'selprod_user_id', 'selprod_code', 'selprod_condition', 'selprod_price', 'special_price_found', 'splprice_start_date', 'splprice_end_date', 'COALESCE(selprod_title, product_name, product_identifier) as selprod_title', 'selprod_warranty', 'selprod_return_policy', 'selprodComments',
+                'theprice', 'selprod_stock', 'selprod_threshold_stock_level', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'brand_id', 'COALESCE(brand_name, brand_identifier) as brand_name', 'brand_short_description', 'user_name',
+                'shop_id', 'COALESCE(shop_name, shop_identifier) as shop_name', 'COALESCE(sq_sprating.prod_rating,0) prod_rating ', 'COALESCE(sq_sprating.totReviews,0) totReviews',
+                'splprice_display_dis_type', 'splprice_display_dis_val', 'splprice_display_list_price', 'product_attrgrp_id', 'product_youtube_video', 'product_cod_enabled', 'selprod_cod_enabled', 'selprod_available_from', 'selprod_min_order_qty', 'product_updated_on', 'product_warranty', 'selprod_return_age', 'selprod_cancellation_age', 'shop_return_age',
+                'shop_cancellation_age', 'selprod_fulfillment_type', 'shop_fulfillment_type', 'product_fulfillment_type', 'product_attachements_with_inventory', 'selprod_product_id', 'COALESCE(shop_state_l.state_name,state_identifier) as shop_state_name', 'COALESCE(shop_country_l.country_name,shop_country.country_code) as shop_country_name', 'selprod_condition', 'product_warranty_unit'
+            )
+        );
+        $productRs = $prodSrch->getResultSet();
+        $row = FatApp::getDb()->fetch($productRs);
+        return (is_array($row) ? $row : []);
     }
 
     public function getBreadcrumbNodes($action)

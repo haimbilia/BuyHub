@@ -124,7 +124,7 @@ class ProductCategoriesRequestController extends ListingBaseController
         }
         $this->setRecordCount(clone $srch, $pageSize, $page, $post);
         $srch->doNotCalculateRecords();
-        $srch->addMultipleFields(array('m.*', 'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name', 'u.user_name', 'IFNULL(shop_name, shop_identifier) as shop_name', 'shop_id', 'shop_updated_on'));
+        $srch->addMultipleFields(array('m.*', 'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name', 'u.user_name', 'IFNULL(shop_name, shop_identifier) as shop_name', 'shop_id','shop_user_id' ,'shop_updated_on'));
         $page = (empty($page) || $page <= 0) ? 1 : $page;
         $page = FatUtility::int($page);
         $srch->setPageNumber($page);

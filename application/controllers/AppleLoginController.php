@@ -10,7 +10,7 @@ class AppleLoginController extends SocialMediaAuthController
     {
         parent::__construct($action);
 
-        $this->apple = PluginHelper::callPlugin(self::KEY_NAME, [$this->siteLangId], $error, $this->siteLangId);
+        $this->apple = LibHelper::callPlugin(self::KEY_NAME, [$this->siteLangId], $error, $this->siteLangId);
         if (false === $this->apple) {
             $this->setErrorAndRedirect($error, true);
         }
@@ -27,7 +27,7 @@ class AppleLoginController extends SocialMediaAuthController
 
         if (isset($post['id_token'])) {
             $state = $post['state'] ?? '';
-            if (false === MOBILE_APP_API_CALL && !empty($state) && session_id() != $post['state']) {
+            if (false === MOBILE_APP_API_CALL && !empty($state) && $_COOKIE[self::KEY_NAME . '_state'] != $post['state']) {
                 $message = Labels::getLabel('ERR_AUTHORIZATION_SERVER_RETURNED_AN_INVALID_STATE_PARAMETER', $this->siteLangId);
                 $this->setErrorAndRedirect($message, true);
             }

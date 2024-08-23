@@ -60,10 +60,14 @@ if (User::isBuyer(true) || (!UserAuthentication::isUserLogged())) {
                                                     <div class="product-profile-data">
                                                         <div class="item__category">
                                                             <a class="stores-link" href="<?php echo UrlHelper::generateUrl('shops', 'view', array($product['shop_id'])); ?>">
-                                                                <span class="text--dark"><?php echo $product['shop_name']; ?></span>
+                                                                <span class="text--dark"><?php echo CommonHelper::renderHtml($product['shop_name'], true); ?></span>
                                                             </a>
                                                         </div>
-                                                        <a class="title" title="<?php echo $product['product_name']; ?>" href="<?php echo $productUrl; ?>"><?php echo ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name']; ?></a>
+                                                        <?php
+                                                        $productName = ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name'];
+                                                        $productName = CommonHelper::renderHtml($productName, true);
+                                                        ?>
+                                                        <a class="title" title="<?php echo $productName; ?>" href="<?php echo $productUrl; ?>"><?php echo $productName; ?></a>
                                                         <div class="products-price">
                                                             <span class="products-price-new"><?php echo trim(CommonHelper::displayMoneyFormat($product['theprice'], true, false, true, false, false, true)); ?></span>
                                                             <?php if ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) { ?>
@@ -78,8 +82,8 @@ if (User::isBuyer(true) || (!UserAuthentication::isUserLogged())) {
                                                                 foreach ($product['options'] as $option) {
                                                             ?>
                                                                     <?php echo ($count > 0) ? ' | ' : '';
-                                                                    echo $option['option_name'] . ':'; ?>
-                                                                    <?php echo $option['optionvalue_name']; ?>
+                                                                    echo CommonHelper::renderHtml($option['option_name'], true) . ':'; ?>
+                                                                    <?php echo CommonHelper::renderHtml($option['optionvalue_name'], true); ?>
                                                             <?php $count++;
                                                                 }
                                                                 echo ' | ';

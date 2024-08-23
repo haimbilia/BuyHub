@@ -10,6 +10,7 @@ $input-border-radius: 4px;
 $input-bg: $bg-gray;
 $input-color: #474747;
 $input-border-focus: #000;
+
 @mixin input {
     border: $input-border-style $input-border-width $input-border-color;
     background-color: transparent;
@@ -26,6 +27,7 @@ $input-border-focus: #000;
     font-family: inherit;
     transition: 0.3s all ease-in-out;
     appearance: none;
+
     &:focus,
     &:hover {
         //outline: ;
@@ -33,12 +35,15 @@ $input-border-focus: #000;
         box-shadow: none;
         transition: 0.3s all ease-in-out;
     }
+
     &:disabled {
         opacity: 0.5;
+
         &:hover {
             cursor: not-allowed;
         }
     }
+
     &.error {
         border: 1px solid $danger-color;
         background-color: transparent;
@@ -53,15 +58,19 @@ $input-border-focus: #000;
     background-size: 10px;
     background-repeat: no-repeat;
     background-position: calc(100% - 12px) center;
+
     &:hover {
         cursor: pointer;
     }
+
     &:disabled {
         opacity: 0.5;
+
         &:hover {
             cursor: not-allowed;
         }
     }
+
     [dir="rtl"] & {
         padding-#{$start-direction}: 35px;
         background-position: calc(0% - -12px) center;
@@ -88,9 +97,11 @@ $input-border-focus: #000;
 }
 
 .form {
+
     .form-group,
     .field-set {
         margin-bottom: 1.3rem;
+
         &.form-group {
             position: relative;
         }
@@ -107,22 +118,27 @@ $input-border-focus: #000;
         display: inline-block;
         cursor: default;
         /*opacity: 0.6;*/
-        font-weight: 500;
+        font-weight: $font-weight-normal;
+
         &:empty {
             min-height: 21px;
             display: block;
         }
     }
+
     input {
         &[type="text"] {
             @include input;
         }
+
         &[type="email"] {
             @include input;
         }
+
         &[type="phone"] {
             @include input;
         }
+
         &[type="search"] {
             @include input;
             appearance: none;
@@ -138,9 +154,9 @@ $input-border-focus: #000;
                 height: 1.25em;
                 width: 1.25em;
                 border-radius: 50em;
-                background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath fill='none' d='M0 0h24v24H0z'/%3E%3Cpath d='M12 10.586l4.95-4.95 1.414 1.414-4.95 4.95 4.95 4.95-1.414 1.414-4.95-4.95-4.95 4.95-1.414-1.414 4.95-4.95-4.95-4.95L7.05 5.636z'/%3E%3C/svg%3E")
-                    no-repeat 50% 50%;
+                background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath fill='none' d='M0 0h24v24H0z'/%3E%3Cpath d='M12 10.586l4.95-4.95 1.414 1.414-4.95 4.95 4.95 4.95-1.414 1.414-4.95-4.95-4.95 4.95-1.414-1.414 4.95-4.95-4.95-4.95L7.05 5.636z'/%3E%3C/svg%3E") no-repeat 50% 50%;
                 background-size: contain;
+
                 &:hover {
                     cursor: pointer;
                 }
@@ -151,30 +167,38 @@ $input-border-focus: #000;
                 background-position: calc(100% - 13px) center;
             }
         }
+
         &[type="password"] {
             @include input;
         }
+
         &[type="date"] {
             @include input;
         }
+
         &[type="url"] {
             @include input;
         }
+
         &[type="tel"] {
             @include input;
         }
+
         &[type="number"] {
             @include input;
         }
+
         &[type="file"] {
             @include input;
             width: auto;
             overflow: hidden;
         }
+
         &[type="file"] {
             height: auto;
             width: 100%;
         }
+
         &.field--calender,
         &[type="date"] {
             padding-#{$end-direction}: 38px !important;
@@ -182,15 +206,18 @@ $input-border-focus: #000;
             background-size: 16px;
             background-repeat: no-repeat;
             background-position: calc(100% - 11px) center;
+
             [dir="rtl"] & {
                 padding-#{$start-direction}: 38px !important;
                 background-position: calc(0% - -11px) center;
             }
         }
     }
+
     select {
         @include select;
     }
+
     textarea {
         @include input;
         resize: vertical;
@@ -198,10 +225,12 @@ $input-border-focus: #000;
         height: 120px;
         line-height: 1.5;
         padding-top: 10px;
+
         &.txtarea-height {
             height: 85px;
         }
     }
+
     //focus
     &:disabled {
         color: rgba(0, 0, 0, 0.38);
@@ -210,46 +239,57 @@ $input-border-focus: #000;
         cursor: initial;
         border-color: transparent;
     }
+
     &.is-invalid {
         border-color: $danger;
     }
+
     input {
         &[type="submit"] {
             @include submit;
         }
     }
+
     //button
     [type="button"] {
         //@include submit;
     }
+
     [type="reset"] {
         // @include submit;
     }
+
     input button {
         @include submit;
     }
+
     button {
+
         //@include submit;
         i {
             &:before {
                 opacity: 1 !important;
             }
         }
+
         &:focus {
             > :before {
                 opacity: 0.2;
             }
         }
+
         &:active {
             > :before {
                 opacity: 0.32;
             }
         }
+
         &:disabled {
             :before {
                 //opacity: 0;
             }
         }
+
         &:active {
             :after {
                 opacity: 0.4;
@@ -257,12 +297,14 @@ $input-border-focus: #000;
                 transition: transform 0s;
             }
         }
+
         &:disabled {
             :after {
                 opacity: 0;
             }
         }
     }
+
     .no-focus {
         &:focus {
             outline: none !important;
@@ -292,13 +334,16 @@ $input-border-focus: #000;
     background-color: $bg-white;
     background-repeat: no-repeat;
     background-position: calc(100% - 11px) center;
+
     [dir="rtl"] & {
         //padding-#{$start-direction}: 35px;
         background-position: calc(0% - -11px) center;
     }
+
     &-sm {
         font-size: 0.8rem;
     }
+
     option {
         line-height: 1.5;
     }
@@ -370,12 +415,14 @@ form.custom-form {
     display: flex;
     align-items: center;
     justify-content: center;
+
     input[type="text"] {
         width: auto;
         margin: 0;
         margin-#{$end-direction}: 5px;
         flex: 1;
     }
+
     input[type="submit"] {
         margin: 0;
     }
@@ -384,6 +431,7 @@ form.custom-form {
 .form-apply {
     margin-bottom: 1rem;
     position: relative;
+
     .btn-apply {
         position: absolute;
         #{$end-direction}: 2px;
@@ -392,7 +440,7 @@ form.custom-form {
         border: 1px;
         background-color: #fff;
         color: $brand-color;
-        font-weight: 600;
+        font-weight: $font-weight-bold;
         width: auto;
         padding: 0 1rem;
     }
@@ -403,10 +451,12 @@ form.custom-form {
         display: flex;
         align-items: center;
     }
+
     .otp-col {
         display: flex;
         align-items: center;
         flex: 1;
+
         input {
             text-align: center;
         }
@@ -419,15 +469,18 @@ form.custom-form {
     flex-wrap: wrap;
     align-items: stretch;
     width: 100%;
+
     input {
         position: relative;
         flex: 1 1 auto;
         width: 1% !important;
         margin-bottom: 0;
+
         &:not(:first-child) {
             border-top-#{$start-direction}-radius: 0;
             border-bottom-#{$start-direction}-radius: 0;
         }
+
         &:not(:last-child) {
             border-top-#{$end-direction}-radius: 0;
             border-bottom-#{$end-direction}-radius: 0;
@@ -438,6 +491,7 @@ form.custom-form {
 .icon-group {
     display: flex;
     align-items: center;
+
     .btn {
         margin-#{$start-direction}: 5px;
     }
@@ -451,6 +505,7 @@ form.custom-form {
     &__group {
         position: relative;
     }
+
     &__label {
         position: absolute;
         left: 1rem;
@@ -464,6 +519,7 @@ form.custom-form {
         transition: transform 0.2s ease-in-out;
         pointer-events: none;
     }
+
     &__field {
         padding-top: 16px !important;
         width: 100%;
@@ -471,14 +527,17 @@ form.custom-form {
         line-height: normal;
         resize: none;
         transition: all 0.35s ease-in-out;
+
         &:focus {
             outline-color: $brand-color;
             border-color: $brand-color;
-            + .form-floating__label {
+
+            +.form-floating__label {
                 transform: translateY(-6px) scale(0.8);
             }
         }
-        &.filled + .form-floating__label {
+
+        &.filled+.form-floating__label {
             opacity: 0.7;
             transform: translateY(-6px) scale(0.8);
         }
@@ -500,7 +559,7 @@ form.custom-form {
     height: $input-height;
     width: 3rem;
     cursor: pointer;
-    font-weight: 500;
+    font-weight: $font-weight-normal;
     font-size: 0.8rem;
     text-align: center;
     background-repeat: no-repeat;
@@ -508,6 +567,7 @@ form.custom-form {
     background-color: transparent;
     border: none;
     background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iY3VycmVudENvbG9yIiBjbGFzcz0iYmkgYmktdGhyZWUtZG90cyIgdmlld0JveD0iMCAwIDE2IDE2Ij4KICA8cGF0aCBkPSJNMyA5LjVhMS41IDEuNSAwIDEgMSAwLTMgMS41IDEuNSAwIDAgMSAwIDN6bTUgMGExLjUgMS41IDAgMSAxIDAtMyAxLjUgMS41IDAgMCAxIDAgM3ptNSAwYTEuNSAxLjUgMCAxIDEgMC0zIDEuNSAxLjUgMCAwIDEgMCAzeiIvPgo8L3N2Zz4=);
+
     &-show {
         background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iY3VycmVudENvbG9yIiBjbGFzcz0iYmkgYmktZXllIiB2aWV3Qm94PSIwIDAgMTYgMTYiPgogIDxwYXRoIGQ9Ik0xNiA4cy0zLTUuNS04LTUuNVMwIDggMCA4czMgNS41IDggNS41UzE2IDggMTYgOHpNMS4xNzMgOGExMy4xMzMgMTMuMTMzIDAgMCAxIDEuNjYtMi4wNDNDNC4xMiA0LjY2OCA1Ljg4IDMuNSA4IDMuNWMyLjEyIDAgMy44NzkgMS4xNjggNS4xNjggMi40NTdBMTMuMTMzIDEzLjEzMyAwIDAgMSAxNC44MjggOGMtLjA1OC4wODctLjEyMi4xODMtLjE5NS4yODgtLjMzNS40OC0uODMgMS4xMi0xLjQ2NSAxLjc1NUMxMS44NzkgMTEuMzMyIDEwLjExOSAxMi41IDggMTIuNWMtMi4xMiAwLTMuODc5LTEuMTY4LTUuMTY4LTIuNDU3QTEzLjEzNCAxMy4xMzQgMCAwIDEgMS4xNzIgOHoiLz4KICA8cGF0aCBkPSJNOCA1LjVhMi41IDIuNSAwIDEgMCAwIDUgMi41IDIuNSAwIDAgMCAwLTV6TTQuNSA4YTMuNSAzLjUgMCAxIDEgNyAwIDMuNSAzLjUgMCAwIDEtNyAweiIvPgo8L3N2Zz4=);
     }

@@ -799,7 +799,7 @@ class User extends MyAppModel
 
         if ($shopId = Shop::getAttributesByUserId($this->mainTableRecordId, 'shop_id')) {
             $data = array(
-                'shop_identifier' => 'xxxxxx',
+                'shop_identifier' => 'xxxxxx-' . $shopId,
                 'shop_phone' => '',
                 'shop_lng' => '',
                 'shop_lng' => '',
@@ -918,7 +918,7 @@ class User extends MyAppModel
             $srch->joinTable(static::DB_TBL_USR_RETURN_ADDR_LANG, 'LEFT OUTER JOIN', 'tura_l.uralang_user_id = tura.ura_user_id and tura_l.uralang_lang_id = ' . $langId, 'tura_l');
             $srch->joinTable(Countries::DB_TBL_LANG, 'LEFT OUTER JOIN', 'c_l.countrylang_country_id = tura.ura_country_id and c_l.countrylang_lang_id = ' . $langId, 'c_l');
             $srch->joinTable(States::DB_TBL_LANG, 'LEFT OUTER JOIN', 's_l.statelang_state_id = tura.ura_state_id and s_l.statelang_lang_id = ' . $langId, 's_l');
-            $srch->addMultipleFields(array('tura_l.*', 'IFNULL(country_name,country_code) as country_name', 'country_code', 'IFNULL(state_name,state_identifier) as state_name'));
+            $srch->addMultipleFields(array('tura_l.*', 'IFNULL(country_name,country_code) as country_name', 'country_code', 'IFNULL(state_name,state_identifier) as state_name', 'state_code'));
         }
 
         $srch->addMultipleFields(array('tura.*'));
@@ -1601,12 +1601,13 @@ class User extends MyAppModel
         $srch = static::getSearchObject(true);
         $srch->addCondition('u.' . static::DB_TBL_PREFIX . 'id', '=', 'mysql_func_' . $this->mainTableRecordId, 'AND', true);
         $srch->doNotCalculateRecords();
-        $rs = $srch->getResultSet();
-        $record = FatApp::getDb()->fetch($rs);
+        $record = FatApp::getDb()->fetch($srch->getResultSet());
+        if (false === $record || is_null($record)) {
+            return false;
+        }
         unset($record['credential_password']);
         $record['user_email'] = $record['credential_email'];
         return $record;
-        //return $this->getAttributesById($this->mainTableRecordId);
     }
 
     public function prepareUserVerificationCode($email = '', $verificationCode = '')
@@ -2346,7 +2347,7 @@ class User extends MyAppModel
         $srch->addCondition('uttr_expiry', '>=', date('Y-m-d H:i:s'));
         $srch->addMultipleFields(array('uttr_user_id', 'uttr_token'));
         $srch->doNotCalculateRecords();
-        $srch->setPagesize(1);
+        $srch->setPagesize(1);       
         $rs = $srch->getResultSet();
         if ((!$row = FatApp::getDb()->fetch($rs)) || ($row['uttr_token'] !== $token)) {
             return false;
@@ -2522,7 +2523,7 @@ class User extends MyAppModel
         }
 
         if (empty($userPhone) && isset($postedData['user_newsletter_signup']) && $postedData['user_newsletter_signup'] == 1) {
-            if (!MailchimpHelper::saveSubscriber($email)) {
+            if (!MailchimpHelper::subscribe(['email' => $email], $this->commonLangId)) {
                 $db->rollbackTransaction();
                 $this->error = Labels::getLabel("ERR_Newsletter_is_not_configured_yet,_Please_contact_admin", $this->commonLangId);
                 return false;
@@ -2640,7 +2641,7 @@ class User extends MyAppModel
 
     public function checkUserByEmailOrUserName($userName, $userEmail)
     {
-        $srch = $this->getUserSearchObj(array('user_id', 'credential_email', 'credential_username', 'credential_verified', 'user_deleted'));
+        $srch = $this->getUserSearchObj(array('user_id', 'credential_email', 'credential_username', 'credential_verified', 'user_deleted'), true, false);
         $condition = $srch->addCondition('credential_username', '=', $userName);
         $condition->attachCondition('credential_email', '=', $userEmail, 'OR');
         $srch->doNotCalculateRecords();
@@ -2655,7 +2656,8 @@ class User extends MyAppModel
         $condition->attachCondition('mysql_func_CONCAT(user_phone_dcode, user_phone)', '=', $userPhone, 'OR', true);
         $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
-        return (array) FatApp::getDb()->fetch($rs);
+        $row = FatApp::getDb()->fetch($rs);
+        return (is_array($row) ? $row : []);
     }
 
     public function saveUserNotifications()
@@ -2742,9 +2744,8 @@ class User extends MyAppModel
         $srch = $this->getUserSearchObj($attr);
         $srch->joinTable(static::DB_TBL_META, 'LEFT OUTER JOIN', 't_um.' . static::DB_TBL_META_PREFIX . 'user_id = u.user_id', 't_um');
 
-        $srch->addCondition('credential_email', '=', $email);
-        $cnd = $srch->addCondition('usermeta_key', '=', strtolower($keyName) . '_account_id', 'OR');
-        $cnd->attachCondition('usermeta_value', '=', $socialAccountId, 'AND');
+        $srch->addDirectCondition('(credential_email = "' . $email .'" OR (usermeta_key = "' . strtolower($keyName) . '_account_id" AND usermeta_value = "' . $socialAccountId . '"))');
+
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
         $rs = $srch->getResultSet();

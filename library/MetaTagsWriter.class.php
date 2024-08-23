@@ -17,12 +17,16 @@ class MetaTagsWriter
 
         $srch = new MetaTagSearch($langId);
         $cond = $srch->addCondition('meta_controller', '=', $controllerName);
-        $cond->attachCondition('meta_controller', '=', '', 'OR');
+        if (!empty($controllerName)) {
+            $cond->attachCondition('meta_controller', '=', '', 'OR');
+        }
 
         $cond1 = $srch->addCondition('meta_action', '=', $action);
         $cond1->attachCondition('meta_action', '=', '', 'OR');
 
-        $srch->addOrder('meta_default', 'asc');
+        if (!empty($controllerName) || !empty($action)) {
+            $srch->addOrder('meta_default', 'asc');
+        }
 
         if (!empty($arrParameters)) {
             if (isset($arrParameters[0]) && FatUtility::int($arrParameters[0]) > 0) {

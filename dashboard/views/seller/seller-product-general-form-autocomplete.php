@@ -371,7 +371,7 @@ $fld->setFieldTagAttribute('onclick', 'clearInvOptionForm()');
                         <?php
                         $defaultCurrencyValue = '<span class="form-text text-muted" data-bs-toggle="tooltip" title="' . Labels::getLabel('LBL_SYSTEM_DEFAULT_CURRENCY.') . '">(' . CommonHelper::displayMoneyFormat($productMinSellingPrice, true, true) . ')</span>';
                         $errorMsg = Labels::getLabel('MSG_SELLING_PRICE_CANNOT_BE_LESS_THEN_MINIMUM_SELLING_PRICE_{MINIMUM-SELLING-PRICE}.');
-                        echo $errorMsg = CommonHelper::replaceStringData($errorMsg, ['{MINIMUM-SELLING-PRICE}' => CommonHelper::displayMoneyFormat($productMinSellingPrice) . $defaultCurrencyValue]);
+                        echo CommonHelper::replaceStringData($errorMsg, ['{MINIMUM-SELLING-PRICE}' => CommonHelper::displayMoneyFormat($productMinSellingPrice) . $defaultCurrencyValue]);
                         ?>
 
                     </div>
@@ -730,7 +730,6 @@ $fld->setFieldTagAttribute('onclick', 'clearInvOptionForm()');
                 $('.optionForm-js .optionname--js, .optionForm-js .select2').hide();
 
                 var optionNameHtm = '<input disabled="disabled" name="optname" class="optionName-js" value="' + optionName + '">';
-                console.log(optionNameHtm);
                 $('.optionForm-js .optionname--js').parent().append(optionNameHtm);
                 tr.remove();
             }

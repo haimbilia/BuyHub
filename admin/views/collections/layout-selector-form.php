@@ -14,13 +14,22 @@
                         <i class="dropdown-toggle-custom-arrow"></i>
                     </div>
                     <div class="layout-data collapse" id="collectionType<?php echo $type; ?>">
-                        <?php foreach ($layouts as $layoutId => $layout) { ?>
+                        <?php
+                        $appOnlyCollections = Collections::COLLECTIONS_FOR_APP_ONLY;
+                        foreach ($layouts as $layoutId => $layout) {
+                            $appClass = in_array($layoutId, $appOnlyCollections) ? 'app-only' : '';
+                        ?>
                             <div class="layout-block" data-bs-toggle="tooltip" data-bs-placement="top" title="<?php echo $layout; ?>" onclick="collectionForm(<?php echo $type; ?>, <?php echo $layoutId; ?>)">
-
+                                <?php if (in_array($layoutId, $appOnlyCollections)) { ?>
+                                    <div class="<?php echo $appClass; ?>">
+                                        <svg class="svg" width="14" height="14">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-layout.svg#mobile"></use>
+                                        </svg>
+                                    </div>
+                                <?php  } ?>
                                 <svg class="svg" width="140" height="70">
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-layout.svg#<?php echo Collections::layoutIconClass($layoutId); ?>"></use>
                                 </svg>
-
                             </div>
                         <?php } ?>
                     </div>

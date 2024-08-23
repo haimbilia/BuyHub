@@ -99,6 +99,11 @@ class States extends MyAppModel
         if ('state_code' == $idCol) {
             $srch->addCondition('state_code', '!=', '');
         }
+
+        if(!in_array($idCol,['state_code','state_country_id','state_identifier','state_id'])){
+            $idCol = 'state_code';
+        }
+        
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $srch->addOrder('state_name', 'ASC');
@@ -181,6 +186,7 @@ class States extends MyAppModel
         $srch->addCondition('state_name', '=', $stateName);
         $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
-        return (array) FatApp::getDb()->fetch($rs);
+        $row = FatApp::getDb()->fetch($rs);
+        return (is_array($row) ? $row : []);
     }
 }

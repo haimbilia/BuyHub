@@ -856,7 +856,7 @@ class ProductCategory extends MyAppModel
 
         if ($excludeCategoriesHavingNoProducts) {
             $prodSrchObj = new ProductSearch();
-            $prodSrchObj->setDefinedCriteria();
+            $prodSrchObj->setDefinedCriteria(0, 0, array('doNotJoinSpecialPrice' => true));
             $prodSrchObj->doNotCalculateRecords();
             $prodSrchObj->doNotLimitRecords();
             $prodSrchObj->joinSellerSubscription(0, true);
@@ -1097,7 +1097,7 @@ class ProductCategory extends MyAppModel
     public function haveProducts(bool $isActive = true)
     {
         $prodSrchObj = new ProductSearch(0, null, null, $isActive);
-        $prodSrchObj->setDefinedCriteria();
+        $prodSrchObj->setDefinedCriteria(0, 0, array('doNotJoinSpecialPrice' => true));
         $prodSrchObj->joinProductToCategory(0, $isActive);
         $prodSrchObj->doNotCalculateRecords();
         $prodSrchObj->setPageSize(1);
@@ -1165,7 +1165,8 @@ class ProductCategory extends MyAppModel
         $prodCatId = FatUtility::int($post['prodcat_id']);
         unset($post['prodcat_id']);
 
-        $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
+        // $siteDefaultLangId = FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1);
+        $siteDefaultLangId = CommonHelper::getDefaultFormLangId();
         if ($this->mainTableRecordId == 0) {
             $post['prodcat_display_order'] = $this->getMaxOrder($parentCatId);
         }
@@ -1350,7 +1351,8 @@ class ProductCategory extends MyAppModel
 
         if (true === $includeSubCategoriesCount) {
             $srchRelation = new SearchBase(ProductCategory::DB_TBL_PROD_CAT_RELATIONS, 'cr');
-            $srchRelation->joinTable(static::DB_TBL, 'INNER JOIN', 'cr.pcr_prodcat_id = pccr.prodcat_id AND pccr.prodcat_deleted = 0', 'pccr');
+            $srchRelation->joinTable(static::DB_TBL, 'INNER JOIN', 'cr.pcr_prodcat_id = pccr.prodcat_id AND pccr.prodcat_deleted = 0 AND pccr.prodcat_status = 1', 'pccr');
+
             $srchRelation->addCondition('pcr_parent_id', '=', 'mysql_func_m.prodcat_id', 'AND', true);
             $srchRelation->addFld('(COUNT(pcr_prodcat_id) - 1) as subcategory_count');
 

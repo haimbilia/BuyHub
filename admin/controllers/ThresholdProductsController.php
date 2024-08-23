@@ -81,7 +81,7 @@ class ThresholdProductsController extends ListingBaseController
         $srch->joinTable(Product::DB_TBL, 'INNER JOIN', 'p.product_id = sp.selprod_product_id', 'p');
         $srch->joinTable(Product::DB_TBL_LANG, 'LEFT OUTER JOIN', 'p.product_id = p_l.productlang_product_id AND p_l.productlang_lang_id = ' . $this->siteLangId, 'p_l');
         $srch->joinTable(User::DB_TBL_CRED, 'LEFT OUTER JOIN', 'cred.credential_user_id = selprod_user_id', 'cred');
-        $srch->joinTable(SentEmail::DB_TBL, 'LEFT OUTER JOIN', 'arch.earch_to_email = cred.credential_email', 'arch');
+        $srch->joinTable(SentEmail::DB_TBL, 'LEFT OUTER JOIN', "arch.earch_to_email = cred.credential_email and earch_tpl_name = 'threshold_notification_vendor'", 'arch');
         if (isset($post['keyword']) && '' != $post['keyword']) {
             $condition = $srch->addCondition('product_name', 'LIKE', '%' . $post['keyword'] . '%');
             $condition->attachCondition('selprod_title', 'LIKE', '%' . $post['keyword'] . '%');
@@ -138,7 +138,7 @@ class ThresholdProductsController extends ListingBaseController
             'product_name' => Labels::getLabel('LBL_PRODUCT_NAME', $this->siteLangId),
             'selprod_stock' => Labels::getLabel('LBL_STOCK_LEFT', $this->siteLangId),
             'selprod_threshold_stock_level' => Labels::getLabel('LBL_THRESHOLD_STOCK', $this->siteLangId),
-            'earch_sent_on' => Labels::getLabel('LBL_LAST_EMAIL_SENT', $this->siteLangId),
+           /*  'earch_sent_on' => Labels::getLabel('LBL_LAST_EMAIL_SENT', $this->siteLangId), */
             'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $this->siteLangId),
         ];
         CacheHelper::create('productsthresholdTblHeadingCols' . $this->siteLangId, json_encode($arr), CacheHelper::TYPE_LABELS);
@@ -152,7 +152,7 @@ class ThresholdProductsController extends ListingBaseController
             'product_name',
             'selprod_stock',
             'selprod_threshold_stock_level',
-            'earch_sent_on',
+            /* 'earch_sent_on', */
             'action',
         ];
     }

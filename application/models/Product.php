@@ -80,6 +80,27 @@ class Product extends MyAppModel
     public const FILTER_TYPE_OPTION = 3;
     public const FILTER_TYPE_SORT_BY = 4;
     public const FILTER_TYPE_PRICE = 5;
+    public const FILTER_TYPE_CONDITION = 6;
+    public const FILTER_TYPE_AVAILABILITY = 7;
+
+    /* Used in products/view API response */
+    public const CONTENT_TYPE_PRODUCT = 1;
+    public const CONTENT_TYPE_PRODUCT_IMAGES = 2;
+    public const CONTENT_TYPE_OPTIONS = 3;
+    public const CONTENT_TYPE_SPECIFICATIONS = 4;
+    public const CONTENT_TYPE_VOLUME_DISCOUNT = 5;
+    public const CONTENT_TYPE_BUY_TOGETHER = 6;
+    public const CONTENT_TYPE_RELATED_PRODUCTS = 7;
+    public const CONTENT_TYPE_RECOMMENDED_PRODUCTS = 8;
+    public const CONTENT_TYPE_REVIEWS = 9;
+    public const CONTENT_TYPE_BANNERS = 10;
+    public const CONTENT_TYPE_RECENTLY_VIEWED = 12;
+    public const CONTENT_TYPE_SHOP = 13;
+    public const CONTENT_TYPE_PRODUCT_POLICIES = 14;
+    public const CONTENT_TYPE_PRODUCT_DESCRIPTION = 15;
+    public const CONTENT_TYPE_DIGITAL_FILES_AND_LINKS = 16;
+    /* ------------------------------------------- */
+
     /* For API */
 
     public const WARRANTY_TYPE_DAY = 0;
@@ -368,7 +389,8 @@ class Product extends MyAppModel
                 $srch->addFld($attr);
             }
         }
-        return (array) FatApp::getDb()->fetch($srch->getResultSet());
+        $row = FatApp::getDb()->fetch($srch->getResultSet());
+        return (is_array($row) ? $row : []);
     }
 
     public function deleteProductImage($productId, $imageId, $fileType)
@@ -1094,15 +1116,11 @@ class Product extends MyAppModel
         if ($userId > 0) {
             $srch->addCondition('pshold_user_id', '=', $userId, 'AND');
         }
-        $srch->addMultipleFields(array('sum(pshold_selprod_stock) as stockHold'));
+        $srch->addMultipleFields(array('IFNULL(SUM(pshold_selprod_stock), 0) as stockHold'));
         $srch->setPageNumber(1);
         $srch->setPageSize(1);
-        $rs = $srch->getResultSet();
-        $stockHoldRow = FatApp::getDb()->fetch($rs);
-        if ($stockHoldRow == false) {
-            return 0;
-        }
-        return $stockHoldRow['stockHold'];
+        $stockHoldRow = FatApp::getDb()->fetch($srch->getResultSet());
+        return $stockHoldRow['stockHold'] ?? 0;
     }
 
     public function addUpdateUserFavoriteProduct(int $user_id, int $selProdId)
@@ -1410,7 +1428,7 @@ class Product extends MyAppModel
     {
         $productId = FatUtility::int($this->mainTableRecordId);
         if (0 >= $productId) {
-            Message::addErrorMessage($this->str_invalid_request_id);
+            Message::addErrorMessage(Labels::getLabel('LBL_INVALID_REQUEST_ID'));
             FatUtility::dieWithError(Message::getHtml());
         }
 
@@ -1469,7 +1487,11 @@ class Product extends MyAppModel
         }
         $criteria['max_price'] = true;
         //$srch->setDefinedCriteria($join_price, 0, $criteria, true);
-        $srch->joinForPrice('', $criteria, true);
+        if(0 < $shop_id){
+            $srch->joinSellerProducts(0,'', $criteria, true);
+        }else{
+            $srch->joinForPrice('', $criteria, true);
+        }
         $srch->unsetDefaultLangForJoins();
         $srch->joinSellers();
         $srch->setGeoAddress();
@@ -1545,8 +1567,7 @@ class Product extends MyAppModel
             $srch->joinTable('(' . $selProdRviewSubQuery . ')', 'LEFT OUTER JOIN', 'sq_sprating.spreview_product_id = product_id', 'sq_sprating');
             $srch->addMultipleFields(['COALESCE(prod_rating,0) prod_rating', 'COALESCE(totReviews,0) totReviews']);
         }
-
-
+     
         if (array_key_exists('category', $criteria)) {
             $srch->addCategoryCondition($criteria['category']);
         }
@@ -1843,7 +1864,7 @@ END,   special_price_found ) as special_price_found'
         );
 
         $srch = new ProductSearch();
-        $srch->addMultipleFields(array('DISTINCT(product_id)', 'selprod_id', 'theprice', 'IFNULL(splprice_id, 0) as splprice_id'));
+        $srch->addMultipleFields(array('DISTINCT(product_id) as product_id', 'selprod_id', 'theprice', 'IFNULL(splprice_id, 0) as splprice_id'));
         $srch->setDefinedCriteria(1, 0, $criteria, true, false);
         $srch->joinProductToCategory();
         $srch->joinSellerSubscription(0, false, true);
@@ -1881,7 +1902,7 @@ END,   special_price_found ) as special_price_found'
         $qry = "INSERT INTO " . static::DB_PRODUCT_MIN_PRICE . " (pmp_product_id, pmp_selprod_id, pmp_min_price, pmp_splprice_id) SELECT * FROM (" . $tmpQry . ") AS t ON DUPLICATE KEY UPDATE pmp_selprod_id = t.selprod_id, pmp_min_price = t.theprice, pmp_splprice_id = t.splprice_id";
         FatApp::getDb()->query($qry);
 
-        $query = "DELETE m FROM " . static::DB_PRODUCT_MIN_PRICE . " m LEFT OUTER JOIN (" . $tmpQry . ") ON pmp_product_id = selprod_product_id WHERE m.pmp_product_id IS NULL";
+        $query = "DELETE m FROM " . static::DB_PRODUCT_MIN_PRICE . " m LEFT OUTER JOIN (" . $tmpQry . ") as t ON m.pmp_product_id = product_id WHERE m.pmp_product_id IS NULL";
         FatApp::getDb()->query($query);
     }
 

@@ -209,7 +209,7 @@ class ProductsController extends ListingBaseController
         $this->set('sortOrder', $sortOrder);
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);
-        $this->set('canEdit', $this->objPrivilege->canEditEmptyCartItems($this->admin_id, true));
+        $this->set('canEdit', $this->objPrivilege->canEditProducts($this->admin_id, true));
         $this->set('canViewUsers', $this->objPrivilege->canViewUsers($this->admin_id, true));
     }
 
@@ -770,7 +770,7 @@ class ProductsController extends ListingBaseController
         $frm->addSelectBox(Labels::getLabel('FRM_CATEGORY', $this->siteLangId), 'prodcat_id', $categories, $prodCat);
 
         $activeInactiveArr = applicationConstants::getActiveInactiveArr($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('FRM_ACTIVE', $this->siteLangId), 'active', array(-1 => Labels::getLabel('FRM_DOES_NOT_MATTER', $this->siteLangId)) + $activeInactiveArr, '', array(), '');
+        $frm->addSelectBox(Labels::getLabel('FRM_ACTIVATION_STATUS', $this->siteLangId), 'active', array(-1 => Labels::getLabel('FRM_DOES_NOT_MATTER', $this->siteLangId)) + $activeInactiveArr, '', array(), '');
 
         if (FatApp::getAction() == 'approvalPending') {
             $frm->addHiddenField('', 'product_approved', Product::UNAPPROVED);

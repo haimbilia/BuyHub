@@ -168,7 +168,7 @@ class BadgeLinkConditionsController extends ListingBaseController
         $srch->joinTable(Shop::DB_TBL, 'LEFT JOIN', 'blnku.user_id = shp.shop_user_id', 'shp');
         $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT JOIN', 'shp.shop_id = shp_l.shoplang_shop_id AND shp_l.shoplang_lang_id = ' . $this->siteLangId, 'shp_l');
         $srch->joinTable(BadgeRequest::DB_TBL, 'LEFT JOIN', 'br.breq_id = blc.badgelink_breq_id', 'br');
-        $srch->addFld('shop_id, COALESCE(shp_l.shop_name, shp.shop_identifier) as shop_name, shop_updated_on, blnku.user_name');
+        $srch->addFld('shop_id,shop_user_id,COALESCE(shp_l.shop_name, shp.shop_identifier) as shop_name, shop_updated_on, blnku.user_name');
         $srch->addCondition('blinkcond_badge_id', '=', 'mysql_func_' . $objectId, 'AND', true);
 
         $srch->addDirectCondition("(
@@ -279,8 +279,8 @@ class BadgeLinkConditionsController extends ListingBaseController
 
                 $recordId = $badgeLink['badgelink_record_id'];
                 $recordName = $badgeLink['record_name'];
-                $optionName = explode('|', $badgeLink['option_name']);
-                $optionValueName = explode('|', $badgeLink['option_value_name']);
+                $optionName = (isset($badgeLink['option_name'])) ? explode('|', $badgeLink['option_name']) : [];
+                $optionValueName = isset($badgeLink['option_value_name']) ? explode('|', $badgeLink['option_value_name']) : [];
 
                 $seller = $badgeLink['seller'];
                 unset($badgeLink['badgelink_record_id'], $badgeLink['record_name'], $badgeLink['option_name'], $badgeLink['option_value_name'], $badgeLink['seller']);
@@ -567,7 +567,8 @@ class BadgeLinkConditionsController extends ListingBaseController
         $badgeSearch->addCondition('badge_id', '=', $objectId);
         $badgeSearch->addMultipleFields($attr);
         $badgeSearch->getResultSet();
-        return (array) FatApp::getDb()->fetch($badgeSearch->getResultSet());
+        $row = FatApp::getDb()->fetch($badgeSearch->getResultSet());
+        return (is_array($row) ? $row : []);
     }
 
     protected function getSearchForm(array $fields = [])

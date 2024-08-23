@@ -18,20 +18,17 @@
             $blogSearchFrm->setFormTagAttribute('class', 'blog-search-form');
             $blogSearchFrm->developerTags['colClassPrefix'] = 'col-lg-12 col-md-12 col-sm-';
             $blogSearchFrm->developerTags['fld_default_col'] = 12;
+            $blogSearchFrm->removeField($blogSearchFrm->getField('btnProductSrchSubmit'));
             $keywordFld = $blogSearchFrm->getField('keyword');
+            $keywordFld->developerTags['noCaptionTag'] = true;
             $keywordFld->setFieldTagAttribute('class', 'blog-search-input');
             $keywordFld->setFieldTagAttribute('id', 'blogAutoCompleteJs');
             $keywordFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_Search_In_Blogs...'));
-            $submitFld = $blogSearchFrm->getField('btnProductSrchSubmit');
-            $submitFld->setFieldTagAttribute('class', 'btn');
             echo $blogSearchFrm->getFormTag();
+            echo $blogSearchFrm->getFieldHTML('pageSize');
             echo $blogSearchFrm->getFieldHTML('keyword');
             echo $blogSearchFrm->getExternalJS(); ?>
-            <div class="search-suggestions" id="blogSuggetionList">
-                </ul>
-                </form>
-            </div>
-
+            <div class="search-suggestions" id="blogSuggetionList"></div>
         </div>
         <button type="button" class="btn btn-close text-reset btn-search-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>

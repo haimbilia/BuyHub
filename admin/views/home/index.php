@@ -139,7 +139,7 @@ if (false === $canViewAdminDashboard) {
                                             <?php echo $dashboardInfo['visitsCount']['today'] ?></span>
                                     </li>
                                     <li class="list-stats-item">
-                                        <span class="label"><?php echo Labels::getLabel('LBL_Weekly', $siteLangId); ?></span>
+                                        <span class="label"><?php echo Labels::getLabel('LBL_PAST_7_DAYS', $siteLangId); ?></span>
                                         <span class="value">
                                             <?php echo $dashboardInfo['visitsCount']['weekly'] ?></span>
                                     </li>
@@ -202,8 +202,8 @@ if (false === $canViewAdminDashboard) {
                             <div class="card-head-toolbar">
                                 <select class="form-select form-select-sm" onChange="traficSource(this.value)">
                                     <option value="today"><?php echo Labels::getLabel('LBL_TODAY', $siteLangId); ?></option>
-                                    <option value="Weekly"><?php echo Labels::getLabel('LBL_WEEKLY', $siteLangId); ?></option>
-                                    <option value="Monthly"><?php echo Labels::getLabel('LBL_MONTHLY', $siteLangId); ?></option>
+                                    <option value="Weekly"><?php echo Labels::getLabel('LBL_PAST_7_DAYS', $siteLangId); ?></option>
+                                    <option value="Monthly"><?php echo Labels::getLabel('LBL_PAST_30_DAYS', $siteLangId); ?></option>
                                     <option value="Yearly" selected="selected"><?php echo Labels::getLabel('LBL_YEARLY', $siteLangId); ?></option>
                                 </select>
                             </div>
@@ -221,8 +221,8 @@ if (false === $canViewAdminDashboard) {
                             <div class="card-head-toolbar">
                                 <select class="form-select form-select-sm" onChange="topCountries(this.value)">
                                     <option value="today"><?php echo Labels::getLabel('LBL_TODAY', $siteLangId); ?></option>
-                                    <option value="Weekly"><?php echo Labels::getLabel('LBL_WEEKLY', $siteLangId); ?></option>
-                                    <option value="Monthly"><?php echo Labels::getLabel('LBL_MONTHLY', $siteLangId); ?></option>
+                                    <option value="Weekly"><?php echo Labels::getLabel('LBL_PAST_7_DAYS', $siteLangId); ?></option>
+                                    <option value="Monthly"><?php echo Labels::getLabel('LBL_PAST_30_DAYS', $siteLangId); ?></option>
                                     <option value="Yearly" selected="selected"><?php echo Labels::getLabel('LBL_YEARLY', $siteLangId); ?></option>
                                 </select>
                             </div>
@@ -240,8 +240,8 @@ if (false === $canViewAdminDashboard) {
                             <div class="card-head-toolbar">
                                 <select class="form-select form-select-sm" onChange="topReferers(this.value)">
                                     <option value="today"><?php echo Labels::getLabel('LBL_TODAY', $siteLangId); ?></option>
-                                    <option value="Weekly"><?php echo Labels::getLabel('LBL_WEEKLY', $siteLangId); ?></option>
-                                    <option value="Monthly"><?php echo Labels::getLabel('LBL_MONTHLY', $siteLangId); ?></option>
+                                    <option value="Weekly"><?php echo Labels::getLabel('LBL_PAST_7_DAYS', $siteLangId); ?></option>
+                                    <option value="Monthly"><?php echo Labels::getLabel('LBL_PAST_30_DAYS', $siteLangId); ?></option>
                                     <option value="Yearly" selected="selected"><?php echo Labels::getLabel('LBL_YEARLY', $siteLangId); ?></option>
                                 </select>
                             </div>
@@ -258,8 +258,8 @@ if (false === $canViewAdminDashboard) {
                             <div class="card-head-toolbar">
                                 <select class="form-select form-select-sm" onChange="getTopSearchKeyword(this.value)">
                                     <option value="today"><?php echo Labels::getLabel('LBL_TODAY', $siteLangId); ?></option>
-                                    <option value="Weekly"><?php echo Labels::getLabel('LBL_WEEKLY', $siteLangId); ?></option>
-                                    <option value="Monthly"><?php echo Labels::getLabel('LBL_MONTHLY', $siteLangId); ?></option>
+                                    <option value="Weekly"><?php echo Labels::getLabel('LBL_PAST_7_DAYS', $siteLangId); ?></option>
+                                    <option value="Monthly"><?php echo Labels::getLabel('LBL_PAST_30_DAYS', $siteLangId); ?></option>
                                     <option value="Yearly" selected="selected"><?php echo Labels::getLabel('LBL_YEARLY', $siteLangId); ?></option>
                                 </select>
                             </div>

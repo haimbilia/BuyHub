@@ -64,7 +64,8 @@ class PluginSettingController extends ListingBaseController
             LibHelper::dieJsonError(Labels::getLabel('ERR_INVALID_KEY_NAME'));
         }
 
-        $plugin = PluginHelper::callPlugin($keyName, [$this->siteLangId], $error, $this->siteLangId, false);
+        $error = '';
+        $plugin = LibHelper::callPlugin($keyName, [$this->siteLangId], $error, $this->siteLangId, false);
         if (false === $plugin) {
             $error = !empty($error) ? $error : Labels::getLabel('LBL_UNABLE_TO_LOCATE_REQUIRED_FILE.');
             FatUtility::dieJsonError($error);
@@ -76,6 +77,10 @@ class PluginSettingController extends ListingBaseController
             }
             $error = !empty($error) ? $error : Labels::getLabel('LBL_GIVEN_KEYS_ARE_NOT_VALID.');
             FatUtility::dieJsonError($error);
+        }
+
+        if (isset($post['update_previous_connected_accounts'])) {
+            $post['update_previous_connected_accounts'] = applicationConstants::NO;
         }
 
         $pluginSetting = new PluginSetting($post["plugin_id"]);
@@ -137,7 +142,7 @@ class PluginSettingController extends ListingBaseController
         if (empty($keyName)) {
             LibHelper::dieJsonError(Labels::getLabel('ERR_INVALID_KEY_NAME', $langId));
         }
-        $plugin = PluginHelper::callPlugin($keyName, [$langId], $error, $langId, false);
+        $plugin = LibHelper::callPlugin($keyName, [$langId], $error, $langId, false);
         if (false == method_exists($plugin, 'getFormFieldsArr')) {
             LibHelper::exitWithError(Labels::getLabel('ERR_UNABLE_TO_LOAD_SETTINGS_FORM', $langId));
         }

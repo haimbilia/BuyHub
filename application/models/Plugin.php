@@ -118,6 +118,38 @@ class Plugin extends PluginCommon
     }
 
     /**
+     * getIdsByCodeArr
+     *
+     * @param  array $code
+     * @param  mixed $attr
+     * @param  int $langId
+     * @return mixed
+     */
+    public static function getIdsByCodeArr(array $code, $attr = '', int $langId = 0)
+    {
+        $srch = new SearchBase(static::DB_TBL, 'plg');
+        $srch->addCondition('plg.' . static::DB_TBL_PREFIX . 'code', 'in', $code);
+
+        if (0 < $langId) {
+            $srch->joinTable(self::DB_TBL_LANG, 'LEFT JOIN', self::DB_TBL_LANG_PREFIX . static::DB_TBL_PREFIX . 'id = ' . static::DB_TBL_PREFIX . 'id and ' . self::DB_TBL_LANG_PREFIX . 'lang_id = ' . $langId, 'plg_l');
+        }
+
+        if ('' != $attr) {
+            if (is_array($attr)) {
+                $srch->addMultipleFields($attr);
+            } elseif (is_string($attr)) {
+                $srch->addFld($attr);
+            }
+        }
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $rs = $srch->getResultSet();
+
+        $db = FatApp::getDb();
+        return (array) $db->fetchAll($rs, 'plugin_id');
+    }
+
+    /**
      * pluginTypeSrchObj
      *
      * @param  int $typeId
@@ -168,7 +200,7 @@ class Plugin extends PluginCommon
             );
         }
         $srch->addOrder('plugin_display_order', 'ASC');
-        $srch->doNotCalculateRecords();      
+        $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
 
         $db = FatApp::getDb();
@@ -212,7 +244,7 @@ class Plugin extends PluginCommon
         }
         $arr = [];
         $pluginsTypeArr = static::getDataByType($typeId, $langId);
-        array_walk($pluginsTypeArr, function (&$value, &$key) use (&$arr) {
+        array_walk($pluginsTypeArr, function (&$value, $key) use (&$arr) {
             $arr[$value['plugin_code']] = $value['plugin_name'];
         });
         return $arr;
@@ -351,6 +383,8 @@ class Plugin extends PluginCommon
             if (!in_array($pluginKey, $payLater) && $activationLimit == count($plugins) && $activatedPayLaterPlugins == count($payLater)) {
                 $activationLimit++;
             }
+        } else if (self::ACTIVE == $status && self::TYPE_SPLIT_PAYMENT_METHOD == $typeId) {
+            Configurations::updateValue('CONF_RETURN_SHIPPING_CHARGES_TO_CUSTOMER', self::INACTIVE);
         }
 
         if (0 < $activationLimit && $activationLimit <= count($plugins) && self::ACTIVE == $status) {

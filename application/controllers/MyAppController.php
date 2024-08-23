@@ -4,6 +4,12 @@ class MyAppController extends FatController
 {
     public $app_user = ['temp_user_id' => 0];
     public $appToken = '';
+    protected $cartItemsCount;
+    protected $currencySymbol;
+    protected $totalFavouriteItems;
+    protected $totalUnreadMessageCount;
+    protected $totalUnreadNotificationCount;
+    protected $pageData;
 
     public function __construct($action)
     {
@@ -92,7 +98,7 @@ class MyAppController extends FatController
                     'charactersSupportedFor' => Labels::getLabel('VLBL_Only_characters_are_supported_for', $this->siteLangId),
                     'pleaseEnterIntegerValue' => Labels::getLabel('VLBL_Please_enter_integer_value_for', $this->siteLangId),
                     'pleaseEnterNumericValue' => Labels::getLabel('VLBL_Please_enter_numeric_value_for', $this->siteLangId),
-                    'startWithLetterOnlyAlphanumeric' => Labels::getLabel('VLBL_must_start_with_a_letter_and_can_contain_only_alphanumeric_characters._Length_must_be_between_4_to_20_characters', $this->siteLangId),
+                    'startWithLetterOnlyAlphanumeric' => Labels::getLabel('ERR_INVALID_USERNAME', $this->siteLangId),
                     'mustBeBetweenCharacters' => Labels::getLabel('VLBL_Length_Must_be_between_6_to_20_characters', $this->siteLangId),
                     'invalidValues' => Labels::getLabel('VLBL_Length_Invalid_value_for', $this->siteLangId),
                     'shouldNotBeSameAs' => Labels::getLabel('VLBL_should_not_be_same_as', $this->siteLangId),
@@ -212,6 +218,19 @@ class MyAppController extends FatController
             return;
         }
 
+        if (
+            isset($_SERVER['HTTP_X_APP_SESSION_ID']) &&
+            !empty($_SERVER['HTTP_X_APP_SESSION_ID']) &&
+            (session_status() !== PHP_SESSION_ACTIVE ||
+                $_SERVER['HTTP_X_APP_SESSION_ID'] != session_id()
+            )
+        ) {
+            session_destroy();
+            session_id($_SERVER['HTTP_X_APP_SESSION_ID']);
+            session_start();
+        }
+
+
         $post = FatApp::getPostedData();
 
         $this->appToken = CommonHelper::getAppToken();
@@ -319,7 +338,7 @@ class MyAppController extends FatController
 
         if ($action == 'index') {
             $nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $className)));
-        } else {            
+        } else {
             $nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $className)), 'href' => UrlHelper::generateUrl($urlController));
             $action = str_replace('-', '_', FatUtility::camel2dashed($action));
             $nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $action)));
@@ -329,7 +348,6 @@ class MyAppController extends FatController
 
     public function setUpNewsLetter()
     {
-        include_once CONF_INSTALLATION_PATH . 'library/Mailchimp.php';
         $siteLangId = CommonHelper::getLangId();
         $post = FatApp::getPostedData();
         $frm = Common::getNewsLetterForm(CommonHelper::getLangId());
@@ -342,13 +360,10 @@ class MyAppController extends FatController
             FatUtility::dieWithError(Message::getHtml());
         }
 
-        $MailchimpObj = new Mailchimp($api_key);
-        $Mailchimp_ListsObj = new Mailchimp_Lists($MailchimpObj);
-
         try {
-            $subscriber = $Mailchimp_ListsObj->subscribe($list_id, array('email' => htmlentities($post['email'])));
-            if (empty($subscriber['leid'])) {
-                Message::addErrorMessage(Labels::getLabel('ERR_NEWSLETTER_SUBSCRIPTION_VALID_EMAIL', $siteLangId));
+            MailchimpHelper::subscribe(['email' => htmlentities($post['email'])], $this->siteLangId);
+            if (!empty($subscriber['msg'])) {
+                Message::addErrorMessage($subscriber['msg']);
                 FatUtility::dieWithError(Message::getHtml());
             }
         } catch (Mailchimp_Error $e) {
@@ -730,11 +745,16 @@ class MyAppController extends FatController
 
     private function checkTempTokenLogin()
     {
-        if (!in_array($this->_actionName, ['downloadDigitalFile'])) {
+        if (!in_array($this->_controllerName, ['BuyerController', 'StripeConnectPayController'])) {
             return;
         }
 
-        $get = FatApp::getQueryStringData();
+        if (in_array($this->_controllerName, ['BuyerController']) && !in_array($this->_actionName, ['downloadDigitalFile'])) {
+            return;
+        }
+
+        // $get = FatApp::getQueryStringData();
+        $get = $_REQUEST;
         if (empty($get) || !array_key_exists('ttk', $get)) {
             return;
         }
@@ -903,7 +923,7 @@ class MyAppController extends FatController
             return true;
         }
 
-        if(isset($_SESSION[User::ADMIN_SESSION_ELEMENT_NAME]) && FatUtility::int($_SESSION[User::ADMIN_SESSION_ELEMENT_NAME]['admin_id']) > 0){
+        if (isset($_SESSION[User::ADMIN_SESSION_ELEMENT_NAME]) && FatUtility::int($_SESSION[User::ADMIN_SESSION_ELEMENT_NAME]['admin_id']) > 0) {
             return true;
         }
 

@@ -27,7 +27,11 @@ class TestimonialsController extends MyAppController
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());
         $this->set('page', $page);
         $this->set('pageCount', $srch->pages());
+        $this->set('recordCount', $srch->recordCount());
         $this->set("list", $records);
+        if (true === MOBILE_APP_API_CALL) {
+            $this->_template->render();
+        }
 
         $json['html'] = $this->_template->render(false, false, 'testimonials/search.php', true, false);
         $json['loadMoreBtnHtml'] = $this->_template->render(false, false, 'testimonials/load-more-btn.php', true, false);

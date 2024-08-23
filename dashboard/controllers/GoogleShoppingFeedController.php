@@ -39,7 +39,7 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
     private function init()
     {
         $userId = UserAuthentication::getLoggedUserId();
-        $this->googleShoppingFeed = PluginHelper::callPlugin(self::KEY_NAME, [$this->siteLangId, $userId], $error, $this->siteLangId);
+        $this->googleShoppingFeed = LibHelper::callPlugin(self::KEY_NAME, [$this->siteLangId, $userId], $error, $this->siteLangId);
         if (false === $this->googleShoppingFeed) {
             $this->setError($error, 'Seller');
         }
@@ -158,8 +158,16 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
             $msg = Labels::getLabel("MSG_MERCHANT_ACCOUNT_DETAIL_NOT_FOUND", $this->siteLangId);
             $this->setError($msg, 'Seller');
         }
-        $merchantId = array_shift($accountDetail)->merchantId;
-        $this->updateMerchantInfo([self::KEY_NAME . '_merchantId' => $merchantId]);
+        $accountDetail = array_shift($accountDetail);
+        $merchantId = $accountDetail->merchantId;
+        $aggregatorId = $accountDetail->aggregatorId;
+        if (!empty($aggregatorId)) {
+            $this->updateMerchantInfo([self::KEY_NAME . '_aggregatorId' => $aggregatorId]);
+        }
+
+        if (!empty($merchantId)) {
+            $this->updateMerchantInfo([self::KEY_NAME . '_merchantId' => $merchantId]);
+        }
     }
 
     /**
@@ -292,6 +300,7 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
             if ($data === false) {
                 LibHelper::dieJsonError($this->str_invalid_request);
             }
+            $data['adsbatch_lang_id'] = $langId;
             $prodBatchAdsFrm->fill($data);
         }
 
@@ -544,6 +553,8 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
         $this->set('recordCount', $srch->recordCount());
         $this->set('pageSize', FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10));
         $this->set('canEdit', $this->userPrivilege->canEditAdvertisementFeed(0, true));
+        $this->set('canView', $this->userPrivilege->canViewAdvertisementFeed(0, true));
+        $this->set('merchantId', $this->getUserMeta(self::KEY_NAME . '_merchantId'));
         $this->_template->render(false, false);
     }
 
@@ -722,9 +733,14 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
      * @param  int $adsBatchId
      * @return void
      */
-    public function publishBatch(int $adsBatchId)
+    public function publishBatch(int $adsBatchId, int $download = 0)
     {
         $this->userPrivilege->canEditAdvertisementFeed();
+
+        if (empty($this->getUserMeta(self::KEY_NAME . '_merchantId'))) {
+            LibHelper::dieJsonError(Labels::getLabel('ERR_YOUR_ACCOUNT_IS_NOT_COMPLETLY_CONFIGURED', $this->siteLangId));
+        }
+
         $this->adsBatchId = $adsBatchId;
         if (false === $this->validateBatchRequest()) {
             LibHelper::dieJsonError($this->error);
@@ -750,12 +766,12 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
 
         $data = [
             'batchId' => $this->adsBatchId,
+            'batchTitle' => AdsBatch::getAttributesById($this->adsBatchId, 'adsbatch_name'),
             'currency_code' => strtoupper(Currency::getAttributesById(CommonHelper::getCurrencyId(), 'currency_code')),
             'data' => $productData,
             'expire_on' => $expireOn,
         ];
-
-        $response = $this->googleShoppingFeed->publishBatch($data);
+        $response = $this->googleShoppingFeed->publishBatch($data, (0 < $download));
         if (false === $response['status'] || Plugin::RETURN_FALSE === $response['status']) {
             LibHelper::dieJsonError($this->googleShoppingFeed->getError());
         }
@@ -769,7 +785,30 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
         if (false === AdsBatch::updateDetail($this->adsBatchId, $dataToUpdate)) {
             LibHelper::dieJsonError(Labels::getLabel("ERR_UNABLE_TO_UPDATE", $this->siteLangId));
         }
-        FatUtility::dieJsonSuccess($response['msg']);
+
+        if (true) {
+            $this->set('redirect_url', UrlHelper::generateUrl('GoogleShoppingFeed', 'downloadXmlFile', [$this->adsBatchId]));
+        }
+        $this->set('msg', $response['msg']);
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
+    public function downloadXmlFile(int $batchId)
+    {
+        $title = AdsBatch::getAttributesById($batchId, 'adsbatch_name');
+        if (empty($title)) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_FILE_NOT_FOUND', $this->siteLangId), false, true);
+            FatApp::redirectUser(UrlHelper::generateUrl('GoogleShoppingFeed'));
+        }
+
+        $xmlFileName = $batchId . str_replace(' ', '_', strtolower($title)) . '.xml';
+        if (!file_exists(CONF_UPLOADS_PATH . $xmlFileName)) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_FILE_NOT_FOUND', $this->siteLangId), false, true);
+            FatApp::redirectUser(UrlHelper::generateUrl('GoogleShoppingFeed'));
+        }
+
+        AttachedFile::downloadAttachment($xmlFileName, $xmlFileName);
+        unlink(CONF_UPLOADS_PATH . $xmlFileName);
     }
 
     public function getBreadcrumbNodes($action)
@@ -796,5 +835,42 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
             $this->nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $action)));
         }
         return $this->nodes;
+    }
+
+    public function getSubUsersAccountList()
+    {
+        $userData = $this->getUserMeta();
+        $serviceAccountInfo = $userData['service_account'] ?? '';
+        if (empty($serviceAccountInfo)) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_ADD_SERVICE_ACCOUNT_INFO', $this->siteLangId), true);
+        }
+        $aggregatorId = $userData[self::KEY_NAME . '_aggregatorId'] ?? '';
+        if (empty($aggregatorId)) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_AGGREGATOR_ID', $this->siteLangId), true);
+        }
+
+        $client = new Google_Client();
+        $client->setAuthConfig(json_decode($serviceAccountInfo, true));
+        $client->setScopes([Google_Service_ShoppingContent::CONTENT]);
+
+        $service = new Google_Service_ShoppingContent($client);
+        $accounts = $service->accounts->listAccounts($aggregatorId);
+        if (empty($aggregatorId)) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_NO_SUB_ACCOUNT_FOUND', $this->siteLangId), true);
+        }
+
+        $this->set('merchantId', ($userData[self::KEY_NAME . '_merchantId'] ?? 0));
+        $this->set('accounts', $accounts);
+        $this->set('html', $this->_template->render(false, false, NULL, true, false));
+        $this->_template->render(false, false, 'json-success.php', true, false);
+    }
+
+    public function updateMerchantId()
+    {
+        $merchantId = FatApp::getPostedData('merchantId', FatUtility::VAR_INT, 0);  
+        if (1 > $merchantId) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_MERCHANT_ID', $this->siteLangId), true);
+        }
+        $this->updateMerchantInfo([self::KEY_NAME . '_merchantId' => $merchantId], false);
     }
 }

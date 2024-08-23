@@ -97,6 +97,9 @@ class MessagesController extends ListingBaseController
             $srch->addCondition('tth.thread_id', '=', $post['thread_id']);
         }
         $srch->addCondition('ttm.message_deleted', '=', 0);
+        $srch->addCondition('tfr.user_deleted', '=', applicationConstants::NO);
+        $srch->addCondition('tfto.user_deleted', '=', applicationConstants::NO);
+
         $keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
         if (!empty($keyword)) {
             $condition = $srch->addCondition('tth.thread_subject', 'like', '%' . $keyword . '%');
@@ -128,7 +131,7 @@ class MessagesController extends ListingBaseController
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
         $rs = $srch->getResultSet();
-        $records = FatApp::getDb()->fetchAll($rs);     
+        $records = FatApp::getDb()->fetchAll($rs);
         $this->set("arrListing", $records);
         $this->set('pageCount', $srch->pages());
         $this->set('recordCount', $srch->recordCount());
@@ -163,6 +166,9 @@ class MessagesController extends ListingBaseController
         ));
         $srch->addCondition('message_deleted', '=', applicationConstants::NO);
         $srch->addCondition('tth.thread_id', '=', $threadId);
+        $srch->addCondition('tfr.user_deleted', '=', applicationConstants::NO);
+        $srch->addCondition('tfto.user_deleted', '=', applicationConstants::NO);
+
         $records = FatApp::getDb()->fetchAll($srch->getResultSet());      
         $this->set("threadListing", $records);       
         $this->set('searchkeyword', FatApp::getPostedData('searchkeyword', FatUtility::VAR_STRING)); 

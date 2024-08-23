@@ -22,14 +22,14 @@
                         <?php if (!empty($description)) { ?>
                             <div class="cms">
                                 <h4><?php echo $description['title']; ?></h4>
-                                <p><?php echo nl2br($description['description']); ?></p>
+                                <p><?php echo !empty($description['description']) ? nl2br($description['description']) : ''; ?></p>
                             </div>
                         <?php } ?>
                         <div class="gap"></div>
                         <?php if (!empty($paymentPolicy)) { ?>
                             <div class="cms">
                                 <h4><?php echo $paymentPolicy['title']; ?></h4>
-                                <p><?php echo nl2br($paymentPolicy['description']); ?></p>
+                                <p><?php echo !empty($paymentPolicy['description']) ? nl2br($paymentPolicy['description']) : ''; ?></p>
                             </div>
                         <?php } ?>
                         <div class="gap"></div>
@@ -37,28 +37,28 @@
                         <?php if (!empty($deliveryPolicy)) { ?>
                             <div class="cms">
                                 <h4><?php echo $deliveryPolicy['title']; ?></h4>
-                                <p> <?php echo nl2br($deliveryPolicy['description']); ?> </p>
+                                <p> <?php echo !empty($deliveryPolicy['description']) ? nl2br($deliveryPolicy['description']) : ''; ?> </p>
                             </div>
                         <?php } ?>
 
                         <?php if (!empty($refundPolicy)) { ?>
                             <div class="cms">
                                 <h4> <?php echo $refundPolicy['title']; ?></h4>
-                                <p> <?php echo nl2br($refundPolicy['description']); ?> </p>
+                                <p> <?php echo !empty($refundPolicy['description']) ? nl2br($refundPolicy['description']) : ''; ?> </p>
                             </div>
                         <?php } ?>
 
                         <?php if (!empty($additionalInfo)) { ?>
                             <div class="cms">
                                 <h4> <?php echo $additionalInfo['title']; ?></h4>
-                                <p> <?php echo nl2br($additionalInfo['description']); ?> </p>
+                                <p> <?php echo !empty($additionalInfo['description']) ? nl2br($additionalInfo['description']) : ''; ?> </p>
                             </div>
                         <?php } ?>
 
                         <?php if (!empty($sellerInfo)) { ?>
                             <div class="cms">
                                 <h4> <?php echo $sellerInfo['title']; ?></h4>
-                                <p> <?php echo nl2br($sellerInfo['description']); ?> </p>
+                                <p> <?php echo !empty($sellerInfo['description']) ? nl2br($sellerInfo['description']) : ''; ?> </p>
                             </div>
                         <?php } ?>
                     </div>
@@ -66,7 +66,7 @@
             </div>
         </section>
     <?php } else {
-        $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId, 'message' =>Labels::getLabel('LBL_NO_POLICY/SHOP_DETAIL_FOUND')), false);
+        $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId, 'message' => Labels::getLabel('LBL_NO_POLICY/SHOP_DETAIL_FOUND')), false);
     } ?>
     <div class="gap"></div>
 </div>

@@ -773,9 +773,9 @@ class Cronjob extends FatModel
         $buyerReminderInterval = FatApp::getConfig('CONF_REMINDER_INTERVAL_PRODUCTS_IN_CART', FatUtility::VAR_INT, 15);
 
         $srch = new SearchBase('tbl_user_cart', 'uc');
-        $srch->joinTable(User::DB_TBL, 'LEFT OUTER JOIN', 'u.user_id = usercart_user_id', 'u');
-        $srch->joinTable(Credential::DB_TBL, 'LEFT OUTER JOIN', 'ucr.' . Credential::DB_TBL_PREFIX . 'user_id = u.user_id', 'ucr');
-        $srch->addMultipleFields(array('uc.*', 'user_name', 'user_phone_dcode', 'user_phone', 'credential_email'));
+        $srch->joinTable(User::DB_TBL, 'INNER JOIN', 'u.user_id LIKE usercart_user_id', 'u');
+        $srch->joinTable(Credential::DB_TBL, 'INNER JOIN', 'ucr.' . Credential::DB_TBL_PREFIX . 'user_id = u.user_id', 'ucr');
+        $srch->addMultipleFields(array('uc.*', 'user_id', 'user_name', 'user_phone_dcode', 'user_phone', 'credential_email'));
         $srch->addCondition('ucr.credential_active', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
         $srch->addCondition('ucr.credential_verified', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
         $srch->addCondition('u.user_is_buyer', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
@@ -789,7 +789,7 @@ class Cronjob extends FatModel
         if (empty($row)) {
             return;
         }
-
+        $error = false;
         foreach ($row as $val) {
             $cartDetails = !empty($val["usercart_details"]) ? json_decode($val["usercart_details"], true) : [];
             if (is_array($cartDetails) && count($cartDetails) == 0) {
@@ -798,16 +798,28 @@ class Cronjob extends FatModel
             $dialCode = array_key_exists('user_phone_dcode', $val) ? ValidateElement::formatDialCode($val['user_phone_dcode']) : '';
             $phone = array_key_exists('user_phone', $val) ? $val['user_phone'] : '';
             $data = array("user_id" => $val['usercart_user_id'], "user_name" => $val['user_name'], "user_email" => $val['credential_email'], "link" => UrlHelper::generateFullUrl('Checkout'), 'user_phone_dcode' => $dialCode, 'user_phone' => $phone);
-
+            
             $email = new EmailHandler();
-            if (!$email->remindBuyerForCartItems(FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1), $data)) {
-                return $val['usercart_user_id'] . ' - ' . Labels::getLabel("MSG_ERROR_IN_SENDING_REMINDER_EMAIL_TO_BUYER", FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
+            if (!$email->remindBuyerForCartItems(CommonHelper::getLangId(), $data)) {
+                $error = true;
+                $msg = Labels::getLabel("MSG_ERROR_IN_SENDING_CART_REMINDER_EMAIL_TO_BUYER_{EMAIL}", CommonHelper::getLangId());
+                $msg = CommonHelper::replaceStringData($msg, ['{EMAIL}' => $val['user_id'] . ' - ' . $val['credential_email']]);
+                SystemLog::system($msg, CommonHelper::replaceStringData(Labels::getLabel('LBL_WISHLIST_REMINDER_ERROR_{EMAIL}'), ['{EMAIL}' => $val['credential_email']]));
+                continue;
             }
 
 
             if (!FatApp::getDb()->updateFromArray('tbl_user_cart', array('usercart_sent_reminder' => 'mysql_func_usercart_sent_reminder + 1', 'usercart_reminder_date' => date('Y-m-d H:i:s')), array('smt' => 'usercart_user_id = ?', 'vals' => array($val['usercart_user_id'])), true)) {
-                return Labels::getLabel("MSG_CAN_NOT_BE_UPDATED", FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
+                $error = true;
+                $msg = Labels::getLabel("MSG_UNABLE_TO_UPDATE_DB_REGARDING_CART_REMINDER_FOR_BUYER_{EMAIL}", CommonHelper::getLangId());
+                $msg = CommonHelper::replaceStringData($msg, ['{EMAIL}' => $val['user_id'] . ' - ' . $val['credential_email']]);
+                SystemLog::system($msg, CommonHelper::replaceStringData(Labels::getLabel('LBL_WISHLIST_REMINDER_ERROR_{EMAIL}'), ['{EMAIL}' => $val['credential_email']]));
+                continue;
             }
+        }
+
+        if ($error) {
+            return Labels::getLabel('LBL_WISHLIST_REMINDER_ERROR_OCCURRED._PLEASE_CHECK_SYSTEM_LOG.');
         }
     }
 
@@ -840,19 +852,32 @@ class Cronjob extends FatModel
             return;
         }
 
+        $error = false;
         foreach ($row as $val) {
             $dialCode = !empty($row['user_phone_dcode']) ? ValidateElement::formatDialCode($row['user_phone_dcode']) : '';
             $phone = !empty($row['user_phone']) ? $row['user_phone'] : '';
             $data = array("user_id" => $val['user_id'], "user_name" => $val['user_name'], "user_email" => $val['credential_email'], "link" => UrlHelper::generateFullUrl('Account', 'wishlist', [], CONF_WEBROOT_DASHBOARD, null, false, false, false), 'user_phone_dcode' => $dialCode, 'user_phone' => $phone);
 
             $email = new EmailHandler();
-            if (!$email->remindBuyerForWishlistItems(FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1), $data)) {
-                return $val['user_id'] . ' - ' . Labels::getLabel("MSG_ERROR_IN_SENDING_REMINDER_EMAIL_TO_BUYER", FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
+            if (!$email->remindBuyerForWishlistItems(CommonHelper::getLangId(), $data)) {
+                $error = true;
+                $msg = Labels::getLabel("MSG_ERROR_IN_SENDING_WISHLIST_REMINDER_EMAIL_TO_BUYER_{EMAIL}", CommonHelper::getLangId());
+                $msg = CommonHelper::replaceStringData($msg, ['{EMAIL}' => $val['user_id'] . ' - ' . $val['credential_email']]);
+                SystemLog::system($msg, CommonHelper::replaceStringData(Labels::getLabel('LBL_WISHLIST_REMINDER_ERROR_{EMAIL}'), ['{EMAIL}' => $val['credential_email']]));
+                continue;
             }
 
             if (!FatApp::getDb()->query('UPDATE tbl_user_wish_list_products uwlp, tbl_user_wish_lists uwl SET uwlp.uwlp_sent_reminder = uwlp_sent_reminder + 1, uwlp.uwlp_reminder_date = NOW() WHERE uwl.uwlist_user_id = ' . $val['user_id'])) {
-                return Labels::getLabel("MSG_CAN_NOT_BE_UPDATED", FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
+                $error = true;
+                $msg = Labels::getLabel("MSG_UNABLE_TO_UPDATE_DB_REGARDING_WISHLIST_REMINDER_FOR_BUYER_{EMAIL}", CommonHelper::getLangId());
+                $msg = CommonHelper::replaceStringData($msg, ['{EMAIL}' => $val['user_id'] . ' - ' . $val['credential_email']]);
+                SystemLog::system($msg, CommonHelper::replaceStringData(Labels::getLabel('LBL_WISHLIST_REMINDER_ERROR_{EMAIL}'), ['{EMAIL}' => $val['credential_email']]));
+                continue;
             }
+        }
+
+        if ($error) {
+            return Labels::getLabel('LBL_WISHLIST_REMINDER_ERROR_OCCURRED._PLEASE_CHECK_SYSTEM_LOG.');
         }
     }
 
@@ -922,7 +947,7 @@ class Cronjob extends FatModel
                 continue;
             }
 
-            $shoppingFeedObj = PluginHelper::callPlugin($activePluginCode, [CommonHelper::getLangId(), $batch['adsbatch_user_id']], $error, CommonHelper::getLangId());
+            $shoppingFeedObj = LibHelper::callPlugin($activePluginCode, [CommonHelper::getLangId(), $batch['adsbatch_user_id']], $error, CommonHelper::getLangId());
             if (false === $shoppingFeedObj) {
                 continue;
             }
@@ -969,5 +994,52 @@ class Cronjob extends FatModel
                 continue;
             }
         }
+    }
+
+    public static function generateSitemap()
+    {
+        if ((new Sitemap())->generate()) {
+            return Labels::getLabel('MSG_SITEMAP_HAS_BEEN_UPDATED_SUCCESSFULLY.');
+        }
+        return Labels::getLabel('MSG_UNABLE_TO_UPDATE_SITEMAP.');
+    }
+
+    public static function updateValidSubscription()
+    {
+        if (1 > FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
+            echo 'Subscription settings not enabled.';
+            return;
+        }
+
+        $sSrch = new SearchBase(Orders::DB_TBL, 'o');
+        $sSrch->addMultipleFields(['max(o.order_id) as currentOrderId']);
+        $sSrch->addCondition('o.order_type', '=', 'mysql_func_' . Orders::ORDER_SUBSCRIPTION, 'AND', true);
+        $sSrch->addCondition('o.order_payment_status', '=',  'mysql_func_' . Orders::ORDER_PAYMENT_PAID, 'AND', true);
+        $sSrch->addGroupBy('o.order_id');
+        $sSrch->doNotCalculateRecords();
+        $sSrch->doNotLimitRecords();
+
+        $srch = new searchBase(Orders::DB_TBL, 'o');
+        $srch->joinTable('(' . $sSrch->getQuery() . ')', 'INNER JOIN', 'otemp.currentOrderId=o.order_id', 'otemp');
+        $srch->joinTable(OrderSubscription::DB_TBL, 'INNER JOIN', 'o.order_id = oss.ossubs_order_id and oss.ossubs_status_id =' . FatApp::getConfig('CONF_DEFAULT_SUBSCRIPTION_PAID_ORDER_STATUS') . " and oss.ossubs_till_date < '" . date('Y-m-d') . "'", 'oss');
+        $srch->joinTable(User::DB_TBL, 'INNER JOIN', 'o.order_user_id = u.user_id', 'u');
+        
+        $srch->addCondition('u.user_has_valid_subscription', '= ', applicationConstants::YES);
+        $srch->addCondition('oss.ossubs_status_id', 'IN ', Orders::getActiveSubscriptionStatusArr());
+        $srch->addCondition('o.order_type', '=', 'mysql_func_' . ORDERS::ORDER_SUBSCRIPTION, 'AND', true);
+        $srch->addCondition('o.order_payment_status', '=', 'mysql_func_' . Orders::ORDER_PAYMENT_PAID, 'AND', true);
+
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $srch->addGroupBy('o.order_user_id');
+        $srch->addFld('o.order_user_id');
+        $srch->addMultipleFields(['o.order_user_id']);
+        
+        $result = FatApp::getDb()->fetchAll($srch->getResultSet());
+        foreach ($result as $user) {
+            $assignValues = ['user_has_valid_subscription' => applicationConstants::NO];
+            FatApp::getDb()->updateFromArray(User::DB_TBL, $assignValues, array('smt' => 'user_id = ? ', 'vals' => array((int) $user['order_user_id'])));
+        }
+        echo 'Done';
     }
 }

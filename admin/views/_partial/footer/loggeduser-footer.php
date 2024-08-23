@@ -2,8 +2,12 @@
 <!-- begin:: Footer -->
 <footer class="footer" id="footer">
     <div class="container">
-        <div class="copyright">
-            <?php $this->includeTemplate('_partial/footer/copyright-text.php', $this->variables, false); ?>
+        <div class="footer-inner">
+            <div class="copyright">
+                <?php $this->includeTemplate('_partial/footer/copyright-text.php', $this->variables, false); ?>
+            </div>
+            <div class="tech-partner"><?php $str =  CommonHelper::getTechPartner(true);
+                                        echo !empty($str) ? $str : CONF_WEB_APP_VERSION; ?></div>
         </div>
     </div>
 </footer>
@@ -25,11 +29,7 @@
             <div class="modal-footer">
                 <div class="search-native">
                     <label class="checkbox" for="">
-                        <?php
-                        $preferences = $_COOKIE['quickSearchCtrlJs'] ?? 0;
-                        $str = Labels::getLabel('LBL_PRESS_{KEY}_KEY_FOR_BROWSER_SEARCH', $siteLangId);
-                        echo CommonHelper::replaceStringData($str, ['{KEY}' => '<kbd>Ctrl-F</kbd>']); ?>
-                        <input type="checkbox" id="quickSearchCtrlJs" <?php echo (0 < $preferences ? 'checked="checked"' : ''); ?> data-bs-toggle="tooltip" data-placement="top" title="<?php echo Labels::getLabel('MSG_MARK_AS_CHECKED_TO_USE_THE_ONLY_NATIVE_BROWSER_SEARCH', $siteLangId); ?>">
+                        <?php echo CommonHelper::replaceStringData(Labels::getLabel('LBL_PRESS_{KEY}_AGAIN_TO_USE_NATIVE_BROWSER_SEARCH', $siteLangId), ['{KEY}' => '<kbd>Ctrl-F</kbd>']); ?>
                     </label>
                 </div>
             </div>
@@ -110,6 +110,7 @@
             </div>
         </div>
     </div>
+    <?php $getProfileImageData = ImageDimension::getData(ImageDimension::TYPE_USER_PROFILE_IMAGE, ImageDimension::VIEW_CROPED); ?>
     <div class="footer-action__item dropdown header-account">
         <a class=" dropdown-toggle no-after" data-bs-toggle="dropdown" href="javascript:void(0)">
             <span class="header-account__img">
@@ -149,11 +150,10 @@
                             <span>
                                 <img src="<?php echo CONF_WEBROOT_FRONTEND; ?>images/flags/round/<?php echo CommonHelper::getLangCountryCode() ?>.svg"></span>
                         </span>
-
                     </a>
                     <div class="languages collapse" id="languages">
                         <?php foreach ($languages as $languageId => $language) { ?>
-                            <a class="languages-link <?php echo ($siteLangId == $languageId) ? 'is--active' : ''; ?>" href="" onclick="setSiteDefaultLang(<?php echo $languageId; ?>)"><?php echo $language['language_name']; ?></a>
+                            <a class="languages-link <?php echo ($siteLangId == $languageId) ? 'is--active' : ''; ?>" href="" onclick="setSiteDefaultLang(<?php echo $languageId; ?>)"><?php echo $language['language_name'] ?? $language; ?></a>
                         <?php } ?>
                     </div>
                 <?php

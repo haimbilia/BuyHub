@@ -16,6 +16,7 @@
     top: 5px;
     right: 5px;
     margin: 0 auto;
+
     .checkmark__circle {
         stroke-dasharray: 166;
         stroke-dashoffset: 166;
@@ -25,6 +26,7 @@
         fill: #fff;
         animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
     }
+
     .checkmark__check {
         transform-origin: 50% 50%;
         stroke-dasharray: 48;
@@ -40,10 +42,12 @@
 }
 
 @keyframes scale {
+
     0%,
     100% {
         transform: none;
     }
+
     50% {
         transform: scale3d(1.1, 1.1, 1);
     }
@@ -59,6 +63,7 @@
     p {
         margin-left: auto;
         margin-right: auto;
+
         @include media-breakpoint-up(xl) {
             max-width: 80%;
         }
@@ -67,26 +72,31 @@
 
 .order-completed {
     color: $txt-gray;
+
     h2 {
         color: $txt-body;
         font-size: calc(1.75rem + ((1vw - 0.1875rem) * 1.2346));
-        font-weight: $font-weight-light;
+        font-weight: $font-weight-regular;
         margin-bottom: 1rem;
     }
+
     h3 {
         color: $txt-body;
         font-size: 1.2rem;
-        font-weight: $font-weight-light;
+        font-weight: $font-weight-regular;
         margin-bottom: 1.5rem;
+
         a {
             color: $brand-color;
         }
     }
+
     p {
-        font-weight: $font-weight-light;
+        font-weight: $font-weight-regular;
         font-size: 0.85rem;
         margin-bottom: 0.8rem;
     }
+
     .svg {
         width: 1rem;
         height: 1rem;
@@ -99,7 +109,8 @@
     display: flex;
     flex-wrap: wrap;
     margin-top: 2rem;
-    > li {
+
+    >li {
         /*flex: 0 0 50%;
         max-width: 50%;*/
         flex: 1;
@@ -107,17 +118,20 @@
         margin: -1px;
         background: $bg-white;
         outline: $border;
+
         @include media-breakpoint-down(lg) {
             flex: 0 0 50%;
             max-width: 50%;
         }
+
         @include media-breakpoint-down(lg) {
             flex: 0 0 100%;
             max-width: 100%;
         }
     }
+
     h4 {
-        font-weight: 500;
+        font-weight: $font-weight-normal;
         font-size: 1rem;
         margin-bottom: 1.5rem;
 
@@ -127,19 +141,22 @@
             height: 1rem;
         }
     }
+
     p {
         font-size: 0.9rem;
     }
+
     .preferred-shipping-list {
         max-height: 200px;
         overflow-y: auto;
+
         li {
             background-color: $bg-gray;
             border-radius: $radius2;
             padding: 5px 8px;
             margin-bottom: 5px;
             font-size: 0.75rem;
-            font-weight: 600;
+            font-weight: $font-weight-bold;
         }
     }
 }

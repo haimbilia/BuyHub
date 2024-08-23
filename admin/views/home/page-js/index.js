@@ -47,7 +47,7 @@
 	};
 
 	topCountries = function (interval) {
-		$('.topCountriesJs').html(fcom.getLoader());
+		$('.topCountriesJs').prepend(fcom.getLoader());
 		data = "rtype=top_countries&interval=" + interval;
 
 		fcom.ajax(fcom.makeUrl('home', 'dashboardStats'), data, function (t) {
@@ -142,7 +142,7 @@
 			tab = $(tab).attr('rel');
 		}
 		data = "type=" + type;
-		$('#' + tab).html(fcom.getLoader());
+		$('#' + tab).prepend(fcom.getLoader());
 		fcom.updateWithAjax(fcom.makeUrl('home', 'searchStatistics'), data, function (t) {
 			fcom.closeProcessing();
 			fcom.removeLoader();
@@ -160,7 +160,7 @@
 
 	totalSales = function (interval) {
 		data = "interval=" + interval;
-		$('#totalSalesJs').html(fcom.getLoader());
+		$('#totalSalesJs').prepend(fcom.getLoader());
 		fcom.ajax(fcom.makeUrl('home', 'totalSales'), data, function (t) {
 			fcom.removeLoader();
 			$('#totalSalesJs').html(t.html);

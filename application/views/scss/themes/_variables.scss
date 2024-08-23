@@ -11,10 +11,22 @@ $dark-color: #888;
 $blue: var(--brand-color);
 $primary: #ff3a59;
 $black: rgba(0, 0, 0, 1);
+
+
 //dynamic theme colors
 $brand-color: var(--brand-color);
 $brand-color-inverse: var(--brand-color-inverse);
 $bg-brand-light: rgba(var(--brand-color-alpha), 0.1);
+
+$bg-brand-100: rgba(var(--brand-color-alpha), 0.1);
+$bg-brand-200: rgba(var(--brand-color-alpha), 0.2);
+$bg-brand-300: rgba(var(--brand-color-alpha), 0.3);
+$bg-brand-400: rgba(var(--brand-color-alpha), 0.4);
+$bg-brand-500: rgba(var(--brand-color-alpha), 0.5);
+$bg-brand-600: rgba(var(--brand-color-alpha), 0.6);
+$bg-brand-700: rgba(var(--brand-color-alpha), 0.7);
+$bg-brand-800: rgba(var(--brand-color-alpha), 0.8);
+$bg-brand-900: rgba(var(--brand-color-alpha), 0.9);
 
 $primary-color: var(--primary-color);
 $primary-color-inverse: var(--primary-color-inverse);
@@ -34,7 +46,11 @@ $txt-gray: rgba(0, 0, 0, 0.77);
 $text-muted: #888888 !default;
 
 //Font weight
-$font-weight-light: 400;
+$font-weight-light: 300;
+$font-weight-regular: 400;
+$font-weight-normal: 500;
+$font-weight-bold: 600;
+$font-weight-boldest: 700;
 
 //border colors
 $border-color: #dee2e6;
@@ -42,13 +58,14 @@ $border: solid 1px $border-color;
 $border-black: solid 1px #000;
 $border-light: solid 1px lighten($border-color, 5);
 $border-transparent: solid 1px transparent;
+
+
 //outline
 $outline: solid 1px $border-color;
 
 //backgrounds colors
 $bg-white: #fff;
 $bg-white-inverse: $txt-body;
-
 $bg-brand: $brand-color;
 //$bg-brand-light: rgba(var(--brand-color-alpha), 0.1);
 $bg-brand-light: $bg-brand-light;
@@ -107,14 +124,17 @@ $star-color: #ff3a59;
     background-color: $secondary-color;
     color: $secondary-color-inverse;
 }
+
 @mixin bg-third {
     background-color: $third-color;
     color: $third-color-inverse;
 }
+
 @mixin bg-white {
     background-color: #fff;
     color: #000;
 }
+
 @mixin bg-black {
     background-color: #000;
     color: #fff;
@@ -130,6 +150,21 @@ $star-color: #ff3a59;
     color: $txt-body;
 }
 
+@mixin bg-blur-white {
+    background-color: rgba(255, 255, 255, 0.75);
+    color: #000;
+    backdrop-filter: blur(10px);
+}
+
+//display
+@mixin display($flex, $center, $space-between, $gap) {
+    display: $flex;
+    align-items: $center;
+    justify-content: $space-between;
+    gap: $gap;
+}
+
+
 //Push auto
 @mixin push--auto {
     margin: {
@@ -137,12 +172,14 @@ $star-color: #ff3a59;
         right: auto;
     }
 }
+
 //Transitions
 @mixin staggered_transitions($nth: 1, $items: 2, $initial: 0, $step: 0.1) {
     @for $i from $nth through $items {
         &:nth-of-type(#{$i}) {
             animation-delay: #{$initial}s;
         }
+
         $initial: $initial + $step;
     }
 }
@@ -169,13 +206,16 @@ $star-color: #ff3a59;
 //Responsive ratio
 @mixin responsive-ratio($x, $y, $pseudo: false) {
     $padding: unquote(($y / $x) * 100 + "%");
+
     @if $pseudo {
         &:before {
             @include pseudo($pos: relative);
             width: 100%;
             padding-top: $padding;
         }
-    } @else {
+    }
+
+    @else {
         padding-top: $padding;
     }
 }
@@ -214,6 +254,7 @@ $star-color: #ff3a59;
     0% {
         background-position: -1200px 0;
     }
+
     100% {
         background-position: 1200px 0;
     }
@@ -223,6 +264,7 @@ $star-color: #ff3a59;
     0% {
         background-position: -1200px 0;
     }
+
     100% {
         background-position: 1200px 0;
     }

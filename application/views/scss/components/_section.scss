@@ -1,8 +1,10 @@
 .section {
-    padding: calc(1rem + 4vw) 0;
+    padding: calc(1rem + 2.5vw) 0;
+
     @include media-breakpoint-down(sm) {
         padding: calc(1rem + 3vw) 0;
     }
+
     &-head {
         width: 100%;
         margin-bottom: 1.2rem;
@@ -12,46 +14,55 @@
         //flex-direction: column;
         flex-wrap: wrap;
         overflow: auto;
+
         @include media-breakpoint-up(lg) {
             flex-direction: row;
             margin-bottom: 2.5rem;
         }
+
         &-center {
             justify-content: center;
             text-align: center;
         }
     }
+
     &-heading {
         color: $txt-body;
         display: inline-block;
+
         h1,
         h2,
         h3,
         h4 {
-            font-weight: 500;
+            font-weight: $font-weight-normal;
         }
+
         h1,
         h2 {
             font-size: clamp(1.2rem, 2vw, 3rem);
-            > span {
+
+            >span {
                 display: block;
                 font-size: 0.875rem;
                 text-align: center;
             }
+
             .search-results {
                 font-size: 2rem;
                 display: inline-block;
             }
         }
+
         p {
             font-size: 1rem;
-            font-weight: $font-weight-light;
+            font-weight: $font-weight-regular;
         }
     }
 
     &-action {
         // overflow: auto;
     }
+
     &-foot {
         text-align: center;
         margin-top: 1.5rem;

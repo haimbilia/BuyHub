@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage');
 $getOrgUrl = (CONF_DEVELOPMENT_MODE) ? true : false;
-
-if(UserAuthentication::isUserLogged()){
+$dashboardOrgUrl = '';
+if (UserAuthentication::isUserLogged()) {
     $userActiveTab = false;
     if (User::canViewSupplierTab() && (isset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab']) && $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] == 'S')) {
         $userActiveTab = true;
@@ -20,10 +20,10 @@ if(UserAuthentication::isUserLogged()){
         $dashboardUrl = UrlHelper::generateUrl('Affiliate', '', [], CONF_WEBROOT_DASHBOARD, null, false, false, false);
         $dashboardOrgUrl = UrlHelper::generateUrl('Affiliate', '', [], CONF_WEBROOT_DASHBOARD, null, false, $getOrgUrl, false);
     }
-    if (!$userActiveTab) {
+    if (!$userActiveTab) {        
         $dashboardUrl = UrlHelper::generateUrl('Account', '', [], CONF_WEBROOT_DASHBOARD, null, false, false, false);
         $dashboardOrgUrl = UrlHelper::generateUrl('Account', '', [], CONF_WEBROOT_DASHBOARD, null, false, $getOrgUrl, false);
-    } 
+    }
 }
 if ($layoutType == applicationConstants::SCREEN_DESKTOP) {
     if (!UserAuthentication::isUserLogged()) {
@@ -69,8 +69,7 @@ if ($layoutType == applicationConstants::SCREEN_DESKTOP) {
                 </div>
             </li> <?php
                 }
-            } else {
-                ?>
+            } else { ?>
         <li class="quick-nav-item item-desktop">
             <div class="dropdown">
                 <button type="button" class="quick-nav-link button-account dropdown-toggle no-after" data-bs-toggle="dropdown">
@@ -123,7 +122,9 @@ if ($layoutType == applicationConstants::SCREEN_DESKTOP) {
             </div>
             <ul class="account-nav">
                 <li class="account-nav-item">
-                    <a class="account-nav-link" href="<?php echo $dashboardOrgUrl; ?>"><?php echo Labels::getLabel("LBL_Dashboard", $siteLangId); ?><i class="icon icon-arrow-right"></i></a>
+                    <a class="account-nav-link" href="<?php echo $dashboardOrgUrl; ?>">
+                        <?php echo Labels::getLabel("LBL_Dashboard", $siteLangId); ?><i class="icon icon-arrow-right"></i>
+                    </a>
                 </li>
                 <?php
                 $this->includeTemplate('_partial/header/sellerUserArea.php', ['siteLangId' => $siteLangId, 'layoutType' => applicationConstants::SCREEN_MOBILE]);

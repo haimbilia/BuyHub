@@ -444,12 +444,12 @@ class SellerController extends SellerBaseController
         $this->set('shippingApiObj', $shippingApiObj);
 
         $codOrder = false;
-        if (strtolower($orderDetail['plugin_code']) == 'cashondelivery') {
+        if (isset($orderDetail['plugin_code']) && strtolower($orderDetail['plugin_code']) == 'cashondelivery') {
             $codOrder = true;
         }
 
         $pickupOrder = false;
-        if (strtolower($orderDetail['plugin_code']) == 'payatstore') {
+        if (isset($orderDetail['plugin_code']) && strtolower($orderDetail['plugin_code']) == 'payatstore') {
             $pickupOrder = true;
         }
 
@@ -691,7 +691,7 @@ class SellerController extends SellerBaseController
         $template->set('orderDetail', $orderDetail);
         $template->set('shippedBySeller', $shippedBySeller);
 
-        require_once(CONF_INSTALLATION_PATH . 'library/tcpdf/tcpdf.php');
+        require_once CONF_INSTALLATION_PATH . 'vendor/autoload.php';
         $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetAuthor(FatApp::getConfig("CONF_WEBSITE_NAME_" . $this->siteLangId));
@@ -751,7 +751,9 @@ class SellerController extends SellerBaseController
 
         $oSubObj = new OrderSubscription();
         $orderDetail['charges'] = $oSubObj->getOrderSubscriptionChargesArr($op_id);
+        $subcriptionPeriodArr = SellerPackagePlans::getSubscriptionPeriods($this->siteLangId);
 
+        $this->set('subcriptionPeriodArr', $subcriptionPeriodArr);
         $this->set('orderDetail', $orderDetail);
         $this->set('orderStatuses', $orderStatuses);
         $this->set('yesNoArr', applicationConstants::getYesNoArr($this->siteLangId));
@@ -830,12 +832,12 @@ class SellerController extends SellerBaseController
         }
 
         $codOrder = false;
-        if (strtolower($orderDetail['plugin_code']) == 'cashondelivery') {
+        if (isset($orderDetail['plugin_code']) && strtolower($orderDetail['plugin_code']) == 'cashondelivery') {
             $codOrder = true;
         }
 
         $pickupOrder = false;
-        if (strtolower($orderDetail['plugin_code']) == 'payatstore') {
+        if (isset($orderDetail['plugin_code']) && strtolower($orderDetail['plugin_code']) == 'payatstore') {
             $pickupOrder = true;
         }
 
@@ -931,7 +933,7 @@ class SellerController extends SellerBaseController
             FatUtility::dieJsonError(Labels::getLabel('M_ERROR_INVALID_REQUEST', $this->siteLangId));
         }
 
-        if (in_array(strtolower($orderDetail['plugin_code']), ['cashondelivery', 'payatstore']) && (FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS") == $post["op_status_id"] || FatApp::getConfig("CONF_DEFAULT_COMPLETED_ORDER_STATUS") == $post["op_status_id"]) && Orders::ORDER_PAYMENT_PAID != $orderDetail['order_payment_status']) {
+        if (isset($orderDetail['plugin_code']) &&  in_array(strtolower($orderDetail['plugin_code']), ['cashondelivery', 'payatstore']) && (FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS") == $post["op_status_id"] || FatApp::getConfig("CONF_DEFAULT_COMPLETED_ORDER_STATUS") == $post["op_status_id"]) && Orders::ORDER_PAYMENT_PAID != $orderDetail['order_payment_status']) {
 
             $orderProducts = new OrderProductSearch($this->siteLangId, true, true);
             $orderProducts->joinPaymentMethod();
@@ -2136,8 +2138,9 @@ class SellerController extends SellerBaseController
         if (!false == $shopDetails) {
             $shop_id = $shopDetails['shop_id'];
             $stateId = isset($shopDetails['shop_state_id']) ? $shopDetails['shop_state_id'] : 0;
+            $shopDetails['shop_country_code'] = Countries::getCountryById($countryId, $this->siteLangId, 'country_code');
         }
-        $shopDetails['shop_country_code'] = Countries::getCountryById($countryId, $this->siteLangId, 'country_code');
+
         $shopLayoutTemplateId = isset($shopDetails['shop_ltemplate_id']) ? $shopDetails['shop_ltemplate_id'] : 0;
         if ($shopLayoutTemplateId == 0) {
             $shopLayoutTemplateId = 10001;
@@ -2486,6 +2489,15 @@ class SellerController extends SellerBaseController
 
         $msg = !empty($errorMsg) ? $errorMsg : Labels::getLabel('MSG_SET_UP_SUCCESSFULLY', $this->siteLangId);
 
+        $shipping = new Shipping($this->siteLangId);
+        $shippingService = $shipping->getShippingApiObj();
+        if (false !== $shippingService) {
+            if (method_exists($shippingService, 'setShopSellerId') && method_exists($shippingService, 'updateWarehouse')) {
+                $shippingService->setShopSellerId($userId);
+                $shippingService->updateWarehouse();
+            }
+        }
+
         $this->set('shopId', $shop_id);
         $this->set('langId', $newTabLangId);
         $this->set('msg', $msg);
@@ -2516,11 +2528,9 @@ class SellerController extends SellerBaseController
             $lang_id = array_key_first($languages);
         }
 
-
         if ($lang_id <= 0) {
             FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST_ID', $this->siteLangId));
         }
-
 
         $shopObj = new Shop($shop_id);
         $data = array(
@@ -2559,7 +2569,15 @@ class SellerController extends SellerBaseController
                 break;
             }
         }
-
+        
+        $shipping = new Shipping($this->siteLangId);
+        $shippingService = $shipping->getShippingApiObj();
+        if (false !== $shippingService) {
+            if (method_exists($shippingService, 'setShopSellerId') && method_exists($shippingService, 'updateWarehouse')) {
+                $shippingService->setShopSellerId($userId);
+                $shippingService->updateWarehouse();
+            }
+        }
 
         $this->set('shopId', $shop_id);
         $this->set('langId', $newTabLangId);
@@ -4517,12 +4535,13 @@ class SellerController extends SellerBaseController
         if (!$userObj->updateUserReturnAddress($post)) {
             FatUtility::dieJsonError(Labels::getLabel($userObj->getError(), $this->siteLangId));
         }
+
         $post['lang_id'] = CommonHelper::getDefaultFormLangId();
 
         if (!$userObj->updateUserReturnAddressLang($post)) {
             FatUtility::dieJsonError(Labels::getLabel($userObj->getError(), $this->siteLangId));
         }
-
+        
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData($userObj::DB_TBL_USR_RETURN_ADDR_LANG);
@@ -4543,6 +4562,16 @@ class SellerController extends SellerBaseController
                 }
             }
         }
+
+        $shipping = new Shipping($this->siteLangId);
+        $shippingService = $shipping->getShippingApiObj();
+        if (false !== $shippingService) {
+            if (method_exists($shippingService, 'setShopSellerId') && method_exists($shippingService, 'updateWarehouse')) {
+                $shippingService->setShopSellerId($userId);
+                $shippingService->updateWarehouse();
+            }
+        }
+
         $this->set('langId', $newTabLangId);
         $this->set('msg', Labels::getLabel('MSG_SETUP_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
@@ -4641,6 +4670,15 @@ class SellerController extends SellerBaseController
         $userObj = new User($userId);
         if (!$userObj->updateUserReturnAddressLang($post)) {
             FatUtility::dieJsonError(Labels::getLabel($userObj->getError(), $this->siteLangId));
+        }
+
+        $shipping = new Shipping($this->siteLangId);
+        $shippingService = $shipping->getShippingApiObj();
+        if (false !== $shippingService) {
+            if (method_exists($shippingService, 'setShopSellerId') && method_exists($shippingService, 'updateWarehouse')) {
+                $shippingService->setShopSellerId($userId);
+                $shippingService->updateWarehouse();
+            }
         }
 
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
@@ -5268,6 +5306,7 @@ class SellerController extends SellerBaseController
             if (FatApp::getConfig("CONF_PRODUCT_WEIGHT_ENABLE", FatUtility::VAR_INT, 1)) {
                 $weightUnitsArr = applicationConstants::getWeightUnitsArr($this->siteLangId);
                 $frm->addSelectBox(Labels::getLabel('FRM_WEIGHT_UNIT', $this->siteLangId), 'product_weight_unit', $weightUnitsArr)->requirements()->setRequired();
+
                 $weightFld = $frm->addFloatField(Labels::getLabel('FRM_WEIGHT', $this->siteLangId), 'product_weight', '0.00');
                 $weightFld->requirements()->setRequired(true);
                 $weightFld->requirements()->setFloatPositive();

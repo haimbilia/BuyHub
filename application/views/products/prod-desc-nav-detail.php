@@ -3,7 +3,10 @@
     <div class="col-lg-7">
         <div class="descriptions" id="accordionExample">
             <?php
-            $youtube_embed_code = UrlHelper::parseYoutubeUrl($product["product_youtube_video"]);
+            $youtube_embed_code = '';
+            if (!empty($product["product_youtube_video"])) {
+                $youtube_embed_code = UrlHelper::parseYoutubeUrl($product["product_youtube_video"]);
+            }
             ?>
             <?php if (Product::PRODUCT_TYPE_DIGITAL == $product['product_type'] && (0 < count($product['preview_attachments']) || 0 < count($product['preview_links']))) { ?>
                 <?php $this->includeTemplate('_partial/product/dd-preview-list.php', array('siteLangId' => $siteLangId, 'product' => $product), false); ?>
@@ -36,7 +39,7 @@
                                         <?php foreach ($speciGroup as $specification) { ?>
                                             <li class="list-specification-item">
                                                 <span class="label"><?php echo $specification['prodspec_name'] . ":"; ?></span>
-                                                <span class="value"><?php echo html_entity_decode($specification['prodspec_value'], ENT_QUOTES, 'utf-8'); ?>
+                                                <span class="value"><?php echo CommonHelper::renderHtml($specification['prodspec_value']); ?>
                                                 </span>
                                             </li>
                                         <?php } ?>
@@ -51,7 +54,7 @@
                     </div>
                 </div>
             <?php } ?>
-            <?php if (trim($product['product_description']) != '') { ?>
+            <?php if (!empty($product['product_description'])) { ?>
                 <div class="descriptions-item accordianSectionJs">
                     <h2 class="descriptions-head  <?php echo ($firstIsVisible ? 'collapsed' : ''); ?>" data-bs-toggle="collapse" data-bs-target="#description" aria-expanded="true"><?php echo Labels::getLabel('LBL_Description', $siteLangId); ?>
                         <svg class="svg plus toggleAccordianJs" width="16" height="16">
@@ -62,7 +65,7 @@
                     <div id="description" class="collapse <?php echo (false === $firstIsVisible ? 'show' : ''); ?>" data-bs-parent="#accordionExample">
                         <div class="descriptions-data">
                             <div class="cms">
-                                <p><?php echo CommonHelper::renderHtml($product['product_description']); ?></p>
+                                <p><?php echo CommonHelper::renderHtml($product['product_description'], true); ?></p>
                             </div>
                         </div>
                     </div>
@@ -102,17 +105,17 @@
                             <div class="cms">
                                 <?php if ($shop['shop_payment_policy'] != '') { ?>
                                     <h6><?php echo Labels::getLabel('LBL_Payment_Policy', $siteLangId) ?></h6>
-                                    <p><?php echo nl2br($shop['shop_payment_policy']); ?></p>
+                                    <p><?php echo !empty($shop['shop_payment_policy']) ? nl2br($shop['shop_payment_policy']) : ''; ?></p>
                                     <br>
                                 <?php } ?>
                                 <?php if ($shop['shop_delivery_policy'] != '') { ?>
                                     <h6><?php echo Labels::getLabel('LBL_Delivery_Policy', $siteLangId) ?></h6>
-                                    <p><?php echo nl2br($shop['shop_delivery_policy']); ?></p>
+                                    <p><?php echo (!empty($shop['shop_delivery_policy'])) ? nl2br($shop['shop_delivery_policy']) : ''; ?></p>
                                     <br>
                                 <?php } ?>
                                 <?php if ($shop['shop_refund_policy'] != '') { ?>
                                     <h6><?php echo Labels::getLabel('LBL_Refund_Policy', $siteLangId) ?></h6>
-                                    <p><?php echo nl2br($shop['shop_refund_policy']); ?></p>
+                                    <p><?php echo (!empty($shop['shop_refund_policy'])) ? nl2br($shop['shop_refund_policy']) : ''; ?></p>
                                 <?php } ?>
                             </div>
                         </div>

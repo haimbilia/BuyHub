@@ -1142,8 +1142,11 @@ class AccountController extends LoggedUserController
         }
         $userObj->assignValues($post);
         if (!$userObj->save()) {
-            $message = Labels::getLabel($userObj->getError(), $this->siteLangId);
-            FatUtility::dieJsonError($message);
+            $msg = $userObj->getError();
+            if (false !== strpos(strtolower($msg), 'duplicate')) {
+                $msg = Labels::getLabel('ERR_DUPLICATE_RECORD', $this->siteLangId);
+            }
+            LibHelper::exitWithError($msg, true);
         }
 
         $postUserName = isset($post['user_name']) ? $post['user_name'] : '';
@@ -3083,147 +3086,6 @@ class AccountController extends LoggedUserController
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
-    public function shareWithTag()
-    {
-        if (!FatApp::getConfig("CONF_ENABLE_REFERRER_MODULE", FatUtility::VAR_INT, 1)) {
-            Message::addErrorMessage(Labels::getLabel("LBL_Refferal_module_no_longer_active", $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
-        $post = FatApp::getPostedData();
-        //print_r($post); exit;
-        $selprod_id = FatApp::getPostedData('selprod_id', FatUtility::VAR_INT, 0);
-        $friendlist = FatApp::getPostedData('friendlist');
-        $friendlist = rtrim($friendlist, ',');
-
-        if (1 > $selprod_id && $friendlist == '') {
-            Message::addErrorMessage(Labels::getLabel("LBL_INVALID_REQUEST", $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
-        $returnDataArr = array();
-        $prodSrchObj = new ProductSearch($this->siteLangId);
-        $prodSrchObj->setDefinedCriteria();
-        $prodSrchObj->joinSellerSubscription();
-        $prodSrchObj->addSubscriptionValidCondition();
-        $prodSrchObj->doNotCalculateRecords();
-        $prodSrchObj->doNotLimitRecords();
-        $prodSrchObj->addCondition('selprod_id', '=', 'mysql_func_' . $selprod_id, 'AND', true);
-        $prodSrchObj->addMultipleFields(array('selprod_id'));
-        $rs = $prodSrchObj->getResultSet();
-        $row = FatApp::getDb()->fetch($rs);
-        if (!$row) {
-            Message::addErrorMessage(Labels::getLabel("LBL_Product_not_found_or_no_longer_available.", $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
-        $user_referral_code = User::getAttributesById($this->userId, "user_referral_code");
-        if ($user_referral_code == '') {
-            Message::addErrorMessage(Labels::getLabel("LBL_Your_referral_code_is_not_generated,_Please_contact_admin.", $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
-        }
-        $productUrl = UrlHelper::generateUrl('products', 'view', array($selprod_id), CONF_WEBROOT_FRONTEND);
-        $productUrl = base64_encode(ltrim($productUrl, '/'));
-
-        $productSharingUrl = UrlHelper::generateFullUrl("custom", "referral", array($user_referral_code, $productUrl), CONF_WEBROOT_FRONTEND);
-
-        $userInfo = User::getAttributesById($this->userId, array('user_fb_access_token'));
-        if ($userInfo['user_fb_access_token'] == '') {
-            Message::addErrorMessage(Labels::getLabel('ERR_AUTHENTICATE_YOUR_ACCOUNT', $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
-        include_once CONF_INSTALLATION_PATH . 'library/Fbapi.php';
-        $config = array(
-            'app_id' => FatApp::getConfig('CONF_FACEBOOK_APP_ID', FatUtility::VAR_STRING, ''),
-            'app_secret' => FatApp::getConfig('CONF_FACEBOOK_APP_SECRET', FatUtility::VAR_STRING, ''),
-        );
-        $fb = new Fbapi($config);
-        $fbObj = $fb->getInstance();
-
-        $linkData = array(
-            'link' => $productSharingUrl,
-            'message' => Labels::getLabel('MSG_Share_and_Earn_Mesage', $this->siteLangId),
-        );
-
-        if ($friendlist != '') {
-            $linkData['tags'] = $friendlist;
-        }
-
-        $fbAccessToken = $userInfo['user_fb_access_token'];
-
-        try {
-            // Returns a `Facebook\FacebookResponse` object
-            $response = $fbObj->post('/me/feed', $linkData, $fbAccessToken);
-        } catch (FacebookResponseException $e) {
-            FatUtility::dieJsonError($e->getMessage());
-        } catch (FacebookSDKException $e) {
-            FatUtility::dieJsonError($e->getMessage());
-        }
-
-        // $graphNode = $response->getGraphNode();
-
-        $this->set('msg', Labels::getLabel('MSG_Shared_Successfully!', $this->siteLangId));
-        $this->_template->render(false, false, 'json-success.php');
-    }
-
-    public function shareSocialReferEarn()
-    {
-        if (!FatApp::getConfig("CONF_ENABLE_REFERRER_MODULE", FatUtility::VAR_INT, 1)) {
-            Message::addErrorMessage(Labels::getLabel("LBL_Refferal_module_no_longer_active", $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
-        }
-        $post = FatApp::getPostedData();
-        $selprod_id = FatApp::getPostedData('selprod_id', FatUtility::VAR_INT, 0);
-        $socialMediaName = FatApp::getPostedData('socialMediaName', FatUtility::VAR_STRING, 0);
-
-        if ($selprod_id <= 0 || $socialMediaName == '') {
-            Message::addErrorMessage(Labels::getLabel("LBL_INVALID_REQUEST", $this->siteLangId));
-            FatUtility::dieWithError(Message::getHtml());
-        }
-
-        $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['redirect_user'] = UrlHelper::generateUrl('products', 'view', array($selprod_id), CONF_WEBROOT_FRONTEND);
-
-        /*FB API to share [*/
-        include_once CONF_INSTALLATION_PATH . 'library/Fbapi.php';
-        $config = array(
-            'app_id' => FatApp::getConfig('CONF_FACEBOOK_APP_ID', FatUtility::VAR_STRING, ''),
-            'app_secret' => FatApp::getConfig('CONF_FACEBOOK_APP_SECRET', FatUtility::VAR_STRING, ''),
-        );
-        $fb = new Fbapi($config);
-
-        $userInfo = User::getAttributesById($this->userId, array('user_fb_access_token'));
-
-        $fbLoginUrl = '';
-        $friendList = array();
-        if ($userInfo['user_fb_access_token'] == '') {
-            $redirectUrl = UrlHelper::generateFullUrl('Buyer', 'getFbToken', array(), '', false);
-            $fbLoginUrl = $fb->getLoginUrl($redirectUrl);
-        } else {
-            $fbAccessToken = $userInfo['user_fb_access_token'];
-            $fbObj = $fb->getInstance();
-
-            try {
-                $response = $fbObj->get('/me/friends?fields=id,name', $fbAccessToken);
-                $graphEdge = $response->getGraphEdge();
-                foreach ($graphEdge as $graphNode) {
-                    $friendList[] = $graphNode->asArray();
-                }
-            } catch (FacebookResponseException $e) {
-                Message::addErrorMessage($e->getMessage());
-                FatUtility::dieWithError(Message::getHtml());
-            } catch (FacebookSDKException $e) {
-                Message::addErrorMessage($e->getMessage());
-                FatUtility::dieWithError(Message::getHtml());
-            }
-        }
-
-        $this->set('fbLoginUrl', $fbLoginUrl);
-        $this->set('friendList', $friendList);
-        $this->set('selprod_id', $selprod_id);
-        $this->_template->render(false, false);
-    }
-
     private function getCreditsSearchForm($langId)
     {
         $frm = new Form('frmRecordSearch');
@@ -3314,6 +3176,10 @@ class AccountController extends LoggedUserController
 
     public function truncateDataRequestPopup()
     {
+        if (UserAuthentication::isGuestUserLogged()) {
+            LibHelper::exitWithError(Labels::getLabel("ERR_UNAUTHORISED_ACCESS", $this->siteLangId));
+        }
+
         $this->_template->render(false, false);
     }
 
@@ -3361,6 +3227,10 @@ class AccountController extends LoggedUserController
 
     public function requestDataForm()
     {
+        if (UserAuthentication::isGuestUserLogged()) {
+            LibHelper::exitWithError(Labels::getLabel("ERR_UNAUTHORISED_ACCESS", $this->siteLangId));
+        }
+
         $userObj = new User($this->userId);
         $srch = $userObj->getUserSearchObj(array('credential_username', 'credential_email', 'user_name'));
         $rs = $srch->getResultSet();
@@ -3392,6 +3262,10 @@ class AccountController extends LoggedUserController
 
     public function setupRequestData()
     {
+        if (UserAuthentication::isGuestUserLogged()) {
+            LibHelper::exitWithError(Labels::getLabel("ERR_UNAUTHORISED_ACCESS", $this->siteLangId));
+        }
+
         $frm = $this->getRequestDataForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
         if (false === $post) {
@@ -3455,6 +3329,9 @@ class AccountController extends LoggedUserController
         $pageSize = FatApp::getPostedData('pagesize', FatUtility::VAR_INT, $defaultPageSize);
         $srch = Notifications::getSearchObject();
         $srch->addCondition('unt.unotification_user_id', '=', 'mysql_func_' . $this->userId, 'AND', true);
+        if (MOBILE_APP_API_CALL) {
+            $srch->addCondition('unt.unotification_type', 'NOT IN', Notifications::SELLER_ONLY_NOTIFICATION_TYPES);
+        }
         $srch->addOrder('unt.unotification_id', 'DESC');
         $srch->addMultipleFields(array('unt.*'));
         $srch->setPageNumber($page);
@@ -3837,7 +3714,7 @@ class AccountController extends LoggedUserController
         $template->set('childOrderDetail', $childOrderDetail);
         $template->set('opId', $opId);
 
-        require_once(CONF_INSTALLATION_PATH . 'library/tcpdf/tcpdf.php');
+        require_once CONF_INSTALLATION_PATH . 'vendor/autoload.php';
         $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetAuthor(FatApp::getConfig("CONF_WEBSITE_NAME_" . $this->siteLangId));

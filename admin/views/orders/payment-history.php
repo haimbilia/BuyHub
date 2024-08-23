@@ -27,7 +27,7 @@ if (!empty($order['payments'])) { ?>
                         <td>
                             <?php if (!empty($row['opayment_gateway_response'])) { ?>
                                 <div class="break-me">
-                                    <a class="link-dotted" href="javascript:void(0);" onclick="viewPaymemntGatewayResponse('<?php echo $order['order_id']; ?>')">
+                                    <a class="link-dotted" href="javascript:void(0);" onclick="viewPaymemntGatewayResponse('<?php echo $row['opayment_order_id']; ?>')">
                                         <?php echo Labels::getLabel('LBL_VIEW', $siteLangId); ?>
                                     </a>
                                 </div>

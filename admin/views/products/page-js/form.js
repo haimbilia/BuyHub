@@ -610,7 +610,7 @@
                         record_id,
                         file_type,
                         ids: sort
-                    });
+                    }, function (t) {fcom.displaySuccessMessage(t.msg)});
                 }
             }).disableSelection();
         }, { fOutMode: 'json' });

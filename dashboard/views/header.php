@@ -48,10 +48,11 @@ $additionalAttributes = (CommonHelper::getLayoutDirection() == 'rtl') ? 'directi
     <meta charset="utf-8">
     <meta name="author" content="">
     <!-- Mobile Specific Metas ===================== -->
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <?php if (CommonHelper::demoUrl() && $controllerName != 'Home') { ?>
         <meta name="robots" content="noindex" />
     <?php } ?>
+    <!-- F!YK -->
     <!-- favicon ================================================== -->
     <meta name="theme-color" content="#<?php echo FatApp::getConfig('CONF_THEME_COLOR', FatUtility::VAR_STRING, "#FF3A59"); ?>">
     <meta name="msapplication-TileColor" content="#ffffff">

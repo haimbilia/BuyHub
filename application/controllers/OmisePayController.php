@@ -1,7 +1,4 @@
 <?php
-
-require_once CONF_INSTALLATION_PATH . 'library/payment-plugins/omise/lib/Omise.php';
-
 class OmisePayController extends PaymentController
 {
     public const KEY_NAME = "Omise";
@@ -22,7 +19,6 @@ class OmisePayController extends PaymentController
         if (false === $this->plugin->validateSettings($this->siteLangId)) {
             $this->setErrorAndRedirect($this->plugin->getError());
         }
-
         $this->settings = $this->plugin->getSettings();
         if (!defined('OMISE_PUBLIC_KEY')) {
             define('OMISE_PUBLIC_KEY', $this->settings['public_key']);
@@ -37,16 +33,15 @@ class OmisePayController extends PaymentController
         $frm = new Form('frmPaymentForm', array('id' => 'frmPaymentForm', 'action' => UrlHelper::generateUrl('OmisePay', 'send', array($orderId)), 'class' => "form form--normal"));
         $frm->addRequiredField(Labels::getLabel('FRM_ENTER_CREDIT_CARD_NUMBER', $this->siteLangId), 'cc_number');
         $frm->addRequiredField(Labels::getLabel('FRM_CARD_HOLDER_NAME', $this->siteLangId), 'cc_owner');
-        $data['months'] = applicationConstants::getMonthsArr($this->siteLangId);
-        $today = getdate();
+        $data['months'] = applicationConstants::getMonthsArr($this->siteLangId);       
+
         $data['year_expire'] = array();
-        for ($i = $today['year']; $i < $today['year'] + 11; $i++) {
-            $data['year_expire'][strftime('%Y', mktime(0, 0, 0, 1, 1, $i))] = strftime('%Y', mktime(0, 0, 0, 1, 1, $i));
+        for ($i = date('Y'); $i < date('Y') + 11; $i++) {
+            $data['year_expire'][$i] = $i;
         }
         $frm->addSelectBox(Labels::getLabel('FRM_EXPIRY_MONTH', $this->siteLangId), 'cc_expire_date_month', $data['months'], '', array(), '');
         $frm->addSelectBox(Labels::getLabel('FRM_EXPIRY_YEAR', $this->siteLangId), 'cc_expire_date_year', $data['year_expire'], '', array(), '');
         $frm->addPasswordField(Labels::getLabel('FRM_CVV_SECURITY_CODE', $this->siteLangId), 'cc_cvv')->requirements()->setRequired(true);
-        /* $frm->addCheckBox(Labels::getLabel('LBL_SAVE_THIS_CARD_FOR_FASTER_CHECKOUT',$this->siteLangId), 'cc_save_card','1'); */
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_PAY_NOW', $this->siteLangId), array('id' => 'button-confirm'));
         return $frm;
     }
@@ -194,11 +189,7 @@ class OmisePayController extends PaymentController
             $orderPaymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
 
             $orderActualPaid = ceil($orderPaymentAmount) * 100; /* payment accepted in satang. i.e. to charge ฿20.00, you should set amount=2000 (฿20.00). */
-
-            $omise_fee = round($orderActualPaid * ('.0365'), 0);
-            $vat = round($omise_fee * ('.07'), 0);
-            $trans_fee = intval($omise_fee + $vat);
-            if ($charge->offsetGet('net') != ($orderActualPaid - $trans_fee)) {
+            if ($charge->offsetGet('amount') != $orderActualPaid) {
                 throw new Exception(Labels::getLabel('ERR_INVALID_TRANSACTION_AMOUNT', $this->siteLangId));
             }
 

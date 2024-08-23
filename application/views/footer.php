@@ -1,5 +1,5 @@
-<?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<?php
+<?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+
 $pixelId = FatApp::getConfig("CONF_FACEBOOK_PIXEL_ID", FatUtility::VAR_STRING, '');
 if ('' !=  $pixelId) {  ?>
     <img alt="Facebook Pixel" height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=<?php echo $pixelId; ?>&ev=PageView&noscript=1" />
@@ -46,8 +46,16 @@ if ('' !=  $pixelId) {  ?>
                     </ul>
 
                     <?php
-                    $this->includeTemplate('_partial/headerLanguageArea.php'); ?>
-
+                    $this->includeTemplate('_partial/headerLanguageArea.php');
+                    if (!empty(CommonHelper::getTechPartner())) {
+                    ?>
+                        <div class="payment mt-3">
+                            <img src="<?php echo CONF_WEBROOT_URL; ?>images/payment-method/payment-1.svg" width="36" height="23" alt="<?php echo Labels::getLabel('LBL_PAYMENT_OPTIONS', $siteLangId); ?>">
+                            <img src="<?php echo CONF_WEBROOT_URL; ?>images/payment-method/payment-2.svg" width="36" height="23" alt="<?php echo Labels::getLabel('LBL_PAYMENT_OPTIONS', $siteLangId); ?>">
+                            <img src="<?php echo CONF_WEBROOT_URL; ?>images/payment-method/payment-3.svg" width="36" height="23" alt="<?php echo Labels::getLabel('LBL_PAYMENT_OPTIONS', $siteLangId); ?>">
+                            <img src="<?php echo CONF_WEBROOT_URL; ?>images/payment-method/payment-4.svg" width="36" height="23" alt="<?php echo Labels::getLabel('LBL_PAYMENT_OPTIONS', $siteLangId); ?>">
+                        </div>
+                    <?php } ?>
                 </div>
                 <div class="footer-layout-col">
                     <div class="row">
@@ -59,6 +67,7 @@ if ('' !=  $pixelId) {  ?>
                 <div class="footer-layout-col">
                     <?php
                     $this->includeTemplate('_partial/footerSocialMedia.php'); ?>
+
                 </div>
             </div>
 
@@ -70,35 +79,42 @@ if ('' !=  $pixelId) {  ?>
         <div class="container">
             <div class="footer-bottom-inner">
                 <div class="copyright">
-                    <?php
-                    $replacements = array(
-                        '{YEAR}' => '&copy; ' . date("Y"),
-                        '{PRODUCT}' => '<a target="_blank" href="https://yo-kart.com" rel="noopener">Yo!Kart</a>',
-                        '{OWNER}' => '<a target="_blank" href="https://www.fatbit.com" rel="noopener">FATbit Technologies</a>',
-                    );
-                    echo CommonHelper::replaceStringData(Labels::getLabel('LBL_COPYRIGHT_TEXT', $siteLangId), $replacements);
-                    ?>
+                    <?php echo CommonHelper::getCopyRight($siteLangId); ?>
                 </div>
-                <div class="payment">
-                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/payment-method/payment-1.svg" width="36" height="23" alt="<?php echo Labels::getLabel('LBL_PAYMENT_OPTIONS', $siteLangId); ?>">
-
-                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/payment-method/payment-2.svg" width="36" height="23" alt="<?php echo Labels::getLabel('LBL_PAYMENT_OPTIONS', $siteLangId); ?>">
-                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/payment-method/payment-3.svg" width="36" height="23" alt="<?php echo Labels::getLabel('LBL_PAYMENT_OPTIONS', $siteLangId); ?>">
-                    <img src="<?php echo CONF_WEBROOT_URL; ?>images/payment-method/payment-4.svg" width="36" height="23" alt="<?php echo Labels::getLabel('LBL_PAYMENT_OPTIONS', $siteLangId); ?>">
-                </div>
+                <?php if (empty(CommonHelper::getTechPartner())) {
+                ?>
+                    <div class="payment">
+                        <img src="<?php echo CONF_WEBROOT_URL; ?>images/payment-method/payment-1.svg" width="36" height="23" alt="<?php echo Labels::getLabel('LBL_PAYMENT_OPTIONS', $siteLangId); ?>">
+                        <img src="<?php echo CONF_WEBROOT_URL; ?>images/payment-method/payment-2.svg" width="36" height="23" alt="<?php echo Labels::getLabel('LBL_PAYMENT_OPTIONS', $siteLangId); ?>">
+                        <img src="<?php echo CONF_WEBROOT_URL; ?>images/payment-method/payment-3.svg" width="36" height="23" alt="<?php echo Labels::getLabel('LBL_PAYMENT_OPTIONS', $siteLangId); ?>">
+                        <img src="<?php echo CONF_WEBROOT_URL; ?>images/payment-method/payment-4.svg" width="36" height="23" alt="<?php echo Labels::getLabel('LBL_PAYMENT_OPTIONS', $siteLangId); ?>">
+                    </div>
+                <?php } else { ?>
+                    <div class="tech-partner">
+                        <?php echo CommonHelper::getTechPartner(); ?>
+                    </div>
+                <?php } ?>
             </div>
-
-
         </div>
     </section>
 
     <?php
-    $this->includeTemplate('_partial/footerMetaContent.php'); ?>
+    $this->includeTemplate('_partial/footerMetaContent.php');
+    if (CommonHelper::demoUrl()) { ?>
+        <section class="footer-cta">
+            <div class="container">
+                <div class="footer-cta-inner">
+                    <h4 class="footer-cta-title">Yo!Kart Comes With All Essential eCommerce Features To Start An Online Marketplace</h4>
+                    <a class="footer-cta-link btn btn-brand" href="https://www.yo-kart.com/contact-us.html?q=demo-footer">Get Started</a>
 
-    <?php if ('cart' != strtolower($controllerName)) { ?>
+                </div>
+            </div>
+        </section>
+    <?php }
+    if ('cart' != strtolower($controllerName)) { ?>
         <!-- Mobile menu -->
-        <ul class="mobile-actions">
-            <li class="mobile-actions-item" role="none">
+        <div class="mobile-actions">
+            <div class="mobile-actions-item">
                 <a class="mobile-actions-link" href="<?php echo UrlHelper::generateUrl(); ?>">
                     <svg class="svg" width="24" height="24">
                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#mbl-home">
@@ -106,17 +122,17 @@ if ('' !=  $pixelId) {  ?>
                     </svg>
                     <span class="txt"><?php echo Labels::getLabel("NAV_HOME", $siteLangId); ?></span>
                 </a>
-            </li>
-            <li class="mobile-actions-item" role="none">
-                <button type="button" class="mobile-actions-link btn-open first">
+            </div>
+            <div class="mobile-actions-item">
+                <button class="mobile-actions-link first" type="button" data-bs-toggle="offcanvas" data-bs-target="#categories-menu" aria-controls="categories-menu" onclick="openMobileMenu();">
                     <svg class="svg" width="24" height="24">
                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#mbl-category">
                         </use>
                     </svg>
                     <span class="txt"><?php echo Labels::getLabel("NAV_MENU", $siteLangId); ?></span>
                 </button>
-            </li>
-            <li class="mobile-actions-item" role="none">
+            </div>
+            <div class="mobile-actions-item">
                 <button class="mobile-actions-link wishListJs">
                     <svg class="svg" width="24" height="24">
                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#mbl-wishlist">
@@ -124,8 +140,8 @@ if ('' !=  $pixelId) {  ?>
                     </svg>
                     <span class="txt"><?php echo Labels::getLabel('NAV_WISHLIST', $siteLangId); ?></span>
                 </button>
-            </li>
-            <li class="mobile-actions-item" role="none">
+            </div>
+            <div class="mobile-actions-item">
                 <?php if ((!UserAuthentication::isUserLogged() && UserAuthentication::isGuestUserLogged()) ||  UserAuthentication::isUserLogged()) {        ?>
                     <button class="mobile-actions-link" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas-account">
                     <?php } else { ?>
@@ -137,10 +153,10 @@ if ('' !=  $pixelId) {  ?>
                         </svg>
                         <span class="txt"><?php echo Labels::getLabel("LBL_Account", $siteLangId); ?></span>
                         </button>
-            </li>
+            </div>
 
             <?php if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) { ?>
-                <li class="mobile-actions-item" role="none">
+                <div class="mobile-actions-item">
                     <button class="mobile-actions-link" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas-gps-location">
                         <svg class="svg" width="24" height="24">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#mbl-location">
@@ -148,9 +164,9 @@ if ('' !=  $pixelId) {  ?>
                         </svg>
                         <span class="txt"><?php echo Labels::getLabel("NAV_LOCATION", $siteLangId); ?></span>
                     </button>
-                </li>
+                </div>
             <?php } ?>
-        </ul>
+        </div>
     <?php } ?>
 </footer>
 <?php if (
@@ -158,18 +174,18 @@ if ('' !=  $pixelId) {  ?>
     !CommonHelper::getUserCookiesEnabled() &&
     FatApp::getConfig('CONF_COOKIES_TEXT_' . $siteLangId, FatUtility::VAR_STRING, '')
 ) { ?>
-    <div class="cc-window no-print" id="cookieInfoBox" style="display:none;">
-        <div class="box-cookies">
-            <p id="cookieconsent:desc" class="cc-message">
+    <div class="cookies-notice no-print" id="cookieInfoBox" style="display:none;">
+        <div class="cookies-notice-content">
+            <span class="cookies-notice-message">
                 <?php echo FatUtility::decodeHtmlEntities(mb_substr(FatApp::getConfig('CONF_COOKIES_TEXT_' . $siteLangId, FatUtility::VAR_STRING, ''), 0, 600)); ?>
-                <a href="<?php echo UrlHelper::generateUrl('cms', 'view', array(FatApp::getConfig('CONF_COOKIES_BUTTON_LINK', FatUtility::VAR_INT))); ?>">
-                    <?php echo Labels::getLabel('LBL_Read_More', $siteLangId); ?></a>
-            </p>
-            <div class="cookies-actions">
-                <button class="btn btn-outline-gray cookie-preferences-js">
+                <a class="" href="<?php echo UrlHelper::generateUrl('cms', 'view', array(FatApp::getConfig('CONF_COOKIES_BUTTON_LINK', FatUtility::VAR_INT))); ?>">
+                    <?php echo Labels::getLabel('LBL_Cookies_Policy', $siteLangId); ?></a>
+            </span>
+            <div class="cookies-notice-buttons">
+                <button class="btn btn-decline cookie-preferences-js">
                     <?php echo Labels::getLabel('LBL_Set_Cookie_Preferences', $siteLangId); ?>
                 </button>
-                <button class="btn btn-brand cc-cookie-accept-js">
+                <button class="btn btn-accept cc-cookie-accept-js">
                     <?php echo Labels::getLabel('LBL_Accept_Cookies', $siteLangId); ?>
                 </button>
             </div>
@@ -219,6 +235,56 @@ if (FatApp::getConfig("CONF_ENABLE_ENGAGESPOT_PUSH_NOTIFICATION", FatUtility::VA
                 s1.setAttribute('crossorigin', '*');
                 s0.parentNode.insertBefore(s1, s0);
             })();
+             // Custom styling of Offset starts here
+            Tawk_API.customStyle = {
+            zIndex:'1048!important', 
+            visibility: {
+                //for desktop only
+                desktop: {
+                position: 'br', // bottom-right
+                xOffset: 15, // 15px away from right
+                yOffset: 60, // 40px up from bottom
+                },
+                // for mobile only
+                mobile: {
+                position: 'bl', // bottom-left
+                xOffset: 5, // 5px away from left
+                yOffset: 90, // 50px up from bottom
+                },
+                // change settings of bubble if necessary
+                bubble: {
+                rotate: '0deg',
+                xOffset: -20,
+                yOffset: 0,
+                }
+            }
+            }
+            $(document).ready(function() {
+                function displayDemoBannerPopup() {
+                    var x = setInterval(function() {
+                        var now = new Date($.now());
+                        var diffMs = (now.getTime() - parseInt(getCookie("demoSessionStartTime"))); // milliseconds between now & stored time
+                        var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes
+
+                        if (diffMins > 1 && getCookie("demoImgpopup1") != 1) {
+                            $.ykmodal('<button type="button" class="btn-close btn-close-end ykmodalJs" data-bs-dismiss="modal" aria-label="Close"></button><a href="https://www.yo-kart.com/request-demo.html?q=demo-banner"><img src="<?php echo CONF_WEBROOT_FRONTEND; ?>images/demopopup1.png"></a>', true, 'modal-dialog-vertical-md', '', '', false);
+                            setCookie('demoImgpopup1', 1);
+                        }
+
+                        if (diffMins > 3 && getCookie("demoImgpopup2") != 1) {
+                            $.ykmodal('<button type="button" class="btn-close btn-close-start ykmodalJs" data-bs-dismiss="modal" aria-label="Close"></button><a href="https://www.yo-kart.com/contact-us.html?q=demo_v10"><img src="<?php echo CONF_WEBROOT_FRONTEND; ?>images/demopopup2.png"></a>', true, 'modal-dialog-vertical-md', '', '', false);
+                            setCookie('demoImgpopup2', 1);
+                        }
+                    }, 6000);
+                }
+                if (getCookie("demoSessionStartTime") == '') {
+                    var now = new Date($.now());
+                    setCookie('demoSessionStartTime', now.getTime());
+                    displayDemoBannerPopup();
+                } else {
+                    displayDemoBannerPopup();
+                };
+            });
         </script>
         <!--End of Tawk.to Script-->
     <?php
@@ -242,31 +308,14 @@ if (FatApp::getConfig("CONF_ENABLE_ENGAGESPOT_PUSH_NOTIFICATION", FatUtility::VA
 </div>
 </div>
 <?php include(CONF_THEME_PATH . '_partial/footer-part/offcanvas-elements.php'); ?>
-<a class="back-to-top no-print">
+<button class="back-to-top no-print" aria-label="back to top">
     <svg class="svg" width="16" height="16">
         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#up-arrow"></use>
     </svg>
     <span>
         <?php echo Labels::getLabel('LBL_TOP', $siteLangId); ?></span>
-</a>
-<?php
-$fontKey = FatApp::getConfig('CONF_GOOGLE_FONTS_API_KEY', FatUtility::VAR_STRING, '');
-$googleFontFamily = "'Montserrat', sans-serif !important";
-$googleFontFamilyUrl = FatApp::getConfig('CONF_THEME_FONT_FAMILY_URL', FatUtility::VAR_STRING, '');
-if (!empty($fontKey) && !empty($googleFontFamilyUrl)) {
-    $googleFontFamily = FatApp::getConfig('CONF_THEME_FONT_FAMILY', FatUtility::VAR_STRING, '');
-    $googleFontFamily =  '"' . str_replace("+", " ", explode('-', $googleFontFamily)[0]) . '" !important';
-?>
-    <link href="<?php echo $googleFontFamilyUrl; ?>" rel="stylesheet">
-<?php
-} else { ?>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<?php } 
-?>
+</button>
+<?php include(CONF_THEME_PATH . '_partial/footer-part/fonts.php'); ?>
 </body>
 
 </html>
-<?php
-//$content  = ob_get_clean();
-//echo CommonHelper::minifyHtml($content);
-?>

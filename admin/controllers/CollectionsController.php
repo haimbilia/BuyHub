@@ -149,7 +149,6 @@ class CollectionsController extends ListingBaseController
             $srch->addCondition('collection_for_web', '=', applicationConstants::NO);
             $srch->addCondition('collection_for_app', '=', applicationConstants::YES);
         }
-
         $srch->addMultipleFields(array('c.*', 'COALESCE(c_l.collection_name, c.collection_identifier) as collection_name'));
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
@@ -272,6 +271,12 @@ class CollectionsController extends ListingBaseController
             case Collections::TYPE_CATEGORY_LAYOUT4:
                 return Collections::LIMIT_CATEGORY_LAYOUT4;
                 break;    
+            case Collections::TYPE_CATEGORY_LAYOUT5:
+                return Collections::LIMIT_CATEGORY_LAYOUT5;
+                break;    
+            case Collections::TYPE_CATEGORY_LAYOUT6:
+                return Collections::LIMIT_CATEGORY_LAYOUT6;
+                break;    
             case Collections::TYPE_SHOP_LAYOUT1:
                 return Collections::LIMIT_SHOP_LAYOUT1;
                 break;
@@ -283,6 +288,9 @@ class CollectionsController extends ListingBaseController
                 break;
             case Collections::TYPE_BRAND_LAYOUT2:
                 return Collections::LIMIT_BRAND_LAYOUT2;
+                break;
+            case Collections::TYPE_BRAND_LAYOUT3:
+                return Collections::LIMIT_BRAND_LAYOUT3;
                 break;
             case Collections::TYPE_BLOG_LAYOUT1:
                 return Collections::LIMIT_BLOG_LAYOUT1;
@@ -312,6 +320,7 @@ class CollectionsController extends ListingBaseController
             $maxDisplayOrder = Collections::getMaxDisplayOrder();
             $post['collection_display_order'] = $maxDisplayOrder + 1;
         }
+        
         $collection = new Collections($recordId);
         $collection->assignValues($post);
         if (!$collection->save()) {
@@ -1110,7 +1119,7 @@ class CollectionsController extends ListingBaseController
         $this->setFormTitle($type, $layoutType, 'collectionForm(' . $type . ', ' . $layoutType . ', ' . $collectionId . ');');
         $bannerDimensiomns = ImageDimension::getBannerData('', $layoutType);
         $frm = $this->getBannerMediaForm($recordId);
-        $frm->fill(['collection_id' => $collectionId]);
+        $frm->fill(['collection_id' => $collectionId]);        
         $this->set('bannerDimensiomns', $bannerDimensiomns);
         $this->set('collectionId', $collectionId);
         $this->set('recordId', $recordId);
@@ -1141,13 +1150,12 @@ class CollectionsController extends ListingBaseController
         }
 
         $screenArr = applicationConstants::getDisplaysArr($this->siteLangId);
-        $displayFor = (!empty($this->collectionDetails) && $this->collectionDetails['collection_layout_type'] == Collections::TYPE_BANNER_LAYOUT3) ? applicationConstants::SCREEN_MOBILE : '';
 
-        if ($this->collectionDetails['collection_layout_type'] != Collections::TYPE_BANNER_LAYOUT2) {
-            $frm->addSelectBox(Labels::getLabel("FRM_DEVICE", $this->siteLangId), 'banner_screen', $screenArr, $displayFor, array(), '');
-        } else {
-            $frm->addHiddenField('', 'banner_screen', applicationConstants::SCREEN_DESKTOP);
+        if (in_array($this->collectionDetails['collection_layout_type'], Collections::COLLECTIONS_FOR_APP_ONLY)) {
+            unset($screenArr[applicationConstants::SCREEN_DESKTOP]);
         }
+        
+        $frm->addSelectBox(Labels::getLabel("FRM_DEVICE", $this->siteLangId), 'banner_screen', $screenArr, '', array(), '');
         $frm->addHtml('', 'banner', '');
 
         return $frm;
@@ -1347,6 +1355,6 @@ class CollectionsController extends ListingBaseController
 
     protected function excludeKeysForSort($fields = []): array
     {
-        return array_diff($fields, ['dragdrop', 'collection_layout_type'], Common::excludeKeysForSort());
+        return array_diff($fields, ['dragdrop', 'collection_layout_type', 'applicable_for'], Common::excludeKeysForSort());
     }
 }

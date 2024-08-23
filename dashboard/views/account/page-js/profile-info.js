@@ -57,7 +57,7 @@ $(document).ready(function () {
 		if (!$(frm).validate()) { return; }
 		var data = fcom.frmData(frm);
 		fcom.updateWithAjax(fcom.makeUrl('Account', 'updateBankInfo'), data, function (t) {
-			bankInfoForm();
+			// bankInfoForm();
 		});
 	};
 

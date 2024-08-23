@@ -96,7 +96,6 @@
             return;
         }
         $.ykmodal(fcom.getLoader(), !$.ykmodal.isSideBarView());
-
         var data = fcom.frmData(frm);
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "langSetup"), data, function (t) {
             fcom.displaySuccessMessage(t.msg);

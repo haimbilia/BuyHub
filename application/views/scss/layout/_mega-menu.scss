@@ -6,14 +6,17 @@
     align-items: center;
     justify-content: space-between;
     color: $txt-body;
+
     &.less {
         justify-content: flex-start;
     }
+
     &-item {
         display: block;
-        font-weight: 400;
+        font-weight: $font-weight-regular;
         position: static;
         margin: 0 20px;
+
         &:first-child {
             margin-#{$start-direction}: 0;
             padding-#{$start-direction}: 0;
@@ -22,8 +25,10 @@
         .link__mobilenav {
             display: none;
         }
+
         .subnav {
             display: block;
+
             &-inner {
                 position: absolute;
                 top: 100%;
@@ -47,7 +52,7 @@
         }
 
         &.is-focus {
-            & > a {
+            &>a {
                 color: $brand-color;
             }
 
@@ -63,6 +68,7 @@
                 opacity: 1;
                 visibility: visible;
                 transform: translate(0, 0);
+
                 .categories-cols {
                     transform: translateY(0);
                     opacity: 1;
@@ -83,7 +89,7 @@
         white-space: nowrap;
         line-height: 1;
         font-size: 0.9rem;
-        font-weight: 600;
+        font-weight: $font-weight-bold;
         border: none;
         background-color: transparent;
         background-image: linear-gradient(currentColor, currentColor);
@@ -91,12 +97,14 @@
         background-repeat: no-repeat;
         background-size: 0% 2px;
         transition: background-size 0.3s;
+
         &:hover,
         &.active,
         &:focus {
             color: $brand-color;
             text-decoration: none;
             background-size: 100% 2px;
+
             a {
                 background-size: 100% 2px;
                 color: $brand-color;
@@ -127,6 +135,7 @@
     line-height: 1;
     width: 30px;
     z-index: 1;
+
     span {
         background: #000;
         border-radius: 3px;
@@ -135,18 +144,22 @@
         transition: 0.3s all ease;
         height: 3px;
         width: 30px;
+
         &:nth-child(1) {
             width: 25px;
         }
     }
+
     &:hover {
         span {
             &:nth-child(3) {
                 width: 25px;
             }
+
             &:nth-child(2) {
                 width: 30px;
             }
+
             &:nth-child(1) {
                 width: 20px;
             }
@@ -159,9 +172,11 @@
     flex: 1;
     margin: 0 auto;
     columns: 4 auto;
+
     @include media-breakpoint-down(lg) {
         padding: 0.5rem 0;
     }
+
     .categories-cols {
         // display: flex;
         // flex-direction: column;
@@ -175,19 +190,23 @@
         opacity: 0;
         visibility: hidden;
         transition: all 0.4s ease-in-out 0s;
+
         // border-bottom: $border;
         .categories-list {
             list-style: none;
             margin: 0;
+
             &-item {
                 display: flex;
             }
+
             &-link {
-                font-weight: $font-weight-light;
+                font-weight: $font-weight-regular;
                 color: $txt-body;
                 text-transform: none;
                 padding: 4px 0;
                 position: relative;
+
                 &:after {
                     transition: all 0.5s ease;
                     position: absolute;
@@ -195,9 +214,11 @@
                     opacity: 0;
                     content: "→";
                 }
+
                 &:hover {
                     color: $brand-color;
                     text-decoration: none;
+
                     &:after {
                         transition: all 0.5s ease;
                         #{$end-direction}: -1rem;
@@ -206,9 +227,10 @@
                     }
                 }
             }
+
             &-head {
                 color: $brand-color;
-                font-weight: 600;
+                font-weight: $font-weight-bold;
             }
         }
     }
@@ -218,6 +240,7 @@
     .navs_toggle {
         display: inline-block;
     }
+
     .navs_toggle:after {
         position: fixed;
         top: 0;
@@ -232,21 +255,25 @@
         content: "";
         transition: 0.3s ease-in-out all;
     }
+
     .navs_toggle.is-focus:after {
         opacity: 1;
         visibility: visible;
         pointer-events: auto;
     }
+
     body.toggled_#{$start-direction} .common_overlay {
         opacity: 1;
         visibility: visible;
         transform: translateY(0%);
         transition: opacity 0.5s, transform 0.5s;
     }
+
     body.toggled_#{$start-direction} .navigation-wrapper {
         opacity: 1;
         transform: translate(0px, 0px);
     }
+
     .navigation-wrapper {
         background: $bg-white;
         bottom: 0;
@@ -262,6 +289,7 @@
         width: 260px;
         z-index: 110;
     }
+
     .navigation {
         margin: 0;
         width: 100%;
@@ -269,6 +297,7 @@
         flex-direction: column;
         justify-content: flex-start;
         display: block;
+
         &-item {
             display: block;
             float: none;
@@ -289,6 +318,7 @@
                 visibility: visible;
                 width: 40px;
                 z-index: 1;
+
                 &:before,
                 &:after {
                     background: #000;
@@ -299,19 +329,23 @@
                     top: 15px;
                     width: 12px;
                 }
+
                 &:after {
                     transform: rotate(90deg);
                 }
+
                 &.is-focus {
                     &:after {
                         content: normal;
                     }
                 }
             }
+
             .subnav {
                 display: none;
                 position: relative;
                 width: 100%;
+
                 &-inner {
                     background: $bg-white;
                     border-top: none;
@@ -336,14 +370,17 @@
             position: relative;
             overflow: visible;
             height: auto;
+
             &:after,
             &:before {
                 content: normal;
             }
         }
     }
+
     .categories-block {
         flex-direction: column;
+
         .categories-cols {
             min-width: auto;
             opacity: 1;
@@ -355,13 +392,20 @@
 .category-media {
     text-align: center;
     color: $brand-color;
-    font-weight: 600;
+    font-weight: $font-weight-bold;
     margin-#{$start-direction}: auto;
     max-width: 300px;
     padding: 0;
+
     figcaption {
         padding: 0.5rem 0;
         text-decoration: underline;
         display: inline-block;
+    }
+}
+
+.is-mobile {
+    @include media-breakpoint-up(lg) {
+        display: none;
     }
 }

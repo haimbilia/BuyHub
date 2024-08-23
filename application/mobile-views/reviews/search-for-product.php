@@ -34,4 +34,5 @@ $data = array(
 
 if (empty($reviewsList)) {
     $status = applicationConstants::OFF;
+    $msg = Labels::getLabel('ERR_NO_REVIEW_FOUND');
 }

@@ -37,4 +37,5 @@ define('S3_REGION', 'us-east-2');
 define('CDN_DOMAIN_URL', '');
 
 define('ALLOW_EMAILS', (strpos(($_SERVER['SERVER_NAME']), '4livedemo.com') > 0) ? false : true);
+define('DEMO_FROM_EMAIL', 'testu9137@gmail.com');
 define('USE_X_FORWARDED_PROTO', false);

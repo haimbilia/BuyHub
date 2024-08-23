@@ -72,6 +72,9 @@
         },
         close: function () {
             toastr.remove();
+        },
+        clear: function () {
+            toastr.clear();
         }
     });
 })(jQuery);

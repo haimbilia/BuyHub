@@ -8,9 +8,9 @@ $redirectSelprod = $redirectSelprod ?? true;
 if (!isset($product)) {
     $product = SellerProduct::getSelProdDataById($selProdId, true, ['selprod_id', 'selprod_product_id', 'product_updated_on', 'selprod_title', 'product_name', 'product_identifier']);
 }
-
+$selprod_product_id = $product['selprod_product_id'] ?? 0;
 $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']);
-$imgSrc = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['selprod_product_id'], ImageDimension::VIEW_SMALL, $product['selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+$imgSrc = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($selprod_product_id, ImageDimension::VIEW_SMALL, $product['selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
 $productTitle = $product['selprod_title'] ?? $product['product_name'] ?? $product['product_identifier'];
 ?>
 <div class="product-profile">

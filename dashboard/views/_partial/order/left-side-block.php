@@ -139,9 +139,9 @@ $cancelOrder = $cancelOrder ?? false;;
                     <thead>
                         <tr>
                             <th><?php echo Labels::getLabel('LBL_ITEMS_SUMMARY', $siteLangId); ?></th>
-                            <th><?php echo Labels::getLabel('LBL_Price', $siteLangId); ?></th>
+                            <th><?php echo Labels::getLabel('LBL_PRICE', $siteLangId); ?></th>
                             <th><?php echo Labels::getLabel('LBL_ORDERED_QUANTITY', $siteLangId); ?></th>
-                            <th><?php echo Labels::getLabel('LBL_Total', $siteLangId); ?></th>
+                            <th><?php echo Labels::getLabel('LBL_TOTAL', $siteLangId); ?></th>
                         </tr>
                     </thead>
                     <tbody>

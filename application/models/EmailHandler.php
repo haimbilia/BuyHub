@@ -280,7 +280,7 @@ class EmailHandler extends FatModel
             '{account_type}' => $d['account_type'],
             '{contact_us_email}' => FatApp::getConfig('CONF_CONTACT_EMAIL'),
         );
-        
+
         if (!empty($d['user_email'])) {
             return (new FatMailer($langId, $tpl))
                 ->setTo($d['user_email'])
@@ -300,7 +300,9 @@ class EmailHandler extends FatModel
 
         $vars = array(
             '{name}' => $d['user_name'],
+            '{username}' => $d['user_name'],
             '{contact_us_email}' => FatApp::getConfig('CONF_CONTACT_EMAIL'),
+            '{account_type}' => $d['account_type'],
         );
 
         if (isset($d['user_id']) && $d['user_id'] > 0) {
@@ -882,7 +884,7 @@ class EmailHandler extends FatModel
                 'unotification_user_id' => $orderDetail["order_user_id"],
                 'unotification_body' => $appNotification,
                 'unotification_type' => 'ORDER_PAYMENT_STATUS',
-                'unotification_data' => json_encode(array('orderId' => $arrReplacements['{invoice_number}'], 'status' => $arrReplacements['{new_order_status}'])),
+                'unotification_data' => json_encode(array('orderId' => $orderDetail['order_id'], 'status' => $arrReplacements['{new_order_status}'])),
             );
             if (!$notificationObj->addNotification($notificationDataArr)) {
                 $this->error = $notificationObj->getError();
@@ -1086,7 +1088,7 @@ class EmailHandler extends FatModel
                     '{order_id}' => $orderDetail['order_number'],
                 );
 
-                if (!empty($paymentType) && in_array(strtolower($paymentType), ['cashondelivery', 'payatstore'])) {
+                if (!empty($paymentType)  && in_array(strtolower($paymentType), ['cashondelivery', 'payatstore'])) {
                     $tpl = "vendor_cod_order_email";
                 } else if (!empty($paymentType) && strtolower($paymentType) == 'transferbank') {
                     $tpl = "vendor_bank_transfer_order_email";
@@ -1129,7 +1131,7 @@ class EmailHandler extends FatModel
                     'unotification_type' => 'SELLER_ORDER',
                     'unotification_data' => json_encode(array('orderId' => $orderDetail['order_id'], 'productName' => $val["op_product_name"])),
                 );
-                if (!$notificationObj->addNotification($notificationDataArr)) {
+                if (!$notificationObj->addNotification($notificationDataArr, false)) {
                     $this->error = $notificationObj->getError();
                     return false;
                 }
@@ -1151,7 +1153,7 @@ class EmailHandler extends FatModel
             if ($orderComment['oshistory_comments'] != "") {
                 $msgComments = '<br>
                     <div style="background: #f6f6f6; font-size: 14px; text-align: center; border-radius: 4px; color: #212529; padding: 20px; line-height: 24px">
-                        <h5 style="font-weight: 600; text-transform: uppercase; color: #212529; letter-spacing: -0.2px; margin: 0">' . Labels::getLabel('LBL_COMMENTS_FOR_YOUR_ORDER', $langId) . '</h5>
+                        <h5 style="font-weight: $font-weight-bold; text-transform: uppercase; color: #212529; letter-spacing: -0.2px; margin: 0">' . Labels::getLabel('LBL_COMMENTS_FOR_YOUR_ORDER', $langId) . '</h5>
                         <p style="margin: 0">' . nl2br($orderComment['oshistory_comments']) . '</p>
                     </div>
                 ';
@@ -1208,7 +1210,7 @@ class EmailHandler extends FatModel
             $this->sendSms("child_order_status_change", ValidateElement::formatDialCode($orderComment['buyer_phone_dcode']) . $orderComment["buyer_phone"], $arrReplacements, $langId);
             $replaceVal = array(
                 '{INVOICE}' => $orderComment["op_invoice_number"],
-                '{PRODUCT}' => $orderComment["op_product_name"],
+                '{PRODUCT}' => isset($orderComment["op_selprod_title"]) && !empty($orderComment["op_selprod_title"]) ? $orderComment["op_selprod_title"] : $orderComment["op_product_name"],
                 '{STATUS}' => $statuesArr[$orderComment["oshistory_orderstatus_id"]]
             );
             $appNotification = CommonHelper::replaceStringData(Labels::getLabel('MSG_YOUR_ORDER_{INVOICE}_{PRODUCT}_STATUS_{STATUS}', $langId), $replaceVal, true);
@@ -1570,14 +1572,14 @@ class EmailHandler extends FatModel
             $this->sendSms($tpl, $phone, $arrReplacements, $langId);
         }
 
-        $adminOrderDetailUrl = UrlHelper::generateFullUrl('Orders', 'view', array($ocRequestRow["order_id"]));
+        $adminOrderDetailUrl = UrlHelper::generateFullUrl('Orders', 'view', array($ocRequestRow["order_id"]), CONF_WEBROOT_BACKEND);
         $adminOrderAnchor = "<a href='" . $adminOrderDetailUrl . "'>" . $ocRequestRow["op_invoice_number"] . "</a>";
         $arrReplacements['{invoice_number}'] = $adminOrderAnchor;
 
         $arrReplacements["{user_name}"] = Labels::getLabel("LBL_ADMIN", $langId);
 
         $this->sendMailToAdminAndAdditionalEmails($tpl, $arrReplacements, static::ADD_ADDITIONAL_ALERTS, static::NOT_ONLY_SUPER_ADMIN, $langId);
-        
+
         $arrReplacements['{invoice_number}'] = $adminOrderDetailUrl;
         $this->sendSms($tpl, ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode')) . FatApp::getConfig('CONF_SITE_PHONE'), $arrReplacements, $langId);
 
@@ -1640,7 +1642,7 @@ class EmailHandler extends FatModel
             $productUrl = UrlHelper::generateFullUrl('Products', 'view', array($msgDetail['op_selprod_id']));
         }
 
-        $productTitle = ($msgDetail['op_selprod_title'] != '') ? $msgDetail['op_selprod_title'] . ' (' . $msgDetail['op_product_name'] . ')' : $msgDetail['op_product_name'];
+        $productTitle = ($msgDetail['op_selprod_title'] != '') ? $msgDetail['op_selprod_title'] : $msgDetail['op_product_name'];
 
         $productExtraDetails = '';
         if ($msgDetail['op_selprod_options'] != '') {
@@ -2257,7 +2259,7 @@ class EmailHandler extends FatModel
             $userInfo = $userObj->getUserInfo(array('user_name', 'credential_email', 'user_phone_dcode', 'user_phone'));
 
             $arrReplacements = array(
-                '{user_full_name}' => trim($userInfo["user_name"]),
+                '{user_full_name}' => isset($userInfo["user_name"]) ? trim($userInfo["user_name"]) : $userInfo["credential_email"],
                 '{new_order_status}' => $statuesArr[$orderProduct["op_status_id"]],
                 '{invoice_number}' => $orderProduct["op_invoice_number"],
                 '{order_items_table_format}' => $orderItemsTableFormatHtml,
@@ -2988,6 +2990,9 @@ class EmailHandler extends FatModel
     {
         $tpl = 'gdpr_request_status_update_notification_to_user';
         $reqData = UserGdprRequest::getAttributesById($reqId, array('ureq_user_id', 'ureq_type'));
+        if(UserGdprRequest::TYPE_DATA_REQUEST == $reqData['ureq_type']) {
+            $tpl = 'gdpr_request_data_to_user';
+        }
 
         $reqTypeArr = UserGdprRequest::getUserRequestTypesArr($langId);
         $reqTypeName = $reqTypeArr[$reqData['ureq_type']];
@@ -3146,7 +3151,8 @@ class EmailHandler extends FatModel
         $notificationDataArr = array(
             'unotification_user_id' => $d["order_user_id"],
             'unotification_body' => $msg,
-            'unotification_type' => 'ORDER_PAYMENT_TRANSFERRED_TO_BANK'
+            'unotification_type' => 'ORDER_PAYMENT_TRANSFERRED_TO_BANK',
+            'unotification_data' => json_encode(array('orderId' => $d['order_id'])),
         );
         if (!$notificationObj->addNotification($notificationDataArr)) {
             $this->error = $notificationObj->getError();

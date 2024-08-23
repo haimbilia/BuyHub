@@ -23,8 +23,8 @@ class TwocheckoutSettingsController extends PaymentMethodSettingsController
 
         $frm->addHTML(
             'Remember',
-            '&nbsp;',
-            '<span class="text-muted">
+            '',
+            '<span class="form-text text-muted">
                 In case of <strong>Hosted Checkout</strong>, Admin must set <strong>Redirect URL</strong> in which :<br>
                 <strong>Return method : Header Redirect</strong><br>  
                 <strong>Approved URL : ' . UrlHelper::generateFullUrl(self::KEY_NAME . 'Pay', 'callback', [], CONF_WEBROOT_FRONT_URL)  . '</strong><br>

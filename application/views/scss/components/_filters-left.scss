@@ -2,9 +2,11 @@
     display: grid;
     grid-template-columns: 280px 1fr;
     grid-gap: 6rem;
+
     @include media-breakpoint-down(lg) {
         display: block;
     }
+
     .collection-sidebar {
         background: $bg-white;
         flex-grow: 0;
@@ -13,6 +15,7 @@
         // border-radius: $common-radius;
         //padding: 1.5rem;
         display: block;
+
         @include media-breakpoint-down(lg) {
             border-radius: 0;
             position: fixed;
@@ -23,6 +26,7 @@
             backface-visibility: hidden;
             width: 280px;
             transition: left 0.3s ease, right 0.3s ease;
+
             .collection-sidebar--on & {
                 padding: 1rem;
                 #{$start-direction}: 0;
@@ -32,6 +36,7 @@
             }
         }
     }
+
     .sidebar-widget {
         &__body {
             transition: none !important;
@@ -42,6 +47,7 @@
 .aside-head {
     display: flex;
     justify-content: space-between;
+
     .title {
         font-size: 1.2rem;
         text-transform: uppercase;
@@ -53,6 +59,7 @@
     padding-bottom: 1.5rem;
     border-bottom: $border;
     position: relative;
+
     &:after {
         background: $brand-color;
         width: 30px;
@@ -62,26 +69,30 @@
         bottom: -1px;
         #{$start-direction}: 0;
     }
+
     &:last-child {
         margin-bottom: 0;
         padding-bottom: 0;
         border: none;
+
         &:after {
             content: normal;
         }
     }
+
     &_head {
         font-size: 1rem;
         /*text-transform: uppercase;*/
         margin: 0;
         color: $txt-body;
-        font-weight: 600;
+        font-weight: $font-weight-bold;
         display: flex;
         justify-content: space-between;
         align-items: center;
         padding-#{$start-direction}: 20px;
         position: relative;
         cursor: pointer;
+
         &:before {
             content: "";
             position: absolute;
@@ -96,6 +107,7 @@
             transform-origin: center;
             transition: all 0.5s ease;
         }
+
         &[aria-expanded="true"] {
             &:before {
                 top: calc(50% - 1px);
@@ -103,9 +115,11 @@
             }
         }
     }
+
     &_body {
         padding: 1rem 0;
     }
+
     .color-dot {
         box-shadow: $shadow2;
         border-radius: 50%;
@@ -125,12 +139,14 @@
     align-items: center;
     margin: 0;
     grid-gap: 10px;
+
     &-head {
         display: flex;
         justify-content: space-between;
         align-items: center;
         margin-bottom: 1rem;
     }
+
     .chip {
         white-space: nowrap;
         display: flex;
@@ -142,12 +158,14 @@
         font-size: 0.75rem;
         //background: $bg-brand-light;
         color: $txt-body;
-        font-weight: $font-weight-light;
+        font-weight: $font-weight-regular;
+
         //height: 28px;
         &.more {
-            font-weight: 600;
+            font-weight: $font-weight-bold;
             padding-#{$end-direction}: 14px;
         }
+
         .remove {
             display: flex;
             align-items: center;
@@ -160,11 +178,15 @@
             margin-#{$start-direction}: 5px;
             font-size: 10px;
             color: inherit;
-            &:hover {
+
+            &:hover,
+            &:focus,
+            &:active {
                 background-color: none;
             }
         }
     }
+
     .btn-clear-all {
         background: #000;
         color: #fff;

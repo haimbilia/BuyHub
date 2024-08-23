@@ -1,14 +1,17 @@
-<button class="restore-btn restoreBtnJs" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRestore">
+<button class="restore-btn restoreBtnJs" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRestore" aria-label="restore button">
     <svg class="svg" width="24" height="24">
         <use xlink:href="<?php echo CONF_WEBROOT_FRONTEND; ?>images/retina/sprite-restore.svg#gear">
         </use>
-    </svg>
+    </svg>    
 </button>
+<div class="fixed-right-btn">
+    <button type="button" class="sticker-Btn popup-btn" onClick="demoRequestForm()"><span class="arrow-btn"><i class="arrow-anim"></i></span>BOOK A DEMO</>
+</div>
 <div class="offcanvas offcanvas-end offcanvas-restore" tabindex="-1" id="offcanvasRestore">
     <div class="offcanvas-body">
         <div class="demo">
             <div class="demo-restore timerSectionJs">
-                <button class="demo-restore-btn" type="button" onclick="showRestorePopup()">
+                <button class="demo-restore-btn" type="button" onclick="showRestorePopup()" aria-label="data restore">
                     <svg class="svg" width="20" height="20">
                         <use xlink:href="<?php echo CONF_WEBROOT_FRONTEND; ?>images/retina/sprite-restore.svg#clock">
                         </use>
@@ -43,7 +46,7 @@
                         ?>
 
                         <li class="views-item <?php echo $admin; ?> restoreElementJs">
-                            <a class="views-links" title="Admin" href="<?php echo UrlHelper::generateUrl($adminUrl, '', [], CONF_WEBROOT_FRONTEND); ?>">
+                            <a class="views-links" title="Admin" href="<?php echo UrlHelper::generateUrl($adminUrl, '', [], CONF_WEBROOT_FRONTEND, null, false, false, false); ?>">
                                 <svg class="svg" width="32" height="32">
                                     <use xlink:href="<?php echo CONF_WEBROOT_FRONTEND; ?>images/retina/sprite-restore.svg#admin">
                                     </use>

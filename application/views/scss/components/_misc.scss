@@ -4,24 +4,30 @@ html {
     @include media-breakpoint-up(md) {
         font-size: 13px;
     }
+
     @include media-breakpoint-up(lg) {
         font-size: 14px;
     }
+
     @include media-breakpoint-up(xl) {
         font-size: 15px;
     }
+
     @include media-breakpoint-up(xxl) {
         font-size: 16px;
     }
+
     @media (min-width: 1600px) {
         font-size: 17px;
     }
 }
+
 @media (min-width: 1600px) {
     .container {
         max-width: 1440px;
     }
 }
+
 @media (min-width: 1800px) {
     .container {
         max-width: 1536px;
@@ -49,8 +55,7 @@ h2,
 h3,
 h4,
 h5,
-h6 {
-}
+h6 {}
 
 p {
     margin: 0;
@@ -58,10 +63,11 @@ p {
 
 b,
 strong {
-    font-weight: 500;
+    font-weight: $font-weight-normal;
 }
+
 .strong {
-    font-weight: 500;
+    font-weight: $font-weight-normal;
 }
 
 ol,
@@ -84,9 +90,11 @@ a:hover {
     color: $brand-color;
     text-decoration: underline;
 }
+
 .svg {
     fill: currentColor;
 }
+
 mark,
 .mark {
     padding: 0;
@@ -138,7 +146,7 @@ mark,
 }
 
 .note {
-    font-weight: $font-weight-light;
+    font-weight: $font-weight-regular;
     margin-top: 10px;
     display: block;
 }
@@ -146,9 +154,11 @@ mark,
 .txt-white {
     color: #fff;
 }
+
 .txt-brand {
     color: $brand-color;
 }
+
 .txt-secondary {
     color: $secondary-color;
 }
@@ -205,6 +215,7 @@ mark,
     &:after {
         content: normal !important;
     }
+
     &:before {
         content: normal !important;
     }
@@ -232,12 +243,14 @@ mark,
     margin: auto;
     color: var(--body-color);
     height: 100%;
+
     .cards-message-icon {
         display: flex;
         align-items: center;
         padding: 1.25rem 0;
         font-size: 2.5rem;
     }
+
     .alert-text {
         align-self: center;
     }
@@ -262,6 +275,7 @@ mark,
 .docs-buttons {
     display: flex;
     justify-content: center;
+
     .btn-group {
         margin: 0 2px;
     }
@@ -274,22 +288,26 @@ mark,
     overflow-y: auto;
     box-shadow: 0 0 35px 10px rgba(0, 0, 0, 0.1);
     border-radius: $common-radius;
-    font-weight: 400;
+    font-weight: $font-weight-regular;
     font-size: 0.8rem !important;
     border: $border;
     animation: dropdown-menu-fade-in 0.3s ease 1, dropdown-menu-move-up 0.3s ease-out 1;
+
     .ui-menu-item {
         border-bottom: $border;
+
         .ui-menu-item-wrapper {
             padding: 0.8rem;
             border-color: transparent !important;
         }
+
         &:last-child {
             border-bottom: none;
         }
     }
+
     strong {
-        font-weight: 600;
+        font-weight: $font-weight-bold;
     }
 }
 
@@ -311,24 +329,29 @@ mark,
     .list-group-item {
         padding: 1rem;
     }
+
     .shipping-states {
         display: flex;
+
         .box-icon {
             border-radius: $radius3;
             background-color: $bg-gray;
             padding: 5px 7px;
             margin-#{$end-direction}: 8px;
         }
+
         .detail {
             h6 {
                 margin: 0;
                 font-size: 0.85rem;
             }
+
             p {
                 font-size: 0.75rem;
             }
         }
     }
+
     .table-rates {
         td {
             padding: 0.6rem;
@@ -342,24 +365,27 @@ mark,
         padding: 5px 0;
         border-bottom: $border-light;
         font-size: 0.8rem;
+
         &:last-child {
             padding-bottom: 0;
             border-bottom: 0;
             margin-bottom: 0;
         }
+
         ul {
             font-size: 0.75rem;
             margin-#{$start-direction}: 1rem;
             color: $txt-gray;
         }
     }
+
     .checkbox {
         font-size: inherit;
     }
 }
 
 .text-link {
-    font-weight: 500;
+    font-weight: $font-weight-normal;
     color: $brand-color;
 }
 
@@ -377,10 +403,14 @@ mark,
     align-items: center;
     border: none;
     background: none;
-    &:hover {
+
+    &:hover,
+    &:focus,
+    &:active {
         transform: rotate(-90deg);
         opacity: 1;
     }
+
     &:before,
     &:after {
         position: absolute;
@@ -390,21 +420,27 @@ mark,
         width: 2px;
         background-color: #000;
     }
+
     &:before {
         transform: rotate(45deg);
     }
+
     &:after {
         transform: rotate(-45deg);
     }
+
     &--white {
+
         &:before,
         &:after {
             background-color: #fff;
         }
     }
+
     &-sm {
         width: 20px;
         height: 20px;
+
         &:before,
         &:after {
             #{$start-direction}: 10px;
@@ -415,11 +451,13 @@ mark,
 }
 
 .browse-more {
+    margin-top: 1.5rem;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-flow: row wrap;
     gap: 10px;
+
     li {
         a {
             background: $bg-brand-light;
@@ -428,8 +466,12 @@ mark,
             padding: 0.5rem 1rem;
             //border: $border;
             font-size: 0.75rem;
+            font-weight: $font-weight-bold;
             display: block;
-            &:hover {
+
+            &:hover,
+            &:focus,
+            &:active {
                 background: $brand-color;
                 color: $brand-color-inverse;
                 border-color: currentColor;
@@ -444,18 +486,22 @@ mark,
     flex-direction: column;
     //height: 100%;
     padding: 0;
+
     &-head {
         padding: 0 2rem;
         border-bottom: $border;
     }
+
     &-body {
         flex: 1 1 auto;
         padding: 1.5rem 2rem;
+
         .h3 {
             font-size: 1rem;
             color: $txt-body;
         }
     }
+
     &-foot {
         border-top: $border;
         position: sticky;
@@ -465,46 +511,53 @@ mark,
         padding: 1.5rem 2rem;
     }
 }
+
+ 
+ 
+//.dropdown-toggle-custom
 .dropdown-toggle-custom {
     text-align: #{$start-direction};
     cursor: pointer;
     position: relative;
     padding-#{$end-direction}: 2rem;
+  
     &-arrow {
+      position: absolute;
+      transform: translate(-6px, 0);
+      top: calc(50% - 4px);
+      #{$end-direction}: 0;
+  
+      &:after,
+      &:before {
+        content: "";
         position: absolute;
-        transform: translate(-6px, 0);
-        top: calc(50% - 4px);
-        #{$end-direction}: 0;
-        &:after,
+        background-color: currentColor;
+        width: 1px;
+        height: 9px;
+        transition: all 0.25s ease-in-out;
+      }
+      &:before {
+        transform: translate(-3px * $transform-direction, 0) rotate(-45deg);
+      }
+      &:after {
+        transform: translate(3px * $transform-direction, 0) rotate(45deg);
+      }
+      [aria-expanded="true"] & {
         &:before {
-            content: "";
-            position: absolute;
-            background-color: currentColor;
-            width: 1px;
-            height: 9px;
-            transition: all 0.25s ease-in-out;
+          transform: translate(-3px * $transform-direction, 0) rotate(45deg);
         }
-        &:before {
-            transform: translate(-3px * $transform-direction, 0) rotate(45deg);
-        }
+  
         &:after {
-            transform: translate(3px * $transform-direction, 0) rotate(-45deg);
+          transform: translate(3px * $transform-direction, 0) rotate(-45deg);
         }
+      }
     }
-    &:not(.show) {
-        .dropdown-toggle-custom-arrow {
-            &:before {
-                transform: translate(3px * $transform-direction, 0) rotate(45deg);
-            }
-            &:after {
-                transform: translate(-3px * $transform-direction, 0) rotate(-45deg);
-            }
-        }
-    }
-}
+  }
+
 
 .btn-dropdown {
     padding-#{$end-direction}: 3rem;
+
     .dropdown-toggle-custom-arrow {
         #{$end-direction}: 1rem;
     }
@@ -527,11 +580,14 @@ mark,
     grid-gap: 1rem;
     flex-direction: row;
     flex-wrap: nowrap;
+
     .btn {
         background-color: #fff;
+
         @include media-breakpoint-up(lg) {
             border: $border-black;
         }
+
         padding: 0;
         width: 42px;
         height: 42px;
@@ -539,6 +595,7 @@ mark,
         display: flex;
         align-items: center;
         justify-content: center;
+
         &-prev span {
             display: inline-block;
             border-#{$end-direction}: 1px solid black;
@@ -548,6 +605,7 @@ mark,
             transform: rotate(136deg * $transform-direction);
             margin-#{$end-direction}: -7px;
         }
+
         &-next span {
             display: inline-block;
             border-#{$end-direction}: 1px solid black;
@@ -557,19 +615,23 @@ mark,
             transform: rotate(-45deg * $transform-direction);
             margin-#{$start-direction}: -7px;
         }
+
         &:hover {
             border-color: $brand-color;
+
             span {
                 border-color: $brand-color;
             }
         }
     }
 }
+
 //phone code
 .iti {
     // width: 100%;
     // height: $input-height;
     font-size: 0.8rem;
+
     &__selected-flag {
         background-color: $input-bg;
         border-radius: $input-border-radius;
@@ -581,6 +643,7 @@ mark,
             right: auto !important;
             left: 0 !important;
         }
+
         .iti__country-list {
             left: 0;
             text-align: left;
@@ -592,15 +655,18 @@ mark,
             right: 0 !important;
             left: auto !important;
         }
+
         .iti__country-list {
             text-align: right;
             right: 0;
         }
     }
 }
+
 .processing-wrap {
     position: relative;
 }
+
 .processing {
     background-color: rgba(255, 255, 255, 0.55);
     position: absolute;
@@ -613,6 +679,7 @@ mark,
     display: flex;
     align-items: center;
     justify-content: center;
+
     &:after {
         position: absolute;
         content: "";
@@ -624,6 +691,7 @@ mark,
         z-index: 1;
     }
 }
+
 //skeleton
 // .skeleton-loader-background {
 //     width: 100%;
@@ -668,6 +736,7 @@ mark,
     margin: 2px 0;
     position: relative;
     overflow: hidden;
+
     &::before {
         content: "";
         display: block;
@@ -695,6 +764,7 @@ mark,
     display: flex;
     flex-direction: column;
     gap: 3rem;
+
     @include media-breakpoint-up(lg) {
         display: grid;
         grid-gap: 5rem;
@@ -707,6 +777,7 @@ mark,
     align-items: center;
     gap: 10px;
     margin-top: 5px;
+
     &-img {
         border-radius: 6px;
         height: 100%;
@@ -725,11 +796,13 @@ mark,
     z-index: 1040;
     border: $border !important;
     border-radius: 4px;
+
     .pac-item {
         cursor: pointer;
         padding: 8px 10px;
         border-top: $border !important;
     }
+
     .pac-icon {
         background-image: url(images/retina/geo-alt.svg) !important;
         background-size: 14px !important;
@@ -737,6 +810,7 @@ mark,
         background-color: transparent;
         background-position: center;
     }
+
     .pac-logo {
         &:after {
             content: normal !important;
@@ -750,3 +824,59 @@ mark,
     #{$end-direction}: 0.25rem;
     top: 0.25rem;
 }
+
+/* Used in blog search autocomplete. */
+.text-suggestions {
+    -webkit-flex: 1;
+  
+    flex: 1;
+  
+    display: -webkit-flex;
+  
+    display: flex;
+    -webkit-flex-direction: column;
+  
+    flex-direction: column;
+    font-size: 0.75rem;
+  
+    li {
+        padding-bottom: 8px;
+        transition: all 0.2s ease-in-out;
+  
+        a {
+            display: block;
+            position: relative;
+  
+            transition: all 0.2s linear;
+  
+            &:before {
+                visibility: hidden;
+                opacity: 0;
+                position: absolute;
+                left: 10px;
+                top: calc(50% - 3px);
+                content: "";
+                display: block;
+                margin: 0;
+                width: 6px;
+                height: 6px;
+                border-top: 1px solid currentColor;
+                border-#{$end-direction}: 1px solid currentColor;
+                transform: rotate(45deg);
+  
+                transition: all 0.2s linear;
+            }
+  
+            &:hover {
+                margin-#{$start-direction}: 10px;
+                color: $brand-color;
+  
+                &:before {
+                    #{$start-direction}: -12px;
+                    visibility: visible;
+                    opacity: 1;
+                }
+            }
+        }
+    }
+  }

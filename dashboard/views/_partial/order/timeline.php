@@ -3,7 +3,7 @@
     <?php
     $orderCancelled = (FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS") == $childOrderDetail['orderstatus_id']);
     $selectUpto = array_search($currentStatus, array_keys($orderProductStatusArr));
-    if (strtolower($childOrderDetail['plugin_code']) == 'cashondelivery') {
+    if (isset($childOrderDetail['plugin_code']) && strtolower($childOrderDetail['plugin_code']) == 'cashondelivery') {
         $selectUpto = array_search($childOrderDetail['orderstatus_id'], array_keys($orderProductStatusArr));
     }
     $index = 0;
@@ -42,9 +42,9 @@
 
                                 <?php foreach ($trackingNumbers as $trackingNumber) {
                                     $trackingNumber = trim($trackingNumber);
-                                    if (is_numeric($trackingNumber)) {
+                                   /*  if (is_numeric($trackingNumber)) {
                                         $trackingNumber = number_format($trackingNumber, 0, null, '');
-                                    }
+                                    } */
                                 ?>
                                     <div class="clipboard mb-4">
                                         <input class="copy-input trackingNumberJs" type="text" readonly value="<?php echo $trackingNumber; ?>" />
@@ -61,9 +61,9 @@
                                         if (!empty($shippingApiObj) && true === $shippingApiObj->canFetchTrackingDetail()) {
                                             foreach ($trackingNumbers as $trackingNumber) {
                                                 $trackingNumber = trim($trackingNumber);
-                                                if (is_numeric($trackingNumber)) {
+                                                /*if (is_numeric($trackingNumber)) {
                                                     $trackingNumber = number_format($trackingNumber, 0, null, '');
-                                                }
+                                                }*/
                                                 $str .=  '<div><a class="link" href="javascript:void(0)" onclick="fetchTrackingDetail(' . "'" . $trackingNumber . "'" . ',' . "'" . $childOrderDetail['op_id'] . "'" . ')" title="' . Labels::getLabel("MSG_TRACK", $siteLangId) . '">' . Labels::getLabel("MSG_TRACK", $siteLangId) . '</a></div>';
                                                 if (empty($childOrderDetail['opship_tracking_url']) && !empty($trackingNumber)) {
                                                     $str .=  Labels::getLabel("LBL_VIA", $siteLangId) . "<em>" . CommonHelper::displayNotApplicable($siteLangId, $childOrderDetail["opshipping_label"]) . "</em>";
@@ -81,9 +81,9 @@
                                     } else {
                                         foreach ($trackingNumbers as $trackingNumber) {
                                             $trackingNumber = trim($trackingNumber);
-                                            if (is_numeric($trackingNumber)) {
+                                            /* if (is_numeric($trackingNumber)) {
                                                 $trackingNumber = number_format($trackingNumber, 0, null, '');
-                                            }
+                                            } */
                                     ?>
                                             <a class="link" href="javascript:void(0)" title="<?php echo Labels::getLabel('LBL_TRACK', $siteLangId); ?>" onclick="trackOrder('<?php echo trim($trackingNumber); ?>', '<?php echo trim($carrier); ?>', '<?php echo $childOrderDetail['op_invoice_number']; ?>')">
                                                 <?php echo $trackingNumber; ?>
@@ -123,7 +123,7 @@
                         <?php } else if ($orderCancelled) { ?>
                             <time class="timeline_date"><?php echo FatDate::format($cancelledDate); ?></time>
                         <?php } ?>
-                        <span class="order-status <?php echo $orderColorClasses[$statusId]; ?>"> <em class="dot"></em>
+                        <span class="order-status <?php echo $orderColorClasses[$statusId] ?? ''; ?>"> <em class="dot"></em>
                             <?php echo $statusLabel; ?>
                         </span>
                     </div>

@@ -56,7 +56,7 @@ class SmsArchive extends MyAppModel
         $pluginKey = Plugin::getAttributesById($smsGateway, 'plugin_code');
 
         $error = '';
-        $smsGateway = PluginHelper::callPlugin($pluginKey, [$this->langId], $error, $this->langId);
+        $smsGateway = LibHelper::callPlugin($pluginKey, [$this->langId], $error, $this->langId);
         if (false === $smsGateway) {
             $this->error = $error;
             return false;

@@ -13,36 +13,32 @@ if (null != $btn) {
     $btn->setFieldTagAttribute('class', "d-none");
 }
 ?>
-
-<div class="payment-page">
-    <div class="cc-payment">
-        <?php $this->includeTemplate('_partial/paymentPageLogo.php', array('siteLangId' => $siteLangId)); ?>
-        <div class="row justify-content-center">
-            <div class="col-lg-10">
-                <div class=" row">
-                    <div class="col-lg-6 col-md-6 col-sm-12">
-                        <p class=""><?php echo Labels::getLabel('LBL_Payable_Amount', $siteLangId); ?> : <strong><?php echo CommonHelper::displayMoneyFormat($paymentAmount) ?></strong> </p>
-                    </div>
-                    <div class="col-lg-6 col-md-6 col-sm-12">
-                        <p class=""><?php echo Labels::getLabel('LBL_Order_Invoice', $siteLangId); ?>: <strong><?php echo $orderInfo["invoice"]; ?></strong></p>
-                    </div>
-                </div>
+<section class="payment-section">
+    <div class="payable-amount">
+        <div class="payable-amount-head">
+            <div class="payable-amount-logo">
+                <?php $this->includeTemplate('_partial/paymentPageLogo.php', array('siteLangId' => $siteLangId)); ?>
+            </div>
+            <div class="payable-amount-total">
+                <p> <span class="label"> <?php echo Labels::getLabel('LBL_Total_Payable', $siteLangId); ?>:</span>
+                    <span class="value"> <?php echo CommonHelper::displayMoneyFormat($paymentAmount) ?> </span>
+                </p>
+                <p> <span class="label"> <?php echo Labels::getLabel('LBL_Order_Invoice', $siteLangId); ?>: </span>
+                    <span class="value"><?php echo $orderInfo["invoice"]; ?></span>
+                </p>
             </div>
         </div>
-        <div class="divider"></div>
-        <div class="row justify-content-center">
-            <div class="col-lg-10">
-                <div class="text-center" id="paymentFormElement-js">
-                    <h6><?php echo Labels::getLabel('LBL_REDIRECTING_TO_PAYMENT_PAGE...', $siteLangId); ?></h6>
-                    <?php echo $frm->getFormHtml(); ?>
-                </div>
-            </div>
+        <div class="payable-amount-body from-payment text-center" id="paymentFormElement-js">
+            <h6><?php echo Labels::getLabel('LBL_REDIRECTING_TO_PAYMENT_PAGE...', $siteLangId); ?></h6>
+            <?php echo $frm->getFormHtml(); ?>
+
             <?php if (CommonHelper::getCurrencyId() != FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1)) { ?>
-                    <p class="form-text text-muted mt-4"><?php echo CommonHelper::currencyDisclaimer($siteLangId, $paymentAmount); ?> </p>
+                <p class="form-text text-muted mt-4"><?php echo CommonHelper::currencyDisclaimer($siteLangId, $paymentAmount); ?> </p>
             <?php } ?>
         </div>
     </div>
-</div>
+</section>
+<?php include(CONF_THEME_PATH . '_partial/footer-part/fonts.php'); ?>
 <script type="text/javascript">
     $("form#paymentForm-js").submit();
     function confirmOrder(frm) {
@@ -58,7 +54,7 @@ if (null != $btn) {
                 fcom.displayErrorMessage(json.msg);
                 return false;
             }
-            $("#paymentFormElement-js").replaceWith(json.html);            
+            $("#paymentFormElement-js").replaceWith(json.html);
             $("form#paymentForm-js").submit();
         });
     }

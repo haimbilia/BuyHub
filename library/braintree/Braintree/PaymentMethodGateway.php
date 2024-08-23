@@ -1,4 +1,5 @@
 <?php
+
 namespace Braintree;
 
 use InvalidArgumentException;
@@ -67,7 +68,7 @@ class PaymentMethodGateway
         return $this->_doUpdate('/payment_methods/any/' . $token, ['payment_method' => $attribs]);
     }
 
-    public function delete($token, $options=[])
+    public function delete($token, $options = [])
     {
         Util::verifyKeys(self::deleteSignature(), $options);
         $this->_validateId($token);
@@ -78,12 +79,12 @@ class PaymentMethodGateway
         return $this->_doDelete('/payment_methods/any/' . $token  . $queryString);
     }
 
-    public function grant($sharedPaymentMethodToken, $attribs=[])
+    public function grant($sharedPaymentMethodToken, $attribs = [])
     {
         if (is_bool($attribs) === true) {
             $attribs = ['allow_vaulting' => $attribs];
         }
-        $options = [ 'shared_payment_method_token' => $sharedPaymentMethodToken ];
+        $options = ['shared_payment_method_token' => $sharedPaymentMethodToken];
 
         return $this->_doGrant(
             '/payment_methods/grant',
@@ -125,12 +126,14 @@ class PaymentMethodGateway
                 'customField',
                 'description',
                 'amount',
-                ['shipping' =>
+                [
+                    'shipping' =>
                     [
                         'firstName', 'lastName', 'company', 'countryName',
                         'countryCodeAlpha2', 'countryCodeAlpha3', 'countryCodeNumeric',
                         'extendedAddress', 'locality', 'postalCode', 'region',
-                        'streetAddress'],
+                        'streetAddress'
+                    ],
                 ],
             ]],
         ];
@@ -265,12 +268,13 @@ class PaymentMethodGateway
             );
         } else {
             throw new Exception\Unexpected(
-            'Expected payment method or apiErrorResponse'
+                'Expected payment method or apiErrorResponse'
             );
         }
     }
 
-    private function _verifyGrantResponse($response) {
+    private function _verifyGrantResponse($response)
+    {
         if (isset($response['apiErrorResponse'])) {
             return new Result\Error($response['apiErrorResponse']);
         } else if (isset($response['paymentMethodNonce'])) {
@@ -285,7 +289,8 @@ class PaymentMethodGateway
         }
     }
 
-    private function _verifyRevokeResponse($response) {
+    private function _verifyRevokeResponse($response)
+    {
         if (isset($response['apiErrorResponse'])) {
             return new Result\Error($response['apiErrorResponse']);
         } else if (isset($response['success'])) {
@@ -307,14 +312,14 @@ class PaymentMethodGateway
     private function _validateId($identifier = null, $identifierType = 'token')
     {
         if (empty($identifier)) {
-           throw new InvalidArgumentException(
-                   'expected payment method id to be set'
-                   );
+            throw new InvalidArgumentException(
+                'expected payment method id to be set'
+            );
         }
         if (!preg_match('/^[0-9A-Za-z_-]+$/', $identifier)) {
             throw new InvalidArgumentException(
-                    $identifier . ' is an invalid payment method ' . $identifierType . '.'
-                    );
+                $identifier . ' is an invalid payment method ' . $identifierType . '.'
+            );
         }
     }
 }

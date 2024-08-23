@@ -253,7 +253,8 @@ class Tax extends MyAppModel
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
         //echo $srch->getQuery().PHP_EOL.PHP_EOL; 
-        return (array) FatApp::getDb()->fetch($srch->getResultSet());
+        $row = FatApp::getDb()->fetch($srch->getResultSet());
+        return (is_array($row) ? $row : []);
     }
 
     /**
@@ -448,7 +449,7 @@ class Tax extends MyAppModel
             $pluginKey = Plugin::getAttributesById($activatedTaxServiceId, 'plugin_code');
 
             $error = '';
-            if (false === PluginHelper::includePlugin($pluginKey, Plugin::getDirectory(Plugin::TYPE_TAX_SERVICES), $error, $langId)) {
+            if (false === LibHelper::includePlugin($pluginKey, Plugin::getDirectory(Plugin::TYPE_TAX_SERVICES), $error, $langId)) {
                 SystemLog::system($error, '( Product Id-' . $productId . ')');
                 $status = (!CONF_DEVELOPMENT_MODE) ? true : false;
                 return $data = [
@@ -634,7 +635,7 @@ class Tax extends MyAppModel
         $pluginKey = Plugin::getAttributesById($activatedTaxServiceId, 'plugin_code');
 
         $error = '';
-        if (false === PluginHelper::includePlugin($pluginKey, Plugin::getDirectory(Plugin::TYPE_TAX_SERVICES), $error, $langId)) {
+        if (false === LibHelper::includePlugin($pluginKey, Plugin::getDirectory(Plugin::TYPE_TAX_SERVICES), $error, $langId)) {
             $this->error = $error;
             return false;
         }

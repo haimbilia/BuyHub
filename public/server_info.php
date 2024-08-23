@@ -71,6 +71,8 @@ $text_iconv = 'ICONV';
 $text_rewrite_url = 'Url Rewriting (mod_rewrite)';
 $text_fileinfo = 'FILEINFO';
 $calendar_info = 'Calendar';
+$bcmath_lbl = 'BCMath';
+$text_max_input_vars = "6. Please <b>update max_input_vars</b> size to <b>5000</b> in php.ini file.";
 
 
 $button_continue = 'Continue';
@@ -109,6 +111,7 @@ $ioncube = extension_loaded('IonCube Loader');
 $json = extension_loaded('json');
 $fileinfo = extension_loaded('fileinfo');
 $calendar = extension_loaded('calendar');
+$bcmath = extension_loaded('bcmath');
 
 ?>
 <!DOCTYPE html>
@@ -125,6 +128,10 @@ $calendar = extension_loaded('calendar');
             margin: 0;
             padding: 0;
         }
+        b {
+            font-weight: bold;
+        }
+
 
         *,
         h1,
@@ -369,7 +376,7 @@ $calendar = extension_loaded('calendar');
         <?php } ?>
         <div class="row">
             <div class="col-sm-12">
-                <form action="<?php echo $action; ?>" method="post" enctype="multipart/form-data">
+                <form action="<?php echo $action ?? ''; ?>" method="post" enctype="multipart/form-data">
                     <p><?php echo $text_install_php; ?>
                     </p>
                     <fieldset>
@@ -409,8 +416,8 @@ $calendar = extension_loaded('calendar');
                                     </td>
                                     <td><?php echo $php_version; ?>
                                     </td>
-                                    <td>7.4</td>
-                                    <td class="text-center"><?php if ($php_version >= '7.3' && $php_version < '7.5') { ?>
+                                    <td>8.1</td>
+                                    <td class="text-center"><?php if ($php_version >= '8.1') { ?>
                                             <span class="text-success"><i class="fa fa-check-circle svg-icn check"><svg class="icon icon--check">
                                                         <use xlink:href="#Check_Circle" />
                                                     </svg>
@@ -880,6 +887,32 @@ $calendar = extension_loaded('calendar');
                                         <?php } ?>
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td><?php echo $bcmath_lbl; ?>
+                                    </td>
+                                    <td>
+                                        <?php if ($bcmath) { ?>
+                                            <?php echo $text_on; ?>
+                                        <?php } else { ?>
+                                            <?php echo $text_off; ?>
+                                        <?php } ?>
+                                    </td>
+                                    <td><?php echo $text_on; ?>
+                                    </td>
+                                    <td class="text-center">
+                                        <?php if ($bcmath) { ?>
+                                            <span class="text-success"><i class="fa fa-check-circle svg-icn check"><svg class="icon icon--check">
+                                                        <use xlink:href="#Check_Circle" />
+                                                    </svg>
+
+                                                </i></span>
+                                        <?php } else { ?>
+                                            <span class="text-danger"><i class="fa fa-minus-circle svg-icn delete"><svg class="icon icon--check">
+                                                        <use xlink:href="#Check_Close" />
+                                                    </svg></i></span>
+                                        <?php } ?>
+                                    </td>
+                                </tr>
 
                             </tbody>
                         </table>
@@ -889,6 +922,8 @@ $calendar = extension_loaded('calendar');
                     <p><?php echo $text_strict_trans_tables; ?>
                     </p>
                     <p><?php echo $text_composer; ?>
+                    </p>
+                    <p><?php echo $text_max_input_vars; ?>
                     </p>
                     <p><?php echo $text_note; ?>
                     </p>

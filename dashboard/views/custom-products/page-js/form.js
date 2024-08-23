@@ -208,14 +208,14 @@ var advanceMedia = false; /* open via advance media*/
             scrollTop: $('#specifications').offset().top,
         });
     };
-    
+
     clearProdSpecForm = function () {
         $('#sp_label, #sp_value, #sp_group').val('');
         $('#sp_id').val(0);
         $('#btnAddSpecJs').text($('#btnAddSpecJs').data('addlbl'));
         $('#specificationsListJs tr.editRowJs').removeClass('editRowJs');
     };
-    
+
     deleteProdSpec = function (el) {
         $(el).closest('tr').remove();
         if ($('#specificationsListJs').find('table tbody tr').length == 0) {
@@ -428,9 +428,7 @@ var advanceMedia = false; /* open via advance media*/
                         record_id,
                         file_type,
                         ids: sort
-                    }, function (t) {
-
-                    });
+                    }, function (t) {fcom.displaySuccessMessage(t.msg)});
                 }
             }).disableSelection();
         }, { fOutMode: 'json' });
@@ -504,7 +502,7 @@ var advanceMedia = false; /* open via advance media*/
                     return;
                 }
                 $("#modalBoxJs").modal("hide");
-                if (advanceMedia) {                   
+                if (advanceMedia) {
                     productImages(ans.record_id, ans.file_type, ans.option_id, ans.lang_id);
                 }
                 fcom.removeLoader();

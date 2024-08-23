@@ -3,6 +3,7 @@
 class OrderPayment extends Orders
 {
     protected $attributes;
+    private bool $userIsGuest = false;
 
     public function __construct($orderId = 0, $langId = 0)
     {
@@ -26,13 +27,18 @@ class OrderPayment extends Orders
     }
 
     public function getOrderNo()
-    {       
+    {
         return $this->attributes['order_number'];
     }
 
     public function getPaymentGatewayCode()
-    {       
+    {
         return $this->attributes['plugin_code'];
+    }
+    
+    public function markUserIsGuest(bool $flag = true)
+    {
+        $this->userIsGuest = $flag;
     }
 
     public function getOrderPrimaryinfo()
@@ -40,7 +46,11 @@ class OrderPayment extends Orders
         $arrOrder = array();
         $orderInfo = $this->attributes;
         $userObj = new User($orderInfo["order_user_id"]);
-        $userInfo = $userObj->getUserInfo(array('user_name', 'credential_email', 'user_phone_dcode', 'user_phone'));
+
+        $checkActiveAndVerified = (false == $this->userIsGuest);
+        $attr = array('user_name', 'credential_email', 'user_phone_dcode', 'user_phone');
+        $userInfo = $userObj->getUserInfo($attr, $checkActiveAndVerified, $checkActiveAndVerified);
+        
         $addresses = $this->getOrderAddresses($orderInfo["order_id"]);
         $currencyArr = Currency::getCurrencyAssoc($this->orderLangId);
         $orderCurrencyCode = !empty($currencyArr[FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1)]) ? $currencyArr[FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1)] : '';
@@ -277,12 +287,12 @@ class OrderPayment extends Orders
             $this->error = $db->getError();
             return false;
         }
-     
+
         $orderPaymentObj = new OrderPayment($orderId, $langId);
         $request = $orderPaymentObj->getPaymentGatewayCode();
         $orderPaymentObj->addOrderPaymentComments($request);
 
-        $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();       
+        $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
         $orderPaymentObj->addOrderPayment($request, 'S-' . time(), $paymentAmount, Labels::getLabel("LBL_RECEIVED_PAYMENT", $langId), Labels::getLabel('LBL_PAYMENT_FROM_USER_PAY_AT_STORE_ORDER', $langId), false, 0, Orders::ORDER_PAYMENT_PENDING);
         return true;
     }
@@ -297,12 +307,12 @@ class OrderPayment extends Orders
             return false;
         }
 
-        
+
         $orderPaymentObj = new OrderPayment($orderId, $langId);
         $request = $orderPaymentObj->getPaymentGatewayCode();
-        $orderPaymentObj->addOrderPaymentComments($request);        
+        $orderPaymentObj->addOrderPaymentComments($request);
 
-        $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();       
+        $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
         $orderPaymentObj->addOrderPayment($request, 'C-' . time(), $paymentAmount, Labels::getLabel("LBL_RECEIVED_PAYMENT", $langId), Labels::getLabel('LBL_PAYMENT_FROM_USER_COD_ORDER', $langId), false, 0, Orders::ORDER_PAYMENT_PENDING);
         return true;
     }
@@ -330,7 +340,7 @@ class OrderPayment extends Orders
             $this->error = Message::addErrorMessage(Labels::getLabel('ERR_WALLET_BALANCE_IS_LESS_THAN_AMOUNT_TO_BE_CHARGE', $defaultSiteLangId));
             return false;
         }
-       
+
         $transObj = new Transactions();
         $transaction_comment = Orders::getOrderCommentById($orderInfo["order_id"], $defaultSiteLangId);
         $txnDataArr = array(

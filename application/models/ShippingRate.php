@@ -39,5 +39,9 @@ class ShippingRate extends MyAppModel
                 self::CONDITION_TYPE_PRICE => Labels::getLabel('LBL_Item_price', $langId),
             );
         }
+
+        return array(
+            self::CONDITION_TYPE_PRICE => Labels::getLabel('LBL_Item_price', $langId),
+        );
     }
 }

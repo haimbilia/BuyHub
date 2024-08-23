@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2010 Google Inc.
  *
@@ -25,7 +26,8 @@ require_once 'io/Google_REST.php';
  *
  * @author Chris Chabot <chabotc@google.com>
  */
-abstract class Google_IO {
+abstract class Google_IO
+{
   const CONNECTION_ESTABLISHED = "HTTP/1.0 200 Connection established\r\n\r\n";
   const FORM_URLENCODED = 'application/x-www-form-urlencoded';
   /**
@@ -56,7 +58,8 @@ abstract class Google_IO {
    * @return bool Returns true if the insertion was successful.
    * Otherwise, return false.
    */
-  protected function setCachedRequest(Google_HttpRequest $request) {
+  protected function setCachedRequest(Google_HttpRequest $request)
+  {
     // Determine if the request is cacheable.
     if (Google_CacheParser::isResponseCacheable($request)) {
       Google_Client::$cache->set($request->getCacheKey(), $request);
@@ -72,7 +75,8 @@ abstract class Google_IO {
    * @return Google_HttpRequest|bool Returns the cached object or
    * false if the operation was unsuccessful.
    */
-  protected function getCachedRequest(Google_HttpRequest $request) {
+  protected function getCachedRequest(Google_HttpRequest $request)
+  {
     if (false == Google_CacheParser::isRequestCacheable($request)) {
       false;
     }
@@ -86,7 +90,8 @@ abstract class Google_IO {
    * @param Google_HttpRequest $request
    * @return Google_HttpRequest Processed request with the enclosed entity.
    */
-  protected function processEntityRequest(Google_HttpRequest $request) {
+  protected function processEntityRequest(Google_HttpRequest $request)
+  {
     $postBody = $request->getPostBody();
     $contentType = $request->getRequestHeader("content-type");
 
@@ -119,7 +124,8 @@ abstract class Google_IO {
    * return bool If the cached object needs to be revalidated, false if it is
    * still current and can be re-used.
    */
-  protected function checkMustRevaliadateCachedRequest($cached, $request) {
+  protected function checkMustRevaliadateCachedRequest($cached, $request)
+  {
     if (Google_CacheParser::mustRevalidate($cached)) {
       $addHeaders = array();
       if ($cached->getResponseHeader('etag')) {
@@ -142,7 +148,8 @@ abstract class Google_IO {
    * @param Google_HttpRequest $cached A previously cached response.
    * @param mixed Associative array of response headers from the last request.
    */
-  protected function updateCachedRequest($cached, $responseHeaders) {
+  protected function updateCachedRequest($cached, $responseHeaders)
+  {
     if (isset($responseHeaders['connection'])) {
       $hopByHop = array_merge(
         self::$HOP_BY_HOP,
@@ -150,7 +157,7 @@ abstract class Google_IO {
       );
 
       $endToEnd = array();
-      foreach($hopByHop as $key) {
+      foreach ($hopByHop as $key) {
         if (isset($responseHeaders[$key])) {
           $endToEnd[$key] = $responseHeaders[$key];
         }

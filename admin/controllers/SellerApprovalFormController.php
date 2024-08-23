@@ -127,9 +127,9 @@ class SellerApprovalFormController extends ListingBaseController
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);
 
-        if (1 == count($records)) {
+       /*  if (1 == count($records)) {
             unset($fields['dragdrop']);
-        }
+        } */
 
         $this->set('fields', $fields);
         $this->set('allowedKeysForSorting', $allowedKeysForSorting);

@@ -56,8 +56,11 @@ class CommonHelper extends FatUtility
                 self::$_lang_id = FatUtility::int($_SERVER['HTTP_X_LANGUAGE_ID']);
             }
 
-            if (!empty($_SERVER['HTTP_X_CURRENCY_ID'])) {
-                self::$_currency_id = FatUtility::int($_SERVER['HTTP_X_CURRENCY_ID']);
+            if (!empty($_SERVER['HTTP_X_CURRENCY_ID']) && Currency::getAttributesById(self::$_currency_id, 'currency_active')) {
+                $currencyId = FatUtility::int($_SERVER['HTTP_X_CURRENCY_ID']);
+                if (Currency::getAttributesById($currencyId, 'currency_active')) {
+                    self::$_currency_id = $currencyId;
+                }
             }
 
             $post = FatApp::getPostedData();
@@ -593,6 +596,9 @@ class CommonHelper extends FatUtility
 
     public static function renderHtml($content = '', $stripJs = false)
     {
+        if (empty($content)) {
+            return '';
+        }
         $str = html_entity_decode($content);
         $str = ($stripJs == true) ? static::stripJavascript($str) : $str;
 
@@ -1460,6 +1466,10 @@ class CommonHelper extends FatUtility
 
     public static function truncateCharacters($string, $limit, $break = " ", $pad = "...", $nl2br = false)
     {
+        if (null == $string) {
+            return;
+        }
+
         if (strlen($string) <= $limit) {
             return ($nl2br) ? nl2br($string) : $string;
         }
@@ -1537,6 +1547,9 @@ class CommonHelper extends FatUtility
 
     public static function displayText($value = '')
     {
+        if (empty($value)) {
+            return '-';
+        }
         return empty(trim($value)) ? '-' : $value;
     }
 
@@ -1617,6 +1630,11 @@ class CommonHelper extends FatUtility
         if ($sub_last_date == '') {
             $sub_last_date = date('Y-m-d');
         }
+
+        if (0 == $days && SellerPackagePlans::SUBSCRIPTION_PERIOD_UNLIMITED == $packageInfo['ossubs_frequency']) {
+            $days = 100;
+        }
+
         return  date('Y-m-d', strtotime("+" . $days . " " . $duration, strtotime($sub_last_date)));
     }
 
@@ -1906,8 +1924,15 @@ class CommonHelper extends FatUtility
         }
     }
 
-    public static function demoUrl()
-    {
+    public static function demoUrl($includeDevDemo = false)
+    {     
+        if (true == $includeDevDemo) {
+            if (strpos($_SERVER['SERVER_NAME'], 'demo.yo-kart.com') !== false || strpos($_SERVER['SERVER_NAME'], 'demo.yokart.4livedemo.com') !== false) {
+                return true;
+            }
+            return false;
+        }
+
         return (strpos($_SERVER['SERVER_NAME'], 'demo.yo-kart.com') !== false);
     }
 
@@ -1917,6 +1942,7 @@ class CommonHelper extends FatUtility
             $data = static::cleanArray($data);
         }
 
+        header('Content-Type: application/json; charset=utf-8');
         die(LibHelper::convertToJson($data, JSON_UNESCAPED_UNICODE));
     }
 
@@ -2156,6 +2182,9 @@ class CommonHelper extends FatUtility
 
     public static function displayEncryptedEmail($email)
     {
+        if (empty($email)) {
+            return;
+        }
         $userEmail = preg_split('/[@.]/', $email);
         if (empty(array_filter($userEmail))) {
             return;
@@ -2205,5 +2234,40 @@ class CommonHelper extends FatUtility
             return $_COOKIE[$cookieName];
         }
         return false;
+    }
+
+    public static function getCopyRight($siteLangId, $backEnd = false, $includeVersion = false)
+    {
+        if (self::demoUrl()) {
+            $str = 'Copyright &copy; ' . date('Y') . ' <a target="_blank" href="https://yo-kart.com">Yo!Kart</a></a>';
+        } else {
+            if ((FatApp::getController() == 'HomeController' || true == $backEnd) && false == WHITE_LABELED) {
+                $str = 'Copyright &copy; ' . date('Y') . ' ' . FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId, FatUtility::VAR_STRING, '');
+            } else {
+                $replacements = array(
+                    '{YEAR}' => '&copy; ' . date("Y"),
+                    '{PRODUCT}' => FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId, FatUtility::VAR_STRING, '')
+                );
+                $str = self::replaceStringData(Labels::getLabel('LBL_COPYRIGHT_TEXT', $siteLangId), $replacements);
+            }
+        }
+
+        if (true == $includeVersion) {
+            $str .= ' ' . CONF_WEB_APP_VERSION;
+        }
+        return $str;
+    }
+
+    public static function getTechPartner($backEnd = false)
+    {
+        $str = '';
+        if (self::demoUrl()) {
+            $str = 'Developed by <a target="_blank" href="https://www.fatbit.com/">FATbit Technologies</a>';
+        } else {
+            if ((FatApp::getController() == 'HomeController' || true == $backEnd) && false == WHITE_LABELED) {
+                $str = 'Technology Partner: <a href="https://www.fatbit.com/" target="_blank" rel="nofollow">FATbit</a>';
+            }
+        }
+        return $str;
     }
 }

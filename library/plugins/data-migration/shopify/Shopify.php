@@ -238,7 +238,7 @@ class Shopify extends DataMigrationBase
                 'discount_total' => $order->total_discounts,
                 'discount_value' => $discountValue,
                 'discount_coupon_code' => $discountCouponCode
-                    //shiping charges needd to check
+                //shiping charges needd to check
             ];
 
             $billingAddress = [];
@@ -523,7 +523,7 @@ class Shopify extends DataMigrationBase
                 'category_name' => $product->product_type ?? '',
                 'product_min_selling_price' => 0,
                 'product_approved' => 1,
-                'product_active' => ($isSingleVendor ? ($product->status == 'active' ? 1 : 0 ) : $product->active),
+                'product_active' => ($isSingleVendor ? ($product->status == 'active' ? 1 : 0) : $product->active),
                 'product_fulfillment_type' => '',
                 'product_name' => ($isSingleVendor ? $product->title : $product->product_name) ?? '',
                 'product_description' => ($isSingleVendor ? $product->body_html : $product->product_description) ?? '',
@@ -582,8 +582,8 @@ class Shopify extends DataMigrationBase
                     'id' => $isSingleVendor ? $variant->id : $variant->shopify_variant_id,
                     'selprod_title' => $catalog['product_name'],
                     'selprod_url_keyword' => $product->handle ?? '',
-                    'selprod_subtract_stock' => ($isSingleVendor ? ($product->status == 'active' ? 1 : 0 ) : $variant->track_inventory),
-                    'selprod_active' => ($isSingleVendor ? ($product->status == 'active' ? 1 : 0 ) : $product->active),
+                    'selprod_subtract_stock' => ($isSingleVendor ? ($product->status == 'active' ? 1 : 0) : $variant->track_inventory),
+                    'selprod_active' => ($isSingleVendor ? ($product->status == 'active' ? 1 : 0) : $product->active),
                     'selprod_available_from' => date('Y-m-d'),
                     'selprod_condition' => Product::CONDITION_NEW,
                     'selprod_fulfillment_type' => 0,
@@ -873,5 +873,4 @@ class Shopify extends DataMigrationBase
             return false;
         }
     }
-
 }

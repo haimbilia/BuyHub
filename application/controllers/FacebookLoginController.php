@@ -9,7 +9,7 @@ class FacebookLoginController extends SocialMediaAuthController
         parent::__construct($action);
 
         $error = '';
-        $this->fb = PluginHelper::callPlugin(self::KEY_NAME, [$this->siteLangId], $error, $this->siteLangId);
+        $this->fb = LibHelper::callPlugin(self::KEY_NAME, [$this->siteLangId], $error, $this->siteLangId);
         if (false === $this->fb) {
             $this->setErrorAndRedirect($error, true);
         }

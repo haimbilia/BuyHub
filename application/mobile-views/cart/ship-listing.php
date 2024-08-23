@@ -22,4 +22,5 @@ require_once(CONF_THEME_PATH . 'cart/price-detail.php');
 
 if (empty(array_filter($productsArr))) {
     $status = applicationConstants::OFF;
+    $msg = Labels::getLabel('LBL_NO_ITEM_AVAILABLE_FOR_SHIPPING');
 }

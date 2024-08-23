@@ -74,6 +74,9 @@ class UserPrivilege
         $srch = $user->getUserSearchObj();
         $rs = $srch->getResultSet();
         $userData = FatApp::getDb()->fetch($rs);
+        if (false == $userData) {
+            return false;
+        }
         return ($userData['user_parent'] == 0) ? true : false;
     }
 

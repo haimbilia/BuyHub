@@ -18,6 +18,7 @@ class ReviewsController extends MyAppController
         $prodSrch->doNotCalculateRecords();
         $prodSrch->setPageSize(1);
         $prodSrch->addCondition('selprod_id', '=', $selprod_id);
+        $prodSrch->addMultipleFields(['product_id', 'selprod_sku', 'product_identifier', 'COALESCE(product_name,product_identifier) as product_name', 'product_seller_id', 'product_model', 'product_type', 'prodcat_id', 'COALESCE(prodcat_name,prodcat_identifier) as prodcat_name', 'product_upc', 'product_isbn', 'product_short_description', 'product_description', 'selprod_id', 'selprod_user_id', 'selprod_code', 'selprod_condition', 'selprod_price', 'special_price_found', 'splprice_start_date', 'splprice_end_date', 'COALESCE(selprod_title, product_name, product_identifier) as selprod_title', 'selprod_warranty', 'selprod_return_policy', 'selprodComments', 'theprice', 'selprod_stock', 'selprod_threshold_stock_level', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'brand_id', 'COALESCE(brand_name, brand_identifier) as brand_name', 'brand_short_description', 'user_name', 'shop_id', 'COALESCE(shop_name, shop_identifier) as shop_name', 'splprice_display_dis_type', 'splprice_display_dis_val', 'splprice_display_list_price', 'product_attrgrp_id', 'product_youtube_video', 'product_cod_enabled', 'selprod_cod_enabled', 'selprod_available_from', 'selprod_min_order_qty', 'product_updated_on', 'selprod_fulfillment_type', 'shop_fulfillment_type', 'product_fulfillment_type', 'product_attachements_with_inventory', 'selprod_product_id', 'COALESCE(shop_state_l.state_name,state_identifier) as shop_state_name', 'COALESCE(shop_country_l.country_name,shop_country.country_code) as shop_country_name', 'selprod_condition']);
         $productRs = $prodSrch->getResultSet();
         $product = FatApp::getDb()->fetch($productRs);
         if (!$product) {
@@ -67,6 +68,9 @@ class ReviewsController extends MyAppController
         $productId = SellerProduct::getAttributesById($selprod_id, 'selprod_product_id', false);
         $reviewId = FatApp::getPostedData('review_id', FatUtility::VAR_INT, 0);
 
+        $withImagesOnly = FatApp::getPostedData('withImages', FatUtility::VAR_INT, 0);
+        $withoutImages = FatApp::getPostedData('withoutImages', FatUtility::VAR_INT, 0);
+
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $orderBy = FatApp::getPostedData('orderBy', FatUtility::VAR_STRING, 'most_recent');
         $page = ($page) ? $page : 1;
@@ -81,6 +85,21 @@ class ReviewsController extends MyAppController
         $srch->addCondition('spr.spreview_status', '=', SelProdReview::STATUS_APPROVED);
         $srch->addMultipleFields(array('spreview_id', 'spreview_selprod_id', 'spreview_title', 'spreview_description', 'spreview_posted_on', 'spreview_postedby_user_id', 'user_name', 'group_concat(case when sprh_helpful = 1 then concat(sprh_user_id,"~",1) else concat(sprh_user_id,"~",0) end ) usersMarked', 'sum(if(sprh_helpful = 1 , 1 ,0)) as helpful', 'sum(if(sprh_helpful = 0 , 1 ,0)) as notHelpful', 'count(sprh_spreview_id) as countUsersMarked', 'user_updated_on'));
         $srch->addGroupBy('spr.spreview_id');
+
+        if (0 < $withImagesOnly || 0 < $withoutImages) {
+            $join = 0 < $withImagesOnly ? 'INNER' : 'LEFT';
+            $subSrch = new SearchBase(AttachedFile::DB_TBL);
+            $subSrch->addCondition('afile_type', '=', AttachedFile::FILETYPE_ORDER_FEEDBACK);
+            $subSrch->addMultipleFields(['afile_record_id', 'afile_id']);
+            $subSrch->addGroupBy('afile_record_id');
+            $subSrch->doNotLimitRecords();
+            $subSrch->doNotCalculateRecords();
+            $srch->joinTable('(' . $subSrch->getQuery() . ')', $join . ' JOIN', 'af.afile_record_id = spr.spreview_id', 'af');
+            if (0 < $withoutImages) {
+                $srch->addCondition('af.afile_id', 'IS', 'mysql_func_null', 'AND', true);
+            }
+        }
+
         if (0 < $reviewId) {
             $srch->addCondition('spr.spreview_id', '=', $reviewId);
         }
@@ -279,7 +298,7 @@ class ReviewsController extends MyAppController
         $srch->joinSellerProducts($this->siteLangId);
         $srch->joinUser();
         $srch->joinSelProdReviewHelpful();
-        $srch->addMultipleFields(array('selprod_id', 'IFNULL(product_name, product_identifier) as product_name', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'spreview_id', 'spreview_seller_user_id', "ROUND(AVG(sprating_rating),2) as shop_rating", 'spreview_title', 'spreview_description', 'spreview_posted_on', 'spreview_postedby_user_id', 'user_name', 'group_concat(case when sprh_helpful = 1 then concat(sprh_user_id,"~",1) else concat(sprh_user_id,"~",0) end ) usersMarked', 'sum(if(sprh_helpful && ratingtype_type = ' . RatingType::TYPE_SHOP . ' , 1 ,0)) as helpful', 'sum(if(sprh_helpful = 0 && ratingtype_type = ' . RatingType::TYPE_SHOP . ' , 1 ,0)) as notHelpful', 'count(sprh_spreview_id) as countUsersMarked', 'user_updated_on'));
+        $srch->addMultipleFields(array('selprod_id', 'IFNULL(product_name, product_identifier) as product_name', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'spreview_id', 'spreview_seller_user_id', "ROUND(AVG(sprating_rating),2) as shop_rating", 'spreview_title', 'spreview_description', 'spreview_posted_on', 'spreview_postedby_user_id', 'user_name', 'sprh_helpful', 'group_concat(case when sprh_helpful = 1 then concat(sprh_user_id,"~",1) else concat(sprh_user_id,"~",0) end ) usersMarked', 'sum(if(sprh_helpful && ratingtype_type = ' . RatingType::TYPE_SHOP . ' , 1 ,0)) as helpful', 'sum(if(sprh_helpful = 0 && ratingtype_type = ' . RatingType::TYPE_SHOP . ' , 1 ,0)) as notHelpful', 'count(sprh_spreview_id) as countUsersMarked', 'user_updated_on'));
         $srch->addGroupBy('spr.spreview_id');
         if (0 < $reviewId) {
             $srch->addCondition('spr.spreview_id', '=', $reviewId);
@@ -396,13 +415,13 @@ class ReviewsController extends MyAppController
             FatUtility::dieWithError(Message::getHtml());
         }
         $tblRecObj = new SelProdReviewHelpful($reviewId);
-        $success['msg'] = Labels::getLabel('MSG_SUCCESSFULLY_UPDATED', $this->siteLangId);
-        $success['data'] = $tblRecObj->getData();
-
+        $data = $tblRecObj->getData();
         if (true === MOBILE_APP_API_CALL) {
+            $this->set('data', $data);
             $this->_template->render();
         }
-
+        $success['msg'] = Labels::getLabel('MSG_SUCCESSFULLY_UPDATED', $this->siteLangId);
+        $success['data'] = $data;
         FatUtility::dieJsonSuccess($success);
     }
 

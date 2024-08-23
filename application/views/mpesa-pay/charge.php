@@ -64,6 +64,7 @@
         </div>
     </div>
 </section>
+<?php include(CONF_THEME_PATH . '_partial/footer-part/fonts.php'); ?>
 <script>
     var confirmPayment = function(frm) {
         var me = $(frm);

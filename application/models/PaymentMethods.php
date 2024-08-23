@@ -26,7 +26,7 @@ class PaymentMethods
     {
         $this->paymentPlugin = (object)[];
     }
-    
+
     /**
      * getSearchObject
      *
@@ -41,7 +41,7 @@ class PaymentMethods
         $cond->attachCondition('plugin_type', '=', Plugin::TYPE_SPLIT_PAYMENT_METHOD);
         return $srch;
     }
-    
+
     /**
      * cashOnDeliveryIsActive
      *
@@ -78,7 +78,10 @@ class PaymentMethods
     {
         $this->keyname = $keyname;
         $this->langId = $langId;
-        $this->paymentPlugin = PluginHelper::callPlugin($this->keyname, [$this->langId]);
+        $this->paymentPlugin = LibHelper::callPlugin($this->keyname, [$this->langId]);
+        if (false == $this->paymentPlugin) {
+            return false;
+        }
         return $this->canRefundToCard = method_exists($this->paymentPlugin, 'initiateRefund');
     }
 
@@ -101,7 +104,7 @@ class PaymentMethods
             self::MOVE_TO_CUSTOMER_CARD => Labels::getLabel('LBL_TRANSFER_TO_PAYMENT_SOURCE', $langId),
         ];
     }
-    
+
     /**
      * convertInPaisa
      *
@@ -132,11 +135,11 @@ class PaymentMethods
             case self::REFUND_TYPE_RETURN:
                 $this->opId = $requestRow['orrequest_op_id'];
                 break;
-            
+
             case self::REFUND_TYPE_CANCEL:
                 $this->opId = $requestRow['op_id'];
                 break;
-            
+
             default:
                 $this->error = Labels::getLabel('ERR_INVALID_REFUND_TYPE', $this->langId);
                 return false;
@@ -164,7 +167,7 @@ class PaymentMethods
                 if ($childOrderInfo['op_qty'] != $requestRow['orrequest_qty']) {
                     $this->txnAmount = ($this->txnAmount / $childOrderInfo['op_qty']) * $requestRow['orrequest_qty'];
                 }
-               
+
                 $amountToBePaidToSeller = CommonHelper::orderProductAmount($childOrderInfo, 'NETAMOUNT', false, User::USER_TYPE_SELLER);
 
                 $deductableSellerAmount = (($amountToBePaidToSeller - $childOrderInfo['op_commission_charged']) / $childOrderInfo['op_qty']) * $requestRow['orrequest_qty'];
@@ -178,10 +181,10 @@ class PaymentMethods
                     'amount' => $this->convertInPaisa($this->txnAmount),
                     'charge' => $txnId,
                     'metadata' => [
-                       'orderInvoice' => $this->invoiceNumber
+                        'orderInvoice' => $this->invoiceNumber
                     ]
                 ];
-                if (false === $this->paymentPlugin->init(true)) {
+                if (false === $this->paymentPlugin->init()) {
                     $this->error = $this->paymentPlugin->getError();
                     return false;
                 }
@@ -191,22 +194,22 @@ class PaymentMethods
                     $this->error = $this->paymentPlugin->getError();
                     return false;
                 }
-                
+
                 $txnData = $this->getTransferTxnData();
-                $transferAmtArr = [ ];
+                $transferAmtArr = [];
                 if (!empty($txnData)) {
                     foreach ($txnData as $txn) {
                         if (empty($txn['utxn_gateway_txn_id'])) {
                             continue;
                         }
-                        
+
                         $transferAmtArr[$txn['utxn_gateway_txn_id']] = $txn['utxn_debit'];
                         if (self::REFUND_TYPE_RETURN == $refundType) {
                             if ($txn['utxn_debit'] >= $deductableSellerAmount) {
                                 $transferAmtArr[$txn['utxn_gateway_txn_id']] = $deductableSellerAmount;
                                 $deductableSellerAmount = 0;
                             } else {
-                                $deductableSellerAmount = $deductableSellerAmount - $transferAmtArr[$txn]['utxn_gateway_txn_id'];
+                                $deductableSellerAmount = $deductableSellerAmount - $transferAmtArr[$txn['utxn_gateway_txn_id']];
                             }
                         }
                     }
@@ -246,11 +249,11 @@ class PaymentMethods
                     }
                 }
 
-            break;
+                break;
         }
         return true;
     }
-    
+
     /**
      * getTxnAmount - Return txn amount used while refund
      *
@@ -295,7 +298,7 @@ class PaymentMethods
         }
         return $records;
     }
-    
+
     /**
      * refundFromWallet - Refund transferred amount to seller
      *
@@ -321,7 +324,7 @@ class PaymentMethods
             $this->error = Labels::getLabel('ERR_NO_REMOTE_TXN_ID_FOUND', $this->langId);
             return false;
         }
-        
+
         Transactions::creditWallet($this->sellerId, Transactions::TYPE_ORDER_REFUND, $this->sellerTxnAmount, $this->langId, $comments, $this->opId, $this->remoteTxnId);
         return true;
     }
@@ -335,7 +338,7 @@ class PaymentMethods
     {
         return empty($this->resp) ? (object) array() : $this->resp;
     }
-    
+
     /**
      * getError
      *

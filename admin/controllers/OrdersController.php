@@ -277,7 +277,7 @@ class OrdersController extends ListingBaseController
         $allowedShippingUserStatuses = $orderObj->getAdminAllowedUpdateShippingUser();
         $displayShippingUserForm = (
             (
-                (in_array(strtolower($opRow['plugin_code']), ['cashondelivery', 'payatstore'])
+                (isset($opRow['plugin_code']) && in_array(strtolower($opRow['plugin_code']), ['cashondelivery', 'payatstore'])
                 ) ||
                 (in_array($opRow['op_status_id'], $allowedShippingUserStatuses)
                 )
@@ -569,7 +569,7 @@ class OrdersController extends ListingBaseController
         $template->set('orderDetail', $orderDetail);
         $template->set('shippedBySeller', $shippedBySeller);
 
-        require_once(CONF_INSTALLATION_PATH . 'library/tcpdf/tcpdf.php');
+        require_once CONF_INSTALLATION_PATH . 'vendor/autoload.php';
         $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetAuthor(FatApp::getConfig("CONF_WEBSITE_NAME_" . $this->siteLangId));
@@ -666,7 +666,7 @@ class OrdersController extends ListingBaseController
         $template->set('childOrderDetail', $childOrderDetail);
         $template->set('opId', $opId);
 
-        require_once(CONF_INSTALLATION_PATH . 'library/tcpdf/tcpdf.php');
+        require_once CONF_INSTALLATION_PATH . 'vendor/autoload.php';
         $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetAuthor(FatApp::getConfig("CONF_WEBSITE_NAME_" . $this->siteLangId));
@@ -925,7 +925,7 @@ class OrdersController extends ListingBaseController
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
-        if (in_array(strtolower($orderDetail['plugin_code']), ['cashondelivery', 'payatstore']) && (FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS") == $post["op_status_id"] || FatApp::getConfig("CONF_DEFAULT_COMPLETED_ORDER_STATUS") == $post["op_status_id"]) && Orders::ORDER_PAYMENT_PAID != $orderDetail['order_payment_status']) {
+        if (isset($orderDetail['plugin_code']) && in_array(strtolower($orderDetail['plugin_code']), ['cashondelivery', 'payatstore']) && (FatApp::getConfig("CONF_DEFAULT_DEIVERED_ORDER_STATUS") == $post["op_status_id"] || FatApp::getConfig("CONF_DEFAULT_COMPLETED_ORDER_STATUS") == $post["op_status_id"]) && Orders::ORDER_PAYMENT_PAID != $orderDetail['order_payment_status']) {
             $orderProducts = new OrderProductSearch($this->siteLangId, true, true);
             $orderProducts->joinPaymentMethod();
             $orderProducts->addMultipleFields(['op_status_id']);
@@ -1196,7 +1196,7 @@ class OrdersController extends ListingBaseController
     {
         $productType = OrderProduct::getAttributesById($opId, 'op_product_type');
         if ($productType != Product::PRODUCT_TYPE_DIGITAL) {
-            LibHelper::exitWithError(Labels::getLabel('LBL_INVLID_PRODUCT_TYPE', $this->siteLangId), true);
+            LibHelper::exitWithError(Labels::getLabel('LBL_INVALID_PRODUCT_TYPE', $this->siteLangId), true);
         }
         $digitalDownloads = Orders::getOrderProductDigitalDownloads($opId);
         $digitalDownloadLinks = Orders::getOrderProductDigitalDownloadLinks($opId);
@@ -1245,5 +1245,120 @@ class OrdersController extends ListingBaseController
         $this->set('response', $response);
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
+    }
+
+    private function getOpCancelForm(): Form
+    {
+        $frm = new Form('frmOrderProductCancel');
+        $frm->addHiddenField('', 'op_id');
+        $fld = $frm->addTextArea(Labels::getLabel('FRM_CANCELLATION_REASON', $this->siteLangId), 'comments');
+        $fld->requirements()->setRequired(true);
+        return $frm;
+    }
+
+    public function getCancelOrderProductForm(int $recordId)
+    {
+        $this->objPrivilege->canEditSellerOrders($this->admin_id);
+        $invoiceNumber = OrderProduct::getAttributesById($recordId, 'op_invoice_number');
+        $opRow = OrderProduct::getAttributesByLangId($this->siteLangId, $recordId, ['op_status_id', 'op_order_id', 'op_selprod_title', 'op_product_name'], applicationConstants::JOIN_INNER);
+        $orderProductName = empty($opRow['op_selprod_title']) ? $opRow['op_selprod_title'] : $opRow['op_product_name'];
+        if (false == $invoiceNumber) {
+            LibHelper::exitWithError(Labels::getLabel('LBL_INVALID_ORDER_PRODUCT.', $this->siteLangId), true);
+        }
+
+        if (false !== OrderCancelRequest::getCancelRequestById($recordId)) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_USER_HAVE_ALREADY_SENT_THE_CANCELLATION_REQUEST_FOR_THIS_ORDER', $this->siteLangId), true);
+        }
+
+        $orderObj = new Orders($opRow['op_order_id']);
+        $notAllowedStatues = $orderObj->getNotAllowedOrderCancellationStatuses();
+        if (in_array($opRow["op_status_id"], $notAllowedStatues)) {
+            $orderStatuses = Orders::getOrderProductStatusArr($this->siteLangId);
+            $lbl = Labels::getLabel('LBL_THIS_ORDER_ALREADY_{STATUS}.', $this->siteLangId);
+            $lbl = CommonHelper::replaceStringData($lbl, ['{STATUS}' => $orderStatuses[$opRow["op_status_id"]]]);
+            LibHelper::exitWithError($lbl, true);
+        }
+
+        $frm = $this->getOpCancelForm();
+        $frm->fill(['op_id' => $recordId]);
+
+        $this->set('recordId', $recordId);
+        $this->set('orderProductName', $orderProductName);
+        $this->set('invoiceNumber', $invoiceNumber);
+        $this->set('frm', $frm);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
+    }
+
+    public function cancelOrderProduct()
+    {
+        $frm = $this->getOpCancelForm($this->siteLangId);
+        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
+
+        if (!false === $post) {
+            Message::addErrorMessage(current($frm->getValidationErrors()));
+            LibHelper::exitWithError(Message::getHtml());
+        }
+
+        $op_id = FatUtility::int($post['op_id']);
+        if (1 > $op_id) {
+            Message::addErrorMessage(Labels::getLabel('MSG_Invalid_access', $this->siteLangId));
+            LibHelper::exitWithError(Message::getHtml());
+        }
+
+        if (false !== OrderCancelRequest::getCancelRequestById($op_id)) {
+            Message::addErrorMessage(Labels::getLabel('MSG_User_have_already_sent_the_cancellation_request_for_this_order', $this->siteLangId));
+            CommonHelper::redirectUserReferer();
+        }
+
+        $srch = new OrderProductSearch($this->siteLangId, true, true);
+        $srch->joinOrderUser();
+        $srch->addCondition('op_id', '=', $op_id);
+        $orderDetail = (array)FatApp::getDb()->fetch($srch->getResultSet());
+
+        if (empty($orderDetail)) {
+            LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
+        }
+        
+        $orderObj = new Orders();
+        $notAllowedStatues = $orderObj->getNotAllowedOrderCancellationStatuses();
+
+        if (in_array($orderDetail["op_status_id"], $notAllowedStatues)) {
+            $orderStatuses = Orders::getOrderProductStatusArr($this->siteLangId);
+            $lbl = Labels::getLabel('LBL_THIS_ORDER_ALREADY_{STATUS}.', $this->siteLangId);
+            $lbl = CommonHelper::replaceStringData($lbl, ['{STATUS}' => $orderStatuses[$orderDetail["op_status_id"]]]);
+            LibHelper::exitWithError($lbl);
+        }
+
+        if (!$orderObj->addChildProductOrderHistory($op_id, $this->siteLangId, FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS"), $post["comments"], true)) {
+            LibHelper::exitWithError(Labels::getLabel('MSG_ERROR_INVALID_REQUEST', $this->siteLangId));
+        }
+
+        $pluginKey = Plugin::getAttributesById($orderDetail['order_pmethod_id'], 'plugin_code');
+
+        $paymentMethodObj = new PaymentMethods();
+        if (true === $paymentMethodObj->canRefundToCard($pluginKey, $this->siteLangId)) {
+            if (false == $paymentMethodObj->initiateRefund($orderDetail, PaymentMethods::REFUND_TYPE_CANCEL)) {
+                LibHelper::exitWithError($paymentMethodObj->getError());
+            }
+
+            $resp = $paymentMethodObj->getResponse();
+            if (empty($resp)) {
+                LibHelper::exitWithError(Labels::getLabel('LBL_UNABLE_TO_PLACE_GATEWAY_REFUND_REQUEST', $this->siteLangId));
+            }
+
+            // Debit from wallet if plugin/payment method support's direct payment to card of customer.
+            if (!empty($resp->id)) {
+                $childOrderInfo = $orderObj->getOrderProductsByOpId($op_id, $this->siteLangId);
+                $txnAmount = $paymentMethodObj->getTxnAmount();
+                $comments = Labels::getLabel('LBL_TRANSFERED_TO_YOUR_CARD._INVOICE_#{invoice-no}', $this->siteLangId);
+                $comments = CommonHelper::replaceStringData($comments, ['{invoice-no}' => $childOrderInfo['op_invoice_number']]);
+                Transactions::debitWallet($childOrderInfo['order_user_id'], Transactions::TYPE_ORDER_REFUND, $txnAmount, $this->siteLangId, $comments, $op_id, $resp->id);
+            }
+        }
+
+        $this->set('order_id', $orderDetail["op_order_id"]);
+        $this->set('msg', Labels::getLabel('MSG_ORDER_CANCELLED.', $this->siteLangId));
+        $this->_template->render(false, false, 'json-success.php');
     }
 }
