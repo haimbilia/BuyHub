@@ -111,9 +111,9 @@ class RfqOffers extends MyAppModel
     {
         return [
             self::STATUS_OPEN => Labels::getLabel('LBL_OFFERED', $langId),
-            self::STATUS_ACCEPTED => Labels::getLabel('LBL_ACCEPTED', $langId),
-            self::STATUS_REJECTED => Labels::getLabel('LBL_REJECTED', $langId),
             self::STATUS_COUNTERED => Labels::getLabel('LBL_COUNTERED', $langId),
+            self::STATUS_REJECTED => Labels::getLabel('LBL_REJECTED', $langId),
+            self::STATUS_ACCEPTED => Labels::getLabel('LBL_ACCEPTED', $langId),
         ];
     }
 

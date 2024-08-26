@@ -84,7 +84,29 @@ trait RequestForQuotesUtility
         }
         $srch->joinBuyer();
         $srch->addMultipleFields([
-            'rfq_id', 'rfq_selprod_id', 'rfq_number', 'rfq_title', 'rfq_selprod_id', 'rfq_visibility_type', 'rfq_product_id', 'rfq_user_id', 'rfq_type', 'rfq_quantity', 'rfq_quantity_unit', 'rfq_status', 'rfq_approved', 'rfq_added_on', 'rfq_delivery_date', 'buc.credential_username as credential_username', 'bu.user_id as user_id', 'bu.user_updated_on', 'buc.credential_email', 'bu.user_name', '0 as totalOffers', '0 as rejectedOffers', '0 as acceptedOffers'
+            'rfq_id',
+            'rfq_selprod_id',
+            'rfq_number',
+            'rfq_title',
+            'rfq_selprod_id',
+            'rfq_visibility_type',
+            'rfq_product_id',
+            'rfq_user_id',
+            'rfq_type',
+            'rfq_quantity',
+            'rfq_quantity_unit',
+            'rfq_status',
+            'rfq_approved',
+            'rfq_added_on',
+            'rfq_delivery_date',
+            'buc.credential_username as credential_username',
+            'bu.user_id as user_id',
+            'bu.user_updated_on',
+            'buc.credential_email',
+            'bu.user_name',
+            '0 as totalOffers',
+            '0 as rejectedOffers',
+            '0 as acceptedOffers'
         ]);
 
         $visibilityType = $post['rfq_visibility_type'];
@@ -164,7 +186,7 @@ trait RequestForQuotesUtility
         $this->set("isSeller", $this->isSeller);
         $this->set("userParentId", $this->userParentId);
         $this->set("isBuyer", $this->isBuyer);
-        if (true === MOBILE_APP_API_CALL) {
+        if (MOBILE_APP_API_CALL) {
             $this->_template->render();
         }
         $tableCols = $this->getRequestForQuotesCols();
@@ -240,6 +262,12 @@ trait RequestForQuotesUtility
     public function getSellersByProductId()
     {
         $json = RequestForQuote::getSellersByProductId($this->siteLangId);
+
+        if (MOBILE_APP_API_CALL) {
+            $this->set('data', ['sellers' => $json]);
+            $this->_template->render();
+        }
+
         die(FatUtility::convertToJson($json));
     }
 
