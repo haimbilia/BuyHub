@@ -1825,7 +1825,17 @@ class CheckoutController extends MyAppController
                 $controller = $pmethodCode . 'Pay';
                 $paymentUrl = UrlHelper::generateFullUrl($controller, 'charge', array($order_id));
             }
-            if (Orders::ORDER_WALLET_RECHARGE != $order_type && $cartSummary['cartWalletSelected'] && $userWalletBalance >= $orderNetAmount) {
+            if (
+                Orders::ORDER_WALLET_RECHARGE != $order_type &&
+                (
+                    $cartSummary['cartWalletSelected'] ||
+                    (
+                        Orders::ORDER_GIFT_CARD == $order_type &&
+                        0 < $this->cartObj->isCartUserGiftWalletSelected()
+                    )
+                ) &&
+                $userWalletBalance >= $orderNetAmount
+            ) {
                 $sendToWeb = $plugin_id = 0;
                 $paymentUrl = UrlHelper::generateFullUrl('WalletPay', 'charge', array($order_id));
             }
@@ -2496,7 +2506,6 @@ class CheckoutController extends MyAppController
 
     public function giftCharge($order_id)
     {
-
         $isSplitPaymentMethod = Plugin::isSplitPaymentEnabled($this->siteLangId);
         if ($isSplitPaymentMethod) {
             Message::addErrorMessage(Labels::getLabel('LBL_INVALID_REQUEST'));
@@ -2550,8 +2559,7 @@ class CheckoutController extends MyAppController
         $this->set('rewardPointBalance', UserRewardBreakup::rewardPointBalance($userId));
         $this->set('paymentMethods', $paymentMethods);
         $this->set('userWalletBalance', $userWalletBalance);
-        $excludePaymentGatewaysArr = applicationConstants::getExcludePaymentGatewayArr();
-        $this->set('excludePaymentGatewaysArr', $excludePaymentGatewaysArr);
+        $this->set('excludePaymentGatewaysArr', applicationConstants::getExcludePaymentGatewayArr());
         $this->set('canUseWalletForPayment', $canUseWallet);
         $this->set('orderId', $order_id);
         $this->set('orderData', $orderData);
@@ -2574,6 +2582,9 @@ class CheckoutController extends MyAppController
     {
         $payFromWallet = FatApp::getPostedData('payFromWallet', FatUtility::VAR_INT, 0);
         $this->cartObj->updateCartGiftWalletOption($payFromWallet);
+        if (MOBILE_APP_API_CALL) {
+            $this->_template->render();
+        }
         $this->_template->render(false, false, 'json-success.php');
     }
 }

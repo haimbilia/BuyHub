@@ -3243,7 +3243,7 @@ class BuyerController extends BuyerBaseController
             $this->_template->render();
             return;
         }
-        
+
         $this->_template->render(false, false);
     }
 
@@ -3320,6 +3320,29 @@ class BuyerController extends BuyerBaseController
         $orderId  = $order->placeGiftcardOrder($post);
         if (empty($orderId)) {
             LibHelper::exitWithError($order->getError(), true);
+        }
+
+        if (true === MOBILE_APP_API_CALL) {
+            $excludePaymentGatewaysArr = applicationConstants::getExcludePaymentGatewayArr(applicationConstants::CHECKOUT_GIFT_CARD);
+            /* Payment Methods[ */
+            $pmSrch = PaymentMethods::getSearchObject($this->siteLangId);
+            $pmSrch->doNotCalculateRecords();
+            $pmSrch->doNotLimitRecords();
+            $pmSrch->addMultipleFields(Plugin::ATTRS);
+            $pmSrch->addCondition('plugin_code', 'not in ', $excludePaymentGatewaysArr);
+            $pmRs = $pmSrch->getResultSet();
+            $paymentMethods = FatApp::getDb()->fetchAll($pmRs);
+            /* ] */
+
+            $userWalletBalance = User::getUserBalance($this->userParentId, true);
+            $this->set('userWalletBalance', $userWalletBalance);
+            $this->set('displayUserWalletBalance', CommonHelper::displayMoneyFormat($userWalletBalance));
+            $this->set('canUseWalletForPayment', PaymentMethods::canUseWalletForPayment());
+            $this->set('orderNetAmount', $post['order_total_amount']);
+            $this->set('paymentMethods', $paymentMethods);
+            $this->set('order_id', $orderId);
+            $this->set('orderType', Orders::GIFT_CARD_TYPE);
+            $this->_template->render();
         }
 
         $redirectUrl = UrlHelper::generateFullUrl('Checkout', 'giftCharge', [$orderId], CONF_WEBROOT_FRONT_URL);

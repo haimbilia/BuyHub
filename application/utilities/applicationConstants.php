@@ -44,6 +44,7 @@ class applicationConstants
     public const CHECKOUT_SUBSCRIPTION = 2;
     public const CHECKOUT_PPC = 3;
     public const CHECKOUT_ADD_MONEY_TO_WALLET = 4;
+    public const CHECKOUT_GIFT_CARD = 5;
     public const SMTP_TLS = 'tls';
     public const SMTP_SSL = 'ssl';
     public const LAYOUT_LTR = 'ltr';
@@ -345,9 +346,9 @@ class applicationConstants
         );
     }
 
-    public static function getExcludePaymentGatewayArr()
+    public static function getExcludePaymentGatewayArr($key =  '')
     {
-        return array(
+        $arr =  array(
             static::CHECKOUT_PRODUCT => array(''),
             static::CHECKOUT_SUBSCRIPTION => array(
                 'CashOnDelivery',
@@ -363,8 +364,19 @@ class applicationConstants
                 'CashOnDelivery',
                 'TransferBank',
                 'PayAtStore'
+            ),
+            static::CHECKOUT_GIFT_CARD => array(
+                'CashOnDelivery',
+                'TransferBank',
+                'PayAtStore'
             )
         );
+
+        if(!empty($key) && isset($arr[$key])){
+            return $arr[$key];
+        }
+
+        return $arr;
     }
 
     public static function getCatalogTypeArr($langId)
