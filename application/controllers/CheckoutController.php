@@ -1805,7 +1805,17 @@ class CheckoutController extends MyAppController
                 $controller = $pmethodCode . 'Pay';
                 $paymentUrl = UrlHelper::generateFullUrl($controller, 'charge', array($order_id));
             }
-            if (Orders::ORDER_WALLET_RECHARGE != $order_type && $cartSummary['cartWalletSelected'] && $userWalletBalance >= $orderNetAmount) {
+            if (
+                Orders::ORDER_WALLET_RECHARGE != $order_type &&
+                (
+                    $cartSummary['cartWalletSelected'] ||
+                    (
+                        Orders::ORDER_GIFT_CARD == $order_type &&
+                        0 < $this->cartObj->isCartUserGiftWalletSelected()
+                    )
+                ) &&
+                $userWalletBalance >= $orderNetAmount
+            ) {
                 $sendToWeb = $plugin_id = 0;
                 $paymentUrl = UrlHelper::generateFullUrl('WalletPay', 'charge', array($order_id));
             }
