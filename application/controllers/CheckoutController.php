@@ -2583,6 +2583,20 @@ class CheckoutController extends MyAppController
         $payFromWallet = FatApp::getPostedData('payFromWallet', FatUtility::VAR_INT, 0);
         $this->cartObj->updateCartGiftWalletOption($payFromWallet);
         if (MOBILE_APP_API_CALL) {
+            $orderId = FatApp::getPostedData('order_id', FatUtility::VAR_INT, 0);
+            if (1 > $orderId) {
+                LibHelper::dieJsonError(Labels::getLabel('ERR_INVALID_ORDER_ID', $this->siteLangId));
+            }
+            $cartSummary = $this->cartObj->getCartGiftFinancialSummary($this->siteLangId, $orderId);
+            $updatedData['order_wallet_amount_charge'] =  $cartSummary['WalletAmountCharge'];
+            $updatedData['order_is_wallet_selected'] = $cartSummary['cartWalletSelected'];
+            $updatedData['order_type'] = Orders::GIFT_CARD_TYPE;
+            $updatedData['order_id'] = $orderId;
+            $orderObj = new Orders($orderId);
+            $orderObj->assignValues($updatedData);
+            if (!$orderObj->save($updatedData, [])) {
+                LibHelper::dieJsonError($orderObj->getError());
+            }
             $this->_template->render();
         }
         $this->_template->render(false, false, 'json-success.php');
