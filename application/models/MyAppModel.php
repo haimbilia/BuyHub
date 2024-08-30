@@ -245,6 +245,7 @@ class MyAppModel extends FatModel
 
         if (NULL !== $primaryTableJoinType) {
             $srch = new SearchBase(static::DB_TBL, 'm');
+            $primaryTableJoinType = ($primaryTableJoinType == applicationConstants::JOIN_INNER) ? applicationConstants::JOIN_INNER : applicationConstants::JOIN_LEFT;
             $joinTypes = applicationConstants::getJoinTypes();
             if (!array_key_exists($primaryTableJoinType, $joinTypes)) {
                 trigger_error('INVALID_JOIN_TYPE', E_ERROR);
