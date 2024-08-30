@@ -56,10 +56,12 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                                 <span><?php echo $package[SellerPackages::DB_TBL_PREFIX . 'products_allowed']; ?></span>
                                                 <?php echo ($package[SellerPackages::DB_TBL_PREFIX . 'products_allowed'] == 1) ? Labels::getlabel('LBL_active_product', $siteLangId) : Labels::getlabel('LBL_active_products', $siteLangId); ?>
                                             </li>
-                                            <li class="features-item">
-                                                <span><?php echo $package[SellerPackages::DB_TBL_PREFIX . 'inventory_allowed']; ?></span>
-                                                <?php echo  Labels::getlabel('LBL_Product_Inventory', $siteLangId) ?>
-                                            </li>
+                                            <?php if (1 > FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) { ?>
+                                                <li class="features-item">
+                                                    <span><?php echo $package[SellerPackages::DB_TBL_PREFIX . 'inventory_allowed']; ?></span>
+                                                    <?php echo  Labels::getlabel('LBL_Product_Inventory', $siteLangId) ?>
+                                                </li>
+                                            <?php } ?>
                                             <li class="features-item">
                                                 <span><?php echo $package[SellerPackages::DB_TBL_PREFIX . 'images_per_product']; ?></span>
                                                 <?php echo ($package[SellerPackages::DB_TBL_PREFIX . 'images_per_product'] == 1) ? Labels::getlabel('LBL_image_per_product', $siteLangId) : Labels::getlabel('LBL_images_per_product', $siteLangId); ?>

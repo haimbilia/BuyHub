@@ -63,6 +63,7 @@
     - Bug-085957 - Branch 1 RTL >> Issues on ' Order Invoice' page on both buyer and seller end
     - Bug-085899 - Branch 1 RTL >> Month navigation icon on calendar does not appear in correct direction
     - Bug-086546 - Branch 1: The link product variant option should not appear on the Ribbons and Badges
+    - Bug-086545 - Branch 1: An error occurs when the seller tries to purchase the subscription package.
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  
