@@ -246,63 +246,65 @@ class CollectionsController extends ListingBaseController
 
     private function getLayoutLimit($collection_layout_type)
     {
+        $limit = 0;
         switch ($collection_layout_type) {
             case Collections::TYPE_PRODUCT_LAYOUT1:
-                return Collections::LIMIT_PRODUCT_LAYOUT1;
+                $limit = Collections::LIMIT_PRODUCT_LAYOUT1;
                 break;
             case Collections::TYPE_PRODUCT_LAYOUT2:
-                return Collections::LIMIT_PRODUCT_LAYOUT2;
+                $limit = Collections::LIMIT_PRODUCT_LAYOUT2;
                 break;
             case Collections::TYPE_PRODUCT_LAYOUT3:
-                return Collections::LIMIT_PRODUCT_LAYOUT3;
+                $limit = Collections::LIMIT_PRODUCT_LAYOUT3;
                 break;
             case Collections::TYPE_PRODUCT_LAYOUT4:
-                return Collections::LIMIT_PRODUCT_LAYOUT4;
+                $limit = Collections::LIMIT_PRODUCT_LAYOUT4;
                 break;
             case Collections::TYPE_PRODUCT_LAYOUT6:
-                return Collections::LIMIT_PRODUCT_LAYOUT6;
+                $limit = Collections::LIMIT_PRODUCT_LAYOUT6;
                 break;
             case Collections::TYPE_CATEGORY_LAYOUT1:
-                return Collections::LIMIT_CATEGORY_LAYOUT1;
+                $limit = Collections::LIMIT_CATEGORY_LAYOUT1;
                 break;
             case Collections::TYPE_CATEGORY_LAYOUT2:
-                return Collections::LIMIT_CATEGORY_LAYOUT2;
+                $limit = Collections::LIMIT_CATEGORY_LAYOUT2;
                 break;
             case Collections::TYPE_CATEGORY_LAYOUT3:
-                return Collections::LIMIT_CATEGORY_LAYOUT3;
+                $limit = Collections::LIMIT_CATEGORY_LAYOUT3;
                 break;
             case Collections::TYPE_CATEGORY_LAYOUT4:
-                return Collections::LIMIT_CATEGORY_LAYOUT4;
+                $limit = Collections::LIMIT_CATEGORY_LAYOUT4;
                 break;
             case Collections::TYPE_CATEGORY_LAYOUT5:
             case Collections::TYPE_CATEGORY_LAYOUT8:
-                return Collections::LIMIT_CATEGORY_LAYOUT5;
+                $limit = Collections::LIMIT_CATEGORY_LAYOUT5;
                 break;
             case Collections::TYPE_CATEGORY_LAYOUT6:
-                return Collections::LIMIT_CATEGORY_LAYOUT6;
+                $limit = Collections::LIMIT_CATEGORY_LAYOUT6;
                 break;
             case Collections::TYPE_CATEGORY_LAYOUT7:
-                return Collections::LIMIT_CATEGORY_LAYOUT7;
+                $limit = Collections::LIMIT_CATEGORY_LAYOUT7;
                 break;
             case Collections::TYPE_SHOP_LAYOUT1:
-                return Collections::LIMIT_SHOP_LAYOUT1;
+                $limit = Collections::LIMIT_SHOP_LAYOUT1;
                 break;
             case Collections::TYPE_SHOP_LAYOUT2:
-                return Collections::LIMIT_SHOP_LAYOUT2;
+                $limit = Collections::LIMIT_SHOP_LAYOUT2;
                 break;
             case Collections::TYPE_BRAND_LAYOUT1:
-                return Collections::LIMIT_BRAND_LAYOUT1;
+                $limit = Collections::LIMIT_BRAND_LAYOUT1;
                 break;
             case Collections::TYPE_BRAND_LAYOUT2:
-                return Collections::LIMIT_BRAND_LAYOUT2;
+                $limit = Collections::LIMIT_BRAND_LAYOUT2;
                 break;
             case Collections::TYPE_BRAND_LAYOUT3:
-                return Collections::LIMIT_BRAND_LAYOUT3;
+                $limit = Collections::LIMIT_BRAND_LAYOUT3;
                 break;
             case Collections::TYPE_BLOG_LAYOUT1:
-                return Collections::LIMIT_BLOG_LAYOUT1;
+                $limit = Collections::LIMIT_BLOG_LAYOUT1;
                 break;
         }
+        return $limit;
     }
 
     public function setup()
