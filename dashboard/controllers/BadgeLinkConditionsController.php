@@ -648,7 +648,7 @@ class BadgeLinkConditionsController extends SellerBaseController
 
         if (1 > $this->badgeLinkCondId) {
             $recordTypesArr = BadgeLinkCondition::getRecordTypeArr($this->siteLangId);
-            $fld = $frm->addSelectBox(Labels::getLabel('FRM_LINK_TYPE', $this->siteLangId), 'blinkcond_record_type', $recordTypesArr);
+            $fld = $frm->addSelectBox(Labels::getLabel('FRM_LINK_TYPE', $this->siteLangId), 'blinkcond_record_type', $recordTypesArr, '', [], '');
             $fld->requirement->setRequired((Badge::COND_MANUAL == $recordCondition));
         }
 

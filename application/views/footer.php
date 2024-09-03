@@ -209,7 +209,7 @@ if (!isset($_SESSION['geo_location']) && FatApp::getConfig('CONF_GOOGLEMAP_API_K
 if (FatApp::getConfig('CONF_ENABLE_LIVECHAT', FatUtility::VAR_STRING, '')) {
     echo FatApp::getConfig('CONF_LIVE_CHAT_CODE', FatUtility::VAR_STRING, '');
 } ?>
-<?php if (FatApp::getConfig('CONF_SITE_TRACKER_CODE', FatUtility::VAR_STRING, '') && User::checkStatisticalCookiesEnabled() == true) {
+<?php if (FatApp::getConfig('CONF_SITE_TRACKER_CODE', FatUtility::VAR_STRING, '') /* && User::checkStatisticalCookiesEnabled() == true */) {
     echo FatApp::getConfig('CONF_SITE_TRACKER_CODE', FatUtility::VAR_STRING, '');
 }
 
@@ -240,29 +240,30 @@ if (FatApp::getConfig("CONF_ENABLE_ENGAGESPOT_PUSH_NOTIFICATION", FatUtility::VA
                 s0.parentNode.insertBefore(s1, s0);
             })();
             // Custom styling of Offset starts here
-            Tawk_API.customStyle = {
-                zIndex: '1048!important',
+                Tawk_API.customStyle = {
+                zIndex:'1048!important', 
                 visibility: {
                     //for desktop only
                     desktop: {
-                        position: 'br', // bottom-right
-                        xOffset: 15, // 15px away from right
-                        yOffset: 60, // 40px up from bottom
+                    position: 'br', // bottom-right
+                    xOffset: 15, // 15px away from right
+                    yOffset: 60, // 40px up from bottom
                     },
                     // for mobile only
                     mobile: {
-                        position: 'bl', // bottom-left
-                        xOffset: 5, // 5px away from left
-                        yOffset: 90, // 50px up from bottom
+                    position: 'bl', // bottom-left
+                    xOffset: 5, // 5px away from left
+                    yOffset: 90, // 50px up from bottom
                     },
                     // change settings of bubble if necessary
                     bubble: {
-                        rotate: '0deg',
-                        xOffset: -20,
-                        yOffset: 0,
+                    rotate: '0deg',
+                    xOffset: -20,
+                    yOffset: 0,
                     }
                 }
             }
+                
             $(document).ready(function() {
                 function displayDemoBannerPopup() {
                     var x = setInterval(function() {
