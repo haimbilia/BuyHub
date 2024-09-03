@@ -131,9 +131,9 @@ class RequestForQuoteSearch extends SearchBase
      * @param  int $langId
      * @return void
      */
-    public function joinBuyerAddress(int $langId): void
+    public function joinBuyerAddress(int $langId = 0): void
     {
-        $this->joinTable(Address::DB_TBL, 'LEFT JOIN', 'ba.addr_id = rfq_addr_id AND ba.addr_type = ' . Address::TYPE_USER . ' AND ba.addr_lang_id = ' . $langId, 'ba');
+        $this->joinTable(Address::DB_TBL, 'LEFT JOIN', 'ba.addr_id = rfq_addr_id AND ba.addr_type = ' . Address::TYPE_USER /* . ' AND ba.addr_lang_id = ' . $langId */, 'ba');
     }
 
     /**

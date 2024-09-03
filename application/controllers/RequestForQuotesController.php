@@ -210,7 +210,7 @@ class RequestForQuotesController extends MyAppController
 
         $sellerIdArr = $selprodData = [];
         if (0 < $selprodId) {
-            $selprodData = SellerProduct::getAttributesByLangId($this->siteLangId, $selprodId, ['selprod_id', 'selprod_title', 'selprod_user_id', 'selprod_product_id', 'selprod_updated_on', 'selprod_code', 'selprod_min_order_qty', 'selprod_rfq_enabled'], applicationConstants::JOIN_INNER);
+            $selprodData = SellerProduct::getAttributesByLangId($this->siteLangId, $selprodId, ['selprod_id', 'coalesce(selprod_title, product_identifier) as selprod_title', 'selprod_user_id', 'selprod_product_id', 'selprod_updated_on', 'selprod_code', 'selprod_min_order_qty', 'selprod_rfq_enabled'], applicationConstants::JOIN_LEFT);
             if ($post['rfq_quantity'] < $selprodData['selprod_min_order_qty']) {
                 $msg = Labels::getLabel('ERR_REQUIRED_QUANTITY_SHOULD_BE_GREATER_THAN_EQUAL_TO_{QTY}', $this->siteLangId);
                 $msg = CommonHelper::replaceStringData($msg, ['{QTY}' => $selprodData['selprod_min_order_qty']]);

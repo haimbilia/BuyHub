@@ -63,13 +63,13 @@
                                             <br>
                                         <?php } ?>
                                         <?php echo $rfqData['addr_address1']; ?>,
-                                        <?php echo (strlen($rfqData['addr_address2']) > 0) ? $rfqData['addr_address2'] . ',' : ''; ?>
-                                        <?php echo (strlen($rfqData['addr_city']) > 0) ? $rfqData['addr_city'] . ',' : ''; ?>
-                                        <?php echo (strlen($rfqData['state_name']) > 0) ? $rfqData['state_name'] . ',' : ''; ?>
-                                        <?php echo (strlen($rfqData['country_name']) > 0) ? $rfqData['country_name'] . ',' : ''; ?>
-                                        <?php echo (strlen($rfqData['addr_zip']) > 0) ? Labels::getLabel('LBL_Zip:', $siteLangId) . $rfqData['addr_zip'] . ',' : ''; ?>
-                                        <?php $dcode = (strlen($rfqData['addr_phone_dcode']) > 0) ? ValidateElement::formatDialCode($rfqData['addr_phone_dcode']) : ''; ?>
-                                        <?php echo (strlen($rfqData['addr_phone']) > 0) ? Labels::getLabel('LBL_Phone:', $siteLangId) . $dcode . $rfqData['addr_phone'] . ',' : ''; ?>
+                                        <?php echo (!empty($rfqData['addr_address2'])) ? $rfqData['addr_address2'] . ',' : ''; ?>
+                                        <?php echo (!empty($rfqData['addr_city'])) ? $rfqData['addr_city'] . ',' : ''; ?>
+                                        <?php echo (!empty($rfqData['state_name'])) ? $rfqData['state_name'] . ',' : ''; ?>
+                                        <?php echo (!empty($rfqData['country_name'])) ? $rfqData['country_name'] . ',' : ''; ?>
+                                        <?php echo (!empty($rfqData['addr_zip'])) ? Labels::getLabel('LBL_Zip:', $siteLangId) . $rfqData['addr_zip'] . ',' : ''; ?>
+                                        <?php $dcode = (!empty($rfqData['addr_phone_dcode'])) ? ValidateElement::formatDialCode($rfqData['addr_phone_dcode']) : ''; ?>
+                                        <?php echo (!empty($rfqData['addr_phone'])) ? Labels::getLabel('LBL_Phone:', $siteLangId) . $dcode . $rfqData['addr_phone'] . ',' : ''; ?>
                                     </p>
                                 </li>
                             <?php } ?>
