@@ -442,6 +442,7 @@ class Collections extends MyAppModel
             self::TYPE_CATEGORY_LAYOUT2 => 'Category-Layout-2.png',
             self::TYPE_CATEGORY_LAYOUT5 => 'Category-Layout-5.png',
             self::TYPE_CATEGORY_LAYOUT6 => 'Category-Layout-6.png',
+            self::TYPE_CATEGORY_LAYOUT7 => 'Category-Layout-7.png',
             self::TYPE_SHOP_LAYOUT1 => 'Shop-Layout-1.png',
             self::TYPE_BRAND_LAYOUT1 => 'Brand-Layout-1.png',
             self::TYPE_BLOG_LAYOUT1 => 'Blog-Layout-1.png',
