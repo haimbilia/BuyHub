@@ -65,6 +65,7 @@
     - Bug-086546 - Branch 1: The link product variant option should not appear on the Ribbons and Badges
     - Bug-086545 - Branch 1: An error occurs when the seller tries to purchase the subscription package.
     - Bug-086512 - Branch 1: The reviews link appears on the product details page when the admin disables the reviews on the product
+    - Bug-086506 - Branch 1: Change email requested email being sent to the new email address added by the user
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  
