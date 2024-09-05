@@ -213,7 +213,7 @@ class StripePayController extends PaymentController
                 ];
 
                 // Create a new checkout session
-                $charge = \Stripe\Checkout\Session::create([
+                $sessionData = [
                     'payment_method_types' => ['card'],
                     'line_items' => [
                         [
@@ -227,7 +227,6 @@ class StripePayController extends PaymentController
                             'quantity' => 1,
                         ],
                     ],
-                    'customer_email' => $this->orderInfo['customer_email'],
                     'metadata' => $orderDetails,
                     'expires_at' => time() + 3600,
                     'payment_intent_data' => [
@@ -238,7 +237,13 @@ class StripePayController extends PaymentController
                     'currency' => strtolower($this->systemCurrencyCode),
                     'success_url' => CommonHelper::generateFullUrl('StripePay', 'callback') . '?session_id={CHECKOUT_SESSION_ID}',
                     'cancel_url' => CommonHelper::generateFullUrl('StripePay', 'callback') . '?session_id={CHECKOUT_SESSION_ID}',
-                ]);
+                ];
+
+                if (!empty($this->orderInfo['customer_email'])) {
+                    $sessionData['customer_email'] = $this->orderInfo['customer_email'];
+                }
+
+                $charge = \Stripe\Checkout\Session::create($sessionData);
 
                 return $charge->toArray();
             }
