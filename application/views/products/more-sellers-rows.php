@@ -36,7 +36,8 @@ foreach ($sellers as $key => $sellerDetail) {
         <?php
         $badgesArr = Badge::getShopBadges($siteLangId, [$sellerDetail['shop_id']]);
         $this->includeTemplate('_partial/badge-ui.php', ['badgesArr' => $badgesArr, 'siteLangId' => $siteLangId], false);
-        if ($shopTotalReviews > 0) {
+        if ($shopTotalReviews > 0 && FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) {
+            $shop_rating = SelProdRating::getSellerRating($sellerDetail['selprod_user_id'], true);
         ?>
             <div class="shop-wrap">
                 <div class="product-ratings">
@@ -44,15 +45,7 @@ foreach ($sellers as $key => $sellerDetail) {
                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
                         </use>
                     </svg>
-                    <?php
-                    $shop_rating = 0;
-                    if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) {
-                        $shop_rating = SelProdRating::getSellerRating($sellerDetail['selprod_user_id'], true);
-                    ?>
-                        <span class="rate"><?php echo round($shop_rating, 1); ?></span>
-                    <?php
-                    }
-                    ?>
+                    <span class="rate"><?php echo round($shop_rating, 1); ?></span>
                     <a href="<?php echo UrlHelper::generateUrl('reviews', 'shop', array($sellerDetail['shop_id'])); ?>" class="totals-review"><?php echo $shopTotalReviews; ?>
                         <?php echo Labels::getLabel('LBL_REVIEWS', $siteLangId); ?>
                     </a>

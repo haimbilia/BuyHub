@@ -100,50 +100,50 @@
             </button>
             <?php } else {
             echo $frmBuyProduct->getFormTag();
-                $qtyField =  $frmBuyProduct->getField('quantity');
-                $qtyField->value = $product['selprod_min_order_qty'];
-                $qtyField->addFieldTagAttribute('data-min-qty', $product['selprod_min_order_qty']);
-                $qtyFieldName =  $qtyField->getCaption();
-                if (strtotime($product['selprod_available_from']) <= strtotime(FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d'))) { ?>
-                    <div class="options-block">
-                        <?php if (1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) { ?>
-                            <div class="options-block-head">
-                                <h6 class="h6"><?php echo $qtyFieldName; ?></h6>
-                                <div class="quantity" data-stock="<?php echo $product['selprod_stock']; ?>">
-                                    <button class="decrease decrease-js disabled" type="button">
-                                        <svg class="svg" width="16" height="16">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
-                                            </use>
-                                        </svg>
-                                    </button>
-                                    <div class="qty-input-wrapper" data-stock="<?php echo $product['selprod_stock']; ?>">
-                                        <?php echo $frmBuyProduct->getFieldHtml('quantity'); ?>
-                                    </div>
-                                    <button class="increase increase-js <?php echo $product['selprod_stock'] <= $product['selprod_min_order_qty'] ? 'disabled' : ''; ?>">
-                                        <svg class="svg" width="16" height="16">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
-                                            </use>
-                                        </svg>
-                                    </button>
+            $qtyField =  $frmBuyProduct->getField('quantity');
+            $qtyField->value = $product['selprod_min_order_qty'];
+            $qtyField->addFieldTagAttribute('data-min-qty', $product['selprod_min_order_qty']);
+            $qtyFieldName =  $qtyField->getCaption();
+            if (strtotime($product['selprod_available_from']) <= strtotime(FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d'))) { ?>
+                <div class="options-block">
+                    <?php if (1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) { ?>
+                        <div class="options-block-head">
+                            <h6 class="h6"><?php echo $qtyFieldName; ?></h6>
+                            <div class="quantity" data-stock="<?php echo $product['selprod_stock']; ?>">
+                                <button class="decrease decrease-js disabled" type="button">
+                                    <svg class="svg" width="16" height="16">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
+                                        </use>
+                                    </svg>
+                                </button>
+                                <div class="qty-input-wrapper" data-stock="<?php echo $product['selprod_stock']; ?>">
+                                    <?php echo $frmBuyProduct->getFieldHtml('quantity'); ?>
                                 </div>
+                                <button class="increase increase-js <?php echo $product['selprod_stock'] <= $product['selprod_min_order_qty'] ? 'disabled' : ''; ?>">
+                                    <svg class="svg" width="16" height="16">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
+                                        </use>
+                                    </svg>
+                                </button>
                             </div>
-                        <?php } else { ?>
-                            <span class="d-none">
-                                <?php echo $frmBuyProduct->getFieldHtml('quantity'); ?>
-                            </span>
-                        <?php } ?>
-                    </div>
-                    <div class="buy-action">
-                        <?php
-                        $fromDate = strtotime($product['selprod_available_from']);
-                        $currentDate = strtotime(FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d'));
+                        </div>
+                    <?php } else { ?>
+                        <span class="d-none">
+                            <?php echo $frmBuyProduct->getFieldHtml('quantity'); ?>
+                        </span>
+                    <?php } ?>
+                </div>
+                <div class="buy-action">
+                    <?php
+                    $fromDate = strtotime($product['selprod_available_from']);
+                    $currentDate = strtotime(FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d'));
 
-                        if ($fromDate <= $currentDate && 1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) {
-                            echo $frmBuyProduct->getFieldHtml('btnAddToCart');
-                        }
-                        echo $frmBuyProduct->getFieldHtml('selprod_id');
+                    if ($fromDate <= $currentDate && 1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) {
+                        echo $frmBuyProduct->getFieldHtml('btnAddToCart');
+                    }
+                    echo $frmBuyProduct->getFieldHtml('selprod_id');
 
-                        /* if (0 < $acceptedOfferId) { ?>
+                    /* if (0 < $acceptedOfferId) { ?>
                             <a class="btn btn-outline-brand btn-block btn-rfq" href="<?php echo UrlHelper::generateUrl('RfqOffers', 'checkout', [$product['selprod_id'], $acceptedOfferId], CONF_WEBROOT_DASHBOARD); ?>" title="<?php echo Labels::getLabel('BTN_BUY_NOW'); ?>">
                                 <?php echo Labels::getLabel('BTN_BUY_NOW'); ?>
                                 <svg class="svg" width="20" height="20">
@@ -152,15 +152,15 @@
                                 </svg>
                             </a>
                             <?php } else { */
-                        if (RequestForQuote::isEnabled($product['shop_rfq_enabled'], $product['selprod_rfq_enabled'])) { ?>
-                            <button class="btn btn-outline-brand btn-block btn-rfq" name="requestForQuote" type="button" onclick="requestForQuoteFn('<?php echo $product['selprod_id']; ?>');">
-                                <?php echo Labels::getLabel('BTN_REQUEST_FOR_QUOTE'); ?>
-                            </button>
-                        <?php //}
-                        } ?>
-                    </div>
-                <?php } ?>
-            <?php echo '</form>' . $frmBuyProduct->getExternalJs();
+                    if (RequestForQuote::isEnabled($product['shop_rfq_enabled'], $product['selprod_rfq_enabled'])) { ?>
+                        <button class="btn btn-outline-brand btn-block btn-rfq" name="requestForQuote" type="button" onclick="requestForQuoteFn('<?php echo $product['selprod_id']; ?>');">
+                            <?php echo Labels::getLabel('BTN_REQUEST_FOR_QUOTE'); ?>
+                        </button>
+                    <?php //}
+                    } ?>
+                </div>
+            <?php } ?>
+        <?php echo '</form>' . $frmBuyProduct->getExternalJs();
         }
     } else { ?>
         <div class="buy-action">
@@ -215,30 +215,35 @@
         <div class="side-blocks delivery-options">
             <h5 class="h5"><?php echo Labels::getLabel('LBL_DELIVERY_OPTIONS'); ?></h5>
             <div class="side-blocks-body">
-                <?php include(CONF_THEME_PATH . '_partial/product/shipping-rates.php'); ?>
-            </div>
+                <?php include(CONF_THEME_PATH . '_partial/product/shipping-rates.php'); ?></div>
         </div>
     <?php } ?>
 
-    <?php if (isset($volumeDiscountRows) && !empty($volumeDiscountRows) && 0 < $currentStock && 1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) { ?>
+    <?php
+    if (isset($volumeDiscountRows) && !empty($volumeDiscountRows) && 0 < $currentStock) { ?>
         <div class="side-blocks wholesale-slider">
             <h5 class="h5"><?php echo Labels::getLabel('LBL_WHOLESALE_PRICE_(PIECE)') ?></h5>
-            <ul class="wholesale-slider">
-                <?php foreach ($volumeDiscountRows as $volumeDiscountRow) {
-                    $volumeDiscount = $product['theprice'] * ($volumeDiscountRow['voldiscount_percentage'] / 100);
-                    $price = ($product['theprice'] - $volumeDiscount); ?>
-                    <li class="wholesale-slider-item">
-                        <span class="wholesale-slider-value"> <?php echo ($volumeDiscountRow['voldiscount_min_qty']); ?>
-                            <?php echo Labels::getLabel('LBL_OR_MORE_PIECES', $siteLangId); ?></span>
-                        <div class="products-price">
-                            <span class="products-price-new"><?php echo CommonHelper::displayMoneyFormat($price, true, false, true, false, false, true); ?></span>
-                            <del class="products-price-old"><?php echo CommonHelper::displayMoneyFormat($product['theprice'], true, false, true, false, false, true); ?></del>
-                            <span class="products-price-off"><?php echo $volumeDiscountRow['voldiscount_percentage'] . '%'; ?>
-                                <?php echo Labels::getLabel('LBL_OFF', $siteLangId); ?></span>
-                        </div>
-                    </li>
-                <?php } ?>
-            </ul>
+            <div class="side-blocks-body">
+                <ul class="wholesale-slider">
+                    <?php foreach ($volumeDiscountRows as $volumeDiscountRow) {
+                        $volumeDiscount = $product['theprice'] * ($volumeDiscountRow['voldiscount_percentage'] / 100);
+                        $price = ($product['theprice'] - $volumeDiscount); ?>
+                        <li class="wholesale-slider-item">
+                            <span class="wholesale-slider-value"> <?php echo ($volumeDiscountRow['voldiscount_min_qty']); ?>
+                                <?php echo Labels::getLabel('LBL_OR_MORE_PIECES', $siteLangId); ?></span>
+                            <div class="products-price">
+                                <span
+                                    class="products-price-new"><?php echo CommonHelper::displayMoneyFormat($price, true, false, true, false, false, true); ?></span>
+                                <del
+                                    class="products-price-old"><?php echo CommonHelper::displayMoneyFormat($product['theprice'], true, false, true, false, false, true); ?></del>
+                                <span
+                                    class="products-price-off"><?php echo $volumeDiscountRow['voldiscount_percentage'] . '%'; ?>
+                                    <?php echo Labels::getLabel('LBL_OFF', $siteLangId); ?></span>
+                            </div>
+                        </li>
+                    <?php } ?>
+                </ul>
+            </div>
         </div>
     <?php }  ?>
 

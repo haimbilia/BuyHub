@@ -89,15 +89,14 @@
                             <?php if (1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) { ?>
                                 <div class="products-price">
                                     <span class="products-price-new">
-                                        <?php echo trim(CommonHelper::displayMoneyFormat($product['actualPrice'], true, false, true, false, false, true)); ?>
+                                        <?php echo trim(CommonHelper::displayMoneyFormat($product['theprice'])); ?>
+                                        <?php if (FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0)) { ?>
+                                            <div class="products-price-off">(<?php echo Labels::getLabel('LBL_WITHOUT_TAXES', $siteLangId); ?>)</div>
+                                        <?php } ?>
                                     </span>
                                     <?php if ($product['selprod_price'] > $product['actualPrice']) { ?>
-                                        <del class="products-price-old">
-                                            <?php echo trim(CommonHelper::displayMoneyFormat($product['selprod_price'], true, false, true, false, false, true)); ?>
-                                        </del>
-                                        <div class="products-price-off">
-                                            <?php echo trim(CommonHelper::showProductDiscountedText($product, $siteLangId, 'actualPrice')); ?>
-                                        </div>
+                                        <del class="products-price-old"><?php echo trim(CommonHelper::displayMoneyFormat($product['selprod_price'])); ?></del>
+                                        <div class="products-price-off"><?php echo trim(CommonHelper::showProductDiscountedText($product, $siteLangId)); ?></div>
                                     <?php } ?>
                                 </div>
                             <?php } ?>

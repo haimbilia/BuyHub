@@ -114,7 +114,7 @@
                                             quantity: "<?php echo $product['quantity']; ?>"
                                         })
                                     </script>
-            <?php
+                            <?php
                                 }
                             }
                             break;

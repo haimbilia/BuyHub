@@ -117,6 +117,13 @@
     - Bug-085899 - Branch 1 RTL >> Month navigation icon on calendar does not appear in correct direction
     - Bug-086546 - Branch 1: The link product variant option should not appear on the Ribbons and Badges
     - Bug-086545 - Branch 1: An error occurs when the seller tries to purchase the subscription package.
+    - Bug-086512 - Branch 1: The reviews link appears on the product details page when the admin disables the reviews on the product
+    - Bug-086506 - Branch 1: Change email requested email being sent to the new email address added by the user
+    - Bug-086504 - Branch 1: An error occurs when the user tries to place an order using the COD payment method
+    - Bug-086501 - Branch 1: An invalid email address error occurs when the user tries to make payment with the Stripe payment method
+    - Bug-086529 - Branch 1: Issue in the order calculations when price inclusive of tax setting is On
+    - Bug-086389 - Dropdown options are not properly aligned for few fields on 'Inventory setup' form
+    - Bug-086387 - The 'Edit' and 'Remove' buttons are not properly aligned for the added address in the 'Delivery Address' panel on the 'Checkout' page.
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  

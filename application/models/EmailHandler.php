@@ -176,13 +176,13 @@ class EmailHandler extends FatModel
         $tpl = 'user_change_email_request_notification';
         $vars = array(
             '{user_full_name}' => $d['user_name'],
-            '{new_email}' => $d['user_new_email'],
+            '{new_email}' => $d['user_email'],
         );
 
         $sendEmail = false;
-        if (!empty($d['user_new_email'])) {
+        if (!empty($d['user_email'])) {
             $sendEmail = (new FatMailer($langId, $tpl))
-                ->setTo($d['user_new_email'])
+                ->setTo($d['user_email'])
                 ->setVariables($vars)
                 ->send();
         }

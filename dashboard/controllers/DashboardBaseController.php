@@ -600,18 +600,17 @@ class DashboardBaseController extends FatController
                 'user_phone' => $data['user_phone'],
                 'link' => $link,
                 'user_new_email' => $data['user_new_email'],
-                'user_email' => $data['user_new_email'],
+                'user_email' => $data['user_email'],
             );
             if (!$email->sendChangeEmailRequestNotification($this->siteLangId, $dataArr)) {
                 return false;
             }
-            $data['user_email'] = $data['user_new_email'];
         }
 
         $dataArr = array(
             'user_name' => $data['user_name'],
             'link' => $link,
-            'user_email' => $data['user_email'],
+            'user_email' => $data['user_new_email'],
             'user_phone_dcode' => ValidateElement::formatDialCode($data['user_phone_dcode']),
             'user_phone' => $data['user_phone'],
         );

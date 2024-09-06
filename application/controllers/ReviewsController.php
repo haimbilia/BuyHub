@@ -215,9 +215,11 @@ class ReviewsController extends MyAppController
         $shop_id = FatUtility::int($shop_id);
 
         if (1 > $shop_id) {
-            FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'Shop'));
+            CommonHelper::redirectUserReferer();
+        } else if (1 > FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) {
+            FatApp::redirectUser(UrlHelper::generateUrl('Shops', 'view', [$shop_id]));
         }
-
+        
         $srch = new ShopSearch($this->siteLangId);
         $srch->setDefinedCriteria($this->siteLangId);
         $srch->joinSellerSubscription();

@@ -267,7 +267,7 @@ class SellerProductsController extends ListingBaseController
             $customUrl = explode("/", $urlRow['urlrewrite_custom']);
             $sellerProductRow['selprod_url_keyword'] = $customUrl[0];
         }
-
+        
         $user_shop_name = User::getUserShopName($sellerProductRow['selprod_user_id'], $this->siteLangId);
         $sellerProductRow['selprod_user_shop_name'] = $user_shop_name['user_name'] . ' - ' . $user_shop_name['shop_name'];
 
