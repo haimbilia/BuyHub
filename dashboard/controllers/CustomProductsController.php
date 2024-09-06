@@ -37,6 +37,10 @@ class CustomProductsController extends SellerBaseController
     {
         $this->checkEditPrivilege();
 
+        if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+            CommonHelper::redirectUserReferer();
+        }
+
         $userId = UserAuthentication::getLoggedUserId();
 
         $recordId = FatUtility::int($recordId);
