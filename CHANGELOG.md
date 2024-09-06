@@ -74,6 +74,7 @@
     - Bug-086333 - Without option variant >> Seller is allowed to submit the request for master product.
     - Bug-086326 - Branch 1: UI issue on the review status update drawer
     - Bug-086310 - Branch 1: Seller is not able to mark the service order as delivered.
+    - Bug-085909 - Branch 1 RTL >> Seller is not able to add inventory of the product
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  
