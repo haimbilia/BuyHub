@@ -113,12 +113,6 @@ $checkbox-active-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.04),
   }
 }
 
-label:has(.checkbox) {
-  display: flex;
-  align-items: center;
-  font-size: 0.85rem;
-}
-
 //switch
 .switch {
   display: flex;

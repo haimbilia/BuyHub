@@ -70,6 +70,7 @@
     - Bug-086501 - Branch 1: An invalid email address error occurs when the user tries to make payment with the Stripe payment method
     - Bug-086529 - Branch 1: Issue in the order calculations when price inclusive of tax setting is On
     - Bug-086389 - Dropdown options are not properly aligned for few fields on 'Inventory setup' form
+    - Bug-086387 - The 'Edit' and 'Remove' buttons are not properly aligned for the added address in the 'Delivery Address' panel on the 'Checkout' page.
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  

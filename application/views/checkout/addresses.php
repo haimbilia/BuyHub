@@ -42,7 +42,8 @@
                                                     echo ", " . $address['addr_address2']; ?>
                                                 <?php } ?>
                                             </p>
-                                            <p><?php echo $address['addr_city'] . ", " . $address['state_name'] . ", " . $address['country_name'] . ", " . $address['addr_zip']; ?>
+                                            <p>
+                                                <?php echo $address['addr_city'] . ", " . $address['state_name'] . ", " . $address['country_name'] . ", " . $address['addr_zip']; ?>
                                             </p>
                                             <?php if (strlen($address['addr_phone']) > 0) {
                                                 $addrPhone = ValidateElement::formatDialCode($address['addr_phone_dcode']) . $address['addr_phone'];
