@@ -85,7 +85,7 @@ class OrdersController extends ListingBaseController
             if (!empty($opVal["opship_orderid"])) {
                 $shippingHanldedBySeller = CommonHelper::canAvailShippingChargesBySeller($opVal['op_selprod_user_id'], $opVal['opshipping_by_seller_user_id']);
                 $shippingApiObj = $shippingObj->getShippingApiObj(($shippingHanldedBySeller ? $opVal['opshipping_by_seller_user_id'] : 0)) ?? NULL;
-                if ($shippingApiObj && false === $shippingApiObj->loadOrder($opVal["opship_orderid"])) {
+                if ($shippingApiObj && method_exists($shippingApiObj, 'loadOrder') && false === $shippingApiObj->loadOrder($opVal["opship_orderid"])) {
                     LibHelper::exitWithError($shippingApiObj->getError(), true);
                 }
                 $this->order['products'][$opId]['thirdPartyorderInfo'] = $shippingApiObj ? $shippingApiObj->getResponse() : [];
