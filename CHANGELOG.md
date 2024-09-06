@@ -68,6 +68,7 @@
     - Bug-086506 - Branch 1: Change email requested email being sent to the new email address added by the user
     - Bug-086504 - Branch 1: An error occurs when the user tries to place an order using the COD payment method
     - Bug-086501 - Branch 1: An invalid email address error occurs when the user tries to make payment with the Stripe payment method
+    - Bug-086529 - Branch 1: Issue in the order calculations when price inclusive of tax setting is On
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  
