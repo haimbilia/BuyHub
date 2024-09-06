@@ -87,7 +87,7 @@ require_once(CONF_THEME_PATH . '_partial/listing/form-head.php'); ?>
                 $largeImgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'review', array($recordId, 0, ImageDimension::VIEW_LARGE, $image['afile_id']), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                 $largeImage = "displayImageInFacebox('" . $largeImgUrl . "');";
                 $imageShow =  '<span class="m-2"><a class="uploaded-file " href="javascript:void(0)" onclick="' . $largeImage . '">';
-                $imageShow .=  '<img data-aspect-ratio = "' . $imageReviewDimensions[ImageDimension::VIEW_LARGE]['aspectRatio'] . '" class="rounded" src="' . $imgUrl . '">';
+                $imageShow .=  '<img data-aspect-ratio = "' . $imageReviewDimensions[ImageDimension::VIEW_LARGE]['aspectRatio'] . '" class="rounded my-2" src="' . $imgUrl . '">';
                 $imageShow .=  '</a></span>';
                 echo $imageShow;
             }

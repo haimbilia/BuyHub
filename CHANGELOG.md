@@ -72,6 +72,7 @@
     - Bug-086389 - Dropdown options are not properly aligned for few fields on 'Inventory setup' form
     - Bug-086387 - The 'Edit' and 'Remove' buttons are not properly aligned for the added address in the 'Delivery Address' panel on the 'Checkout' page.
     - Bug-086333 - Without option variant >> Seller is allowed to submit the request for master product.
+    - Bug-086326 - Branch 1: UI issue on the review status update drawer
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  
