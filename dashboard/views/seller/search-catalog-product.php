@@ -19,7 +19,7 @@
         );
         $isCustom = $postedData['type'] ?? 0;
         if ($canEdit && $canEditShipProfile && 1 > $isCustom) {
-            $arr_flds['product_shipped_by'] = Labels::getLabel('LBL_Shipped_by_me', $siteLangId);
+            $arr_flds['product_shipped_by'] = Labels::getLabel('LBL_SHIPPED_BY_ME', $siteLangId);
             $width['product_shipped_by'] = '15%';
             $width['product_identifier'] = '25%';
         }
@@ -74,6 +74,8 @@
                             $statucAct = (!$row['psbs_user_id']) ? 'setShippedBySeller(' . $row['product_id'] . ')' : 'setShippedByAdmin(' . $row['product_id'] . ')';
                             $attributes .= ' onclick="' . $statucAct . '"';
                             $str = HtmlHelper::configureSwitchForCheckboxStatic('', $row['product_id'], $attributes);
+                        } else if (Product::PRODUCT_TYPE_SERVICE == $row['product_type']) {
+                            $str = '<span class="badge badge-inline badge-success">' . Labels::getLabel('LBL_ME', $siteLangId) . '</span>';
                         }
 
                         $td->appendElement('plaintext', array(), $str, true);

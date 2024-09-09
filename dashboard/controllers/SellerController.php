@@ -48,11 +48,33 @@ class SellerController extends SellerBaseController
 
         $srch->addMultipleFields(
             array(
-                'order_number', 'order_id', 'order_user_id', 'op_selprod_id', 'op_is_batch', 'selprod_product_id', 'order_date_added',
-                'order_net_amount', 'op_invoice_number', 'totCombinedOrders as totOrders', 'op_selprod_title', 'op_product_name',
-                'op_id', 'op_qty', 'op_selprod_options', 'op_status_id', 'op_brand_name', 'op_other_charges', 'op_unit_price',
-                'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'op_tax_collected_by_seller', 'op_selprod_user_id',
-                'opshipping_by_seller_user_id', 'orderstatus_color_class', 'order_pmethod_id', 'opshipping_fulfillment_type', 'op_rounding_off'
+                'order_number',
+                'order_id',
+                'order_user_id',
+                'op_selprod_id',
+                'op_is_batch',
+                'selprod_product_id',
+                'order_date_added',
+                'order_net_amount',
+                'op_invoice_number',
+                'totCombinedOrders as totOrders',
+                'op_selprod_title',
+                'op_product_name',
+                'op_id',
+                'op_qty',
+                'op_selprod_options',
+                'op_status_id',
+                'op_brand_name',
+                'op_other_charges',
+                'op_unit_price',
+                'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name',
+                'op_tax_collected_by_seller',
+                'op_selprod_user_id',
+                'opshipping_by_seller_user_id',
+                'orderstatus_color_class',
+                'order_pmethod_id',
+                'opshipping_fulfillment_type',
+                'op_rounding_off'
             )
         );
 
@@ -113,9 +135,24 @@ class SellerController extends SellerBaseController
 
         $srchReturnReq->addMultipleFields(
             array(
-                'orrequest_id', 'orrequest_user_id', 'orrequest_qty', 'orrequest_type', 'orrequest_reference', 'orrequest_date', 'orrequest_status',
-                'op_invoice_number', 'op_selprod_title', 'op_product_name', 'op_brand_name', 'op_selprod_options', 'op_selprod_sku', 'op_product_model', 'op_selprod_id', 'op_is_batch',
-                'op_id', 'selprod_product_id'
+                'orrequest_id',
+                'orrequest_user_id',
+                'orrequest_qty',
+                'orrequest_type',
+                'orrequest_reference',
+                'orrequest_date',
+                'orrequest_status',
+                'op_invoice_number',
+                'op_selprod_title',
+                'op_product_name',
+                'op_brand_name',
+                'op_selprod_options',
+                'op_selprod_sku',
+                'op_product_model',
+                'op_selprod_id',
+                'op_is_batch',
+                'op_id',
+                'selprod_product_id'
             )
         );
         $srchReturnReq->addOrder('orrequest_date', 'DESC');
@@ -409,9 +446,73 @@ class SellerController extends SellerBaseController
         $srch->joinTable(Plugin::DB_TBL, 'LEFT OUTER JOIN', 'ops.opshipping_plugin_id = ops_plugin.plugin_id', 'ops_plugin');
         $srch->addMultipleFields(
             array(
-                'ops.*', 'order_id', 'order_number', 'order_payment_status', 'order_pmethod_id', 'order_tax_charged', 'order_date_added', 'op_id', 'op_qty', 'op_order_id', 'orderstatus_id', 'op_unit_price', 'op_selprod_user_id', 'op_invoice_number', 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'ou.user_name as buyer_user_name', 'op_is_batch', 'op_selprod_id', 'selprod_product_id', 'pm.plugin_code', 'IFNULL(pm_l.plugin_name, IFNULL(pm.plugin_identifier, "Wallet")) as plugin_name', 'op_commission_charged', 'op_qty', 'op_commission_percentage', 'ou.user_name as buyer_name', 'ouc.credential_username as user_name', 'ouc.credential_email as buyer_email', 'ou.user_phone as buyer_phone', 'op.op_shop_owner_name', 'op.op_shop_owner_username', 'op_l.op_shop_name', 'op.op_shop_owner_email', 'op.op_shop_owner_phone',
-                'op_selprod_title', 'op_product_name', 'op_brand_name', 'op_selprod_options', 'op_selprod_sku', 'op_product_model', 'op_product_type',
-                'op_shipping_duration_name', 'op_shipping_durations', 'op_status_id', 'op_refund_qty', 'op_refund_amount', 'op_refund_commission', 'op_other_charges', 'optosu.optsu_user_id', 'op_tax_collected_by_seller', 'order_is_wallet_selected', 'order_reward_point_used', 'op_product_tax_options', 'ops.*', 'opship.*', 'opr_response', 'addr.*', 'op_rounding_off', 'ops_plugin.plugin_code as opshipping_plugin_code', 'op_selprod_cancellation_age as cancellation_age', 'op_product_length', 'op_product_width', 'op_product_height', 'op_product_dimension_unit', 'op_special_price', 'op_selprod_price', 'op_tax_after_discount', 'op_comments'
+                'ops.*',
+                'order_id',
+                'order_number',
+                'order_payment_status',
+                'order_pmethod_id',
+                'order_tax_charged',
+                'order_date_added',
+                'op_id',
+                'op_qty',
+                'op_order_id',
+                'orderstatus_id',
+                'op_unit_price',
+                'op_selprod_user_id',
+                'op_invoice_number',
+                'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name',
+                'ou.user_name as buyer_user_name',
+                'op_is_batch',
+                'op_selprod_id',
+                'selprod_product_id',
+                'pm.plugin_code',
+                'IFNULL(pm_l.plugin_name, IFNULL(pm.plugin_identifier, "Wallet")) as plugin_name',
+                'op_commission_charged',
+                'op_qty',
+                'op_commission_percentage',
+                'ou.user_name as buyer_name',
+                'ouc.credential_username as user_name',
+                'ouc.credential_email as buyer_email',
+                'ou.user_phone as buyer_phone',
+                'op.op_shop_owner_name',
+                'op.op_shop_owner_username',
+                'op_l.op_shop_name',
+                'op.op_shop_owner_email',
+                'op.op_shop_owner_phone',
+                'op_selprod_title',
+                'op_product_name',
+                'op_brand_name',
+                'op_selprod_options',
+                'op_selprod_sku',
+                'op_product_model',
+                'op_product_type',
+                'op_shipping_duration_name',
+                'op_shipping_durations',
+                'op_status_id',
+                'op_refund_qty',
+                'op_refund_amount',
+                'op_refund_commission',
+                'op_other_charges',
+                'optosu.optsu_user_id',
+                'op_tax_collected_by_seller',
+                'order_is_wallet_selected',
+                'order_reward_point_used',
+                'op_product_tax_options',
+                'ops.*',
+                'opship.*',
+                'opr_response',
+                'addr.*',
+                'op_rounding_off',
+                'ops_plugin.plugin_code as opshipping_plugin_code',
+                'op_selprod_cancellation_age as cancellation_age',
+                'op_product_length',
+                'op_product_width',
+                'op_product_height',
+                'op_product_dimension_unit',
+                'op_special_price',
+                'op_selprod_price',
+                'op_tax_after_discount',
+                'op_comments'
             )
         );
         $srch->addCondition('op_selprod_user_id', '=', $userId);
@@ -455,14 +556,15 @@ class SellerController extends SellerBaseController
 
         if ($orderDetail['op_product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
             $processingStatuses = $orderObj->getVendorAllowedUpdateOrderStatuses(true, $codOrder, $pickupOrder);
-        } elseif ($orderDetail['op_product_type'] == Product::PRODUCT_TYPE_PHYSICAL) {
+        } elseif (in_array($orderDetail['op_product_type'], [Product::PRODUCT_TYPE_PHYSICAL, Product::PRODUCT_TYPE_SERVICE])) {
             $processingStatuses = $orderObj->getVendorAllowedUpdateOrderStatuses(false, $codOrder, $pickupOrder);
-        } else {
-            $processingStatuses = $orderObj->getVendorAllowedUpdateOrderStatuses(false, $codOrder, $pickupOrder);
+            if ($orderDetail['op_product_type'] == Product::PRODUCT_TYPE_SERVICE) {
+                $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS"));
+            }
         }
 
         /* [ if shipping not handled by seller then seller can not update status to ship and delived */
-        if (!CommonHelper::canAvailShippingChargesBySeller($orderDetail['op_selprod_user_id'], $orderDetail['opshipping_by_seller_user_id'])) {
+        if (!CommonHelper::canAvailShippingChargesBySeller($orderDetail['op_selprod_user_id'], $orderDetail['opshipping_by_seller_user_id']) && $orderDetail['op_product_type'] != Product::PRODUCT_TYPE_SERVICE) {
             $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS"));
             if ($pickupOrder) {
                 $processingStatuses = [];
@@ -840,16 +942,18 @@ class SellerController extends SellerBaseController
             $pickupOrder = true;
         }
 
+
         if ($orderDetail['op_product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
             $processingStatuses = $orderObj->getVendorAllowedUpdateOrderStatuses(true, $codOrder, $pickupOrder);
-        } elseif ($orderDetail['op_product_type'] == Product::PRODUCT_TYPE_PHYSICAL) {
+        } elseif (in_array($orderDetail['op_product_type'], [Product::PRODUCT_TYPE_PHYSICAL, Product::PRODUCT_TYPE_SERVICE])) {
             $processingStatuses = $orderObj->getVendorAllowedUpdateOrderStatuses(false, $codOrder, $pickupOrder);
-        } else {
-            $processingStatuses = $orderObj->getVendorAllowedUpdateOrderStatuses(false, $codOrder, $pickupOrder);
+            if ($orderDetail['op_product_type'] == Product::PRODUCT_TYPE_SERVICE) {
+                $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS"));
+            }
         }
 
         /* [ if shipping not handled by seller then seller can not update status to ship and delived */
-        if (!$shippedBySeller) {
+        if (!$shippedBySeller && $orderDetail['op_product_type'] != Product::PRODUCT_TYPE_SERVICE) {
             $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS"));
             if ($pickupOrder) {
                 $processingStatuses = [];
@@ -996,9 +1100,72 @@ class SellerController extends SellerBaseController
         $srch->joinTable(Plugin::DB_TBL, 'LEFT OUTER JOIN', 'ops.opshipping_plugin_id = ops_plugin.plugin_id', 'ops_plugin');
         $srch->addMultipleFields(
             array(
-                'ops.*', 'order_id', 'order_number', 'order_payment_status', 'order_pmethod_id', 'order_tax_charged', 'order_date_added', 'op_id', 'op_qty', 'op_order_id', 'orderstatus_id', 'op_unit_price', 'op_selprod_user_id', 'op_invoice_number', 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'ou.user_name as buyer_user_name', 'op_is_batch', 'op_selprod_id', 'selprod_product_id', 'pm.plugin_code', 'IFNULL(pm_l.plugin_name, IFNULL(pm.plugin_identifier, "Wallet")) as plugin_name', 'op_commission_charged', 'op_qty', 'op_commission_percentage', 'ou.user_name as buyer_name', 'ouc.credential_username as user_name', 'ouc.credential_email as buyer_email', 'ou.user_phone as buyer_phone', 'op.op_shop_owner_name', 'op.op_shop_owner_username', 'op_l.op_shop_name', 'op.op_shop_owner_email', 'op.op_shop_owner_phone',
-                'op_selprod_title', 'op_product_name', 'op_brand_name', 'op_selprod_options', 'op_selprod_sku', 'op_product_model', 'op_product_type',
-                'op_shipping_duration_name', 'op_shipping_durations', 'op_status_id', 'op_refund_qty', 'op_refund_amount', 'op_refund_commission', 'op_other_charges', 'optosu.optsu_user_id', 'op_tax_collected_by_seller', 'order_is_wallet_selected', 'order_reward_point_used', 'op_product_tax_options', 'ops.*', 'opship.*', 'opr_response', 'addr.*', 'op_rounding_off', 'ops_plugin.plugin_code as opshipping_plugin_code', 'op_selprod_cancellation_age as cancellation_age', 'op_product_length', 'op_product_width', 'op_product_height', 'op_product_dimension_unit', 'op_special_price', 'op_selprod_price', 'op_tax_after_discount'
+                'ops.*',
+                'order_id',
+                'order_number',
+                'order_payment_status',
+                'order_pmethod_id',
+                'order_tax_charged',
+                'order_date_added',
+                'op_id',
+                'op_qty',
+                'op_order_id',
+                'orderstatus_id',
+                'op_unit_price',
+                'op_selprod_user_id',
+                'op_invoice_number',
+                'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name',
+                'ou.user_name as buyer_user_name',
+                'op_is_batch',
+                'op_selprod_id',
+                'selprod_product_id',
+                'pm.plugin_code',
+                'IFNULL(pm_l.plugin_name, IFNULL(pm.plugin_identifier, "Wallet")) as plugin_name',
+                'op_commission_charged',
+                'op_qty',
+                'op_commission_percentage',
+                'ou.user_name as buyer_name',
+                'ouc.credential_username as user_name',
+                'ouc.credential_email as buyer_email',
+                'ou.user_phone as buyer_phone',
+                'op.op_shop_owner_name',
+                'op.op_shop_owner_username',
+                'op_l.op_shop_name',
+                'op.op_shop_owner_email',
+                'op.op_shop_owner_phone',
+                'op_selprod_title',
+                'op_product_name',
+                'op_brand_name',
+                'op_selprod_options',
+                'op_selprod_sku',
+                'op_product_model',
+                'op_product_type',
+                'op_shipping_duration_name',
+                'op_shipping_durations',
+                'op_status_id',
+                'op_refund_qty',
+                'op_refund_amount',
+                'op_refund_commission',
+                'op_other_charges',
+                'optosu.optsu_user_id',
+                'op_tax_collected_by_seller',
+                'order_is_wallet_selected',
+                'order_reward_point_used',
+                'op_product_tax_options',
+                'ops.*',
+                'opship.*',
+                'opr_response',
+                'addr.*',
+                'op_rounding_off',
+                'ops_plugin.plugin_code as opshipping_plugin_code',
+                'op_selprod_cancellation_age as cancellation_age',
+                'op_product_length',
+                'op_product_width',
+                'op_product_height',
+                'op_product_dimension_unit',
+                'op_special_price',
+                'op_selprod_price',
+                'op_tax_after_discount'
             )
         );
         $srch->addCondition('op_selprod_user_id', '=', $userId);
@@ -1447,9 +1614,16 @@ class SellerController extends SellerBaseController
         $srch->addOrder('scatrequestmsg_id', 'DESC');
         $srch->addMultipleFields(
             array(
-                'scatrequestmsg_id', 'scatrequestmsg_from_user_id', 'scatrequestmsg_from_admin_id',
-                'admin_name', 'admin_username', 'admin_email', 'scatrequestmsg_msg',
-                'scatrequestmsg_date', 'msg_user.user_name as msg_user_name', 'msg_user_cred.credential_username as msg_username',
+                'scatrequestmsg_id',
+                'scatrequestmsg_from_user_id',
+                'scatrequestmsg_from_admin_id',
+                'admin_name',
+                'admin_username',
+                'admin_email',
+                'scatrequestmsg_msg',
+                'scatrequestmsg_date',
+                'msg_user.user_name as msg_user_name',
+                'msg_user_cred.credential_username as msg_username',
                 'msg_user_cred.credential_email as msg_user_email',
                 'scatrequest_status'
             )
@@ -2825,9 +2999,24 @@ class SellerController extends SellerBaseController
         $srch->doNotCalculateRecords();
         $srch->addMultipleFields(
             [
-                'orrequest_id', 'orrequest_user_id', 'orrequest_qty', 'orrequest_type', 'orrequest_reference', 'orrequest_date', 'orrequest_status',
-                'op_invoice_number', 'op_selprod_title', 'op_product_name', 'op_brand_name', 'op_selprod_options', 'op_selprod_sku', 'op_product_model', 'op_selprod_id', 'op_is_batch',
-                'op_id', 'selprod_product_id'
+                'orrequest_id',
+                'orrequest_user_id',
+                'orrequest_qty',
+                'orrequest_type',
+                'orrequest_reference',
+                'orrequest_date',
+                'orrequest_status',
+                'op_invoice_number',
+                'op_selprod_title',
+                'op_product_name',
+                'op_brand_name',
+                'op_selprod_options',
+                'op_selprod_sku',
+                'op_product_model',
+                'op_selprod_id',
+                'op_is_batch',
+                'op_id',
+                'selprod_product_id'
             ]
         );
         $srch->addOrder('orrequest_date', 'DESC');
@@ -2899,13 +3088,42 @@ class SellerController extends SellerBaseController
         $srch->doNotLimitRecords();
         $srch->addMultipleFields(
             array(
-                'orrequest_id', 'orrequest_op_id', 'orrequest_user_id', 'orrequest_qty', 'orrequest_type',
-                'orrequest_date', 'orrequest_status', 'orrequest_reference', 'op_invoice_number', 'op_selprod_title', 'op_product_name',
-                'op_brand_name', 'op_selprod_options', 'op_selprod_sku', 'op_product_model', 'op_qty',
-                'op_unit_price', 'op_selprod_user_id', 'IFNULL(orreason_title, orreason_identifier) as orreason_title', 'op_shop_id', 'op_shop_name',
-                'op_shop_owner_name', 'buyer.user_name as buyer_name', 'order_tax_charged', 'op_other_charges', 'op_refund_shipping',
-                'op_refund_amount', 'op_commission_percentage', 'op_affiliate_commission_percentage', 'op_commission_include_tax',
-                'op_commission_include_shipping', 'op_free_ship_upto', 'op_actual_shipping_charges', 'op_rounding_off', 'op_selprod_id', 'selprod_product_id',
+                'orrequest_id',
+                'orrequest_op_id',
+                'orrequest_user_id',
+                'orrequest_qty',
+                'orrequest_type',
+                'orrequest_date',
+                'orrequest_status',
+                'orrequest_reference',
+                'op_invoice_number',
+                'op_selprod_title',
+                'op_product_name',
+                'op_brand_name',
+                'op_selprod_options',
+                'op_selprod_sku',
+                'op_product_model',
+                'op_qty',
+                'op_unit_price',
+                'op_selprod_user_id',
+                'IFNULL(orreason_title, orreason_identifier) as orreason_title',
+                'op_shop_id',
+                'op_shop_name',
+                'op_shop_owner_name',
+                'buyer.user_name as buyer_name',
+                'order_tax_charged',
+                'op_other_charges',
+                'op_refund_shipping',
+                'op_refund_amount',
+                'op_commission_percentage',
+                'op_affiliate_commission_percentage',
+                'op_commission_include_tax',
+                'op_commission_include_shipping',
+                'op_free_ship_upto',
+                'op_actual_shipping_charges',
+                'op_rounding_off',
+                'op_selprod_id',
+                'selprod_product_id',
                 'opshipping_by_seller_user_id'
             )
         );
@@ -3848,7 +4066,10 @@ class SellerController extends SellerBaseController
         $srch = Product::getSearchObject($this->siteLangId);
         $srch->addMultipleFields(
             array(
-                'product_id', 'product_ship_package', 'product_seller_id', 'product_added_by_admin_id',
+                'product_id',
+                'product_ship_package',
+                'product_seller_id',
+                'product_added_by_admin_id',
                 'IFNULL(product_name,product_identifier)as product_name'
             )
         );
@@ -4254,8 +4475,8 @@ class SellerController extends SellerBaseController
             $fld->requirements()->setInt();
             $fld = $frm->addIntegerField(Labels::getLabel('FRM_MINIMUM_PURCHASE_QUANTITY', $this->siteLangId), 'selprod_min_order_qty');
             $fld->requirements()->setRange(1, SellerProduct::MAX_RANGE_OF_MINIMUM_PURCHANGE_QTY);
-        }else{
-            $frm->addHiddenField(Labels::getLabel('FRM_MINIMUM_PURCHASE_QUANTITY', $this->siteLangId), 'selprod_min_order_qty',1);
+        } else {
+            $frm->addHiddenField(Labels::getLabel('FRM_MINIMUM_PURCHASE_QUANTITY', $this->siteLangId), 'selprod_min_order_qty', 1);
         }
 
         if ($productData['product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
@@ -4267,7 +4488,7 @@ class SellerController extends SellerBaseController
             $frm->addHiddenField('', 'selprod_condition', $defaultProductCond);
         } elseif ($productData['product_type'] != Product::PRODUCT_TYPE_PHYSICAL) {
             $frm->addHiddenField('', 'selprod_condition', $defaultProductCond);
-         } else {
+        } else {
             $fld = $frm->addSelectBox(Labels::getLabel('FRM_PRODUCT_CONDITION', $this->siteLangId), 'selprod_condition', Product::getConditionArr($this->siteLangId), $defaultProductCond, array(), Labels::getLabel('FRM_SELECT_CONDITION', $this->siteLangId));
             $fld->requirements()->setRequired();
         }
@@ -4432,9 +4653,17 @@ class SellerController extends SellerBaseController
 
         $prodSrch->addMultipleFields(
             array(
-                'product_id', 'product_identifier', 'IFNULL(product_name,product_identifier) as product_name',
-                'product_seller_id', 'product_model', 'product_type', 'product_short_description', 'prodcat_id',
-                'IFNULL(prodcat_name,prodcat_identifier) as prodcat_name', 'brand_id', 'IFNULL(brand_name, brand_identifier) as brand_name',
+                'product_id',
+                'product_identifier',
+                'IFNULL(product_name,product_identifier) as product_name',
+                'product_seller_id',
+                'product_model',
+                'product_type',
+                'product_short_description',
+                'prodcat_id',
+                'IFNULL(prodcat_name,prodcat_identifier) as prodcat_name',
+                'brand_id',
+                'IFNULL(brand_name, brand_identifier) as brand_name',
                 'product_min_selling_price'
             )
         );
@@ -4890,8 +5119,21 @@ class SellerController extends SellerBaseController
         $srch->doNotCalculateRecords();
         $srch->addMultipleFields(
             array(
-                'selprod_id', 'credential_username', 'selprod_price', 'date(splprice_start_date) as splprice_start_date', 'splprice_end_date', 'IFNULL(product_name, product_identifier) as product_name',
-                'selprod_title', 'splprice_id', 'splprice_price', 'selprod_product_id', 'product_updated_on', 'user_id', 'user_updated_on', 'credential_email', 'user_name'
+                'selprod_id',
+                'credential_username',
+                'selprod_price',
+                'date(splprice_start_date) as splprice_start_date',
+                'splprice_end_date',
+                'IFNULL(product_name, product_identifier) as product_name',
+                'selprod_title',
+                'splprice_id',
+                'splprice_price',
+                'selprod_product_id',
+                'product_updated_on',
+                'user_id',
+                'user_updated_on',
+                'credential_email',
+                'user_name'
             )
         );
         $srch->addOrder('splprice_id', 'DESC');

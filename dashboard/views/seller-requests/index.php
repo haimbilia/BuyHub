@@ -14,7 +14,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                 </button>
                                 
                                     <ul class="dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim" aria-labelledby="dashboardDropdown">';
-        if (FatApp::getConfig('CONF_SELLER_CAN_REQUEST_CUSTOM_PRODUCT', FatUtility::VAR_INT, 0)) {
+        if (FatApp::getConfig('CONF_SELLER_CAN_REQUEST_CUSTOM_PRODUCT', FatUtility::VAR_INT, 0) && 1 > FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
             $otherBtnHtml .= '<li class="dropdown-menu-item">
                                                 <a class="dropdown-menu-link" href="' . UrlHelper::generateUrl('customProducts', 'form') . '">
                                                     ' . Labels::getLabel('LBL_Marketplace_Product', $siteLangId) . '
@@ -144,20 +144,20 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                         </div>
                                     </div>
                                 <?php } else if (empty($reqBadges) && !empty($approvalRequiredBadges)) { ?>
-                                        <div class="col-md-3">
-                                            <div class="no-data-found">
-                                                <div class="img">
-                                                    <img src="<?php echo CONF_WEBROOT_FRONT_URL; ?>images/retina/no-brand-requests.svg"
-                                                        width="70px" height="70px">
-                                                </div>
-                                                <div class="data">
-                                                    <div class="action">
-                                                        <a class="btn btn-outline-gray btn-sm" href="javascript:void(0);"
-                                                            onclick="addBadgeReqForm(0)"><?php echo Labels::getLabel('LBL_ADD_BADGE_REQUEST', $siteLangId); ?></a>
-                                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="no-data-found">
+                                            <div class="img">
+                                                <img src="<?php echo CONF_WEBROOT_FRONT_URL; ?>images/retina/no-brand-requests.svg"
+                                                    width="70px" height="70px">
+                                            </div>
+                                            <div class="data">
+                                                <div class="action">
+                                                    <a class="btn btn-outline-gray btn-sm" href="javascript:void(0);"
+                                                        onclick="addBadgeReqForm(0)"><?php echo Labels::getLabel('LBL_ADD_BADGE_REQUEST', $siteLangId); ?></a>
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
                                 <?php } ?>
                             <?php } ?>
 
@@ -177,8 +177,9 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 <script>
     var ratioTypeSquare = <?php echo AttachedFile::RATIO_TYPE_SQUARE; ?>;
     var canRequestCustomProduct = <?php echo FatApp::getConfig('CONF_SELLER_CAN_REQUEST_CUSTOM_PRODUCT', FatUtility::VAR_INT, 0); ?>;
-    $(document).ready(function () {
-        if (canRequestCustomProduct) {
+    var withoutVariants = <?php echo FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0); ?>;
+    $(document).ready(function() {
+        if (canRequestCustomProduct && 1 > withoutVariants) {
             searchCustomCatalogProducts();
         } else {
             searchBrandRequests();

@@ -59,7 +59,7 @@
                                                 </ul>
                                             <?php } ?>
                                         </div>
-                                        <?php if (!commonhelper::isAppUser()) { ?>
+                                        <?php if (!CommonHelper::isAppUser()) { ?>
                                             <div class="addresses-actions">
                                                 <button class="btn btn-icon btn-addresses" type="button" onClick="editAddress('<?php echo $address['addr_id']; ?>', '<?php echo $addressType; ?>')">
                                                     <?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?>

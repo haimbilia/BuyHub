@@ -78,7 +78,7 @@ class BadgeLinkCondition extends MyAppModel
                 self::RECORD_TYPE_SHOP => Labels::getLabel('LBL_SHOP', $langId)
             ];
             
-            if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS')) {
+            if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
                 unset($arr[self::RECORD_TYPE_SELLER_PRODUCT]);
             }
 

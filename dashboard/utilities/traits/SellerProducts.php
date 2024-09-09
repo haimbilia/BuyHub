@@ -555,13 +555,15 @@ trait SellerProducts
         $post['selprod_stock'] = ($post['selprod_stock'] > 0) ? $post['selprod_stock'] : 1;
         $post['selprod_min_order_qty'] = ($post['selprod_min_order_qty'] > 0) ? $post['selprod_min_order_qty'] : 1;
 
+        $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
+
         $keywordSlug = '';
-        $productId = SellerProduct::getAttributesById($selprod_id, 'selprod_product_id', false);       
-        if (empty($post['selprod_title' . $this->siteLangId])) {
+        $productId = SellerProduct::getAttributesById($selprod_id, 'selprod_product_id', false);
+        if (empty($post['selprod_title' . $siteDefaultLangId])) {
             $productLangRow = Product::getProductDataById($this->siteLangId, $productId, array('product_identifier', 'product_name'));
             $keywordSlug = $productLangRow['product_name'] ?? $productLangRow['product_identifier'];
         }
-        $keywordSlug =  $post['selprod_title' . $this->siteLangId] ?? $keywordSlug;
+        $keywordSlug =  $post['selprod_title' . $siteDefaultLangId] ?? $keywordSlug;
 
         if ($selprod_url_keyword == '') {
             $shopData = Shop::getAttributesByUserId($this->userParentId, ['COALESCE(shop_name,shop_identifier) as shop_name'], false, $this->userParentId);
