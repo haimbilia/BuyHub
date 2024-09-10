@@ -166,9 +166,11 @@ class TaxStructure extends MyAppModel
             $components['taxstr_name'][$result['taxstrlang_lang_id']] = $result['taxstr_name'];
         }
 
+        $count = 1;
         foreach ($postComponents as $key => $postComponent) {
-            $component[$key][$postLang] = $postComponent[$postLang];
+            $component[$key][$postLang] = $postComponent[$postLang] ?? $count;
             $components['taxstr_name'][$postLang] = $data['taxstr_name'];
+            $count++;
         }
         $components['taxstr_component_name'] = $component;
         return $components;

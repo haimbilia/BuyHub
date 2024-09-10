@@ -307,7 +307,7 @@ class ReviewsController extends MyAppController
             $this->set('userParentId', $userParentId);
         }
 
-        // $this->includeFeatherLight();
+        $this->includeFeatherLight();
         $this->_template->addJs(['js/jquery.fancybox.min.js']);
         if (1 > $reviewId) {
             $this->_template->render();
@@ -389,7 +389,6 @@ class ReviewsController extends MyAppController
         $json['startRecord'] = $startRecord;
         $json['recordsToDisplay'] = count($records);
         $json['totalRecords'] = $recordCount;
-
         $json['html'] = $this->_template->render(false, false, 'reviews/search-for-shop.php', true, false);
         $json['loadMoreBtnHtml'] = $this->_template->render(false, false, 'reviews/load-more-shop-reviews-btn.php', true, false);
         FatUtility::dieJsonSuccess($json);
