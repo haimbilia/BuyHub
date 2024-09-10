@@ -75,6 +75,7 @@
     - Bug-086326 - Branch 1: UI issue on the review status update drawer
     - Bug-086310 - Branch 1: Seller is not able to mark the service order as delivered.
     - Bug-085909 - Branch 1 RTL >> Seller is not able to add inventory of the product
+    - Bug-086853 - Error message appears when the user opens the shop reviews page
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  
