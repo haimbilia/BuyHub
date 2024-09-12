@@ -11,5 +11,5 @@ $data = array(
 );
 
 if (empty($arrListing)) {
-    $status = applicationConstants::OFF;
+    $status = applicationConstants::ON;
 }
