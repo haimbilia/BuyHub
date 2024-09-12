@@ -22,7 +22,7 @@ class AbandonedCartController extends ListingBaseController
         $actionItemsData = HtmlHelper::getDefaultActionItems($fields);
         $actionItemsData['newRecordBtnAttrs'] = [
             'attr' => [
-                'href' => commonHelper::generateUrl('AbandonedCartProducts'),
+                'href' => urlHelper::generateUrl('AbandonedCartProducts'),
                 'title' => Labels::getLabel('LBL_VIEW_BY_PRODUCT', $this->siteLangId),
                 'onclick' => ''
             ],

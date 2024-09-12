@@ -303,7 +303,7 @@ class StripePayController extends PaymentController
                     $message = "\n\n StripePay_NOTE :: TOTAL PAID MISMATCH! " . strtolower($payment_amount) . "\n\n";
                     $orderPaymentObj->addOrderPaymentComments($message);
                     if (false === MOBILE_APP_API_CALL) {
-                        FatApp::redirectUser(CommonHelper::generateUrl('custom', 'paymentFailed'));
+                        FatApp::redirectUser(urlHelper::generateUrl('custom', 'paymentFailed'));
                     }
                 } else if ($orderInfo['order_payment_status'] == Orders::ORDER_PAYMENT_PENDING) {
                     /* Recording Payment in DB */
@@ -311,12 +311,12 @@ class StripePayController extends PaymentController
                 }
 
                 if (false === MOBILE_APP_API_CALL) {
-                    FatApp::redirectUser(CommonHelper::generateUrl('custom', 'paymentSuccess', array($orderInfo['order_number'])));
+                    FatApp::redirectUser(urlHelper::generateUrl('custom', 'paymentSuccess', array($orderInfo['order_number'])));
                 }
             } else {
                 $orderPaymentObj->addOrderPaymentComments($message);
                 if (false === MOBILE_APP_API_CALL) {
-                    FatApp::redirectUser(CommonHelper::generateUrl('custom', 'paymentFailed'));
+                    FatApp::redirectUser(urlHelper::generateUrl('custom', 'paymentFailed'));
                 }
             }
         }
