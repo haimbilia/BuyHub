@@ -2508,7 +2508,7 @@ class User extends MyAppModel
 
         $email = isset($postedData['user_email']) && !empty($postedData['user_email']) ? $postedData['user_email'] : '';
 
-        if (!$this->validateUserForRegistration($postedData['user_username'], $email, $userPhone)) {
+        if (!$this->validateUserForRegistration(strtolower($postedData['user_username']), $email, $userPhone)) {
             return false;
         }
 
