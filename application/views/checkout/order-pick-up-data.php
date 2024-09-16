@@ -46,7 +46,7 @@ if (!empty($orderPickUpData)) {
                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#mobile-alt">
                                             </use>
                                         </svg>
-                                        <?php echo ValidateElement::formatDialCode($address['oua_phone_dcode']) . $address['oua_phone']; ?>
+                                        <span class="default-ltr"><?php echo ValidateElement::formatDialCode($address['oua_phone_dcode']) . $address['oua_phone']; ?></span>
                                     </li>
                                 </ul>
                             <?php } ?>

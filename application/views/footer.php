@@ -33,7 +33,7 @@ if ('' !=  $pixelId) {  ?>
                         $site_conatct =  FatApp::getConfig('CONF_SITE_PHONE', FatUtility::VAR_INT, '');
                         if ($site_conatct) { ?>
                             <li class="contact-info-item">
-                                <?php echo (CommonHelper::demoUrl() == true) ? '+1 469 844 3346' : ValidateElement::formatDialCode($dialCode) . $site_conatct; ?>
+                                <span class="default-ltr"><?php echo (CommonHelper::demoUrl() == true) ? '+1 469 844 3346' : ValidateElement::formatDialCode($dialCode) . $site_conatct; ?></span>
                             </li>
                         <?php } ?>
                         <?php $email_id = (CommonHelper::demoUrl() == true) ? 'sales@fatbit.com' : FatApp::getConfig('CONF_CONTACT_EMAIL', FatUtility::VAR_STRING, '');
