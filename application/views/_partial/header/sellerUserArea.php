@@ -22,9 +22,14 @@ if ($userPrivilege->canViewSales(UserAuthentication::getLoggedUserId(), true)) {
 }
 ?>
 
-<?php if ($userPrivilege->canViewProducts(UserAuthentication::getLoggedUserId(), true)) { ?>
+<?php if ($userPrivilege->canViewProducts(UserAuthentication::getLoggedUserId(), true)) { 
+    $prodUrl = UrlHelper::generateUrl('seller', 'products');
+    if (FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+        $prodUrl = UrlHelper::generateUrl('seller', 'catalog');
+    }
+    ?>
     <li class="<?php echo $liClass; ?>">
-        <a class="<?php echo $aClass; ?>" href="<?php echo UrlHelper::generateUrl('Seller', 'products', [], CONF_WEBROOT_DASHBOARD, null, false, false, false); ?>"><?php echo Labels::getLabel('LBL_Shop_Inventory', $siteLangId); ?><?php echo $html; ?></a>
+        <a class="<?php echo $aClass; ?>" href="<?php echo $prodUrl; ?>"><?php echo Labels::getLabel('LBL_Shop_Inventory', $siteLangId); ?><?php echo $html; ?></a>
     </li>
 
 <?php } ?>
