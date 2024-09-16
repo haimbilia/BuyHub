@@ -138,7 +138,7 @@ foreach ($orderProductsData as $addrKey => $orderProducts) {
         }
 
         if ($orderProducts['pickupAddress']['oua_phone'] != '') {
-            $pickUpAddressInfo .= ', ' . ValidateElement::formatDialCode($orderProducts['pickupAddress']['oua_phone_dcode']) . $orderProducts['pickupAddress']['oua_phone'];
+            $pickUpAddressInfo .= ', <span class="default-ltr">' . ValidateElement::formatDialCode($orderProducts['pickupAddress']['oua_phone_dcode']) . $orderProducts['pickupAddress']['oua_phone'] . '</span>';
         }
 
         $pickupHtml .= '<table width="100%" cellspacing="0" cellpadding="0" border="0">
@@ -267,7 +267,7 @@ if ($billingAddress['oua_zip'] != '') {
 }
 
 if ($billingAddress['oua_phone'] != '') {
-    $billingInfo .= '<br>' . ValidateElement::formatDialCode($billingAddress['oua_phone_dcode']) . $billingAddress['oua_phone'];
+    $billingInfo .= '<br><span class="default-ltr">' . ValidateElement::formatDialCode($billingAddress['oua_phone_dcode']) . $billingAddress['oua_phone'] . '</span>';
 }
 
 $shippingInfo = '';
@@ -294,7 +294,7 @@ if (!empty($shippingAddress)) {
     }
 
     if ($shippingAddress['oua_phone'] != '') {
-        $shippingInfo .= '<br>' . ValidateElement::formatDialCode($shippingAddress['oua_phone_dcode']) . $shippingAddress['oua_phone'];
+        $shippingInfo .= '<br><span class="default-ltr">' . ValidateElement::formatDialCode($shippingAddress['oua_phone_dcode']) . $shippingAddress['oua_phone'] . '</span>';
     }
 }
 

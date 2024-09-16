@@ -44,7 +44,7 @@
     <?php if ($address['oua_phone'] != '') { ?>
         <li class="list-stats-item">
             <span class="label"><?php echo Labels::getLabel('LBL_PHONE', $siteLangId); ?> </span>
-            <span class="value"><?php echo ValidateElement::formatDialCode($address['oua_phone_dcode']) . $address['oua_phone']; ?></span>
+            <span class="value"><span class="default-ltr"><?php echo ValidateElement::formatDialCode($address['oua_phone_dcode']) . $address['oua_phone']; ?></span></span>
         </li>
     <?php } ?>
 </ul>

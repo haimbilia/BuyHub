@@ -62,8 +62,8 @@ if ($noPaymentMethod && $rewardsCurrAmtCanBeUsed < $cartSummary['orderNetAmount'
                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#mobile-alt">
                                             </use>
                                         </svg>
-                                        <?php echo $addrPhone; ?>
-                                        </p>
+                                        <span class="default-ltr"><?php echo $addrPhone; ?></span>
+                                    </li>
                                 </ul>
                             <?php } ?>
                         </address>
