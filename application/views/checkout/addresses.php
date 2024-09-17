@@ -54,7 +54,7 @@
                                                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#mobile-alt">
                                                             </use>
                                                         </svg>
-                                                        <?php echo $addrPhone; ?>
+                                                        <span class="default-ltr"><?php echo $addrPhone; ?></span>
                                                     </li>
                                                 </ul>
                                             <?php } ?>

@@ -24,7 +24,7 @@ $frm->setFormTagAttribute('onsubmit', 'saveRecord(this); return(false);');
             </li>
             <li class="list-stats-item">
                 <span class='lable'><?php echo Labels::getLabel('LBL_Phone', $siteLangId); ?></span>
-                <span class='value'><?php echo ValidateElement::formatDialCode($data['bcontributions_author_phone_dcode']) . $data['bcontributions_author_phone']; ?></span>
+                <span class='value'><span class="default-ltr"><?php echo ValidateElement::formatDialCode($data['bcontributions_author_phone_dcode']) . $data['bcontributions_author_phone']; ?></span></span>
             </li>
             <li class="list-stats-item">
                 <span class='lable'><?php echo Labels::getLabel('LBL_Posted_On', $siteLangId); ?></span>

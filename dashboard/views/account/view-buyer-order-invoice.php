@@ -78,7 +78,7 @@ if (!empty($orderDetail['billingAddress'])) {
     }
 
     if ($orderDetail['billingAddress']['oua_phone'] != '') {
-        $billingAddress  .= '<br/>' . ValidateElement::formatDialCode($orderDetail['billingAddress']['oua_phone_dcode']) . $orderDetail['billingAddress']['oua_phone'];
+        $billingAddress  .= '<br><span class="default-ltr">' . ValidateElement::formatDialCode($orderDetail['billingAddress']['oua_phone_dcode']) . $orderDetail['billingAddress']['oua_phone'] . '</span>';
     }
 }
 
@@ -102,7 +102,7 @@ if (isset($orderDetail['pickupAddress']) && !empty($orderDetail['pickupAddress']
         $pickUpAddress .= '-' . $orderDetail['pickupAddress']['oua_zip'];
     }
     if ($orderDetail['pickupAddress']['oua_phone'] != '') {
-        $pickUpAddress .= '<br/>' . ValidateElement::formatDialCode($orderDetail['pickupAddress']['oua_phone_dcode']) . $orderDetail['pickupAddress']['oua_phone'];
+        $pickUpAddress .= '<br><span class="default-ltr">' . ValidateElement::formatDialCode($orderDetail['pickupAddress']['oua_phone_dcode']) . $orderDetail['pickupAddress']['oua_phone'] . '</span>';
     }
 }
 
@@ -148,7 +148,7 @@ if ($orderDetail['order_is_wallet_selected'] > 0) {
                 }
 
                 if ($orderDetail['shippingAddress']['oua_phone'] != '') {
-                    $shippingAddress .= '<br/>' . ValidateElement::formatDialCode($orderDetail['shippingAddress']['oua_phone_dcode']) . $orderDetail['shippingAddress']['oua_phone'];
+                    $shippingAddress .= '<br><span class="default-ltr">' . ValidateElement::formatDialCode($orderDetail['shippingAddress']['oua_phone_dcode']) . $orderDetail['shippingAddress']['oua_phone'] . '</span>';
                 }
             }
             $item = ($childOrder['op_selprod_title'] != '') ? $childOrder['op_selprod_title'] : $childOrder['op_product_name'];

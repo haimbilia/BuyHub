@@ -23,7 +23,7 @@ foreach ($arrListing as $sn => $row) {
             case 'addr_phone':
                 $addrPhone = (strlen($row['addr_phone']) > 0) ? $row['addr_phone'] : '';
                 if (!empty($addrPhone) && array_key_exists('addr_phone_dcode', $row)) {
-                    $addrPhone = ValidateElement::formatDialCode($row['addr_phone_dcode']) . $addrPhone;
+                    $addrPhone = '<span class="default-ltr">' . ValidateElement::formatDialCode($row['addr_phone_dcode']) . $addrPhone . '</span>';
                 }
                 $td->appendElement('plaintext', array(), $addrPhone, true);
                 break;

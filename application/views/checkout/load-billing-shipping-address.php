@@ -14,10 +14,11 @@
                 <?php
                 $addrPhone = $defaultAddress['addr_phone'];
                 if (!empty($addrPhone) && array_key_exists('addr_phone_dcode', $defaultAddress)) {
-                    $addrPhone = ValidateElement::formatDialCode($defaultAddress['addr_phone_dcode']) . $addrPhone;
+                    $addrPhone = '<span class="default-ltr">' . ValidateElement::formatDialCode($defaultAddress['addr_phone_dcode']) . $addrPhone . '</span>';
                 }
                 echo (strlen($addrPhone) > 0) ? Labels::getLabel('LBL_Phone:', $siteLangId) . $addrPhone . '<br>' : '';
-                ?></div>
+                ?>
+            </div>
             <div class="selected-panel-action">
                 <a href="javascript:void(0)" onClick="showAddressList()" class="btn btn-brand btn-sm ripplelink"><?php echo Labels::getLabel('LBL_Change_Address', $siteLangId); ?></a>
             </div>

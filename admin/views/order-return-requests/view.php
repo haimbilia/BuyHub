@@ -166,7 +166,7 @@ echo $msgsSrchForm->getFormHtml(); ?>
                                 <?php if (!empty($order['user_phone'])) { ?>
                                     <li class="list-stats-item">
                                         <span class="lable"><?php echo Labels::getLabel('LBL_PHONE', $siteLangId); ?>:</span>
-                                        <span class="value"><?php echo ValidateElement::formatDialCode($order['user_phone_dcode']) . $order['user_phone']; ?></span>
+                                        <span class="value"><span class="default-ltr"><?php echo ValidateElement::formatDialCode($order['user_phone_dcode']) . $order['user_phone']; ?></span></span>
                                     </li>
                                 <?php } ?>
                             </ul>

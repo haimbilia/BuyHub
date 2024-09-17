@@ -147,8 +147,8 @@ $fld->developerTags['col'] = 12;
                                                     </svg>
                                                 </span>
                                                 <span class="label">
-                                                    <?php $dialCode = FatApp::getConfig('CONF_SITE_PHONE_DCODE', FatUtility::VAR_STRING, '');
-                                                    echo ValidateElement::formatDialCode($dialCode) . FatApp::getConfig('CONF_SITE_PHONE', FatUtility::VAR_INT, ''); ?>
+                                                    <span class="default-ltr"><?php $dialCode = FatApp::getConfig('CONF_SITE_PHONE_DCODE', FatUtility::VAR_STRING, '');
+                                                        echo ValidateElement::formatDialCode($dialCode) . FatApp::getConfig('CONF_SITE_PHONE', FatUtility::VAR_INT, ''); ?></span>
                                                 </span>
                                             </li>
                                         <?php } ?>
@@ -164,8 +164,8 @@ $fld->developerTags['col'] = 12;
                                                     </svg>
                                                 </span>
                                                 <span class="label">
-                                                    <?php $dialCode = FatApp::getConfig('CONF_SITE_FAX_DCODE', FatUtility::VAR_STRING, '');
-                                                    echo ValidateElement::formatDialCode($dialCode) . FatApp::getConfig('CONF_SITE_FAX', FatUtility::VAR_STRING, ''); ?>
+                                                    <span class="default-ltr"><?php $dialCode = FatApp::getConfig('CONF_SITE_FAX_DCODE', FatUtility::VAR_STRING, '');
+                                                        echo ValidateElement::formatDialCode($dialCode) . FatApp::getConfig('CONF_SITE_FAX', FatUtility::VAR_STRING, ''); ?></span>
                                                 </span>
                                             </li>
                                         <?php } ?>

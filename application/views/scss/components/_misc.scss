@@ -352,7 +352,7 @@ mark,
         font-size: 0.75rem;
       }
     }
-  }
+}
 
   .table-rates {
     td {
@@ -883,4 +883,8 @@ mark,
       }
     }
   }
+}
+[dir="rtl"] .default-ltr {
+  direction: ltr;
+  display: inline-flex;   
 }
