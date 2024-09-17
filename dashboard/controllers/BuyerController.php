@@ -3215,7 +3215,7 @@ class BuyerController extends BuyerBaseController
             $cond = $srch->addCondition('ogcards_created_on', '<=', $toDate, 'and', true);
         }
 
-        $srch->addMultipleFields(array('ogcards_id', 'ogcards_order_id', 'ogcards_code', 'ogcards_sender_id', 'ogcards_receiver_name', 'ogcards_receiver_email', 'ogcards_status', 'ogcards_created_on', 'order_payment_status', 'ogcards_created_on'));
+        $srch->addMultipleFields(array('ogcards_id', 'ogcards_order_id', 'ogcards_code', 'ogcards_sender_id', 'ogcards_receiver_name', 'ogcards_receiver_email', 'ogcards_status', 'ogcards_created_on', 'order_payment_status', 'ogcards_created_on','order_net_amount'));
 
         $srch->doNotCalculateRecords();
         $recordCountSrch = clone $srch;
