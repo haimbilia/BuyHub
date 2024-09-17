@@ -49,7 +49,7 @@ foreach ($op['taxOptions'] as $key => $val) {
                 $pickupAddress = (!empty($addresses[Orders::PICKUP_ADDRESS_TYPE])) ? $addresses[Orders::PICKUP_ADDRESS_TYPE] : array();
                 $pickupAddrPhone = "";
                 if (!empty($pickupAddress['oua_phone_dcode'])) {
-                    $pickupAddrPhone = ValidateElement::formatDialCode($pickupAddress['oua_phone_dcode']) . $pickupAddress['oua_phone'];
+                    $pickupAddrPhone = '<span class="default-ltr">'. ValidateElement::formatDialCode($pickupAddress['oua_phone_dcode']) . $pickupAddress['oua_phone'] . '</span>';
                 }
                 $contactName = $pickupAddress['oua_name'];
 
@@ -268,7 +268,7 @@ foreach ($op['taxOptions'] as $key => $val) {
                 <?php if ($address['oua_phone'] != '') { ?>
                     <li class="list-stats-item">
                         <span class="label"><?php echo Labels::getLabel('LBL_PHONE', $siteLangId); ?> </span>
-                        <span class="value"><?php echo ValidateElement::formatDialCode($address['oua_phone_dcode']) . $address['oua_phone']; ?></span>
+                        <span class="value"><span class="default-ltr"><?php echo ValidateElement::formatDialCode($address['oua_phone_dcode']) . $address['oua_phone']; ?></span></span>
                     </li>
                 <?php } ?>
                 <?php

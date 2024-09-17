@@ -79,7 +79,7 @@ if (!empty($orderDetail['billingAddress'])) {
     }
 
     if ($orderDetail['billingAddress']['oua_phone'] != '') {
-        $billingAddress  .= '<br/>' . ValidateElement::formatDialCode($orderDetail['billingAddress']['oua_phone_dcode']) . $orderDetail['billingAddress']['oua_phone'];
+        $billingAddress  .= '<br><span class="default-ltr">' . ValidateElement::formatDialCode($orderDetail['billingAddress']['oua_phone_dcode']) . $orderDetail['billingAddress']['oua_phone'] . '</span>';
     }
 }
 
@@ -108,7 +108,7 @@ if ($orderDetail['op_product_type'] != Product::PRODUCT_TYPE_DIGITAL && !empty($
     }
 
     if ($orderDetail['shippingAddress']['oua_phone'] != '') {
-        $shippingAddress .= '<br/>' . ValidateElement::formatDialCode($orderDetail['shippingAddress']['oua_phone_dcode']) . $orderDetail['shippingAddress']['oua_phone'];
+        $shippingAddress .= '<br><span class="default-ltr">' . ValidateElement::formatDialCode($orderDetail['shippingAddress']['oua_phone_dcode']) . $orderDetail['shippingAddress']['oua_phone'] . '</span>';
     }
 }
 
@@ -130,7 +130,7 @@ if (isset($orderDetail['pickupAddress']) && !empty($orderDetail['pickupAddress']
         $pickUpAddress .= '-' . $orderDetail['pickupAddress']['oua_zip'];
     }
     if ($orderDetail['pickupAddress']['oua_phone'] != '') {
-        $pickUpAddress .= '<br/>' . ValidateElement::formatDialCode($orderDetail['pickupAddress']['oua_phone_dcode']) . $orderDetail['pickupAddress']['oua_phone'];
+        $pickUpAddress .= '<br><span class="default-ltr">' . ValidateElement::formatDialCode($orderDetail['pickupAddress']['oua_phone_dcode']) . $orderDetail['pickupAddress']['oua_phone'] . '</span>';
     }
 }
 

@@ -26,7 +26,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, $row[$key], true);
                 break;
             case 'bcontributions_author_phone':
-                $phone = ValidateElement::formatDialCode($row['bcontributions_author_phone_dcode']) . $row[$key];
+                $phone = '<span class="default-ltr">' . ValidateElement::formatDialCode($row['bcontributions_author_phone_dcode']) . $row[$key] . '</span>';
                 $td->appendElement('plaintext', $tdAttr, $phone, true);
                 break;
             case 'bcontributions_status':
