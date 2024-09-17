@@ -78,6 +78,7 @@
     - Bug-086853 - Error message appears when the user opens the shop reviews page
     - Bug-086840 - The error occurs when the user clicks on the save button without adding details on the tax structure setup popup
     - Bug-086940 - The seller is redirected to the inventory listing by Clicking on shop inventory link from the header menu
+    - Bug-085674 - Distance-based Delivery: Same category listing appears multiple times in the categories collection on the homepage
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  
