@@ -672,3 +672,6 @@ INSERT INTO `tbl_sms_templates` (`stpl_code`, `stpl_lang_id`, `stpl_name`, `stpl
 ON DUPLICATE KEY UPDATE stpl_body = VALUES(stpl_body), stpl_replacements = VALUES(stpl_replacements);
 
 UPDATE `tbl_email_templates` SET `etpl_priority` = '5' WHERE `tbl_email_templates`.`etpl_code` IN ('NEW_RFQ', 'RFQ_APPROVAL', 'RFQ_DELETION', 'NEW_RFQ_OFFER', 'NEW_RFQ_ASSIGNED', 'RFQ_OFFER_ACTION_BUYER', 'COUNTER_RFQ_OFFER_BUYER', 'RFQ_OFFER_ACTION_SELLER', 'COUNTER_RFQ_OFFER_SELLER', 'RFQ_OFFER_ACCEPTED_BY_BUYER', 'RFQ_OFFER_ACCEPTED_BY_SELLER');
+INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES 
+('ERR_PACKAGE_SUPPORT_MAXIMUM_UP_TO_{PROD-CNT}_PRODUCTS_AND_{INV-CNT}_INVENTORIES._MARK_ALL_THE_INVENTORIES_INACTIVE', 1, 'This package support maximum up to {PROD-CNT} products and {INV-CNT} inventories. Please mark additional inventories as inactive before buying a plan.', 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);

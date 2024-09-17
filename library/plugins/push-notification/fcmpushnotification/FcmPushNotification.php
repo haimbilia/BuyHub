@@ -75,7 +75,7 @@ class FcmPushNotification extends PushNotificationBase
                 'image' => ($data['image'] ?? ''),
                 'customData' => $data['customData'] ?? []
             ];
-            Notifications::sendPushNotification($config, $deviceToken, $data);
+            Notifications::sendPushNotification($config, $deviceToken, $os, $data);
         }
         return $this->formatOutput(Plugin::RETURN_TRUE, Labels::getLabel('MSG_SUCCESS', $this->langId));
     }

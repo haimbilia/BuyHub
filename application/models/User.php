@@ -2471,7 +2471,7 @@ class User extends MyAppModel
         $srch->addCondition('uc.' . static::DB_TBL_CRED_PREFIX . 'verified', '=', 1);
         $srch->addCondition('uauth_fcm_id', '!=', '');
         $srch->addCondition('uauth_last_access', '>=', date('Y-m-d H:i:s', strtotime("-7 DAYS")));
-        $srch->addFld('uauth_fcm_id');
+        $srch->addMultipleFields(['uauth_fcm_id', 'uauth_device_os']);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $rs = $srch->getResultSet();
@@ -2515,7 +2515,7 @@ class User extends MyAppModel
 
         $email = isset($postedData['user_email']) && !empty($postedData['user_email']) ? $postedData['user_email'] : '';
 
-        if (!$this->validateUserForRegistration($postedData['user_username'], $email, $userPhone)) {
+        if (!$this->validateUserForRegistration(strtolower($postedData['user_username']), $email, $userPhone)) {
             return false;
         }
 

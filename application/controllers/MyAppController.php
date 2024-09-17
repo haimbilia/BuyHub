@@ -872,7 +872,12 @@ class MyAppController extends FatController
                     LibHelper::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
                 }
 
-                $userInfo = $uObj->getUserInfo(array('user_name', 'user_id', 'user_phone_dcode', 'user_phone', 'credential_email'), true, true, true);
+                $userInfo = $uObj->getUserInfo(array('user_name', 'user_id', 'user_phone_dcode', 'user_phone', 'credential_email', 'credential_active', 'credential_verified'), false, false, true);
+                if(!empty($userInfo) && $userInfo['credential_active'] == applicationConstants::INACTIVE){
+                    LibHelper::dieJsonError(Labels::getLabel('ERR_USER_NOT_ACTIVE', $this->siteLangId));
+                } elseif(!empty($userInfo) && $userInfo['credential_verified'] == applicationConstants::NO) {
+                    LibHelper::dieJsonError(Labels::getLabel('ERR_USER_NOT_VERIFIED', $this->siteLangId));
+                }
                 $data = array_merge(['token' => $token], $userInfo);
                 $this->set('data', $data);
             }

@@ -279,7 +279,11 @@ trait CatalogProduct
     private function getImageFrm()
     {
         $frm = new Form('imageFrm');
-        $frm->addSelectBox(Labels::getLabel('FRM_IMAGE_FILE_TYPE', $this->siteLangId), 'option_id', [], '', array(), Labels::getLabel('FRM_FOR_ALL_OPTIONS', $this->siteLangId));
+        if (!FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+            $frm->addSelectBox(Labels::getLabel('FRM_IMAGE_FILE_TYPE', $this->siteLangId), 'option_id', [], '', array(), Labels::getLabel('FRM_FOR_ALL_OPTIONS', $this->siteLangId));
+        } else {
+            $frm->addHiddenField('', 'option_id', 0);
+        }
         $languagesAssocArr = Language::getAllNames();
         if (count($languagesAssocArr) > 1) {
             $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', array(0 => Labels::getLabel('LBL_All_Languages', $this->siteLangId)) + $languagesAssocArr, '', array(), '');
