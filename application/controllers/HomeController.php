@@ -890,7 +890,7 @@ class HomeController extends MyAppController
                     $catIds = array_keys($collectionCatRecords);
 
                     /* fetch Categories data[ */
-                    $productCatSrchTempObj = $this->getProductSearchObj($loggedUserId, ['categoryIds' => $catIds]);
+                    $productCatSrchTempObj = clone $productCatSrchObj;
                     $productCatSrchTempObj->joinTable('(' . $tempObj->getQuery() . ')', 'INNER JOIN', 'prodcat_id = ctr.ctr_record_id', 'ctr');
 
                     $productCatSrchTempObj->addCondition('prodcat_deleted', '=', applicationConstants::NO);
