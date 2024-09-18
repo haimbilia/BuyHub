@@ -975,3 +975,7 @@ mark,
 		padding: 0;
 	}
 }
+[dir="rtl"] .default-ltr {
+  direction: ltr;
+  display: inline-flex;   
+}

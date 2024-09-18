@@ -18,15 +18,15 @@ $doNotshowMessages = $doNotshowMessages ?? false;
     $fromUserId = $messageDetail['message_from_user_id'];
     $fromUserUpdatedOn = $messageDetail['message_from_user_updated_on'];
     $fromUserName = $messageDetail['message_from_name'];
-    $fromEmail = $messageDetail['message_from_email'];
-    $fromPhoneNo =  !empty($messageDetail['message_from_user_phone']) ? ValidateElement::formatDialCode($messageDetail['message_from_user_phone_dcode']) . $messageDetail['message_from_user_phone'] : '';
+    // $fromEmail = $messageDetail['message_from_email'];
+    // $fromPhoneNo =  !empty($messageDetail['message_from_user_phone']) ? ValidateElement::formatDialCode($messageDetail['message_from_user_phone_dcode']) . $messageDetail['message_from_user_phone'] : '';
     $toUserName = $messageDetail['message_to_name'];
     if ($messageDetail['thread_started_by'] == $messageDetail['message_to_user_id'] || $activeTab == "B") {
         $fromUserId = $messageDetail['message_to_user_id'];
         $fromUserUpdatedOn = $messageDetail['message_to_user_updated_on'];
         $fromUserName = $messageDetail['message_to_name'];
-        $fromEmail = $messageDetail['message_to_email'];
-        $fromPhoneNo =  !empty($messageDetail['message_to_user_phone']) ? ValidateElement::formatDialCode($messageDetail['message_to_user_phone_dcode']) . $messageDetail['message_to_user_phone'] : '';
+        // $fromEmail = $messageDetail['message_to_email'];
+        // $fromPhoneNo =  !empty($messageDetail['message_to_user_phone']) ? ValidateElement::formatDialCode($messageDetail['message_to_user_phone_dcode']) . $messageDetail['message_to_user_phone'] : '';
         $toUserName = $messageDetail['message_from_name'];
     }
 

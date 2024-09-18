@@ -45,7 +45,7 @@ defined('SYSTEM_INIT') or die('Invalid Usage.');
                                     </svg>
                                     <?php
                                     if (strlen($address['addr_phone']) > 0) {
-                                        $addrPhone = ValidateElement::formatDialCode($address['addr_phone_dcode']) . $address['addr_phone'];
+                                        $addrPhone = '<span class="default-ltr">' . ValidateElement::formatDialCode($address['addr_phone_dcode']) . $address['addr_phone'] . '</span>';
                                         echo Labels::getLabel('LBL_Phone:', $siteLangId) . $addrPhone . '<br>';
                                     }
                                     ?>

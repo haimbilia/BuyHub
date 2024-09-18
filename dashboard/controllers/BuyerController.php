@@ -3220,7 +3220,7 @@ class BuyerController extends BuyerBaseController
             $cond = $srch->addCondition('ogcards_created_on', '<=', $toDate, 'and', true);
         }
 
-        $srch->addMultipleFields(array('ogcards_id', 'ogcards_order_id', 'ogcards_code', 'ogcards_sender_id', 'ogcards_receiver_name', 'ogcards_receiver_email', 'ogcards_status', 'ogcards_created_on', 'order_payment_status', 'ogcards_created_on'));
+        $srch->addMultipleFields(array('ogcards_id', 'ogcards_order_id', 'ogcards_code', 'ogcards_sender_id', 'ogcards_receiver_name', 'ogcards_receiver_email', 'ogcards_status', 'ogcards_created_on', 'order_payment_status', 'ogcards_created_on','order_net_amount'));
 
         $srch->doNotCalculateRecords();
         $recordCountSrch = clone $srch;
@@ -3285,7 +3285,9 @@ class BuyerController extends BuyerBaseController
         $lbl = CommonHelper::replaceStringData(Labels::getLabel('LBL_ENTER_AMOUNT_({CURRENCY-CODE})'), ['{CURRENCY-CODE}' => $currency['currency_code']]);
 
         $frm = new Form('frmAddMoney');
-        $frm->addRequiredField($lbl, 'order_total_amount');
+        $fld = $frm->addRequiredField($lbl, 'order_total_amount');
+        $fld->requirements()->setInt();
+        $fld->requirements()->setRange('1', '99999999');
         $frm->addRequiredField(Labels::getLabel('LBL_RECEIVER_NAME'), 'ogcards_receiver_name');
         $frm->addEmailField(Labels::getLabel('LBL_RECEIVER_EMAIL'), 'ogcards_receiver_email');
         return $frm;

@@ -176,7 +176,7 @@ class EmailHandler extends FatModel
         $tpl = 'user_change_email_request_notification';
         $vars = array(
             '{user_full_name}' => $d['user_name'],
-            '{new_email}' => $d['user_email'],
+            '{new_email}' => $d['user_new_email'],
         );
 
         $sendEmail = false;
@@ -278,6 +278,8 @@ class EmailHandler extends FatModel
 
         $vars = array(
             '{name}' => $d['user_name'],
+            '{username}' => $d['user_name'],
+            '{account_type}' => $d['account_type'],
             '{contact_us_email}' => FatApp::getConfig('CONF_CONTACT_EMAIL'),
         );
 
