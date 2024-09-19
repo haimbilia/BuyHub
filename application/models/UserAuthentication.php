@@ -234,6 +234,7 @@ class UserAuthentication extends FatModel
             'user_username' => $useremail,
             'user_email' => $useremail,
             'user_is_buyer' => 1,
+            'user_type' => User::USER_TYPE_BUYER,
             'user_preferred_dashboard' => User::USER_BUYER_DASHBOARD,
             'user_registered_initially_for' => User::USER_TYPE_BUYER,
         );
