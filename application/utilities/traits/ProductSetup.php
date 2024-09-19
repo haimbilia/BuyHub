@@ -342,7 +342,11 @@ trait ProductSetup
         $selProdId = $recordObj->getMainTableRecordId();
 
         $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, CommonHelper::getDefaultFormLangId());
-        if (!$recordObj->updateLangData($langId, ['selprod_title' => $post['selprod_title'], 'selprod_comments' => $post['selprod_comments']])) {
+        $postData = ['selprod_comments' => $post['selprod_comments']];
+        if (!FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+            $postData['selprod_title'] = $post['selprod_title'];
+        }
+        if (!$recordObj->updateLangData($langId, $postData)) {
             LibHelper::exitWithError($recordObj->getError(), true);
         }
         $useShopPolicy = $post['use_shop_policy'];

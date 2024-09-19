@@ -185,6 +185,7 @@ class ReviewsController extends MyAppController
     {
         $selProdId = FatApp::getPostedData('selprod_id');
         $pageSize = FatApp::getPostedData('pageSize', FatUtility::VAR_INT, 10);
+        $pageSize = 3;
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         if ($page < 2) {
             $page = 1;
@@ -204,6 +205,7 @@ class ReviewsController extends MyAppController
         $this->set('pageSize', $pageSize);
         $this->set('page', $page);
         $this->set('pageCount', $srch->pages());
+        $this->set('selProdId', $selProdId);
         $json['page'] = $page;
         $json['html'] = $this->_template->render(false, false, 'reviews/reviews-with-images.php', true, false);
         $json['total_records'] = $totalRecords;

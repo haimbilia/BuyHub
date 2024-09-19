@@ -274,8 +274,8 @@ function setupReviewAbuse(frm) {
             } else {
                 $('.reviewsWithImagesSectionJs').fadeIn();
                 $(riDv).append(ans.html);
-                
                 pageNumber = ans.page;
+                /* 
                 $.fancybox.close();
                 let selector = riDv + " [data-fancybox]";
                 $(selector).fancybox({
@@ -295,7 +295,7 @@ function setupReviewAbuse(frm) {
                             lastIndex = 0;
                         }
                     }
-                });
+                }); */
             }
         }, '', false);
     };
