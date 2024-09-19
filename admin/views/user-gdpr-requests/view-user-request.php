@@ -13,10 +13,18 @@
                         <span class="lable"><?php echo Labels::getLabel('LBL_Full_Name', $siteLangId); ?></span>
                         <span class="value"><?php echo CommonHelper::displayNotApplicable($siteLangId, $userRequest['user_name']); ?></span>
                     </li>
-                    <li class="list-stats-item">
-                        <span class="lable"><?php echo Labels::getLabel('LBL_Email', $siteLangId); ?></span>
-                        <span class="value"><?php echo $userRequest['credential_email']; ?></span>
-                    </li>
+                    <?php if (!empty($userRequest['credential_email'])) { ?>
+                        <li class="list-stats-item">
+                            <span class="lable"><?php echo Labels::getLabel('LBL_Email', $siteLangId); ?></span>
+                            <span class="value"><?php echo $userRequest['credential_email']; ?></span>
+                        </li>
+                    <?php } ?>
+                    <?php if (!empty($userRequest['user_phone'])) { ?>
+                        <li class="list-stats-item">
+                            <span class="lable"><?php echo Labels::getLabel('LBL_PHONE', $siteLangId); ?></span>
+                            <span class="value"><span class="default-ltr"><?php echo ValidateElement::formatDialCode($userRequest['user_phone_dcode']) . $userRequest['user_phone']; ?></span></span>
+                        </li>
+                    <?php } ?>
                     <li class="list-stats-item">
                         <span class="lable"><?php echo Labels::getLabel('LBL_Username', $siteLangId); ?></span>
                         <span class="value"><?php echo $userRequest['credential_username']; ?></span>

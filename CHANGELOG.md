@@ -25,3 +25,6 @@
     - Bug-083863 - A fatal error occurs when the admin enables the Payout settings in the production mode.
     - Bug-084137 - Please remove the duplicity in the settings
     - Bug-084136 - Need to remove Brand parameters from Inventory Missing Info when linking brand with the catalog is not mandatory
+    - Bug-087215 - The user's phone number is missing in the GDPR request for the user registered with a phone number only
+    - Bug-087213 - A warning appears when the user tries to place a pickup order in Arabic
+    - Bug-087210 - The phone number direction is not correct in the RTL on the seller registration page

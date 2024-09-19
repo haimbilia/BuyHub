@@ -1029,6 +1029,9 @@
         display: flex;
         gap: 7px;
     }
+    span {
+        max-width: none;
+    }
 }
 
 .payment-action {
