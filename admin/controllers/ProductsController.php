@@ -390,7 +390,7 @@ class ProductsController extends ListingBaseController
             if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
                 $selProdId = SellerProduct::getSelprodIdByProductId($recordId);
                 $sellerProductRow = SellerProduct::getAttributesById($selProdId, null, true, true);
-                if (!$sellerProductRow) {
+                if (!$sellerProductRow || 1 > $sellerProductRow['selprod_user_id']) {
                     LibHelper::exitWithError($this->str_invalid_request_id, true);
                 }
 
