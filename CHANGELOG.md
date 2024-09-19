@@ -83,3 +83,6 @@
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  
+    - Bug-087215 - The user's phone number is missing in the GDPR request for the user registered with a phone number only
+    - Bug-087213 - A warning appears when the user tries to place a pickup order in Arabic
+    - Bug-087210 - The phone number direction is not correct in the RTL on the seller registration page

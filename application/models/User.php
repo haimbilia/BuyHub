@@ -1887,6 +1887,7 @@ class User extends MyAppModel
         $data = array(
             'user_name' => $data['user_name'],
             'user_email' => $data['user_email'],
+            'account_type' => User::getUserTypesArr($langId)[$data['user_type']],
             'link' => $link,
         );
 

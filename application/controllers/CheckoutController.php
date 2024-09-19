@@ -1220,23 +1220,25 @@ class CheckoutController extends MyAppController
                     $addressRecordId = Address::getAttributesById($pickUpDataRow['time_slot_addr_id'], 'addr_record_id');
                     $addr = new Address($pickUpDataRow['time_slot_addr_id'], $this->siteLangId);
                     $pickUpAddressArr = $addr->getData($pickUpDataRow['time_slot_type'], $addressRecordId);
-                    $productPickupAddress = array(
-                        'oua_order_id' => $order_id,
-                        'oua_op_id' => '',
-                        'oua_type' => Orders::PICKUP_ADDRESS_TYPE,
-                        'oua_name' => $pickUpAddressArr['addr_name'],
-                        'oua_address1' => $pickUpAddressArr['addr_address1'],
-                        'oua_address2' => $pickUpAddressArr['addr_address2'],
-                        'oua_city' => $pickUpAddressArr['addr_city'],
-                        'oua_state' => $pickUpAddressArr['state_name'],
-                        'oua_country' => $pickUpAddressArr['country_name'],
-                        'oua_country_code' => $pickUpAddressArr['country_code'],
-                        'oua_country_code_alpha3' => $pickUpAddressArr['country_code_alpha3'],
-                        'oua_state_code' => $pickUpAddressArr['state_code'],
-                        'oua_phone_dcode' => $pickUpAddressArr['addr_phone_dcode'],
-                        'oua_phone' => $pickUpAddressArr['addr_phone'],
-                        'oua_zip' => $pickUpAddressArr['addr_zip'],
-                    );
+                    if (!empty($pickUpAddressArr)) {
+                        $productPickupAddress = array(
+                            'oua_order_id' => $order_id,
+                            'oua_op_id' => '',
+                            'oua_type' => Orders::PICKUP_ADDRESS_TYPE,
+                            'oua_name' => $pickUpAddressArr['addr_name'] ?? Shop::getName($cartProduct['shop_id'], $this->siteLangId) ?? '',
+                            'oua_address1' => $pickUpAddressArr['addr_address1'],
+                            'oua_address2' => $pickUpAddressArr['addr_address2'],
+                            'oua_city' => $pickUpAddressArr['addr_city'],
+                            'oua_state' => $pickUpAddressArr['state_name'],
+                            'oua_country' => $pickUpAddressArr['country_name'],
+                            'oua_country_code' => $pickUpAddressArr['country_code'],
+                            'oua_country_code_alpha3' => $pickUpAddressArr['country_code_alpha3'],
+                            'oua_state_code' => $pickUpAddressArr['state_code'],
+                            'oua_phone_dcode' => $pickUpAddressArr['addr_phone_dcode'],
+                            'oua_phone' => $pickUpAddressArr['addr_phone'],
+                            'oua_zip' => $pickUpAddressArr['addr_zip'],
+                        );
+                    }
                 }
 
                 $productTaxOption = array();
