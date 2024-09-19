@@ -54,7 +54,7 @@
                                 if ($val['sformfield_type']  == User::USER_FIELD_TYPE_PHONE) {
                                     echo '<span class="value">' . filter_var($val['sfreqvalue_text'], FILTER_SANITIZE_NUMBER_INT) . '</span>';
                                 } else {
-                                    echo '<span class="value">' . nl2br($val['sfreqvalue_text']) . '</span>';
+                                    echo '<span class="value"><span class="default-ltr">' . nl2br($val['sfreqvalue_text']) . '</span></span>';
                                 }
                             }
                             ?>

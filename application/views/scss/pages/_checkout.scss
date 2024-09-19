@@ -1024,10 +1024,13 @@
   gap: 2rem;
   flex-flow: row wrap;
 
-  &-item {
-    display: flex;
-    gap: 7px;
-  }
+    &-item {
+        display: flex;
+        gap: 7px;
+    }
+    span {
+        max-width: none;
+    }
 }
 
 .payment-action {
