@@ -62,6 +62,9 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !em
                                 title="<?php echo Labels::getLabel('LBL_TYPE_YOUR_ADDRESS', $siteLangId); ?>"
                                 placeholder="<?php echo Labels::getLabel('LBL_TYPE_YOUR_ADDRESS', $siteLangId); ?>"
                                 type="text" name="location" value="<?php echo $geoAddress; ?>">
+                            <div class="or">
+                                <span><?php echo Labels::getLabel("LBL_OR", $siteLangId); ?></span>
+                            </div>
                             <button onclick="loadGeoLocation()" class="btn btn-brand btn-block btn-detect">
 
                                 <svg class="svg" width="18" height="18">
