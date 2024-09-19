@@ -276,6 +276,8 @@ class EmailHandler extends FatModel
 
         $vars = array(
             '{name}' => $d['user_name'],
+            '{username}' => $d['user_name'],
+            '{account_type}' => $d['account_type'],
             '{contact_us_email}' => FatApp::getConfig('CONF_CONTACT_EMAIL'),
         );
 

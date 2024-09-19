@@ -4,6 +4,7 @@
     <?php $arr_flds = array(
         'ogcards_order_id' => Labels::getLabel('LBL_ORDER_ID', $siteLangId),
         'ogcards_code' => Labels::getLabel('LBL_CODE', $siteLangId),
+        'order_net_amount' => Labels::getLabel('LBL_AMOUNT', $siteLangId),
         'ogcards_receiver_name' => Labels::getLabel('LBL_RECEIVER_NAME', $siteLangId),
         'ogcards_receiver_email' => Labels::getLabel('LBL_RECEIVER_EMAIL', $siteLangId),
         'order_payment_status' => Labels::getLabel('LBL_PAYMENT_STATUS', $siteLangId),
@@ -25,6 +26,9 @@
             switch ($key) {
                 case 'ogcards_order_id':
                     $td->appendElement('plaintext', array(),  '<div class="text-nowrap">' . $row[$key] . '</div>', true);
+                    break;
+                case 'order_net_amount':
+                    $td->appendElement('plaintext', array(),  CommonHelper::displayMoneyFormat($row[$key]), true);
                     break;
                 case 'ogcards_status':
                     $statusclass = (GiftCards::STATUS_USED == $row[$key]) ? 'success' : 'warning';
