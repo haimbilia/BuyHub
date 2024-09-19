@@ -48,6 +48,24 @@ class RequestForQuotesController extends MyAppController
         return $frm;
     }
 
+    /* 
+    * Used for API only
+    */
+    public function getAddresses()
+    {
+        $address = new Address();
+        $addresses = $address->getData(Address::TYPE_USER, UserAuthentication::getLoggedUserId(true), sessionId: session_id());
+        $defaultAddress = current($addresses);
+
+        $data = [
+            'addresses' => $addresses,
+            'defaultAddress' => !empty($defaultAddress) ? $defaultAddress : (object) []
+        ];
+
+        $this->set('data', $data);
+        $this->_template->render();
+    }
+
     public function form()
     {
         $selprodId = FatApp::getPostedData('selprodId', FatUtility::VAR_INT, 0);
