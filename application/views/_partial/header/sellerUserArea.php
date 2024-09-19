@@ -23,9 +23,9 @@ if ($userPrivilege->canViewSales(UserAuthentication::getLoggedUserId(), true)) {
 ?>
 
 <?php if ($userPrivilege->canViewProducts(UserAuthentication::getLoggedUserId(), true)) { 
-    $prodUrl = UrlHelper::generateUrl('seller', 'products');
+    $prodUrl = UrlHelper::generateUrl('seller', 'products',[],CONF_WEBROOT_DASHBOARD);
     if (FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
-        $prodUrl = UrlHelper::generateUrl('seller', 'catalog');
+        $prodUrl = UrlHelper::generateUrl('seller', 'catalog',[],CONF_WEBROOT_DASHBOARD);
     }
     ?>
     <li class="<?php echo $liClass; ?>">

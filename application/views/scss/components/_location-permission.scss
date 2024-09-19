@@ -89,6 +89,9 @@
     margin-bottom: 0;
     background-size: 16px;
     padding-#{$start-direction}: 40px;
+    [dir="rtl"] & {
+      background-position: calc(100% - 13px) center;
+    }
     &:hover,
     &:focus {
       border-color: #000;
