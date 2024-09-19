@@ -42,6 +42,7 @@ class Cart extends FatModel
     public $cart_user_id = 0;
     public $cart_id = 0;
     public $cartSameSessionUser = 0;
+    public $orderType = Orders::ORDER_PRODUCT;
 
     public function __construct($user_id = 0, $langId = 0, $tempCartUserId = 0, $pageType = 0)
     {
@@ -795,12 +796,46 @@ class Cart extends FatModel
         $prodSrch->doNotLimitRecords();
         $prodSrch->addDirectCondition('selprod_id IN (' . implode(',', $selProdIds) . ')');
         $prodSrch->addMultipleFields(array(
-            'product_id', 'product_type', 'product_length', 'product_width', 'product_height', 'product_ship_free',
-            'product_dimension_unit', 'product_weight', 'product_weight_unit', 'product_fulfillment_type',
-            'selprod_id', 'selprod_code', 'selprod_stock', 'selprod_user_id', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'selprod_min_order_qty',
-            'special_price_found', 'theprice', 'shop_id', 'shop_free_ship_upto', 'shop_state_id', 'shop_country_id',
-            'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'selprod_price', 'selprod_cost', 'case when product_seller_id=0 then IFNULL(psbs_user_id,0)   else product_seller_id end  as psbs_user_id', 'product_seller_id', 'product_cod_enabled', 'shop_fulfillment_type', 'selprod_fulfillment_type', 'selprod_cod_enabled', 'shippack_length', 'shippack_width', 'shippack_height', 'shippack_units',
-            'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name', 'product_updated_on', 'selprod_track_inventory'
+            'product_id',
+            'product_type',
+            'product_length',
+            'product_width',
+            'product_height',
+            'product_ship_free',
+            'product_dimension_unit',
+            'product_weight',
+            'product_weight_unit',
+            'product_fulfillment_type',
+            'selprod_id',
+            'selprod_code',
+            'selprod_stock',
+            'selprod_user_id',
+            'IF(selprod_stock > 0, 1, 0) AS in_stock',
+            'selprod_min_order_qty',
+            'special_price_found',
+            'theprice',
+            'shop_id',
+            'shop_free_ship_upto',
+            'shop_state_id',
+            'shop_country_id',
+            'splprice_display_list_price',
+            'splprice_display_dis_val',
+            'splprice_display_dis_type',
+            'selprod_price',
+            'selprod_cost',
+            'case when product_seller_id=0 then IFNULL(psbs_user_id,0)   else product_seller_id end  as psbs_user_id',
+            'product_seller_id',
+            'product_cod_enabled',
+            'shop_fulfillment_type',
+            'selprod_fulfillment_type',
+            'selprod_cod_enabled',
+            'shippack_length',
+            'shippack_width',
+            'shippack_height',
+            'shippack_units',
+            'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name',
+            'product_updated_on',
+            'selprod_track_inventory'
         ));
 
         if ($siteLangId) {
@@ -1359,13 +1394,16 @@ class Cart extends FatModel
     {
         $cartTotal = 0;
         $products = $this->getBasketProducts($this->cart_lang_id);
-        // CommonHelper::printArray($products); die;
         if (is_array($products) && count($products) > 0) {
             foreach ($products as $product) {
                 $cartTotal += $product['total'];
             }
         }
         return $cartTotal;
+    }
+
+    public function setOrderType(int $orderType = Orders::ORDER_PRODUCT) {
+        $this->orderType = $orderType;
     }
 
     public function getCartFinancialSummary($langId)
@@ -1475,7 +1513,8 @@ class Cart extends FatModel
 
         $orderNetAmount = $orderNetAmount - CommonHelper::rewardPointDiscount($orderNetAmount, $cartRewardPoints);
 
-        $WalletAmountCharge = ($this->isCartUserWalletSelected()) ? min($orderNetAmount, $userWalletBalance) : 0;
+        $isWalletSelected = (Orders::ORDER_GIFT_CARD == $this->orderType ? $this->isCartUserGiftWalletSelected() : $this->isCartUserWalletSelected());
+        $WalletAmountCharge = $isWalletSelected ? min($orderNetAmount, $userWalletBalance) : 0;
 
         $orderPaymentGatewayCharges = $orderNetAmount - $WalletAmountCharge;
 
@@ -1498,7 +1537,7 @@ class Cart extends FatModel
             'cartDiscounts' => $cartDiscounts,
             'cartVolumeDiscount' => $cartVolumeDiscount,
             'cartRewardPoints' => $cartRewardPoints,
-            'cartWalletSelected' => $this->isCartUserWalletSelected(),
+            'cartWalletSelected' => $isWalletSelected,
             'siteCommission' => $totalSiteCommission,
             'orderNetAmount' => $orderNetAmount,
             'WalletAmountCharge' => $WalletAmountCharge,
