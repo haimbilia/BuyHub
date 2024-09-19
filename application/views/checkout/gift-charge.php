@@ -95,7 +95,7 @@ if ($noPaymentMethod && $rewardsCurrAmtCanBeUsed < $orderData['order_net_amount'
                                                     <script>
                                                         function confirmOrder(frm) {
                                                             var data = fcom.frmData(frm);
-                                                            data = data + "&order_type=" + <?php echo Orders::GIFT_CARD_TYPE; ?>;
+                                                            data = data + "&order_type=" + <?php echo Orders::ORDER_GIFT_CARD; ?>;
 
                                                             var action = $(frm).attr('action');
                                                             $(frm.btn_submit).attr({

@@ -37,7 +37,6 @@ class Orders extends MyAppModel
     public const BILLING_ADDRESS_TYPE = 1;
     public const SHIPPING_ADDRESS_TYPE = 2;
     public const PICKUP_ADDRESS_TYPE = 3;
-    public const GIFT_CARD_TYPE = 4;
 
     public const ORDER_PAYMENT_CANCELLED = -1;
     public const ORDER_PAYMENT_PENDING = 0;
@@ -3097,7 +3096,7 @@ class Orders extends MyAppModel
         $currency = Currency::getAttributesById(CommonHelper::getCurrencyId());
         $orderNumber =  $this->generateOrderNo();
         $this->assignValues([
-            'order_type' => static::GIFT_CARD_TYPE,
+            'order_type' => static::ORDER_GIFT_CARD,
             'order_user_id' => UserAuthentication::getLoggedUserId(),
             'order_date_added' => date('Y-m-d H:i:s'),
             'order_discount_value' => 0,

@@ -51,7 +51,7 @@ class WalletPayController extends MyAppController
             $srch->addCondition('order_type', '=', Orders::ORDER_SUBSCRIPTION);
         } else {
             $cond =   $srch->addCondition('order_type', '=', Orders::ORDER_PRODUCT);
-            $cond->attachCondition('order_type', '=', Orders::GIFT_CARD_TYPE);
+            $cond->attachCondition('order_type', '=', Orders::ORDER_GIFT_CARD);
         }
         $rs = $srch->getResultSet();
         $orderInfo = FatApp::getDb()->fetch($rs);

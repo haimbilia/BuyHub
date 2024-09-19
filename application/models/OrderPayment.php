@@ -278,7 +278,7 @@ class OrderPayment extends Orders
                 /* ] */
             }
 
-            if ($orderDetails['order_type'] == Orders::GIFT_CARD_TYPE) {
+            if ($orderDetails['order_type'] == Orders::ORDER_GIFT_CARD) {
                 $emailNotificationObj = new EmailHandler();
                 $emailNotificationObj->sendMailToAdminAndRecipient($orderDetails['order_id']);
             }

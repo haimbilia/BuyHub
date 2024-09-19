@@ -49,7 +49,7 @@ class GiftCards extends MyAppModel
         $srch->addCondition('ogcards_receiver_id', '=', $userId);
         $srch->addCondition('ogcards_status', '=', self::STATUS_UNUSED);
         $srch->addCondition('order_payment_status', '=', Orders::ORDER_PAYMENT_PAID);
-        $srch->addCondition('order_type', '=', Orders::GIFT_CARD_TYPE);
+        $srch->addCondition('order_type', '=', Orders::ORDER_GIFT_CARD);
 
         if (!empty($code)) {
             $srch->addCondition('ogcards_code', '=', $code);

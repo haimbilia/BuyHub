@@ -477,7 +477,7 @@ class CustomController extends MyAppController
             }
             $cartObj->updateUserCart(); */
         }
-        if (isset($_SESSION['order_type']) && $_SESSION['order_type'] == Orders::GIFT_CARD_TYPE) {
+        if (isset($_SESSION['order_type']) && $_SESSION['order_type'] == Orders::ORDER_GIFT_CARD) {
             FatApp::redirectUser(UrlHelper::generateFullUrl('buyer', 'giftCards', [], CONF_WEBROOT_DASHBOARD, null, false, false, false));
         }
         if (isset($_SESSION['order_type']) && $_SESSION['order_type'] == Orders::ORDER_SUBSCRIPTION) {
@@ -581,7 +581,7 @@ class CustomController extends MyAppController
             );
             $textMessage = Labels::getLabel('MSG_WALLET_SUCCESS_ORDER_{account}_{credits}', $this->siteLangId);
             $textMessage = str_replace(array_keys($searchReplaceArray), array_values($searchReplaceArray), $textMessage);
-        } elseif ($orderInfo['order_type'] == Orders::GIFT_CARD_TYPE) {
+        } elseif ($orderInfo['order_type'] == Orders::ORDER_GIFT_CARD) {
 
             $searchReplaceArray = array(
                 '{account}' => '<a href="' . UrlHelper::generateUrl('account', '', [], CONF_WEBROOT_DASHBOARD, null, false, false, false) . '" class="link">' . Labels::getLabel('MSG_MY_ACCOUNT', $this->siteLangId) . '</a>',

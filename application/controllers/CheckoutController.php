@@ -1779,8 +1779,11 @@ class CheckoutController extends MyAppController
         $order_id = FatApp::getPostedData("order_id", FatUtility::VAR_STRING, "");
         $user_id = UserAuthentication::getLoggedUserId();
         
-        $this->cartObj->setOrderType($order_type);
-        $cartSummary = $this->cartObj->getCartFinancialSummary($this->siteLangId);
+        if (Orders::ORDER_GIFT_CARD == $order_type) {
+            $cartSummary = $this->cartObj->getCartGiftFinancialSummary($this->siteLangId, $order_id);
+        } else {
+            $cartSummary = $this->cartObj->getCartFinancialSummary($this->siteLangId);
+        }
         $userWalletBalance = FatUtility::convertToType(User::getUserBalance($user_id, true), FatUtility::VAR_FLOAT);
         $orderNetAmount = isset($cartSummary['orderNetAmount']) ? FatUtility::convertToType($cartSummary['orderNetAmount'], FatUtility::VAR_FLOAT) : 0;
 
@@ -1874,7 +1877,7 @@ class CheckoutController extends MyAppController
         /* ] */
 
         /* Loading GIFT CARDS[ */
-        if ($order_type == Orders::GIFT_CARD_TYPE) {
+        if ($order_type == Orders::ORDER_GIFT_CARD) {
             $criteria = array('isUserLogged' => true);
             if (!$this->isEligibleForNextStep($criteria)) {
                 $this->errMessage = Labels::getLabel('ERR_SOMETHING_WENT_WRONG,_PLEASE_TRY_AFTER_SOME_TIME.', $this->siteLangId);
@@ -1895,7 +1898,7 @@ class CheckoutController extends MyAppController
             $srch->addCondition('order_id', '=', $order_id);
             $srch->addCondition('order_user_id', '=', 'mysql_func_' . $user_id, 'AND', true);
             $srch->addCondition('order_payment_status', '=', 'mysql_func_' . Orders::ORDER_PAYMENT_PENDING, 'AND', true);
-            $srch->addCondition('order_type', '=', 'mysql_func_' . Orders::GIFT_CARD_TYPE, 'AND', true);
+            $srch->addCondition('order_type', '=', 'mysql_func_' . Orders::ORDER_GIFT_CARD, 'AND', true);
             $rs = $srch->getResultSet();
             $orderInfo = FatApp::getDb()->fetch($rs);
             if (!$orderInfo) {
@@ -2514,7 +2517,7 @@ class CheckoutController extends MyAppController
 
         /* ] */
         $canUseWallet = PaymentMethods::canUseWalletForPayment();
-        $orderData = Orders::getOrderPaymentStatus($order_id, Orders::GIFT_CARD_TYPE, Orders::ORDER_PAYMENT_PENDING);
+        $orderData = Orders::getOrderPaymentStatus($order_id, Orders::ORDER_GIFT_CARD, Orders::ORDER_PAYMENT_PENDING);
         if (empty($orderData)) {
             Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ORDER', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Buyer', 'giftCards', [], CONF_WEBROOT_DASHBOARD));
@@ -2550,7 +2553,7 @@ class CheckoutController extends MyAppController
         $cartSummary = $this->cartObj->getCartGiftFinancialSummary($this->siteLangId, $order_id);
         $updatedData['order_wallet_amount_charge'] =  $cartSummary['WalletAmountCharge'];
         $updatedData['order_is_wallet_selected'] = $cartSummary['cartWalletSelected'];
-        $updatedData['order_type'] = Orders::GIFT_CARD_TYPE;
+        $updatedData['order_type'] = Orders::ORDER_GIFT_CARD;
         $updatedData['order_id'] = $order_id;
         $orderObj = new Orders($order_id);
         $orderObj->assignValues($updatedData);
@@ -2574,7 +2577,7 @@ class CheckoutController extends MyAppController
             $cartSummary = $this->cartObj->getCartGiftFinancialSummary($this->siteLangId, $orderId);
             $updatedData['order_wallet_amount_charge'] =  $cartSummary['WalletAmountCharge'];
             $updatedData['order_is_wallet_selected'] = $cartSummary['cartWalletSelected'];
-            $updatedData['order_type'] = Orders::GIFT_CARD_TYPE;
+            $updatedData['order_type'] = Orders::ORDER_GIFT_CARD;
             $updatedData['order_id'] = $orderId;
             $orderObj = new Orders($orderId);
             $orderObj->assignValues($updatedData);

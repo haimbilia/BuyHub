@@ -48,7 +48,7 @@ class OrderSearch extends SearchBase
             $cnd->attachCondition('buyer_cred.credential_username', 'like', '%' . $keyword . '%', 'OR');
             $cnd->attachCondition('buyer_cred.credential_email', 'like', '%' . $keyword . '%', 'OR');
         }
-        if ($orderType >= 0 && $orderType == Orders::GIFT_CARD_TYPE) {
+        if ($orderType >= 0 && $orderType == Orders::ORDER_GIFT_CARD) {
             $cnd->attachCondition('ogcards.ogcards_receiver_name', 'like', '%' . $keyword . '%', 'OR');
             $cnd->attachCondition('ogcards.ogcards_receiver_email', 'like', '%' . $keyword . '%', 'OR');
         }
