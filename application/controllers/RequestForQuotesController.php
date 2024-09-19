@@ -228,7 +228,11 @@ class RequestForQuotesController extends MyAppController
 
         $sellerIdArr = $selprodData = [];
         if (0 < $selprodId) {
-            $selprodData = SellerProduct::getAttributesByLangId($this->siteLangId, $selprodId, ['selprod_id', 'coalesce(selprod_title, product_identifier) as selprod_title', 'selprod_user_id', 'selprod_product_id', 'selprod_updated_on', 'selprod_code', 'selprod_min_order_qty', 'selprod_rfq_enabled'], applicationConstants::JOIN_LEFT);
+            $selprodData = SellerProduct::getAttributesByLangId($this->siteLangId, $selprodId, ['selprod_id', 'selprod_title', 'selprod_user_id', 'selprod_product_id', 'selprod_updated_on', 'selprod_code', 'selprod_min_order_qty', 'selprod_rfq_enabled'], 1, applicationConstants::JOIN_LEFT);
+            if(!empty($selprodData) && empty($selprodData['selprod_title'])){
+                $selprodData['selprod_title'] = Product::getAttributesById($selprodData['selprod_product_id'],'product_identifier');
+            }
+            
             if ($post['rfq_quantity'] < $selprodData['selprod_min_order_qty']) {
                 $msg = Labels::getLabel('ERR_REQUIRED_QUANTITY_SHOULD_BE_GREATER_THAN_EQUAL_TO_{QTY}', $this->siteLangId);
                 $msg = CommonHelper::replaceStringData($msg, ['{QTY}' => $selprodData['selprod_min_order_qty']]);
@@ -423,7 +427,7 @@ class RequestForQuotesController extends MyAppController
         $catId = $post['rfq_prodcat_id'] ?? 0;
         $catName = '';
         if (0 < $catId) {
-            $catData = ProductCategory::getAttributesByLangId($this->siteLangId, $post['rfq_prodcat_id'], ['COALESCE(prodcat_name, prodcat_identifier) as prodcat_name'], applicationConstants::JOIN_RIGHT);
+            $catData = ProductCategory::getAttributesByLangId($this->siteLangId, $post['rfq_prodcat_id'], ['COALESCE(prodcat_name, prodcat_identifier) as prodcat_name'],true, applicationConstants::JOIN_LEFT);
             $catName = $catData['prodcat_name'];
         }
         $emailData = array_merge($selprodData, $shopData, $userInfo, $address, $post, ['rfq_id' => $rfq->getMainTableRecordId(), 'rfq_added_on' => date("d-m-Y"), 'prodcat_name' => $catName]);
