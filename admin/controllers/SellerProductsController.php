@@ -37,7 +37,11 @@ class SellerProductsController extends ListingBaseController
     {
         $this->checkEditPrivilege();
         $this->setModel($constructorArgs);
-        $this->formLangFields = [$this->modelObj::tblFld('title'), $this->modelObj::tblFld('comments')];
+        if (FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+            $this->formLangFields = [$this->modelObj::tblFld('comments')];
+        } else {
+            $this->formLangFields = [$this->modelObj::tblFld('title'), $this->modelObj::tblFld('comments')];
+        }
         $this->set('formTitle', Labels::getLabel('LBL_SELLER_INVENTORY_SETUP', $this->siteLangId));
     }
 
@@ -194,9 +198,19 @@ class SellerProductsController extends ListingBaseController
         $srch->setPageSize($pageSize);
         $srch->addMultipleFields(
             array(
-                'selprod_id', 'selprod_user_id', 'selprod_price', 'selprod_stock', 'selprod_product_id',
-                'selprod_active', 'selprod_available_from', 'IFNULL(product_name, product_identifier) as product_name',
-                'selprod_title', 'u.user_name', 'uc.credential_email', 'product_type', 'product_updated_on'
+                'selprod_id',
+                'selprod_user_id',
+                'selprod_price',
+                'selprod_stock',
+                'selprod_product_id',
+                'selprod_active',
+                'selprod_available_from',
+                'IFNULL(product_name, product_identifier) as product_name',
+                'selprod_title',
+                'u.user_name',
+                'uc.credential_email',
+                'product_type',
+                'product_updated_on'
             )
         );
 
@@ -267,7 +281,7 @@ class SellerProductsController extends ListingBaseController
             $customUrl = explode("/", $urlRow['urlrewrite_custom']);
             $sellerProductRow['selprod_url_keyword'] = $customUrl[0];
         }
-        
+
         $user_shop_name = User::getUserShopName($sellerProductRow['selprod_user_id'], $this->siteLangId);
         $sellerProductRow['selprod_user_shop_name'] = $user_shop_name['user_name'] . ' - ' . $user_shop_name['shop_name'];
 
@@ -357,7 +371,9 @@ class SellerProductsController extends ListingBaseController
         $frm = new Form('frmLang');
         $frm->addHiddenField('', 'selprod_id', $recordId);
         $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $this->siteLangId), 'lang_id', Language::getDropDownList(CommonHelper::getDefaultFormLangId()), $lang_id, array(), '');
-        $frm->addRequiredField(Labels::getLabel('FRM_TITLE', $this->siteLangId), 'selprod_title');
+        if (!FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+            $frm->addRequiredField(Labels::getLabel('FRM_TITLE', $this->siteLangId), 'selprod_title');
+        }
         $frm->addTextArea(Labels::getLabel('FRM_ANY_EXTRA_COMMENT_FOR_BUYER', $this->siteLangId), 'selprod_comments');
         return $frm;
     }
@@ -1371,9 +1387,16 @@ class SellerProductsController extends ListingBaseController
         $srch->addOrder('scatrequestmsg_id', 'DESC');
         $srch->addMultipleFields(
             array(
-                'scatrequestmsg_id', 'scatrequestmsg_from_user_id', 'scatrequestmsg_from_admin_id',
-                'admin_name', 'admin_username', 'admin_email', 'scatrequestmsg_msg',
-                'scatrequestmsg_date', 'msg_user.user_name as msg_user_name', 'msg_user_cred.credential_username as msg_username',
+                'scatrequestmsg_id',
+                'scatrequestmsg_from_user_id',
+                'scatrequestmsg_from_admin_id',
+                'admin_name',
+                'admin_username',
+                'admin_email',
+                'scatrequestmsg_msg',
+                'scatrequestmsg_date',
+                'msg_user.user_name as msg_user_name',
+                'msg_user_cred.credential_username as msg_username',
                 'msg_user_cred.credential_email as msg_user_email',
                 'scatrequest_status'
             )
@@ -1953,8 +1976,21 @@ class SellerProductsController extends ListingBaseController
         $srch = SellerProduct::searchSpecialPriceProductsObj($this->siteLangId, $selProdId, $keyword, $sellerId);
         $srch->addMultipleFields(
             array(
-                'selprod_id', 'credential_username', 'selprod_price', 'date(splprice_start_date) as splprice_start_date', 'splprice_end_date', 'IFNULL(product_name, product_identifier) as product_name',
-                'selprod_title', 'splprice_id', 'splprice_price', 'selprod_product_id', 'product_updated_on', 'user_id', 'user_updated_on', 'credential_email', 'user_name'
+                'selprod_id',
+                'credential_username',
+                'selprod_price',
+                'date(splprice_start_date) as splprice_start_date',
+                'splprice_end_date',
+                'IFNULL(product_name, product_identifier) as product_name',
+                'selprod_title',
+                'splprice_id',
+                'splprice_price',
+                'selprod_product_id',
+                'product_updated_on',
+                'user_id',
+                'user_updated_on',
+                'credential_email',
+                'user_name'
             )
         );
         $srch->addOrder('splprice_id', 'DESC');
@@ -1988,8 +2024,19 @@ class SellerProductsController extends ListingBaseController
         $srch->doNotCalculateRecords();
         $srch->addMultipleFields(
             [
-                'selprod_id', 'credential_username', 'voldiscount_min_qty', 'voldiscount_percentage', 'IFNULL(product_name, product_identifier) as product_name', 'selprod_title',
-                'voldiscount_id', 'product_updated_on', 'selprod_product_id', 'user_id', 'user_updated_on', 'credential_email', 'user_name'
+                'selprod_id',
+                'credential_username',
+                'voldiscount_min_qty',
+                'voldiscount_percentage',
+                'IFNULL(product_name, product_identifier) as product_name',
+                'selprod_title',
+                'voldiscount_id',
+                'product_updated_on',
+                'selprod_product_id',
+                'user_id',
+                'user_updated_on',
+                'credential_email',
+                'user_name'
             ]
         );
         $srch->addOrder('voldiscount_id', 'DESC');

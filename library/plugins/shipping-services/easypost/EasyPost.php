@@ -3,6 +3,10 @@
 /**
  * EasyPost - https://www.easypost.com/docs/api
  */
+use \EasyPost\EasyPostClient as EasyPostClient;
+use \EasyPost\Util\Util as Util;
+use \EasyPost\Util\InternalUtil as InternalUtil;
+
 class EasyPost extends ShippingServicesBase
 {
     public const KEY_NAME = __CLASS__;
@@ -16,7 +20,10 @@ class EasyPost extends ShippingServicesBase
     private const REQUEST_RETRIEVE_ORDER = 7;
     private const REQUEST_REFUND_SHIPMENT = 8;
     private const REQUEST_CARRIER_TYPES = 9;
+    private const REQUEST_BUY_SHIPMENT = 10;
 
+    private $easyPost;
+    private string $apiKey;
     private $resp;
     private $eCode = '';
     private $toAddress;
@@ -73,10 +80,8 @@ class EasyPost extends ShippingServicesBase
         }
 
         $this->apiKey = Plugin::ENV_PRODUCTION == $this->settings['env'] ? $this->settings['live_api_key'] : $this->settings['api_key'];
-        if (false === $this->doRequest(self::SETUP_API_KEY, $this->apiKey)) {
-            return false;
-        }
-        return true;
+        
+        return $this->doRequest(self::SETUP_API_KEY, $this->apiKey);
     }
 
     /**
@@ -116,6 +121,7 @@ class EasyPost extends ShippingServicesBase
             return [];
         }
 
+        $this->easyPost = new EasyPostClient($this->settings['live_api_key']);
         if (false === $this->doRequest(self::REQUEST_CARRIER_LIST)) {
             return [];
         }
@@ -147,7 +153,7 @@ class EasyPost extends ShippingServicesBase
             $this->error = Labels::getLabel('ERR_PRODUCTION_API_KEY_REQUIRED_FOR_CARRIER_LISTING', $this->langId);
             return [];
         }
-
+        $this->easyPost = new EasyPostClient($this->settings['live_api_key']);
         if (false === $this->doRequest(self::REQUEST_CARRIER_TYPES)) {
             return [];
         }
@@ -412,7 +418,7 @@ class EasyPost extends ShippingServicesBase
     /**
      * retrieveOrder
      *
-     * @param  string $orderId
+     * @param  string $orderIdretrieveOrder
      * @param  bool $formatResp
      * @return bool
      */
@@ -512,7 +518,7 @@ class EasyPost extends ShippingServicesBase
             return (true === $formatResp ? [] : (object)[]);
         }
 
-        return (false === $formatResp ? \EasyPost\Util::convertToEasyPostObject($rates[$key], $this->apiKey) : $rates[$key]);
+        return (false === $formatResp ? InternalUtil::convertToEasyPostObject(null, $rates[$key]) : $rates[$key]);
     }
 
     /**
@@ -535,12 +541,12 @@ class EasyPost extends ShippingServicesBase
      */
     public function downloadLabel(array $labelData, string $filename = 'label.zip')
     {
-        if (!array_key_exists('shipments', $labelData)) {
+        if (!array_key_exists('postage_label', $labelData)) {
             return false;
         }
         $ext = pathinfo($filename, PATHINFO_EXTENSION);
         $filename = empty($ext) ? trim($filename) . '.zip' : $filename;
-        $this->createZipAndDownload($labelData['shipments'], $filename);
+        $this->createZipAndDownload([$labelData], $filename);
     }
 
     /**
@@ -554,7 +560,7 @@ class EasyPost extends ShippingServicesBase
     {
         $ext = pathinfo($filename, PATHINFO_EXTENSION);
         $filename = empty($ext) ? trim($filename) . '.zip' : $filename;
-        $this->createZipAndDownload($labelData, $filename);
+        $this->createZipAndDownload([$labelData], $filename);
     }
 
     /**
@@ -609,10 +615,7 @@ class EasyPost extends ShippingServicesBase
             return false;
         }
 
-        if (false === $this->retrieveOrder($shipmentRate[0])) {
-            return false;
-        }
-        return true;
+        return $this->retrieveOrder($shipmentRate[0]);
     }
 
     /**
@@ -627,69 +630,27 @@ class EasyPost extends ShippingServicesBase
             $this->error = Labels::getLabel('ERR_LOAD_ORDER_BEFORE_SHIPMENT', $this->langId);
             return false;
         }
-
-        $shipment = \EasyPost\Util::convertToEasyPostObject($this->shipment, $this->apiKey);
         $rate = $this->retrieveRate($requestParam['opshipmentId']);
-        $shipment->buy($rate);
-        $resp = \EasyPost\Util::convertEasyPostObjectToArray($shipment);
-        if (0 < count($resp)) {
-            $trackingUrl = [];
-            $trackingNumber = [];
-            foreach ($resp['shipments'] as $value) {
-                $trackingUrl[] = $value['tracker']['public_url'];
-                $trackingNumber[] = $value['tracker']['tracking_code'];
-            }
+        $requestParam = [
+            'shipment_id' => $rate->shipment_id,
+            'rate' => [
+                'rate' => Util::convertEasyPostObjectToArray($rate)
+            ]
+        ];
+        if (false === $this->doRequest(self::REQUEST_BUY_SHIPMENT, $requestParam)) {
+            return false;
+        }
+        
+        $resp = $this->getResponse();
+        
+        if (!empty($resp) && isset($resp['id'])) {
             $resp['orderNumber'] = $resp['id'];
-            $resp['tracking_url'] = implode(', ', $trackingUrl);
-            $resp['tracking_code'] = implode(', ', $trackingNumber);
+            $resp['tracking_url'] = $resp['tracker']['public_url'];
+            $resp['tracking_code'] = $resp['tracker']['tracking_code'];
         }
         $this->resp = $resp;
         return true;
     }
-
-    /**
-     * returnShipment
-     *
-     * @param  string $rateId
-     * @param  int $qty
-     * @return bool
-     */
-    /*
-    public function returnShipment(string $rateId, int $qty): bool
-    {
-        if (false === $this->loadOrder($rateId)) {
-            return false;
-        }
-        if (is_null($this->shipment) || empty($this->shipment)) {
-            $this->error = Labels::getLabel('ERR_LOAD_ORDER_BEFORE_PROCEED_TO_RETURN_SHIPMENT', $this->langId);
-            return false;
-        }
-        $shipments = array_slice($this->shipment['shipments'], 0, $qty);
-        $resp = [];
-        foreach ($shipments as $shipment) {
-            $requestParam = [
-                'to_address' => [
-                    'id' => $shipment['to_address']['id']
-                ],
-                'from_address' => [
-                    'id' => $shipment['from_address']['id']
-                ],
-                'parcel' => [
-                    'id' => $shipment['parcel']['id']
-                ],
-                'is_return' => true
-            ];
-            if (false === $this->doRequest(self::REQUEST_CREATE_SHIPPING, $requestParam, false)) {
-                return false;
-            }
-            $shipmentReturn = $this->getResponse();
-            $shipmentReturn->buy($shipmentReturn->lowest_rate());
-            $resp[] = \EasyPost\Util::convertEasyPostObjectToArray($shipmentReturn);
-        }
-        $this->resp = $resp;
-        return true;
-    }
-    */
 
     /**
      * refundShipment
@@ -722,10 +683,7 @@ class EasyPost extends ShippingServicesBase
             "tracking_codes" => implode(',', $trackingCodes)
         ];
 
-        if (false === $this->doRequest(self::REQUEST_REFUND_SHIPMENT, $requestRefundParam)) {
-            return false;
-        }
-        return true;
+        return $this->doRequest(self::REQUEST_REFUND_SHIPMENT, $requestRefundParam);
     }
 
     /**
@@ -765,38 +723,43 @@ class EasyPost extends ShippingServicesBase
      */
     private function doRequest(int $requestType, $requestParam = [], bool $formatResp = true): bool
     {
+        if (is_null($this->easyPost) || self::SETUP_API_KEY == $requestType) {
+            $this->apiKey = Plugin::ENV_PRODUCTION == $this->settings['env'] ? $this->settings['live_api_key'] : $this->settings['api_key'];
+            $this->easyPost = $this->easyPost ?? new EasyPostClient($requestParam);
+        }
+
         try {
             switch ($requestType) {
-                case self::SETUP_API_KEY:
-                    \EasyPost\EasyPost::setApiKey($requestParam);
-                    break;
                 case self::REQUEST_CARRIER_LIST:
-                    $this->resp = \EasyPost\CarrierAccount::all(null, $this->settings['live_api_key']);
+                    $this->resp = $this->easyPost->carrierAccount->all();
                     break;
                 case self::REQUEST_CARRIER_TYPES:
-                    $this->resp = \EasyPost\CarrierAccount::types(null, $this->settings['live_api_key']);
+                    $this->resp = $this->easyPost->carrierAccount->types();
                     break;
                 case self::REQUEST_CREATE_ADDRESS:
-                    $this->resp = \EasyPost\Address::create_and_verify($requestParam, $this->apiKey);
+                    $this->resp = $this->easyPost->address->create($requestParam);
                     break;
                 case self::REQUEST_CREATE_SHIPPING:
-                    $this->resp = \EasyPost\Shipment::create($requestParam, $this->apiKey);
+                    $this->resp = $this->easyPost->shipment->create($requestParam);
                     break;
                 case self::REQUEST_RETRIEVE_SHIPMENT:
-                    $this->resp = \EasyPost\Shipment::retrieve(['id' => $requestParam], $this->apiKey);
+                    $this->resp = $this->easyPost->shipment->retrieve($requestParam);
+                    break;
+                case self::REQUEST_BUY_SHIPMENT:
+                    $this->resp = $this->easyPost->shipment->buy($requestParam['shipment_id'], $requestParam['rate']);
                     break;
                 case self::REQUEST_CREATE_ORDER:
-                    $this->resp = \EasyPost\Order::create($requestParam, $this->apiKey);
+                    $this->resp = $this->easyPost->order->create($requestParam);
                     break;
                 case self::REQUEST_RETRIEVE_ORDER:
-                    $this->resp = \EasyPost\Order::retrieve(['id' => $requestParam], $this->apiKey);
+                    $this->resp = $this->easyPost->order->retrieve($requestParam);
                     break;
                 case self::REQUEST_REFUND_SHIPMENT:
-                    $this->resp = \EasyPost\Refund::create($requestParam, $this->apiKey);
+                    $this->resp = $this->easyPost->refund->create($requestParam);
                     break;
             }
             if (true === $formatResp && !empty($this->resp)) {
-                $this->resp = \EasyPost\Util::convertEasyPostObjectToArray($this->resp);
+                $this->resp = Util::convertEasyPostObjectToArray($this->resp);
             }
             return true;
         } catch (Exception $e) {

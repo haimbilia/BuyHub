@@ -397,10 +397,10 @@ class AdminBaseController extends FatController
 
         $pTypeFld = $frm->addSelectBox(Labels::getLabel('FRM_PRODUCT_TYPE', $this->siteLangId), 'product_type', Product::getProductTypes($langId), Product::PRODUCT_TYPE_PHYSICAL, array('id' => 'product_type'), '');
 
-        if(!FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)){
+        if (!FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
             $frm->addSelectBox(Labels::getLabel('FRM_PRODUCT_DOWNLOAD_ATTACHEMENTS_AT_INVENTORY_LEVEL', $this->siteLangId), 'product_attachements_with_inventory', applicationConstants::getYesNoArr($this->siteLangId), '', array(), '');
-        }else{
-            $frm->addHiddenField('','product_attachements_with_inventory',0);
+        } else {
+            $frm->addHiddenField('', 'product_attachements_with_inventory', 0);
         }
 
         /* $downloadAttachementsWithInventoryTrue = new FormFieldRequirement('product_attachements_with_inventory', 'value');
@@ -641,7 +641,9 @@ $frm->addTextBox('ISBN Code','product_isbn'); */
             $frm->addTextBox(Labels::getLabel('FRM_USER', $this->siteLangId), 'selprod_user_shop_name', '', array(' ' => ' '))->requirements()->setRequired();
         }
 
-        $frm->addRequiredField(Labels::getLabel('FRM_TITLE', $this->siteLangId), 'selprod_title');
+        if (!FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+            $frm->addRequiredField(Labels::getLabel('FRM_TITLE', $this->siteLangId), 'selprod_title');
+        }
 
         $isPickupEnabled = applicationConstants::NO;
         if ($productData['sellerProduct'] > 0) {
