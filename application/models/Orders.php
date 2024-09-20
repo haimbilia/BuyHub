@@ -2706,6 +2706,8 @@ class Orders extends MyAppModel
             } else {
                 return sprintf(Labels::getLabel('LBL_NEW_SUBSCRIPTION_PURCHASED_%s', $langId), $formattedOrderValue);
             }
+        } else if ($orderInfo['order_type'] == Orders::ORDER_GIFT_CARD) { 
+            return sprintf(Labels::getLabel('LBL_GIFT_CARD_PURCHASED_%s', $langId), $formattedOrderValue);
         } else {
             return sprintf(Labels::getLabel('LBL_ORDER_PLACED_%s', $langId), $formattedOrderValue);
         }
