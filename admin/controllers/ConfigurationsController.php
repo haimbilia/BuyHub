@@ -1600,7 +1600,7 @@ class ConfigurationsController extends ListingBaseController
                 HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("FRM_NOTE:_To_use_SSL,_check_with_your_host_if_a_SSL_certificate_is_installed_and_enable_it_from_here.", $langId));
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
-                $frm->addSelectBox(
+                $fld = $frm->addSelectBox(
                     Labels::getLabel('FRM_DEFAULT_SITE_LAGUAGE', $langId),
                     'CONF_DEFAULT_SITE_LANG',
                     Language::getAllNames(),
@@ -1608,6 +1608,7 @@ class ConfigurationsController extends ListingBaseController
                     array(),
                     ''
                 );
+                $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("FRM_CHANGING_DEFAULT_SITE_LANGUAGE,_MAKE_SURE_ALL_THE_INFORMATION_IS_UPDATED_WITH_THIS_LANGUAGE", $langId) . '</span>';
 
                 $currencyArr = Currency::getCurrencyNameWithCode($langId);
                 $frm->addSelectBox(Labels::getLabel('FRM_DEFAULT_SYSTEM_CURRENCY', $langId), 'CONF_CURRENCY', $currencyArr, false, array(), '');

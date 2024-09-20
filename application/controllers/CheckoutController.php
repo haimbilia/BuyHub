@@ -101,7 +101,6 @@ class CheckoutController extends MyAppController
                     /* ] */
 
                     $cartProducts = $this->cartObj->getProducts($this->siteLangId);
-                    //CommonHelper::printArray($cartProducts); exit;
                     foreach ($cartProducts as $product) {
                         if (!$product['in_stock']) {
                             $stock = false;
@@ -121,7 +120,7 @@ class CheckoutController extends MyAppController
                                 $userTempHoldStock = Product::tempHoldStockCount($pgproduct['selprod_id'], $cart_user_id, $product['prodgroup_id'], true);
                                 if ($availableStock < ($product['quantity'] - $userTempHoldStock)) {
                                     $key = false;
-                                    $productName = (isset($pgproduct['selprod_title']) && $pgproduct['selprod_title'] != '') ? $pgproduct['selprod_title'] : $pgproduct['name'];
+                                    $productName = (isset($pgproduct['selprod_title']) && $pgproduct['selprod_title'] != '') ? $pgproduct['selprod_title'] : $pgproduct['product_name'];
 
                                     $this->errMessage = str_replace('{product-name}', $productName, Labels::getLabel('ERR_{product-name}_IS_TEMPORARY_OUT_OF_STOCK_OR_HOLD_BY_OTHER_CUSTOMER', $this->siteLangId));
                                     if (true === $addErrorMessage) {
@@ -137,7 +136,7 @@ class CheckoutController extends MyAppController
                             if (0 < $product['selprod_track_inventory']) {
                                 $userTempHoldStock = Product::tempHoldStockCount($product['selprod_id'], $cart_user_id, 0, true);
                             }
-                            $productName = (isset($product['selprod_title']) && $product['selprod_title'] != '') ? $product['selprod_title'] : $product['name'];
+                            $productName = (isset($product['selprod_title']) && $product['selprod_title'] != '') ? $product['selprod_title'] : $product['product_name'];
                             if ($availableStock < ($product['quantity'] - $userTempHoldStock)) {
                                 $key = false;
                                 $this->errMessage = Labels::getLabel('ERR_{PRODUCT-NAME}_IS_TEMPORARY_OUT_OF_STOCK_OR_HOLD_BY_OTHER_CUSTOMER', $this->siteLangId);

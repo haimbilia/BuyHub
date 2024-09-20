@@ -282,13 +282,15 @@ class Shipping
     private function getShopAddress($shopId)
     {
         if (0 < $shopId) {
-            $fields = array('shop_postalcode as postalCode', 'shop_address_line_1 as line1', 'shop_address_line_2 as line2', 'shop_city as city', 'state_name as state', 'state_code as stateCode', 'country_code as countryCode', 'shop_phone as phone', 'shop_name', 'shop_id');
+            $fields = array('shop_postalcode as postalCode', 'COALESCE(shop_address_line_1, COALESCE(shop_name, shop_identifier)) as line1', 'shop_address_line_2 as line2', 'COALESCE(shop_city, shop_postalcode)  as city', 'COALESCE(state_name, state_identifier) as state', 'state_code as stateCode', 'country_code as countryCode', 'shop_phone as phone', 'COALESCE(shop_name, shop_identifier) as shop_name', 'shop_id');
             return Shop::getShopAddress($shopId, true, $this->langId, $fields);
         }
 
+        $adminLabel = Labels::getLabel('LBL_ADMIN', $this->langId);
+        $shopName = FatApp::getConfig('CONF_WEBSITE_NAME_' . $this->langId, FatUtility::VAR_STRING, $adminLabel);
         $adminAddress = Admin::getAddress($this->langId);
         $adminAddress['phone'] = FatApp::getConfig('CONF_SITE_PHONE', FatUtility::VAR_INT, 0);
-        $adminAddress['shop_name'] = FatApp::getConfig('CONF_WEBSITE_NAME_' . $this->langId, FatUtility::VAR_STRING, '');
+        $adminAddress['shop_name'] = !empty($shopName) ? $shopName : $adminLabel;
         $adminAddress['shop_id'] = 0;
         return $adminAddress;
     }
