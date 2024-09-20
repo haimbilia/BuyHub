@@ -8,6 +8,9 @@ $langFrm->setFormTagAttribute('onsubmit', 'saveLangData($("#frmLangJs")); return
 $langFrm->setFormTagAttribute('class', 'modal-body form form-edit modalFormJs layout--' . $formLayout);
 $langFrm->setFormTagAttribute('dir', $formLayout);
 
+$fld = $langFrm->getField('etpl_name');
+$fld->htmlAfterField = '<span class="form-text text-muted">' . CommonHelper::replaceStringData(Labels::getLabel('FRM_TEMPLATE:_{TEMPLATE}', $siteLangId), ['{TEMPLATE}' => '<i>'. $etplCode . '</i>']) . '</span>';
+
 $fld = $langFrm->getField('lang_id');
 $fld->setfieldTagAttribute('onChange', "editLangForm('" . $etplCode . "', this.value);");
 if (!isset($fld->htmlAfterField) || empty($fld->htmlAfterField)) {

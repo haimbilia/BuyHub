@@ -146,3 +146,89 @@ INSERT INTO `tbl_email_templates` (`etpl_code`, `etpl_lang_id`, `etpl_name`, `et
 INSERT IGNORE INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES 
 ('ERR_PACKAGE_SUPPORT_MAXIMUM_UP_TO_{PROD-CNT}_PRODUCTS_AND_{INV-CNT}_INVENTORIES._MARK_ALL_THE_INVENTORIES_INACTIVE', 1, 'This package support maximum up to {PROD-CNT} products and {INV-CNT} inventories. Please mark additional inventories as inactive before buying a plan.', 1)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+
+INSERT INTO `tbl_email_templates` (`etpl_code`, `etpl_lang_id`, `etpl_name`, `etpl_subject`, `etpl_body`, `etpl_replacements`, `etpl_priority`, `etpl_status`) VALUES ('receiver-gift-card', '1', 'Gift Card Order Placed', 'A new gift card order was placed', '<table width="600px" cellspacing="0" cellpadding="0" style="margin: 0 auto; table-layout: fixed; background: #ffffff; border-radius: 4px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.04)">
+    <tbody>
+        <tr>
+            <td style="background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;">
+                <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+                    <tbody>
+                        <tr>
+                            <td style="background:#fff;padding:20px 0 10px; text-align:center;">
+                                <h4 style="font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;">Gift Card</h4>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding:20px 0 30px;"><strong style="font-size:18px;color:#333;">Dear {recipient_name}</strong><br /> A new gift card order was placed. Below are the details::</td>
+                        </tr>
+                        <tr>
+                            <table style="border:1px solid #ddd; border-collapse:collapse;" cellspacing="0" cellpadding="0" border="0">
+                                <tbody>
+                                    <tr>
+                                        <td style="padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;" width="153">Sender</td>
+                                        <td style="padding:10px;font-size:13px; color:#333;border:1px solid #ddd;" width="620">{sender_name}<br>({sender_email})</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;" width="153">Receiver Name<span class="Apple-tab-span" style="white-space:pre"></span></td>
+                                        <td style="padding:10px;font-size:13px; color:#333;border:1px solid #ddd;" width="620">{recipient_name}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;" width="153">Code</td>
+                                        <td style="padding:10px;font-size:13px; color:#333;border:1px solid #ddd;" width="620">{giftcard_code}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>', '{recipient_name} Receiver Name<br/> {sender_name} Sender Name <br/> {sender_email} Sender Email <br/> {giftcard_code} Redeem Code <br/>', '5', '1')
+ON DUPLICATE KEY UPDATE etpl_subject = VALUES(etpl_subject), etpl_body = VALUES(etpl_body), etpl_replacements = VALUES(etpl_replacements);
+
+
+INSERT INTO `tbl_email_templates` (`etpl_code`, `etpl_lang_id`, `etpl_name`, `etpl_subject`, `etpl_body`, `etpl_replacements`, `etpl_priority`, `etpl_status`) VALUES ('admin-gift-card', '1', 'Gift Card Order Placed', 'A new gift card order was placed', '<table width="600px" cellspacing="0" cellpadding="0" style="margin: 0 auto; table-layout: fixed; background: #ffffff; border-radius: 4px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.04)">
+    <tbody>
+        <tr>
+            <td style="background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;">
+                <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+                    <tbody>
+                        <tr>
+                            <td style="background:#fff;padding:20px 0 10px; text-align:center;">
+                                <h4 style="font-weight:normal; text-transform:uppercase; color:#999;margin:0; padding:10px 0; font-size:18px;">Gift Card</h4>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding:20px 0 30px;"><strong style="font-size:18px;color:#333;">Dear Admin</strong><br /> A new gift card order was placed. Below are the details::</td>
+                        </tr>
+                        <tr>
+                            <table style="border:1px solid #ddd; border-collapse:collapse;" cellspacing="0" cellpadding="0" border="0">
+                                <tbody>
+                                    <tr>
+                                        <td style="padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;" width="153">Sender</td>
+                                        <td style="padding:10px;font-size:13px; color:#333;border:1px solid #ddd;" width="620">{sender_name}<br>({sender_email})</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;" width="153">Receiver<span class="Apple-tab-span" style="white-space:pre"></span></td>
+                                        <td style="padding:10px;font-size:13px; color:#333;border:1px solid #ddd;" width="620">{recipient_name}<br>({recipient_email})</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;" width="153">Amount</td>
+                                        <td style="padding:10px;font-size:13px; color:#333;border:1px solid #ddd;" width="620">{giftcard_amount}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:10px;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;" width="153">Code</td>
+                                        <td style="padding:10px;font-size:13px; color:#333;border:1px solid #ddd;" width="620">{giftcard_code}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>', '\r\n{recipient_email} Receiver Email<br/> {recipient_name} Receiver Name<br/> {giftcard_code} Redeem Code <br/> {sender_name} Sender Name <br/>{sender_email} Sender Email <br/> {giftcard_amount} Total Amount <br/>', '5', '1')
+ON DUPLICATE KEY UPDATE etpl_subject = VALUES(etpl_subject), etpl_body = VALUES(etpl_body), etpl_replacements = VALUES(etpl_replacements);
