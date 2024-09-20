@@ -377,6 +377,7 @@ class Shipping
                 continue;
             }
 
+            $shippingAddressDetail = FatUtility::convertToType($shippingAddressDetail, FatUtility::VAR_STRING);
             $shippingApiObj->setAddress($shippingAddressDetail['addr_name'], $shippingAddressDetail['addr_address1'], $shippingAddressDetail['addr_address2'], $shippingAddressDetail['addr_city'], $shippingAddressDetail['state_name'], $shippingAddressDetail['addr_zip'], $shippingAddressDetail['country_code'], $shippingAddressDetail['addr_phone'], $shippingAddressDetail['state_code']);
 
             if (empty($product['shippack_length']) || empty($product['shippack_width']) || empty($product['shippack_height']) || empty($product['shippack_units'])) {
@@ -387,6 +388,7 @@ class Shipping
                 continue;
             }
             $shopAddress = 0 < $isProductShippedBySeller ? $this->getShopAddress($product['shop_id']) : $this->getShopAddress(0);
+            $shopAddress = FatUtility::convertToType($shopAddress, FatUtility::VAR_STRING);
 
             if (method_exists($shippingApiObj, 'setAddressReference')) {
                 $referenceId = str_pad($shopAddress['shop_id'], 6, "0", STR_PAD_LEFT);
