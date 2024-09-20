@@ -3271,7 +3271,7 @@ class EmailHandler extends FatModel
         $langId = $this->commonLangId;
         $vars = [
             '{sender_name}' => $giftcard['user_name'],
-            '{sender_email}' => $giftcard['credential_email'],
+            '{sender_email}' => !empty($giftcard['credential_email']) ? $giftcard['credential_email'] : Labels::getLabel('LBL_N/A', $langId),
             '{recipient_name}' => $giftcard['ogcards_receiver_name'],
             '{recipient_email}' => $giftcard['ogcards_receiver_email'],
             '{giftcard_code}' => $giftcard['ogcards_code'],
@@ -3299,7 +3299,7 @@ class EmailHandler extends FatModel
         $langId = $this->commonLangId;
         $vars = [
             '{sender_name}' => $giftcard['user_name'],
-            '{sender_email}' => $giftcard['credential_email'],
+            '{sender_email}' => !empty($giftcard['credential_email']) ? $giftcard['credential_email'] : Labels::getLabel('LBL_N/A', $langId),
             '{recipient_name}' => $giftcard['ogcards_receiver_name'],
             '{giftcard_code}' => $giftcard['ogcards_code'],
         ];
