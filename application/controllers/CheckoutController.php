@@ -5,11 +5,10 @@ class CheckoutController extends MyAppController
     private $errMessage;
 
     public function __construct($action)
-    {
+    {   
         parent::__construct($action);
-        UserAuthentication::checkLogin(true, UrlHelper::generateUrl('Cart'));
-
-        if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) {
+        UserAuthentication::checkLogin(true, UrlHelper::generateUrl('Cart'));        
+        if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, '')) && !in_array($action, ['confirmOrder','giftCharge', 'walletGiftSelection', 'paymentTab'])) {
             $geoAddress = Address::getYkGeoData();
             if (!array_key_exists('ykGeoLat', $geoAddress) || $geoAddress['ykGeoLat'] == '' || !array_key_exists('ykGeoLng', $geoAddress) || $geoAddress['ykGeoLng'] == '') {
                 $this->errMessage = Labels::getLabel('ERR_PLEASE_CONFIGURE_YOUR_LOCATION', $this->siteLangId);
@@ -1777,7 +1776,7 @@ class CheckoutController extends MyAppController
         $plugin_id = FatApp::getPostedData('plugin_id', FatUtility::VAR_INT, 0);
         $order_id = FatApp::getPostedData("order_id", FatUtility::VAR_STRING, "");
         $user_id = UserAuthentication::getLoggedUserId();
-        
+
         if (Orders::ORDER_GIFT_CARD == $order_type) {
             $cartSummary = $this->cartObj->getCartGiftFinancialSummary($this->siteLangId, $order_id);
         } else {

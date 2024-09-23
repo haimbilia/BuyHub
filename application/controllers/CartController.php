@@ -183,7 +183,7 @@ class CartController extends MyAppController
         } else {
             $srch = EmptyCartItems::getSearchObject($this->siteLangId);
             $srch->doNotCalculateRecords();
-            $srch->addMultipleFields(array('emptycartitem_title', 'emptycartitem_url', 'emptycartitem_url_is_newtab'));
+            $srch->addMultipleFields(array('COALESCE(emptycartitem_title, emptycartitem_identifier) as emptycartitem_title', 'emptycartitem_url', 'emptycartitem_url_is_newtab'));
             $rs = $srch->getResultSet();
             $EmptyCartItems = FatApp::getDb()->fetchAll($rs);
             $this->set('EmptyCartItems', $EmptyCartItems);
