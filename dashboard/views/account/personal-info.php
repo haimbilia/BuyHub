@@ -10,7 +10,7 @@
     </tr>
     <tr>
         <th><?php echo Labels::getLabel('LBL_Phone',$siteLangId);?></th>
-        <td><?php echo CommonHelper::displayNotApplicable( $siteLangId, ValidateElement::formatDialCode($info['user_phone_dcode']) . $info['user_phone'] );?>
+        <td><span class="default-ltr"><?php echo CommonHelper::displayNotApplicable( $siteLangId, ValidateElement::formatDialCode($info['user_phone_dcode']) . $info['user_phone'] );?></span>
         </td>
     </tr>
     <?php 

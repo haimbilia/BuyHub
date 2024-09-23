@@ -33,7 +33,7 @@
                                 </svg>
                                 <?php
                                 if (strlen($addressData['ura_phone']) > 0) {
-                                    $addrPhone = ValidateElement::formatDialCode($addressData['ura_phone_dcode']) . $addressData['ura_phone'];
+                                    $addrPhone = '<span class="default-ltr">' . ValidateElement::formatDialCode($addressData['ura_phone_dcode']) . $addressData['ura_phone'] . '</span>';
                                     echo Labels::getLabel('LBL_Phone:', $siteLangId) . $addrPhone . '<br>';
                                 }
                                 ?>

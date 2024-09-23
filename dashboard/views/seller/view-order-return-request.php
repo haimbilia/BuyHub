@@ -218,7 +218,7 @@ if (null != $btn) {
                                 <?php if (strlen($vendorReturnAddress['ura_phone']) > 0) { ?>
                                     <li class="list-stats-item">
                                         <span class="label"><?php echo Labels::getLabel('LBL_Phone', $siteLangId); ?></span>
-                                        <span class="value"><?php echo ValidateElement::formatDialCode($vendorReturnAddress['ura_phone_dcode']) . $vendorReturnAddress['ura_phone']; ?></span>
+                                        <span class="value"><span class="default-ltr"><?php echo ValidateElement::formatDialCode($vendorReturnAddress['ura_phone_dcode']) . $vendorReturnAddress['ura_phone']; ?></span></span>
                                     </li>
                                 <?php } ?>
                             </ul>

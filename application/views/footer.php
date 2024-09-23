@@ -33,7 +33,7 @@ if ('' !=  $pixelId) {  ?>
                         $site_conatct =  FatApp::getConfig('CONF_SITE_PHONE', FatUtility::VAR_INT, '');
                         if ($site_conatct) { ?>
                             <li class="contact-info-item">
-                                <?php echo (CommonHelper::demoUrl() == true) ? '+1 469 844 3346' : ValidateElement::formatDialCode($dialCode) . $site_conatct; ?>
+                                <span class="default-ltr"><?php echo (CommonHelper::demoUrl() == true) ? '+1 469 844 3346' : ValidateElement::formatDialCode($dialCode) . $site_conatct; ?></span>
                             </li>
                         <?php } ?>
                         <?php $email_id = (CommonHelper::demoUrl() == true) ? 'sales@fatbit.com' : FatApp::getConfig('CONF_CONTACT_EMAIL', FatUtility::VAR_STRING, '');
@@ -205,7 +205,7 @@ if (!isset($_SESSION['geo_location']) && FatApp::getConfig('CONF_GOOGLEMAP_API_K
 if (FatApp::getConfig('CONF_ENABLE_LIVECHAT', FatUtility::VAR_STRING, '')) {
     echo FatApp::getConfig('CONF_LIVE_CHAT_CODE', FatUtility::VAR_STRING, '');
 } ?>
-<?php if (FatApp::getConfig('CONF_SITE_TRACKER_CODE', FatUtility::VAR_STRING, '') && User::checkStatisticalCookiesEnabled() == true) {
+<?php if (FatApp::getConfig('CONF_SITE_TRACKER_CODE', FatUtility::VAR_STRING, '') /* && User::checkStatisticalCookiesEnabled() == true */) {
     echo FatApp::getConfig('CONF_SITE_TRACKER_CODE', FatUtility::VAR_STRING, '');
 }
 
@@ -235,30 +235,31 @@ if (FatApp::getConfig("CONF_ENABLE_ENGAGESPOT_PUSH_NOTIFICATION", FatUtility::VA
                 s1.setAttribute('crossorigin', '*');
                 s0.parentNode.insertBefore(s1, s0);
             })();
-             // Custom styling of Offset starts here
-            Tawk_API.customStyle = {
-            zIndex:'1048!important', 
-            visibility: {
-                //for desktop only
-                desktop: {
-                position: 'br', // bottom-right
-                xOffset: 15, // 15px away from right
-                yOffset: 60, // 40px up from bottom
-                },
-                // for mobile only
-                mobile: {
-                position: 'bl', // bottom-left
-                xOffset: 5, // 5px away from left
-                yOffset: 90, // 50px up from bottom
-                },
-                // change settings of bubble if necessary
-                bubble: {
-                rotate: '0deg',
-                xOffset: -20,
-                yOffset: 0,
+            // Custom styling of Offset starts here
+                Tawk_API.customStyle = {
+                zIndex:'1048!important', 
+                visibility: {
+                    //for desktop only
+                    desktop: {
+                    position: 'br', // bottom-right
+                    xOffset: 15, // 15px away from right
+                    yOffset: 60, // 40px up from bottom
+                    },
+                    // for mobile only
+                    mobile: {
+                    position: 'bl', // bottom-left
+                    xOffset: 5, // 5px away from left
+                    yOffset: 90, // 50px up from bottom
+                    },
+                    // change settings of bubble if necessary
+                    bubble: {
+                    rotate: '0deg',
+                    xOffset: -20,
+                    yOffset: 0,
+                    }
                 }
             }
-            }
+                
             $(document).ready(function() {
                 function displayDemoBannerPopup() {
                     var x = setInterval(function() {

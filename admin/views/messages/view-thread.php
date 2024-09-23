@@ -19,15 +19,15 @@ $imageUserDimensions = ImageDimension::getData(ImageDimension::TYPE_USER, ImageD
     $fromUserId = $messageDetail['message_from_user_id'];
     $fromUserUpdatedOn = $messageDetail['message_from_user_updated_on'];
     $fromUserName = $messageDetail['message_from_name'];
-    $fromEmail = $messageDetail['message_from_email'];
-    $fromPhoneNo =  !empty($messageDetail['message_from_user_phone']) ? ValidateElement::formatDialCode($messageDetail['message_from_user_phone_dcode']) . $messageDetail['message_from_user_phone'] : '';
+    // $fromEmail = $messageDetail['message_from_email'];
+    // $fromPhoneNo =  !empty($messageDetail['message_from_user_phone']) ? ValidateElement::formatDialCode($messageDetail['message_from_user_phone_dcode']) . $messageDetail['message_from_user_phone'] : '';
     $toUserName = $messageDetail['message_to_name'];
     if ($messageDetail['thread_started_by'] == $messageDetail['message_to_user_id']) {
         $fromUserId = $messageDetail['message_to_user_id'];
         $fromUserUpdatedOn = $messageDetail['message_to_user_updated_on'];
         $fromUserName = $messageDetail['message_to_name'];
-        $fromEmail = $messageDetail['message_to_email'];
-        $fromPhoneNo =  !empty($messageDetail['message_to_user_phone']) ? ValidateElement::formatDialCode($messageDetail['message_to_user_phone_dcode']) . $messageDetail['message_to_user_phone'] : '';
+        // $fromEmail = $messageDetail['message_to_email'];
+        // $fromPhoneNo =  !empty($messageDetail['message_to_user_phone']) ? ValidateElement::formatDialCode($messageDetail['message_to_user_phone_dcode']) . $messageDetail['message_to_user_phone'] : '';
         $toUserName = $messageDetail['message_from_name'];
     }
 
@@ -105,46 +105,4 @@ $imageUserDimensions = ImageDimension::getData(ImageDimension::TYPE_USER, ImageD
             </div>
         </div>
     </div>
-
-    <!-- <div class="communication-sidebar userJs">
-        <div class="card card-stretch mb-0">
-            <div class="card-body">
-                <div class="message__user">
-                    <div class="user user-circle">
-                        <img data-aspect-ratio = "<?php echo $imageUserDimensions[ImageDimension::VIEW_THUMB]['aspectRatio']; ?>" src="<?php echo $userImageUrl; ?>" alt="<?php echo $fromUserName; ?>">
-                    </div>
-                    <h3 class="message__user-name"><?php echo $fromUserName; ?></h3>
-                    <ul class="list__group">
-                        <li class="list__group-item">
-                            <div class="list__group-icon">
-                                <svg class="svg">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-mail">
-                                    </use>
-                                </svg>
-                            </div>
-                            <div class="list__group-title">
-                                <h4><?php echo $fromEmail; ?></h4>
-                            </div>
-                        </li>
-
-                        <?php if (!empty($fromPhoneNo)) { ?>
-                            <li class="list__group-item">
-                                <div class="list__group-icon">
-                                    <svg class="svg">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.yokart.svg#icon-phone">
-                                        </use>
-                                    </svg>
-                                </div>
-                                <div class="list__group-title">
-                                    <h4>
-                                        <?php echo $fromPhoneNo; ?>
-                                    </h4>
-                                </div>
-                            </li>
-                        <?php } ?>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div> -->
 <?php } ?>

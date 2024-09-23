@@ -823,14 +823,42 @@ class CheckoutController extends MyAppController
         $prodSrch->addCondition('selprod_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
         $prodSrch->addDirectCondition('selprod_id IN (' . implode(',', $selprodIds) . ')');
         $fields = array(
-            'product_id', 'product_type', 'product_length', 'product_width', 'product_height',
-            'product_dimension_unit', 'product_weight', 'product_weight_unit', 'product_model',
-            'selprod_id', 'selprod_user_id', 'selprod_stock', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'selprod_sku',
-            'selprod_condition', 'selprod_code',
-            'special_price_found', 'theprice', 'shop_id', 'IFNULL(product_name, product_identifier) as product_name', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'IFNULL(brand_name, brand_identifier) as brand_name', 'shop_name',
-            'seller_user.user_name as shop_onwer_name', 'seller_user_cred.credential_username as shop_owner_username',
-            'seller_user.user_phone_dcode as shop_owner_phone_dcode', 'seller_user.user_phone as shop_owner_phone', 'seller_user_cred.credential_email as shop_owner_email', 'selprod_download_validity_in_days', 'selprod_max_download_times', 'ps.product_warranty', 'COALESCE(sps.selprod_return_age, ss.shop_return_age) as return_age', 'COALESCE(sps.selprod_cancellation_age, ss.shop_cancellation_age) as cancellation_age',
-            'prodcat_id', 'product_attachements_with_inventory', 'selprod_product_id'
+            'product_id',
+            'product_type',
+            'product_length',
+            'product_width',
+            'product_height',
+            'product_dimension_unit',
+            'product_weight',
+            'product_weight_unit',
+            'product_model',
+            'selprod_id',
+            'selprod_user_id',
+            'selprod_stock',
+            'IF(selprod_stock > 0, 1, 0) AS in_stock',
+            'selprod_sku',
+            'selprod_condition',
+            'selprod_code',
+            'special_price_found',
+            'theprice',
+            'shop_id',
+            'IFNULL(product_name, product_identifier) as product_name',
+            'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title',
+            'IFNULL(brand_name, brand_identifier) as brand_name',
+            'shop_name',
+            'seller_user.user_name as shop_onwer_name',
+            'seller_user_cred.credential_username as shop_owner_username',
+            'seller_user.user_phone_dcode as shop_owner_phone_dcode',
+            'seller_user.user_phone as shop_owner_phone',
+            'seller_user_cred.credential_email as shop_owner_email',
+            'selprod_download_validity_in_days',
+            'selprod_max_download_times',
+            'ps.product_warranty',
+            'COALESCE(sps.selprod_return_age, ss.shop_return_age) as return_age',
+            'COALESCE(sps.selprod_cancellation_age, ss.shop_cancellation_age) as cancellation_age',
+            'prodcat_id',
+            'product_attachements_with_inventory',
+            'selprod_product_id'
         );
         $prodSrch->addMultipleFields($fields);
         return FatApp::getDb()->fetchAll($prodSrch->getResultSet(), 'selprod_id');
@@ -1183,23 +1211,25 @@ class CheckoutController extends MyAppController
                     $addressRecordId = Address::getAttributesById($pickUpDataRow['time_slot_addr_id'], 'addr_record_id');
                     $addr = new Address($pickUpDataRow['time_slot_addr_id'], $this->siteLangId);
                     $pickUpAddressArr = $addr->getData($pickUpDataRow['time_slot_type'], $addressRecordId);
-                    $productPickupAddress = array(
-                        'oua_order_id' => $order_id,
-                        'oua_op_id' => '',
-                        'oua_type' => Orders::PICKUP_ADDRESS_TYPE,
-                        'oua_name' => $pickUpAddressArr['addr_name'],
-                        'oua_address1' => $pickUpAddressArr['addr_address1'],
-                        'oua_address2' => $pickUpAddressArr['addr_address2'],
-                        'oua_city' => $pickUpAddressArr['addr_city'],
-                        'oua_state' => $pickUpAddressArr['state_name'],
-                        'oua_country' => $pickUpAddressArr['country_name'],
-                        'oua_country_code' => $pickUpAddressArr['country_code'],
-                        'oua_country_code_alpha3' => $pickUpAddressArr['country_code_alpha3'],
-                        'oua_state_code' => $pickUpAddressArr['state_code'],
-                        'oua_phone_dcode' => $pickUpAddressArr['addr_phone_dcode'],
-                        'oua_phone' => $pickUpAddressArr['addr_phone'],
-                        'oua_zip' => $pickUpAddressArr['addr_zip'],
-                    );
+                    if (!empty($pickUpAddressArr)) {
+                        $productPickupAddress = array(
+                            'oua_order_id' => $order_id,
+                            'oua_op_id' => '',
+                            'oua_type' => Orders::PICKUP_ADDRESS_TYPE,
+                            'oua_name' => $pickUpAddressArr['addr_name'] ?? Shop::getName($cartProduct['shop_id'], $this->siteLangId) ?? '',
+                            'oua_address1' => $pickUpAddressArr['addr_address1'],
+                            'oua_address2' => $pickUpAddressArr['addr_address2'],
+                            'oua_city' => $pickUpAddressArr['addr_city'],
+                            'oua_state' => $pickUpAddressArr['state_name'],
+                            'oua_country' => $pickUpAddressArr['country_name'],
+                            'oua_country_code' => $pickUpAddressArr['country_code'],
+                            'oua_country_code_alpha3' => $pickUpAddressArr['country_code_alpha3'],
+                            'oua_state_code' => $pickUpAddressArr['state_code'],
+                            'oua_phone_dcode' => $pickUpAddressArr['addr_phone_dcode'],
+                            'oua_phone' => $pickUpAddressArr['addr_phone'],
+                            'oua_zip' => $pickUpAddressArr['addr_zip'],
+                        );
+                    }
                 }
 
                 $productTaxOption = array();
