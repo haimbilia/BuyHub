@@ -345,7 +345,10 @@ trait ProductSetup
         $postData = ['selprod_comments' => $post['selprod_comments']];
         if (!FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
             $postData['selprod_title'] = $post['selprod_title'];
+        } else {
+            $postData['selprod_title'] = FatApp::getPostedData('product_name', FatUtility::VAR_STRING, '');
         }
+        
         if (!$recordObj->updateLangData($langId, $postData)) {
             LibHelper::exitWithError($recordObj->getError(), true);
         }
