@@ -64,7 +64,7 @@
                 $onclick = ($canViewUsers ? 'redirectUser(' . $rfqData['user_id'] . ')' : '');
                 $this->includeTemplate('_partial/user/user-info-card.php', ['user' => $rfqData, 'siteLangId' => $siteLangId, 'href' => 'javascript:void(0)', 'onclick' => $onclick, 'extraClass' => 'user-profile-sm', 'displayProfileImage' => false]); ?>
             </li>
-            <?php $res = AttachedFile::getAttachment(AttachedFile::FILETYPE_RFQ, $recordId);
+            <?php $res = AttachedFile::getAttachment(AttachedFile::FILETYPE_RFQ, $recordId, 0, -1);
             if (!empty($res) && 0 < $res['afile_id']) { ?>
                 <li class="list-stats-item list-stats-item-full">
                     <span class="lable"><?php echo Labels::getLabel('LBL_ATTACHMENT', $siteLangId); ?>:</span>

@@ -238,14 +238,13 @@ trait RequestForQuotesUtility
         if (MOBILE_APP_API_CALL) {
             $this->_template->render();
         }
-
         $this->set('html', $this->_template->render(false, false, 'request-for-quotes/view.php', true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
     public function downloadFile(int $recordId)
     {
-        $res = AttachedFile::getAttachment(AttachedFile::FILETYPE_RFQ, $recordId);
+        $res = AttachedFile::getAttachment(AttachedFile::FILETYPE_RFQ, $recordId, 0, -1);
         if ($res == false || 1 > $res['afile_id']) {
             LibHelper::exitWithError(Labels::getLabel('ERR_NOT_AVAILABLE_TO_DOWNLOAD', $this->siteLangId), false, true);
             FatApp::redirectUser(UrlHelper::generateUrl('RequestForQuotes'));

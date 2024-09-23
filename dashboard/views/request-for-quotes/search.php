@@ -40,7 +40,7 @@
                                     ' . $global . '
                                     <div>' . Labels::getLabel('LBL_QTY') . ': ' . $row['rfq_quantity'] . ' ' . applicationConstants::getWeightUnitName($siteLangId, $row['rfq_quantity_unit'], true) . '</div>
                                 </div>';
-                        $td->appendElement('plaintext', array(), $htm, true);
+                        $td->appendElement('plaintext', array('width'=> '20%'), $htm, true);
                         break;
                     case 'rfq_number':
                         $td->appendElement('div', ["class" => 'text-nowrap'], $row['rfq_number'], true);

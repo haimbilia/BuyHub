@@ -64,7 +64,8 @@
                     </span>
                 </span>
             </li>
-            <?php $res = AttachedFile::getAttachment(AttachedFile::FILETYPE_RFQ, $recordId);
+            <?php
+            $res = AttachedFile::getAttachment(AttachedFile::FILETYPE_RFQ, $recordId, 0, langId: -1);
             if (!empty($res) && 0 < $res['afile_id']) { ?>
                 <li class="list-stats-item list-stats-item-full">
                     <span class="label"><?php echo Labels::getLabel('LBL_ATTACHMENT', $siteLangId); ?>:</span>

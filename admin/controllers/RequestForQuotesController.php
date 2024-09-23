@@ -242,7 +242,31 @@ class RequestForQuotesController extends ListingBaseController
         CalculativeDataRecord::updateRfqCount();
 
         $attr = [
-            'rfq_product_type', 'rfq_title', 'rfq_number', 'rfq_approved', 'rfq_user_id', 'rfq_quantity', 'rfq_quantity_unit', 'rfq_delivery_date', 'rfq_description', 'rfq_added_on', 'ba.*', 'selprod_id', 'selprod_title', 'selprod_user_id', 'selprod_product_id', 'selprod_updated_on', 'shop_name', 'bu.user_name', 'buc.credential_username', 'buc.credential_email', 'bu.user_phone_dcode', 'bu.user_phone', 'rfqts_user_id as seller_id', 'IFNULL(country_name, country_code) as country_name', 'IFNULL(state_name, state_identifier) as state_name'
+            'rfq_product_type',
+            'rfq_title',
+            'rfq_number',
+            'rfq_approved',
+            'rfq_user_id',
+            'rfq_quantity',
+            'rfq_quantity_unit',
+            'rfq_delivery_date',
+            'rfq_description',
+            'rfq_added_on',
+            'ba.*',
+            'selprod_id',
+            'selprod_title',
+            'selprod_user_id',
+            'selprod_product_id',
+            'selprod_updated_on',
+            'shop_name',
+            'bu.user_name',
+            'buc.credential_username',
+            'buc.credential_email',
+            'bu.user_phone_dcode',
+            'bu.user_phone',
+            'rfqts_user_id as seller_id',
+            'IFNULL(country_name, country_code) as country_name',
+            'IFNULL(state_name, state_identifier) as state_name'
         ];
         $rfqData = $rfq->get($this->siteLangId, $attr, 'LEFT');
         if (empty($rfqData)) {
@@ -490,7 +514,30 @@ class RequestForQuotesController extends ListingBaseController
         }
         CalculativeDataRecord::updateRfqCount();
         $attr = [
-            'rfq_title', 'rfq_number', 'rfq_approved', 'rfq_user_id', 'rfq_quantity', 'rfq_quantity_unit', 'rfq_delivery_date', 'rfq_description', 'rfq_added_on', 'ba.*', 'selprod_id', 'selprod_title', 'selprod_user_id', 'selprod_product_id', 'selprod_updated_on', 'shop_name', 'bu.user_name', 'buc.credential_username', 'buc.credential_email', 'bu.user_phone_dcode', 'bu.user_phone', 'rfqts_user_id as seller_id', 'IFNULL(country_name, country_code) as country_name', 'IFNULL(state_name, state_identifier) as state_name'
+            'rfq_title',
+            'rfq_number',
+            'rfq_approved',
+            'rfq_user_id',
+            'rfq_quantity',
+            'rfq_quantity_unit',
+            'rfq_delivery_date',
+            'rfq_description',
+            'rfq_added_on',
+            'ba.*',
+            'selprod_id',
+            'selprod_title',
+            'selprod_user_id',
+            'selprod_product_id',
+            'selprod_updated_on',
+            'shop_name',
+            'bu.user_name',
+            'buc.credential_username',
+            'buc.credential_email',
+            'bu.user_phone_dcode',
+            'bu.user_phone',
+            'rfqts_user_id as seller_id',
+            'IFNULL(country_name, country_code) as country_name',
+            'IFNULL(state_name, state_identifier) as state_name'
         ];
         $rfqData = $rfq->get($this->siteLangId, $attr, 'LEFT');
         if (!empty($rfqData)) {
@@ -505,7 +552,7 @@ class RequestForQuotesController extends ListingBaseController
 
     public function downloadFile(int $recordId)
     {
-        $res = AttachedFile::getAttachment(AttachedFile::FILETYPE_RFQ, $recordId);
+        $res = AttachedFile::getAttachment(AttachedFile::FILETYPE_RFQ, $recordId, 0, -1);
         if ($res == false || 1 > $res['afile_id']) {
             LibHelper::exitWithError(Labels::getLabel('ERR_NOT_AVAILABLE_TO_DOWNLOAD', $this->siteLangId), false, true);
             FatApp::redirectUser(UrlHelper::generateUrl('RequestForQuotes'));

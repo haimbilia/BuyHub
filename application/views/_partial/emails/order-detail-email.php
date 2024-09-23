@@ -267,7 +267,7 @@ foreach ($orderProductsData as $addrKey => $orderProducts) {
         }
 
         if ($billingAddress['oua_phone'] != '') {
-            $shippingInfo .= '<br><span class="default-ltr">' . ValidateElement::formatDialCode($shippingAddress['oua_phone_dcode']) . $shippingAddress['oua_phone'] . '</span>';
+            $billingInfo .= '<br><span class="default-ltr">' . ValidateElement::formatDialCode($shippingAddress['oua_phone_dcode']) . $shippingAddress['oua_phone'] . '</span>';
         }
 
         $shippingInfo = '';
