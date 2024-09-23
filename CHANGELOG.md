@@ -133,6 +133,9 @@
     - Bug-086940 - The seller is redirected to the inventory listing by Clicking on shop inventory link from the header menu
     - Bug-085674 - Distance-based Delivery: Same category listing appears multiple times in the categories collection on the homepage
     - Bug-087073 - The content issue in the email change request email.
+    - Bug-087200 - partial payment is not working with wallet + stripe
+    - Bug-086479 - sender email should also be visible to receiver and admin.
+    - Bug-087199 - Debit entry content need to be upadated
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  

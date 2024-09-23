@@ -5,11 +5,10 @@ class CheckoutController extends MyAppController
     private $errMessage;
 
     public function __construct($action)
-    {
+    {   
         parent::__construct($action);
-        UserAuthentication::checkLogin(true, UrlHelper::generateUrl('Cart'));
-
-        if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) {
+        UserAuthentication::checkLogin(true, UrlHelper::generateUrl('Cart'));        
+        if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, '')) && !in_array($action, ['confirmOrder','giftCharge', 'walletGiftSelection', 'paymentTab'])) {
             $geoAddress = Address::getYkGeoData();
             if (!array_key_exists('ykGeoLat', $geoAddress) || $geoAddress['ykGeoLat'] == '' || !array_key_exists('ykGeoLng', $geoAddress) || $geoAddress['ykGeoLng'] == '') {
                 $this->errMessage = Labels::getLabel('ERR_PLEASE_CONFIGURE_YOUR_LOCATION', $this->siteLangId);
@@ -101,7 +100,6 @@ class CheckoutController extends MyAppController
                     /* ] */
 
                     $cartProducts = $this->cartObj->getProducts($this->siteLangId);
-                    //CommonHelper::printArray($cartProducts); exit;
                     foreach ($cartProducts as $product) {
                         if (!$product['in_stock'] && !isset($_SESSION['offer_checkout'])) {
                             $stock = false;
@@ -121,7 +119,7 @@ class CheckoutController extends MyAppController
                                 $userTempHoldStock = Product::tempHoldStockCount($pgproduct['selprod_id'], $cart_user_id, $product['prodgroup_id'], true);
                                 if ($availableStock < ($product['quantity'] - $userTempHoldStock)) {
                                     $key = false;
-                                    $productName = (isset($pgproduct['selprod_title']) && $pgproduct['selprod_title'] != '') ? $pgproduct['selprod_title'] : $pgproduct['name'];
+                                    $productName = (isset($pgproduct['selprod_title']) && $pgproduct['selprod_title'] != '') ? $pgproduct['selprod_title'] : $pgproduct['product_name'];
 
                                     $this->errMessage = str_replace('{product-name}', $productName, Labels::getLabel('ERR_{product-name}_IS_TEMPORARY_OUT_OF_STOCK_OR_HOLD_BY_OTHER_CUSTOMER', $this->siteLangId));
                                     if (true === $addErrorMessage) {
@@ -142,7 +140,7 @@ class CheckoutController extends MyAppController
                             if (0 < $product['selprod_track_inventory']) {
                                 $userTempHoldStock = Product::tempHoldStockCount($product['selprod_id'], $cart_user_id, 0, true);
                             }
-                            $productName = (isset($product['selprod_title']) && $product['selprod_title'] != '') ? $product['selprod_title'] : $product['name'];
+                            $productName = (isset($product['selprod_title']) && $product['selprod_title'] != '') ? $product['selprod_title'] : $product['product_name'];
                             if (!isset($_SESSION['offer_checkout'])) {
                                 if ($availableStock < ($product['quantity'] - $userTempHoldStock)) {
                                     $key = false;
@@ -1798,7 +1796,12 @@ class CheckoutController extends MyAppController
         $plugin_id = FatApp::getPostedData('plugin_id', FatUtility::VAR_INT, 0);
         $order_id = FatApp::getPostedData("order_id", FatUtility::VAR_STRING, "");
         $user_id = UserAuthentication::getLoggedUserId();
-        $cartSummary = $this->cartObj->getCartFinancialSummary($this->siteLangId);
+
+        if (Orders::ORDER_GIFT_CARD == $order_type) {
+            $cartSummary = $this->cartObj->getCartGiftFinancialSummary($this->siteLangId, $order_id);
+        } else {
+            $cartSummary = $this->cartObj->getCartFinancialSummary($this->siteLangId);
+        }
         $userWalletBalance = FatUtility::convertToType(User::getUserBalance($user_id, true), FatUtility::VAR_FLOAT);
         $orderNetAmount = isset($cartSummary['orderNetAmount']) ? FatUtility::convertToType($cartSummary['orderNetAmount'], FatUtility::VAR_FLOAT) : 0;
 
@@ -1892,7 +1895,7 @@ class CheckoutController extends MyAppController
         /* ] */
 
         /* Loading GIFT CARDS[ */
-        if ($order_type == Orders::GIFT_CARD_TYPE) {
+        if ($order_type == Orders::ORDER_GIFT_CARD) {
             $criteria = array('isUserLogged' => true);
             if (!$this->isEligibleForNextStep($criteria)) {
                 $this->errMessage = Labels::getLabel('ERR_SOMETHING_WENT_WRONG,_PLEASE_TRY_AFTER_SOME_TIME.', $this->siteLangId);
@@ -1913,7 +1916,7 @@ class CheckoutController extends MyAppController
             $srch->addCondition('order_id', '=', $order_id);
             $srch->addCondition('order_user_id', '=', 'mysql_func_' . $user_id, 'AND', true);
             $srch->addCondition('order_payment_status', '=', 'mysql_func_' . Orders::ORDER_PAYMENT_PENDING, 'AND', true);
-            $srch->addCondition('order_type', '=', 'mysql_func_' . Orders::GIFT_CARD_TYPE, 'AND', true);
+            $srch->addCondition('order_type', '=', 'mysql_func_' . Orders::ORDER_GIFT_CARD, 'AND', true);
             $rs = $srch->getResultSet();
             $orderInfo = FatApp::getDb()->fetch($rs);
             if (!$orderInfo) {
@@ -2532,7 +2535,7 @@ class CheckoutController extends MyAppController
 
         /* ] */
         $canUseWallet = PaymentMethods::canUseWalletForPayment();
-        $orderData = Orders::getOrderPaymentStatus($order_id, Orders::GIFT_CARD_TYPE, Orders::ORDER_PAYMENT_PENDING);
+        $orderData = Orders::getOrderPaymentStatus($order_id, Orders::ORDER_GIFT_CARD, Orders::ORDER_PAYMENT_PENDING);
         if (empty($orderData)) {
             Message::addErrorMessage(Labels::getLabel('ERR_INVALID_ORDER', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Buyer', 'giftCards', [], CONF_WEBROOT_DASHBOARD));
@@ -2568,7 +2571,7 @@ class CheckoutController extends MyAppController
         $cartSummary = $this->cartObj->getCartGiftFinancialSummary($this->siteLangId, $order_id);
         $updatedData['order_wallet_amount_charge'] =  $cartSummary['WalletAmountCharge'];
         $updatedData['order_is_wallet_selected'] = $cartSummary['cartWalletSelected'];
-        $updatedData['order_type'] = Orders::GIFT_CARD_TYPE;
+        $updatedData['order_type'] = Orders::ORDER_GIFT_CARD;
         $updatedData['order_id'] = $order_id;
         $orderObj = new Orders($order_id);
         $orderObj->assignValues($updatedData);
@@ -2592,7 +2595,7 @@ class CheckoutController extends MyAppController
             $cartSummary = $this->cartObj->getCartGiftFinancialSummary($this->siteLangId, $orderId);
             $updatedData['order_wallet_amount_charge'] =  $cartSummary['WalletAmountCharge'];
             $updatedData['order_is_wallet_selected'] = $cartSummary['cartWalletSelected'];
-            $updatedData['order_type'] = Orders::GIFT_CARD_TYPE;
+            $updatedData['order_type'] = Orders::ORDER_GIFT_CARD;
             $updatedData['order_id'] = $orderId;
             $orderObj = new Orders($orderId);
             $orderObj->assignValues($updatedData);

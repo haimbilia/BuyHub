@@ -109,8 +109,16 @@ class FatTemplate
 
         if ($includeCommon) {
             $langCode = '';
-            if (FatApp::getConfig('CONF_LANG_SPECIFIC_URL', FatUtility::VAR_INT, 0) && count(LANG_CODES_ARR) > 0 && SYSTEM_LANG_ID  != FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1)) {
-                $langCode = strtolower(LANG_CODES_ARR[SYSTEM_LANG_ID]) . '/';
+            $redirectLangCode = '';
+            $displaylangId = (isset($_COOKIE['defaultSiteLang']) && $_COOKIE['defaultSiteLang'] != '') ? $_COOKIE['defaultSiteLang'] : SYSTEM_LANG_ID;
+            if (FatApp::getConfig('CONF_LANG_SPECIFIC_URL', FatUtility::VAR_INT, 0) && count(LANG_CODES_ARR) > 0) {
+                if (SYSTEM_LANG_ID  != FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1)) {
+                    $langCode = strtolower(LANG_CODES_ARR[SYSTEM_LANG_ID]) . '/';
+                }
+
+                if ($displaylangId  != FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1)) {
+                    $redirectLangCode = strtolower(LANG_CODES_ARR[$displaylangId]) . '/';
+                }
             }
 
             /* Include JS */
@@ -119,6 +127,7 @@ class FatTemplate
                 'rooturl' => CONF_WEBROOT_FRONTEND,
                 'webroot' => CONF_WEBROOT_URL . $langCode,
                 'webrootfront' => CONF_WEBROOT_FRONTEND . $langCode,
+                'dashboard_redirect' => CONF_WEBROOT_FRONTEND . $redirectLangCode,
                 'webroot_dashboard' => CONF_WEBROOT_DASHBOARD,
                 'webroot_traditional' => CONF_WEBROOT_URL_TRADITIONAL,
                 'rewritingEnabled' => (CONF_URL_REWRITING_ENABLED ? '1' : '0'),

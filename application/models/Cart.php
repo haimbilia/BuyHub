@@ -1549,10 +1549,8 @@ class Cart extends FatModel
         return $cartSummary;
     }
 
-
     public function getCartGiftFinancialSummary($langId, $order_id)
     {
-
         $cartTotal = 0;
         $orderPaymentGatewayCharges = 0;
         $orderNetAmount = 0;

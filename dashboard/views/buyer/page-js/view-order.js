@@ -22,7 +22,7 @@ $(document).ready(function () {
 
     addItemsToCart = function (orderId) {
         fcom.updateWithAjax(fcom.makeUrl('Buyer', 'addItemsToCart', [orderId]), '', function (ans) {
-            window.location = fcom.makeUrl('Cart', '', '', siteConstants.webrootfront);
+            window.location = fcom.makeUrl('Cart', '', '', siteConstants.dashboard_redirect);
             return true;
         });
     };

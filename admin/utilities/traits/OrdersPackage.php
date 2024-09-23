@@ -20,7 +20,7 @@ trait OrdersPackage
                 $this->viewPageKey = 'SUBSCRIPTION_ORDER_VIEW';
                 $this->tblHeadingKey = 'subscriptionOrdersTblHeadingCols';
                 break;
-            case Orders::GIFT_CARD_TYPE:
+            case Orders::ORDER_GIFT_CARD:
                 $this->directory = 'gift-card-orders';
                 $this->viewPageKey = 'GIFT_CARD_ORDER_VIEW';
                 $this->tblHeadingKey = 'giftCardOrdersTblHeadingCols';
@@ -102,7 +102,7 @@ trait OrdersPackage
         $srch->joinOrderBuyerUser();
         $srch->joinOrderPaymentMethod($this->siteLangId);
         $srch->addCondition('order_type', '=', $this->ordersType);
-        if ($this->ordersType == Orders::GIFT_CARD_TYPE) {
+        if ($this->ordersType == Orders::ORDER_GIFT_CARD) {
             $srch->joinTable(GiftCards::DB_TBL, 'INNER JOIN', 'ogcards.ogcards_order_id = order_id', 'ogcards');
         }
         $keyword = FatApp::getPostedData('keyword', null, '');
@@ -163,7 +163,7 @@ trait OrdersPackage
         $this->setRecordCount(clone $srch, $pageSize, $page, $post);
         $srch->doNotCalculateRecords();
         $fieldsearch = ['order_number', 'order_id', 'order_date_added', 'order_payment_status', 'order_status', 'buyer.user_id', 'buyer.user_name as buyer_user_name', 'buyer_cred.credential_email as buyer_email', 'order_net_amount', 'order_wallet_amount_charge', 'order_pmethod_id', 'IFNULL(plugin_name, plugin_identifier) as plugin_name', 'plugin_code', 'order_is_wallet_selected', 'order_deleted', 'order_cart_data', 'buyer.user_name', 'user_updated_on', 'user_id', 'credential_username', 'buyer_cred.credential_email'];
-        if ($this->ordersType == Orders::GIFT_CARD_TYPE) {
+        if ($this->ordersType == Orders::ORDER_GIFT_CARD) {
             $fieldsearch[] = 'ogcards_receiver_name';
             $fieldsearch[] = 'ogcards_receiver_email';
             $fieldsearch[] = 'ogcards_status';
@@ -341,7 +341,7 @@ trait OrdersPackage
         if ($tblHeadingCols) {
             return json_decode($tblHeadingCols, true);
         }
-        if ($this->ordersType == Orders::GIFT_CARD_TYPE) {
+        if ($this->ordersType == Orders::ORDER_GIFT_CARD) {
             $arr = [
                 'select_all' => Labels::getLabel('LBL_Select_all', $this->siteLangId),
                 /* 'listSerial' => Labels::getLabel('LBL_SR._NO', $this->siteLangId), */
@@ -376,7 +376,7 @@ trait OrdersPackage
     protected function getDefaultColumns(): array
     {
 
-        if ($this->ordersType == Orders::GIFT_CARD_TYPE) {
+        if ($this->ordersType == Orders::ORDER_GIFT_CARD) {
             return [
                 'select_all',
                 /*  'listSerial', */

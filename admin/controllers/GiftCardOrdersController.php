@@ -5,7 +5,7 @@ class GiftCardOrdersController extends ListingBaseController
     protected string $pageKey = 'MANAGE_GIFT_CARDS_ORDER';
     use OrdersPackage;
 
-    private int $ordersType = Orders::GIFT_CARD_TYPE;
+    private int $ordersType = Orders::ORDER_GIFT_CARD;
 
     public function __construct($action)
     {

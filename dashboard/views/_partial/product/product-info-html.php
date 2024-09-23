@@ -5,11 +5,11 @@ $shopName = $options = $otherInfo = $date = '';
 if (isset($order)) {
     $prodUrl = 'javascript:fcom.displayErrorMessage(\'' . Labels::getLabel('ERR_THIS_PRODUCT_IS_NOT_AVAILABLE.') . '\')';
     if (isset($order['op_is_batch']) && $order['op_is_batch']) {
-        $prodUrl = UrlHelper::generateUrl('Products', 'batch', array($order['op_selprod_id'] ?? 0), CONF_WEBROOT_FRONTEND);
+        $prodUrl = UrlHelper::generateUrl('Products', 'batch', array($order['op_selprod_id'] ?? 0), CONF_WEBROOT_FRONTEND, useLangCode: true, langId: $siteLangId);
         $imgSrc = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'BatchProduct', array($order['op_selprod_id'], $siteLangId, ImageDimension::VIEW_MINI), CONF_WEBROOT_FRONTEND), CONF_IMG_CACHE_TIME, '.jpg');
     } else {
         if (Product::verifyProductIsValid($order['op_selprod_id']) == true) {
-            $prodUrl = UrlHelper::generateUrl('Products', 'view', array($order['op_selprod_id']), CONF_WEBROOT_FRONTEND);
+            $prodUrl = UrlHelper::generateUrl('Products', 'view', array($order['op_selprod_id']), CONF_WEBROOT_FRONTEND, useLangCode: true, langId: $siteLangId);
         }
         $imgSrc = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($order['selprod_product_id'] ?? 0, ImageDimension::VIEW_MINI, $order['op_selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND) . UrlHelper::getCacheTimestamp($siteLangId), CONF_IMG_CACHE_TIME, '.jpg');
     }
@@ -33,7 +33,7 @@ if (isset($order)) {
     $date = isset($showDate) && $order['order_date_added']   ? FatDate::format($order['order_date_added']) : '';
 } else {
     $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']);
-    $prodUrl = UrlHelper::generateUrl('Products', 'view', array($product['selprod_id']), CONF_WEBROOT_FRONTEND);
+    $prodUrl = UrlHelper::generateUrl('Products', 'view', array($product['selprod_id']), CONF_WEBROOT_FRONTEND, useLangCode: true, langId: $siteLangId);
     $imgSrc = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['selprod_product_id'], ImageDimension::VIEW_MINI, $product['selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
 
     $productName = html_entity_decode($product['product_name'] ?? $product['product_identifier'], ENT_QUOTES, 'utf-8');

@@ -3343,7 +3343,7 @@ class BuyerController extends BuyerBaseController
             $this->set('orderNetAmount', $post['order_total_amount']);
             $this->set('paymentMethods', $paymentMethods);
             $this->set('order_id', $orderId);
-            $this->set('orderType', Orders::GIFT_CARD_TYPE);
+            $this->set('orderType', Orders::ORDER_GIFT_CARD);
             $this->_template->render();
         }
 
