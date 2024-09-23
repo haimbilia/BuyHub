@@ -197,8 +197,8 @@
         padding: 10px 1rem;
         @include media-breakpoint-up(lg) {
             border-top-#{$end-direction}-radius: 4px;
-            padding-left: $content-space;
-            padding-right: $content-space;
+            padding-#{$start-direction}: $content-space;
+            padding-#{$end-direction}: $content-space;
             height: 100px;
         }
         // padding-#{$start-direction}: $sidebar-width;
@@ -570,8 +570,8 @@
 .content-wrapper {
     &.content-space {
         flex: 1;
-        padding-left: $content-space;
-        padding-right: $content-space;
+        padding-#{$start-direction}: $content-space;
+        padding-#{$end-direction}: $content-space;
         padding-top: 2rem;
         //min-height: calc(100vh - 100px);
         @include media-breakpoint-down(xl) {
@@ -835,14 +835,14 @@
 .slick-prev:after,
 .slick-next:after {
     content: "";
-    border-right: 2px solid black;
+    border-#{$end-direction}: 2px solid black;
     border-bottom: 2px solid black;
     width: 10px;
     height: 10px;
     transform: rotate(-45deg);
     position: absolute;
-    left: 50%;
-    margin-left: -7px;
+    #{$start-direction}: 50%;
+    margin-#{$start-direction}: -7px;
     top: 50%;
     margin-top: -5px;
 }
@@ -858,11 +858,11 @@
 }
 
 .slick-prev {
-    left: 0;
+    #{$start-direction}: 0;
 }
 
 .slick-next {
-    right: 0;
+    #{$end-direction}: 0;
 }
 
 .graph {
@@ -1470,7 +1470,7 @@ input.sp-input {
                 position: absolute;
                 width: 6px;
                 height: 6px;
-                left: 8px;
+                #{$start-direction}: 8px;
                 top: 10px;
                 border-radius: 50%;
                 background: $txt-body;
@@ -1696,7 +1696,7 @@ $shadow1: 0 0 3px 0 rgba(0, 0, 0, 0.2);
             i {
                 display: inline-block;
                 position: relative;
-                right: -10px;
+                #{$end-direction}: -10px;
                 line-height: 0;
                 vertical-align: middle;
                 font-size: 10px;
@@ -1721,15 +1721,15 @@ $shadow1: 0 0 3px 0 rgba(0, 0, 0, 0.2);
         }
         &_left {
             position: sticky;
-            left: 0;
+            #{$start-direction}: 0;
             z-index: 2;
             background-color: rgba(220, 220, 220, 0.5) !important;
             backdrop-filter: blur(3px);
             overflow-wrap: break-word;
-            &:after {
+           /*  &:after {
                 position: absolute;
                 top: 0;
-                right: 0;
+                #{$end-direction}: 0;
                 bottom: -1px;
                 width: 30px;
                 transform: translateX(100% * $transform-direction);
@@ -1737,13 +1737,13 @@ $shadow1: 0 0 3px 0 rgba(0, 0, 0, 0.2);
                 content: "";
                 pointer-events: none;
                 box-shadow: inset 10px 0 8px -8px rgba(0, 0, 0, 0.05);
-            }
+            } */
             > span {
             }
         }
         &_right {
             position: sticky;
-            right: 0;
+            #{$end-direction}: 0;
             z-index: 2;
             background-color: hsla(0, 0%, 100%, 0.8);
             backdrop-filter: blur(3px);
@@ -1752,7 +1752,7 @@ $shadow1: 0 0 3px 0 rgba(0, 0, 0, 0.2);
                 position: absolute;
                 top: 0;
                 bottom: -1px;
-                left: 0;
+                #{$start-direction}: 0;
                 width: 30px;
                 transform: translateX(-100% * $transform-direction);
                 transition: box-shadow 0.3s;
