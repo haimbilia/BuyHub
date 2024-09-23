@@ -1470,7 +1470,7 @@ input.sp-input {
                 position: absolute;
                 width: 6px;
                 height: 6px;
-                left: 8px;
+                #{$start-direction}: 8px;
                 top: 10px;
                 border-radius: 50%;
                 background: $txt-body;
