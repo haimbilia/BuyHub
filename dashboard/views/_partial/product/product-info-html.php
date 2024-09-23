@@ -15,7 +15,7 @@ if (isset($order)) {
     }
     // $productName = $order['op_product_name'];
     $productName = '';
-    $productTitle = html_entity_decode($order['op_selprod_title'], ENT_QUOTES, 'utf-8');
+    $productTitle = html_entity_decode($order['op_selprod_title'] ?? $productName, ENT_QUOTES, 'utf-8');
     $brandName = $order['op_brand_name'];
 
     $str = Labels::getLabel('LBL_QTY:_{QTY}', $siteLangId);
