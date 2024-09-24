@@ -185,7 +185,6 @@ trait RequestForQuotesUtility
         $this->set("isBuyer", $this->isBuyer);
         $this->set("isSeller", $this->isSeller);
         $this->set("userParentId", $this->userParentId);
-        $this->set("isBuyer", $this->isBuyer);
         if (MOBILE_APP_API_CALL) {
             $this->_template->render();
         }
@@ -234,6 +233,7 @@ trait RequestForQuotesUtility
         $this->set("statusArr", RequestForQuote::getStatusArr($this->siteLangId));
         $this->set("productTypes", Product::getProductTypes($this->siteLangId));
         $this->set('recordId', $recordId);
+        $this->set("isSeller", $this->isSeller);
 
         if (MOBILE_APP_API_CALL) {
             $this->_template->render();

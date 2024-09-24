@@ -136,6 +136,7 @@
     - Bug-087200 - partial payment is not working with wallet + stripe
     - Bug-086479 - sender email should also be visible to receiver and admin.
     - Bug-087199 - Debit entry content need to be upadated
+    - Bug-087356 - When a seller is not a buyer rfq attachement does not get opened.
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  

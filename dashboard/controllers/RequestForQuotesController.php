@@ -1,11 +1,11 @@
 <?php
-class RequestForQuotesController extends LoggedUserController
+class RequestForQuotesController extends BuyerBaseController
 {
     use RequestForQuotesUtility;
     public function __construct($action)
     {
         parent::__construct($action);
-        $this->isBuyer = User::isBuyer();
+        $this->isBuyer = true;
     }
 
     public function downloadRfqCopy(int $rfqId)
