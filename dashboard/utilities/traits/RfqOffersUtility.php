@@ -240,7 +240,7 @@ trait RfqOffersUtility
             array_push($counterOfferFlds, 'roc.' . $fld . ' as counter_' . $fld);
         }
 
-        $dbFlds = array_merge($flds, $counterOfferFlds, ['rfq_selprod_id', 'rfq_product_type', 'rfq_product_id', 'rfq_visibility_type', 'rlo_seller_user_id', 'ou.user_name', 'ouc.credential_email', 'ou.user_updated_on', 'ou.user_id', 'bu.user_name as buyer_user_name', 'bu.user_id as buyer_user_id', 'buc.credential_email as buyer_credential_email', 'COALESCE(ous_l.shop_name, ous.shop_identifier) as shop_name', 'ous.shop_id', 'rlo_primary_offer_id', 'rfq_status', 'rfq_quantity_unit', 'rfq_added_on', 'rlo_shipping_charges', 'rlo_accepted_offer_id', 'rlo_selprod_id', 'rlo_seller_offer_id', 'rlo_buyer_offer_id', 'rlo_seller_acceptance', 'rlo_buyer_acceptance']);
+        $dbFlds = array_merge($flds, $counterOfferFlds, ['rfq_user_id', 'rfq_selprod_id', 'rfq_product_type', 'rfq_product_id', 'rfq_visibility_type', 'rlo_seller_user_id', 'ou.user_name', 'ouc.credential_email', 'ou.user_updated_on', 'ou.user_id', 'bu.user_name as buyer_user_name', 'bu.user_id as buyer_user_id', 'buc.credential_email as buyer_credential_email', 'COALESCE(ous_l.shop_name, ous.shop_identifier) as shop_name', 'ous.shop_id', 'rlo_primary_offer_id', 'rfq_status', 'rfq_quantity_unit', 'rfq_added_on', 'rlo_shipping_charges', 'rlo_accepted_offer_id', 'rlo_selprod_id', 'rlo_seller_offer_id', 'rlo_buyer_offer_id', 'rlo_seller_acceptance', 'rlo_buyer_acceptance']);
         $srch->addMultipleFields($dbFlds);
 
         $sellerId = FatApp::getPostedData('offer_user_id', FatUtility::VAR_INT, 0);
@@ -1094,7 +1094,16 @@ trait RfqOffersUtility
         $frm = RfqOffers::getAttachmentForm($this->isBuyer);
         $frm->fill(['rom_primary_offer_id' => $primaryOfferId]);
 
-        $data = RfqOffers::getMessages($primaryOfferId, $this->siteLangId, hideForBuyer: $this->isBuyer, onlyWithAttachments: (0 < $onlyWithAttachments));
+        $data = RfqOffers::getMessages($primaryOfferId, hideForBuyer: $this->isBuyer, onlyWithAttachments: (0 < $onlyWithAttachments));
+        
+        if (!empty($data['data'])) {
+            $msgIds = [];
+            foreach ($data['data'] as $rom) {
+                $msgIds[] = $rom['rom_id'];
+            }
+            RfqOffers::markMessagesAsRead($primaryOfferId, $msgIds);
+        }
+
         $this->set('pageCount', ($data['pageCount'] ?? 0));
         $this->set('data', array_reverse($data['data']));
 
@@ -1111,7 +1120,14 @@ trait RfqOffersUtility
     {
         $primaryOfferId = FatApp::getPostedData('rom_primary_offer_id', FatUtility::VAR_INT, 0);
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
-        $data = RfqOffers::getMessages($primaryOfferId, $this->siteLangId, $page, hideForBuyer: $this->isBuyer);
+        $data = RfqOffers::getMessages($primaryOfferId, $page, hideForBuyer: $this->isBuyer);
+        if (!empty($data['data'])) {
+            $msgIds = [];
+            foreach ($data['data'] as $rom) {
+                $msgIds[] = $rom['rom_id'];
+            }
+            RfqOffers::markMessagesAsRead($primaryOfferId, $msgIds);
+        }
         $this->set('primaryOfferId', $primaryOfferId);
         $this->set('page', $page);
         $this->set('pageCount', ($data['pageCount'] ?? 0));
@@ -1166,8 +1182,7 @@ trait RfqOffersUtility
                 $primaryOfferId,
                 $_FILES['attachment_file']['name'],
                 -1,
-                false,
-                $this->siteLangId
+                false
             )) {
                 LibHelper::exitWithError($fileHandlerObj->getError(), true);
             }

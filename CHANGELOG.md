@@ -139,6 +139,7 @@
     - Bug-087356 - When a seller is not a buyer rfq attachement does not get opened.
     - Bug-087400 - Site stops working in case if multiple quantity
     - Bug-087395 - A warning appears when the admin tries to approve the seller-added catalog
+    - Bug-087344 - Users did't get notified about the messages or attachement bound with RFQ offer
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  

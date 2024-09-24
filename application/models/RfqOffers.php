@@ -587,14 +587,14 @@ class RfqOffers extends MyAppModel
      * @param  int $pageSize
      * @return array
      */
-    public static function getMessages(int $primaryOfferId, int $langId, int $page = 1, int $pageSize = 5, bool $hideForBuyer = false, bool $onlyWithAttachments = false): array
+    public static function getMessages(int $primaryOfferId, int $page = 1, int $pageSize = 5, bool $hideForBuyer = false, bool $onlyWithAttachments = false): array
     {
         if (1 > $primaryOfferId) {
             return [];
         }
         $srch = new SearchBase(self::DB_RO_MESSAGES, 'rom');
         $join = $onlyWithAttachments ? 'INNER' : 'LEFT';
-        $srch->joinTable(AttachedFile::DB_TBL, $join . ' JOIN', 'afile_record_id = rom_id AND afile_record_subid = rom_primary_offer_id AND afile_lang_id = ' . $langId);
+        $srch->joinTable(AttachedFile::DB_TBL, $join . ' JOIN', 'afile_record_id = rom_id AND afile_record_subid = rom_primary_offer_id AND afile_type = ' . AttachedFile::FILETYPE_RFQ_OFFER_FILE);
         $srch->addCondition('rom_primary_offer_id', '=', $primaryOfferId);
         if (true == $hideForBuyer) {
             $srch->addDirectCondition("(CASE WHEN rom_user_type = " . User::USER_TYPE_SELLER . " THEN rom_buyer_access = 1 ELSE TRUE END)");
@@ -759,7 +759,7 @@ class RfqOffers extends MyAppModel
         $result = FatApp::getDb()->fetch($srch->getResultSet());
         return !empty($result);
     }
-    
+
     public static function isAnySellerOfferAccepted(int $sellerId, int $rfqId)
     {
         $srch = new SearchBase(self::DB_RFQ_LATEST_OFFER, 'rlo');
@@ -773,5 +773,62 @@ class RfqOffers extends MyAppModel
         $srch->setPageSize(1);
         $result = FatApp::getDb()->fetch($srch->getResultSet());
         return !empty($result);
+    }
+
+    public static function unreadMessagesForBuyer(int $buyerId, int $primaryOfferId): array
+    {
+        $srch = new SearchBase(self::DB_RFQ_LATEST_OFFER, 'rlo');
+        $srch->doNotCalculateRecords();
+        $srch->joinTable(self::DB_RO_MESSAGES, 'INNER JOIN', 'rom.rom_primary_offer_id = rlo.rlo_primary_offer_id', 'rom');
+        $srch->joinTable(RequestForQuote::DB_TBL, 'INNER JOIN', 'rfq.rfq_id = rlo.rlo_rfq_id', 'rfq');
+        $srch->joinTable(AttachedFile::DB_TBL, 'LEFT JOIN', 'afile_record_id = rom_id AND afile_record_subid = rom_primary_offer_id AND afile_type = ' . AttachedFile::FILETYPE_RFQ_OFFER_FILE);
+        $srch->addCondition('rlo.rlo_primary_offer_id', '=', $primaryOfferId);
+        $srch->addCondition('rom_user_type', '=', User::USER_TYPE_SELLER); // Sent by seller.
+        $srch->addCondition('rom_buyer_access', '=', applicationConstants::YES);
+        $srch->addCondition('rfq_user_id', '=', $buyerId);
+        $srch->addCondition('rom_read', '=', applicationConstants::NO);
+        $srch->addMultipleFields([
+            'SUM((CASE WHEN afile_id IS NULL THEN 0 ELSE 1 END)) as attachmentCount',
+            'SUM(1) as totalUnread'
+        ]);
+        $srch->setPageSize(1);
+        $result = FatApp::getDb()->fetch($srch->getResultSet());
+        if (!is_array($result)) {
+            return [
+                'attachmentCount' => 0,
+                'totalUnread' => 0,
+            ];
+        }
+        return FatUtility::convertToType($result, FatUtility::VAR_INT);
+    }
+
+    public static function unreadMessagesForSeller(int $sellerId, int $primaryOfferId): array
+    {
+        $srch = new SearchBase(self::DB_RFQ_LATEST_OFFER, 'rlo');
+        $srch->joinTable(self::DB_RO_MESSAGES, 'INNER JOIN', 'rom.rom_primary_offer_id = rlo.rlo_primary_offer_id', 'rom');
+        $srch->joinTable(AttachedFile::DB_TBL, 'LEFT JOIN', 'afile_record_id = rom_id AND afile_record_subid = rom_primary_offer_id AND afile_type = ' . AttachedFile::FILETYPE_RFQ_OFFER_FILE);
+        $srch->addCondition('rlo.rlo_primary_offer_id', '=', $primaryOfferId);
+        $srch->addCondition('rom_user_type', '=', User::USER_TYPE_BUYER); // Sent by buyer.
+        $srch->addCondition('rlo_seller_user_id', '=', $sellerId);
+        $srch->addCondition('rom_read', '=', applicationConstants::NO);
+        $srch->addMultipleFields([
+            'SUM((CASE WHEN afile_id IS NULL THEN 0 ELSE 1 END)) as attachmentCount',
+            'SUM(1) as totalUnread'
+        ]);
+        $srch->setPageSize(1);
+        $result = FatApp::getDb()->fetch($srch->getResultSet());
+        if (!is_array($result)) {
+            return [
+                'attachmentCount' => 0,
+                'totalUnread' => 0,
+            ];
+        }
+        return FatUtility::convertToType($result, FatUtility::VAR_INT);
+    }
+
+    public static function markMessagesAsRead(int $primaryOfferId, array $messageIdArr): bool
+    {
+        $qry = "UPDATE " . self::DB_RO_MESSAGES . " SET rom_read = " . applicationConstants::YES . " WHERE rom_id IN (" . implode(',', $messageIdArr) . ") AND rom_primary_offer_id = " . $primaryOfferId;
+        return FatApp::getDb()->query($qry);
     }
 }

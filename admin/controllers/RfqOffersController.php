@@ -104,7 +104,7 @@ class RfqOffersController extends ListingBaseController
         $this->set('defaultPageSize', FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10));
         $this->_template->addJs(array('js/select2.js'));
         $this->_template->addCss(array('css/select2.min.css'));
-        $this->_template->render(convertVariablesToHtmlentities:false);
+        $this->_template->render(convertVariablesToHtmlentities: false);
     }
 
     protected function getSearchForm($fields = [])
@@ -673,7 +673,7 @@ class RfqOffersController extends ListingBaseController
         if (false == $rfq->updateLatestOffer($data)) {
             LibHelper::exitWithError($rfq->getError(), true);
         }
-        
+
         $this->sendOfferActionNotification($recordId, $rfqId, RfqOffers::getSellerIdByOfferId($recordId));
 
         FatUtility::dieJsonSuccess(Labels::getLabel('LBL_SUCCESS'));
@@ -867,7 +867,14 @@ class RfqOffersController extends ListingBaseController
         $frm = RfqOffers::getAttachmentForm();
         $frm->fill(['rom_primary_offer_id' => $primaryOfferId]);
 
-        $data = RfqOffers::getMessages($primaryOfferId, $this->siteLangId, onlyWithAttachments: (0 < $onlyWithAttachments));
+        $data = RfqOffers::getMessages($primaryOfferId, onlyWithAttachments: (0 < $onlyWithAttachments));
+        if (!empty($data['data'])) {
+            $msgIds = [];
+            foreach ($data['data'] as $rom) {
+                $msgIds[] = $rom['rom_id'];
+            }
+            RfqOffers::markMessagesAsRead($primaryOfferId, $msgIds);
+        }
         $this->set('pageCount', ($data['pageCount'] ?? 0));
         $this->set('data', array_reverse($data['data']));
 
@@ -883,7 +890,14 @@ class RfqOffersController extends ListingBaseController
     {
         $primaryOfferId = FatApp::getPostedData('rom_primary_offer_id', FatUtility::VAR_INT, 0);
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
-        $data = RfqOffers::getMessages($primaryOfferId, $this->siteLangId, $page);
+        $data = RfqOffers::getMessages($primaryOfferId, $page);
+        if (!empty($data['data'])) {
+            $msgIds = [];
+            foreach ($data['data'] as $rom) {
+                $msgIds[] = $rom['rom_id'];
+            }
+            RfqOffers::markMessagesAsRead($primaryOfferId, $msgIds);
+        }
         $this->set('primaryOfferId', $primaryOfferId);
         $this->set('page', $page);
         $this->set('pageCount', ($data['pageCount'] ?? 0));
@@ -938,8 +952,7 @@ class RfqOffersController extends ListingBaseController
                 $primaryOfferId,
                 $_FILES['attachment_file']['name'],
                 -1,
-                false,
-                $this->siteLangId
+                false
             )) {
                 LibHelper::exitWithError($fileHandlerObj->getError(), true);
             }

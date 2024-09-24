@@ -308,14 +308,22 @@
                         </button>
 
                         <?php //if (RfqOffers::STATUS_ACCEPTED == $row['offer_status'] || RfqOffers::STATUS_ACCEPTED == $row['counter_offer_status']) 
-                        { ?>
+                        {
+                            $unreadMessages = RfqOffers::unreadMessagesForSeller($row['rlo_seller_user_id'], $row['rlo_primary_offer_id']);
+                        ?>
                             <button class="btn btn-outline-info btn-icon" onclick="attachmentForm(<?php echo $row['rlo_primary_offer_id']; ?>)">
+                                <?php if (0 < $unreadMessages['attachmentCount']) { ?>
+                                    <span class="dot"></span>
+                                <?php } ?>
                                 <svg class="svg" width="16" height="16">
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#linking">
                                     </use>
                                 </svg> <?php echo Labels::getLabel('LBL_ATTACHMENT', $siteLangId); ?>
                             </button>
                             <button class="btn btn-outline-gray btn-icon" onclick="attachmentForm(<?php echo $row['rlo_primary_offer_id']; ?>, 0)">
+                                <?php if (0 < $unreadMessages['totalUnread']) { ?>
+                                    <span class="dot"></span>
+                                <?php } ?>
                                 <svg class="svg" width="16" height="16">
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#messages">
                                     </use>

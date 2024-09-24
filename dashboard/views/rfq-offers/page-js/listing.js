@@ -201,6 +201,7 @@
     attachmentForm = function (primaryOfferId, onlyWithAttachments = 1) {
         let data = 'rom_primary_offer_id=' + primaryOfferId + '&only_with_attachments=' + onlyWithAttachments;
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "attachmentForm"), data, function (t) {
+            searchRecords(document.frmRecordSearch);
             fcom.closeProcessing();
             fcom.removeLoader();
             $.ykmodal(t.html);
@@ -262,6 +263,7 @@
         let data = 'rom_primary_offer_id=' + primaryOfferId + '&page=' + pageNo;
         $(".messageChatBodyJs").prepend(fcom.getLoader());
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "loadMoreAttachments"), data, function (t) {
+            searchRecords(document.frmRecordSearch);
             fcom.closeProcessing();
             fcom.removeLoader();
             $('.lastRowJs').remove();

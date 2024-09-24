@@ -217,6 +217,7 @@ $space: 1.5rem;
   .btn {
     text-align: center;
     border-width: 1px;
+    position: relative;
     &-accept {
       background-color: lighten($success-color, 40);
       border-color: $success-color;
