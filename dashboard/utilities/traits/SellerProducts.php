@@ -895,7 +895,7 @@ trait SellerProducts
                 $data_to_be_save['selprod_threshold_stock_level'] = 0;
                 $data_to_be_save['selprod_condition'] = 1;
             } else {
-                $data_to_be_save['selprod_stock'] = $post['selprod_stock' . $optionKey];
+                $data_to_be_save['selprod_stock'] = $post['selprod_stock' . $optionValue];
             }
             $data_to_be_save['selprod_sku'] = $post['selprod_sku' . $optionValue];
             $selProdKeywordSlug = $keywordSlug . '-' . $optionValue . '-' . $shopData['shop_name'];
