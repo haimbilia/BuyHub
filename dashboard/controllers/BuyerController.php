@@ -2253,7 +2253,6 @@ class BuyerController extends BuyerBaseController
         $srch->addMultipleFields(array('op_status_id', 'op_id', 'op_qty', 'op_product_type'));
         $rs = $srch->getResultSet();
         $opDetail = FatApp::getDb()->fetch($rs);
-
         if (!$opDetail || CommonHelper::isMultidimArray($opDetail)) {
             Message::addErrorMessage(Labels::getLabel('ERR_ERROR_INVALID_ACCESS', $this->siteLangId));
             // CommonHelper::redirectUserReferer();
@@ -2287,7 +2286,7 @@ class BuyerController extends BuyerBaseController
         }
 
         $frm = $this->getOrderReturnRequestForm($this->siteLangId, $opDetail);
-        $fld = $frm->getField('orrequest_qty');
+        // $fld = $frm->getField('orrequest_qty');
 
         $frm->fill(array('op_id' => $opDetail['op_id']));
         $this->set('frmOrderReturnRequest', $frm);
@@ -2763,15 +2762,13 @@ class BuyerController extends BuyerBaseController
 
     private function getOrderReturnRequestForm($langId, $opDetail = array())
     {
-        $returnQtyArr = array();
-        if (!empty($opDetail)) {
-            $op_qty = isset($opDetail["op_qty"]) ? $opDetail["op_qty"] : 1;
-            for ($k = 1; $k <= $op_qty; $k++) {
-                $returnQtyArr[$k] = $k;
-            }
-        }
         $frm = new Form('frmOrderReturnRequest', array('enctype' => "multipart/form-data"));
-        $frm->addSelectBox(Labels::getLabel('FRM_RETURN_QTY', $langId), 'orrequest_qty', $returnQtyArr, '', array(), '')->requirements()->setRequired();
+        $op_qty = $opDetail["op_qty"] ?? 1;
+        $fld = $frm->addRequiredField(Labels::getLabel('FRM_RETURN_QTY', $langId), 'orrequest_qty', $op_qty);
+        $fld->requirements()->setInt();
+        $fld->requirements()->setRange(1, $op_qty);
+        $fld->overrideFldType('number');
+
         $orderReturnReasonsArr = OrderReturnReason::getOrderReturnReasonArr($langId);
         $frm->addSelectBox(Labels::getLabel('FRM_REASON_FOR_RETURN', $langId), 'orrequest_returnreason_id', $orderReturnReasonsArr, '', array(), Labels::getLabel('FRM_SELECT_REASON', $langId))->requirements()->setRequired();
 

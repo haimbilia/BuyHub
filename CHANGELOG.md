@@ -137,6 +137,7 @@
     - Bug-086479 - sender email should also be visible to receiver and admin.
     - Bug-087199 - Debit entry content need to be upadated
     - Bug-087356 - When a seller is not a buyer rfq attachement does not get opened.
+    - Bug-087400 - Site stops working in case if multiple quantity
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  
