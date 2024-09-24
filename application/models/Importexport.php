@@ -204,6 +204,10 @@ class Importexport extends ImportexportCommon
             static::PRODUCT_SPECIFICATION => Labels::getLabel('LBL_PRODUCT_SPECIFICATIONS', $langId),
             // static::PRODUCT_SHIPPING => Labels::getLabel('LBL_PRODUCT_SHIPPING', $langId),
         );
+
+        if (FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+            unset($arr[static::PRODUCT_OPTION]);
+        }
         return $arr;
     }
 
@@ -219,6 +223,10 @@ class Importexport extends ImportexportCommon
             static::SELLER_PROD_RELATED_PRODUCT => Labels::getLabel('LBL_RELATED_PRODUCTS', $langId),
             //static::SELLER_PROD_POLICY => Labels::getLabel('LBL_SELLER_PRODUCT_POLICY', $langId),
         );
+
+        if (FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+            unset($arr[static::SELLER_PROD_OPTION]);
+        }
         return $arr;
     }
 
