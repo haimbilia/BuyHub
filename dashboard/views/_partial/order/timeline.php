@@ -35,14 +35,14 @@
                             <?php
                             if (isset($row['oshistory_orderstatus_id']) && $row['oshistory_orderstatus_id'] ==  FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS")) {
 
-                                $trackingNumbers = explode(",", $childOrderDetail['opship_tracking_number']);
+                                $trackingNumbers = !empty($childOrderDetail['opship_tracking_number']) ? explode(",", $childOrderDetail['opship_tracking_number']) : '';
 
                                 $carrier = $row['oshistory_courier']; ?>
                                 <h6><?php echo Labels::getLabel('MSG_TRACKING_NUMBER', $siteLangId); ?></h6>
 
                                 <?php foreach ($trackingNumbers as $trackingNumber) {
                                     $trackingNumber = trim($trackingNumber);
-                                   /*  if (is_numeric($trackingNumber)) {
+                                    /*  if (is_numeric($trackingNumber)) {
                                         $trackingNumber = number_format($trackingNumber, 0, null, '');
                                     } */
                                 ?>
