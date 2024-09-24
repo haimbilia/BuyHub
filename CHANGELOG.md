@@ -138,6 +138,7 @@
     - Bug-087199 - Debit entry content need to be upadated
     - Bug-087356 - When a seller is not a buyer rfq attachement does not get opened.
     - Bug-087400 - Site stops working in case if multiple quantity
+    - Bug-087395 - A warning appears when the admin tries to approve the seller-added catalog
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  

@@ -287,7 +287,7 @@ class ProductsController extends ListingBaseController
             if ($productData['product_seller_id'] > 0) {
                 $userShopName = User::getUserShopName($productData['product_seller_id'], $langId);
                 $prodSellerIdFld->options = [$productData['product_seller_id'] => $userShopName['user_name'] . ' (' . $userShopName['shop_name'] . ')'];
-            } else {
+            } else if (isset($prodSellerIdFld) && null != $prodSellerIdFld) {
                 $prodSellerIdFld->options = [0 => Labels::getLabel('FRM_ADMIN', $langId)];
             }
 
@@ -662,7 +662,6 @@ class ProductsController extends ListingBaseController
                 $db->rollbackTransaction();
                 LibHelper::exitWithError($spObj->getError(), true);
             }
-
         }
 
         $productSpecifics = new ProductSpecifics($recordId);
