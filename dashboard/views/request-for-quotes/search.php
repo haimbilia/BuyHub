@@ -33,12 +33,12 @@
                             $class = 'fw-normal';
                         }
 
-                        $htm = '<div>
-                                    <span class="product-profile__title ' . $class . '">'
-                            . $title .
-                            '</span>
-                                    ' . $global . '
-                                    <div>' . Labels::getLabel('LBL_QTY') . ': ' . $row['rfq_quantity'] . ' ' . applicationConstants::getWeightUnitName($siteLangId, $row['rfq_quantity_unit'], true) . '</div>
+                        $htm = '<div class="product-profile">
+                                    <div class="product-profile__description mw-350">
+                                        <div class="product-profile__title ' . $class . '">' . $title . '</div>
+                                        ' . $global . '
+                                        <div class="product-profile__options">' . Labels::getLabel('LBL_QTY') . ': ' . $row['rfq_quantity'] . ' ' . applicationConstants::getWeightUnitName($siteLangId, $row['rfq_quantity_unit'], true) . '</div>
+                                    </div>
                                 </div>';
                         $td->appendElement('plaintext', array('width'=> '20%'), $htm, true);
                         break;
