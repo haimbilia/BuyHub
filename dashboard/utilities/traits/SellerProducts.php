@@ -546,7 +546,7 @@ trait SellerProducts
                 FatUtility::dieWithError(Message::getHtml());
             }
         }
-                
+
         $post['selprod_subtract_stock'] = FatApp::getPostedData('selprod_subtract_stock', FatUtility::VAR_INT, 0);
         $post['selprod_track_inventory'] = FatApp::getPostedData('selprod_track_inventory', FatUtility::VAR_INT, 0);
         $post['selprod_rfq_enabled'] = FatApp::getPostedData('selprod_rfq_enabled', FatUtility::VAR_INT, 0);
@@ -793,7 +793,8 @@ trait SellerProducts
         if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
             $prodAllowedLimit = SellerPackages::getAllowedLimit($this->userParentId, $this->siteLangId, 'ossubs_inventory_allowed');
         }
-        $minSellingPrice = Product::getAttributesById($productId, 'product_min_selling_price');
+        $prodInfo = Product::getAttributesById($productId, ['product_min_selling_price', 'product_type']);
+        $minSellingPrice = $prodInfo['product_min_selling_price'] ?? 0;
         $productCount = SellerProduct::getActiveCount($this->userParentId);
 
         $keywordSlug = '';
@@ -844,7 +845,16 @@ trait SellerProducts
                 $data_to_be_save['selprod_code'] = $selProdCode;
                 $data_to_be_save['selprod_cost'] = $post['selprod_cost' . $optionKey];
                 $data_to_be_save['selprod_price'] = $sellingPrice;
-                $data_to_be_save['selprod_stock'] = $post['selprod_stock' . $optionKey];
+                if ($prodInfo['product_type'] == Product::PRODUCT_TYPE_SERVICE) {
+                    $data_to_be_save['selprod_stock'] = 1;
+                    $data_to_be_save['selprod_min_order_qty'] = 1;
+                    $data_to_be_save['selprod_subtract_stock'] = 0;
+                    $data_to_be_save['selprod_track_inventory'] = 0;
+                    $data_to_be_save['selprod_threshold_stock_level'] = 0;
+                    $data_to_be_save['selprod_condition'] = 1;
+                } else {
+                    $data_to_be_save['selprod_stock'] = $post['selprod_stock' . $optionKey];
+                }
                 $data_to_be_save['selprod_sku'] = $post['selprod_sku' . $optionKey] ?? '';
 
                 $selProdKeywordSlug = $keywordSlug . '-' . $optionValue . '-' . $shopData['shop_name'];
@@ -879,7 +889,16 @@ trait SellerProducts
             $data_to_be_save['selprod_code'] = $selProdCode;
             $data_to_be_save['selprod_cost'] = $post['selprod_cost' . $optionValue];
             $data_to_be_save['selprod_price'] = $post['selprod_price' . $optionValue];
-            $data_to_be_save['selprod_stock'] = $post['selprod_stock' . $optionValue];
+            if ($prodInfo['product_type'] == Product::PRODUCT_TYPE_SERVICE) {
+                $data_to_be_save['selprod_stock'] = 1;
+                $data_to_be_save['selprod_min_order_qty'] = 1;
+                $data_to_be_save['selprod_subtract_stock'] = 0;
+                $data_to_be_save['selprod_track_inventory'] = 0;
+                $data_to_be_save['selprod_threshold_stock_level'] = 0;
+                $data_to_be_save['selprod_condition'] = 1;
+            } else {
+                $data_to_be_save['selprod_stock'] = $post['selprod_stock' . $optionValue];
+            }
             $data_to_be_save['selprod_sku'] = $post['selprod_sku' . $optionValue];
             $selProdKeywordSlug = $keywordSlug . '-' . $optionValue . '-' . $shopData['shop_name'];
             $data_to_be_save['selprod_url_keyword'] = strtolower(CommonHelper::createSlug($selProdKeywordSlug));
@@ -2090,9 +2109,9 @@ trait SellerProducts
         $srch->addOrder('product_name');
         $srch->addCondition('product_deleted', '=', applicationConstants::NO);
         $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
-        if(isset($post['volumeDiscount']) && $post['volumeDiscount']) {
+        if (isset($post['volumeDiscount']) && $post['volumeDiscount']) {
             $srch->addCondition(Product::DB_TBL_PREFIX . 'type', '!=', Product::PRODUCT_TYPE_SERVICE);
-        } 
+        }
         if (!empty($post['keyword'])) {
             $cnd = $srch->addCondition('product_name', 'LIKE', '%' . $post['keyword'] . '%');
             $cnd->attachCondition('selprod_title', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
@@ -2114,7 +2133,10 @@ trait SellerProducts
 
         $srch->addMultipleFields(
             array(
-                'selprod_id as id', 'IFNULL(selprod_title, product_name) as product_name', 'product_identifier', 'selprod_price'
+                'selprod_id as id',
+                'IFNULL(selprod_title, product_name) as product_name',
+                'product_identifier',
+                'selprod_price'
             )
         );
         $srch->setPageSize($pagesize);
@@ -2777,8 +2799,19 @@ trait SellerProducts
         $srch->doNotCalculateRecords();
         $srch->addMultipleFields(
             [
-                'selprod_id', 'credential_username', 'voldiscount_min_qty', 'voldiscount_percentage', 'IFNULL(product_name, product_identifier) as product_name', 'selprod_title',
-                'voldiscount_id', 'product_updated_on', 'selprod_product_id', 'user_id', 'user_updated_on', 'credential_email', 'user_name'
+                'selprod_id',
+                'credential_username',
+                'voldiscount_min_qty',
+                'voldiscount_percentage',
+                'IFNULL(product_name, product_identifier) as product_name',
+                'selprod_title',
+                'voldiscount_id',
+                'product_updated_on',
+                'selprod_product_id',
+                'user_id',
+                'user_updated_on',
+                'credential_email',
+                'user_name'
             ]
         );
         $srch->addOrder('voldiscount_id', 'DESC');
