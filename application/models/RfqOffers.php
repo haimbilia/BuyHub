@@ -866,4 +866,17 @@ class RfqOffers extends MyAppModel
         $qry = "UPDATE " . self::DB_RO_MESSAGES . " SET rom_read = " . applicationConstants::YES . " WHERE rom_id IN (" . implode(',', $messageIdArr) . ") AND rom_primary_offer_id = " . $primaryOfferId;
         return FatApp::getDb()->query($qry);
     }
+
+    public static function hasAnySellerAcceptance(int $rfqId, int $sellerId): bool
+    {
+        $srch = new SearchBase(self::DB_RFQ_LATEST_OFFER, 'rlo');
+        $srch->addCondition('rlo_seller_acceptance', '=', applicationConstants::YES);
+        $srch->addCondition('rlo_rfq_id', '=', $rfqId);
+        $srch->addCondition('rlo_seller_user_id', '=', $sellerId);
+        $srch->addFld('rlo_primary_offer_id');
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
+        $result = FatApp::getDb()->fetch($srch->getResultSet());
+        return (!is_array($result) || empty($result));
+    }
 }
