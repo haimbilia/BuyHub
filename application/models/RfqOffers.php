@@ -702,7 +702,7 @@ class RfqOffers extends MyAppModel
     public static function validateOfferRequest($rfqId, $qty, $sellerId): bool
     {
         $srch = new SearchBase(self::DB_TBL);
-        $srch->joinTable(self::DB_RFQ_LATEST_OFFER, 'INNER JOIN', 'offer_rfq_id = rlo_rfq_id', 'rlo');
+        $srch->joinTable(self::DB_RFQ_LATEST_OFFER, 'INNER JOIN', 'offer_rfq_id = rlo.rlo_rfq_id AND offer_primary_offer_id = rlo.rlo_primary_offer_id', 'rlo');
         $srch->addCondition('offer_rfq_id', '=', $rfqId);
         $srch->addCondition('offer_quantity', '=', $qty);
         $srch->addCondition('offer_deleted', '=', applicationConstants::NO);
