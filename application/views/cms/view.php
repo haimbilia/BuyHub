@@ -2,7 +2,7 @@
 ?>
 <div id="body" class="body">
     <?php if ($cPage['cpage_layout'] == Contentpage::CONTENT_PAGE_LAYOUT1_TYPE) { ?>
-        <div class="page-banner" style="background-repeat: no-repeat;background-position: center;background-image:url(<?php echo UrlHelper::generateFileUrl('image', 'cpageBackgroundImage', array($cPage['cpage_id'], $siteLangId, '', 0, false), CONF_WEBROOT_URL); ?>);">
+        <div class="page-banner" style="background-repeat: no-repeat;background-position:<?php echo (CommonHelper::getLayoutDirection() == 'rtl'?'right':'left')?>;background-image:url(<?php echo UrlHelper::generateFileUrl('image', 'cpageBackgroundImage', array($cPage['cpage_id'], $siteLangId, '', 0, false), CONF_WEBROOT_URL); ?>);">
             <div class="container">
                 <div class="page-banner-txt">
                     <h1><?php echo $cPage['cpage_image_title']; ?></h1>
