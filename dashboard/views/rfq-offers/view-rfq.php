@@ -18,7 +18,7 @@
                 <?php
                 $prodUrl = 'javascript:void(0)';
                 $urlTarget = '';
-                if (!$linkedSelprodId) {
+                if ($linkedSelprodId) {
                     $prodUrl = UrlHelper::generateUrl('Products', 'view', [$linkedSelprodId], CONF_WEBROOT_FRONT_URL, useLangCode: true, langId: $siteLangId);
                     $urlTarget = "target='_blank'";
                 } ?>

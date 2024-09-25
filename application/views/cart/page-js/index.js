@@ -8,7 +8,7 @@ $(function () {
 	});
 });
 (function () {
-	listCartProducts = function (fulfilmentType = 2) {
+	listCartProducts = function (fulfilmentType = 2) {		
 		if (true === isAjaxRunning) { return; }
 		if (fulfilmentType == 2) {
 			$("#shipping").prop("checked", true);
