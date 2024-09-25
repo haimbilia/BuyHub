@@ -140,6 +140,9 @@
     - Bug-087400 - Site stops working in case if multiple quantity
     - Bug-087395 - A warning appears when the admin tries to approve the seller-added catalog
     - Bug-087344 - Users did't get notified about the messages or attachement bound with RFQ offer
+    - Bug-087413 - <<RFQ+B1>>Download rfq copy option is not working properly
+    - Bug-087468 - There is no option to update the inventory binded, could lead to conflict.
+    - Bug- 087453 - << RFQ >> Multiple sellers can not share offers with the same quantity for any RFQ
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  

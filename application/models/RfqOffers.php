@@ -445,19 +445,54 @@ class RfqOffers extends MyAppModel
      * @param  int $loggedUserId
      * @return array
      */
-    public static function getAllAcceptedOffers(int $loggedUserId): array
+    public static function getAllAcceptedOffers(int $loggedUserId, int $rfqId = 0, bool $getFullDetail = false, int $langId = 0): array
     {
         $srch = new SearchBase(self::DB_RFQ_LATEST_OFFER, 'rlo');
         $srch->addCondition('rlo_status', '=', self::STATUS_ACCEPTED);
         $srch->joinTable(self::DB_TBL, 'INNER JOIN', 'offer_id = rlo_seller_offer_id', 'ro');
         $srch->joinTable(RequestForQuote::DB_TBL, 'INNER JOIN', 'rfq_id = rlo_rfq_id AND rfq_user_id = ' . $loggedUserId, 'rfq');
+
         $paidStatus = FatApp::getConfig('CONF_DEFAULT_PAID_ORDER_STATUS', FatUtility::VAR_INT, 0);
         $srch->joinTable(OrderProduct::DB_TBL, 'LEFT JOIN', 'op.op_offer_id = rlo_accepted_offer_id AND op.op_selprod_id = rlo.rlo_selprod_id AND op.op_status_id = ' . $paidStatus, 'op');
         $srch->joinTable(Orders::DB_TBL_ORDER_PAYMENTS, 'LEFT JOIN', 'opayment_order_id = op.op_order_id', 'opay');
 
-        $srch->addCondition('opayment_id', 'IS', 'mysql_func_NULL', 'AND', true);
+        if (0 < $rfqId) {
+            $srch->addCondition('rlo_rfq_id', '=', $rfqId);
+        }
 
         $srch->doNotCalculateRecords();
+        if ($getFullDetail) {
+            $langId = 0 < $langId ? $langId : CommonHelper::getLangId();
+            $srch->joinTable(User::DB_TBL, 'INNER JOIN', 'rlo_seller_user_id = su.user_id', 'su');
+            $srch->joinTable(Shop::DB_TBL, 'INNER JOIN', 'shop_user_id = rlo_seller_user_id', 'shp');
+            $srch->joinTable(Shop::DB_TBL_LANG, 'LEFT JOIN', 'shoplang_shop_id = shop_id AND shoplang_lang_id = ' . $langId, 'shp_l');
+            $srch->joinTable(User::DB_TBL_CRED, 'INNER JOIN', 'rlo_seller_user_id = scred.credential_user_id', 'scred');
+
+            $srch->joinTable(User::DB_TBL, 'INNER JOIN', 'rfq_user_id = bu.user_id', 'bu');
+            $srch->joinTable(User::DB_TBL_CRED, 'INNER JOIN', 'rfq_user_id = bcred.credential_user_id', 'bcred');
+            $srch->joinTable(RfqOffers::DB_TBL, 'INNER JOIN', 'rlo_accepted_offer_id = ao.offer_id', 'ao');
+            $srch->addMultipleFields([
+                'su.user_name as seller_name',
+                'COALESCE(shop_name, shop_identifier) as shop_name',
+                'scred.credential_email as seller_email',
+                'shop_phone_dcode as seller_phone_dcode',
+                'shop_phone as seller_phone',
+                'bu.user_name as buyer_name',
+                'bcred.credential_email as buyer_email',
+                'bu.user_phone_dcode as buyer_phone_dcode',
+                'bu.user_phone as buyer_phone',
+                'rlo_shipping_charges',
+                'ao.offer_quantity',
+                'ao.offer_price',
+                'ao.offer_comments',
+                'rlo_selprod_id as selprod_id',
+                'rlo_primary_offer_id as primary_offer_id',
+                'rlo_accepted_offer_id as accepted_offer_id'
+            ]);
+            return FatApp::getDb()->fetchAll($srch->getResultSet());
+        }
+
+        $srch->addCondition('opayment_id', 'IS', 'mysql_func_NULL', 'AND', true);
         $srch->addMultipleFields(['rlo_selprod_id as selprod_id', 'rlo_primary_offer_id as primary_offer_id', 'rlo_accepted_offer_id as accepted_offer_id']);
         return FatApp::getDb()->fetchAll($srch->getResultSet(), 'selprod_id');
     }
@@ -667,7 +702,7 @@ class RfqOffers extends MyAppModel
     public static function validateOfferRequest($rfqId, $qty, $sellerId): bool
     {
         $srch = new SearchBase(self::DB_TBL);
-        $srch->joinTable(self::DB_RFQ_LATEST_OFFER, 'INNER JOIN', 'offer_rfq_id = rlo_rfq_id', 'rlo');
+        $srch->joinTable(self::DB_RFQ_LATEST_OFFER, 'INNER JOIN', 'offer_rfq_id = rlo.rlo_rfq_id AND offer_primary_offer_id = rlo.rlo_primary_offer_id', 'rlo');
         $srch->addCondition('offer_rfq_id', '=', $rfqId);
         $srch->addCondition('offer_quantity', '=', $qty);
         $srch->addCondition('offer_deleted', '=', applicationConstants::NO);
@@ -830,5 +865,18 @@ class RfqOffers extends MyAppModel
     {
         $qry = "UPDATE " . self::DB_RO_MESSAGES . " SET rom_read = " . applicationConstants::YES . " WHERE rom_id IN (" . implode(',', $messageIdArr) . ") AND rom_primary_offer_id = " . $primaryOfferId;
         return FatApp::getDb()->query($qry);
+    }
+
+    public static function hasAnySellerAcceptance(int $rfqId, int $sellerId): bool
+    {
+        $srch = new SearchBase(self::DB_RFQ_LATEST_OFFER, 'rlo');
+        $srch->addCondition('rlo_seller_acceptance', '=', applicationConstants::YES);
+        $srch->addCondition('rlo_rfq_id', '=', $rfqId);
+        $srch->addCondition('rlo_seller_user_id', '=', $sellerId);
+        $srch->addFld('rlo_primary_offer_id');
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
+        $result = FatApp::getDb()->fetch($srch->getResultSet());
+        return (!is_array($result) || empty($result));
     }
 }

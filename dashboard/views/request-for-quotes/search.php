@@ -121,7 +121,7 @@
                             }
                         }
 
-                        if ($isBuyer) {
+                        if ($isBuyer && 0 < $row['acceptedOffers']) {
                             $li = $ul->appendElement("li", ['class' => 'actions-item']);
                             $li->appendElement(
                                 'a',

@@ -77,6 +77,7 @@ if (isset($rfqData['addr_zip']) &&  $rfqData['addr_zip'] != '') {
 
 $isGlobal = (RequestForQuote::VISIBILITY_TYPE_OPEN == $rfqData['rfq_visibility_type']);
 $productTypeArr = Product::getProductTypes($siteLangId);
+$rfqQtyUnit = applicationConstants::getWeightUnitName($siteLangId, $rfqData['rfq_quantity_unit'], true);
 ?>
 <table width="100%" border="0" cellpadding="10" cellspacing="0" class="tbl-border">
     <tbody>
@@ -103,7 +104,7 @@ $productTypeArr = Product::getProductTypes($siteLangId);
                     <tbody>
                         <tr>
                             <td width="10%"><strong><?php echo Labels::getLabel('LBL_SHIP_TO', $siteLangId); ?>:</strong></td>
-                            <td width="90%"><?php echo $shippingInfo; ?></td>
+                            <td width="40%"><?php echo $shippingInfo; ?></td>
                         </tr>
                         <?php if (isset($rfqData['addr_phone']) &&  $rfqData['addr_phone'] != '') { ?>
                             <tr>
@@ -141,9 +142,11 @@ $productTypeArr = Product::getProductTypes($siteLangId);
                             <td style="padding:10px; ;text-align: left;"><?php echo $rfqData['rfq_title']; ?></td>
                             <?php if ($isGlobal) { ?>
                                 <td style="padding:10px; ;text-align: left;"><?php echo $productTypeArr[$rfqData['rfq_product_type']]; ?></td>
-                                <td style="padding:10px; ;text-align: left;"><?php echo $rfqData['prodcat_name']; ?></td>
+                                <td style="padding:10px; ;text-align: left;">
+                                    <?php echo !empty($rfqData['prodcat_name']) ? $rfqData['prodcat_name'] : Labels::getLabel('LBL_N/A', $siteLangId); ?>
+                                </td>
                             <?php } ?>
-                            <td style="padding:10px; ;text-align: left;"><?php echo $rfqData['rfq_quantity']  . ' ' . applicationConstants::getWeightUnitName($siteLangId, $rfqData['rfq_quantity_unit'], true); ?></td>
+                            <td style="padding:10px; ;text-align: left;"><?php echo $rfqData['rfq_quantity']  . ' ' . $rfqQtyUnit; ?></td>
                         </tr>
                         <tr>
                             <td style="padding:10px; ;text-align: left;font-weight:700;background-color: #ddd;" colspan="<?php echo ($isGlobal) ? 4 : 2; ?>"><?php echo Labels::getLabel('LBL_COMMENTS', $siteLangId) ?> </td>
@@ -157,3 +160,72 @@ $productTypeArr = Product::getProductTypes($siteLangId);
         </tr>
     </tbody>
 </table>
+<?php if (!empty($acceptedOffers)) { ?>
+    <table width="100%" border="0" cellpadding="10" cellspacing="0" class="tbl-border">
+        <tbody>
+            <tr>
+                <td style="border-bottom: solid px #000; text-align:center; line-height:1.5; ">
+                    <strong style="padding:10px;display:block;font-size: 20px;"><?php echo Labels::getlabel('LBL_ACCEPTED_OFFERS', $siteLangId); ?></strong>
+                </td>
+            </tr>
+            <?php foreach ($acceptedOffers as $offer) { ?>
+                <tr>
+                    <td style="border-top: solid 1px #000;">
+                        <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                            <tbody>
+                                <tr>
+                                    <td><strong><?php echo Labels::getLabel('LBL_SOLD_BY', $siteLangId); ?>:</strong> <?php echo $offer['shop_name']; ?></td>
+                                    <td><strong><?php echo Labels::getLabel('LBL_EMAIL', $siteLangId); ?>:</strong> <?php echo $offer['seller_email']; ?></td>
+                                    <?php if (!empty($offer['seller_phone_dcode']) && !empty($offer['seller_phone'])) { ?>
+                                        <td>
+                                            <strong><?php echo Labels::getLabel('LBL_PHONE', $siteLangId); ?>:</strong>
+                                            <?php echo ValidateElement::formatDialCode($offer['seller_phone_dcode']) . $offer['seller_phone']; ?>
+                                        </td>
+                                    <?php } ?>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <table class="tbl-border" width="100%" border="0" cellpadding="10" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th style="padding:10px; ;text-align: left; border-bottom:1px solid #ddd; background-color:#ddd; "><?php echo Labels::getLabel('LBL_OFFER_QUANTITY', $siteLangId); ?></th>
+                                    <?php if (0 < $offer['rlo_shipping_charges']) { ?>
+                                        <th style="padding:10px; ;text-align: left; border-bottom:1px solid #ddd; background-color:#ddd; "><?php echo Labels::getLabel('LBL_SHIPPING_RATE', $siteLangId); ?></th>
+                                    <?php } ?>
+                                    <th style="padding:10px; ;text-align: left; border-bottom:1px solid #ddd; background-color:#ddd; "><?php echo Labels::getLabel('LBL_OFFER_PRICE', $siteLangId); ?></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="padding:10px; ;text-align: left;"><?php echo $offer['offer_quantity']  . ' ' . $rfqQtyUnit; ?></td>
+                                    <?php if (0 < $offer['rlo_shipping_charges']) { ?>
+                                        <td style="padding:10px; ;text-align: left;"><?php echo CommonHelper::displayMoneyFormat($offer['rlo_shipping_charges']); ?></td>
+                                    <?php } ?>
+                                    <td style="padding:10px; ;text-align: left;"><?php
+                                                                                    $str = Labels::getLabel('LBL_{PRICE}_{UNIT}', $siteLangId);
+                                                                                    echo CommonHelper::replaceStringData($str, [
+                                                                                        '{PRICE}' => CommonHelper::displayMoneyFormat($offer['offer_price']),
+                                                                                        '{UNIT}' => '<span class="per-unit">/ ' . $rfqQtyUnit . '</span>',
+                                                                                    ]); ?></td>
+                                </tr>
+                                <?php if (!empty($offer['offer_comments'])) { ?>
+                                    <tr>
+                                        <td style="padding:10px; ;text-align: left;font-weight:700;background-color: #ddd;" colspan="<?php echo (0 < $offer['rlo_shipping_charges']) ? 3 : 2; ?>"><?php echo Labels::getLabel('LBL_COMMENTS', $siteLangId) ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:10px; ;text-align: left;" colspan="<?php echo (0 < $offer['rlo_shipping_charges']) ? 3 : 2; ?>"><?php echo $offer['offer_comments']; ?></td>
+                                    </tr>
+                                <?php } ?>
+                            </tbody>
+                        </table>
+                    </td>
+
+                </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+<?php } ?>
