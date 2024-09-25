@@ -646,7 +646,7 @@ class RfqOffers extends MyAppModel
             $srch->addCondition('rfqts_rfq_id', '=', $rfqId);
         }
         $srch->addCondition('selprod_code', 'IS NOT', 'mysql_func_NULL', 'AND', true);
-
+        $srch->doNotCalculateRecords();
         $users = FatApp::getDb()->fetchAll($srch->getResultSet(), 'user_id');
         $json = array(
             'pageCount' => $srch->pages(),

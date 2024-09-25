@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<div class="side-blocksa your-sellers">
+<div class="side-blocks your-sellers">
     <h5 class="h5"><?php echo Labels::getLabel('LBL_Meet_Your_seller'); ?></h5>
     <div class="side-blocks-body">
         <ul class="more-sellers <?php echo (count($product['moreSellersArr']) ? 'moreSellerRows--js' : ''); ?>">

@@ -1013,7 +1013,7 @@ class RfqOffersController extends ListingBaseController
     public function getSellers()
     {
         $isGlobal = FatApp::getPostedData('isGlobal', FatUtility::VAR_INT, 0);
-        if (0 < $isGlobal) {
+        if (RequestForQuote::VISIBILITY_TYPE_OPEN == $isGlobal) {
             $json = Shop::getSellersAutocomplete($this->siteLangId);
         } else {
             $json = RfqOffers::getSellers($this->siteLangId);
