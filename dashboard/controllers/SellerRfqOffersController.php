@@ -87,6 +87,9 @@ class SellerRfqOffersController extends SellerBaseController
         $srch->addCondition('selprod_user_id', '=', $this->userId);
         $srch->addOrder('selprod_active', 'DESC');
         $srch->addCondition('product_type', '=', $rfqData['rfq_product_type']);
+        $srch->addCondition('product_approved', '=', applicationConstants::YES);
+        $srch->addCondition('product_active', '=', applicationConstants::YES);
+        $srch->addCondition('product_deleted', '=', applicationConstants::NO);
         $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
         $srch->addCondition('selprod_active', '=', applicationConstants::ACTIVE);
         if ($rfqData['rfq_selprod_id'] > 0 && $rfqData['rfq_product_id'] > 0) {

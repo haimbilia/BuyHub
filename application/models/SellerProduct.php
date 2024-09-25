@@ -341,15 +341,34 @@ class SellerProduct extends MyAppModel
 
             if (empty($attr)) {
                 $attr = array(
-                    'upsell_sellerproduct_id', 'upsell_recommend_sellerproduct_id', 'selprod_id', 'product_id', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'selprod_price', 'selprod_stock', 'IFNULL(product_identifier ,product_name) as product_name', 'product_identifier', 'selprod_product_id', 'CASE WHEN m.splprice_selprod_id IS NULL THEN 0 ELSE 1 END AS special_price_found',
-                    'IFNULL(m.splprice_price, selprod_price) AS theprice', 'selprod_min_order_qty',
-                    'selprod_cart_type', 'product_updated_on'
+                    'upsell_sellerproduct_id',
+                    'upsell_recommend_sellerproduct_id',
+                    'selprod_id',
+                    'product_id',
+                    'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title',
+                    'selprod_price',
+                    'selprod_stock',
+                    'IFNULL(product_identifier ,product_name) as product_name',
+                    'product_identifier',
+                    'selprod_product_id',
+                    'CASE WHEN m.splprice_selprod_id IS NULL THEN 0 ELSE 1 END AS special_price_found',
+                    'IFNULL(m.splprice_price, selprod_price) AS theprice',
+                    'selprod_min_order_qty',
+                    'selprod_cart_type',
+                    'product_updated_on'
                 );
             }
         } else {
             if (empty($attr)) {
                 $attr = array(
-                    'upsell_sellerproduct_id', 'upsell_recommend_sellerproduct_id', 'selprod_id', 'product_id', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'IFNULL(product_identifier ,product_name) as product_name', 'product_identifier', 'selprod_product_id',
+                    'upsell_sellerproduct_id',
+                    'upsell_recommend_sellerproduct_id',
+                    'selprod_id',
+                    'product_id',
+                    'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title',
+                    'IFNULL(product_identifier ,product_name) as product_name',
+                    'product_identifier',
+                    'selprod_product_id',
                     'product_updated_on'
                 );
             }
@@ -1645,7 +1664,7 @@ class SellerProduct extends MyAppModel
         $row = FatApp::getDb()->fetch($srch->getResultSet());
         return is_array($row) && isset($row['selprod_id']) ? $row['selprod_id'] : 0;
     }
-    
+
     public static function getSelprodIdByProductId(int $productId): int
     {
         if (1 > $productId || 1 > FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {

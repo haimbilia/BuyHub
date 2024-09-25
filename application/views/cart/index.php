@@ -8,7 +8,7 @@
                         <main class="cart-page_main">
                             <div class="cart-page-head">
                                 <h2 class="h2"><?php echo Labels::getLabel('LBL_YOUR_SHOPPING_BAG'); ?></h2>
-                                <?php if ($hasPhysicalProduct && !isset($_SESSION['offer_checkout'])) { ?>
+                                <?php if ($hasPhysicalProduct) { ?>
                                     <ul class="shiporpickup" id="js-shiporpickup">
                                         <li class="shiporpickup-item" onclick="listCartProducts(<?php echo Shipping::FULFILMENT_SHIP; ?>)">
                                             <label class="control-label radio is-active shippingLblJs">
@@ -30,10 +30,6 @@
                                             </label>
                                         </li>
                                     </ul>
-                                <?php } else if (isset($_SESSION['offer_checkout'])) { 
-                                    $defaultFulfillmentType = ($pickUpProductsCount > $shipProductsCount ? Shipping::FULFILMENT_PICKUP : Shipping::FULFILMENT_SHIP);
-                                    ?>
-                                    <input type="hidden" id="offerCheckoutFulfillmentTypeJs" name="fulfillment_type" value="<?php echo $defaultFulfillmentType; ?>">
                                 <?php } ?>
                             </div>
                             <div class="processing-wrap" id="cartList">

@@ -3,15 +3,12 @@ $(function () {
 		var type = $('input[name="fulfillment_type"]:checked').val();
 		if ('undefined' == typeof type) {
 			type = 2;
-			if ($('#offerCheckoutFulfillmentTypeJs').length) {
-				type = $('#offerCheckoutFulfillmentTypeJs').val();
-			}
 		}
 		listCartProducts(type);
 	});
 });
 (function () {
-	listCartProducts = function (fulfilmentType = 2) {
+	listCartProducts = function (fulfilmentType = 2) {		
 		if (true === isAjaxRunning) { return; }
 		if (fulfilmentType == 2) {
 			$("#shipping").prop("checked", true);
@@ -84,9 +81,6 @@ $(function () {
 
 	goToCheckout = function () {
 		var type = $('input[name="fulfillment_type"]:checked').val();
-		if ($('#offerCheckoutFulfillmentTypeJs').length) {
-			type = $('#offerCheckoutFulfillmentTypeJs').val();
-		}
 		var data = "type=" + type;
 		fcom.updateWithAjax(fcom.makeUrl('Cart', 'setCartCheckoutType'), data, function (ans) {
 			fcom.removeLoader();

@@ -275,6 +275,12 @@ class RequestForQuote extends MyAppModel
      */
     public static function getTypeArr(int $langId): array
     {
+        if (FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+            return [
+                self::TYPE_INDIVIDUAL => Labels::getLabel('LBL_INDIVIDUAL', $langId)
+            ];
+        }
+
         return [
             self::TYPE_INDIVIDUAL => Labels::getLabel('LBL_INDIVIDUAL', $langId),
             self::TYPE_VARIANT => Labels::getLabel('LBL_VARIANT', $langId),

@@ -15,7 +15,14 @@
             <?php } ?>
             <li class="list-stats-item list-stats-item-full">
                 <span class="label"><?php echo Labels::getLabel('LBL_PRODUCT', $siteLangId); ?>:</span>
-                <span class="value"><?php echo $rfqData['rfq_title']; ?></span>
+                <?php
+                $prodUrl = 'javascript:void(0)';
+                $urlTarget = '';
+                if ($linkedSelprodId) {
+                    $prodUrl = UrlHelper::generateUrl('Products', 'view', [$linkedSelprodId], CONF_WEBROOT_FRONT_URL, useLangCode: true, langId: $siteLangId);
+                    $urlTarget = "target='_blank'";
+                } ?>
+                <span class="value"><a href="<?php echo $prodUrl; ?>" <?php echo $urlTarget; ?>><?php echo $rfqData['rfq_title']; ?></a></span>
             </li>
             <?php if (!empty($rfqData['prodcat_name'])) { ?>
                 <li class="list-stats-item">
