@@ -12,7 +12,7 @@
                                     <ul class="shiporpickup" id="js-shiporpickup">
                                         <li class="shiporpickup-item" onclick="listCartProducts(<?php echo Shipping::FULFILMENT_SHIP; ?>)">
                                             <label class="control-label radio is-active shippingLblJs">
-                                                <input class="control-input" type="radio" id="shipping" name="fulfillment_type" value="<?php echo Shipping::FULFILMENT_SHIP; ?>" <?php echo ($pickUpProductsCount == 0) ? "checked='true'": ''; ?>>
+                                                <input class="control-input" type="radio" id="shipping" name="fulfillment_type" value="<?php echo Shipping::FULFILMENT_SHIP; ?>" <?php echo ($pickUpProductsCount == 0) ? "checked='true'" : ''; ?>>
                                                 <svg class="svg" width="18" height="18">
                                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#shipping">
                                                     </use>
@@ -30,8 +30,10 @@
                                             </label>
                                         </li>
                                     </ul>
-                                <?php } else if (isset($_SESSION['offer_checkout'])) { ?>
-                                    <input class="d-none" type="radio" id="shipping" name="fulfillment_type" value="<?php echo Shipping::FULFILMENT_SHIP; ?>" checked>
+                                <?php } else if (isset($_SESSION['offer_checkout'])) { 
+                                    $defaultFulfillmentType = ($pickUpProductsCount > $shipProductsCount ? Shipping::FULFILMENT_PICKUP : Shipping::FULFILMENT_SHIP);
+                                    ?>
+                                    <input type="hidden" id="offerCheckoutFulfillmentTypeJs" name="fulfillment_type" value="<?php echo $defaultFulfillmentType; ?>">
                                 <?php } ?>
                             </div>
                             <div class="processing-wrap" id="cartList">

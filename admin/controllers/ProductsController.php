@@ -390,41 +390,43 @@ class ProductsController extends ListingBaseController
             if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
                 $selProdId = SellerProduct::getSelprodIdByProductId($recordId);
                 $sellerProductRow = SellerProduct::getAttributesById($selProdId, null, true, true);
-                if (!$sellerProductRow || 1 > $sellerProductRow['selprod_user_id']) {
-                    LibHelper::exitWithError($this->str_invalid_request_id, true);
+                if (is_array($sellerProductRow) && !empty($sellerProductRow)) {
+                    /*  if (!$sellerProductRow || 1 > $sellerProductRow['selprod_user_id']) {
+                        LibHelper::exitWithError($this->str_invalid_request_id, true);
+                    } */
+
+                    $sellerProductLangRow = SellerProduct::getAttributesByLangId($langId, $selProdId);
+                    $sellerProductLangRow = is_array($sellerProductLangRow) ? $sellerProductLangRow : [];
+
+                    $urlSrch = UrlRewrite::getSearchObject();
+                    $urlSrch->doNotCalculateRecords();
+                    $urlSrch->doNotLimitRecords();
+                    $urlSrch->addFld('urlrewrite_custom');
+                    $urlSrch->addCondition('urlrewrite_original', '=', 'products/view/' . $selProdId);
+                    $urlSrch->doNotCalculateRecords();
+                    $urlSrch->setPageSize(1);
+                    $rs = $urlSrch->getResultSet();
+                    $urlRow = FatApp::getDb()->fetch($rs);
+
+                    $sellerProductRow['selprod_url_keyword'] = '';
+                    if ($urlRow) {
+                        $data['urlrewrite_custom'] = $urlRow['urlrewrite_custom'];
+                        $customUrl = explode("/", $urlRow['urlrewrite_custom']);
+                        $sellerProductRow['selprod_url_keyword'] = $customUrl[0];
+                    }
+
+                    $user_shop_name = User::getUserShopName($sellerProductRow['selprod_user_id'], $this->siteLangId);
+                    $sellerProductRow['selprod_user_shop_name'] = $user_shop_name['user_name'] . ' - ' . $user_shop_name['shop_name'];
+
+                    $returnAge = isset($sellerProductRow['selprod_return_age']) ? FatUtility::int($sellerProductRow['selprod_return_age']) : '';
+                    $cancellationAge = isset($sellerProductRow['selprod_cancellation_age']) ? FatUtility::int($sellerProductRow['selprod_cancellation_age']) : '';
+
+                    if ('' === $returnAge || '' === $cancellationAge) {
+                        $sellerProductRow['use_shop_policy'] = 1;
+                    }
+                    $productData = array_merge($productData, $sellerProductRow, $sellerProductLangRow);
                 }
 
-                $sellerProductLangRow = SellerProduct::getAttributesByLangId($langId, $selProdId);
-                $sellerProductLangRow = is_array($sellerProductLangRow) ? $sellerProductLangRow : [];
-
-                $urlSrch = UrlRewrite::getSearchObject();
-                $urlSrch->doNotCalculateRecords();
-                $urlSrch->doNotLimitRecords();
-                $urlSrch->addFld('urlrewrite_custom');
-                $urlSrch->addCondition('urlrewrite_original', '=', 'products/view/' . $selProdId);
-                $urlSrch->doNotCalculateRecords();
-                $urlSrch->setPageSize(1);
-                $rs = $urlSrch->getResultSet();
-                $urlRow = FatApp::getDb()->fetch($rs);
-
-                $sellerProductRow['selprod_url_keyword'] = '';
-                if ($urlRow) {
-                    $data['urlrewrite_custom'] = $urlRow['urlrewrite_custom'];
-                    $customUrl = explode("/", $urlRow['urlrewrite_custom']);
-                    $sellerProductRow['selprod_url_keyword'] = $customUrl[0];
-                }
-
-                $user_shop_name = User::getUserShopName($sellerProductRow['selprod_user_id'], $this->siteLangId);
-                $sellerProductRow['selprod_user_shop_name'] = $user_shop_name['user_name'] . ' - ' . $user_shop_name['shop_name'];
-
-                $returnAge = isset($sellerProductRow['selprod_return_age']) ? FatUtility::int($sellerProductRow['selprod_return_age']) : '';
-                $cancellationAge = isset($sellerProductRow['selprod_cancellation_age']) ? FatUtility::int($sellerProductRow['selprod_cancellation_age']) : '';
-
-                if ('' === $returnAge || '' === $cancellationAge) {
-                    $sellerProductRow['use_shop_policy'] = 1;
-                }
-
-                $productData = array_merge($productData, $sellerProductRow, $sellerProductLangRow);
             }
 
             $frm->fill($productData);

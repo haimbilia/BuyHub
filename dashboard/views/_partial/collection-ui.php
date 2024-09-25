@@ -35,7 +35,7 @@ if ($showAddToFavorite) {
                         <input type="checkbox" name='selprod_id[]' class="selectItem--js" value="<?php echo $product['selprod_id']; ?>" />
                     </label>
                 </li>
-                <?php if (1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) { ?>
+                <?php if (1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0) && SellerProduct::CART_TYPE_RFQ_ONLY != $product['selprod_cart_type']) { ?>
                     <li>
                         <a onclick="addToCart( $(this), event , <?php echo $isWishList; ?>);" href="javascript:void(0)" class="" title="<?php echo Labels::getLabel('LBL_Move_to_cart', $siteLangId); ?>" data-id='<?php echo $product['selprod_id']; ?>'>
                             <svg class="svg" width="18" height="18">

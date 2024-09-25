@@ -88,7 +88,7 @@
     <!-- Add To Cart -->
     <?php
     $acceptedOfferId = 0;
-    if (RequestForQuote::isEnabled($product['shop_rfq_enabled'], $product['selprod_rfq_enabled'])) {
+    if (RequestForQuote::isEnabled($product['shop_rfq_enabled'], $product['selprod_cart_type'])) {
         $acceptedOffers = $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['acceptedOffers'] ?? [];
         $acceptedOfferId = $acceptedOffers[$product['selprod_id']]['accepted_offer_id'] ?? 0;
     }
@@ -138,7 +138,15 @@
                     $fromDate = strtotime($product['selprod_available_from']);
                     $currentDate = strtotime(FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d'));
 
-                    if ($fromDate <= $currentDate && 1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) {
+                    if (
+                        $fromDate <= $currentDate && 
+                        1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0) &&
+                        (
+                            SellerProduct::CART_TYPE_RFQ_ONLY != $product['selprod_cart_type'] ||
+                            applicationConstants::NO == $product['shop_rfq_enabled'] || 
+                            1 > FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0)
+                        )
+                    ) {
                         echo $frmBuyProduct->getFieldHtml('btnAddToCart');
                     }
                     echo $frmBuyProduct->getFieldHtml('selprod_id');
@@ -152,7 +160,13 @@
                                 </svg>
                             </a>
                             <?php } else { */
-                    if (RequestForQuote::isEnabled($product['shop_rfq_enabled'], $product['selprod_rfq_enabled'])) { ?>
+                    if (
+                        RequestForQuote::isEnabled($product['shop_rfq_enabled'], $product['selprod_cart_type']) &&
+                        (
+                            SellerProduct::CART_TYPE_CART_ONLY != $product['selprod_cart_type'] ||
+                            0 < FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)
+                        )
+                    ) { ?>
                         <button class="btn btn-outline-brand btn-block btn-rfq" name="requestForQuote" type="button" onclick="requestForQuoteFn('<?php echo $product['selprod_id']; ?>');">
                             <?php echo Labels::getLabel('BTN_REQUEST_FOR_QUOTE'); ?>
                         </button>
@@ -164,7 +178,7 @@
         }
     } else { ?>
         <div class="buy-action">
-            <?php if (!RequestForQuote::isEnabled($product['shop_rfq_enabled'], $product['selprod_rfq_enabled'])) { ?>
+            <?php if (!RequestForQuote::isEnabled($product['shop_rfq_enabled'], $product['selprod_cart_type'])) { ?>
                 <button type="button" disabled="disabled" class="btn btn-brand btn-block mt-3">
                     <?php echo Labels::getLabel('LBL_SOLD_OUT', $siteLangId); ?>
                 </button>
@@ -182,7 +196,7 @@
                 </a>
                 <?php } else { */
             echo $frmBuyProduct->getFieldHtml('selprod_id');
-            if (RequestForQuote::isEnabled($product['shop_rfq_enabled'], $product['selprod_rfq_enabled'])) { ?>
+            if (RequestForQuote::isEnabled($product['shop_rfq_enabled'], $product['selprod_cart_type'])) { ?>
                 <button class="btn btn-outline-brand btn-block btn-rfq" name="requestForQuote" type="button" onclick="requestForQuoteFn('<?php echo $product['selprod_id']; ?>');">
                     <?php echo Labels::getLabel('BTN_REQUEST_FOR_QUOTE'); ?>
                 </button>

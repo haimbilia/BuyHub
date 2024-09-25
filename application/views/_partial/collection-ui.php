@@ -12,6 +12,8 @@ if (!isset($showAddToFavorite)) {
     }
 }
 
+$canEditOrder = $canEditOrder ?? true;
+
 if ($showAddToFavorite) {
     /* Get Ribbon */
     if ((!isset($includeRibbon) || true === $includeRibbon) && !empty($selProdRibbons)) {
@@ -32,14 +34,16 @@ if ($showAddToFavorite) {
 
                             </label>
                         </li>
-                        <li>
-                            <a onClick="addToCart( $(this), event , <?php echo $isWishList; ?>);" href="javascript:void(0)" class="" title="<?php echo Labels::getLabel('LBL_Move_to_cart', $siteLangId); ?>" data-id='<?php echo $product['selprod_id']; ?>'>
-                                <svg class="svg" width="18" height="18">
-                                    <use xlink:href=" <?php echo  CONF_WEBROOT_FRONTEND; ?>images/retina/sprite.svg#shopping-cart">
-                                    </use>
-                                </svg>
-                            </a>
-                        </li>
+                        <?php if ($canEditOrder && 1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0) && SellerProduct::CART_TYPE_RFQ_ONLY != $product['selprod_cart_type']) { ?>
+                            <li>
+                                <a onClick="addToCart( $(this), event , <?php echo $isWishList; ?>);" href="javascript:void(0)" class="" title="<?php echo Labels::getLabel('LBL_Move_to_cart', $siteLangId); ?>" data-id='<?php echo $product['selprod_id']; ?>'>
+                                    <svg class="svg" width="18" height="18">
+                                        <use xlink:href=" <?php echo  CONF_WEBROOT_FRONTEND; ?>images/retina/sprite.svg#shopping-cart">
+                                        </use>
+                                    </svg>
+                                </a>
+                            </li>
+                        <?php } ?>
                     <?php } ?>
                     <li>
                         <?php if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::YES) { ?>

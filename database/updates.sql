@@ -764,3 +764,6 @@ ON DUPLICATE KEY UPDATE etpl_subject = VALUES(etpl_subject), etpl_body = VALUES(
 
 
 ALTER TABLE `tbl_rfq_offer_messages`  ADD `rom_read` TINYINT(2) NOT NULL  AFTER `rom_buyer_access`;
+
+ALTER TABLE `tbl_seller_products` DROP `selprod_rfq_enabled`;
+ALTER TABLE `tbl_seller_products` ADD `selprod_cart_type` TINYINT NOT NULL AFTER `selprod_fulfillment_type`;

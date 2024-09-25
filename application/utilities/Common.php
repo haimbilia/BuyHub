@@ -15,8 +15,12 @@ class Common
         if (FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0)) {
             $cartObj->excludeTax();
         }
-        $cartObj->excludeOfferCheckoutItems();
-        $productsArr = $cartObj->getProducts($siteLangId);
+        
+        // $cartObj->excludeOfferCheckoutItems();
+        $rfqOnlyProdCount = $cartObj->countRfqOnlyProducts();
+        $prodCount = $cartObj->countProducts();
+        $cartType = $rfqOnlyProdCount == $prodCount ? SellerProduct::CART_TYPE_CART_ONLY : SellerProduct::CART_TYPE_RFQ_ONLY;
+        $productsArr = $cartObj->getProducts($siteLangId, true, $cartType);
         $cartSummary = $cartObj->getCartFinancialSummary($siteLangId);
 
         $saveForLaterProducts = [];

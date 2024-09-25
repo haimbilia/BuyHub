@@ -76,6 +76,12 @@ class RequestForQuotesController extends MyAppController
             if (!$selprodData) {
                 LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
             }
+
+            $shopRfqEnabled = Shop::getAttributesByUserId($selprodData['selprod_user_id'], 'shop_rfq_enabled');
+            if (!RequestForQuote::isEnabled($shopRfqEnabled, $selprodData['selprod_cart_type'])) {
+                LibHelper::exitWithError(Labels::getLabel('ERR_RFQ_NOT_ENABLED_FOR_THIS_SHOP_OR_PRODUCT.'));
+            }
+
             $selprodData['options'] = SellerProduct::getSellerProductOptions($selprodId, true, $this->siteLangId);
             $optionSrchObj = new ProductSearch($this->siteLangId);
             $optionSrchObj->setDefinedCriteria(0, 0, array('product_id' => $selprodData['selprod_product_id']));
@@ -111,13 +117,14 @@ class RequestForQuotesController extends MyAppController
                     $optionValueSrch->joinTable(OptionValue::DB_TBL . '_lang', 'LEFT OUTER JOIN', 'opval.optionvalue_id = opval_l.optionvaluelang_optionvalue_id AND opval_l.optionvaluelang_lang_id = ' . $this->siteLangId, 'opval_l');
                     $optionValueSrch->addCondition('product_id', '=', $selprodData['selprod_product_id']);
                     $optionValueSrch->addCondition('option_id', '=', $option['option_id']);
-                    $optionValueSrch->addMultipleFields(array('COALESCE(product_name, product_identifier) as product_name', 'selprod_id', 'selprod_user_id', 'selprod_code', 'option_id', 'COALESCE(optionvalue_name,optionvalue_identifier) as optionvalue_name ', 'theprice', 'optionvalue_id', 'optionvalue_color_code'));
+                    $optionValueSrch->addMultipleFields(array('COALESCE(product_name, product_identifier) as product_name', 'selprod_id', 'selprod_user_id', 'selprod_code', 'option_id', 'COALESCE(optionvalue_name,optionvalue_identifier) as optionvalue_name ', 'theprice', 'optionvalue_id', 'optionvalue_color_code', 'selprod_cart_type'));
                     $optionValueSrch->addGroupBy('optionvalue_id');
                     $optionValueSrch->addOrder('optionvalue_display_order');
+                    $optionValueSrch->addCondition('selprod_cart_type', '!=', SellerProduct::CART_TYPE_CART_ONLY);  
 
                     if (1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0) && RequestForQuote::TYPE_INDIVIDUAL == FatApp::getConfig('CONF_RFQ_MODULE_TYPE', FatUtility::VAR_INT, 0)) {
                         $optionValueSrch->addCondition('shop_rfq_enabled', '=', applicationConstants::YES);
-                        $optionValueSrch->addCondition('selprod_rfq_enabled', '=', applicationConstants::YES);
+                        $optionValueSrch->addCondition('selprod_cart_type', '!=', SellerProduct::CART_TYPE_CART_ONLY);
                     }
 
                     $optionValueRs = $optionValueSrch->getResultSet();
@@ -190,7 +197,7 @@ class RequestForQuotesController extends MyAppController
         $prodSrch->doNotCalculateRecords();
 
         $prodSrch->addMultipleFields(
-            ['COALESCE(selprod_title, product_name, product_identifier) as selprod_title', 'selprod_product_id', 'selprod_updated_on', 'selprod_price', 'theprice', 'COALESCE(shop_name, shop_identifier) as shop_name', 'user_name as shop_user_name', 'shop_user_id', 'COALESCE(brand_name, brand_identifier) as brand_name']
+            ['COALESCE(selprod_title, product_name, product_identifier) as selprod_title', 'selprod_product_id', 'selprod_updated_on', 'selprod_price', 'theprice', 'COALESCE(shop_name, shop_identifier) as shop_name', 'user_name as shop_user_name', 'shop_user_id', 'COALESCE(brand_name, brand_identifier) as brand_name', 'selprod_cart_type', 'selprod_user_id']
         );
         $productRs = $prodSrch->getResultSet();
         return (array) FatApp::getDb()->fetch($productRs);
@@ -228,7 +235,7 @@ class RequestForQuotesController extends MyAppController
 
         $sellerIdArr = $selprodData = [];
         if (0 < $selprodId) {
-            $selprodData = SellerProduct::getAttributesByLangId($this->siteLangId, $selprodId, ['selprod_id', 'selprod_title', 'selprod_user_id', 'selprod_product_id', 'selprod_updated_on', 'selprod_code', 'selprod_min_order_qty', 'selprod_rfq_enabled'], 1, applicationConstants::JOIN_LEFT);
+            $selprodData = SellerProduct::getAttributesByLangId($this->siteLangId, $selprodId, ['selprod_id', 'selprod_title', 'selprod_user_id', 'selprod_product_id', 'selprod_updated_on', 'selprod_code', 'selprod_min_order_qty', 'selprod_cart_type'], 1, applicationConstants::JOIN_LEFT);
             if(!empty($selprodData) && empty($selprodData['selprod_title'])){
                 $selprodData['selprod_title'] = Product::getAttributesById($selprodData['selprod_product_id'],'product_identifier');
             }
@@ -240,7 +247,7 @@ class RequestForQuotesController extends MyAppController
             }
 
             $shopRfqEnabled = Shop::getAttributesByUserId($selprodData['selprod_user_id'], 'shop_rfq_enabled');
-            if (!RequestForQuote::isEnabled($shopRfqEnabled, $selprodData['selprod_rfq_enabled'])) {
+            if (!RequestForQuote::isEnabled($shopRfqEnabled, $selprodData['selprod_cart_type'])) {
                 LibHelper::exitWithError(Labels::getLabel('ERR_RFQ_NOT_ENABLED_FOR_THIS_SHOP_OR_PRODUCT.'), true);
             }
 
@@ -622,6 +629,7 @@ class RequestForQuotesController extends MyAppController
         if (0 < $rfqProductType) {
             $srch->addCondition('product_type', '=', $rfqProductType);
         }
+        $srch->addCondition('selprod_cart_type', '!=', SellerProduct::CART_TYPE_CART_ONLY);
 
         $srch->addMultipleFields(array('selprod_id as id', 'COALESCE(selprod_title ,product_name, product_identifier) as name', 'credential_username'));
         $srch->setPageNumber($page);

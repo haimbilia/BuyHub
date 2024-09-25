@@ -161,6 +161,14 @@ trait ProductSetup
         $useShopPolicy->requirements()->addOnChangerequirementUpdate(Shop::USE_SHOP_POLICY, 'ne', 'selprod_cancellation_age', $orderCancellationAgeReqFld);
 
         $frm->addCheckBox(Labels::getLabel('FRM_PUBLISH_INVENTORY', $this->siteLangId), 'selprod_active', applicationConstants::ACTIVE, [], false, applicationConstants::INACTIVE);
+        
+        if (0 < FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0) && 1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) {
+            $shopRfqEnabled = Shop::getAttributesByUserId($this->userParentId, 'shop_rfq_enabled', false);
+            if (0 < $shopRfqEnabled) {
+                $fld = $frm->addSelectBox(Labels::getLabel('FRM_CART_TYPE', $this->siteLangId), 'selprod_cart_type', SellerProduct::getCartType(), SellerProduct::CART_TYPE_BOTH, array(), '');
+                $fld->requirements()->setRequired();
+            }
+        }
 
         $frm->addTextArea(Labels::getLabel('FRM_ANY_EXTRA_COMMENT_FOR_BUYER', $this->siteLangId), 'selprod_comments');
 
@@ -189,7 +197,7 @@ trait ProductSetup
             $postedData['selprod_price'] = $postedData['product_min_selling_price'];
             $postedData['selprod_title'] = $postedData['product_name'];
             $postedData['selprod_cod_enabled'] = $postedData['product_cod_enabled'] ?? 0;
-            $postedData['selprod_fulfillment_type'] = $postedData['product_fulfillment_type'] ?? -1;
+            $postedData['selprod_fulfillment_type'] = $postedData['product_fulfillment_type'] ?? -1;            
         }
 
         $frm = $this->getSellerProductForm($productId, $type);

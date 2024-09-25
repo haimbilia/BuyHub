@@ -103,13 +103,6 @@ if (null != $fld) {
     $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 }
 
-$fld = $frm->getField('selprod_rfq_enabled');
-if (null != $fld) {
-    HtmlHelper::configureSwitchForCheckbox($fld);
-    $fld->developerTags['noCaptionTag'] = true;
-    $fld->developerTags['colWidthValues'] = [null, '12', null, null];
-}
-
 $fld = $frm->getField('selprod_cod_enabled');
 if (null != $fld) {
     $fld->developerTags['colWidthValues'] = [null, '6', null, null];
@@ -117,6 +110,11 @@ if (null != $fld) {
 }
 
 $fld = $frm->getField('selprod_fulfillment_type');
+if (null != $fld) {
+    $fld->developerTags['colWidthValues'] = [null, '6', null, null];
+}
+
+$fld = $frm->getField('selprod_cart_type');
 if (null != $fld) {
     $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 }

@@ -643,7 +643,7 @@ class RequestForQuote extends MyAppModel
         $moduleType = FatApp::getConfig('CONF_RFQ_MODULE_TYPE', FatUtility::VAR_INT, 0);
         if (RequestForQuote::TYPE_INDIVIDUAL == $moduleType) {
             $srch->addCondition('shop.shop_rfq_enabled', '=', applicationConstants::YES);
-            $srch->addCondition('sp.selprod_rfq_enabled', '=', applicationConstants::YES);
+            $srch->addCondition('sp.selprod_cart_type', '!=', SellerProduct::CART_TYPE_CART_ONLY);
         }
 
         $sql = 'INSERT INTO ' . self::DB_RFQ_TO_SELLERS . ' ' . $srch->getQuery();
@@ -671,7 +671,7 @@ class RequestForQuote extends MyAppModel
         return $arr[$rfqStatus] ?? [];
     }
 
-    public static function isEnabled(int $shopRfqEnabled = 0, int $selProdRfqEnabled = 0): bool
+    public static function isEnabled(int $shopRfqEnabled = 0, int $cartType = 0): bool
     {
         if (1 > FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0)) {
             return false;
@@ -687,7 +687,7 @@ class RequestForQuote extends MyAppModel
             return true;
         }
 
-        return (applicationConstants::YES == $shopRfqEnabled && applicationConstants::YES == $selProdRfqEnabled);
+        return (applicationConstants::YES == $shopRfqEnabled && SellerProduct::CART_TYPE_CART_ONLY != $cartType);
     }
 
     public static function getVisibilityTypeArr(int $langId): array
@@ -781,5 +781,19 @@ class RequestForQuote extends MyAppModel
         $srch->doNotCalculateRecords();
         $srch->addGroupBy('rfqts_rfq_id');
         return FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
+    }
+
+
+    public static function isCartTypeRfqOnly(int $shopRfqEnabled = 0, int $cartType = 0): bool
+    {
+        if (1 > FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0)) {
+            return false;
+        }
+
+        if (0 < FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) {
+            return true;
+        }
+
+        return (applicationConstants::YES == $shopRfqEnabled && SellerProduct::CART_TYPE_RFQ_ONLY == $cartType);
     }
 }

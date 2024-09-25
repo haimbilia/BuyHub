@@ -20,6 +20,10 @@ trait SellerProducts
 
     public function products($product_id = 0)
     {
+        if (FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+            FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'catalog'));
+        }
+
         $this->userPrivilege->canViewProducts(UserAuthentication::getLoggedUserId());
         $this->includeDateTimeFiles();
         if (!$this->isShopActive($this->userParentId)) {
@@ -89,7 +93,7 @@ trait SellerProducts
                 'selprod_price',
                 'selprod_stock',
                 'selprod_track_inventory',
-                'selprod_rfq_enabled',
+                'selprod_cart_type',
                 'selprod_threshold_stock_level',
                 'selprod_product_id',
                 'selprod_active',
@@ -549,7 +553,6 @@ trait SellerProducts
 
         $post['selprod_subtract_stock'] = FatApp::getPostedData('selprod_subtract_stock', FatUtility::VAR_INT, 0);
         $post['selprod_track_inventory'] = FatApp::getPostedData('selprod_track_inventory', FatUtility::VAR_INT, 0);
-        $post['selprod_rfq_enabled'] = FatApp::getPostedData('selprod_rfq_enabled', FatUtility::VAR_INT, 0);
         $post['selprod_min_order_qty'] = FatApp::getPostedData('selprod_min_order_qty', FatUtility::VAR_INT, 1);
         $post['selprod_stock'] = FatApp::getPostedData('selprod_stock', FatUtility::VAR_INT, 1);
         $post['selprod_stock'] = ($post['selprod_stock'] > 0) ? $post['selprod_stock'] : 1;
@@ -2416,6 +2419,14 @@ trait SellerProducts
             $fld->requirements()->setRange($productData['product_min_selling_price'], 9999999999);
             $fld->requirements()->setCustomErrorMessage(Labels::getLabel('FRM_MINIMUM_SELLING_PRICE_FOR_THIS_PRODUCT_IS', $this->siteLangId) . ' ' . CommonHelper::displayMoneyFormat($productData['product_min_selling_price'], true, true));
         }
+        
+        if (0 < FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0) && 1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) {
+            $shopRfqEnabled = Shop::getAttributesByUserId($this->userParentId, 'shop_rfq_enabled', false);
+            if (0 < $shopRfqEnabled) {
+                $fld = $frm->addSelectBox(Labels::getLabel('FRM_CART_TYPE', $this->siteLangId), 'selprod_cart_type', SellerProduct::getCartType(), SellerProduct::CART_TYPE_BOTH, array(), '');
+                $fld->requirements()->setRequired();
+            }
+        }
 
         if ($productData['product_type'] != Product::PRODUCT_TYPE_SERVICE) {
             $fld = $frm->addIntegerField(Labels::getLabel('FRM_QUANTITY', $this->siteLangId), 'selprod_stock');
@@ -2426,13 +2437,6 @@ trait SellerProducts
 
         $useShopPolicy = $frm->addCheckBox(Labels::getLabel('FRM_USE_SHOP_RETURN_AND_CANCELLATION_AGE_POLICY', $this->siteLangId), 'use_shop_policy', 1, ['id' => 'use_shop_policy'], false, 0);
 
-        if (
-            0 < FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0) &&
-            FatApp::getConfig('CONF_RFQ_MODULE_TYPE', FatUtility::VAR_INT, 0) == RequestForQuote::TYPE_INDIVIDUAL &&
-            applicationConstants::NO == FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)
-        ) {
-            $frm->addCheckBox(Labels::getLabel('FRM_ENABLE_RFQ', $this->siteLangId), 'selprod_rfq_enabled', 1, ['id' => 'selprod_rfq_enabled'], false, 0);
-        }
         if ($productData['product_type'] != Product::PRODUCT_TYPE_SERVICE) {
             $fld = $frm->addIntegerField(Labels::getLabel('FRM_ORDER_RETURN_AGE', $this->siteLangId), 'selprod_return_age');
             $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('FRM_WARRANTY_IN_DAYS', $this->siteLangId) . ' </span>';
@@ -2527,6 +2531,7 @@ trait SellerProducts
         $data_to_be_save['selprod_price'] = $post['selprod_price'];
         $data_to_be_save['selprod_stock'] = $post['selprod_stock'] ?? 1;
         $data_to_be_save['selprod_available_from'] = $post['selprod_available_from'];
+        $data_to_be_save['selprod_cart_type'] = $post['selprod_cart_type'] ?? 0;
 
         if (!empty($selProdAvailable)) {
             if (!$selProdAvailable['selprod_deleted']) {

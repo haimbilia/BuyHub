@@ -410,4 +410,13 @@ $(document).on('change', '#digitalFrmLangId,#digitalFrmdownloadType,#digitalFrmO
             }
         );
     };
+
+	productMissingInfo = function(selProdId){     
+        fcom.updateWithAjax(fcom.makeUrl('Seller', 'productMissingInfo'), {recordId: selProdId}, function(t) { 
+            fcom.closeProcessing();
+            $.ykmodal(t.html);
+            fcom.removeLoader();
+            
+        });
+    }
 })();

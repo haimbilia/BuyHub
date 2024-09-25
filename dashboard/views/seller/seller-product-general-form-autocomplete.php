@@ -49,12 +49,6 @@ $fld = $frmSellerProduct->getField('use_shop_policy');
 $fld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
 $fld->developerTags['cbHtmlAfterCheckbox'] = '';
 
-$rfqFld = $frmSellerProduct->getField('selprod_rfq_enabled');
-if ($rfqFld != null) {
-    $rfqFld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
-    $rfqFld->developerTags['cbHtmlAfterCheckbox'] = '';
-}
-
 $submitBtnFld = $frmSellerProduct->getField('btn_submit');
 $submitBtnFld->setFieldTagAttribute('class', 'btn btn-brand');
 $submitBtnFld->developerTags['col'] = 12;
@@ -273,20 +267,6 @@ $fld->setFieldTagAttribute('onclick', 'clearInvOptionForm()');
                     </div>
                 <?php } ?>
             </div>
-            <?php if ($rfqFld != null) { ?>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="field-set">
-                            <div class="caption-wraper"><label class="field_label"></label>
-                            </div>
-                            <div class="field-wraper">
-                                <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_rfq_enabled'); ?>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            <?php } ?>
             <div class="row mt-4">
                 <div class="col-md-12">
                     <div class="field-set">

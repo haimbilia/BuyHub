@@ -164,6 +164,7 @@ if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0))
                             ?>
                         <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_return_age', 6); ?>
                         <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_cancellation_age', 6); ?>
+                        <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_cart_type', 6); ?>
                         <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_comments', 12); ?>
                     </div>
                 </div>

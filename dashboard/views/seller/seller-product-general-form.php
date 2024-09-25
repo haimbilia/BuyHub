@@ -47,13 +47,7 @@ if (false === Plugin::isActive('EasyEcom') && $product_type != Product::PRODUCT_
     $fld->developerTags['cbHtmlAfterCheckbox'] = '';
 }
 $fld = $frmSellerProduct->getField('use_shop_policy');
-$fld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
-$fld->developerTags['cbHtmlAfterCheckbox'] = '';
-
-$rfqFld = $frmSellerProduct->getField('selprod_rfq_enabled');
-if ($rfqFld != null) {
-    HtmlHelper::configureSwitchForCheckbox($rfqFld, Labels::getLabel('FRM_ENABLING_THIS,_MAKES_PRODUCTS_AVAILABLE_FOR_RFQ.', $siteLangId));
-}
+HtmlHelper::configureSwitchForCheckbox($fld);
 
 $submitBtnFld = $frmSellerProduct->getField('btn_submit');
 $submitBtnFld->setFieldTagAttribute('class', 'btn btn-brand');
@@ -62,6 +56,10 @@ $submitBtnFld->developerTags['col'] = 12;
 $cancelBtnFld = $frmSellerProduct->getField('btn_cancel');
 $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-gray js-cancel-inventory');
 
+$fld = $frmSellerProduct->getField('selprod_active');
+if ($fld != null) {
+    HtmlHelper::configureSwitchForCheckbox($fld);
+}
 ?>
 <div class="row">
     <div class="col-md-12">
@@ -175,16 +173,6 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-gray js-cancel-inv
             <div class="row">
                 <div class="col-md-6">
                     <div class="field-set">
-                        <div class="caption-wraper"><label class="field_label"><?php echo $frmSellerProduct->getField('selprod_active')->getCaption(); ?></label>
-                        </div>
-                        <div class="field-wraper">
-                            <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_active'); ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="field-set">
                         <div class="caption-wraper"><label class="field_label"><?php echo $frmSellerProduct->getField('selprod_available_from')->getCaption(); ?><span class="spn_must_field">*</span></label></div>
                         <div class="field-wraper">
                             <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_available_from'); ?>
@@ -192,9 +180,8 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-gray js-cancel-inv
                         </div>
                     </div>
                 </div>
-            </div>
-            <?php if ($product_type == Product::PRODUCT_TYPE_PHYSICAL) { ?>
-                <div class="row">
+
+                <?php if ($product_type == Product::PRODUCT_TYPE_PHYSICAL) { ?>
                     <div class="col-md-6">
                         <div class="field-set">
                             <div class="caption-wraper"><label class="field_label"><?php echo $frmSellerProduct->getField('selprod_condition')->getCaption(); ?><span class="spn_must_field">*</span></label></div>
@@ -204,16 +191,27 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-gray js-cancel-inv
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="field-set">
-                            <div class="caption-wraper"><label class="field_label"></label></div>
-                            <div class="field-wraper">
-                                <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('use_shop_policy'); ?>
-                                </div>
-                            </div>
+                <?php } ?>
+                
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="setting-block">
+                            <?php echo $frmSellerProduct->getFieldHtml('selprod_active'); ?>
                         </div>
                     </div>
                 </div>
+
+                <?php if ($product_type == Product::PRODUCT_TYPE_PHYSICAL) { ?>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="setting-block">
+                                <?php echo $frmSellerProduct->getFieldHtml('use_shop_policy'); ?>
+                            </div>
+                        </div>
+                    </div>
+                <?php } ?>
+            </div>
+            <?php if ($product_type == Product::PRODUCT_TYPE_PHYSICAL) { ?>
                 <div class="row use-shop-policy <?php echo $hidden; ?>">
                     <div class="col-md-6">
                         <div class="field-set">
@@ -263,17 +261,19 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-gray js-cancel-inv
                     </div>
                 <?php } ?>
             </div>
-            <?php if ($rfqFld != null) { ?>
-                <div class="row">
+            <div class="row">
+                <?php if (null != $frmSellerProduct->getField('selprod_cart_type')) { ?>
                     <div class="col-md-6">
-                        <div class="form-group">
-                            <div class="setting-block">
-                                <?php echo $frmSellerProduct->getFieldHtml('selprod_rfq_enabled'); ?>
+                        <div class="field-set">
+                            <div class="caption-wraper"><label class="field_label"><?php echo $frmSellerProduct->getField('selprod_cart_type')->getCaption(); ?><span class="spn_must_field">*</span></label></div>
+                            <div class="field-wraper">
+                                <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_cart_type'); ?>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            <?php } ?>
+                <?php } ?>
+            </div>
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-text text-muted my-4">

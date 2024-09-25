@@ -1,8 +1,11 @@
 $(function () {
 	$(document).ready(function () {
 		var type = $('input[name="fulfillment_type"]:checked').val();
-		if (typeof type == undefined) {
+		if ('undefined' == typeof type) {
 			type = 2;
+			if ($('#offerCheckoutFulfillmentTypeJs').length) {
+				type = $('#offerCheckoutFulfillmentTypeJs').val();
+			}
 		}
 		listCartProducts(type);
 	});
@@ -81,6 +84,9 @@ $(function () {
 
 	goToCheckout = function () {
 		var type = $('input[name="fulfillment_type"]:checked').val();
+		if ($('#offerCheckoutFulfillmentTypeJs').length) {
+			type = $('#offerCheckoutFulfillmentTypeJs').val();
+		}
 		var data = "type=" + type;
 		fcom.updateWithAjax(fcom.makeUrl('Cart', 'setCartCheckoutType'), data, function (ans) {
 			fcom.removeLoader();

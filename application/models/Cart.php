@@ -103,6 +103,10 @@ class Cart extends FatModel
             $this->SYSTEM_ARR['shopping_cart'] = array();
         }
 
+        if (!isset($this->SYSTEM_ARR['rfqOnlyCount'])) {
+            $this->SYSTEM_ARR['rfqOnlyCount'] = 0;
+        }
+
         $this->cartCache = true;
         $this->pageType = $pageType;
         $this->discounts = [];
@@ -165,7 +169,7 @@ class Cart extends FatModel
             $this->error = Labels::getLabel('ERR_ALREADY_ADDED_FROM_OFFER');
             return false;
         }
-        $selProdData = SellerProduct::getAttributesById($selprod_id, ['selprod_user_id', 'selprod_track_inventory']);
+        $selProdData = SellerProduct::getAttributesById($selprod_id, ['selprod_user_id', 'selprod_track_inventory', 'selprod_cart_type']);
         if ($this->hasProducts() > 0 && FatApp::getConfig('CONF_SINGLE_SELLER_CART', FatUtility::VAR_INT, 0)) {
             $this->getBasketProducts($this->cart_lang_id);
             $sellerUserId = $selProdData['selprod_user_id'];
@@ -183,6 +187,10 @@ class Cart extends FatModel
             $key = base64_encode(json_encode($key));
             if (!isset($this->SYSTEM_ARR['cart'][$key])) {
                 $this->SYSTEM_ARR['cart'][$key] = FatUtility::int($qty);
+                $shopRfqEnabled = Shop::getAttributesByUserId($selProdData['selprod_user_id'], 'shop_rfq_enabled');
+                if (RequestForQuote::isCartTypeRfqOnly($shopRfqEnabled, $selProdData['selprod_cart_type'])) {
+                    $this->SYSTEM_ARR['rfqOnlyCount'] += 1;
+                }
             } else {
                 $this->SYSTEM_ARR['cart'][$key] += FatUtility::int($qty);
             }
@@ -217,6 +225,17 @@ class Cart extends FatModel
             return $this->cart_user_id;
         }
         return true;
+    }
+
+    public function countRfqOnlyProducts(): int
+    {
+        return $this->SYSTEM_ARR['rfqOnlyCount'] ?? 0;
+    }
+
+    public function countCartProducts(): int
+    {
+        $cnt = count($this->SYSTEM_ARR['cart']) - self::countRfqOnlyProducts();
+        return (0 > $cnt ? 0 : $cnt);
     }
 
     public function countProducts()
@@ -489,7 +508,7 @@ class Cart extends FatModel
         return (int) $this->shipmentItemsCount;
     }
 
-    public function getProducts($siteLangId = 0, $checkFulfilmentType = true)
+    public function getProducts($siteLangId = 0, $checkFulfilmentType = true, $excludeCartType = -1, $removeCartType = -1)
     {
         if (!$this->products) {
             $this->isAnyOutOfStock = true;
@@ -552,6 +571,16 @@ class Cart extends FatModel
                 //To rid of from invalid product detail in listing.
                 if (1 > $selprod_id) {
                     unset($this->SYSTEM_ARR['cart'][$key]);
+                    continue;
+                }
+
+                $sellerProductRow =  $cartProdsData[$selprod_id] ?? [];
+                if (!empty($sellerProductRow) && $excludeCartType == $sellerProductRow['selprod_cart_type']) {
+                    continue;
+                }
+
+                if (RequestForQuote::isCartTypeRfqOnly($sellerProductRow['shop_rfq_enabled'], $sellerProductRow['selprod_cart_type']) && SellerProduct::CART_TYPE_RFQ_ONLY == $removeCartType) {
+                    $this->removeCartKey($key, $selprod_id, $quantity);
                     continue;
                 }
 
@@ -815,7 +844,7 @@ class Cart extends FatModel
             'selprod_id', 'selprod_code', 'selprod_stock', 'selprod_user_id', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'selprod_min_order_qty',
             'special_price_found', 'theprice', 'shop_id', 'shop_free_ship_upto', 'shop_state_id', 'shop_country_id',
             'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'selprod_price', 'selprod_cost', 'case when product_seller_id=0 then IFNULL(psbs_user_id,0)   else product_seller_id end  as psbs_user_id', 'product_seller_id', 'product_cod_enabled', 'shop_fulfillment_type', 'selprod_fulfillment_type', 'selprod_cod_enabled', 'shippack_length', 'shippack_width', 'shippack_height', 'shippack_units',
-            'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name', 'product_updated_on', 'selprod_track_inventory'
+            'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name', 'product_updated_on', 'selprod_track_inventory', 'selprod_cart_type', 'shop_rfq_enabled',
         ));
 
         if ($siteLangId) {
@@ -1032,6 +1061,7 @@ class Cart extends FatModel
             $sellerProductRows[$key]['isProductShippedBySeller'] = $isProductShippedBySeller;
 
             $fulfillmentType = $sellerProductRow['selprod_fulfillment_type'];
+            
             if (true == $isProductShippedBySeller) {
                 if ($sellerProductRow['shop_fulfillment_type'] != Shipping::FULFILMENT_ALL) {
                     $fulfillmentType = $sellerProductRow['shop_fulfillment_type'];
@@ -1060,6 +1090,13 @@ class Cart extends FatModel
         if (is_numeric($this->cart_user_id) && $this->cart_user_id > 0) {
             AbandonedCart::saveAbandonedCart($this->cart_user_id, $selProdId, $quantity, AbandonedCart::ACTION_DELETED);
         }
+
+        $selProdData = SellerProduct::getAttributesById($selProdId, ['selprod_cart_type', 'selprod_user_id']);
+        $shopRfqEnabled = Shop::getAttributesByUserId($selProdData['selprod_user_id'], 'shop_rfq_enabled');
+        if (RequestForQuote::isCartTypeRfqOnly($shopRfqEnabled, $selProdData['selprod_cart_type']) && isset($this->SYSTEM_ARR['rfqOnlyCount'])) {
+            $this->SYSTEM_ARR['rfqOnlyCount'] -= 1;
+        }
+
         unset($this->products[$key]);
         unset($this->basketProducts[$key]);
         unset($this->SYSTEM_ARR['cart'][$key]);
@@ -1080,6 +1117,9 @@ class Cart extends FatModel
             foreach ($cartProducts as $cartKey => $product) {
                 if (($key == 'all' || (md5($product['key']) == $key) && !$product['is_batch'])) {
                     $found = true;
+                    if (RequestForQuote::isCartTypeRfqOnly($product['shop_rfq_enabled'], $product['selprod_cart_type']) && isset($this->SYSTEM_ARR['rfqOnlyCount'])) {
+                        $this->SYSTEM_ARR['rfqOnlyCount'] -= 1;
+                    }
                     unset($this->SYSTEM_ARR['cart'][$cartKey]);
                     $this->updateTempStockHold($product['selprod_id'], 0, 0);
                     if (($key == 'all' || md5($product['key']) == $key) && !$product['is_batch']) {
@@ -2281,6 +2321,10 @@ class Cart extends FatModel
                 continue;
             }
 
+            if (RequestForQuote::isCartTypeRfqOnly($product['shop_rfq_enabled'], $product['selprod_cart_type']) && isset($this->SYSTEM_ARR['rfqOnlyCount'])) {
+                $this->SYSTEM_ARR['rfqOnlyCount'] -= 1;
+            }
+
             unset($this->SYSTEM_ARR['cart'][$cartKey]);
             $this->updateTempStockHold($product['selprod_id'], 0, 0);
             if (is_numeric($this->cart_user_id) && $this->cart_user_id > 0) {
@@ -2298,6 +2342,10 @@ class Cart extends FatModel
         foreach ($cartProducts as $cartKey => $product) {
             if ($product['fulfillment_type'] != Shipping::FULFILMENT_SHIP) {
                 continue;
+            }
+
+            if (RequestForQuote::isCartTypeRfqOnly($product['shop_rfq_enabled'], $product['selprod_cart_type']) && isset($this->SYSTEM_ARR['rfqOnlyCount'])) {
+                $this->SYSTEM_ARR['rfqOnlyCount'] -= 1;
             }
 
             unset($this->SYSTEM_ARR['cart'][$cartKey]);

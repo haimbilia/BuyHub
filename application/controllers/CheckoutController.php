@@ -253,7 +253,9 @@ class CheckoutController extends MyAppController
         $addresses = $address->getData(Address::TYPE_USER, UserAuthentication::getLoggedUserId());
         $this->set('cartHasPhysicalProduct', $cartHasPhysicalProduct);
 
-        $cart_products = $this->cartObj->getProducts($this->siteLangId);
+        $removeCartType = !isset($_SESSION['offer_checkout']) ? SellerProduct::CART_TYPE_RFQ_ONLY : -1;
+        $cart_products = $this->cartObj->getProducts($this->siteLangId, removeCartType: $removeCartType);
+
         if (0 < count($cart_products) && FatApp::getConfig('CONF_ANALYTICS_ADVANCE_ECOMMERCE', FatUtility::VAR_INT, 0)) {
             $et = new EcommerceTracking(Labels::getLabel('MSG_CHECKOUT', $this->siteLangId), UserAuthentication::getLoggedUserId(true));
             $et->addProductAction(EcommerceTracking::PROD_ACTION_TYPE_CHECKOUT);
@@ -509,7 +511,8 @@ class CheckoutController extends MyAppController
 
         $this->cartObj->setCartCheckoutType($fulfillmentType);
 
-        $cartProducts = $this->cartObj->getProducts($this->siteLangId);
+        $removeCartType = isset($_SESSION['offer_checkout']) ? -1 : SellerProduct::CART_TYPE_RFQ_ONLY;
+        $cartProducts = $this->cartObj->getProducts($this->siteLangId, removeCartType:$removeCartType);
         if (count($cartProducts) == 0) {
             $this->errMessage = Labels::getLabel('ERR_YOUR_CART_IS_EMPTY', $this->siteLangId);
             if (true === MOBILE_APP_API_CALL) {

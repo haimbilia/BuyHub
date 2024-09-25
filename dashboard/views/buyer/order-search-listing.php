@@ -156,7 +156,7 @@
                         );
                     }
 
-                    if (1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) {
+                    if (SellerProduct::CART_TYPE_RFQ_ONLY != $order['selprod_cart_type'] && 1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) {
                         $li = $ul->appendElement("li");
                         $li->appendElement(
                             'a',

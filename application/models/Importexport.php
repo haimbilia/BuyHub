@@ -3522,6 +3522,11 @@ class Importexport extends ImportexportCommon
                     $colValue = (FatUtility::int($colValue) == 1) ? 'YES' : 'NO';
                 }
 
+                if ('selprod_cart_type' == $columnKey) {
+                    $cartTypeArr = SellerProduct::getCartType($langId);
+                    $colValue = $cartTypeArr[$row['selprod_cart_type']];
+                }
+
                 if ('selprod_fulfillment_type' == $columnKey) {
                     switch ($colValue) {
                         case Shipping::FULFILMENT_SHIP:
@@ -3666,6 +3671,10 @@ class Importexport extends ImportexportCommon
                             if (0 > $colValue) {
                                 $invalid = true;
                             }
+                            break;
+                        case 'selprod_cart_type':
+                            $cartTypeArr = array_flip(SellerProduct::getCartType($langId));
+                            $colValue = $cartTypeArr[$colValue];
                             break;
                         case 'selprod_fulfillment_type':
                             // $colValue = str_replace(' ', '_', mb_strtolower($colValue));

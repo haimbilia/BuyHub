@@ -753,7 +753,8 @@ class BuyerController extends BuyerBaseController
                 'opshipping_fulfillment_type',
                 'op_rounding_off',
                 'selprod_product_id',
-                'orderstatus_id'
+                'orderstatus_id',
+                'selprod_cart_type'
             )
         );
 
@@ -2848,7 +2849,14 @@ class BuyerController extends BuyerBaseController
             if (strpos($keyDecoded, Cart::CART_KEY_PREFIX_PRODUCT) !== false) {
                 $selprod_id = FatUtility::int(str_replace(Cart::CART_KEY_PREFIX_PRODUCT, '', $keyDecoded));
             }
-            $selProdStock = SellerProduct::getAttributesById($selprod_id, 'selprod_stock', false);
+            
+            $selProdData = SellerProduct::getAttributesById($selprod_id, ['selprod_stock', 'selprod_cart_type'], false);
+            if (SellerProduct::CART_TYPE_RFQ_ONLY == $selProdData['selprod_cart_type']) {
+                $notAvailable++;
+                continue;
+            }
+
+            $selProdStock = $selProdData['selprod_stock'];
             if (!$selProdStock && $selProdStock <= 0) {
                 $outOfStock = true;
                 continue;
@@ -2876,7 +2884,7 @@ class BuyerController extends BuyerBaseController
             }
             LibHelper::exitWithError($message, true);
         }
-
+        
         $cartObj->removeUsedRewardPoints();
         $cartObj->removeCartDiscountCoupon();
         $cartObj->removeProductShippingMethod();
@@ -3115,7 +3123,7 @@ class BuyerController extends BuyerBaseController
                 'COALESCE(shop_state_l.state_name,state_identifier) as shop_state_name',
                 'COALESCE(shop_country_l.country_name,shop_country.country_code) as shop_country_name',
                 'selprod_condition',
-                'product_warranty_unit'
+                'product_warranty_unit', 'selprod_cart_type'
             )
         );
         $productRs = $prodSrch->getResultSet();

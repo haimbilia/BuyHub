@@ -105,7 +105,7 @@
                                 );
                             }
 
-                            if ($available) {
+                            if ($available && 1 > FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
                                 $li = $ul->appendElement("li");
                                 $li->appendElement(
                                     'a',
@@ -186,6 +186,22 @@
                                     </use>
                                 </svg>
                             </i>',
+                                true
+                            );
+                        }
+
+                        if (FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+                            $li = $ul->appendElement("li");
+                            $li->appendElement(
+                                'a',
+                                array('href' => 'javascript:void(0)', 'title' => Labels::getLabel('LBL_PRODUCT_MISSING_INFO', $siteLangId), "onclick" => "productMissingInfo(" . $row['selprod_id'] . ")"),
+                                '<i class="icn">
+                                    <svg class="svg" width="18" height="18">
+                                        <use
+                                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#warning">
+                                        </use>
+                                    </svg>
+                                </i>',
                                 true
                             );
                         }

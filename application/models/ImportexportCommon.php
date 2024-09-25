@@ -589,6 +589,9 @@ class ImportexportCommon extends FatModel
         }
 
         if ($this->isDefaultSheetData($langId)) {
+            if (0 < FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0) && 1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) {
+                $arr['selprod_cart_type'] = Labels::getLabel('LBL_CART_TYPE', $langId);
+            }
             $arr['selprod_price'] = Labels::getLabel('LBL_SELLING_PRICE', $langId);
             $arr['selprod_cost'] = Labels::getLabel('LBL_COST_PRICE', $langId);
             $arr['selprod_stock'] = Labels::getLabel('LBL_STOCK', $langId);
