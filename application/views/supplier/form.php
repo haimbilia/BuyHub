@@ -83,7 +83,7 @@ $frm->developerTags['fld_default_col'] = 12; */
                 echo $fld;
                 ?>
 
-            <?php echo CommonHelper::replaceStringData(Labels::getLabel('LBL_I_agree_to_the_terms_conditions', $siteLangId), ['{terms-of-service}' => "<a target='_blank' href='$termsAndConditionsLinkHref'>" . Labels::getLabel('LBL_Terms_Conditions', $siteLangId) . "</a>"]); ?>
+            <?php echo CommonHelper::replaceStringData(Labels::getLabel('LBL_I_AGREE_TO_THE_{TERMS-OF-SERVICE}', $siteLangId), ['{terms-of-service}' => "<a target='_blank' href='$termsAndConditionsLinkHref'>" . Labels::getLabel('LBL_Terms_Conditions', $siteLangId) . "</a>"]); ?>
             </label>
             <?php if ($frm->getField('user_newsletter_signup')) { ?>
                 <span class="gap"></span>
