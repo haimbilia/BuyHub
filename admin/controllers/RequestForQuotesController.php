@@ -523,6 +523,7 @@ class RequestForQuotesController extends ListingBaseController
             'rfq_delivery_date',
             'rfq_description',
             'rfq_added_on',
+            'rfq_product_type',
             'ba.*',
             'selprod_id',
             'selprod_title',
