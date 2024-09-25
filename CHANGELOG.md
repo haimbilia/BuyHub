@@ -140,6 +140,7 @@
     - Bug-087400 - Site stops working in case if multiple quantity
     - Bug-087395 - A warning appears when the admin tries to approve the seller-added catalog
     - Bug-087344 - Users did't get notified about the messages or attachement bound with RFQ offer
+    - Bug-087413 - <<RFQ+B1>>Download rfq copy option is not working properly
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  
