@@ -97,6 +97,7 @@
         fcom.updateWithAjax(fcom.makeUrl(controllerName, "sellerAcceptance", [offerId, rfqId]), '', function (t) {
             fcom.closeProcessing();
             searchRecords(document.frmRecordSearch);
+            location.reload();
         });
     }
 
