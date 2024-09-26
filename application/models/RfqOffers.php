@@ -706,7 +706,7 @@ class RfqOffers extends MyAppModel
         $srch->addCondition('offer_rfq_id', '=', $rfqId);
         $srch->addCondition('offer_quantity', '=', $qty);
         $srch->addCondition('offer_deleted', '=', applicationConstants::NO);
-        $srch->addCondition('rlo_seller_user_id', '=', $sellerId);
+        $srch->addCondition('offer_user_id', '=', $sellerId);
         $srch->addCondition('rlo_deleted', '=', applicationConstants::NO);
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
