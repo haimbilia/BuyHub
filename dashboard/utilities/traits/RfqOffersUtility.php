@@ -116,7 +116,7 @@ trait RfqOffersUtility
                     'label' => Labels::getLabel('LBL_OFFER', $this->siteLangId)
                 ];
             }
-            
+
 
             $hasAnySellerAcceptance = RfqOffers::hasAnySellerAcceptance($rfqId, $this->userParentId);
             if ($hasAnySellerAcceptance || ($isOpenOffered && empty($linkedSelprodId)) || (empty($linkedSelprodId) && RequestForQuote::STATUS_ACCEPTED == $rfqData['rfq_status'] && RfqOffers::hasAnyBuyerAcceptedOffer($this->userParentId, $rfqId))) {
@@ -594,7 +594,14 @@ trait RfqOffersUtility
         }
 
         $db->commitTransaction();
-        $this->set('record_id', $rfq->getMainTableRecordId());
+
+        $recordId = $rfq->getMainTableRecordId();
+        if (MOBILE_APP_API_CALL) {
+            $this->set('data', ['record_id' => $recordId]);
+            $this->_template->render();
+        }
+
+        $this->set('record_id', $recordId);
         $this->set('msg', Labels::getLabel('MGS_UPDATED_SUCCESSFULLY.', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
@@ -627,8 +634,11 @@ trait RfqOffersUtility
         }
 
         $srch->addOrder('ro.offer_added_on', 'DESC');
-        // echo $srch->getQuery();
         $this->set("arrListing", FatApp::getDb()->fetchAll($srch->getDataResultSet()));
+        if (MOBILE_APP_API_CALL) {
+            $this->_template->render();
+        }
+
         $this->set('postedData', FatApp::getPostedData());
 
         $jsonData = [
@@ -1030,6 +1040,9 @@ trait RfqOffersUtility
             }
         }
         $this->set('options', $options);
+        if (MOBILE_APP_API_CALL) {
+            $this->_template->render();
+        }
         $this->set('html', $this->_template->render(false, false, 'rfq-offers/get-shipping-rates.php', true));
         $this->_template->render(false, false, 'json-success.php', false, false);
     }
@@ -1112,13 +1125,19 @@ trait RfqOffersUtility
         }
 
         $this->set('pageCount', ($data['pageCount'] ?? 0));
-        $this->set('data', array_reverse($data['data']));
 
+        $messageData = array_reverse($data['data']);
+        if (MOBILE_APP_API_CALL) {
+            $this->set('messagesData', $messageData);
+            $this->_template->render();
+        }
+        $this->set('data', $messageData);
         $this->set('includeTabs', false);
         $this->set('isSeller', $this->isSeller);
         $this->set('frm', $frm);
         $this->set('primaryOfferId', $primaryOfferId);
         $this->set('onlyWithAttachments', $onlyWithAttachments);
+
         $this->set('html', $this->_template->render(false, false, 'rfq-offers/attachment-form.php', return_content: true));
         $this->_template->render(false, false, 'json-success.php', false, false);
     }

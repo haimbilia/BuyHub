@@ -74,7 +74,7 @@ $totalRecords = count($arrListing); ?>
                                 </div>
                                 <div class="user-profile_data">
                                     <span class="user-profile_title">
-                                        <?php echo $row['credential_username']; ?>
+                                        <?php echo $row['user_name']; ?>
                                     </span>
                                     <span class="date"><?php echo FatDate::format($row['offer_added_on']); ?></span>
                                 </div>
