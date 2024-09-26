@@ -767,3 +767,28 @@ ALTER TABLE `tbl_rfq_offer_messages`  ADD `rom_read` TINYINT(2) NOT NULL  AFTER 
 
 ALTER TABLE `tbl_seller_products` DROP `selprod_rfq_enabled`;
 ALTER TABLE `tbl_seller_products` ADD `selprod_cart_type` TINYINT NOT NULL AFTER `selprod_fulfillment_type`;
+
+
+INSERT INTO `tbl_email_templates` (`etpl_code`, `etpl_lang_id`, `etpl_name`, `etpl_subject`, `etpl_body`, `etpl_replacements`, `etpl_status`) VALUES ('RFQ_OFFER_ACCEPTED_BY_SELLER', '1', 'RFQ Offer Action By Seller', 'Final confirmation for the RFQ ({rfq_number}) by another Seller', '<table width="600px" cellspacing="0" cellpadding="0" style="margin: 0 auto; table-layout: fixed; background: #ffffff; border-radius: 4px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.04)">
+    <tbody>
+        <tr>
+            <td style="background:#fff;padding:0 30px; text-align:center; color:#999;vertical-align:top;">
+                <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+                    <tbody>
+                        <tr>
+                            <td style="padding:20px 0 30px;">
+                                <strong style="font-size:18px;color:#333;">Dear {shop_name} Seller,</strong><br />
+                                Another seller shared a final confirmation for the RFQ ({rfq_number}) of {user_name}.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>', '{rfq_number} RFQ Number<br>\r\n{shop_name} Seller`s Shop<br>\r\n{user_name} Buyer Name<br>\r\n{website_name} Name of our website<br>\r\n{website_url} URL of our website<br>\r\n{social_media_icons} <br>\r\n{contact_us_url} <br>\r\n', '1')
+ON DUPLICATE KEY UPDATE etpl_name = VALUES(etpl_name), etpl_subject = VALUES(etpl_subject), etpl_body = VALUES(etpl_body), etpl_replacements = VALUES(etpl_replacements);
+
+INSERT INTO `tbl_sms_templates` (`stpl_code`, `stpl_lang_id`, `stpl_name`, `stpl_body`, `stpl_replacements`, `stpl_status`) VALUES 
+('RFQ_OFFER_ACCEPTED_BY_SELLER',1,'Final confirmation for the RFQ by another Seller','Dear {shop_name} Seller,\r\nAnother seller shared a final confirmation for the RFQ ({rfq_number}) of {user_name}. \r\n\r\n{SITE_NAME} Team','[{\"title\":\"RFQ Number\", \"variable\":\"{rfq_number}\"},{\"title\":\"Seller`s Shop\", \"variable\":\"{shop_name}\"},{\"title\":\"Buyer Name\", \"variable\":\"{user_name}\"}, {\"title\":\"Website Name\", \"variable\":\"{SITE_NAME}\"}]',1)
+ON DUPLICATE KEY UPDATE stpl_name = VALUES(stpl_name), stpl_body = VALUES(stpl_body), stpl_replacements = VALUES(stpl_replacements);
