@@ -1,4 +1,4 @@
-# Multivendor - Released Version : RV-10.0.0
+# Multivendor - Released Version : RV-10.1.0
 
 > IOS/Android Buyer APP version : 2.0.1
 > System API version : 2.3
