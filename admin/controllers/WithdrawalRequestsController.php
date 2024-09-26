@@ -386,7 +386,7 @@ class WithdrawalRequestsController extends ListingBaseController
                 $emailNotificationObj->sendTxnNotification($txnId, $this->siteLangId);
             }
         }
-
+        CalculativeDataRecord::updateWithdrawalRequestCount();
         $this->set('msg', Labels::getLabel('MSG_STATUS_UPDATED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }

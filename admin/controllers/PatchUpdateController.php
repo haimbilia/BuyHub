@@ -359,7 +359,7 @@ class PatchUpdateController extends ListingBaseController
                 'tbl_order_seller_subscriptions', 'tbl_order_seller_subscriptions_lang', 'tbl_order_user_address', 'tbl_user_reward_points', 'tbl_user_reward_point_breakup',
                 'tbl_rewards_on_purchase', 'tbl_coupons_history', 'tbl_coupons_hold', 'tbl_user_cart', 'tbl_order_product_settings', 'tbl_order_product_shipment',
                 'tbl_order_prod_charges_logs', 'tbl_order_prod_charges_logs_lang', 'tbl_orders_to_plugin_order', 'tbl_order_product_shipment_pickup', 'tbl_order_product_plugin_specifics', 'tbl_order_product_responses', 'tbl_user_withdrawal_requests',
-                'tbl_user_withdrawal_requests_specifics', 'tbl_seller_product_reviews', 'tbl_seller_product_reviews_abuse', 'tbl_seller_product_reviews_helpful', 'tbl_seller_product_rating','tbl_order_product_specifics'
+                'tbl_user_withdrawal_requests_specifics', 'tbl_seller_product_reviews', 'tbl_seller_product_reviews_abuse', 'tbl_seller_product_reviews_helpful', 'tbl_seller_product_rating', 'tbl_order_product_specifics'
             );
             FatApp::getDb()->query('UPDATE `tbl_seller_products` SET `selprod_sold_count` = 0 WHERE 1');
 
@@ -413,14 +413,14 @@ class PatchUpdateController extends ListingBaseController
                 'tbl_user_wish_lists', 'tbl_user_withdrawal_requests', 'tbl_users', 'tbl_order_product_settings', 'tbl_user_requests_history', 'tbl_meta_tags', 'tbl_coupon_to_brands',
                 'tbl_coupon_to_shops', 'tbl_transactions_failure_log', 'tbl_product_category_relations', 'tbl_tax_structure', 'tbl_tax_structure_lang', 'tbl_collection_to_records',
                 'tbl_tracking_courier_code_relation', 'tbl_time_slots', 'tbl_user_collections', 'tbl_addresses', 'tbl_order_product_shipment', 'tbl_order_prod_charges_logs', 'tbl_order_prod_charges_logs_lang',
-                'tbl_tax_rule_locations', 'tbl_tax_rule_details_lang', 'tbl_tax_rule_details', 'tbl_tax_rules','tbl_tax_rule_rates', 'tbl_shipping_locations', 'tbl_shipping_zone', 'tbl_shipping_rates_lang',
+                'tbl_tax_rule_locations', 'tbl_tax_rule_details_lang', 'tbl_tax_rule_details', 'tbl_tax_rules', 'tbl_tax_rule_rates', 'tbl_shipping_locations', 'tbl_shipping_zone', 'tbl_shipping_rates_lang',
                 'tbl_shipping_rates', 'tbl_shipping_profile_zones', 'tbl_shipping_profile_products', 'tbl_shipping_profile', 'tbl_shipping_packages', 'tbl_abandoned_cart',
                 'tbl_products_min_price', 'tbl_product_requests', 'tbl_product_requests_lang', 'tbl_product_saved_search', 'tbl_product_specifics', 'tbl_products_to_plugin_product',
                 'tbl_seller_products_to_plugin_selprod', 'tbl_orders_to_plugin_order', 'tbl_plugin_to_user', 'tbl_product_digital_data_relation', 'tbl_product_digital_links', 'tbl_badges',
                 'tbl_badges_lang', 'tbl_badge_link_conditions', 'tbl_badge_links', 'tbl_badge_requests', 'tbl_order_product_shipment_pickup', 'tbl_system_logs', 'tbl_order_product_plugin_specifics',
-                'tbl_order_product_responses','tbl_unique_check_failed_attempt','tbl_upc_codes','tbl_user_cookies_preferences','tbl_user_meta','tbl_user_notifications','tbl_user_withdrawal_requests_specifics','tbl_order_product_specifics','tbl_shop_specifics','tbl_shop_stats'
+                'tbl_order_product_responses', 'tbl_unique_check_failed_attempt', 'tbl_upc_codes', 'tbl_user_cookies_preferences', 'tbl_user_meta', 'tbl_user_notifications', 'tbl_user_withdrawal_requests_specifics', 'tbl_order_product_specifics', 'tbl_shop_specifics', 'tbl_shop_stats'
             );
-            FatApp::getDb()->query("DELETE FROM `tbl_attached_files` WHERE `afile_type` in (1,2,3,4,5,7,8,9,10,11,12,13,14,22,23,24,25,26,27,28,29,30,32,33,41,42,43,48,50,52,53,60)");
+            FatApp::getDb()->query("DELETE FROM `tbl_attached_files` WHERE `afile_type` in (1,2,3,4,5,7,8,9,10,11,12,13,14,22,23,24,25,26,27,28,29,30,32,33,41,42,43,48,50,52,53,60,63)");
 
             /*
             Delete FROM `tbl_navigation_links` where nlink_nav_id != 1
@@ -504,9 +504,9 @@ class PatchUpdateController extends ListingBaseController
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $srch->addCondition('spr.spreview_status', '=', 'mysql_func_' . SelProdReview::STATUS_APPROVED, 'AND', true);
-        $srch->addGroupBy('spreview_seller_user_id');       
+        $srch->addGroupBy('spreview_seller_user_id');
         // $srch->addHaving('avg_rating', '>', 0);
-        $rs = $srch->getResultSet();        
+        $rs = $srch->getResultSet();
         while ($row = FatApp::getDb()->fetch($rs)) {
             $rsrch = SelProdRating::getAvgShopReviewsRatingObj($row['spreview_seller_user_id']);
             $rsrch->joinUser();
@@ -524,7 +524,7 @@ class PatchUpdateController extends ListingBaseController
         }
         echo 'Done';
     }
-    
+
     public function updateValidSubscription()
     {
         if (1 > FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
@@ -543,7 +543,7 @@ class PatchUpdateController extends ListingBaseController
         $srch = new searchBase(Orders::DB_TBL, 'o');
         $srch->joinTable('(' . $sSrch->getQuery() . ')', 'INNER JOIN', 'otemp.currentOrderId=o.order_id', 'otemp');
         $srch->joinTable(OrderSubscription::DB_TBL, 'INNER JOIN', 'o.order_id = oss.ossubs_order_id and oss.ossubs_status_id =' . FatApp::getConfig('CONF_DEFAULT_SUBSCRIPTION_PAID_ORDER_STATUS') . " and oss.ossubs_till_date >= '" . date('Y-m-d') . "'", 'oss');
-        
+
         $srch->addCondition('oss.ossubs_status_id', 'IN ', Orders::getActiveSubscriptionStatusArr());
         $srch->addCondition('o.order_type', '=', 'mysql_func_' . ORDERS::ORDER_SUBSCRIPTION, 'AND', true);
         $srch->addCondition('o.order_payment_status', '=', 'mysql_func_' . Orders::ORDER_PAYMENT_PAID, 'AND', true);
@@ -563,7 +563,40 @@ class PatchUpdateController extends ListingBaseController
         foreach ($result as $user) {
             $assignValues = ['user_has_valid_subscription' => $user['hasValidSubscription']];
             FatApp::getDb()->updateFromArray(User::DB_TBL, $assignValues, array('smt' => 'user_id = ? ', 'vals' => array((int) $user['seller_user_id'])));
+            $assignValues = ['shop_has_valid_subscription' => $user['hasValidSubscription']];
+            FatApp::getDb()->updateFromArray(Shop::DB_TBL, $assignValues, array('smt' => 'shop_user_id = ? ', 'vals' => array((int) $user['seller_user_id'])));
         }
         echo 'Done';
+    }
+
+    public function updateProductRating()
+    {
+        $selProdReviewObj = new SelProdReviewSearch();
+        $selProdReviewObj->joinSellerProducts();
+        $selProdReviewObj->joinSelProdRating();
+        $selProdReviewObj->addCondition('ratingtype_type', '=', 'mysql_func_' . RatingType::TYPE_PRODUCT, 'AND', true);
+        $selProdReviewObj->doNotCalculateRecords();
+        $selProdReviewObj->doNotLimitRecords();
+        $selProdReviewObj->addGroupBy('spr.spreview_product_id');
+        $selProdReviewObj->addCondition('spr.spreview_status', '=', 'mysql_func_' . SelProdReview::STATUS_APPROVED, 'AND', true);
+        $selProdReviewObj->addMultipleFields(array('spreview_product_id', "ROUND(AVG(sprating_rating),2) as prod_rating", "count(spreview_id) as totReviews"));
+        $result = FatApp::getDb()->fetchAll($selProdReviewObj->getResultSet());
+        foreach ($result as $data) {
+            $assignValues = ['product_total_reviews' => $data['totReviews'], 'product_rating' => $data['prod_rating']];
+            FatApp::getDb()->updateFromArray(Product::DB_TBL, $assignValues, array('smt' => 'product_id = ? ', 'vals' => array((int) $data['spreview_product_id'])));
+        }
+        echo 'Done';
+    }
+
+    public function removeForeignKeyConstraint()
+    {
+        $qry = FatApp::getDb()->query("SELECT CONSTRAINT_NAME,TABLE_NAME,COLUMN_NAME, REFERENCED_TABLE_NAME, REFERENCED_COLUMN_NAME FROM information_schema.KEY_COLUMN_USAGE WHERE CONSTRAINT_SCHEMA = '" . CONF_DB_NAME . "' AND REFERENCED_TABLE_NAME IS NOT NULL");
+        $res = FatApp::getDb()->fetchAll($qry);
+        foreach ($res as $record) {
+            $qry = "ALTER TABLE " . $record['TABLE_NAME'] . " DROP FOREIGN KEY " . $record['COLUMN_NAME'];
+            FatApp::getDb()->query($qry);
+            echo $qry . '<br>';
+        }
+        echo "Done";
     }
 }

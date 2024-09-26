@@ -203,6 +203,16 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="block-cart-detail-middle">
+                                        <div class="shipping-comments">
+                                            <button class="btn-dropdown dropdown-toggle-custom collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<?php echo $product['selprod_id']; ?>" aria-expanded="false" aria-controls="collapse<?php echo $product['selprod_id']; ?>">
+                                                <?php echo Labels::getLabel('LBL_COMMENTS', $siteLangId); ?> <i class="dropdown-toggle-custom-arrow"></i>
+                                            </button>
+                                            <div class="collapse form" id="collapse<?php echo $product['selprod_id']; ?>">
+                                                <textarea maxlength="250" class="form-textarea form-control opCommentsJs" placeholder="<?php echo Labels::getLabel('LBL_WRITE_YOUR_COMMENTS', $siteLangId); ?>" name="op_comments[<?php echo $product['selprod_id']; ?>]" spellcheck="false"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="block-cart-detail-bottom">
                                         <ul class="cart-action">
                                             <li class="cart-action-item">
@@ -211,12 +221,8 @@
                                                 </button>
                                             </li>
                                         </ul>
-
-
                                     </div>
                                 </div>
-
-
                             </li>
                         <?php } ?>
                         <!-- Items Body-->

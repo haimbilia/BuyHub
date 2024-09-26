@@ -63,7 +63,7 @@ class Zone extends MyAppModel
         $srch->addMultipleFields(
             array(
                 'zone_id',
-                'if(zone_name is null, zone_identifier, zone_name) as zone_name', 'country_id', 'if(country_name is null, country_code, country_name) as  country_identifier', '(select count(*) from ' . States::DB_TBL . ' where state_country_id = c.country_id) as state_count'
+                'if(zone_name is null, zone_identifier, zone_name) as zone_name', 'country_id', 'if(country_name is null, country_code, country_name) as  country_identifier', '(select count(1) from ' . States::DB_TBL . ' where state_country_id = c.country_id) as state_count'
             )
         );
 

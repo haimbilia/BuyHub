@@ -289,7 +289,7 @@ class ProductReviewsController extends ListingBaseController
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
 
-        $data = SelProdReview::getAttributesById($recordId, ['spreview_id', 'spreview_status', 'spreview_lang_id', 'spreview_seller_user_id']);
+        $data = SelProdReview::getAttributesById($recordId, ['spreview_id', 'spreview_status', 'spreview_lang_id', 'spreview_seller_user_id','spreview_product_id']);
         if (false == $data) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
@@ -301,6 +301,7 @@ class ProductReviewsController extends ListingBaseController
 
         SelProdRating::updateSellerRating($data['spreview_seller_user_id']);
         SelProdReview::updateSellerTotalReviews($data['spreview_seller_user_id']);
+        SelProdReview::updateProductRating($data['spreview_product_id']);
 
         $emailNotificationObj = new EmailHandler();
         $emailNotificationObj->sendBuyerReviewStatusUpdatedNotification($recordId, $data['spreview_lang_id']);

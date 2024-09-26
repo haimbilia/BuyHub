@@ -548,14 +548,20 @@ trait SellerProducts
 
         $post['selprod_subtract_stock'] = FatApp::getPostedData('selprod_subtract_stock', FatUtility::VAR_INT, 0);
         $post['selprod_track_inventory'] = FatApp::getPostedData('selprod_track_inventory', FatUtility::VAR_INT, 0);
+        $post['selprod_min_order_qty'] = FatApp::getPostedData('selprod_min_order_qty', FatUtility::VAR_INT, 1);
+        $post['selprod_stock'] = FatApp::getPostedData('selprod_stock', FatUtility::VAR_INT, 1);
+        $post['selprod_stock'] = ($post['selprod_stock'] > 0) ? $post['selprod_stock'] : 1;
+        $post['selprod_min_order_qty'] = ($post['selprod_min_order_qty'] > 0) ? $post['selprod_min_order_qty'] : 1;
+
+        $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
 
         $keywordSlug = '';
         $productId = SellerProduct::getAttributesById($selprod_id, 'selprod_product_id', false);
-        if (empty($post['selprod_title' . $this->siteLangId])) {
+        if (empty($post['selprod_title' . $siteDefaultLangId])) {
             $productLangRow = Product::getProductDataById($this->siteLangId, $productId, array('product_identifier', 'product_name'));
             $keywordSlug = $productLangRow['product_name'] ?? $productLangRow['product_identifier'];
         }
-        $keywordSlug =  $post['selprod_title' . $this->siteLangId] ?? $keywordSlug;
+        $keywordSlug =  $post['selprod_title' . $siteDefaultLangId] ?? $keywordSlug;
 
         if ($selprod_url_keyword == '') {
             $shopData = Shop::getAttributesByUserId($this->userParentId, ['COALESCE(shop_name,shop_identifier) as shop_name'], false, $this->userParentId);
@@ -638,6 +644,7 @@ trait SellerProducts
         /* ] */
 
         $productId = SellerProduct::getAttributesById($selprod_id, 'selprod_product_id', false);
+        CalculativeDataRecord::updateThresholdSelprodRequestCount();
         Product::updateMinPrices($productId);
         $this->set('selprod_id', $selprod_id);
         $this->set('product_id', $productId);
@@ -784,7 +791,8 @@ trait SellerProducts
         if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
             $prodAllowedLimit = SellerPackages::getAllowedLimit($this->userParentId, $this->siteLangId, 'ossubs_inventory_allowed');
         }
-        $minSellingPrice = Product::getAttributesById($productId, 'product_min_selling_price');
+        $prodInfo = Product::getAttributesById($productId, ['product_min_selling_price', 'product_type']);
+        $minSellingPrice = $prodInfo['product_min_selling_price'] ?? 0;
         $productCount = SellerProduct::getActiveCount($this->userParentId);
 
         $keywordSlug = '';
@@ -802,6 +810,8 @@ trait SellerProducts
             foreach ($optionCombinations as $optionKey => $optionValue) {
                 /* Check if product already added for this option [ */
                 $selProdCode = $post['selprod_code'] . $optionKey;
+                $post['selprod_stock' . $optionKey] = $post['selprod_stock' . $optionKey] ?? 1;
+
                 $selProdAvailable = Product::isSellProdAvailableForUser($selProdCode, $this->siteLangId, $this->userParentId);
                 if (!empty($selProdAvailable)) {
                     if (!$selProdAvailable['selprod_deleted']) {
@@ -811,7 +821,8 @@ trait SellerProducts
                     }
                     $data_to_be_save['selprod_deleted'] = applicationConstants::NO;
                 }
-                if (!isset($post['selprod_cost' . $optionKey]) || !isset($post['selprod_price' . $optionKey]) || !isset($post['selprod_stock' . $optionKey])) {
+
+                if (!isset($post['selprod_cost' . $optionKey]) || !isset($post['selprod_price' . $optionKey])) {
                     continue;
                 }
 
@@ -832,7 +843,16 @@ trait SellerProducts
                 $data_to_be_save['selprod_code'] = $selProdCode;
                 $data_to_be_save['selprod_cost'] = $post['selprod_cost' . $optionKey];
                 $data_to_be_save['selprod_price'] = $sellingPrice;
-                $data_to_be_save['selprod_stock'] = $post['selprod_stock' . $optionKey];
+                if ($prodInfo['product_type'] == Product::PRODUCT_TYPE_SERVICE) {
+                    $data_to_be_save['selprod_stock'] = 1;
+                    $data_to_be_save['selprod_min_order_qty'] = 1;
+                    $data_to_be_save['selprod_subtract_stock'] = 0;
+                    $data_to_be_save['selprod_track_inventory'] = 0;
+                    $data_to_be_save['selprod_threshold_stock_level'] = 0;
+                    $data_to_be_save['selprod_condition'] = 1;
+                } else {
+                    $data_to_be_save['selprod_stock'] = $post['selprod_stock' . $optionKey];
+                }
                 $data_to_be_save['selprod_sku'] = $post['selprod_sku' . $optionKey] ?? '';
 
                 $selProdKeywordSlug = $keywordSlug . '-' . $optionValue . '-' . $shopData['shop_name'];
@@ -867,7 +887,16 @@ trait SellerProducts
             $data_to_be_save['selprod_code'] = $selProdCode;
             $data_to_be_save['selprod_cost'] = $post['selprod_cost' . $optionValue];
             $data_to_be_save['selprod_price'] = $post['selprod_price' . $optionValue];
-            $data_to_be_save['selprod_stock'] = $post['selprod_stock' . $optionValue];
+            if ($prodInfo['product_type'] == Product::PRODUCT_TYPE_SERVICE) {
+                $data_to_be_save['selprod_stock'] = 1;
+                $data_to_be_save['selprod_min_order_qty'] = 1;
+                $data_to_be_save['selprod_subtract_stock'] = 0;
+                $data_to_be_save['selprod_track_inventory'] = 0;
+                $data_to_be_save['selprod_threshold_stock_level'] = 0;
+                $data_to_be_save['selprod_condition'] = 1;
+            } else {
+                $data_to_be_save['selprod_stock'] = $post['selprod_stock' . $optionValue];
+            }
             $data_to_be_save['selprod_sku'] = $post['selprod_sku' . $optionValue];
             $selProdKeywordSlug = $keywordSlug . '-' . $optionValue . '-' . $shopData['shop_name'];
             $data_to_be_save['selprod_url_keyword'] = strtolower(CommonHelper::createSlug($selProdKeywordSlug));
@@ -2078,6 +2107,9 @@ trait SellerProducts
         $srch->addOrder('product_name');
         $srch->addCondition('product_deleted', '=', applicationConstants::NO);
         $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
+        if (isset($post['volumeDiscount']) && $post['volumeDiscount']) {
+            $srch->addCondition(Product::DB_TBL_PREFIX . 'type', '!=', Product::PRODUCT_TYPE_SERVICE);
+        }
         if (!empty($post['keyword'])) {
             $cnd = $srch->addCondition('product_name', 'LIKE', '%' . $post['keyword'] . '%');
             $cnd->attachCondition('selprod_title', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
@@ -2099,7 +2131,10 @@ trait SellerProducts
 
         $srch->addMultipleFields(
             array(
-                'selprod_id as id', 'IFNULL(selprod_title, product_name) as product_name', 'product_identifier', 'selprod_price'
+                'selprod_id as id',
+                'IFNULL(selprod_title, product_name) as product_name',
+                'product_identifier',
+                'selprod_price'
             )
         );
         $srch->setPageSize($pagesize);
@@ -2359,11 +2394,10 @@ trait SellerProducts
     public function getSellerProductCloneForm($product_id, $selprod_id)
     {
         $frm = new Form('frmSellerProduct');
-        $productData = Product::getAttributesById($product_id, array('product_identifier', 'product_min_selling_price'));
+        $productData = Product::getAttributesById($product_id, array('product_identifier', 'product_min_selling_price', 'product_type'));
 
         $productOptions = Product::getProductOptions($product_id, $this->siteLangId, true);
         if ($productOptions) {
-            $frm->addHtml('', 'optionSectionHeading', '');
             foreach ($productOptions as $option) {
                 $option_name = ($option['option_name'] != '') ? $option['option_name'] : $option['option_identifier'];
                 $fld = $frm->addSelectBox($option_name, 'selprodoption_optionvalue_id[' . $option['option_id'] . ']', $option['optionValues'], '', array('class' => 'selprodoption_optionvalue_id'), Labels::getLabel('LBL_Select', $this->siteLangId));
@@ -2381,39 +2415,43 @@ trait SellerProducts
             $fld->requirements()->setCustomErrorMessage(Labels::getLabel('FRM_MINIMUM_SELLING_PRICE_FOR_THIS_PRODUCT_IS', $this->siteLangId) . ' ' . CommonHelper::displayMoneyFormat($productData['product_min_selling_price'], true, true));
         }
 
-        $fld = $frm->addIntegerField(Labels::getLabel('FRM_QUANTITY', $this->siteLangId), 'selprod_stock');
-        $fld->requirements()->setRange(1, SellerProduct::MAX_RANGE_OF_AVAILBLE_QTY);
+        if ($productData['product_type'] != Product::PRODUCT_TYPE_SERVICE) {
+            $fld = $frm->addIntegerField(Labels::getLabel('FRM_QUANTITY', $this->siteLangId), 'selprod_stock');
+            $fld->requirements()->setRange(1, SellerProduct::MAX_RANGE_OF_AVAILBLE_QTY);
+        }
 
         $frm->addDateField(Labels::getLabel('FRM_DATE_AVAILABLE', $this->siteLangId), 'selprod_available_from', '', array('readonly' => 'readonly'))->requirements()->setRequired();
 
         $useShopPolicy = $frm->addCheckBox(Labels::getLabel('FRM_USE_SHOP_RETURN_AND_CANCELLATION_AGE_POLICY', $this->siteLangId), 'use_shop_policy', 1, ['id' => 'use_shop_policy'], false, 0);
 
-        $fld = $frm->addIntegerField(Labels::getLabel('FRM_ORDER_RETURN_AGE', $this->siteLangId), 'selprod_return_age');
+        if ($productData['product_type'] != Product::PRODUCT_TYPE_SERVICE) {
+            $fld = $frm->addIntegerField(Labels::getLabel('FRM_ORDER_RETURN_AGE', $this->siteLangId), 'selprod_return_age');
+            $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('FRM_WARRANTY_IN_DAYS', $this->siteLangId) . ' </span>';
 
-        $orderReturnAgeReqFld = new FormFieldRequirement('selprod_return_age', Labels::getLabel('FRM_ORDER_RETURN_AGE', $this->siteLangId));
-        $orderReturnAgeReqFld->setRequired(true);
-        $orderReturnAgeReqFld->setPositive();
-        $orderReturnAgeReqFld->htmlAfterField = '<br/><small>' . Labels::getLabel('FRM_WARRANTY_IN_DAYS', $this->siteLangId) . ' </small>';
+            $orderReturnAgeReqFld = new FormFieldRequirement('selprod_return_age', Labels::getLabel('FRM_ORDER_RETURN_AGE', $this->siteLangId));
+            $orderReturnAgeReqFld->setRequired(true);
+            $orderReturnAgeReqFld->setPositive();
 
-        $orderReturnAgeUnReqFld = new FormFieldRequirement('selprod_return_age', Labels::getLabel('FRM_ORDER_RETURN_AGE', $this->siteLangId));
-        $orderReturnAgeUnReqFld->setRequired(false);
-        $orderReturnAgeUnReqFld->setPositive();
-        $orderReturnAgeUnReqFld->htmlAfterField = '<br/><small>' . Labels::getLabel('FRM_WARRANTY_IN_DAYS', $this->siteLangId) . ' </small>';
+            $orderReturnAgeUnReqFld = new FormFieldRequirement('selprod_return_age', Labels::getLabel('FRM_ORDER_RETURN_AGE', $this->siteLangId));
+            $orderReturnAgeUnReqFld->setRequired(false);
+            $orderReturnAgeUnReqFld->setPositive();
+        }
 
         $fld = $frm->addIntegerField(Labels::getLabel('FRM_ORDER_CANCELLATION_AGE', $this->siteLangId), 'selprod_cancellation_age');
+        $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('FRM_WARRANTY_IN_DAYS', $this->siteLangId) . ' </span>';
 
         $orderCancellationAgeReqFld = new FormFieldRequirement('selprod_cancellation_age', Labels::getLabel('FRM_ORDER_CANCELLATION_AGE', $this->siteLangId));
         $orderCancellationAgeReqFld->setRequired(true);
         $orderCancellationAgeReqFld->setPositive();
-        $orderCancellationAgeReqFld->htmlAfterField = '<br/><small>' . Labels::getLabel('FRM_WARRANTY_IN_DAYS', $this->siteLangId) . ' </small>';
 
         $orderCancellationAgeUnReqFld = new FormFieldRequirement('selprod_cancellation_age', Labels::getLabel('FRM_ORDER_CANCELLATION_AGE', $this->siteLangId));
         $orderCancellationAgeUnReqFld->setRequired(false);
         $orderCancellationAgeUnReqFld->setPositive();
-        $orderCancellationAgeUnReqFld->htmlAfterField = '<br/><small>' . Labels::getLabel('FRM_WARRANTY_IN_DAYS', $this->siteLangId) . ' </small>';
 
-        $useShopPolicy->requirements()->addOnChangerequirementUpdate(Shop::USE_SHOP_POLICY, 'eq', 'selprod_return_age', $orderReturnAgeUnReqFld);
-        $useShopPolicy->requirements()->addOnChangerequirementUpdate(Shop::USE_SHOP_POLICY, 'ne', 'selprod_return_age', $orderReturnAgeReqFld);
+        if ($productData['product_type'] != Product::PRODUCT_TYPE_SERVICE) {
+            $useShopPolicy->requirements()->addOnChangerequirementUpdate(Shop::USE_SHOP_POLICY, 'eq', 'selprod_return_age', $orderReturnAgeUnReqFld);
+            $useShopPolicy->requirements()->addOnChangerequirementUpdate(Shop::USE_SHOP_POLICY, 'ne', 'selprod_return_age', $orderReturnAgeReqFld);
+        }
 
         $useShopPolicy->requirements()->addOnChangerequirementUpdate(Shop::USE_SHOP_POLICY, 'eq', 'selprod_cancellation_age', $orderCancellationAgeUnReqFld);
         $useShopPolicy->requirements()->addOnChangerequirementUpdate(Shop::USE_SHOP_POLICY, 'ne', 'selprod_cancellation_age', $orderCancellationAgeReqFld);
@@ -2478,7 +2516,7 @@ trait SellerProducts
         unset($sellerProductRow['selprod_id']);
         $data_to_be_save = $sellerProductRow;
         $data_to_be_save['selprod_price'] = $post['selprod_price'];
-        $data_to_be_save['selprod_stock'] = $post['selprod_stock'];
+        $data_to_be_save['selprod_stock'] = $post['selprod_stock'] ?? 1;
         $data_to_be_save['selprod_available_from'] = $post['selprod_available_from'];
 
         if (!empty($selProdAvailable)) {
@@ -2757,8 +2795,19 @@ trait SellerProducts
         $srch->doNotCalculateRecords();
         $srch->addMultipleFields(
             [
-                'selprod_id', 'credential_username', 'voldiscount_min_qty', 'voldiscount_percentage', 'IFNULL(product_name, product_identifier) as product_name', 'selprod_title',
-                'voldiscount_id', 'product_updated_on', 'selprod_product_id', 'user_id', 'user_updated_on', 'credential_email', 'user_name'
+                'selprod_id',
+                'credential_username',
+                'voldiscount_min_qty',
+                'voldiscount_percentage',
+                'IFNULL(product_name, product_identifier) as product_name',
+                'selprod_title',
+                'voldiscount_id',
+                'product_updated_on',
+                'selprod_product_id',
+                'user_id',
+                'user_updated_on',
+                'credential_email',
+                'user_name'
             ]
         );
         $srch->addOrder('voldiscount_id', 'DESC');

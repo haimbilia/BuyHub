@@ -183,7 +183,7 @@ class CartController extends MyAppController
         } else {
             $srch = EmptyCartItems::getSearchObject($this->siteLangId);
             $srch->doNotCalculateRecords();
-            $srch->addMultipleFields(array('emptycartitem_title', 'emptycartitem_url', 'emptycartitem_url_is_newtab'));
+            $srch->addMultipleFields(array('COALESCE(emptycartitem_title, emptycartitem_identifier) as emptycartitem_title', 'emptycartitem_url', 'emptycartitem_url_is_newtab'));
             $rs = $srch->getResultSet();
             $EmptyCartItems = FatApp::getDb()->fetchAll($rs);
             $this->set('EmptyCartItems', $EmptyCartItems);
@@ -404,7 +404,7 @@ class CartController extends MyAppController
             $srch->joinProductToCategory();
             $srch->addCondition('pricetbl.selprod_id', '=', 'mysql_func_' . $productId, 'AND', true);
             $srch->addCondition('selprod_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
-            $srch->addMultipleFields(array('selprod_id', 'selprod_code', 'selprod_min_order_qty', 'selprod_stock', 'product_name', 'prodcat_name', 'brand_name', 'selprod_title', 'selprod_price', 'COALESCE(splprice_price, selprod_price) as theprice'));
+            $srch->addMultipleFields(array('selprod_id', 'selprod_code', 'selprod_min_order_qty', 'selprod_stock', 'COALESCE(product_name, product_identifier) as product_name', 'prodcat_name', 'brand_name', 'selprod_title', 'selprod_price', 'COALESCE(splprice_price, selprod_price) as theprice'));
             $srch->doNotCalculateRecords();
             $srch->setPageSize(1);
             $rs = $srch->getResultSet();

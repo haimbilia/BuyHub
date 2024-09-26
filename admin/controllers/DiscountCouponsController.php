@@ -401,7 +401,7 @@ class DiscountCouponsController extends ListingBaseController
         }
         $this->checkEditPrivilege(true);
 
-        $couponData = DiscountCoupons::getAttributesByLangId($this->siteLangId, $recordId, ['COALESCE(coupon_title, coupon_identifier) as coupon_title'], applicationConstants::JOIN_RIGHT);
+        $couponData = DiscountCoupons::getAttributesByLangId($this->siteLangId, $recordId, ['COALESCE(coupon_title, coupon_identifier) as coupon_title', 'coupon_type'], applicationConstants::JOIN_RIGHT);
         if (empty($couponData)) {
             LibHelper::exitWithError($this->str_invalid_request_id, false, true);
             CommonHelper::redirectUserReferer();
@@ -412,21 +412,32 @@ class DiscountCouponsController extends ListingBaseController
             'items' => Labels::getLabel('LBL_ITEMS', $this->siteLangId),
         ];
 
-        $linksTypeArr = [
-            'products' => Labels::getLabel('LBL_PRODUCTS', $this->siteLangId),
-            'categories' => Labels::getLabel('LBL_CATEGORIES', $this->siteLangId),
-            'users' => Labels::getLabel('LBL_USERS', $this->siteLangId),
-            'shops' => Labels::getLabel('LBL_SHOPS', $this->siteLangId),
-            'brands' => Labels::getLabel('LBL_BRANDS', $this->siteLangId),
-        ];
+        if ($couponData['coupon_type'] == DiscountCoupons::TYPE_SELLER_PACKAGE) {
+            $linksTypeArr = [               
+                'users' => Labels::getLabel('LBL_USERS', $this->siteLangId),
+            ];
 
-        $linksTypeData = [
-            'products' => DiscountCoupons::getCouponProducts($recordId, $this->siteLangId),
-            'categories' => DiscountCoupons::getCouponCategories($recordId, $this->siteLangId),
-            'users' => DiscountCoupons::getCouponUsers($recordId, $this->siteLangId),
-            'shops' => DiscountCoupons::getCouponShops($recordId, $this->siteLangId),
-            'brands' => DiscountCoupons::getCouponBrands($recordId, $this->siteLangId),
-        ];
+            $linksTypeData = [              
+                'users' => DiscountCoupons::getCouponUsers($recordId, $this->siteLangId),
+            ];
+        } else {
+            $linksTypeArr = [
+                'products' => Labels::getLabel('LBL_PRODUCTS', $this->siteLangId),
+                'categories' => Labels::getLabel('LBL_CATEGORIES', $this->siteLangId),
+                'users' => Labels::getLabel('LBL_USERS', $this->siteLangId),
+                'shops' => Labels::getLabel('LBL_SHOPS', $this->siteLangId),
+                'brands' => Labels::getLabel('LBL_BRANDS', $this->siteLangId),
+            ];
+
+            $linksTypeData = [
+                'products' => DiscountCoupons::getCouponProducts($recordId, $this->siteLangId),
+                'categories' => DiscountCoupons::getCouponCategories($recordId, $this->siteLangId),
+                'users' => DiscountCoupons::getCouponUsers($recordId, $this->siteLangId),
+                'shops' => DiscountCoupons::getCouponShops($recordId, $this->siteLangId),
+                'brands' => DiscountCoupons::getCouponBrands($recordId, $this->siteLangId),
+            ];
+        }
+
 
         $str = Labels::getLabel('LBL_BIND_LINKS_FOR_{LINK-TYPE}', $this->siteLangId);
         $pageTitle = CommonHelper::replaceStringData($str, ['{LINK-TYPE}' => current($couponData)]);

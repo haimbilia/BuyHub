@@ -14,7 +14,8 @@ class OrderSearch extends SearchBase
             $this->joinTable(
                 Orders::DB_TBL_LANG,
                 'LEFT OUTER JOIN',
-                'orderlang_order_id = o.order_id AND orderlang_lang_id = ' . $this->langId, 'o_l'
+                'orderlang_order_id = o.order_id AND orderlang_lang_id = ' . $this->langId,
+                'o_l'
             );
         }
     }
@@ -39,13 +40,17 @@ class OrderSearch extends SearchBase
         }
     }
 
-    public function addKeywordSearch($keyword)
+    public function addKeywordSearch($keyword, $orderType = -1)
     {
         $cnd = $this->addCondition('order_number', 'like', '%' . $keyword . '%');
         if ($this->isOrderBuyerUserJoined) {
             $cnd->attachCondition('buyer.user_name', 'like', '%' . $keyword . '%', 'OR');
             $cnd->attachCondition('buyer_cred.credential_username', 'like', '%' . $keyword . '%', 'OR');
             $cnd->attachCondition('buyer_cred.credential_email', 'like', '%' . $keyword . '%', 'OR');
+        }
+        if ($orderType >= 0 && $orderType == Orders::ORDER_GIFT_CARD) {
+            $cnd->attachCondition('ogcards.ogcards_receiver_name', 'like', '%' . $keyword . '%', 'OR');
+            $cnd->attachCondition('ogcards.ogcards_receiver_email', 'like', '%' . $keyword . '%', 'OR');
         }
     }
 

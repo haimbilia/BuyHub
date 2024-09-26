@@ -5,6 +5,9 @@ class OptionValuesController extends ListingBaseController
     public function __construct($action)
     {
         parent::__construct($action);
+        if (FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', CommonHelper::getLangId()));
+        }
         $this->objPrivilege->canViewOptions();
     }
 
@@ -67,7 +70,7 @@ class OptionValuesController extends ListingBaseController
         $actionItemsData['deleteButton'] = true;
         $actionItemsData['formAction'] = 'deleteSelected';
         $actionItemsData['performBulkAction'] = true;
-        
+
         $actionItemsData['newRecordBtnAttrs'] = [
             'attr' => [
                 'onclick' => 'optionValueForm(' . $optionId . ')',
@@ -190,10 +193,10 @@ class OptionValuesController extends ListingBaseController
         $frm = $this->getForm($optionId, $recordId);
 
         if (0 < $recordId) {
-            $data = OptionValue::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, array('m.*','IFNULL(optionvalue_name,optionvalue_identifier) as optionvalue_name'), applicationConstants::JOIN_RIGHT);
+            $data = OptionValue::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, array('m.*', 'IFNULL(optionvalue_name,optionvalue_identifier) as optionvalue_name'), applicationConstants::JOIN_RIGHT);
             if ($data === false) {
                 LibHelper::exitWithError($this->str_invalid_request, true);
-            }           
+            }
             $frm->fill($data);
         }
 
@@ -270,7 +273,7 @@ class OptionValuesController extends ListingBaseController
         $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, $this->siteLangId);
         $optionId = FatApp::getPostedData('optionId', FatUtility::VAR_INT, 0);
 
-        $srch = OptionValue::getSearchObject($langId, true);    
+        $srch = OptionValue::getSearchObject($langId, true);
         $srch->addCondition('ov.optionvalue_option_id', '=', $optionId);
         $srch->addMultipleFields(array('optionvalue_id as id, COALESCE(optionvalue_name, optionvalue_identifier) as text'));
 
@@ -279,18 +282,18 @@ class OptionValuesController extends ListingBaseController
             $cnd->attachCondition('optionvalue_name', 'LIKE', '%' . $post['keyword'] . '%', 'OR');
         }
 
-        if(FatApp::getPostedData('doNotLimitRecords', FatUtility::VAR_INT, 1)){
+        if (FatApp::getPostedData('doNotLimitRecords', FatUtility::VAR_INT, 1)) {
             $pagesize = 20;
             $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
             if ($page < 2) {
                 $page = 1;
-            }    
+            }
             $srch->setPageNumber($page);
             $srch->setPageSize($pagesize);
-        }else{
+        } else {
 
             $srch->doNotLimitRecords();
-        }       
+        }
 
         $options = FatApp::getDb()->fetchAll($srch->getResultSet());
 
@@ -298,7 +301,7 @@ class OptionValuesController extends ListingBaseController
             'pageCount' => $srch->pages(),
             'results' => $options
         );
-        
+
         die(FatUtility::convertToJson($json));
     }
 

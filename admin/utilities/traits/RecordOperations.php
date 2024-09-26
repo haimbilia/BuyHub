@@ -92,10 +92,10 @@ trait RecordOperations
         } else {
             $langData = $this->modelObj::getAttributesByLangId($langId, $this->mainTableRecordId, NULL, applicationConstants::JOIN_RIGHT);
             if (isset($langData[$this->modelObj::tblFld('name')])  && empty($langData[$this->modelObj::tblFld('name')])) {
-                $langData[$this->modelObj::tblFld('name')] =  $langData[$this->modelObj::tblFld('identifier')];
+                $langData[$this->modelObj::tblFld('name')] =  $langData[$this->modelObj::tblFld('identifier')] ?? '';
             }
             if (isset($langData[$this->modelObj::tblFld('title')])  && empty($langData[$this->modelObj::tblFld('title')])) {
-                $langData[$this->modelObj::tblFld('title')] =  $langData[$this->modelObj::tblFld('identifier')];
+                $langData[$this->modelObj::tblFld('title')] =  $langData[$this->modelObj::tblFld('identifier')] ?? '';
             }
         }
 

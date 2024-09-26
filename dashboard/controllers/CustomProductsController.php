@@ -4,6 +4,7 @@ class CustomProductsController extends SellerBaseController
 
     use CatalogProduct;
     use ProductDigitalDownloads;
+    use ProductSetup;
 
     public function __construct($action)
     {
@@ -35,6 +36,10 @@ class CustomProductsController extends SellerBaseController
     public function form($recordId = 0, $productType = 0)
     {
         $this->checkEditPrivilege();
+
+        if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+            CommonHelper::redirectUserReferer();
+        }
 
         $userId = UserAuthentication::getLoggedUserId();
 
@@ -175,6 +180,14 @@ class CustomProductsController extends SellerBaseController
             }
 
             $productData['record_id'] = $recordId;
+
+            if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+                $selprodData = json_decode($productData['preq_sel_prod_data'], true);
+                if (!empty($selprodData)) {
+                    $productData = array_merge($productData, $selprodData);
+                }
+            }
+
             $frm->fill($productData);
             $imgFrm->fill(['file_type' => AttachedFile::FILETYPE_CUSTOM_PRODUCT_IMAGE, 'record_id' => $recordId]);
         } else {
@@ -183,6 +196,7 @@ class CustomProductsController extends SellerBaseController
             $imgFrm->fill(['file_type' => AttachedFile::FILETYPE_CUSTOM_PRODUCT_IMAGE_TEMP, 'record_id' => $tempProductId]);
         }
 
+        $this->set("selProdId", 0);
         $this->set("frm", $frm);
         $this->set("imgFrm", $imgFrm);
 
@@ -227,7 +241,6 @@ class CustomProductsController extends SellerBaseController
             }
             $isNewProduct  = false;
         }
-
 
         $productType = FatApp::getPostedData('product_type', FatUtility::VAR_INT, 0);
         $langId = FatApp::getPostedData('lang_id', FatUtility::VAR_INT, 0);
@@ -311,7 +324,7 @@ class CustomProductsController extends SellerBaseController
         $data['preq_content']['shipping_profile'] = array_key_first(ShippingProfile::getProfileArr($langId, 0, true, true));
         $data['preq_content'] = array_merge($data['preq_content'], array_diff_key($post, $langData, $data));
         $data['preq_content'] = json_encode($data['preq_content']);
-        $data['preq_status'] = $requestStatus;      
+        $data['preq_status'] = $requestStatus;
 
         if ($isNewProduct) {
             $data['preq_added_on'] = date('Y-m-d H:i:s');
@@ -319,6 +332,12 @@ class CustomProductsController extends SellerBaseController
         }
 
         $data['preq_product_identifier'] = $productIdentifier;
+
+        if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+            $selProdData = $this->setupInventory(type: 'REQUESTED_CATALOG_PRODUCT');
+            $data['preq_sel_prod_data'] = json_encode($selProdData);
+        }
+
         $prodReqObj = new ProductRequest($recordId);
         $prodReqObj->assignValues($data);
         if (!$prodReqObj->save()) {
@@ -349,6 +368,11 @@ class CustomProductsController extends SellerBaseController
         }
 
         $db->commitTransaction();
+
+        if (ProductRequest::STATUS_PENDING == $requestStatus) {
+            CalculativeDataRecord::updateCustomCatalogCount();
+        }
+
         $this->set('recordId', $recordId);
         $this->set('langId', $newTabLangId);
         $this->set('msg', $this->str_setup_successful);
@@ -549,8 +573,10 @@ class CustomProductsController extends SellerBaseController
             $upcCodes = ProductRequest::getAttributesById($recordId, 'preq_ean_upc_code');
             if (!empty($upcCodes)) {
                 $upcCodes = json_decode($upcCodes, true);
-                foreach ($upcCodes as $key => $upcCode) {
-                    $upcCodeData[$key]['upc_code'] = $upcCode;
+                if (!empty($upcCodes)) {
+                    foreach ($upcCodes as $key => $upcCode) {
+                        $upcCodeData[$key]['upc_code'] = $upcCode;
+                    }
                 }
             }
         }

@@ -1,6 +1,11 @@
 $(function () {
-	var type = $('input[name="fulfillment_type"]:checked').val();
-	listCartProducts(type);
+	$(document).ready(function () {
+		var type = $('input[name="fulfillment_type"]:checked').val();
+		if (typeof type == undefined) {
+			type = 2;
+		}
+		listCartProducts(type);
+	});
 });
 (function () {
 	listCartProducts = function (fulfilmentType = 2) {
@@ -123,7 +128,7 @@ $(function () {
 	};
 
 	removeFromWishlist = function (selprod_id, wish_list_id, event) {
-		if (!confirm(langLbl.confirmDelete)) { return false; };		
+		if (!confirm(langLbl.confirmDelete)) { return false; };
 		addRemoveWishListProduct(selprod_id, wish_list_id, event);
 	};
 

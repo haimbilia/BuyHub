@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 if ($relatedProductsRs) { ?>
-    <section class="section">
+    <section class="section" data-section="section">
         <div class="container">
             <div class="section-head">
                 <div class="section-heading">
@@ -16,7 +16,8 @@ if ($relatedProductsRs) { ?>
                     </div>
                 </div>
             </div>
-            <div class="js-carousel related-products" id="product-listing-rep" data-slides="4,4,3,2" dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
+            <div class="js-carousel related-products" id="product-listing-rep" data-slides="4,4,3,2"
+                dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
                 <?php
                 $tRightRibbons = $relatedProductsRibbons['tRightRibbons'];
                 foreach ($relatedProductsRs as $rProduct) {
@@ -36,19 +37,25 @@ if ($relatedProductsRs) { ?>
                                 } ?>
                                 <?php $uploadedTime = AttachedFile::setTimeParam($rProduct['product_updated_on']); ?>
                                 <div class="products-img">
-                                    <a title="<?php echo CommonHelper::renderHtml($rProduct['selprod_title'], true); ?>" href="<?php echo !isset($rProduct['promotion_id']) ? UrlHelper::generateUrl('Products', 'View', array($rProduct['selprod_id'])) : UrlHelper::generateUrl('Products', 'track', array($rProduct['promotion_record_id'])); ?>">
+                                    <a title="<?php echo CommonHelper::renderHtml($rProduct['selprod_title'], true); ?>"
+                                        href="<?php echo !isset($rProduct['promotion_id']) ? UrlHelper::generateUrl('Products', 'View', array($rProduct['selprod_id'])) : UrlHelper::generateUrl('Products', 'track', array($rProduct['promotion_record_id'])); ?>">
                                         <?php $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_PRODUCT_IMAGE, $rProduct['product_id']); ?>
-                                        <img <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_CLAYOUT1); ?> src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($rProduct['product_id'], ImageDimension::VIEW_CLAYOUT1, $rProduct['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $rProduct['prodcat_name']; ?>" title="<?php echo (!empty($fileRow['afile_attribute_title'])) ? $fileRow['afile_attribute_title'] : $rProduct['prodcat_name']; ?>">
+                                        <img <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_CLAYOUT1); ?>
+                                            src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($rProduct['product_id'], ImageDimension::VIEW_CLAYOUT1, $rProduct['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>"
+                                            alt="<?php echo (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $rProduct['prodcat_name']; ?>"
+                                            title="<?php echo (!empty($fileRow['afile_attribute_title'])) ? $fileRow['afile_attribute_title'] : $rProduct['prodcat_name']; ?>">
                                     </a>
                                 </div>
                             </div>
                             <div class="products-foot">
                                 <div class="products-category">
-                                    <a href="<?php echo UrlHelper::generateUrl('Category', 'View', array($rProduct['prodcat_id'])); ?>"><?php echo $rProduct['prodcat_name']; ?>
+                                    <a
+                                        href="<?php echo UrlHelper::generateUrl('Category', 'View', array($rProduct['prodcat_id'])); ?>"><?php echo $rProduct['prodcat_name']; ?>
                                     </a>
                                 </div>
                                 <div class="products-title">
-                                    <a title="<?php echo CommonHelper::renderHtml($rProduct['selprod_title'], true); ?>" href="<?php echo UrlHelper::generateUrl('Products', 'View', array($rProduct['selprod_id'])); ?>"><?php echo (mb_strlen($rProduct['selprod_title']) > 50) ? mb_substr(CommonHelper::renderHtml($rProduct['selprod_title'], true), 0, 50) . "..." : CommonHelper::renderHtml($rProduct['selprod_title'], true); ?>
+                                    <a title="<?php echo CommonHelper::renderHtml($rProduct['selprod_title'], true); ?>"
+                                        href="<?php echo UrlHelper::generateUrl('Products', 'View', array($rProduct['selprod_id'])); ?>"><?php echo (mb_strlen($rProduct['selprod_title']) > 50) ? mb_substr(CommonHelper::renderHtml($rProduct['selprod_title'], true), 0, 50) . "..." : CommonHelper::renderHtml($rProduct['selprod_title'], true); ?>
                                     </a>
                                 </div>
                                 <?php $this->includeTemplate('_partial/collection-product-price.php', array('product' => $rProduct, 'siteLangId' => $siteLangId), false); ?>
@@ -56,7 +63,7 @@ if ($relatedProductsRs) { ?>
                         </div>
                     </div>
                     <!--/product tile-->
-                <?php
+                    <?php
                 } ?>
             </div>
         </div>

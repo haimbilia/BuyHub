@@ -30,5 +30,5 @@ $actionItemsData = $actionItemsData + [
 </main>
 
 <script>
-    var canEdit = <?php echo $canEdit ? 1 : 0; ?>;
+    var canEdit = <?php echo $canEdit ? 1 : 0; ?>;    
 </script>

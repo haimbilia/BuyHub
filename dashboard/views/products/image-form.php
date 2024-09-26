@@ -9,10 +9,12 @@ $fld->addFieldTagAttribute('accept', "image/*");
 $fld->addFieldTagAttribute('data-name', Labels::getLabel("FRM_PRODUCT_IMAGE", $siteLangId));
 
 $fld = $frm->getField('option_id');
-$fld->addFieldTagAttribute('id', "image_option_id");
+if (null != $fld) {
+    $fld->addFieldTagAttribute('id', "image_option_id");
+}
 
 $fld = $frm->getField('file_type');
-if(null != $fld){
+if (null != $fld) {
     $fld->addFieldTagAttribute('id', "image_file_type");
 }
 
@@ -24,7 +26,7 @@ $fld = $frm->getField('record_id');
 $fld->addFieldTagAttribute('id', "image_record_id");
 
 $fld = $frm->getField('images');
-$fld->value= '<div class="upload__files"><ul class="upload__list" id="productImagesJs"></ul></div>';
+$fld->value = '<div class="upload__files"><ul class="upload__list" id="productImagesJs"></ul></div>';
 
 $displayFooterButtons = false;
 $includeTabs = false;

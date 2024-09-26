@@ -212,6 +212,7 @@ trait BadgeRequestSetup
         }
 
         $db->commitTransaction();
+        CalculativeDataRecord::updateBadgeRequestCount();
         $msg = Labels::getLabel("MSG_REQUESTED_SUCCESSFULLY", $this->siteLangId);
         if (0 < $badgeReqId) {
             $msg = Labels::getLabel("MSG_REQUEST_UPDATED_SUCCESSFULLY", $this->siteLangId);

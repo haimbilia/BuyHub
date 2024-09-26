@@ -1,5 +1,4 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); 
-
 $selectorClass = $selectorClass ?? '';
 ?>
 <ul class="grouping grouping-level grouping-level-<?php echo $level; ?>" id="level-cat-<?php echo $prodcatId; ?>">

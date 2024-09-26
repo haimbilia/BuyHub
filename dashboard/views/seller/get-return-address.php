@@ -19,11 +19,11 @@
                         <h5><?php echo $addressData['ura_name']; ?></h5>
                         <p>
                             <?php echo $addressData['ura_address_line_1'] . '<br>'; ?>
-                            <?php echo (strlen($addressData['ura_address_line_2']) > 0) ? $addressData['ura_address_line_2'] . '<br>' : ''; ?>
-                            <?php echo (strlen($addressData['ura_city']) > 0) ? $addressData['ura_city'] . ',' : ''; ?>
-                            <?php echo (strlen($addressData['state_name']) > 0) ? $addressData['state_name'] . '<br>' : ''; ?>
-                            <?php echo (strlen($addressData['country_name']) > 0) ? $addressData['country_name'] . '<br>' : ''; ?>
-                            <?php echo (strlen($addressData['ura_zip']) > 0) ? Labels::getLabel('LBL_Zip:', $siteLangId) . $addressData['ura_zip'] . '<br>' : ''; ?>
+                            <?php echo (!empty($addressData['ura_address_line_2'])) ? $addressData['ura_address_line_2'] . '<br>' : ''; ?>
+                            <?php echo (!empty($addressData['ura_city'])) ? $addressData['ura_city'] . ',' : ''; ?>
+                            <?php echo (!empty($addressData['state_name'])) ? $addressData['state_name'] . '<br>' : ''; ?>
+                            <?php echo (!empty($addressData['country_name'])) ? $addressData['country_name'] . '<br>' : ''; ?>
+                            <?php echo (!empty($addressData['ura_zip'])) ? Labels::getLabel('LBL_Zip:', $siteLangId) . $addressData['ura_zip'] . '<br>' : ''; ?>
                         </p>
                         <ul class="phone-list">
                             <li class="phone-list-item phone-txt">
@@ -32,8 +32,8 @@
                                     </use>
                                 </svg>
                                 <?php
-                                if (strlen($addressData['ura_phone']) > 0) {
-                                    $addrPhone = '<span class="default-ltr">' . ValidateElement::formatDialCode($addressData['ura_phone_dcode']) . $addressData['ura_phone'] . '</span>';
+                                if (!empty($addressData['ura_phone'])) {
+                                   $addrPhone = '<span class="default-ltr">' . ValidateElement::formatDialCode($addressData['ura_phone_dcode']) . $addressData['ura_phone'] . '</span>';
                                     echo Labels::getLabel('LBL_Phone:', $siteLangId) . $addrPhone . '<br>';
                                 }
                                 ?>

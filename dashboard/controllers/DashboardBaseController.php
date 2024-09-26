@@ -599,18 +599,17 @@ class DashboardBaseController extends FatController
                 'user_phone' => $data['user_phone'],
                 'link' => $link,
                 'user_new_email' => $data['user_new_email'],
-                'user_email' => $data['user_new_email'],
+                'user_email' => $data['user_email'],
             );
             if (!$email->sendChangeEmailRequestNotification($this->siteLangId, $dataArr)) {
                 return false;
             }
-            $data['user_email'] = $data['user_new_email'];
         }
 
         $dataArr = array(
             'user_name' => $data['user_name'],
             'link' => $link,
-            'user_email' => $data['user_email'],
+            'user_email' => $data['user_new_email'],
             'user_phone_dcode' => ValidateElement::formatDialCode($data['user_phone_dcode']),
             'user_phone' => $data['user_phone'],
         );
@@ -830,15 +829,15 @@ class DashboardBaseController extends FatController
 
         $recordCountSrch->doNotLimitRecords();
         if ($isGroupSearch == false) {
-            $recordCountSrch->addFld('count(*) as totalRecords');
+            $recordCountSrch->addFld('count(1) as totalRecords');
             $recordCountSrch->doNotCalculateRecords();
             $results = FatApp::getDb()->fetch($recordCountSrch->getResultSet());
             $defaultRecordCount = !empty($results['totalRecords']) ? $results['totalRecords'] : 0;
         } else {
             $recordCountSrch->getResultSet();
+
             $defaultRecordCount = $recordCountSrch->recordCount();
         }
-        //echo $recordCountSrch->getQuery();
         $this->setPageRecord($defaultRecordCount, $pageSize, $page);
         $post['total_record_count'] = $defaultRecordCount;
     }

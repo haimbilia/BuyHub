@@ -19,7 +19,7 @@ $(document).ready(function () {
 		fcom.displayProcessing();
 		$("#ordersListing").prepend(fcom.getLoader());
 		fcom.updateWithAjax(fcom.makeUrl('Buyer', 'addItemsToCart', [orderId]), '', function (ans) {
-			window.location = fcom.makeUrl('Cart', '', '', siteConstants.webrootfront);
+			window.location = fcom.makeUrl('Cart', '', '', siteConstants.dashboard_redirect);
 			return true;
 		});
 	};

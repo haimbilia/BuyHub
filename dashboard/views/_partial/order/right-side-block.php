@@ -2,6 +2,7 @@
 $canViewShippingCharges = isset($canViewShippingCharges) ? $canViewShippingCharges : false;
 $canViewTaxCharges = isset($canViewTaxCharges) ? $canViewTaxCharges : false;
 $primaryOrder = isset($primaryOrder) ? $primaryOrder : true;
+$sellerView = isset($sellerView) ? $sellerView : false;
 
 $transferBank = (isset($orderDetail['plugin_code']) && 'TransferBank' == $orderDetail['plugin_code']);
 $cartTotal = $shippingCharges = $totalTax = $selProdTotalSpecialPrice = 0;
@@ -62,7 +63,7 @@ $totalSaving = $selProdTotalSpecialPrice + $discount + $volDiscount;
                         <?php }
                     }
                     if (true == $canViewTaxCharges && 0 < $totalTax) { ?>
-                       <li>
+                        <li>
                             <span class="lable"><?php echo Labels::getLabel('LBL_TAXABLE_AMOUNT', $siteLangId); ?> </span>
                             <span class="value"><?php echo CommonHelper::displayMoneyFormat($taxableAmount, true, false, true, false, true); ?></span>
                         </li>
@@ -171,7 +172,7 @@ $totalSaving = $selProdTotalSpecialPrice + $discount + $volDiscount;
             </div>
         <?php } ?>
 
-        <?php if (!empty($orderDetail['shippingAddress']) && $productType != Product::PRODUCT_TYPE_DIGITAL) { ?>
+        <?php if (!empty($orderDetail['shippingAddress']) && ($productType != Product::PRODUCT_TYPE_DIGITAL && $productType != Product::PRODUCT_TYPE_SERVICE)) { ?>
             <div class="order-block">
                 <h4><?php echo Labels::getLabel('LBL_Shipping_ADDRESS', $siteLangId); ?></h4>
                 <div class="order-block-data">
@@ -239,6 +240,26 @@ $totalSaving = $selProdTotalSpecialPrice + $discount + $volDiscount;
                             <?php } ?>
                         </ul>
 
+                    </div>
+                </div>
+            </div>
+        <?php } ?>
+
+        <?php if (!empty($childOrderDetail['op_comments'])) { ?>
+            <div class="order-block">
+                <h4 class="dropdown-toggle-custom collapsed" data-bs-toggle="collapse" data-bs-target="#order-block-comments" aria-expanded="false" aria-controls="order-block2">
+                    <?php echo Labels::getLabel('LBL_CUSTOMER_COMMENTS', $siteLangId); ?>
+                    <i class="dropdown-toggle-custom-arrow"></i>
+                </h4>
+                <div class="collapse" id="order-block-comments">
+                    <div class="order-block-data">
+                        <?php
+                        if ($sellerView) {
+                            echo FatUtility::decodeHtmlEntities($childOrderDetail['op_comments']);                            
+                        } else {
+                            echo $childOrderDetail['op_comments'];
+                        }
+                        ?>
                     </div>
                 </div>
             </div>

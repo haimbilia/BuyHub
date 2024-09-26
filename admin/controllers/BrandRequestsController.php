@@ -84,16 +84,20 @@ class BrandRequestsController extends ListingBaseController
 
     public function search()
     {
-        $this->getListingData();
+        $loadPagination = FatApp::getPostedData('loadPagination', FatUtility::VAR_INT, 0);
+        $this->getListingData($loadPagination);
         $jsonData = [
-            'listingHtml' => $this->_template->render(false, false, 'brand-requests/search.php', true),
             'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
         ];
+
+        if (!$loadPagination || !FatUtility::isAjaxCall()) {
+            $jsonData['listingHtml'] = $this->_template->render(false, false, 'brand-requests/search.php', true);
+        }
 
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    private function getListingData()
+    private function getListingData($loadPagination = 0)
     {
         $this->objPrivilege->canViewBrandRequests();
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
@@ -141,15 +145,20 @@ class BrandRequestsController extends ListingBaseController
             $srch->addCondition('brand_id', '=', $brandId);
         }
 
-        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        if ($loadPagination && FatUtility::isAjaxCall()) {
+            $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        }
         $srch->doNotCalculateRecords();
-        $srch->addMultipleFields(array('b.*', 'u.user_name','user_id','credential_username', 'credential_email', 'shop_id', 'shop_updated_on', 'ifnull(shop_name, shop_identifier) as shop_name', 'COALESCE(bl.brand_name, b.brand_identifier) as brand_name'));
+        $srch->addMultipleFields(array('b.*', 'u.user_name', 'user_id', 'credential_username', 'credential_email', 'shop_id', 'shop_updated_on', 'ifnull(shop_name, shop_identifier) as shop_name', 'COALESCE(bl.brand_name, b.brand_identifier) as brand_name'));
         $page = (empty($page) || $page <= 0) ? 1 : $page;
         $page = FatUtility::int($page);
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
         $srch->addOrder($sortBy, $sortOrder);
-        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
+        $records = [];
+        if (!$loadPagination) {
+            $records = FatApp::getDb()->fetchAll($srch->getResultSet());
+        }
         $this->set("arrListing", $records);
         $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
@@ -248,6 +257,7 @@ class BrandRequestsController extends ListingBaseController
             $brand->rewriteUrl($post['urlrewrite_custom']);
         }
         /* ] */
+        CalculativeDataRecord::updateBrandRequestCount();
         Product::updateMinPrices(0, 0, $recordId);
         $this->set('msg', $this->str_setup_successful);
         $this->set('recordId', $recordId);
@@ -524,7 +534,7 @@ class BrandRequestsController extends ListingBaseController
                 LibHelper::exitWithError(Labels::getLabel('LBL_Email_Could_Not_Be_Sent', $this->siteLangId));
             }
         }
-
+        CalculativeDataRecord::updateBrandRequestCount();
         $this->set('msg', Labels::getLabel('MSG_BRAND_APPROVED_SUCCESSFULLY', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }

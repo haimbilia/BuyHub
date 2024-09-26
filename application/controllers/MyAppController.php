@@ -53,9 +53,12 @@ class MyAppController extends FatController
             /* to keep track of temporary hold the product stock, update time in each row of tbl_product_stock_hold against current user[ */
             $cartObj = new Cart(UserAuthentication::getLoggedUserId(true), $this->siteLangId, $this->app_user['temp_user_id']);
             $cartObj->excludeTax();
-            $cartProducts = $cartObj->getBasketProducts($this->siteLangId);
+            $cartProducts = $cartObj->getBasketProducts($this->siteLangId, false);
             if ($cartProducts) {
                 foreach ($cartProducts as $product) {
+                    if (1 > $product['selprod_track_inventory']) {
+                        continue;
+                    }
                     $cartObj->updateTempStockHold($product['selprod_id'], $product['quantity']);
                 }
             }
@@ -173,9 +176,12 @@ class MyAppController extends FatController
                     'cacheTimeStamp' => UrlHelper::getCacheTimestamp($this->siteLangId),
                     'close' => Labels::getLabel('LBL_CLOSE', $this->siteLangId),
                     'copiedText' => Labels::getLabel('LBL_COPIED_TEXT', $this->siteLangId),
-                    'copied' => Labels::getLabel('LBL_COPIED', $this->siteLangId),
                     'fieldNotFound' => Labels::getLabel('LBL_{field}_NOT_FOUND', $this->siteLangId),
                     'faqsSearchStringLengthMsg' => CommonHelper::replaceStringData(Labels::getLabel('LBL_TYPE_ATLEAST_{LEN}_CHARACTERS_TO_SEARCH_IN_FAQS.', $this->siteLangId), ['{LEN}' => Faq::FAQS_SEARCH_STRING_LENGTH]),
+                    'overwriteCartItems' => Labels::getLabel('LBL_DO_YOU_WANT_TO_REPLACE_EXISTING_SHOP_ITEMS?', $this->siteLangId),
+                    'maxLengthValidator' => CommonHelper::replaceStringData(Labels::getLabel('FRM_USED_{charsTyped}_of_{charsTotal}_CHAR', $this->siteLangId), ["{charsTyped}" => "%charsTyped%", "{charsTotal}" => "%charsTotal%"]), /* Used By Maxlength bootstrap validator. */
+                    'geoLocationNotSupported' => Labels::getLabel('FRM_GEO_LOCATION_NOT_SUPPORTED', $this->siteLangId),
+                    'dontReloadPageWhilePayment' => Labels::getLabel('FRM_PLEASE_DON`T_REFRESH/RELOAD_OR_HITTING_BACK_BUTTON_ON_THE_BROWSER._WE_ARE_PROCESSING_YOUR_TRANSACTION.', $this->siteLangId),
                 );
 
                 $languages = Language::getAllNames(false);
@@ -865,7 +871,12 @@ class MyAppController extends FatController
                     LibHelper::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
                 }
 
-                $userInfo = $uObj->getUserInfo(array('user_name', 'user_id', 'user_phone_dcode', 'user_phone', 'credential_email'), true, true, true);
+                $userInfo = $uObj->getUserInfo(array('user_name', 'user_id', 'user_phone_dcode', 'user_phone', 'credential_email', 'credential_active', 'credential_verified'), false, false, true);
+                if(!empty($userInfo) && $userInfo['credential_active'] == applicationConstants::INACTIVE){
+                    LibHelper::dieJsonError(Labels::getLabel('ERR_USER_NOT_ACTIVE', $this->siteLangId));
+                } elseif(!empty($userInfo) && $userInfo['credential_verified'] == applicationConstants::NO) {
+                    LibHelper::dieJsonError(Labels::getLabel('ERR_USER_NOT_VERIFIED', $this->siteLangId));
+                }
                 $data = array_merge(['token' => $token], $userInfo);
                 $this->set('data', $data);
             }
@@ -938,7 +949,7 @@ class MyAppController extends FatController
             if (!empty($removeFlds)) {
                 $recordCountSrch->removeFld($removeFlds);
             }
-            $recordCountSrch->addFld('count(*) as totalRecords');
+            $recordCountSrch->addFld('count(1) as totalRecords');
             $recordCountSrch->doNotCalculateRecords();
             $results = FatApp::getDb()->fetch($recordCountSrch->getResultSet());
             $defaultRecordCount = !empty($results['totalRecords']) ? $results['totalRecords'] : 0;
@@ -975,7 +986,7 @@ class MyAppController extends FatController
             if (!empty($removeFlds)) {
                 $recordCountSrch->removeFld($removeFlds);
             }
-            $recordCountSrch->addFld('count(*) as totalRecords');
+            $recordCountSrch->addFld('count(1) as totalRecords');
             $recordCountSrch->doNotCalculateRecords();
             $results = FatApp::getDb()->fetch($recordCountSrch->getResultSet());
             $defaultRecordCount = !empty($results['totalRecords']) ? $results['totalRecords'] : 0;

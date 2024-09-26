@@ -45,8 +45,8 @@
                             $fileExt = pathinfo($attachment['preview'], PATHINFO_EXTENSION);
                             $fileExt = strtolower($fileExt);
                             $videoPath = AttachedFile::getProductPreviewVideoUrl($attachment['prev_afile_id']);
-                            $imagePath = UrlHelper::generateFullUrl('image', 'previewImage', array($attachment['prev_afile_id'])) . '?' . time(); 
-                            ?>
+                            $imagePath = UrlHelper::generateFullUrl('image', 'previewImage', array($attachment['prev_afile_id'])) . '?' . time();
+                    ?>
                             <li>
                                 <div class="clipboard">
                                     <div class="copy-input">
@@ -62,7 +62,7 @@
                                             </button>
                                         <?php } ?>
                                         <?php if (in_array($fileExt, applicationConstants::allowedImageFileExtensions())) { ?>
-                                            <a class="copy-btn play-preview" href=<?php echo $imagePath; ?>  title="<?php echo $attachment['preview']; ?>" data-featherlight="image">
+                                            <a class="copy-btn play-preview" href=<?php echo $imagePath; ?> title="<?php echo $attachment['preview']; ?>" data-fancybox="gallery-<?php echo $product['selprod_id']; ?>">
                                                 <svg class="svg" width="18" height="18">
                                                     <use xlink:href="<?php echo  CONF_WEBROOT_FRONTEND; ?>images/retina/sprite.svg#view">
                                                     </use>

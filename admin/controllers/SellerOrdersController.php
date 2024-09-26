@@ -713,6 +713,7 @@ class SellerOrdersController extends ListingBaseController
         }
 
         $db->commitTransaction();
+        CalculativeDataRecord::updateOrderCancelRequestCount();
         $this->set('msg', $this->str_update_record);
         $this->_template->render(false, false, 'json-success.php');
     }

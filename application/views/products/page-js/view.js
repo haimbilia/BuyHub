@@ -35,6 +35,10 @@ $(function () {
         var data = $("#frmBuyProduct").serialize();
         var selprod_id = $(this).attr('data-id');
         var quantity = $(this).attr('data-min-qty');
+        var cartHasProducts = $(this).data('cartHasProduct');
+        if (0 < cartHasProducts && !confirm(langLbl.overwriteCartItems)) {
+            return false;
+        }
         data = "selprod_id=" + selprod_id + "&quantity=" + quantity;
         ykevents.addToCart();
         fcom.updateWithAjax(fcom.makeUrl('cart', 'add'), data, function (ans) {
@@ -250,6 +254,52 @@ function setupReviewAbuse(frm) {
         }, '', false);
     };
 
+    let lastIndex = 0;
+    let pageNumber = 1;
+    reviewsWithImages = function (selprodId, page = 1) {
+        riDv = '#itemRatings .reviewImagesListJs';
+        data = 'productView=1&selprod_id=' + selprodId + '&page=' + page;
+        $(riDv).prepend(fcom.getLoader());
+        fcom.updateWithAjax(fcom.makeUrl('Reviews', 'getReviewsImages'), data, function (ans) {
+            fcom.closeProcessing();
+            fcom.removeLoader();
+            $('.revsMoreImagesJs').remove();
+            if ('' == ans.html && 1 < page) {
+                lastIndex = 0;
+                return;
+            }
+
+            if ('' == ans.html) {
+                $('.reviewsWithImagesSectionJs').remove();
+            } else {
+                $('.reviewsWithImagesSectionJs').fadeIn();
+                $(riDv).append(ans.html);
+                pageNumber = ans.page;
+                /* 
+                $.fancybox.close();
+                let selector = riDv + " [data-fancybox]";
+                $(selector).fancybox({
+                    afterShow: function (instance, current) {
+                        if (current.index === instance.group.length - 1) {
+                            if (ans.total_records > instance.group.length) {
+                                lastIndex = current.index;
+                                fancyboxInstance = instance;
+                                reviewsWithImages(selprodId, page + 1);
+                            }
+                        }
+                    },
+                    afterClose: function () {
+                        if (1 < pageNumber && 0 < lastIndex) {
+                            // $.fancybox.open($(selector), {}, (lastIndex + 1));
+                            $(selector + ':eq(' + (lastIndex + 1) + ')').click();
+                            lastIndex = 0;
+                        }
+                    }
+                }); */
+            }
+        }, '', false);
+    };
+
     goToLoadMoreReviews = function (page) {
         if (typeof page == undefined || page == null) {
             page = 1;
@@ -275,7 +325,7 @@ function setupReviewAbuse(frm) {
             reviews(document.frmReviewSearch);
         });
     }
-    
+
     rateAndReviewProduct = function (product_id) {
         if (isUserLogged() == 0) {
             loginPopUpBox();

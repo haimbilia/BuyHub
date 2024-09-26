@@ -39,8 +39,33 @@ class BuyerController extends BuyerBaseController
 
         $srch->addMultipleFields(
             array(
-                'order_number', 'order_id', 'order_user_id', 'op_selprod_id', 'op_is_batch', 'selprod_product_id', 'order_date_added', 'order_net_amount', 'op_invoice_number', 'totCombinedOrders as totOrders', 'op_selprod_title', 'op_product_name', 'op_product_type', 'op_status_id', 'op_id', 'op_qty', 'op_selprod_options', 'op_brand_name', 'op_other_charges', 'op_unit_price', 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name',
-                'orderstatus_color_class', 'order_pmethod_id', 'opshipping_fulfillment_type', 'op_rounding_off', 'op_selprod_return_age', 'op_selprod_cancellation_age'
+                'order_number',
+                'order_id',
+                'order_user_id',
+                'op_selprod_id',
+                'op_is_batch',
+                'selprod_product_id',
+                'order_date_added',
+                'order_net_amount',
+                'op_invoice_number',
+                'totCombinedOrders as totOrders',
+                'op_selprod_title',
+                'op_product_name',
+                'op_product_type',
+                'op_status_id',
+                'op_id',
+                'op_qty',
+                'op_selprod_options',
+                'op_brand_name',
+                'op_other_charges',
+                'op_unit_price',
+                'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name',
+                'orderstatus_color_class',
+                'order_pmethod_id',
+                'opshipping_fulfillment_type',
+                'op_rounding_off',
+                'op_selprod_return_age',
+                'op_selprod_cancellation_age'
             )
         );
         $rs = $srch->getResultSet();
@@ -264,7 +289,7 @@ class BuyerController extends BuyerBaseController
         }
 
         $opSrchObj = Orders::searchOrderProducts(['order_id' => $orderDetail['order_id']]);
-        $opSrchObj->addFld('count(*) as opCount');
+        $opSrchObj->addFld('count(1) as opCount');
         $opSrchObj->doNotCalculateRecords();
         $childOrderProductsCountData = FatApp::getDb()->fetch($opSrchObj->getResultSet());
         if (1 > $opId || 1 == $childOrderProductsCountData['opCount']) {
@@ -349,11 +374,9 @@ class BuyerController extends BuyerBaseController
         }
 
         $orderStatusArr = Orders::getOrderPaymentStatusArr($this->siteLangId);
-
         $arr = (true == $primaryOrderDisplay) ? [$childOrderDetail] : $childOrderDetail;
         $this->set('arr', $arr);
         $orderColorClasses =  OrderStatus::getOrderStatusColorClassArray();
-
         $frm = $this->getTransferBankForm($this->siteLangId, $orderId);
         $this->set('frm', $frm);
         $this->set('highlightEnabled', $highlightEnabled);
@@ -696,14 +719,41 @@ class BuyerController extends BuyerBaseController
         $srch->setPageSize($pagesize);
         $srch->addMultipleFields(
             array(
-                'order_number', 'order_id', 'order_user_id', 'order_date_added', 'order_net_amount', 'op_invoice_number',
-                'totCombinedOrders as totOrders', 'op_selprod_id', 'op_selprod_title', 'op_product_name', 'op_id', 'op_other_charges', 'op_unit_price',
-                'op_qty', 'op_selprod_options', 'op_brand_name', 'op_shop_name', 'op_status_id', 'op_product_type',
-                'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'orderstatus_color_class',
-                'order_pmethod_id', 'order_status', 'plugin_name', 'IFNULL(orrequest_id, 0) as return_request',
-                'IFNULL(ocrequest_id, 0) as cancel_request', 'op_selprod_return_age',
-                'op_selprod_cancellation_age', 'order_payment_status',
-                'order_deleted', 'plugin_code', 'opshipping_fulfillment_type', 'op_rounding_off', 'selprod_product_id', 'orderstatus_id'
+                'order_number',
+                'order_id',
+                'order_user_id',
+                'order_date_added',
+                'order_net_amount',
+                'op_invoice_number',
+                'totCombinedOrders as totOrders',
+                'op_selprod_id',
+                'op_selprod_title',
+                'op_product_name',
+                'op_id',
+                'op_other_charges',
+                'op_unit_price',
+                'op_qty',
+                'op_selprod_options',
+                'op_brand_name',
+                'op_shop_name',
+                'op_status_id',
+                'op_product_type',
+                'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name',
+                'orderstatus_color_class',
+                'order_pmethod_id',
+                'order_status',
+                'plugin_name',
+                'IFNULL(orrequest_id, 0) as return_request',
+                'IFNULL(ocrequest_id, 0) as cancel_request',
+                'op_selprod_return_age',
+                'op_selprod_cancellation_age',
+                'order_payment_status',
+                'order_deleted',
+                'plugin_code',
+                'opshipping_fulfillment_type',
+                'op_rounding_off',
+                'selprod_product_id',
+                'orderstatus_id'
             )
         );
 
@@ -1203,6 +1253,8 @@ class BuyerController extends BuyerBaseController
             FatUtility::dieWithError(Message::getHtml());
         }
 
+        CalculativeDataRecord::updateOrderCancelRequestCount();
+
         /* send notification to admin */
         $notificationData = array(
             'notification_record_type' => Notification::TYPE_ORDER_CANCELATION,
@@ -1360,8 +1412,20 @@ class BuyerController extends BuyerBaseController
         $srch->setPageSize($pagesize);
         $srch->addMultipleFields(
             array(
-                'orrequest_id', 'orrequest_user_id', 'orrequest_qty', 'orrequest_type', 'orrequest_reference', 'orrequest_date', 'orrequest_status',
-                'op_invoice_number', 'op_selprod_title', 'op_product_name', 'op_brand_name', 'op_selprod_options', 'op_selprod_sku', 'op_product_model',
+                'orrequest_id',
+                'orrequest_user_id',
+                'orrequest_qty',
+                'orrequest_type',
+                'orrequest_reference',
+                'orrequest_date',
+                'orrequest_status',
+                'op_invoice_number',
+                'op_selprod_title',
+                'op_product_name',
+                'op_brand_name',
+                'op_selprod_options',
+                'op_selprod_sku',
+                'op_product_model',
             )
         );
         $requests = FatApp::getDb()->fetchAll($srch->getResultSet());
@@ -1386,8 +1450,25 @@ class BuyerController extends BuyerBaseController
         $srch->addCondition('orrequest_user_id', '=', UserAuthentication::getLoggedUserId());
         $srch->addMultipleFields(
             array(
-                'orrequest_id', 'orrequest_user_id', 'orrequest_qty', 'orrequest_type', 'orrequest_reference', 'orrequest_date', 'orrequest_status',
-                'op_invoice_number', 'op_selprod_title', 'op_product_name', 'op_brand_name', 'op_selprod_options', 'op_selprod_sku', 'op_product_model', 'op_id', 'op_is_batch', 'op_selprod_id', 'order_id', 'order_number'
+                'orrequest_id',
+                'orrequest_user_id',
+                'orrequest_qty',
+                'orrequest_type',
+                'orrequest_reference',
+                'orrequest_date',
+                'orrequest_status',
+                'op_invoice_number',
+                'op_selprod_title',
+                'op_product_name',
+                'op_brand_name',
+                'op_selprod_options',
+                'op_selprod_sku',
+                'op_product_model',
+                'op_id',
+                'op_is_batch',
+                'op_selprod_id',
+                'order_id',
+                'order_number'
             )
         );
         $srch->addOrder('orrequest_date', 'DESC');
@@ -1413,13 +1494,42 @@ class BuyerController extends BuyerBaseController
         $srch->doNotLimitRecords();
         $srch->addMultipleFields(
             array(
-                'orrequest_id', 'orrequest_op_id', 'orrequest_user_id', 'orrequest_qty', 'orrequest_type',
-                'orrequest_date', 'orrequest_status', 'orrequest_reference', 'op_invoice_number', 'op_selprod_title', 'op_product_name',
-                'op_brand_name', 'op_selprod_options', 'op_selprod_sku', 'op_product_model', 'op_qty',
-                'op_unit_price', 'op_selprod_user_id', 'IFNULL(orreason_title, orreason_identifier) as orreason_title',
-                'op_shop_id', 'op_shop_name', 'op_shop_owner_name', 'order_tax_charged', 'op_other_charges', 'op_refund_amount', 'op_commission_percentage',
-                'op_affiliate_commission_percentage', 'op_commission_include_tax', 'op_commission_include_shipping', 'op_free_ship_upto', 'op_actual_shipping_charges',
-                'op_rounding_off', 'op_selprod_id', 'selprod_product_id', 'opshipping_by_seller_user_id', 'op_tax_after_discount'
+                'orrequest_id',
+                'orrequest_op_id',
+                'orrequest_user_id',
+                'orrequest_qty',
+                'orrequest_type',
+                'orrequest_date',
+                'orrequest_status',
+                'orrequest_reference',
+                'op_invoice_number',
+                'op_selprod_title',
+                'op_product_name',
+                'op_brand_name',
+                'op_selprod_options',
+                'op_selprod_sku',
+                'op_product_model',
+                'op_qty',
+                'op_unit_price',
+                'op_selprod_user_id',
+                'IFNULL(orreason_title, orreason_identifier) as orreason_title',
+                'op_shop_id',
+                'op_shop_name',
+                'op_shop_owner_name',
+                'order_tax_charged',
+                'op_other_charges',
+                'op_refund_amount',
+                'op_commission_percentage',
+                'op_affiliate_commission_percentage',
+                'op_commission_include_tax',
+                'op_commission_include_shipping',
+                'op_free_ship_upto',
+                'op_actual_shipping_charges',
+                'op_rounding_off',
+                'op_selprod_id',
+                'selprod_product_id',
+                'opshipping_by_seller_user_id',
+                'op_tax_after_discount'
             )
         );
         $rs = $srch->getResultSet();
@@ -1544,6 +1654,7 @@ class BuyerController extends BuyerBaseController
             Message::addErrorMessage($message);
             FatApp::redirectUser(UrlHelper::generateUrl('Buyer', 'viewOrderReturnRequest', array($orrequest_id)));
         }
+        CalculativeDataRecord::updateOrderReturnRequestCount();
 
         /* email notification handling[ */
         $emailNotificationObj = new EmailHandler();
@@ -1851,7 +1962,11 @@ class BuyerController extends BuyerBaseController
         $ratingAspects = $selProdRating;
 
         $shopRatingTypesArr = SelProdRating::getShopRatingTypeArr($this->siteLangId);
-        $deliveryRatingTypesArr = SelProdRating::getDeliveryRatingTypeArr($this->siteLangId);
+
+        $deliveryRatingTypesArr = [];
+        if ($opDetail['op_product_type'] != Product::PRODUCT_TYPE_SERVICE) {
+            $deliveryRatingTypesArr = SelProdRating::getDeliveryRatingTypeArr($this->siteLangId);
+        }
 
         if (!empty($shopRatingTypesArr) || !empty($deliveryRatingTypesArr)) {
             $ratingAspects = (0 < count($shopRatingTypesArr)) ? ($shopRatingTypesArr + $ratingAspects) : $ratingAspects;
@@ -1979,7 +2094,10 @@ class BuyerController extends BuyerBaseController
         }
 
         $shopRatingTypesArr = SelProdRating::getShopRatingTypeArr($this->siteLangId);
-        $deliveryRatingTypesArr = SelProdRating::getDeliveryRatingTypeArr($this->siteLangId);
+        $deliveryRatingTypesArr = [];
+        if ($opDetail['op_product_type'] != Product::PRODUCT_TYPE_SERVICE) {
+            $deliveryRatingTypesArr = SelProdRating::getDeliveryRatingTypeArr($this->siteLangId);
+        }
 
         if (!empty($shopRatingTypesArr) || !empty($deliveryRatingTypesArr)) {
             $ratingAspects = (0 < count($shopRatingTypesArr)) ? ($shopRatingTypesArr + $ratingAspects) : $ratingAspects;
@@ -2020,6 +2138,7 @@ class BuyerController extends BuyerBaseController
 
         SelProdRating::updateSellerRating($sellerId);
         SelProdReview::updateSellerTotalReviews($sellerId);
+        SelProdReview::updateProductRating($productId);
 
         $spreviewId = $selProdReview->getMainTableRecordId();
 
@@ -2141,11 +2260,7 @@ class BuyerController extends BuyerBaseController
             FatApp::redirectUser(UrlHelper::generateUrl('Buyer', 'orderReturnRequests'));
         }
 
-        if ($opDetail["op_product_type"] == Product::PRODUCT_TYPE_DIGITAL) {
-            $getBuyerAllowedOrderReturnStatuses = (array) Orders::getBuyerAllowedOrderReturnStatuses(true);
-        } else {
-            $getBuyerAllowedOrderReturnStatuses = (array) Orders::getBuyerAllowedOrderReturnStatuses();
-        }
+        $getBuyerAllowedOrderReturnStatuses = (array) Orders::getBuyerAllowedOrderReturnStatuses($opDetail["op_product_type"]);
 
         if (!in_array($opDetail["op_status_id"], $getBuyerAllowedOrderReturnStatuses)) {
             $orderStatuses = Orders::getOrderProductStatusArr($this->siteLangId);
@@ -2238,11 +2353,7 @@ class BuyerController extends BuyerBaseController
             }
         }
 
-        if ($opDetail["op_product_type"] == Product::PRODUCT_TYPE_DIGITAL) {
-            $getBuyerAllowedOrderReturnStatuses = (array) Orders::getBuyerAllowedOrderReturnStatuses(true);
-        } else {
-            $getBuyerAllowedOrderReturnStatuses = (array) Orders::getBuyerAllowedOrderReturnStatuses();
-        }
+        $getBuyerAllowedOrderReturnStatuses = (array) Orders::getBuyerAllowedOrderReturnStatuses($opDetail["op_product_type"]);
 
         if (!in_array($opDetail["op_status_id"], $getBuyerAllowedOrderReturnStatuses)) {
             $orderStatuses = Orders::getOrderProductStatusArr($this->siteLangId);
@@ -2324,6 +2435,7 @@ class BuyerController extends BuyerBaseController
         $orderObj = new Orders();
         $orderObj->addChildProductOrderHistory($opDetail['op_id'], $opDetail['order_language_id'], FatApp::getConfig("CONF_RETURN_REQUEST_ORDER_STATUS"), Labels::getLabel('LBL_Buyer_Raised_Return_Request', $opDetail['order_language_id']), 1);
         /* ] */
+        CalculativeDataRecord::updateOrderReturnRequestCount();
 
         /* sending of email notification[ */
         $emailNotificationObj = new EmailHandler();
@@ -2941,12 +3053,67 @@ class BuyerController extends BuyerBaseController
         $prodSrch->joinTable('(' . $selProdReviewObj->getQuery() . ')', 'LEFT OUTER JOIN', 'sq_sprating.spreview_product_id = product_id', 'sq_sprating');
         $prodSrch->addMultipleFields(
             array(
-                'product_id', 'selprod_sku', 'product_identifier', 'COALESCE(product_name,product_identifier) as product_name', 'product_seller_id', 'product_model', 'product_type', 'prodcat_id', 'COALESCE(prodcat_name,prodcat_identifier) as prodcat_name', 'product_upc', 'product_isbn', 'product_short_description', 'product_description',
-                'selprod_id', 'selprod_user_id', 'selprod_code', 'selprod_condition', 'selprod_price', 'special_price_found', 'splprice_start_date', 'splprice_end_date', 'COALESCE(selprod_title, product_name, product_identifier) as selprod_title', 'selprod_warranty', 'selprod_return_policy', 'selprodComments',
-                'theprice', 'selprod_stock', 'selprod_threshold_stock_level', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'brand_id', 'COALESCE(brand_name, brand_identifier) as brand_name', 'brand_short_description', 'user_name',
-                'shop_id', 'COALESCE(shop_name, shop_identifier) as shop_name', 'COALESCE(sq_sprating.prod_rating,0) prod_rating ', 'COALESCE(sq_sprating.totReviews,0) totReviews',
-                'splprice_display_dis_type', 'splprice_display_dis_val', 'splprice_display_list_price', 'product_attrgrp_id', 'product_youtube_video', 'product_cod_enabled', 'selprod_cod_enabled', 'selprod_available_from', 'selprod_min_order_qty', 'product_updated_on', 'product_warranty', 'selprod_return_age', 'selprod_cancellation_age', 'shop_return_age',
-                'shop_cancellation_age', 'selprod_fulfillment_type', 'shop_fulfillment_type', 'product_fulfillment_type', 'product_attachements_with_inventory', 'selprod_product_id', 'COALESCE(shop_state_l.state_name,state_identifier) as shop_state_name', 'COALESCE(shop_country_l.country_name,shop_country.country_code) as shop_country_name', 'selprod_condition', 'product_warranty_unit'
+                'product_id',
+                'selprod_sku',
+                'product_identifier',
+                'COALESCE(product_name,product_identifier) as product_name',
+                'product_seller_id',
+                'product_model',
+                'product_type',
+                'prodcat_id',
+                'COALESCE(prodcat_name,prodcat_identifier) as prodcat_name',
+                'product_upc',
+                'product_isbn',
+                'product_short_description',
+                'product_description',
+                'selprod_id',
+                'selprod_user_id',
+                'selprod_code',
+                'selprod_condition',
+                'selprod_price',
+                'special_price_found',
+                'splprice_start_date',
+                'splprice_end_date',
+                'COALESCE(selprod_title, product_name, product_identifier) as selprod_title',
+                'selprod_warranty',
+                'selprod_return_policy',
+                'selprodComments',
+                'theprice',
+                'selprod_stock',
+                'selprod_threshold_stock_level',
+                'IF(selprod_stock > 0, 1, 0) AS in_stock',
+                'brand_id',
+                'COALESCE(brand_name, brand_identifier) as brand_name',
+                'brand_short_description',
+                'user_name',
+                'shop_id',
+                'COALESCE(shop_name, shop_identifier) as shop_name',
+                'COALESCE(sq_sprating.prod_rating,0) prod_rating ',
+                'COALESCE(sq_sprating.totReviews,0) totReviews',
+                'splprice_display_dis_type',
+                'splprice_display_dis_val',
+                'splprice_display_list_price',
+                'product_attrgrp_id',
+                'product_youtube_video',
+                'product_cod_enabled',
+                'selprod_cod_enabled',
+                'selprod_available_from',
+                'selprod_min_order_qty',
+                'product_updated_on',
+                'product_warranty',
+                'selprod_return_age',
+                'selprod_cancellation_age',
+                'shop_return_age',
+                'shop_cancellation_age',
+                'selprod_fulfillment_type',
+                'shop_fulfillment_type',
+                'product_fulfillment_type',
+                'product_attachements_with_inventory',
+                'selprod_product_id',
+                'COALESCE(shop_state_l.state_name,state_identifier) as shop_state_name',
+                'COALESCE(shop_country_l.country_name,shop_country.country_code) as shop_country_name',
+                'selprod_condition',
+                'product_warranty_unit'
             )
         );
         $productRs = $prodSrch->getResultSet();
@@ -2991,5 +3158,191 @@ class BuyerController extends BuyerBaseController
             $this->nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $action)));
         }
         return $this->nodes;
+    }
+
+    public function giftCards()
+    {
+        $isSplitPaymentMethod = Plugin::isSplitPaymentEnabled($this->siteLangId);
+        if ($isSplitPaymentMethod) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_UNAUTHORISED_ACCESS'), false, true);
+            CommonHelper::redirectUserReferer();
+        }
+        $frm = $this->getGiftCardSearchForm($this->siteLangId);
+        $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_RECEIVER_NAME,_EMAIL_OR_CODE', $this->siteLangId));
+        $this->set('frmSearch', $frm);
+        $this->_template->render(true, true);
+    }
+
+    public function searchGiftCards()
+    {
+        $isSplitPaymentMethod = Plugin::isSplitPaymentEnabled($this->siteLangId);
+        if ($isSplitPaymentMethod) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_UNAUTHORISED_ACCESS'));
+        }
+        $frm = $this->getGiftCardSearchForm($this->siteLangId);
+        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        if ($page < 2) {
+            $page = 1;
+        }
+        $keyword = $post['keyword'];
+        $pagesize = FatApp::getConfig('conf_page_size', FatUtility::VAR_INT, 10);
+
+        $srch = GiftCards::getSearchObject();
+        $srch->joinTable(Orders::DB_TBL, 'INNER JOIN', 'ogc.ogcards_order_id = orders.order_id', 'orders');
+        $srch->addCondition('ogcards_sender_id', '=', UserAuthentication::getLoggedUserId());
+        if (!empty($keyword)) {
+            $cond = $srch->addCondition('ogcards_receiver_name', 'like', '%' . $keyword . '%');
+            $cond->attachCondition('ogcards_receiver_email', 'like', '%' . $keyword . '%');
+            $cond->attachCondition('ogcards_code', 'like', '%' . $keyword . '%');
+        }
+        $orderUsed = FatApp::getPostedData('ogcards_status', FatUtility::VAR_INT, -1);
+        if ($orderUsed >= 0) {
+            $cond = $srch->addCondition('ogcards_status', '=', $orderUsed);
+        }
+
+        $paymetType = FatApp::getPostedData('order_payment_status', FatUtility::VAR_INT, -1);
+        if ($paymetType >= 0) {
+            $cond = $srch->addCondition('order_payment_status', '=', $paymetType);
+        }
+        $fromDate = FatApp::getPostedData('date_from', FatUtility::VAR_DATE, '');
+        if (!empty($fromDate)) {
+            $cond = $srch->addCondition('ogcards_created_on', '>=', $fromDate);
+        }
+
+        $toDate = FatApp::getPostedData('date_to', FatUtility::VAR_DATE, '');
+        if (!empty($toDate)) {
+            $cond = $srch->addCondition('ogcards_created_on', '<=', $toDate, 'and', true);
+        }
+
+        $srch->addMultipleFields(array('ogcards_id', 'ogcards_order_id', 'ogcards_code', 'ogcards_sender_id', 'ogcards_receiver_name', 'ogcards_receiver_email', 'ogcards_status', 'ogcards_created_on', 'order_payment_status', 'ogcards_created_on','order_net_amount'));
+
+        $srch->doNotCalculateRecords();
+        $recordCountSrch = clone $srch;
+        $srch->doNotCalculateRecords();
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pagesize);
+        $srch->addOrder('ogcards_created_on', 'DESC');
+        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
+
+        $this->setRecordCount($recordCountSrch, $pagesize, $page, $post, false);
+        $orderPaymentStatusArr = Orders::getOrderPaymentStatusArr($this->siteLangId);
+        unset($orderPaymentStatusArr[Orders::ORDER_PAYMENT_CANCELLED]);
+        $this->set('orderPaymentStatusArr', $orderPaymentStatusArr);
+        $this->set('useStatusArr', GiftCards::getStatusArr($this->siteLangId));
+        $this->set('arrListing', $records);
+        $this->set('postedData', $post);
+        $this->set('siteLangId', $this->siteLangId);
+
+        if (MOBILE_APP_API_CALL) {
+            $this->_template->render();
+            return;
+        }
+
+        $this->_template->render(false, false);
+    }
+
+    private function getGiftCardSearchForm($langId)
+    {
+        $frm = new Form('frmRecordSearch');
+        $frm->addHiddenField('', 'total_record_count', '');
+        $frm->addHiddenField('', 'page');
+        $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $langId), 'keyword', '');
+
+        $useStatusArr = GiftCards::getStatusArr($langId);
+        $frm->addSelectBox(Labels::getLabel('FRM_GIFT_CARD_USED', $langId), 'ogcards_status', array(-1 => Labels::getLabel('FRM_SELECT', $langId)) + $useStatusArr, -1, array(), '');
+
+        $orderStatusArr = Orders::getOrderPaymentStatusArr($langId);
+        unset($orderStatusArr[Orders::ORDER_PAYMENT_CANCELLED]);
+        $frm->addSelectBox(Labels::getLabel('FRM_PAYMENT_TYPE', $langId), 'order_payment_status', array(-1 => Labels::getLabel('FRM_SELECT', $langId)) + $orderStatusArr, -1, array(), '');
+        $frm->addDateField(Labels::getLabel('FRM_DATE_FROM', $langId), 'date_from', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
+        $frm->addDateField(Labels::getLabel('FRM_DATE_TO', $langId), 'date_to', '', array('readonly' => 'readonly', 'class' => 'field--calender'));
+        HtmlHelper::addSearchButton($frm);
+        HtmlHelper::addClearButton($frm, 'btn btn-clear');
+        return $frm;
+    }
+
+    public function giftCardForm()
+    {
+        $isSplitPaymentMethod = Plugin::isSplitPaymentEnabled($this->siteLangId);
+        if ($isSplitPaymentMethod) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_UNAUTHORISED_ACCESS'));
+        }
+        $this->set('frm', $this->getForm());
+        $this->set('currency',  Currency::getAttributesById(CommonHelper::getCurrencyId()));
+        $this->set('minAmount', FatApp::getConfig('CONF_MINIMUM_GIFT_CARD_AMOUNT', FatUtility::VAR_FLOAT, 100));
+        $this->_template->render(false, false);
+    }
+
+    private function getForm(): Form
+    {
+        $currency = Currency::getAttributesById(CommonHelper::getCurrencyId());
+        $lbl = CommonHelper::replaceStringData(Labels::getLabel('LBL_ENTER_AMOUNT_({CURRENCY-CODE})'), ['{CURRENCY-CODE}' => $currency['currency_code']]);
+
+        $frm = new Form('frmAddMoney');
+        $fld = $frm->addRequiredField($lbl, 'order_total_amount');
+        $fld->requirements()->setInt();
+        $fld->requirements()->setRange('1', '99999999');
+        $frm->addRequiredField(Labels::getLabel('LBL_RECEIVER_NAME'), 'ogcards_receiver_name');
+        $frm->addEmailField(Labels::getLabel('LBL_RECEIVER_EMAIL'), 'ogcards_receiver_email');
+        return $frm;
+    }
+
+    public function setupGiftCard()
+    {
+        $isSplitPaymentMethod = Plugin::isSplitPaymentEnabled($this->siteLangId);
+        if ($isSplitPaymentMethod) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_UNAUTHORISED_ACCESS'), true);
+        }
+        $frm = $this->getForm();
+        if (!$post = $frm->getFormDataFromArray(FatApp::getPostedData())) {
+            LibHelper::exitWithError(current($frm->getValidationErrors()), true);
+        }
+
+        $userData = $this->userInfo;
+        $minAmount = FatApp::getConfig('CONF_MINIMUM_GIFT_CARD_AMOUNT', FatUtility::VAR_FLOAT, 100);
+        if ($post['ogcards_receiver_email'] == $userData['credential_email']) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_YOU_CANNOT_BUY_GIFTCARD_FOR_YOURSELF'), true);
+        }
+
+        if (FatUtility::int($post['order_total_amount']) < $minAmount) {
+            $lbl = Labels::getLabel('LBL_AMOUNT_SHOULD_BE_GREATER_THEN_({MIN-AMOUNT})');
+            $lbl = CommonHelper::replaceStringData($lbl, ['{MIN-AMOUNT}' => $minAmount]);
+            LibHelper::exitWithError($lbl, true);
+        }
+
+        $post['order_language_id'] = $this->siteLangId;
+        $post['order_language_code'] = CommonHelper::getLangCode();
+        $order = new Orders(0);
+        $orderId  = $order->placeGiftcardOrder($post);
+        if (empty($orderId)) {
+            LibHelper::exitWithError($order->getError(), true);
+        }
+
+        if (true === MOBILE_APP_API_CALL) {
+            $excludePaymentGatewaysArr = applicationConstants::getExcludePaymentGatewayArr(applicationConstants::CHECKOUT_GIFT_CARD);
+            /* Payment Methods[ */
+            $pmSrch = PaymentMethods::getSearchObject($this->siteLangId);
+            $pmSrch->doNotCalculateRecords();
+            $pmSrch->doNotLimitRecords();
+            $pmSrch->addMultipleFields(Plugin::ATTRS);
+            $pmSrch->addCondition('plugin_code', 'not in ', $excludePaymentGatewaysArr);
+            $pmRs = $pmSrch->getResultSet();
+            $paymentMethods = FatApp::getDb()->fetchAll($pmRs);
+            /* ] */
+
+            $userWalletBalance = User::getUserBalance($this->userParentId, true);
+            $this->set('userWalletBalance', $userWalletBalance);
+            $this->set('displayUserWalletBalance', CommonHelper::displayMoneyFormat($userWalletBalance));
+            $this->set('canUseWalletForPayment', PaymentMethods::canUseWalletForPayment());
+            $this->set('orderNetAmount', $post['order_total_amount']);
+            $this->set('paymentMethods', $paymentMethods);
+            $this->set('order_id', $orderId);
+            $this->set('orderType', Orders::ORDER_GIFT_CARD);
+            $this->_template->render();
+        }
+
+        $redirectUrl = UrlHelper::generateFullUrl('Checkout', 'giftCharge', [$orderId], CONF_WEBROOT_FRONT_URL);
+        FatUtility::dieJsonSuccess(['msg' => Labels::getLabel('MSG_REDIRECTING_PLEASE_WAIT'), 'redirectUrl' => $redirectUrl]);
     }
 }

@@ -1,5 +1,5 @@
 <?php if (isset($collection['blogs']) && count($collection['blogs']) > 0) { ?>
-    <section class="section">
+    <section class="section" data-section="section">
         <div class="container">
             <div class="section-head section-head-center">
                 <?php echo (isset($collection['collection_name']) && $collection['collection_name'] != '') ? ' <div class="section-heading"><h2>' . $collection['collection_name'] . '</h2></div>' : ''; ?>
@@ -10,7 +10,8 @@
                         <div class="post">
                             <div class="post-head">
                                 <div class="post-media">
-                                    <a href="<?php echo UrlHelper::generateUrl('Blog', 'postDetail', array($blog['post_id'])); ?>" class="animate-scale">
+                                    <a href="<?php echo UrlHelper::generateUrl('Blog', 'postDetail', array($blog['post_id'])); ?>"
+                                        class="animate-scale">
                                         <?php $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_BLOG_POST_IMAGE, $blog['post_id']);
                                         $uploadedTime = AttachedFile::setTimeParam($fileRow['afile_updated_at']);
                                         $pictureAttr = [
@@ -34,7 +35,8 @@
                                         <span class="article__date"><?php echo $blog['post_updated_on']; ?></span>
                                     </div>
                                     <h3 class="article-title">
-                                        <a href="<?php echo UrlHelper::generateUrl('Blog', 'postDetail', array($blog['post_id'])); ?>">
+                                        <a
+                                            href="<?php echo UrlHelper::generateUrl('Blog', 'postDetail', array($blog['post_id'])); ?>">
                                             <span>
                                                 <?php
                                                 $title = !empty($blog['post_title']) ? $blog['post_title'] : $blog['post_identifier'];

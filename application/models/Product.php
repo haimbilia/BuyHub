@@ -50,6 +50,7 @@ class Product extends MyAppModel
 
     public const PRODUCT_TYPE_PHYSICAL = 1;
     public const PRODUCT_TYPE_DIGITAL = 2;
+    public const PRODUCT_TYPE_SERVICE = 3;
 
     public const APPROVED = 1;
     public const UNAPPROVED = 0;
@@ -314,7 +315,8 @@ class Product extends MyAppModel
         }
         return array(
             self::PRODUCT_TYPE_PHYSICAL => Labels::getLabel('LBL_PHYSICAL', $langId),
-            self::PRODUCT_TYPE_DIGITAL => Labels::getLabel('LBL_DIGITAL', $langId)
+            self::PRODUCT_TYPE_DIGITAL => Labels::getLabel('LBL_DIGITAL', $langId),
+            self::PRODUCT_TYPE_SERVICE => Labels::getLabel('LBL_SERVICE', $langId),
         );
     }
 
@@ -959,7 +961,7 @@ class Product extends MyAppModel
         $selprod_code = $product_id . '_' . implode('_', $selectedOptions);
 
         $prodSrchObj = new ProductSearch();
-        $prodSrchObj->setDefinedCriteria();
+        $prodSrchObj->setDefinedCriteria(0, 0, ['doNotJoinSellers' => true]);
         $prodSrchObj->joinProductToCategory();
         $prodSrchObj->doNotCalculateRecords();
         $prodSrchObj->addCondition('selprod_id', '!=', 'mysql_func_' . $selprod_id, 'AND', true);
@@ -982,7 +984,7 @@ class Product extends MyAppModel
         } else {
             $prodSrch2 = new ProductSearch(CommonHelper::getLangId());
             $prodSrch2->doNotCalculateRecords();
-            $prodSrch2->setDefinedCriteria();
+            $prodSrch2->setDefinedCriteria(0, 0, ['doNotJoinSellers' => true]);
             $prodSrch2->addCondition('selprod_id', '!=', 'mysql_func_' . $selprod_id, 'AND', true);
             $prodSrch2->addCondition('product_id', '=', 'mysql_func_' . $product_id, 'AND', true);
             $prodSrch2->addCondition('selprod_code', 'LIKE', '%_' . $optionvalue_id . '%');
@@ -1182,8 +1184,12 @@ class Product extends MyAppModel
 
     public static function isProductShippedBySeller($productId, $productAddedBySellerId, $selProdSellerId)
     {
-        $productId = FatUtility::int($productId);
         $productAddedBySellerId = FatUtility::int($productAddedBySellerId);
+        if (0 < FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0)) {
+            return false;
+        }
+        
+        $productId = FatUtility::int($productId);
         $selProdSellerId = FatUtility::int($selProdSellerId);
         if ($productAddedBySellerId && $productAddedBySellerId == $selProdSellerId) {
             return true;
@@ -1443,7 +1449,7 @@ class Product extends MyAppModel
     public static function verifyProductIsValid($selprod_id)
     {
         $prodSrch = new ProductSearch();
-        $prodSrch->setDefinedCriteria();
+        $prodSrch->setDefinedCriteria(0, 0, ['doNotJoinSpecialPrice' => true, 'doNotJoinSellers' => true]);
         $prodSrch->joinProductToCategory();
         $prodSrch->joinSellerSubscription();
         $prodSrch->addSubscriptionValidCondition();
@@ -1487,9 +1493,9 @@ class Product extends MyAppModel
         }
         $criteria['max_price'] = true;
         //$srch->setDefinedCriteria($join_price, 0, $criteria, true);
-        if(0 < $shop_id){
-            $srch->joinSellerProducts(0,'', $criteria, true);
-        }else{
+        if (0 < $shop_id) {
+            $srch->joinSellerProducts(0, '', $criteria, true);
+        } else {
             $srch->joinForPrice('', $criteria, true);
         }
         $srch->unsetDefaultLangForJoins();
@@ -1567,7 +1573,7 @@ class Product extends MyAppModel
             $srch->joinTable('(' . $selProdRviewSubQuery . ')', 'LEFT OUTER JOIN', 'sq_sprating.spreview_product_id = product_id', 'sq_sprating');
             $srch->addMultipleFields(['COALESCE(prod_rating,0) prod_rating', 'COALESCE(totReviews,0) totReviews']);
         }
-     
+
         if (array_key_exists('category', $criteria)) {
             $srch->addCategoryCondition($criteria['category']);
         }
@@ -1861,6 +1867,7 @@ END,   special_price_found ) as special_price_found'
             'country_id' => $countryId,
             'shop_id' => $shopId,
             'state_id' => $stateId,
+            'doNotJoinSellers' => true
         );
 
         $srch = new ProductSearch();

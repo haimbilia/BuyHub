@@ -28,7 +28,6 @@ class SelProdRating extends MyAppModel
         $srch->doNotCalculateRecords();
 
         $ratingTypes = (array) FatApp::getDb()->fetchAllAssoc($srch->getResultSet());
-
         if ($fulfillmentType == Shipping::FULFILMENT_PICKUP && array_key_exists(RatingType::TYPE_DELIVERY, $ratingTypes)) {
             unset($ratingTypes[RatingType::TYPE_DELIVERY]);
         }

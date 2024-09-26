@@ -58,14 +58,14 @@ class Notifications extends MyAppModel
             $siteName = FatApp::getConfig('CONF_WEBSITE_NAME_' . $this->commonLangId, FatUtility::VAR_STRING, 'Yo!Kart');
             $message = array('title' => empty($siteName) ? $_SERVER['SERVER_NAME'] : $siteName, 'text' => $data['unotification_body'], 'type' => $data['unotification_type']);
             foreach ($fcmDeviceIds as $pushNotificationApiToken) {
-                self::sendPushNotification($config, $pushNotificationApiToken['uauth_fcm_id'], $message);
+                self::sendPushNotification($config, $pushNotificationApiToken['uauth_fcm_id'], $pushNotificationApiToken['uauth_device_os'], $message);
             }
         }
 
         return $this->getMainTableRecordId();
     }
 
-    public static function sendPushNotification($config, $deviceToken, $notiData = array())
+    public static function sendPushNotification($config, $deviceToken, $os, $notiData = array())
     {
         $client = new GoogleClient();
         $client->setAuthConfig($config);
@@ -110,6 +110,11 @@ class Notifications extends MyAppModel
                 ],
             ]
         ];
+
+        if (User::DEVICE_OS_ANDROID == $os) {
+            unset($data['message']['notification']);
+        }
+
         $payload = json_encode($data);
 
         $ch = curl_init();

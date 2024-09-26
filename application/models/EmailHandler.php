@@ -178,9 +178,9 @@ class EmailHandler extends FatModel
         );
 
         $sendEmail = false;
-        if (!empty($d['user_new_email'])) {
+        if (!empty($d['user_email'])) {
             $sendEmail = (new FatMailer($langId, $tpl))
-                ->setTo($d['user_new_email'])
+                ->setTo($d['user_email'])
                 ->setVariables($vars)
                 ->send();
         }
@@ -2990,7 +2990,7 @@ class EmailHandler extends FatModel
     {
         $tpl = 'gdpr_request_status_update_notification_to_user';
         $reqData = UserGdprRequest::getAttributesById($reqId, array('ureq_user_id', 'ureq_type'));
-        if(UserGdprRequest::TYPE_DATA_REQUEST == $reqData['ureq_type']) {
+        if (UserGdprRequest::TYPE_DATA_REQUEST == $reqData['ureq_type']) {
             $tpl = 'gdpr_request_data_to_user';
         }
 
@@ -3202,6 +3202,146 @@ class EmailHandler extends FatModel
             $this->sendSms($tpl, $phone, $vars, $langId);
         }
 
+        return true;
+    }
+
+    public function sendTransferBankActionNotification($langId, $d)
+    {
+        $tpl = 'BANK_TRANSFER_ORDER_PAYMENT_ACTIONS';
+        $vars = array(
+            '{USER_NAME}' => $d['user_name'],
+            '{ORDER_ID}' => $d['order_number'],
+            '{STATUS}' => $d['txn_status'],
+        );
+
+        if (!(new FatMailer($langId, $tpl))
+            ->setTo($d['credential_email'])
+            ->setVariables($vars)
+            ->send()) {
+            return false;
+        }
+
+        if (!empty($d['user_phone']) && !empty($d['user_phone_dcode'])) {
+            $phone = ValidateElement::formatDialCode($d['user_phone_dcode']) . $d['user_phone'];
+            $this->sendSms($tpl, $phone, $vars, $langId);
+        }
+
+        /* Send Notification To Buyer about Bank Transfer transaction status.  */
+        $msg = Labels::getLabel('MSG_ORDER_#{ORDER-ID}_TXN._HAS_BEEN_{STATUS}', $langId);
+        $msg = CommonHelper::replaceStringData($msg, $vars);
+        $notificationObj = new Notifications();
+        $notificationDataArr = array(
+            'unotification_user_id' => $d["order_user_id"],
+            'unotification_body' => $msg,
+            'unotification_type' => 'BANK_TRANSFER_ORDER_PAYMENT_APPROVAL',
+            'unotification_data' => json_encode(array('orderId' => $d['order_id'])),
+        );
+        if (!$notificationObj->addNotification($notificationDataArr)) {
+            $this->error = $notificationObj->getError();
+            return false;
+        }
+        /* Send Notification To Buyer about Bank Transfer transaction status.  */
+        return true;
+    }
+
+    public function sendMailToAdminAndRecipient($orderId)
+    {
+        $srch = new SearchBase(GiftCards::DB_TBL, 'ogcards');
+        $srch->joinTable(Orders::DB_TBL, 'INNER JOIN', 'ogcards.ogcards_order_id = orders.order_id', 'orders');
+        $srch->joinTable(User::DB_TBL, 'INNER JOIN', 'user.user_id = orders.order_user_id', 'user');
+        $srch->joinTable(User::DB_TBL_CRED, 'INNER JOIN', 'user.user_id = usercred.credential_user_id', 'usercred');
+        $srch->addCondition('ogcards_order_id', '=', $orderId);
+        $srch->addMultipleFields([
+            'ogcards_receiver_email', 'ogcards_receiver_name', 'ogcards_code', 'order_net_amount',
+            'user.user_name', 'usercred.credential_email'
+        ]);
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $giftcard = FatApp::getDb()->fetch($srch->getResultSet());
+        if (!empty($giftcard)) {
+            $this->sendEmailToAdmin($giftcard);
+            $this->sendEmailToRecipient($giftcard);
+        }
+        return true;
+    }
+
+    public function sendEmailToAdmin(array $giftcard): bool
+    {
+        $tpl = "admin-gift-card";
+        $langId = $this->commonLangId;
+        $vars = [
+            '{sender_name}' => $giftcard['user_name'],
+            '{sender_email}' => !empty($giftcard['credential_email']) ? $giftcard['credential_email'] : Labels::getLabel('LBL_N/A', $langId),
+            '{recipient_name}' => $giftcard['ogcards_receiver_name'],
+            '{recipient_email}' => $giftcard['ogcards_receiver_email'],
+            '{giftcard_code}' => $giftcard['ogcards_code'],
+            '{giftcard_amount}' => CommonHelper::displayMoneyFormat($giftcard['order_net_amount'], true, true)
+        ];
+
+        $sendEmail = false;
+        if (!empty(FatApp::getConfig('CONF_SITE_OWNER_EMAIL'))) {
+            $sendEmail = (new FatMailer($langId, $tpl))
+                ->setTo(FatApp::getConfig('CONF_SITE_OWNER_EMAIL'))
+                ->setVariables($vars)
+                ->send();
+        }
+
+        if (false === $sendEmail) {
+            $this->error = Labels::getLabel("ERR_UNABLE_TO_SEND_EMAIL", $langId);
+            return false;
+        }
+        return true;
+    }
+
+    public function sendEmailToRecipient(array $giftcard)
+    {
+        $tpl = "receiver-gift-card";
+        $langId = $this->commonLangId;
+        $vars = [
+            '{sender_name}' => $giftcard['user_name'],
+            '{sender_email}' => !empty($giftcard['credential_email']) ? $giftcard['credential_email'] : Labels::getLabel('LBL_N/A', $langId),
+            '{recipient_name}' => $giftcard['ogcards_receiver_name'],
+            '{giftcard_code}' => $giftcard['ogcards_code'],
+        ];
+        $sendEmail = false;
+        if (!empty($giftcard['ogcards_receiver_email'])) {
+            $sendEmail = (new FatMailer($langId, $tpl))
+                ->setTo($giftcard['ogcards_receiver_email'])
+                ->setVariables($vars)
+                ->send();
+        }
+
+        if (false === $sendEmail) {
+            $this->error = Labels::getLabel("ERR_UNABLE_TO_SEND_EMAIL", $langId);
+            return false;
+        }
+        return true;
+    }
+
+
+    public function sendRedeemGiftCardNotification(array $card)
+    {
+        $tpl = 'user-redeem-gift-card';
+        $langId = $this->commonLangId;
+        $vars = array(
+            '{user_full_name}' => $card['user_name'],
+            '{redeemed_code}' => $card['ogcards_code'],
+        );
+        $sendEmail  = false;
+        if (!empty($card['credential_email'])) {
+            $sendEmail = (new FatMailer($langId, $tpl))
+                ->setTo($card['credential_email'])
+                ->setVariables($vars)
+                ->send();
+        } else {
+            SystemLog::system('Unable to send Redeem Gift Card Email to user(' . $card['user_name'] . ')', 'Unable to send Redeem Gift Card Email to user');
+        }
+
+        if (false === $sendEmail) {
+
+            $this->error = Labels::getLabel("ERR_UNABLE_TO_SEND_EMAIL", $langId);
+            return false;
+        }
         return true;
     }
 }

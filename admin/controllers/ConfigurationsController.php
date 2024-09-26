@@ -219,6 +219,20 @@ class ConfigurationsController extends ListingBaseController
             $post['CONF_TAX_AFTER_DISOCUNT'] = 0;
         }
 
+
+        if (isset($post['CONF_WITHOUT_PROD_VARIANTS']) && FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0) != $post['CONF_WITHOUT_PROD_VARIANTS']) {
+            $srch = new ProductSearch(0, '', '', false, false, false);
+            $srch->joinProductVariant('INNER JOIN');
+            $srch->addFld(1);
+            $srch->doNotCalculateRecords();
+            $srch->setPageSize(1);          
+            $rs = $srch->getResultSet();
+            $row = FatApp::getDb()->fetch($rs);
+            if (!empty($row)) {
+                LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_REMOVE_PRODUCTS_DATA_TO_CHANGE_THIS_SETTINGS', $this->siteLangId), true);
+            }
+        }
+
         if (!$record->update($post)) {
             LibHelper::exitWithError($record->getError(), true);
         }
@@ -736,6 +750,9 @@ class ConfigurationsController extends ListingBaseController
 
                 $fld = $frm->addIntegerField(Labels::getLabel("FRM_MAX_SELLER_REQUEST_ATTEMPTS", $langId), 'CONF_MAX_SUPPLIER_REQUEST_ATTEMPT', '');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_MAXIMUM_SELLER_REQUEST_ATTEMPTS_ALLOWED", $langId) . "</span>";
+
+                $fld = $frm->addIntegerField(Labels::getLabel("FRM_MINIMUM_GIFT_CARD_AMOUNT", $langId), 'CONF_MINIMUM_GIFT_CARD_AMOUNT', '');
+                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_SET_MINIMUM_AMOUNT_FOR_GIFT_CARDS", $langId) . "</span>";
 
                 $fld = $frm->addHtml('', 'Withdrawal', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("FRM_WITHDRAWAL", $langId) . '</h3>');
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
@@ -1583,7 +1600,7 @@ class ConfigurationsController extends ListingBaseController
                 HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("FRM_NOTE:_To_use_SSL,_check_with_your_host_if_a_SSL_certificate_is_installed_and_enable_it_from_here.", $langId));
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
-                $frm->addSelectBox(
+                $fld = $frm->addSelectBox(
                     Labels::getLabel('FRM_DEFAULT_SITE_LAGUAGE', $langId),
                     'CONF_DEFAULT_SITE_LANG',
                     Language::getAllNames(),
@@ -1591,6 +1608,7 @@ class ConfigurationsController extends ListingBaseController
                     array(),
                     ''
                 );
+                $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("FRM_CHANGING_DEFAULT_SITE_LANGUAGE,_MAKE_SURE_ALL_THE_INFORMATION_IS_UPDATED_WITH_THIS_LANGUAGE", $langId) . '</span>';
 
                 $currencyArr = Currency::getCurrencyNameWithCode($langId);
                 $frm->addSelectBox(Labels::getLabel('FRM_DEFAULT_SYSTEM_CURRENCY', $langId), 'CONF_CURRENCY', $currencyArr, false, array(), '');
@@ -1615,6 +1633,13 @@ class ConfigurationsController extends ListingBaseController
                 HtmlHelper::configureSwitchForCheckbox($fld);
 
                 $fld = $frm->addCheckBox(Labels::getLabel("FRM_HEADER_MEGA_MENU", $langId), 'CONF_LAYOUT_MEGA_MENU', 1, array(), false, 0);
+                HtmlHelper::configureSwitchForCheckbox($fld);
+
+                $fld = $frm->addCheckBox(Labels::getLabel("FRM_SINGLE_SELLER_CART", $langId), 'CONF_SINGLE_SELLER_CART', 1, array(), false, 0);
+                HtmlHelper::configureSwitchForCheckbox($fld);
+
+                $fld = $frm->addCheckBox(Labels::getLabel("FRM_WITHOUT_PRODUCT_VARIANTS", $langId), 'CONF_WITHOUT_PROD_VARIANTS', 1, array(), false, 0);
+                $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("FRM_IT_WILL_MERGE_PROD_ADD_FORM_&_REMOVE_PROD_VARIANTS", $langId) . '.</span><span class="form-text text-muted">' . Labels::getLabel('ERR_PLEASE_REMOVE_PRODUCTS_DATA_TO_CHANGE_THIS_SETTINGS', $this->siteLangId) . '.</span>';
                 HtmlHelper::configureSwitchForCheckbox($fld);
 
                 $fld = $frm->addHtmlEditor(Labels::getLabel('FRM_MAINTENANCE_TEXT', $this->siteLangId), 'CONF_MAINTENANCE_TEXT_' . $langId);

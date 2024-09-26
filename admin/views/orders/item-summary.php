@@ -81,7 +81,7 @@ $returnRequestApproved = FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_S
                 <?php
                     $label = (0 == $op['opshipping_by_seller_user_id'] ? Labels::getLabel('LBL_ME', $siteLangId) : Labels::getLabel('LBL_SELLER', $siteLangId));
                     $class = (0 == $op['opshipping_by_seller_user_id'] ? 'badge-warning' : 'badge-success');
-                    if ($op['op_product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
+                    if (in_array($op['op_product_type'],[Product::PRODUCT_TYPE_DIGITAL,Product::PRODUCT_TYPE_SERVICE])) {
                         $label = Labels::getLabel('LBL_N/A', $siteLangId);
                         $class = 'badge-danger';
                     }

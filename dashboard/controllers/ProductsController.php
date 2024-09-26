@@ -5,6 +5,7 @@ class ProductsController extends SellerBaseController
         validateGetForm as validateForm;
     }
     use ProductDigitalDownloads;
+    use ProductSetup;
 
     public function __construct($action)
     {
@@ -59,7 +60,7 @@ class ProductsController extends SellerBaseController
 
         $imgFrm = $this->getImageFrm();
         $productOptions = [];
-
+        $selProdId = 0;
         if (0 < $recordId) {
             if (0 < FatApp::getPostedData('autoFillLangData', FatUtility::VAR_INT, 0)) {
                 $updateLangDataobj = new TranslateLangData(Product::DB_TBL_LANG);
@@ -182,6 +183,46 @@ class ProductsController extends SellerBaseController
                 $productData['product_type'] = $productType;
             }
 
+            if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+                $selProdId = SellerProduct::getSelprodIdByProductId($recordId);
+                $sellerProductRow = SellerProduct::getAttributesById($selProdId, null, true, true);
+                if (!$sellerProductRow) {
+                    LibHelper::exitWithError($this->str_invalid_request_id, true);
+                }
+
+                $sellerProductLangRow = SellerProduct::getAttributesByLangId($langId, $selProdId);
+                $sellerProductLangRow = is_array($sellerProductLangRow) ? $sellerProductLangRow : [];
+
+                $urlSrch = UrlRewrite::getSearchObject();
+                $urlSrch->doNotCalculateRecords();
+                $urlSrch->doNotLimitRecords();
+                $urlSrch->addFld('urlrewrite_custom');
+                $urlSrch->addCondition('urlrewrite_original', '=', 'products/view/' . $selProdId);
+                $urlSrch->doNotCalculateRecords();
+                $urlSrch->setPageSize(1);
+                $rs = $urlSrch->getResultSet();
+                $urlRow = FatApp::getDb()->fetch($rs);
+
+                $sellerProductRow['selprod_url_keyword'] = '';
+                if ($urlRow) {
+                    $data['urlrewrite_custom'] = $urlRow['urlrewrite_custom'];
+                    $customUrl = explode("/", $urlRow['urlrewrite_custom']);
+                    $sellerProductRow['selprod_url_keyword'] = $customUrl[0];
+                }
+
+                $user_shop_name = User::getUserShopName($sellerProductRow['selprod_user_id'], $this->siteLangId);
+                $sellerProductRow['selprod_user_shop_name'] = $user_shop_name['user_name'] . ' - ' . $user_shop_name['shop_name'];
+
+                $returnAge = isset($sellerProductRow['selprod_return_age']) ? FatUtility::int($sellerProductRow['selprod_return_age']) : '';
+                $cancellationAge = isset($sellerProductRow['selprod_cancellation_age']) ? FatUtility::int($sellerProductRow['selprod_cancellation_age']) : '';
+
+                if ('' === $returnAge || '' === $cancellationAge) {
+                    $sellerProductRow['use_shop_policy'] = 1;
+                }
+
+                $productData = array_merge($productData, $sellerProductRow, $sellerProductLangRow);
+            }
+
             $frm->fill($productData);
             $imgFrm->fill(['file_type' => AttachedFile::FILETYPE_PRODUCT_IMAGE, 'record_id' => $recordId]);
         } else {
@@ -190,6 +231,7 @@ class ProductsController extends SellerBaseController
             $imgFrm->fill(['file_type' => AttachedFile::FILETYPE_PRODUCT_IMAGE_TEMP, 'record_id' => $tempProductId]);
         }
 
+        $this->set("selProdId", $selProdId);
         $this->set("frm", $frm);
         $this->set("imgFrm", $imgFrm);
 
@@ -301,6 +343,15 @@ class ProductsController extends SellerBaseController
             $prodObj::tblFld('youtube_video') => $post[$prodObj::tblFld('youtube_video')]
         ], $langId);
 
+
+        if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+            $selProdId = $this->setupInventory($recordId, $db);
+            if (1 > $selProdId) {
+                $db->rollbackTransaction();
+                LibHelper::exitWithError($this->str_invalid_request, true);
+            }
+        }
+
         if (!$prodObj->saveProductCategory($post['ptc_prodcat_id'])) {
             $db->rollbackTransaction();
             LibHelper::exitWithError($prodObj->getError(), true);
@@ -345,19 +396,36 @@ class ProductsController extends SellerBaseController
         }
 
         if (isset($post['shipping_profile'])) {
-            $shipProProdData = array(
-                'shippro_shipprofile_id' => !empty($post['shipping_profile']) ? $post['shipping_profile'] : ShippingProfile::getDefaultProfileId($post['product_seller_id']),
-                'shippro_product_id' => $recordId,
-                'shippro_user_id' => $post['product_seller_id'],
-            );
+            $sellerShippingProfile = false;
+            if (1 > FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0) && 0 < $post['product_seller_id']) {
+                $defaultShippingProfileId = ShippingProfile::getDefaultProfileId($post['product_seller_id']);
+                $shipProProdData = array(
+                    'shippro_shipprofile_id' => !empty($post['shipping_profile']) ? $post['shipping_profile'] : $defaultShippingProfileId,
+                    'shippro_product_id' => $recordId,
+                    'shippro_user_id' => $post['product_seller_id'],
+                );
+                $spObj = new ShippingProfileProduct();
+                if (!$spObj->addProduct($shipProProdData)) {
+                    $db->rollbackTransaction();
+                    LibHelper::exitWithError($spObj->getError(), true);
+                }
+                $sellerShippingProfile = true;
+            }
 
+            $defaultShippingProfileId = ShippingProfile::getDefaultProfileId(0);
+            $shipProProdData = array(
+                'shippro_shipprofile_id' => !empty($post['shipping_profile']) && false == $sellerShippingProfile ? $post['shipping_profile'] : $defaultShippingProfileId,
+                'shippro_product_id' => $recordId,
+                'shippro_user_id' => 0,
+            );
             $spObj = new ShippingProfileProduct();
             if (!$spObj->addProduct($shipProProdData)) {
                 $db->rollbackTransaction();
                 LibHelper::exitWithError($spObj->getError(), true);
             }
-        }
 
+        }
+        
         $productSpecifics = new ProductSpecifics($recordId);
         $productSpecifics->assignValues(($post + ['ps_product_id' => $recordId]));
         $data = $productSpecifics->getFlds();
@@ -398,21 +466,22 @@ class ProductsController extends SellerBaseController
         }
 
         UpcCode::remove($recordId);
-        foreach ($post['product_upcs'] as $optionsIds => $upcCode) {
-            $dataToSave = array(
-                'upc_code' => $upcCode,
-                'upc_product_id' => $recordId,
-                'upc_options' => $optionsIds,
-            );
-            if (!$db->insertFromArray(UpcCode::DB_TBL, $dataToSave, false, [], $dataToSave)) {
-                $db->rollbackTransaction();
-                LibHelper::exitWithError($db->getError(), true);
+        if (isset($post['product_upcs']) && !empty($post['product_upcs'])) {
+            foreach ($post['product_upcs'] as $optionsIds => $upcCode) {
+                $dataToSave = array(
+                    'upc_code' => $upcCode,
+                    'upc_product_id' => $recordId,
+                    'upc_options' => $optionsIds,
+                );
+                if (!$db->insertFromArray(UpcCode::DB_TBL, $dataToSave, false, [], $dataToSave)) {
+                    $db->rollbackTransaction();
+                    LibHelper::exitWithError($db->getError(), true);
+                }
             }
         }
 
 
         Tag::updateProductTagString($recordId);
-        Product::updateMinPrices($recordId);
         if ($isNewProduct) {
             $prodObj->moveTempFiles($post['temp_product_id']);
         }
@@ -429,6 +498,8 @@ class ProductsController extends SellerBaseController
         }
 
         $db->commitTransaction();
+        CalculativeDataRecord::updateSelprodRequestCount();
+        Product::updateMinPrices($recordId);
         $this->set('recordId', $recordId);
         $this->set('langId', $newTabLangId);
         $this->set('msg', $this->str_setup_successful);
@@ -763,7 +834,7 @@ class ProductsController extends SellerBaseController
             $frm->removeField($fld);
         }
 
-        if ($productType != Product::PRODUCT_TYPE_DIGITAL) {
+        if (!in_array($productType, [Product::PRODUCT_TYPE_DIGITAL, Product::PRODUCT_TYPE_SERVICE])) {
             $fulfillmentType = -1;
             $shipBySeller = Product::isProductShippedBySeller($recordId, $this->userParentId, $this->userParentId);
 
@@ -877,7 +948,7 @@ class ProductsController extends SellerBaseController
             $this->nodes[] = array('title' => Labels::getLabel('LBL_CATALOG'), 'href' => UrlHelper::generateUrl("Seller", "catalog"));
             $this->nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $action)));
         } else {
-            $action = str_replace('-', '_', FatUtility::camel2dashed($action));            
+            $action = str_replace('-', '_', FatUtility::camel2dashed($action));
             $this->nodes[] = array('title' => ucwords(Labels::getLabel('BCN_' . $action)));
         }
         return $this->nodes;

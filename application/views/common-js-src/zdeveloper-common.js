@@ -1199,6 +1199,23 @@ $(function () {
         });
     };
 
+    showLanguageDropdown = function () {
+        $.ykmodal(fcom.getLoader(), true);
+        fcom.ajax(fcom.makeUrl("Home", "languageArea"), '', function (ans) {
+            fcom.removeLoader();
+            $.ykmodal(ans, true,'','','',false);
+        });
+    };
+
+    setGeoLocation = function () {
+        fcom.displayProcessing();
+        fcom.ajax(fcom.makeUrl("Home", "setGeoLocation"), '', function (ans) {
+            fcom.closeProcessing();
+            $.ykmodal(ans, true,'','','',false);
+            googleAddressAutocomplete('ga-autoComplete-header');
+        });
+    };
+
     guestUserLogin = function (frm, v) {
         v.validate();
         if (!v.isValid()) return;
@@ -1720,7 +1737,10 @@ $(document).on("click", ".add-to-cart--js", function (event) {
     event.preventDefault();
     var selprodId = $(this).siblings('input[name="selprod_id"]').val();
     var quantity = document.frmBuyProduct.quantity.value;
-
+    var cartHasProducts = $(this).data('cartHasProduct');
+    if (0 < cartHasProducts && !confirm(langLbl.overwriteCartItems)) {
+        return false;
+    }
     cart.add(selprodId, quantity);
     return false;
 });
@@ -2030,3 +2050,22 @@ $.fn.isInViewport = function () {
         (bottom > viewport_top && bottom <= viewport_bottom) ||
         (height > viewport_height && top <= viewport_top && bottom >= viewport_bottom)
 };
+
+bindMaxLengthValidator = function () {
+    $('[maxlength]').maxlength({
+        alwaysShow: true,
+        threshold: 10,
+        warningClass: "badge badge-info",
+        limitReachedClass: "badge badge-warning",
+        placement: 'top',
+        message: langLbl.maxLengthValidator
+    });
+}
+
+$(document).ready(function () {
+    bindMaxLengthValidator();
+});
+
+$(document).ajaxComplete(function () {
+    bindMaxLengthValidator();
+});

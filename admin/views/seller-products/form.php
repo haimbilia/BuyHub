@@ -1,5 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
+$frm->setFormTagAttribute('data-onclear', 'editRecord(' . $recordId . ', false, "modal-dialog-vertical-md")');
 HtmlHelper::formatFormFields($frm);
 $fld = $frm->getField('use_shop_policy');
 $fld->setFieldTagAttribute('class', "fieldsVisibilityJs");
@@ -23,9 +24,11 @@ if ($productOptions) {
 
 
 $fld = $frm->getField('selprod_threshold_stock_level');
-$fld->developerTags['colWidthValues'] = [null, '6', null, null];
+if (null != $fld) {
+    $fld->developerTags['colWidthValues'] = [null, '6', null, null];
+    HtmlHelper::addFieldLabelInfo($frm, 'selprod_threshold_stock_level', Labels::getLabel('MSG_ALERT_STOCK_LEVEL_HINT_INFO', $siteLangId), ['id' => 'selprod_threshold_stock_level']);
+}
 
-HtmlHelper::addFieldLabelInfo($frm, 'selprod_threshold_stock_level', Labels::getLabel('MSG_ALERT_STOCK_LEVEL_HINT_INFO', $siteLangId), ['id' => 'selprod_threshold_stock_level']);
 
 
 $fld = $frm->getField('selprod_cost');
@@ -34,16 +37,20 @@ $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 $fld = $frm->getField('selprod_price');
 
 $selPriceTitle = (FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0)) ? Labels::getLabel('LBL_THIS_PRICE_IS_INCLUDING_THE_TAX_RATES.', $siteLangId) : Labels::getLabel('LBL_THIS_PRICE_IS_EXCLUDING_THE_TAX_RATES.', $siteLangId);
-$selPriceTitle .= ' '.Labels::getLabel('LBL_MIN_SELLING_PRICE', $siteLangId).' '. CommonHelper::displayMoneyFormat($productMinSellingPrice, true, true);
+$selPriceTitle .= ' ' . Labels::getLabel('LBL_MIN_SELLING_PRICE', $siteLangId) . ' ' . CommonHelper::displayMoneyFormat($productMinSellingPrice, true, true);
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 HtmlHelper::addFieldLabelInfo($frm, 'selprod_price', $selPriceTitle);
 
 $fld = $frm->getField('selprod_stock');
-$fld->developerTags['colWidthValues'] = [null, '6', null, null];
+if (null != $fld) {
+    $fld->developerTags['colWidthValues'] = [null, '6', null, null];
+}
 
 $fld = $frm->getField('selprod_sku');
-$fld->developerTags['colWidthValues'] = [null, '6', null, null];
-HtmlHelper::addFieldLabelInfo($frm, 'selprod_sku', Labels::getLabel('LBL_STOCK_KEEPING_UNIT', $siteLangId));
+if (null != $fld) {
+    $fld->developerTags['colWidthValues'] = [null, '6', null, null];
+    HtmlHelper::addFieldLabelInfo($frm, 'selprod_sku', Labels::getLabel('LBL_STOCK_KEEPING_UNIT', $siteLangId));
+}
 
 $fld = $frm->getField('selprod_available_from');
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];
@@ -56,8 +63,9 @@ if (null != $fld) {
 }
 
 $fld = $frm->getField('selprod_min_order_qty');
-$fld->developerTags['colWidthValues'] = [null, '6', null, null];
-
+if (null != $fld) {
+    $fld->developerTags['colWidthValues'] = [null, '6', null, null];
+}
 $fld = $frm->getField('selprod_fulfillment_type');
 if (null != $fld) {
     $fld->developerTags['colWidthValues'] = [null, '6', null, null];
@@ -107,24 +115,27 @@ if (null != $fld) {
 }
 
 $fld = $frm->getField('selprod_subtract_stock');
-HtmlHelper::configureSwitchForCheckbox($fld);
-$fld->developerTags['noCaptionTag'] = true;
-$fld->developerTags['colWidthValues'] = [null, '12', null, null];
-$fld->developerTags['noCaptionTag'] = true;
+if (null != $fld) {
+    HtmlHelper::configureSwitchForCheckbox($fld);
+    $fld->developerTags['noCaptionTag'] = true;
+    $fld->developerTags['colWidthValues'] = [null, '12', null, null];
+    $fld->developerTags['noCaptionTag'] = true;
+}
 
 $fld = $frm->getField('selprod_track_inventory');
-HtmlHelper::configureSwitchForCheckbox($fld);
-$fld->developerTags['noCaptionTag'] = true;
 if (null != $fld) {
-    $fld->developerTags['colWidthValues'] = [null, '12', null, null];    
+    HtmlHelper::configureSwitchForCheckbox($fld);
+    $fld->developerTags['noCaptionTag'] = true;
+    $fld->developerTags['colWidthValues'] = [null, '12', null, null];
     $fld->addFieldtagAttribute('id', 'selprod_track_inventory');
 }
 
 $fld = $frm->getField('selprod_url_keyword');
-$fld->setFieldTagAttribute('id', "urlrewrite_custom");
-$fld->htmlAfterField = '<span class="form-text text-muted">' . HtmlHelper::seoFriendlyUrl(UrlHelper::generateFullUrl('Products', 'View', array($recordId), CONF_WEBROOT_FRONT_URL)) . '</span>';
-$fld->setFieldTagAttribute('onkeyup', "getUniqueSlugUrl(this,this.value,$recordId)");
-
+if (null != $fld) {
+    $fld->setFieldTagAttribute('id', "urlrewrite_custom");
+    $fld->htmlAfterField = '<span class="form-text text-muted">' . HtmlHelper::seoFriendlyUrl(UrlHelper::generateFullUrl('Products', 'View', array($recordId), CONF_WEBROOT_FRONT_URL)) . '</span>';
+    $fld->setFieldTagAttribute('onkeyup', "getUniqueSlugUrl(this,this.value,$recordId)");
+}
 $formTitle = Labels::getLabel('LBL_SELLER_INVENTORY_SETUP', $siteLangId);
 require_once(CONF_THEME_PATH . '_partial/listing/form.php');
 ?>

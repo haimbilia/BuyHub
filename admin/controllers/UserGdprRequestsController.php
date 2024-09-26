@@ -183,7 +183,7 @@ class UserGdprRequestsController extends ListingBaseController
             LibHelper::exitWithError($userReqObj->getError(), true);
         }
         /* ] */
-
+        CalculativeDataRecord::updateGdprRequestCount();
         $this->set('userReqId', $userReqId);
         $this->set('msg', Labels::getLabel('MSG_SUCCESSFULLY_DELETED_USER_DATA', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');

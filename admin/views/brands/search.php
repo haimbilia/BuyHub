@@ -1,5 +1,8 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $printData = false;
+$pageSize = $pageSize ?? 0;
+$page = $page ?? 0;
+
 if (!isset($tbody)) {
     $printData = true;
     $tbody = new HtmlElement('tbody', ['class' => 'listingRecordJs']);

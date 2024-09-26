@@ -314,7 +314,7 @@ class CustomController extends MyAppController
 
         $srch->addGroupBy('faqcat_id');
         $srch->addMultipleFields(array('IFNULL(faqcat_name, faqcat_identifier) as faqcat_name', 'faqcat_id'));
-        $srch->addFld('COUNT(*) AS faq_count');
+        $srch->addFld('COUNT(1) AS faq_count');
         if (isset($srchCondition)) {
             $srchCondition->remove();
         }
@@ -449,6 +449,7 @@ class CustomController extends MyAppController
     {
         /* echo FatApp::getConfig('CONF_MAINTAIN_CART_ON_PAYMENT_CANCEL',FatUtility::VAR_INT,applicationConstants::NO);
         echo $_SESSION['cart_order_id']; */
+
         if (!FatApp::getConfig('CONF_MAINTAIN_CART_ON_PAYMENT_CANCEL', FatUtility::VAR_INT, applicationConstants::NO) && isset($_SESSION['cart_order_id']) && $_SESSION['cart_order_id'] != '') {
             $cartOrderId = $_SESSION['cart_order_id'];
             $orderObj = new Orders();
@@ -475,6 +476,9 @@ class CustomController extends MyAppController
                 $cartObj->add($selprod_id, $quantity);
             }
             $cartObj->updateUserCart(); */
+        }
+        if (isset($_SESSION['order_type']) && $_SESSION['order_type'] == Orders::ORDER_GIFT_CARD) {
+            FatApp::redirectUser(UrlHelper::generateFullUrl('buyer', 'giftCards', [], CONF_WEBROOT_DASHBOARD, null, false, false, false));
         }
         if (isset($_SESSION['order_type']) && $_SESSION['order_type'] == Orders::ORDER_SUBSCRIPTION) {
             FatApp::redirectUser(UrlHelper::generateFullUrl('SubscriptionCheckout', '', [], CONF_WEBROOT_DASHBOARD, null, false, false, false));
@@ -576,6 +580,14 @@ class CustomController extends MyAppController
                 '{credits}' => '<a href="' . UrlHelper::generateUrl('account', 'credits', [], CONF_WEBROOT_DASHBOARD, null, false, false, false) . '" class="link">' . Labels::getLabel('MSG_MY_CREDITS', $this->siteLangId) . '</a>',
             );
             $textMessage = Labels::getLabel('MSG_WALLET_SUCCESS_ORDER_{account}_{credits}', $this->siteLangId);
+            $textMessage = str_replace(array_keys($searchReplaceArray), array_values($searchReplaceArray), $textMessage);
+        } elseif ($orderInfo['order_type'] == Orders::ORDER_GIFT_CARD) {
+
+            $searchReplaceArray = array(
+                '{account}' => '<a href="' . UrlHelper::generateUrl('account', '', [], CONF_WEBROOT_DASHBOARD, null, false, false, false) . '" class="link">' . Labels::getLabel('MSG_MY_ACCOUNT', $this->siteLangId) . '</a>',
+                '{credits}' => '<a href="' . UrlHelper::generateUrl('buyer', 'giftCards', [], CONF_WEBROOT_DASHBOARD, null, false, false, false) . '" class="link">' . Labels::getLabel('MSG_MY_GIFT_CARDS', $this->siteLangId) . '</a>',
+            );
+            $textMessage = Labels::getLabel('MSG_GIFT_CARDS_SUCCESS_ORDER_{account}_{credits}', $this->siteLangId);
             $textMessage = str_replace(array_keys($searchReplaceArray), array_values($searchReplaceArray), $textMessage);
         } else {
             $message = Labels::getLabel('ERR_INVALID_ORDER_TYPE', $this->siteLangId);

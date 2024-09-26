@@ -39,7 +39,7 @@
                                         <?php foreach ($speciGroup as $specification) { ?>
                                             <li class="list-specification-item">
                                                 <span class="label"><?php echo $specification['prodspec_name'] . ":"; ?></span>
-                                                <span class="value"><?php echo CommonHelper::renderHtml($specification['prodspec_value']); ?>
+                                                <span class="value"><?php echo CommonHelper::renderHtml(htmlspecialchars($specification['prodspec_value']), true); ?>
                                                 </span>
                                             </li>
                                         <?php } ?>

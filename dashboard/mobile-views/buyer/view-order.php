@@ -46,12 +46,11 @@ foreach ($childArr as &$childOrder) {
     $childOrder['reviewsAllowed'] =  $reviewAllowed;
     $childOrder['product_image_url'] = UrlHelper::generateFullUrl('image', 'product', array($childOrder['selprod_product_id'], ImageDimension::VIEW_THUMB, $childOrder['op_selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND);
 
+    $canReturnRefund = (in_array($childOrder["op_status_id"], (array)Orders::getBuyerAllowedOrderReturnStatuses($childOrder['op_product_type']))) ? 1 : 0;
     if ($childOrder['op_product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
-        $canCancelOrder = (in_array($childOrder["op_status_id"], (array)Orders::getBuyerAllowedOrderCancellationStatuses(true))) ? 1 : 0;
-        $canReturnRefund = (in_array($childOrder["op_status_id"], (array)Orders::getBuyerAllowedOrderReturnStatuses(true))) ? 1 : 0;
+        $canCancelOrder = (in_array($childOrder["op_status_id"], (array)Orders::getBuyerAllowedOrderCancellationStatuses(true))) ? 1 : 0;        
     } else {
-        $canCancelOrder = (in_array($childOrder["op_status_id"], (array)Orders::getBuyerAllowedOrderCancellationStatuses())) ? 1 : 0;
-        $canReturnRefund = (in_array($childOrder["op_status_id"], (array)Orders::getBuyerAllowedOrderReturnStatuses())) ? 1 : 0;
+        $canCancelOrder = (in_array($childOrder["op_status_id"], (array)Orders::getBuyerAllowedOrderCancellationStatuses())) ? 1 : 0;        
         $datediff = time() - strtotime($childOrder['order_date_added']);
         $daysSpent = $datediff / (60 * 60 * 24);
         $returnAge = $childOrder['op_selprod_return_age'];  

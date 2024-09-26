@@ -2004,6 +2004,8 @@ class CommonHelper extends FatUtility
     public static function replaceStringData($str, $replacements = array(), $stripTags = false)
     {
         foreach ($replacements as $key => $val) {
+            if (is_null($val)) {continue;}
+            
             if ($stripTags) {
                 $val = strip_tags($val);
             }

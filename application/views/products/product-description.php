@@ -45,7 +45,8 @@
                 </div>
                 <?php if ($option['values']) { ?>
                     <div class="options-block-body">
-                        <ul class="select-options <?php echo ($option['option_is_color']) ? 'select-options-color' : 'select-options-size'; ?>">
+                        <ul
+                            class="select-options <?php echo ($option['option_is_color']) ? 'select-options-color' : 'select-options-size'; ?>">
                             <?php foreach ($option['values'] as $opVal) {
                                 $isAvailable = true;
                                 if (in_array($opVal['optionvalue_id'], $product['selectedOptionValues'])) {
@@ -74,8 +75,14 @@
                                     $title = Labels::getLabel('LBL_Not_Available', $siteLangId);
                                 }
                             ?>
-                                <li class="select-options-item <?php echo (in_array($opVal['optionvalue_id'], $product['selectedOptionValues'])) ? 'selected' : ''; ?>">
-                                    <a class="btn-option <?php echo (!$optionUrl) ? ' is-disabled' : ''; ?>" data-optionValueId="<?php echo $opVal['optionvalue_id']; ?>" data-selectedOptionValues="<?php echo implode("_", $selectedOptionsArr); ?>" title="<?php echo $title; ?>" href="<?php echo ($optionUrl) ? $optionUrl : 'javascript:void(0)'; ?>" <?php echo $colorStyle; ?>>
+                                <li
+                                    class="select-options-item <?php echo (in_array($opVal['optionvalue_id'], $product['selectedOptionValues'])) ? 'selected' : ''; ?>">
+                                    <a class="btn-option <?php echo (!$optionUrl) ? ' is-disabled' : ''; ?>"
+                                        data-optionValueId="<?php echo $opVal['optionvalue_id']; ?>"
+                                        data-selectedOptionValues="<?php echo implode("_", $selectedOptionsArr); ?>"
+                                        title="<?php echo $title; ?>"
+                                        href="<?php echo ($optionUrl) ? $optionUrl : 'javascript:void(0)'; ?>"
+                                        <?php echo $colorStyle; ?>>
                                         <?php echo ($option['option_is_color']) ? '' : $opVal['optionvalue_name'];  ?>
                                     </a>
                                 </li>
@@ -118,7 +125,8 @@
                             <div class="qty-input-wrapper" data-stock="<?php echo $product['selprod_stock']; ?>">
                                 <?php echo $frmBuyProduct->getFieldHtml('quantity'); ?>
                             </div>
-                            <button class="increase increase-js <?php echo $product['selprod_stock'] <= $product['selprod_min_order_qty'] ? 'disabled' : ''; ?>">
+                            <button
+                                class="increase increase-js <?php echo $product['selprod_stock'] <= $product['selprod_min_order_qty'] ? 'disabled' : ''; ?>">
                                 <svg class="svg" width="16" height="16">
                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
                                     </use>
@@ -162,7 +170,8 @@
     <?php if ($product['product_type'] == Product::PRODUCT_TYPE_PHYSICAL) { ?>
         <div class="side-blocks delivery-options">
             <h5 class="h5"><?php echo Labels::getLabel('LBL_DELIVERY_OPTIONS'); ?></h5>
-            <?php include(CONF_THEME_PATH . '_partial/product/shipping-rates.php'); ?>
+            <div class="side-blocks-body">
+                <?php include(CONF_THEME_PATH . '_partial/product/shipping-rates.php'); ?></div>
         </div>
     <?php } ?>
 
@@ -170,21 +179,27 @@
     if (isset($volumeDiscountRows) && !empty($volumeDiscountRows) && 0 < $currentStock) { ?>
         <div class="side-blocks wholesale-slider">
             <h5 class="h5"><?php echo Labels::getLabel('LBL_WHOLESALE_PRICE_(PIECE)') ?></h5>
-            <ul class="wholesale-slider">
-                <?php foreach ($volumeDiscountRows as $volumeDiscountRow) {
-                    $volumeDiscount = $product['theprice'] * ($volumeDiscountRow['voldiscount_percentage'] / 100);
-                    $price = ($product['theprice'] - $volumeDiscount); ?>
-                    <li class="wholesale-slider-item">
-                        <span class="wholesale-slider-value"> <?php echo ($volumeDiscountRow['voldiscount_min_qty']); ?>
-                            <?php echo Labels::getLabel('LBL_OR_MORE_PIECES', $siteLangId); ?></span>
-                        <div class="products-price">
-                            <span class="products-price-new"><?php echo CommonHelper::displayMoneyFormat($price, true, false, true, false, false, true); ?></span>
-                            <del class="products-price-old"><?php echo CommonHelper::displayMoneyFormat($product['theprice'], true, false, true, false, false, true); ?></del>
-                            <span class="products-price-off"><?php echo $volumeDiscountRow['voldiscount_percentage'] . '%'; ?> <?php echo Labels::getLabel('LBL_OFF', $siteLangId); ?></span>
-                        </div>
-                    </li>
-                <?php } ?>
-            </ul>
+            <div class="side-blocks-body">
+                <ul class="wholesale-slider">
+                    <?php foreach ($volumeDiscountRows as $volumeDiscountRow) {
+                        $volumeDiscount = $product['theprice'] * ($volumeDiscountRow['voldiscount_percentage'] / 100);
+                        $price = ($product['theprice'] - $volumeDiscount); ?>
+                        <li class="wholesale-slider-item">
+                            <span class="wholesale-slider-value"> <?php echo ($volumeDiscountRow['voldiscount_min_qty']); ?>
+                                <?php echo Labels::getLabel('LBL_OR_MORE_PIECES', $siteLangId); ?></span>
+                            <div class="products-price">
+                                <span
+                                    class="products-price-new"><?php echo CommonHelper::displayMoneyFormat($price, true, false, true, false, false, true); ?></span>
+                                <del
+                                    class="products-price-old"><?php echo CommonHelper::displayMoneyFormat($product['theprice'], true, false, true, false, false, true); ?></del>
+                                <span
+                                    class="products-price-off"><?php echo $volumeDiscountRow['voldiscount_percentage'] . '%'; ?>
+                                    <?php echo Labels::getLabel('LBL_OFF', $siteLangId); ?></span>
+                            </div>
+                        </li>
+                    <?php } ?>
+                </ul>
+            </div>
         </div>
     <?php }  ?>
 
@@ -192,60 +207,74 @@
     <?php if (count($upsellProducts) > 0) { ?>
         <div class="side-blocks product-add-ons">
             <h5 class="h5"> <?php echo Labels::getLabel('LBL_Product_Add-ons', $siteLangId); ?></h5>
+            <div class="side-blocks-body">
+                <ul class="list-addons list-addons--js">
+                    <?php foreach ($upsellProducts as $usproduct) {
+                        $cancelClass = '';
+                        $uncheckBoxClass = '';
+                        if ($usproduct['selprod_stock'] <= 0) {
+                            $cancelClass = 'cancel cancelled--js';
+                            $uncheckBoxClass = 'remove-add-on';
+                        }
 
-            <ul class="list-addons list-addons--js">
-                <?php foreach ($upsellProducts as $usproduct) {
-                    $cancelClass = '';
-                    $uncheckBoxClass = '';
-                    if ($usproduct['selprod_stock'] <= 0) {
-                        $cancelClass = 'cancel cancelled--js';
-                        $uncheckBoxClass = 'remove-add-on';
-                    }
+                    ?>
+                        <li
+                            class="list-addons-item addon--js <?php echo $cancelClass; ?> <?php echo ($usproduct['selprod_stock'] <= 0) ? 'out-of-stock' : ''; ?>">
+                            <div class="product-profile">
+                                <figure class="product-profile__pic">
+                                    <a title="<?php echo $usproduct['selprod_title']; ?>"
+                                        href="<?php echo UrlHelper::generateUrl('products', 'view', array($usproduct['selprod_id'])) ?>">
+                                        <img src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($usproduct['product_id'], ImageDimension::VIEW_MINI, $usproduct['selprod_id'])), CONF_IMG_CACHE_TIME, '.jpg'); ?>"
+                                            alt="<?php echo $usproduct['product_identifier']; ?>"
+                                            <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_MINI); ?>>
+                                    </a>
+                                </figure>
+                                <div class="product-profile-data">
+                                    <a class="title"
+                                        href="<?php echo UrlHelper::generateUrl('products', 'view', array($usproduct['selprod_id'])) ?>"><?php echo $usproduct['selprod_title'] ?></a>
 
-                ?>
-                    <li class="list-addons-item addon--js <?php echo $cancelClass; ?> <?php echo ($usproduct['selprod_stock'] <= 0) ? 'out-of-stock' : ''; ?>">
-                        <div class="product-profile">
-                            <figure class="product-profile__pic">
-                                <a title="<?php echo $usproduct['selprod_title']; ?>" href="<?php echo UrlHelper::generateUrl('products', 'view', array($usproduct['selprod_id'])) ?>">
-                                    <img src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'product', array($usproduct['product_id'], ImageDimension::VIEW_MINI, $usproduct['selprod_id'])), CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo $usproduct['product_identifier']; ?>" <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_MINI); ?>>
-                                </a>
-                            </figure>
-                            <div class="product-profile-data">
-                                <a class="title" href="<?php echo UrlHelper::generateUrl('products', 'view', array($usproduct['selprod_id'])) ?>"><?php echo $usproduct['selprod_title'] ?></a>
-
-                                <div class="products-price">
-                                    <?php echo CommonHelper::displayMoneyFormat($usproduct['theprice'], true, false, true, false, false, true); ?>
-                                </div>
-                                <div class="quantity quantity-2" data-stock="<?php echo $usproduct['selprod_stock']; ?>">
-                                    <button class="decrease decrease-js disabled" type="button">
-                                        <svg class="svg" width="16" height="16">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
-                                            </use>
-                                        </svg>
-                                    </button>
-                                    <div class="qty-input-wrapper" data-stock="<?php echo $usproduct['selprod_stock']; ?>">
-                                        <input type="text" value="<?php echo $usproduct['selprod_min_order_qty']; ?>" data-min-qty="<?php echo $usproduct['selprod_min_order_qty']; ?>" data-page="product-view" placeholder="Qty" class="qty-input cartQtyTextBox productQty-js" data-lang="addons[<?php echo $usproduct['selprod_id'] ?>]" name="addons[<?php echo $usproduct['selprod_id'] ?>]">
+                                    <div class="products-price">
+                                        <?php echo CommonHelper::displayMoneyFormat($usproduct['theprice'], true, false, true, false, false, true); ?>
                                     </div>
-                                    <button class="increase increase-js <?php echo $usproduct['selprod_stock'] <= $usproduct['selprod_min_order_qty'] ? 'disabled' : ''; ?>">
-                                        <svg class="svg" width="16" height="16">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
-                                            </use>
-                                        </svg>
-                                    </button>
+                                    <div class="quantity quantity-2" data-stock="<?php echo $usproduct['selprod_stock']; ?>">
+                                        <button class="decrease decrease-js disabled" type="button">
+                                            <svg class="svg" width="16" height="16">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
+                                                </use>
+                                            </svg>
+                                        </button>
+                                        <div class="qty-input-wrapper" data-stock="<?php echo $usproduct['selprod_stock']; ?>">
+                                            <input type="text" value="<?php echo $usproduct['selprod_min_order_qty']; ?>"
+                                                data-min-qty="<?php echo $usproduct['selprod_min_order_qty']; ?>"
+                                                data-page="product-view" placeholder="Qty"
+                                                class="qty-input cartQtyTextBox productQty-js"
+                                                data-lang="addons[<?php echo $usproduct['selprod_id'] ?>]"
+                                                name="addons[<?php echo $usproduct['selprod_id'] ?>]">
+                                        </div>
+                                        <button
+                                            class="increase increase-js <?php echo $usproduct['selprod_stock'] <= $usproduct['selprod_min_order_qty'] ? 'disabled' : ''; ?>">
+                                            <svg class="svg" width="16" height="16">
+                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
+                                                </use>
+                                            </svg>
+                                        </button>
+                                    </div>
                                 </div>
+                                <?php if ($usproduct['selprod_stock'] <= 0) { ?>
+                                    <div class="out-of-stock-txt">
+                                        <?php echo Labels::getLabel('LBL_SOLD_OUT', $siteLangId); ?>
+                                    </div>
+                                <?php  } ?>
                             </div>
-                            <?php if ($usproduct['selprod_stock'] <= 0) { ?>
-                                <div class="out-of-stock-txt">
-                                    <?php echo Labels::getLabel('LBL_SOLD_OUT', $siteLangId); ?>
-                                </div>
-                            <?php  } ?>
-                        </div>
-                        <label class="checkbox">
-                            <input <?php echo ($usproduct['selprod_stock'] > 0) ? 'checked="checked"' : ''; ?> type="checkbox" class="cancel <?php echo $uncheckBoxClass; ?>" name="check_addons" title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
-                        </label>
-                    </li>
-                <?php } ?>
-            </ul>
+                            <label class="checkbox">
+                                <input <?php echo ($usproduct['selprod_stock'] > 0) ? 'checked="checked"' : ''; ?>
+                                    type="checkbox" class="cancel <?php echo $uncheckBoxClass; ?>" name="check_addons"
+                                    title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
+                            </label>
+                        </li>
+                    <?php } ?>
+                </ul>
+            </div>
 
         </div>
     <?php } ?>

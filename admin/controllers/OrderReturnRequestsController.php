@@ -246,9 +246,9 @@ class OrderReturnRequestsController extends ListingBaseController
         $pageSize = FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
         $pageSize = 10;
         $srch = $this->getMessageListObj();
-        $srch->addCondition('orrmsg_orrequest_id', '=', $recordId);       
+        $srch->addCondition('orrmsg_orrequest_id', '=', $recordId);
         $srch->setPageNumber(1);
-        $srch->setPageSize($pageSize);      
+        $srch->setPageSize($pageSize);
         $rs = $srch->getResultSet();
         $messagesList = FatApp::getDb()->fetchAll($rs, 'orrmsg_id');
 
@@ -354,7 +354,7 @@ class OrderReturnRequestsController extends ListingBaseController
 
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $page = ($page <= 0) ? 1 : $page;
-       
+
         $pageSize = 10;
         $recordId = isset($post['orrequest_id']) ? FatUtility::int($post['orrequest_id']) : 0;
 
@@ -504,6 +504,7 @@ class OrderReturnRequestsController extends ListingBaseController
                 $successMsg = Labels::getLabel('MSG_RETURN_REQUEST_HAS_BEEN_WITHDRAWN_SUCCESSFULLY.', $this->siteLangId);
                 break;
         }
+        CalculativeDataRecord::updateOrderReturnRequestCount();
         $emailNotificationObj = new EmailHandler();
         if (!$emailNotificationObj->sendOrderReturnRequestStatusChangeNotification($row['orrequest_id'], $this->siteLangId)) {
             LibHelper::exitWithError($emailNotificationObj->getError(), true);

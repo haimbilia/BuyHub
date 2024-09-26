@@ -49,7 +49,7 @@ if (0 < $recordId) {
     echo $imgFrm->getFormHtml();
 
     ?>
-    <script>
+    <script type="text/javascript">
         var canEditTags = <?php echo $canEditTags ? 1 : 0; ?>;
         var tagsEditErr = '<?php echo Labels::getLabel('ERR_NOT_AUTHORIZED_TO_ADD_TAGS', $langId); ?>';
         var tagifyObjs = {};
@@ -125,6 +125,8 @@ if (0 < $recordId) {
                     langId
                 }, function(e) {
                     getShippingProfileOptions(e.params.args.data.id)
+                }, function () {
+                    getShippingProfileOptions(0)
                 });
             <?php } else { ?>
                 $('select[name=\'product_seller_id\']').attr('disabled', true);
@@ -138,7 +140,11 @@ if (0 < $recordId) {
         });
 
         $(document).ready(function() {
-            if (prodTypeDigital == $('.productTypeJs:checked').val() && 0 == $('.attachmentWithInventoryJs:checked').val()) {
+            var attachmentWithInventory = $('.attachmentWithInventoryJs:checked').val();
+            <?php if (FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) { ?>
+                var attachmentWithInventory = $('.attachmentWithInventoryJs').val();
+            <?php } ?>
+            if (prodTypeDigital == $('.productTypeJs').find(":selected").val() && 0 == attachmentWithInventory) {
                 $('.digitalDownloadSectionJS').removeClass('hide');
             } else if (!$('.digitalDownloadSectionJS').hasClass('hide')) {
                 $('.digitalDownloadSectionJS').addClass('hide');
@@ -146,13 +152,25 @@ if (0 < $recordId) {
         });
 
         $(document).on('change', '.attachmentWithInventoryJs', function() {
-            if (prodTypeDigital == $('.productTypeJs:checked').val()) {
+            if (prodTypeDigital == $('.productTypeJs').find(":selected").val()) {
                 if (1 == $(this).val()) {
                     $('.digitalDownloadSectionJS').addClass('hide');
                 } else {
                     $('.digitalDownloadSectionJS').removeClass('hide');
                 }
             }
+        });
+
+        $(document).ready(function() {
+            $(".datePickerJs").datepicker("option", {
+                beforeShow: function(input, inst) {                   
+                    $(input).css({    
+                        "position": "relative",                   
+                        "z-index": 1020
+                    });
+                },
+                onClose: function () { $(".datePickerJs").css({ 'z-index': 0 } ); }
+            });
         });
     </script>
 </main>

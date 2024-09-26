@@ -23,10 +23,15 @@
         $e = $th->appendElement('th', array(), $val);
     }
 
+    $found = 0;
     $sr_no = ($page > 1) ? $recordCount - (($page - 1) * $pageSize) : $recordCount;
     foreach ($arrListing as $sn => $row) {
         $tr = $tbl->appendElement('tr', array('class' => ''));
 
+        if (BadgeLinkCondition::RECORD_TYPE_SELLER_PRODUCT == $row['breq_record_type'] && FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+            continue;
+        }
+        $found++;
         foreach ($arr_flds as $key => $val) {
             $td = $tr->appendElement('td');
             switch ($key) {
@@ -93,7 +98,7 @@
     }
 
     echo $tbl->getHtml();
-    if (count($arrListing) == 0) {
+    if (count($arrListing) == 0 || 0 == $found) {
         $message = Labels::getLabel('LBL_NO_RECORDS_FOUND', $siteLangId);
         $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId, 'message' => $message));
     } ?>

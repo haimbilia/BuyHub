@@ -206,7 +206,7 @@ class StripeConnectPayController extends PaymentController
                     'quantity' => $op['op_qty']
                 ];
 
-                $data['payment_intent_data']['statement_descriptor'] = $this->orderInfo['order_number'];
+                $data['payment_intent_data']['statement_descriptor'] = FatApp::getConfig("CONF_WEBSITE_NAME_" . $this->siteLangId) ?? $this->orderInfo['order_number'];
             }
         } else if ($this->orderInfo['order_type'] == Orders::ORDER_SUBSCRIPTION) {
             $stipePlanInfo = SellerPackagePlans::getAttributesById($orderProducts[key($orderProducts)]['ossubs_plan_id']);

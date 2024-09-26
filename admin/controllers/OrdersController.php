@@ -64,7 +64,7 @@ class OrdersController extends ListingBaseController
                 'op_shop_name', 'op_shop_owner_name', 'op_shop_owner_email', 'op_shop_owner_phone', 'op_unit_price',
                 'totCombinedOrders as totOrders', 'op_shipping_duration_name', 'op_shipping_durations',  'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'op_other_charges', 'op_product_tax_options', 'ops.*', 'opship.*', 'opr_response', 'addr.*', 'ts.state_code', 'tc.country_code', 'op_rounding_off',
                 'op_shop_owner_phone_dcode', 'op_selprod_price', 'op_special_price', 'opshipping_by_seller_user_id', 'selprod_product_id', 'orderstatus_color_class', 'op_product_type', 'order_payment_status', 'plugin_code', 'opshipping_fulfillment_type', 'orderstatus_id', 'IFNULL(optosu.optsu_user_id, 0) as optsu_user_id', 'op_product_length',
-                'op_product_width', 'op_product_height', 'op_product_dimension_unit', 'op_commission_charged', 'op_commission_percentage', 'op_refund_commission', 'op_tax_after_discount'
+                'op_product_width', 'op_product_height', 'op_product_dimension_unit', 'op_commission_charged', 'op_commission_percentage', 'op_refund_commission', 'op_tax_after_discount', 'op_comments'
             )
         );
         $opSrch->addOrder('op_selprod_user_id');
@@ -85,7 +85,7 @@ class OrdersController extends ListingBaseController
             if (!empty($opVal["opship_orderid"])) {
                 $shippingHanldedBySeller = CommonHelper::canAvailShippingChargesBySeller($opVal['op_selprod_user_id'], $opVal['opshipping_by_seller_user_id']);
                 $shippingApiObj = $shippingObj->getShippingApiObj(($shippingHanldedBySeller ? $opVal['opshipping_by_seller_user_id'] : 0)) ?? NULL;
-                if ($shippingApiObj && false === $shippingApiObj->loadOrder($opVal["opship_orderid"])) {
+                if ($shippingApiObj && method_exists($shippingApiObj, 'loadOrder') && false === $shippingApiObj->loadOrder($opVal["opship_orderid"])) {
                     LibHelper::exitWithError($shippingApiObj->getError(), true);
                 }
                 $this->order['products'][$opId]['thirdPartyorderInfo'] = $shippingApiObj ? $shippingApiObj->getResponse() : [];
@@ -960,6 +960,7 @@ class OrdersController extends ListingBaseController
         }
 
         $db->commitTransaction();
+        CalculativeDataRecord::updateOrderCancelRequestCount();
         $this->set('msg', $this->str_update_record);
         $this->_template->render(false, false, 'json-success.php');
     }
@@ -1063,37 +1064,65 @@ class OrdersController extends ListingBaseController
 
     public function approvePayment(int $orderPaymentId)
     {
-        $orederObj = new Orders();
-        $result = current($orederObj->getOrderPayments(['id' => $orderPaymentId]));
+        $orderObj = new Orders();
+        $result = current($orderObj->getOrderPayments(['id' => $orderPaymentId]));
         if (!empty($result)) {
+            $orderDetail = $orderObj->getOrderById($result['opayment_order_id'], $this->siteLangId);
+            $paymentAmount = $orderDetail['order_net_amount'];
+            $paidAmount = $orderObj->getOrderPaymentPaid($result['opayment_order_id']);
+
             $db = FatApp::getDb();
             $db->startTransaction();
-            if (!$db->updateFromArray(
-                Orders::DB_TBL,
-                array('order_payment_status' => Orders::ORDER_PAYMENT_PAID, 'order_date_updated' => date('Y-m-d H:i:s')),
-                array('smt' => 'order_id = ? ', 'vals' => array($result['opayment_order_id']))
-            )) {
-                $db->rollbackTransaction();
-                LibHelper::exitWithError($db->getError(), true);
+
+            if (($paidAmount + $result['opayment_amount']) >= $paymentAmount) {
+                if (!$db->updateFromArray(
+                    Orders::DB_TBL,
+                    array('order_payment_status' => Orders::ORDER_PAYMENT_PAID, 'order_date_updated' => date('Y-m-d H:i:s')),
+                    array('smt' => 'order_id = ? ', 'vals' => array($result['opayment_order_id']))
+                )) {
+                    $db->rollbackTransaction();
+                    LibHelper::exitWithError($db->getError(), true);
+                }
             }
 
             if (!$db->updateFromArray(
                 Orders::DB_TBL_ORDER_PAYMENTS,
                 array('opayment_txn_status' => Orders::ORDER_PAYMENT_PAID),
-                array('smt' => 'opayment_id = ? ', 'vals' => array($orderPaymentId))
+                array('smt' => 'opayment_id = ? ', 'vals' => [$orderPaymentId])
             )) {
                 $db->rollbackTransaction();
                 LibHelper::exitWithError($db->getError(), true);
             }
 
-            if (!$db->updateFromArray(
-                Orders::DB_TBL_ORDER_PRODUCTS,
-                array('op_status_id' => FatApp::getConfig("CONF_DEFAULT_PAID_ORDER_STATUS")),
-                array('smt' => 'op_order_id = ? ', 'vals' => array($result['opayment_order_id']))
-            )) {
-                $db->rollbackTransaction();
-                LibHelper::exitWithError($db->getError(), true);
+            $orderObj = new Orders();
+            $orderProducts = $orderObj->getChildOrders(['order_id' => $result['opayment_order_id']], langId: $this->siteLangId);
+
+            $storeOrderNetAmount = 0;
+            foreach ($orderProducts as $op) {
+                $storeOrderNetAmount += CommonHelper::orderProductAmount($op);
             }
+
+            if ($storeOrderNetAmount <= OrderPayment::getApprovedAmountTotal($result['opayment_order_id'])) {
+                if (!$db->updateFromArray(
+                    Orders::DB_TBL_ORDER_PRODUCTS,
+                    array('op_status_id' => FatApp::getConfig("CONF_DEFAULT_PAID_ORDER_STATUS")),
+                    array('smt' => 'op_order_id = ?', 'vals' => [$result['opayment_order_id']])
+                )) {
+                    $db->rollbackTransaction();
+                    LibHelper::exitWithError($db->getError(), true);
+                }
+            }
+
+            $userObj = new User($orderDetail['order_user_id']);
+            $vars = $userObj->getUserInfo(['user_name', 'user_phone_dcode', 'user_phone', 'credential_email'], false, false, true);
+            $vars += array(
+                'txn_status' => Labels::getLabel('LBL_APPROVED', $this->siteLangId),
+                'order_id' => $result['opayment_order_id'],
+            );
+            $vars += $orderDetail;
+
+            $emailObj = new EmailHandler();
+            $emailObj->sendTransferBankActionNotification($this->siteLangId, $vars);
         }
 
         $db->commitTransaction();
@@ -1108,14 +1137,6 @@ class OrdersController extends ListingBaseController
         if (!empty($result)) {
             $db = FatApp::getDb();
             $db->startTransaction();
-            if (!$db->updateFromArray(
-                Orders::DB_TBL,
-                array('order_payment_status' => Orders::ORDER_PAYMENT_CANCELLED, 'order_date_updated' => date('Y-m-d H:i:s')),
-                array('smt' => 'order_id = ? ', 'vals' => array($result['opayment_order_id']))
-            )) {
-                $db->rollbackTransaction();
-                LibHelper::exitWithError($db->getError(), true);
-            }
 
             if (!$db->updateFromArray(
                 Orders::DB_TBL_ORDER_PAYMENTS,
@@ -1126,14 +1147,17 @@ class OrdersController extends ListingBaseController
                 LibHelper::exitWithError($db->getError(), true);
             }
 
-            if (!$db->updateFromArray(
-                Orders::DB_TBL_ORDER_PRODUCTS,
-                array('op_status_id' => FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS")),
-                array('smt' => 'op_order_id = ? ', 'vals' => array($result['opayment_order_id']))
-            )) {
-                $db->rollbackTransaction();
-                LibHelper::exitWithError($db->getError(), true);
-            }
+            $orderData = Orders::getAttributesById($result['opayment_order_id'], ['order_number', 'order_net_amount', 'order_user_id']);
+            $userObj = new User($orderData['order_user_id']);
+            $vars = $userObj->getUserInfo(['user_name', 'user_phone_dcode', 'user_phone', 'credential_email'], false, false, true);
+            $vars += array(
+                'txn_status' => Labels::getLabel('MSG_REJECTED', $this->siteLangId),
+                'order_id' => $result['opayment_order_id'],
+            );
+            $vars += $orderData;
+
+            $emailObj = new EmailHandler();
+            $emailObj->sendTransferBankActionNotification($this->siteLangId, $vars);
         }
         $db->commitTransaction();
         $this->set('msg', Labels::getLabel("MSG_REJECTED", $this->siteLangId));
@@ -1319,7 +1343,7 @@ class OrdersController extends ListingBaseController
         if (empty($orderDetail)) {
             LibHelper::exitWithError(Labels::getLabel('MSG_Invalid_Access', $this->siteLangId));
         }
-        
+
         $orderObj = new Orders();
         $notAllowedStatues = $orderObj->getNotAllowedOrderCancellationStatuses();
 

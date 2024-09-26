@@ -60,7 +60,6 @@ $displayDateformat = FatDate::convertDateFormatFromPhp(
     FatApp::getConfig('CONF_DATE_FORMAT', FatUtility::VAR_STRING, 'Y-m-d'),
     FatDate::FORMAT_JQUERY_UI
 );
-
 ?>
 
 <script>
@@ -68,6 +67,7 @@ $displayDateformat = FatDate::convertDateFormatFromPhp(
     var calendarSelectedDate = '';
     $(document).ready(function() {
         $('.js-datepicker').datepicker({
+            isRTL: false,
             minDate: new Date(),
             dateFormat: 'yy-mm-dd',
             beforeShowDay: availableDates,

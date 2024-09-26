@@ -4,16 +4,14 @@ class HomeController extends MyAppController
     public function index()
     {
         $loggedUserId = UserAuthentication::getLoggedUserId(true);
-
-        $productSrchObj = $this->getProductSearchObj($loggedUserId);
         $sponsoredShopsInCollection = $sponsoredProdsInCollection = [];
-        $collections = $this->getCollections($productSrchObj, $sponsoredShopsInCollection, $sponsoredProdsInCollection);
+        $collections = $this->getCollections($loggedUserId, $sponsoredShopsInCollection, $sponsoredProdsInCollection);
         $sponShopLayoutCount = count($sponsoredShopsInCollection);
         $sponProdLayoutCount = count($sponsoredProdsInCollection);
         if (0 < $sponProdLayoutCount) {
             foreach ($sponsoredProdsInCollection as $indexId => $collectionId) {
                 $ind = (true === MOBILE_APP_API_CALL) ? $indexId : $collectionId;
-                $sponsoredProds = $this->getSponsoredProducts($productSrchObj);
+                $sponsoredProds = $this->getSponsoredProducts($loggedUserId);
 
                 if (empty($sponsoredProds)) {
                     unset($collections[$ind]);
@@ -62,13 +60,16 @@ class HomeController extends MyAppController
             }
         }
 
-        $slides = $this->getSlides();
-        $this->set('slides', $slides);
         $this->set('collections', $collections);
 
         if (true === MOBILE_APP_API_CALL) {
+            $slides = $this->getSlides();
+            $this->set('slides', $slides);
             $this->_template->render();
             die;
+        } else {
+            $slides = $this->getSlides(1);
+            $this->set('slides', $slides);
         }
 
         $displayProductNotAvailableLable = false;
@@ -319,18 +320,26 @@ class HomeController extends MyAppController
         $this->_template->render();
     }
 
-    private function getProductSearchObj($loggedUserId)
+    public function getSlidesHtml()
+    {
+        $this->set('slides', $this->getSlides());
+        $this->set('html', $this->_template->render(false, false, '_partial/homePageSlides.php', true, true));
+        $this->_template->render(false, false, 'json-success.php', false, false);
+    }
+
+    private function getProductSearchObj($loggedUserId, $criteria = [])
     {
         $loggedUserId = FatUtility::int($loggedUserId);
 
         $productSrchObj = new ProductSearch($this->siteLangId);
         $productSrchObj->setLocationBasedInnerJoin(false);
         $productSrchObj->setGeoAddress();
-        $productSrchObj->joinProductToCategory();
+        $productSrchObj->joinProductToCategory($this->siteLangId, true, true, true, false, $criteria);
         $productSrchObj->joinProductToTax();
         /* $productSrchObj->doNotCalculateRecords();
         $productSrchObj->setPageSize( 10 ); */
-        $productSrchObj->setDefinedCriteria();
+        $criteria['doNotJoinSellers'] = true;
+        $productSrchObj->setDefinedCriteria(0, 0, $criteria);
         $productSrchObj->joinSellerSubscription($this->siteLangId, true);
         $productSrchObj->addSubscriptionValidCondition();
         $productSrchObj->validateAndJoinDeliveryLocation(false);
@@ -614,7 +623,7 @@ class HomeController extends MyAppController
         FatApp::redirectUser(UrlHelper::generateUrl());
     }
 
-    private function getCollections($productSrchObj, &$sponsoredShopsInCollection, &$sponsoredProdsInCollection)
+    private function getCollections($loggedUserId, &$sponsoredShopsInCollection, &$sponsoredProdsInCollection)
     {
         $langId = $this->siteLangId;
         $geoAddress = Address::getYkGeoData();
@@ -667,7 +676,10 @@ class HomeController extends MyAppController
             } else {
                 $cacheData = $collectionsArr;
             }
-            CacheHelper::create('collectionsArr' . $cacheKey, serialize($cacheData), CacheHelper::TYPE_COLLECTIONS);
+
+            if (!empty($collectionsArr)) {
+                CacheHelper::create('collectionsArr' . $cacheKey, serialize($cacheData), CacheHelper::TYPE_COLLECTIONS);
+            }
             $pagesCount = (1 == $page ? $srch->pages() : $pagesCount);
         }
 
@@ -806,12 +818,15 @@ class HomeController extends MyAppController
                     $tempObj->addCondition('collection_id', '=', $collection_id);
                     $tempObj->doNotCalculateRecords();
                     $tempObj->doNotLimitRecords();
+                    $rs = $tempObj->getResultSet();
+                    $collectionProdRecords = $db->fetchAll($rs, 'ctr_record_id');
+                    $selProdIds = array_keys($collectionProdRecords);
 
-                    $productSrchTempObj = clone $productSrchObj;
+                    $productSrchTempObj = $this->getProductSearchObj($loggedUserId, ['selProdIds' => $selProdIds]);
                     $productSrchTempObj->joinTable('(' . $tempObj->getQuery() . ')', 'INNER JOIN', 'selprod_id = ctr.ctr_record_id', 'ctr');
                     if (true === MOBILE_APP_API_CALL) {
-                        $productSrchTempObj->joinProductRating();
-                        $productSrchTempObj->addFld('IFNULL(prod_rating, 0) as prod_rating');
+                        // $productSrchTempObj->joinProductRating();
+                        $productSrchTempObj->addFld('product_rating as prod_rating');
                     }
 
                     $productSrchTempObj->addCondition('selprod_deleted', '=', applicationConstants::NO);
@@ -870,6 +885,10 @@ class HomeController extends MyAppController
                     $tempObj->doNotCalculateRecords();
                     $tempObj->doNotLimitRecords();
 
+                    $rs = $tempObj->getResultSet();
+                    $collectionCatRecords = $db->fetchAll($rs, 'ctr_record_id');
+                    $catIds = array_keys($collectionCatRecords);
+
                     /* fetch Categories data[ */
                     $productCatSrchTempObj = clone $productCatSrchObj;
                     $productCatSrchTempObj->joinTable('(' . $tempObj->getQuery() . ')', 'INNER JOIN', 'prodcat_id = ctr.ctr_record_id', 'ctr');
@@ -925,7 +944,8 @@ class HomeController extends MyAppController
                                 $product = [];
                                 if ($collection['collection_layout_type'] == Collections::TYPE_CATEGORY_LAYOUT3 || $collection['collection_layout_type'] == Collections::TYPE_CATEGORY_LAYOUT4) {
                                     $allCats = [$catData['prodcat_id']] + array_keys($subCategories);
-                                    $prodObj = clone $productSrchObj;
+                                    $productShopSrchTempObj = $this->getProductSearchObj($loggedUserId, ['categoryIds' => $allCats]);
+                                    $prodObj = $this->getProductSearchObj($loggedUserId);
                                     $prodObj->addCondition('prodcat_id', 'IN', $allCats);
                                     $prodObj->addGroupBy('selprod_product_id');
                                     $prodObj->setPageSize(1);
@@ -940,7 +960,7 @@ class HomeController extends MyAppController
                     } else if (in_array($collection['collection_layout_type'], [Collections::TYPE_CATEGORY_LAYOUT1, Collections::TYPE_CATEGORY_LAYOUT4])) {
                         while ($catData = $db->fetch($rs)) {
                             /* fetch Product data[ */
-                            $productShopSrchTempObj = clone $productSrchObj;
+                            $productShopSrchTempObj = $this->getProductSearchObj($loggedUserId, ['categoryIds' => [$catData['prodcat_id']]]);
                             $productShopSrchTempObj->joinTable('(' . $tempObj->getQuery() . ')', 'INNER JOIN', 'prodcat_id = ctr.ctr_record_id', 'ctr');
                             $productShopSrchTempObj->addCondition('prodcat_id', '=', $catData['prodcat_id']);
                             //$productShopSrchTempObj->addOrder('in_stock', 'DESC');
@@ -1003,7 +1023,7 @@ class HomeController extends MyAppController
                     } else {
                         while ($catData = $db->fetch($rs)) {
                             /* fetch Product data[ */
-                            $productShopSrchTempObj = clone $productSrchObj;
+                            $productShopSrchTempObj = $this->getProductSearchObj($loggedUserId, ['categoryIds' => [$catData['prodcat_id']]]);
                             $productShopSrchTempObj->joinTable('(' . $tempObj->getQuery() . ')', 'INNER JOIN', 'prodcat_id = ctr.ctr_record_id', 'ctr');
                             $productShopSrchTempObj->addCondition('prodcat_id', '=', $catData['prodcat_id']);
                             //$productShopSrchTempObj->addOrder('in_stock', 'DESC');
@@ -1106,7 +1126,7 @@ class HomeController extends MyAppController
                             $collections[$ind]['shops'][$counter]['rating'] = $rating;
                         } else {
                             if ($collection['collection_layout_type'] == Collections::TYPE_SHOP_LAYOUT2) {
-                                $prodObj = clone $productSrchObj;
+                                $prodObj = $this->getProductSearchObj($loggedUserId, ['shop_id' => $shopsData['shop_id']]);
                                 $prodObj->addCondition('shop_id', '=', $shopsData['shop_id']);
                                 $prodObj->addGroupBy('shop_id');
                                 if (CommonHelper::demoUrl(true)) {
@@ -1156,7 +1176,7 @@ class HomeController extends MyAppController
                     } else {
                         if ($collection['collection_layout_type'] == Collections::TYPE_BRAND_LAYOUT2) {
                             foreach ($brands as &$brand) {
-                                $prodObj = clone $productSrchObj;
+                                $prodObj = $this->getProductSearchObj($loggedUserId, ['brand_id' => $brand['brand_id']]);
                                 $prodObj->addCondition('brand_id', '=', $brand['brand_id']);
                                 $prodObj->addGroupBy('brand_id');
                                 $prodObj->setPageSize(1);
@@ -1227,7 +1247,11 @@ class HomeController extends MyAppController
 
                     /* fetch FAQ data[ */
                     $attr = [
-                        'faq_id', 'faqcat_id', 'IFNULL(faq_title, faq_identifier) as faq_title', 'faq_content', 'IFNULL(faqcat_name, faqcat_identifier) as faqcat_name'
+                        'faq_id',
+                        'faqcat_id',
+                        'IFNULL(faq_title, faq_identifier) as faq_title',
+                        'faq_content',
+                        'IFNULL(faqcat_name, faqcat_identifier) as faqcat_name'
                     ];
                     $faqSearchObj = Faq::getSearchObject($langId);
                     $faqSearchTempObj = clone $faqSearchObj;
@@ -1271,7 +1295,8 @@ class HomeController extends MyAppController
 
                     /* fetch FAQ data[ */
                     $attr = [
-                        'faqcat_id', 'IFNULL(faqcat_name, faqcat_identifier) as faqcat_name'
+                        'faqcat_id',
+                        'IFNULL(faqcat_name, faqcat_identifier) as faqcat_name'
                     ];
                     $faqCategorySearchObj = FaqCategory::getSearchObject($langId);
                     $faqCategorySearchObj->joinTable('tbl_faqs', 'LEFT OUTER JOIN', 'faq_faqcat_id = faqcat_id and faq_active = ' . applicationConstants::ACTIVE . '  and faq_deleted = ' . applicationConstants::NO);
@@ -1279,7 +1304,7 @@ class HomeController extends MyAppController
                     $faqCategorySearchObj->addMultipleFields($attr);
                     $faqCategorySearchObj->addOrder('ctr.ctr_display_order', 'ASC');
                     $faqCategorySearchObj->addGroupBy('faqcat_id');
-                    $faqCategorySearchObj->addFld('COUNT(*) AS faq_count');
+                    $faqCategorySearchObj->addFld('COUNT(1) AS faq_count');
                     $res = $faqCategorySearchObj->getResultSet();
                     $faqCats = $db->fetchAll($res);
                     if (empty($faqCats)) {
@@ -1305,7 +1330,11 @@ class HomeController extends MyAppController
 
                     /* fetch Testimonial data[ */
                     $attr = [
-                        'testimonial_id', 'testimonial_user_name', 'IFNULL(testimonial_title, testimonial_identifier) as testimonial_title', 'testimonial_text', 'testimonial_added_on'
+                        'testimonial_id',
+                        'testimonial_user_name',
+                        'IFNULL(testimonial_title, testimonial_identifier) as testimonial_title',
+                        'testimonial_text',
+                        'testimonial_added_on'
                     ];
                     $testimonialSrchObj = Testimonial::getSearchObject($langId, true);
                     $testimonialSrchObj = clone $testimonialSrchObj;
@@ -1369,7 +1398,7 @@ class HomeController extends MyAppController
         return $collections;
     }
 
-    private function getSlides()
+    private function getSlides($recordLimit = 0)
     {
         $langId = $this->siteLangId;
         $db = FatApp::getDb();
@@ -1384,8 +1413,14 @@ class HomeController extends MyAppController
         $srchSlide->joinAttachedFile();
         $srchSlide->addMultipleFields(array('slide_id', 'slide_record_id', 'slide_type', 'IFNULL(promotion_name, promotion_identifier) as promotion_name,IFNULL(slide_title, slide_identifier) as slide_title', 'slide_target', 'slide_url', 'promotion_id', 'daily_cost', 'weekly_cost', 'monthly_cost', 'total_cost', 'slide_img_updated_on'));
 
-        $totalSlidesPageSize = FatApp::getConfig('CONF_TOTAL_SLIDES_HOME_PAGE', FatUtility::VAR_INT, 4);
-        $ppcSlidesPageSize = FatApp::getConfig('CONF_PPC_SLIDES_HOME_PAGE', FatUtility::VAR_INT, 4);
+        if ($recordLimit == 1) {
+            $totalSlidesPageSize = 1;
+            $ppcSlidesPageSize = 1;
+        } else {
+            $totalSlidesPageSize = FatApp::getConfig('CONF_TOTAL_SLIDES_HOME_PAGE', FatUtility::VAR_INT, 4);
+            $ppcSlidesPageSize = FatApp::getConfig('CONF_PPC_SLIDES_HOME_PAGE', FatUtility::VAR_INT, 4);
+        }
+
 
         $ppcSlides = array();
         $adminSlides = array();
@@ -1478,7 +1513,7 @@ class HomeController extends MyAppController
         return $sponsoredShops;
     }
 
-    private function getSponsoredProductsObj($productSrchObj)
+    private function getSponsoredProductsObj($loggedUserId)
     {
         $langId = $this->siteLangId;
         $prodObj = new PromotionSearch($langId);
@@ -1494,7 +1529,7 @@ class HomeController extends MyAppController
         $prodObj->doNotCalculateRecords();
         $prodObj->addMultipleFields(array('selprod_id as proSelProdId', 'promotion_id', 'promotion_record_id'));
 
-        $productSrchSponObj = clone $productSrchObj;
+        $productSrchSponObj =  $this->getProductSearchObj($loggedUserId);
         $productSrchSponObj->joinTable('(' . $prodObj->getQuery() . ') ', 'INNER JOIN', 'selprod_id = ppr.proSelProdId ', 'ppr');
         $productSrchSponObj->addFld(array('promotion_id', 'promotion_record_id'));
         $productSrchSponObj->joinSellers();
@@ -1516,8 +1551,8 @@ class HomeController extends MyAppController
         $db = FatApp::getDb();
         $productSrchSponObj = $this->getSponsoredProductsObj($productSrchObj);
         if (true === MOBILE_APP_API_CALL) {
-            $productSrchSponObj->joinProductRating();
-            $productSrchSponObj->addFld('IFNULL(prod_rating, 0) as prod_rating');
+            // $productSrchSponObj->joinProductRating();
+            $productSrchSponObj->addFld('product_rating as prod_rating');
         }
         $productSrchSponObj->doNotCalculateRecords();
         $productSrchSponObj->setPageSize($productPageSize);
@@ -1534,12 +1569,9 @@ class HomeController extends MyAppController
         $page = ($page < 2) ? 1 : $page;
 
         $pagesize = FatApp::getConfig('conf_page_size', FatUtility::VAR_INT, 10);
-
-        $productSrchObj = $this->getProductSearchObj($loggedUserId);
-
-        $productSrchSponObj = $this->getSponsoredProductsObj($productSrchObj);
-        $productSrchSponObj->joinProductRating();
-        $productSrchSponObj->addFld('IFNULL(prod_rating, 0) as prod_rating');
+        $productSrchSponObj = $this->getSponsoredProductsObj($loggedUserId);
+        // $productSrchSponObj->joinProductRating();
+        $productSrchSponObj->addFld('product_rating as prod_rating');
         $productSrchSponObj->setPageNumber($page);
         $productSrchSponObj->setPageSize($pagesize);
         $sponsoredProds = FatApp::getDb()->fetchAll($productSrchSponObj->getResultSet());
@@ -1642,7 +1674,8 @@ class HomeController extends MyAppController
     {
         $data = [
             'CONF_ENABLE_GEO_LOCATION' => FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0),
-            'CONF_DEFAULT_CURRENCY_SEPARATOR' => FatApp::getConfig('CONF_DEFAULT_CURRENCY_SEPARATOR', FatUtility::VAR_STRING, '.')
+            'CONF_DEFAULT_CURRENCY_SEPARATOR' => FatApp::getConfig('CONF_DEFAULT_CURRENCY_SEPARATOR', FatUtility::VAR_STRING, '.'),
+            'CONF_SINGLE_SELLER_CART' => FatApp::getConfig('CONF_SINGLE_SELLER_CART', FatUtility::VAR_INT, 0)
         ];
 
         $data['languageLabels'] = [
@@ -1716,7 +1749,9 @@ class HomeController extends MyAppController
             $srch->setPageSize(1);
             $srch->addMultipleFields(array(
                 'meta_title',
-                'meta_keywords', 'meta_description', 'meta_other_meta_tags'
+                'meta_keywords',
+                'meta_description',
+                'meta_other_meta_tags'
             ));
 
             $rs = $srch->getResultSet();
@@ -1729,7 +1764,9 @@ class HomeController extends MyAppController
                 $srch->doNotCalculateRecords();
                 $srch->addMultipleFields(array(
                     'meta_title',
-                    'meta_keywords', 'meta_description', 'meta_other_meta_tags'
+                    'meta_keywords',
+                    'meta_description',
+                    'meta_other_meta_tags'
                 ));
                 $rs = $srch->getResultSet();
                 $metas = FatApp::getDb()->fetch($rs);
@@ -1761,6 +1798,21 @@ class HomeController extends MyAppController
         }
         echo file_get_contents($manifestFile);
         exit;
+    }
+
+    public function languageArea()
+    {
+        $languages = Language::getAllNames(false);
+        $currencies = Currency::getCurrencyAssoc($this->siteLangId);
+
+        $this->set('languages', $languages);
+        $this->set('currencies', $currencies);
+        $this->_template->render(false, false);
+    }
+
+    public function setGeoLocation()
+    {       
+        $this->_template->render(false, false);
     }
 
     public function dummy()

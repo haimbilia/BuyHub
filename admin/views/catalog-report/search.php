@@ -29,7 +29,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, html_entity_decode($row[$key], ENT_QUOTES, 'utf-8'), true);
                 break;
             case 'product_type':
-                $td->appendElement('plaintext', $tdAttr, $productTypeArr[$row[$key]], true);
+                $td->appendElement('plaintext', $tdAttr, $productTypeArr[$row[$key]] ?? '', true);
                 break;
             case 'grossSales':
             case 'transactionAmount':

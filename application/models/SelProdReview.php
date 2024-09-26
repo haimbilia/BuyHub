@@ -75,6 +75,31 @@ class SelProdReview extends MyAppModel
         FatApp::getDb()->query("Update tbl_shops set `shop_total_reviews` = '" . $totalReviews . "' where shop_user_id = '" . $userId . "'");
     }
 
+    public static function getProductRating($productId)
+    {
+        $selProdReviewObj = new SelProdReviewSearch();
+        $selProdReviewObj->joinSellerProducts();
+        $selProdReviewObj->joinSelProdRating();
+        $selProdReviewObj->addCondition('ratingtype_type', '=', 'mysql_func_' . RatingType::TYPE_PRODUCT, 'AND', true);
+        $selProdReviewObj->addCondition('spreview_product_id', '=', $productId);
+        $selProdReviewObj->doNotCalculateRecords();
+        $selProdReviewObj->doNotLimitRecords();
+        $selProdReviewObj->addGroupBy('spr.spreview_product_id');
+        $selProdReviewObj->addCondition('spr.spreview_status', '=', 'mysql_func_' . SelProdReview::STATUS_APPROVED, 'AND', true);
+        $selProdReviewObj->addMultipleFields(array('spreview_product_id', "ROUND(AVG(sprating_rating),2) as prod_rating", "count(spreview_id) as totReviews"));
+        $record = FatApp::getDb()->fetch($selProdReviewObj->getResultSet());
+        return [
+            'prod_rating' => $record['prod_rating'] ?? 0,
+            'totReviews' => $record['totReviews'] ?? 0
+        ];
+    }
+
+    public static function updateProductRating($productId)
+    {
+        $totalReviews = self::getProductRating($productId);
+        FatApp::getDb()->query("Update " . Product::DB_TBL . " set `product_total_reviews` = '" . $totalReviews['totReviews'] . "' , `product_rating` = '" . $totalReviews['prod_rating'] . "' where product_id = '" . $productId . "'");
+    }
+
     public static function getProductOrderId($product_id, $loggedUserId)
     {
         $product_id = FatUtility::int($product_id);

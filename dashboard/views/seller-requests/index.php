@@ -9,12 +9,12 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 
     if ($canEdit && !$noRecordFound) {
         $otherBtnHtml = '<div class="dropdown">
-                                <button class="btn btn-outline-gray dropdown-toggle" type="button" id="dashboardDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <button class="btn btn-outline-gray dropdown-toggle" type="button" id="dashboardDropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside"  aria-haspopup="true" aria-expanded="false">
                                     ' . Labels::getLabel('LBL_New_Request', $siteLangId) . '
                                 </button>
                                 
                                     <ul class="dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim" aria-labelledby="dashboardDropdown">';
-        if (FatApp::getConfig('CONF_SELLER_CAN_REQUEST_CUSTOM_PRODUCT', FatUtility::VAR_INT, 0)) {
+        if (FatApp::getConfig('CONF_SELLER_CAN_REQUEST_CUSTOM_PRODUCT', FatUtility::VAR_INT, 0) && 1 > FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
             $otherBtnHtml .= '<li class="dropdown-menu-item">
                                                 <a class="dropdown-menu-link" href="' . UrlHelper::generateUrl('customProducts', 'form') . '">
                                                     ' . Labels::getLabel('LBL_Marketplace_Product', $siteLangId) . '
@@ -71,7 +71,8 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                             <div class="col-md-6">
                                 <div class="info">
                                     <span> <svg class="svg">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_FRONT_URL; ?>images/retina/sprite.svg#info" href="<?php echo CONF_WEBROOT_FRONT_URL; ?>images/retina/sprite.svg#info">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_FRONT_URL; ?>images/retina/sprite.svg#info"
+                                                href="<?php echo CONF_WEBROOT_FRONT_URL; ?>images/retina/sprite.svg#info">
                                             </use>
                                         </svg><?php echo Labels::getLabel('LBL_Generate_requests_using_buttons_below', $siteLangId); ?></span>
                                 </div>
@@ -82,11 +83,13 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                 <div class="col-md-3">
                                     <div class="no-data-found">
                                         <div class="img">
-                                            <img src="<?php echo CONF_WEBROOT_FRONT_URL; ?>images/retina/no-product-requests.svg" width="70px" height="70px">
+                                            <img src="<?php echo CONF_WEBROOT_FRONT_URL; ?>images/retina/no-product-requests.svg"
+                                                width="70px" height="70px">
                                         </div>
                                         <div class="data">
                                             <div class="action">
-                                                <a class="btn btn-outline-gray btn-sm" href="<?php echo UrlHelper::generateUrl('CustomProducts', 'form'); ?>"><?php echo Labels::getLabel('LBL_New_Product_Request', $siteLangId); ?></a>
+                                                <a class="btn btn-outline-gray btn-sm"
+                                                    href="<?php echo UrlHelper::generateUrl('CustomProducts', 'form'); ?>"><?php echo Labels::getLabel('LBL_New_Product_Request', $siteLangId); ?></a>
                                             </div>
                                         </div>
                                     </div>
@@ -96,11 +99,13 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                 <div class="col-md-3">
                                     <div class="no-data-found">
                                         <div class="img">
-                                            <img src="<?php echo CONF_WEBROOT_FRONT_URL; ?>images/retina/no-brand-requests.svg" width="70px" height="70px">
+                                            <img src="<?php echo CONF_WEBROOT_FRONT_URL; ?>images/retina/no-brand-requests.svg"
+                                                width="70px" height="70px">
                                         </div>
                                         <div class="data">
                                             <div class="action">
-                                                <a class="btn btn-outline-gray btn-sm" href="javascript:void(0);" onclick="addBrandReqForm(0)"><?php echo Labels::getLabel('LBL_New_Brand_Request', $siteLangId); ?></a>
+                                                <a class="btn btn-outline-gray btn-sm" href="javascript:void(0);"
+                                                    onclick="addBrandReqForm(0)"><?php echo Labels::getLabel('LBL_New_Brand_Request', $siteLangId); ?></a>
                                             </div>
                                         </div>
                                     </div>
@@ -110,11 +115,13 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                 <div class="col-md-3">
                                     <div class="no-data-found">
                                         <div class="img">
-                                            <img src="<?php echo CONF_WEBROOT_FRONT_URL; ?>images/retina/no-category-requests.svg" width="70px" height="70px">
+                                            <img src="<?php echo CONF_WEBROOT_FRONT_URL; ?>images/retina/no-category-requests.svg"
+                                                width="70px" height="70px">
                                         </div>
                                         <div class="data">
                                             <div class="action">
-                                                <a class="btn btn-outline-gray btn-sm" href="javascript:void(0);" onclick="addCategoryReqForm(0)"><?php echo Labels::getLabel('LBL_New_Category_Request', $siteLangId); ?></a>
+                                                <a class="btn btn-outline-gray btn-sm" href="javascript:void(0);"
+                                                    onclick="addCategoryReqForm(0)"><?php echo Labels::getLabel('LBL_New_Category_Request', $siteLangId); ?></a>
                                             </div>
                                         </div>
                                     </div>
@@ -125,11 +132,13 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                     <div class="col-md-3">
                                         <div class="no-data-found">
                                             <div class="img">
-                                                <img src="<?php echo CONF_WEBROOT_FRONT_URL; ?>images/retina/no-brand-requests.svg" width="70px" height="70px">
+                                                <img src="<?php echo CONF_WEBROOT_FRONT_URL; ?>images/retina/no-brand-requests.svg"
+                                                    width="70px" height="70px">
                                             </div>
                                             <div class="data">
                                                 <div class="action">
-                                                    <a class="btn btn-outline-gray btn-sm" href="javascript:void(0);" onclick="addBadgeReqForm(0)"><?php echo Labels::getLabel('LBL_ADD_BADGE_REQUEST', $siteLangId); ?></a>
+                                                    <a class="btn btn-outline-gray btn-sm" href="javascript:void(0);"
+                                                        onclick="addBadgeReqForm(0)"><?php echo Labels::getLabel('LBL_ADD_BADGE_REQUEST', $siteLangId); ?></a>
                                                 </div>
                                             </div>
                                         </div>
@@ -138,11 +147,13 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                     <div class="col-md-3">
                                         <div class="no-data-found">
                                             <div class="img">
-                                                <img src="<?php echo CONF_WEBROOT_FRONT_URL; ?>images/retina/no-brand-requests.svg" width="70px" height="70px">
+                                                <img src="<?php echo CONF_WEBROOT_FRONT_URL; ?>images/retina/no-brand-requests.svg"
+                                                    width="70px" height="70px">
                                             </div>
                                             <div class="data">
                                                 <div class="action">
-                                                    <a class="btn btn-outline-gray btn-sm" href="javascript:void(0);" onclick="addBadgeReqForm(0)"><?php echo Labels::getLabel('LBL_ADD_BADGE_REQUEST', $siteLangId); ?></a>
+                                                    <a class="btn btn-outline-gray btn-sm" href="javascript:void(0);"
+                                                        onclick="addBadgeReqForm(0)"><?php echo Labels::getLabel('LBL_ADD_BADGE_REQUEST', $siteLangId); ?></a>
                                                 </div>
                                             </div>
                                         </div>
@@ -153,7 +164,8 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                         </div>
                     <?php } else { ?>
                         <div id="listing">
-                            <div class="container m-2"><?php echo Labels::getLabel('LBL_Processing...', $siteLangId); ?></div>
+                            <div class="container m-2"><?php echo Labels::getLabel('LBL_Processing...', $siteLangId); ?>
+                            </div>
                         </div>
                     <?php } ?>
                 </div>
@@ -165,8 +177,9 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 <script>
     var ratioTypeSquare = <?php echo AttachedFile::RATIO_TYPE_SQUARE; ?>;
     var canRequestCustomProduct = <?php echo FatApp::getConfig('CONF_SELLER_CAN_REQUEST_CUSTOM_PRODUCT', FatUtility::VAR_INT, 0); ?>;
+    var withoutVariants = <?php echo FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0); ?>;
     $(document).ready(function() {
-        if (canRequestCustomProduct) {
+        if (canRequestCustomProduct && 1 > withoutVariants) {
             searchCustomCatalogProducts();
         } else {
             searchBrandRequests();

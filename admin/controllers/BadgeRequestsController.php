@@ -218,6 +218,7 @@ class BadgeRequestsController extends ListingBaseController
             LibHelper::exitWithError($record->getError(), true);
         }
         $badgeReqId = $record->getMainTableRecordId();
+        CalculativeDataRecord::updateBadgeRequestCount();
 
         $db = FatApp::getDb();
         if (!$db->deleteRecords(

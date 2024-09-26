@@ -48,11 +48,33 @@ class SellerController extends SellerBaseController
 
         $srch->addMultipleFields(
             array(
-                'order_number', 'order_id', 'order_user_id', 'op_selprod_id', 'op_is_batch', 'selprod_product_id', 'order_date_added',
-                'order_net_amount', 'op_invoice_number', 'totCombinedOrders as totOrders', 'op_selprod_title', 'op_product_name',
-                'op_id', 'op_qty', 'op_selprod_options', 'op_status_id', 'op_brand_name', 'op_other_charges', 'op_unit_price',
-                'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'op_tax_collected_by_seller', 'op_selprod_user_id',
-                'opshipping_by_seller_user_id', 'orderstatus_color_class', 'order_pmethod_id', 'opshipping_fulfillment_type', 'op_rounding_off'
+                'order_number',
+                'order_id',
+                'order_user_id',
+                'op_selprod_id',
+                'op_is_batch',
+                'selprod_product_id',
+                'order_date_added',
+                'order_net_amount',
+                'op_invoice_number',
+                'totCombinedOrders as totOrders',
+                'op_selprod_title',
+                'op_product_name',
+                'op_id',
+                'op_qty',
+                'op_selprod_options',
+                'op_status_id',
+                'op_brand_name',
+                'op_other_charges',
+                'op_unit_price',
+                'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name',
+                'op_tax_collected_by_seller',
+                'op_selprod_user_id',
+                'opshipping_by_seller_user_id',
+                'orderstatus_color_class',
+                'order_pmethod_id',
+                'opshipping_fulfillment_type',
+                'op_rounding_off'
             )
         );
 
@@ -113,9 +135,24 @@ class SellerController extends SellerBaseController
 
         $srchReturnReq->addMultipleFields(
             array(
-                'orrequest_id', 'orrequest_user_id', 'orrequest_qty', 'orrequest_type', 'orrequest_reference', 'orrequest_date', 'orrequest_status',
-                'op_invoice_number', 'op_selprod_title', 'op_product_name', 'op_brand_name', 'op_selprod_options', 'op_selprod_sku', 'op_product_model', 'op_selprod_id', 'op_is_batch',
-                'op_id', 'selprod_product_id'
+                'orrequest_id',
+                'orrequest_user_id',
+                'orrequest_qty',
+                'orrequest_type',
+                'orrequest_reference',
+                'orrequest_date',
+                'orrequest_status',
+                'op_invoice_number',
+                'op_selprod_title',
+                'op_product_name',
+                'op_brand_name',
+                'op_selprod_options',
+                'op_selprod_sku',
+                'op_product_model',
+                'op_selprod_id',
+                'op_is_batch',
+                'op_id',
+                'selprod_product_id'
             )
         );
         $srchReturnReq->addOrder('orrequest_date', 'DESC');
@@ -409,9 +446,73 @@ class SellerController extends SellerBaseController
         $srch->joinTable(Plugin::DB_TBL, 'LEFT OUTER JOIN', 'ops.opshipping_plugin_id = ops_plugin.plugin_id', 'ops_plugin');
         $srch->addMultipleFields(
             array(
-                'ops.*', 'order_id', 'order_number', 'order_payment_status', 'order_pmethod_id', 'order_tax_charged', 'order_date_added', 'op_id', 'op_qty', 'op_order_id', 'orderstatus_id', 'op_unit_price', 'op_selprod_user_id', 'op_invoice_number', 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'ou.user_name as buyer_user_name', 'op_is_batch', 'op_selprod_id', 'selprod_product_id', 'pm.plugin_code', 'IFNULL(pm_l.plugin_name, IFNULL(pm.plugin_identifier, "Wallet")) as plugin_name', 'op_commission_charged', 'op_qty', 'op_commission_percentage', 'ou.user_name as buyer_name', 'ouc.credential_username as user_name', 'ouc.credential_email as buyer_email', 'ou.user_phone as buyer_phone', 'op.op_shop_owner_name', 'op.op_shop_owner_username', 'op_l.op_shop_name', 'op.op_shop_owner_email', 'op.op_shop_owner_phone',
-                'op_selprod_title', 'op_product_name', 'op_brand_name', 'op_selprod_options', 'op_selprod_sku', 'op_product_model', 'op_product_type',
-                'op_shipping_duration_name', 'op_shipping_durations', 'op_status_id', 'op_refund_qty', 'op_refund_amount', 'op_refund_commission', 'op_other_charges', 'optosu.optsu_user_id', 'op_tax_collected_by_seller', 'order_is_wallet_selected', 'order_reward_point_used', 'op_product_tax_options', 'ops.*', 'opship.*', 'opr_response', 'addr.*', 'op_rounding_off', 'ops_plugin.plugin_code as opshipping_plugin_code', 'op_selprod_cancellation_age as cancellation_age', 'op_product_length', 'op_product_width', 'op_product_height', 'op_product_dimension_unit', 'op_special_price', 'op_selprod_price', 'op_tax_after_discount'
+                'ops.*',
+                'order_id',
+                'order_number',
+                'order_payment_status',
+                'order_pmethod_id',
+                'order_tax_charged',
+                'order_date_added',
+                'op_id',
+                'op_qty',
+                'op_order_id',
+                'orderstatus_id',
+                'op_unit_price',
+                'op_selprod_user_id',
+                'op_invoice_number',
+                'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name',
+                'ou.user_name as buyer_user_name',
+                'op_is_batch',
+                'op_selprod_id',
+                'selprod_product_id',
+                'pm.plugin_code',
+                'IFNULL(pm_l.plugin_name, IFNULL(pm.plugin_identifier, "Wallet")) as plugin_name',
+                'op_commission_charged',
+                'op_qty',
+                'op_commission_percentage',
+                'ou.user_name as buyer_name',
+                'ouc.credential_username as user_name',
+                'ouc.credential_email as buyer_email',
+                'ou.user_phone as buyer_phone',
+                'op.op_shop_owner_name',
+                'op.op_shop_owner_username',
+                'op_l.op_shop_name',
+                'op.op_shop_owner_email',
+                'op.op_shop_owner_phone',
+                'op_selprod_title',
+                'op_product_name',
+                'op_brand_name',
+                'op_selprod_options',
+                'op_selprod_sku',
+                'op_product_model',
+                'op_product_type',
+                'op_shipping_duration_name',
+                'op_shipping_durations',
+                'op_status_id',
+                'op_refund_qty',
+                'op_refund_amount',
+                'op_refund_commission',
+                'op_other_charges',
+                'optosu.optsu_user_id',
+                'op_tax_collected_by_seller',
+                'order_is_wallet_selected',
+                'order_reward_point_used',
+                'op_product_tax_options',
+                'ops.*',
+                'opship.*',
+                'opr_response',
+                'addr.*',
+                'op_rounding_off',
+                'ops_plugin.plugin_code as opshipping_plugin_code',
+                'op_selprod_cancellation_age as cancellation_age',
+                'op_product_length',
+                'op_product_width',
+                'op_product_height',
+                'op_product_dimension_unit',
+                'op_special_price',
+                'op_selprod_price',
+                'op_tax_after_discount',
+                'op_comments'
             )
         );
         $srch->addCondition('op_selprod_user_id', '=', $userId);
@@ -455,14 +556,15 @@ class SellerController extends SellerBaseController
 
         if ($orderDetail['op_product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
             $processingStatuses = $orderObj->getVendorAllowedUpdateOrderStatuses(true, $codOrder, $pickupOrder);
-        } elseif ($orderDetail['op_product_type'] == Product::PRODUCT_TYPE_PHYSICAL) {
+        } elseif (in_array($orderDetail['op_product_type'], [Product::PRODUCT_TYPE_PHYSICAL, Product::PRODUCT_TYPE_SERVICE])) {
             $processingStatuses = $orderObj->getVendorAllowedUpdateOrderStatuses(false, $codOrder, $pickupOrder);
-        } else {
-            $processingStatuses = $orderObj->getVendorAllowedUpdateOrderStatuses(false, $codOrder, $pickupOrder);
+            if ($orderDetail['op_product_type'] == Product::PRODUCT_TYPE_SERVICE) {
+                $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS"));
+            }
         }
 
         /* [ if shipping not handled by seller then seller can not update status to ship and delived */
-        if (!CommonHelper::canAvailShippingChargesBySeller($orderDetail['op_selprod_user_id'], $orderDetail['opshipping_by_seller_user_id'])) {
+        if (!CommonHelper::canAvailShippingChargesBySeller($orderDetail['op_selprod_user_id'], $orderDetail['opshipping_by_seller_user_id']) && $orderDetail['op_product_type'] != Product::PRODUCT_TYPE_SERVICE) {
             $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS"));
             if ($pickupOrder) {
                 $processingStatuses = [];
@@ -607,7 +709,6 @@ class SellerController extends SellerBaseController
         if ($print) {
             $print = true;
         }
-
         $this->set('canEdit', $this->userPrivilege->canEditSales(UserAuthentication::getLoggedUserId(), true));
         $this->set('print', $print);
         $urlParts = array_filter(FatApp::getParameters());
@@ -615,7 +716,7 @@ class SellerController extends SellerBaseController
 
         $this->_template->addJs(array('js/jquery.datetimepicker.js'));
         $this->_template->addCss(array('css/jquery.datetimepicker.css'), false);
-        $this->_template->render(true, true);
+        $this->_template->render();
     }
 
     public function viewInvoice($op_id)
@@ -841,16 +942,18 @@ class SellerController extends SellerBaseController
             $pickupOrder = true;
         }
 
+
         if ($orderDetail['op_product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
             $processingStatuses = $orderObj->getVendorAllowedUpdateOrderStatuses(true, $codOrder, $pickupOrder);
-        } elseif ($orderDetail['op_product_type'] == Product::PRODUCT_TYPE_PHYSICAL) {
+        } elseif (in_array($orderDetail['op_product_type'], [Product::PRODUCT_TYPE_PHYSICAL, Product::PRODUCT_TYPE_SERVICE])) {
             $processingStatuses = $orderObj->getVendorAllowedUpdateOrderStatuses(false, $codOrder, $pickupOrder);
-        } else {
-            $processingStatuses = $orderObj->getVendorAllowedUpdateOrderStatuses(false, $codOrder, $pickupOrder);
+            if ($orderDetail['op_product_type'] == Product::PRODUCT_TYPE_SERVICE) {
+                $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS"));
+            }
         }
 
         /* [ if shipping not handled by seller then seller can not update status to ship and delived */
-        if (!$shippedBySeller) {
+        if (!$shippedBySeller && $orderDetail['op_product_type'] != Product::PRODUCT_TYPE_SERVICE) {
             $processingStatuses = array_diff($processingStatuses, (array) FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS"));
             if ($pickupOrder) {
                 $processingStatuses = [];
@@ -966,6 +1069,7 @@ class SellerController extends SellerBaseController
         }
 
         $db->commitTransaction();
+        CalculativeDataRecord::updateOrderCancelRequestCount();
         $this->set('op_id', $op_id);
         $this->set('msg', Labels::getLabel('MSG_Updated_Successfully', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
@@ -996,9 +1100,72 @@ class SellerController extends SellerBaseController
         $srch->joinTable(Plugin::DB_TBL, 'LEFT OUTER JOIN', 'ops.opshipping_plugin_id = ops_plugin.plugin_id', 'ops_plugin');
         $srch->addMultipleFields(
             array(
-                'ops.*', 'order_id', 'order_number', 'order_payment_status', 'order_pmethod_id', 'order_tax_charged', 'order_date_added', 'op_id', 'op_qty', 'op_order_id', 'orderstatus_id', 'op_unit_price', 'op_selprod_user_id', 'op_invoice_number', 'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name', 'ou.user_name as buyer_user_name', 'op_is_batch', 'op_selprod_id', 'selprod_product_id', 'pm.plugin_code', 'IFNULL(pm_l.plugin_name, IFNULL(pm.plugin_identifier, "Wallet")) as plugin_name', 'op_commission_charged', 'op_qty', 'op_commission_percentage', 'ou.user_name as buyer_name', 'ouc.credential_username as user_name', 'ouc.credential_email as buyer_email', 'ou.user_phone as buyer_phone', 'op.op_shop_owner_name', 'op.op_shop_owner_username', 'op_l.op_shop_name', 'op.op_shop_owner_email', 'op.op_shop_owner_phone',
-                'op_selprod_title', 'op_product_name', 'op_brand_name', 'op_selprod_options', 'op_selprod_sku', 'op_product_model', 'op_product_type',
-                'op_shipping_duration_name', 'op_shipping_durations', 'op_status_id', 'op_refund_qty', 'op_refund_amount', 'op_refund_commission', 'op_other_charges', 'optosu.optsu_user_id', 'op_tax_collected_by_seller', 'order_is_wallet_selected', 'order_reward_point_used', 'op_product_tax_options', 'ops.*', 'opship.*', 'opr_response', 'addr.*', 'op_rounding_off', 'ops_plugin.plugin_code as opshipping_plugin_code', 'op_selprod_cancellation_age as cancellation_age', 'op_product_length', 'op_product_width', 'op_product_height', 'op_product_dimension_unit', 'op_special_price', 'op_selprod_price', 'op_tax_after_discount'
+                'ops.*',
+                'order_id',
+                'order_number',
+                'order_payment_status',
+                'order_pmethod_id',
+                'order_tax_charged',
+                'order_date_added',
+                'op_id',
+                'op_qty',
+                'op_order_id',
+                'orderstatus_id',
+                'op_unit_price',
+                'op_selprod_user_id',
+                'op_invoice_number',
+                'IFNULL(orderstatus_name, orderstatus_identifier) as orderstatus_name',
+                'ou.user_name as buyer_user_name',
+                'op_is_batch',
+                'op_selprod_id',
+                'selprod_product_id',
+                'pm.plugin_code',
+                'IFNULL(pm_l.plugin_name, IFNULL(pm.plugin_identifier, "Wallet")) as plugin_name',
+                'op_commission_charged',
+                'op_qty',
+                'op_commission_percentage',
+                'ou.user_name as buyer_name',
+                'ouc.credential_username as user_name',
+                'ouc.credential_email as buyer_email',
+                'ou.user_phone as buyer_phone',
+                'op.op_shop_owner_name',
+                'op.op_shop_owner_username',
+                'op_l.op_shop_name',
+                'op.op_shop_owner_email',
+                'op.op_shop_owner_phone',
+                'op_selprod_title',
+                'op_product_name',
+                'op_brand_name',
+                'op_selprod_options',
+                'op_selprod_sku',
+                'op_product_model',
+                'op_product_type',
+                'op_shipping_duration_name',
+                'op_shipping_durations',
+                'op_status_id',
+                'op_refund_qty',
+                'op_refund_amount',
+                'op_refund_commission',
+                'op_other_charges',
+                'optosu.optsu_user_id',
+                'op_tax_collected_by_seller',
+                'order_is_wallet_selected',
+                'order_reward_point_used',
+                'op_product_tax_options',
+                'ops.*',
+                'opship.*',
+                'opr_response',
+                'addr.*',
+                'op_rounding_off',
+                'ops_plugin.plugin_code as opshipping_plugin_code',
+                'op_selprod_cancellation_age as cancellation_age',
+                'op_product_length',
+                'op_product_width',
+                'op_product_height',
+                'op_product_dimension_unit',
+                'op_special_price',
+                'op_selprod_price',
+                'op_tax_after_discount'
             )
         );
         $srch->addCondition('op_selprod_user_id', '=', $userId);
@@ -1447,9 +1614,16 @@ class SellerController extends SellerBaseController
         $srch->addOrder('scatrequestmsg_id', 'DESC');
         $srch->addMultipleFields(
             array(
-                'scatrequestmsg_id', 'scatrequestmsg_from_user_id', 'scatrequestmsg_from_admin_id',
-                'admin_name', 'admin_username', 'admin_email', 'scatrequestmsg_msg',
-                'scatrequestmsg_date', 'msg_user.user_name as msg_user_name', 'msg_user_cred.credential_username as msg_username',
+                'scatrequestmsg_id',
+                'scatrequestmsg_from_user_id',
+                'scatrequestmsg_from_admin_id',
+                'admin_name',
+                'admin_username',
+                'admin_email',
+                'scatrequestmsg_msg',
+                'scatrequestmsg_date',
+                'msg_user.user_name as msg_user_name',
+                'msg_user_cred.credential_username as msg_username',
                 'msg_user_cred.credential_email as msg_user_email',
                 'scatrequest_status'
             )
@@ -2436,6 +2610,7 @@ class SellerController extends SellerBaseController
         if ($shop_id > 0) {
             $post['shop_updated_on'] = date('Y-m-d H:i:s');
         } else {
+            $recordInsert = true;
             $post['shop_created_on'] = date('Y-m-d H:i:s');
         }
 
@@ -2448,6 +2623,9 @@ class SellerController extends SellerBaseController
             FatUtility::dieJsonError($shopObj->getError());
         }
         $shop_id = $shopObj->getMainTableRecordId();
+
+        $user = new User($userId);
+        $user->updateShopValidUser();
 
         $post['ss_shop_id'] = $shop_id;
         $shopSpecificsObj = new ShopSpecifics($shop_id);
@@ -2569,7 +2747,7 @@ class SellerController extends SellerBaseController
                 break;
             }
         }
-        
+
         $shipping = new Shipping($this->siteLangId);
         $shippingService = $shipping->getShippingApiObj();
         if (false !== $shippingService) {
@@ -2820,9 +2998,24 @@ class SellerController extends SellerBaseController
         $srch->doNotCalculateRecords();
         $srch->addMultipleFields(
             [
-                'orrequest_id', 'orrequest_user_id', 'orrequest_qty', 'orrequest_type', 'orrequest_reference', 'orrequest_date', 'orrequest_status',
-                'op_invoice_number', 'op_selprod_title', 'op_product_name', 'op_brand_name', 'op_selprod_options', 'op_selprod_sku', 'op_product_model', 'op_selprod_id', 'op_is_batch',
-                'op_id', 'selprod_product_id'
+                'orrequest_id',
+                'orrequest_user_id',
+                'orrequest_qty',
+                'orrequest_type',
+                'orrequest_reference',
+                'orrequest_date',
+                'orrequest_status',
+                'op_invoice_number',
+                'op_selprod_title',
+                'op_product_name',
+                'op_brand_name',
+                'op_selprod_options',
+                'op_selprod_sku',
+                'op_product_model',
+                'op_selprod_id',
+                'op_is_batch',
+                'op_id',
+                'selprod_product_id'
             ]
         );
         $srch->addOrder('orrequest_date', 'DESC');
@@ -2894,13 +3087,42 @@ class SellerController extends SellerBaseController
         $srch->doNotLimitRecords();
         $srch->addMultipleFields(
             array(
-                'orrequest_id', 'orrequest_op_id', 'orrequest_user_id', 'orrequest_qty', 'orrequest_type',
-                'orrequest_date', 'orrequest_status', 'orrequest_reference', 'op_invoice_number', 'op_selprod_title', 'op_product_name',
-                'op_brand_name', 'op_selprod_options', 'op_selprod_sku', 'op_product_model', 'op_qty',
-                'op_unit_price', 'op_selprod_user_id', 'IFNULL(orreason_title, orreason_identifier) as orreason_title', 'op_shop_id', 'op_shop_name',
-                'op_shop_owner_name', 'buyer.user_name as buyer_name', 'order_tax_charged', 'op_other_charges', 'op_refund_shipping',
-                'op_refund_amount', 'op_commission_percentage', 'op_affiliate_commission_percentage', 'op_commission_include_tax',
-                'op_commission_include_shipping', 'op_free_ship_upto', 'op_actual_shipping_charges', 'op_rounding_off', 'op_selprod_id', 'selprod_product_id',
+                'orrequest_id',
+                'orrequest_op_id',
+                'orrequest_user_id',
+                'orrequest_qty',
+                'orrequest_type',
+                'orrequest_date',
+                'orrequest_status',
+                'orrequest_reference',
+                'op_invoice_number',
+                'op_selprod_title',
+                'op_product_name',
+                'op_brand_name',
+                'op_selprod_options',
+                'op_selprod_sku',
+                'op_product_model',
+                'op_qty',
+                'op_unit_price',
+                'op_selprod_user_id',
+                'IFNULL(orreason_title, orreason_identifier) as orreason_title',
+                'op_shop_id',
+                'op_shop_name',
+                'op_shop_owner_name',
+                'buyer.user_name as buyer_name',
+                'order_tax_charged',
+                'op_other_charges',
+                'op_refund_shipping',
+                'op_refund_amount',
+                'op_commission_percentage',
+                'op_affiliate_commission_percentage',
+                'op_commission_include_tax',
+                'op_commission_include_shipping',
+                'op_free_ship_upto',
+                'op_actual_shipping_charges',
+                'op_rounding_off',
+                'op_selprod_id',
+                'selprod_product_id',
                 'opshipping_by_seller_user_id'
             )
         );
@@ -2997,7 +3219,7 @@ class SellerController extends SellerBaseController
             Message::addErrorMessage(Labels::getLabel($orrObj->getError(), $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'viewOrderReturnRequest', array($requestRow['orrequest_id'])));
         }
-
+        CalculativeDataRecord::updateOrderReturnRequestCount();
         /* Update To Shipping Service         
         $this->langId = $this->siteLangId;
         $this->returnShipment($requestRow['op_id'], $requestRow['orrequest_qty'], UrlHelper::generateUrl('Seller', 'viewOrderReturnRequest', array($requestRow['orrequest_id'])));
@@ -3849,7 +4071,10 @@ class SellerController extends SellerBaseController
         $srch = Product::getSearchObject($this->siteLangId);
         $srch->addMultipleFields(
             array(
-                'product_id', 'product_ship_package', 'product_seller_id', 'product_added_by_admin_id',
+                'product_id',
+                'product_ship_package',
+                'product_seller_id',
+                'product_added_by_admin_id',
                 'IFNULL(product_name,product_identifier)as product_name'
             )
         );
@@ -4192,7 +4417,7 @@ class SellerController extends SellerBaseController
         }
 
         $fld = $frm->addTextBox(Labels::getLabel('FRM_PRODUCT_WARRANTY', $this->siteLangId), 'product_warranty');
-        $fld->htmlAfterField = '<br/><small>' . Labels::getLabel('FRM_WARRANTY_IN_DAYS', $this->siteLangId) . ' </small>';
+        $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('FRM_WARRANTY_IN_DAYS', $this->siteLangId) . ' </span>';
 
         $frm->addHiddenField('', 'ps_from_country_id');
         $frm->addHiddenField('', 'product_id');
@@ -4245,14 +4470,18 @@ class SellerController extends SellerBaseController
         }
 
         $frm->addRequiredField(Labels::getLabel('FRM_TITLE', $this->siteLangId), 'selprod_title' . FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1));
-        if (false === Plugin::isActive('EasyEcom')) {
-            $frm->addCheckBox(Labels::getLabel('FRM_SYSTEM_SHOULD_MAINTAIN_STOCK_LEVELS', $this->siteLangId), 'selprod_subtract_stock', applicationConstants::YES, array(), false, 0);
-            $frm->addCheckBox(Labels::getLabel('FRM_SYSTEM_SHOULD_TRACK_PRODUCT_INVENTORY', $this->siteLangId), 'selprod_track_inventory', Product::INVENTORY_TRACK, array(), false, 0);
+        if ($productData['product_type'] != Product::PRODUCT_TYPE_SERVICE) {
+            if (false === Plugin::isActive('EasyEcom')) {
+                $frm->addCheckBox(Labels::getLabel('FRM_SYSTEM_SHOULD_MAINTAIN_STOCK_LEVELS', $this->siteLangId), 'selprod_subtract_stock', applicationConstants::YES, array(), false, 0);
+                $frm->addCheckBox(Labels::getLabel('FRM_SYSTEM_SHOULD_TRACK_PRODUCT_INVENTORY', $this->siteLangId), 'selprod_track_inventory', Product::INVENTORY_TRACK, array(), false, 0);
+            }
+            $fld = $frm->addTextBox(Labels::getLabel('FRM_ALERT_STOCK_LEVEL', $this->siteLangId), 'selprod_threshold_stock_level');
+            $fld->requirements()->setInt();
+            $fld = $frm->addIntegerField(Labels::getLabel('FRM_MINIMUM_PURCHASE_QUANTITY', $this->siteLangId), 'selprod_min_order_qty');
+            $fld->requirements()->setRange(1, SellerProduct::MAX_RANGE_OF_MINIMUM_PURCHANGE_QTY);
+        } else {
+            $frm->addHiddenField(Labels::getLabel('FRM_MINIMUM_PURCHASE_QUANTITY', $this->siteLangId), 'selprod_min_order_qty', 1);
         }
-        $fld = $frm->addTextBox(Labels::getLabel('FRM_ALERT_STOCK_LEVEL', $this->siteLangId), 'selprod_threshold_stock_level');
-        $fld->requirements()->setInt();
-        $fld = $frm->addIntegerField(Labels::getLabel('FRM_MINIMUM_PURCHASE_QUANTITY', $this->siteLangId), 'selprod_min_order_qty');
-        $fld->requirements()->setRange(1, SellerProduct::MAX_RANGE_OF_MINIMUM_PURCHANGE_QTY);
 
         if ($productData['product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
             $fld = $frm->addIntegerField(Labels::getLabel('FRM_MAX_DOWNLOAD_TIMES', $this->siteLangId), 'selprod_max_download_times');
@@ -4260,6 +4489,8 @@ class SellerController extends SellerBaseController
 
             $fld1 = $frm->addIntegerField(Labels::getLabel('FRM_VALIDITY_(days)', $this->siteLangId), 'selprod_download_validity_in_days');
             $fld1->htmlAfterField = '<span class="note">' . Labels::getLabel('FRM_-1_FOR_UNLIMITED', $this->siteLangId) . '</span>';
+            $frm->addHiddenField('', 'selprod_condition', $defaultProductCond);
+        } elseif ($productData['product_type'] != Product::PRODUCT_TYPE_PHYSICAL) {
             $frm->addHiddenField('', 'selprod_condition', $defaultProductCond);
         } else {
             $fld = $frm->addSelectBox(Labels::getLabel('FRM_PRODUCT_CONDITION', $this->siteLangId), 'selprod_condition', Product::getConditionArr($this->siteLangId), $defaultProductCond, array(), Labels::getLabel('FRM_SELECT_CONDITION', $this->siteLangId));
@@ -4271,28 +4502,25 @@ class SellerController extends SellerBaseController
         $useShopPolicy = $frm->addCheckBox(Labels::getLabel('FRM_USE_SHOP_RETURN_AND_CANCELLATION_POLICY', $this->siteLangId), 'use_shop_policy', 1, ['id' => 'use_shop_policy'], false, 0);
 
         $fld = $frm->addIntegerField(Labels::getLabel('FRM_PRODUCT_ORDER_RETURN_PERIOD_(Days)', $this->siteLangId), 'selprod_return_age');
+        $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('FRM_IN_DAYS', $this->siteLangId) . ' </span>';
 
         $orderReturnAgeReqFld = new FormFieldRequirement('selprod_return_age', Labels::getLabel('FRM_PRODUCT_ORDER_RETURN_PERIOD_(Days)', $this->siteLangId));
         $orderReturnAgeReqFld->setRequired(true);
         $orderReturnAgeReqFld->setPositive();
-        $orderReturnAgeReqFld->htmlAfterField = '<br/><small>' . Labels::getLabel('FRM_IN_DAYS', $this->siteLangId) . ' </small>';
 
         $orderReturnAgeUnReqFld = new FormFieldRequirement('selprod_return_age', Labels::getLabel('FRM_PRODUCT_ORDER_RETURN_PERIOD_(Days)', $this->siteLangId));
         $orderReturnAgeUnReqFld->setRequired(false);
         $orderReturnAgeUnReqFld->setPositive();
-        $orderReturnAgeUnReqFld->htmlAfterField = '<br/><small>' . Labels::getLabel('FRM_IN_DAYS', $this->siteLangId) . ' </small>';
 
         $fld = $frm->addIntegerField(Labels::getLabel('FRM_PRODUCT_ORDER_CANCELLATION_PERIOD_(Days)', $this->siteLangId), 'selprod_cancellation_age');
+        $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('FRM_PERIOD_IN_DAYS', $this->siteLangId) . ' </span>';
 
         $orderCancellationAgeReqFld = new FormFieldRequirement('selprod_cancellation_age', Labels::getLabel('FRM_PRODUCT_ORDER_CANCELLATION_PERIOD_(DAYS)', $this->siteLangId));
         $orderCancellationAgeReqFld->setRequired(true);
         $orderCancellationAgeReqFld->setPositive();
-        $orderCancellationAgeReqFld->htmlAfterField = '<br/><small>' . Labels::getLabel('FRM_WARRANTY_IN_DAYS', $this->siteLangId) . ' </small>';
-
         $orderCancellationAgeUnReqFld = new FormFieldRequirement('selprod_cancellation_age', Labels::getLabel('FRM_PRODUCT_ORDER_CANCELLATION_PERIOD_(DAYS)', $this->siteLangId));
         $orderCancellationAgeUnReqFld->setRequired(false);
         $orderCancellationAgeUnReqFld->setPositive();
-        $orderCancellationAgeUnReqFld->htmlAfterField = '<br/><small>' . Labels::getLabel('FRM_WARRANTY_IN_DAYS', $this->siteLangId) . ' </small>';
 
         $useShopPolicy->requirements()->addOnChangerequirementUpdate(Shop::USE_SHOP_POLICY, 'eq', 'selprod_return_age', $orderReturnAgeUnReqFld);
         $useShopPolicy->requirements()->addOnChangerequirementUpdate(Shop::USE_SHOP_POLICY, 'ne', 'selprod_return_age', $orderReturnAgeReqFld);
@@ -4301,19 +4529,20 @@ class SellerController extends SellerBaseController
         $useShopPolicy->requirements()->addOnChangerequirementUpdate(Shop::USE_SHOP_POLICY, 'ne', 'selprod_cancellation_age', $orderCancellationAgeReqFld);
 
         if ($type != 'CUSTOM_CATALOG') {
-            $yesNoArr = applicationConstants::getYesNoArr($this->siteLangId);
-            $codFld = $frm->addSelectBox(Labels::getLabel('FRM_AVAILABLE_FOR_COD', $this->siteLangId), 'selprod_cod_enabled', $yesNoArr, '0', array(), '');
+            if ($productData['product_type'] != Product::PRODUCT_TYPE_SERVICE) {
+                $yesNoArr = applicationConstants::getYesNoArr($this->siteLangId);
+                $codFld = $frm->addSelectBox(Labels::getLabel('FRM_AVAILABLE_FOR_COD', $this->siteLangId), 'selprod_cod_enabled', $yesNoArr, '0', array(), '');
 
-            $paymentMethod = new PaymentMethods();
-            if (!$paymentMethod->cashOnDeliveryIsActive() || $productData['product_cod_enabled'] != applicationConstants::YES) {
-                $codFld->addFieldTagAttribute('disabled', 'disabled');
-                if ($productData['product_cod_enabled'] != applicationConstants::YES) {
-                    $codFld->htmlAfterField = '<span class="note">' . Labels::getLabel('FRM_COD_OPTION_IS_DISABLED_IN_PRODUCT', $this->siteLangId) . '</span>';
-                } else {
-                    $codFld->htmlAfterField = '<span class="note">' . Labels::getLabel('FRM_COD_OPTION_IS_DISABLED_IN_PAYMENT_GATEWAY_SETTINGS', $this->siteLangId) . '</span>';
+                $paymentMethod = new PaymentMethods();
+                if (!$paymentMethod->cashOnDeliveryIsActive() || $productData['product_cod_enabled'] != applicationConstants::YES) {
+                    $codFld->addFieldTagAttribute('disabled', 'disabled');
+                    if ($productData['product_cod_enabled'] != applicationConstants::YES) {
+                        $codFld->htmlAfterField = '<span class="note">' . Labels::getLabel('FRM_COD_OPTION_IS_DISABLED_IN_PRODUCT', $this->siteLangId) . '</span>';
+                    } else {
+                        $codFld->htmlAfterField = '<span class="note">' . Labels::getLabel('FRM_COD_OPTION_IS_DISABLED_IN_PAYMENT_GATEWAY_SETTINGS', $this->siteLangId) . '</span>';
+                    }
                 }
             }
-
 
             $shipBySeller = Product::isProductShippedBySeller($product_id, $productData['product_seller_id'], UserAuthentication::getLoggedUserId());
             // $shipBySeller = SellerProduct::prodShipByseller($product_id);
@@ -4420,9 +4649,17 @@ class SellerController extends SellerBaseController
 
         $prodSrch->addMultipleFields(
             array(
-                'product_id', 'product_identifier', 'IFNULL(product_name,product_identifier) as product_name',
-                'product_seller_id', 'product_model', 'product_type', 'product_short_description', 'prodcat_id',
-                'IFNULL(prodcat_name,prodcat_identifier) as prodcat_name', 'brand_id', 'IFNULL(brand_name, brand_identifier) as brand_name',
+                'product_id',
+                'product_identifier',
+                'IFNULL(product_name,product_identifier) as product_name',
+                'product_seller_id',
+                'product_model',
+                'product_type',
+                'product_short_description',
+                'prodcat_id',
+                'IFNULL(prodcat_name,prodcat_identifier) as prodcat_name',
+                'brand_id',
+                'IFNULL(brand_name, brand_identifier) as brand_name',
                 'product_min_selling_price'
             )
         );
@@ -4541,7 +4778,7 @@ class SellerController extends SellerBaseController
         if (!$userObj->updateUserReturnAddressLang($post)) {
             FatUtility::dieJsonError(Labels::getLabel($userObj->getError(), $this->siteLangId));
         }
-        
+
         $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
         if (0 < $autoUpdateOtherLangsData) {
             $updateLangDataobj = new TranslateLangData($userObj::DB_TBL_USR_RETURN_ADDR_LANG);
@@ -4878,8 +5115,21 @@ class SellerController extends SellerBaseController
         $srch->doNotCalculateRecords();
         $srch->addMultipleFields(
             array(
-                'selprod_id', 'credential_username', 'selprod_price', 'date(splprice_start_date) as splprice_start_date', 'splprice_end_date', 'IFNULL(product_name, product_identifier) as product_name',
-                'selprod_title', 'splprice_id', 'splprice_price', 'selprod_product_id', 'product_updated_on', 'user_id', 'user_updated_on', 'credential_email', 'user_name'
+                'selprod_id',
+                'credential_username',
+                'selprod_price',
+                'date(splprice_start_date) as splprice_start_date',
+                'splprice_end_date',
+                'IFNULL(product_name, product_identifier) as product_name',
+                'selprod_title',
+                'splprice_id',
+                'splprice_price',
+                'selprod_product_id',
+                'product_updated_on',
+                'user_id',
+                'user_updated_on',
+                'credential_email',
+                'user_name'
             )
         );
         $srch->addOrder('splprice_id', 'DESC');
@@ -4970,14 +5220,14 @@ class SellerController extends SellerBaseController
             FatUtility::dieJsonError($message);
         }
 
-        if (!isset($post['splprice_price']) || $post['splprice_price'] < $product['product_min_selling_price'] || $post['splprice_price'] > $product['selprod_price']) {
+        /* if (!isset($post['splprice_price']) || $post['splprice_price'] < $product['product_min_selling_price'] || $post['splprice_price'] > $product['selprod_price']) {
             $str = Labels::getLabel('ERR_PRICE_MUST_BETWEEN_MIN_SELLING_PRICE_{MINSELLINGPRICE}_AND_SELLING_PRICE_{SELLINGPRICE}', $this->siteLangId);
             $minSellingPrice = CommonHelper::displayMoneyFormat($product['product_min_selling_price'], false, true, true);
             $sellingPrice = CommonHelper::displayMoneyFormat($product['selprod_price'], false, true, true);
 
             $message = CommonHelper::replaceStringData($str, array('{MINSELLINGPRICE}' => $minSellingPrice, '{SELLINGPRICE}' => $sellingPrice));
             FatUtility::dieJsonError($message);
-        }
+        } */
 
 
         /* Check if same date already exists [ */
@@ -5320,7 +5570,7 @@ class SellerController extends SellerBaseController
                 $paymentMethod = new PaymentMethods();
                 if (!$paymentMethod->cashOnDeliveryIsActive()) {
                     $codFld->addFieldTagAttribute('disabled', 'disabled');
-                    $codFld->htmlAfterField = '<br/><small>' . Labels::getLabel('FRM_COD_OPTION_IS_DISABLED_IN_PAYMENT_GATEWAY_SETTINGS', $this->siteLangId) . '</small>';
+                    $codFld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('FRM_COD_OPTION_IS_DISABLED_IN_PAYMENT_GATEWAY_SETTINGS', $this->siteLangId) . '</span>';
                 }
             }
 
@@ -5907,5 +6157,6 @@ class SellerController extends SellerBaseController
         if (!$product->save()) {
             LibHelper::exitWithError($product->getError(), true);
         }
+        CalculativeDataRecord::updateSelprodRequestCount();
     }
 }

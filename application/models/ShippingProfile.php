@@ -11,7 +11,6 @@ class ShippingProfile extends MyAppModel
     public function __construct($id = 0)
     {
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $id);
-        $this->db = FatApp::getDb();
     }
 
     public static function getSearchObject($langId = 0, $isActive = false)
@@ -244,6 +243,7 @@ class ShippingProfile extends MyAppModel
                 $userId = 0;
             }
 
+            $shippingProfileId = $shippingProfileId ?? 0;
             $srch->addMultipleFields(array($userId . ' as user_id', $shippingProfileId . ' as shipprofile_id', 'product_id'));
             $srch->doNotCalculateRecords();
             $srch->doNotLimitRecords();

@@ -53,6 +53,7 @@ class OrderPayment extends Orders
         
         $addresses = $this->getOrderAddresses($orderInfo["order_id"]);
         $currencyArr = Currency::getCurrencyAssoc($this->orderLangId);
+
         $orderCurrencyCode = !empty($currencyArr[FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1)]) ? $currencyArr[FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1)] : '';
 
         $billingArr = array(
@@ -79,6 +80,8 @@ class OrderPayment extends Orders
             "customer_shipping_phone" => '',
         );
 
+
+
         $arrOrder = array(
             "id" => $orderInfo["order_id"],
             "order_number" => $orderInfo["order_number"],
@@ -103,6 +106,7 @@ class OrderPayment extends Orders
             "paypal_bn" => "FATbit_SP",
             "order_pmethod_id" => $orderInfo['order_pmethod_id'],
         );
+
 
         /* if (empty($orderInfo) || empty($userInfo) || empty($addresses)){
         return $arrOrder;
@@ -140,7 +144,10 @@ class OrderPayment extends Orders
             //$shippingArr = $billingArr;
         }
 
+
+
         $arrOrder = array_merge($arrOrder, $billingArr, $shippingArr);
+
         return $arrOrder;
     }
 
@@ -269,6 +276,11 @@ class OrderPayment extends Orders
                 $emailNotificationObj = new EmailHandler();
                 $emailNotificationObj->sendTxnNotification($txnId, $defaultSiteLangId);
                 /* ] */
+            }
+
+            if ($orderDetails['order_type'] == Orders::ORDER_GIFT_CARD) {
+                $emailNotificationObj = new EmailHandler();
+                $emailNotificationObj->sendMailToAdminAndRecipient($orderDetails['order_id']);
             }
             /* ] */
             return true;
@@ -423,5 +435,19 @@ class OrderPayment extends Orders
         }
 
         return [$data['opayment_gateway_response']];
+    }
+
+    public static function getApprovedAmountTotal(int $orderId): float
+    {
+        $srch = new SearchBase(Orders::DB_TBL_ORDER_PAYMENTS, 'opay');
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $srch->addMultipleFields(['IFNULL(SUM((CASE WHEN opayment_txn_status = 1 THEN opayment_amount ELSE 0 END)), 0) as approvedAmount']);
+        $srch->addCondition('opayment_order_id', '=', $orderId);
+        $paymentRecord = FatApp::getDb()->fetch($srch->getResultSet());
+        if (empty($paymentRecord)) {
+            return 0;
+        }
+        return $paymentRecord['approvedAmount'];
     }
 }

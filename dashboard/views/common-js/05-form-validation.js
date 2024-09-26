@@ -385,7 +385,7 @@
                 if (this.settings.errordisplay != 0 && this.settings.errordisplay != 1) {
                     obj.field.unbind("keyup");
                     obj.attach("keyup");
-                }               
+                }
                 switch (this.settings.errordisplay) {
                     case 1:
                         $('#' + this.settings.summaryElementId).append(errorlist.empty());
@@ -400,9 +400,9 @@
                         }
                         break;
                     case 3:
-                        if (field.attr('type') && field.attr('type').toLowerCase() === 'checkbox'  || field.parent().hasClass('input-group')) {
+                        if (field.attr('type') && field.attr('type').toLowerCase() === 'checkbox' || field.parent().hasClass('input-group')) {
                             field.parent().after(errorlist.empty());
-                        }else if(field.siblings('.br-widget').length){
+                        } else if (field.siblings('.br-widget').length) {
                             field.parent().append(errorlist.empty());
                         }
                         else {
@@ -554,11 +554,17 @@
             var elementObj = $(el[0].form.elements[arr[i].fldname]);
             elementObj.attr('data-fatreq', JSON.stringify(arr[i].requirement));
             if (true === fieldsVisibility) {
-                var elementRow = elementObj.closest('.field-set').parent();             
-                if (false == arr[i].requirement.required) {
-                    elementRow.hide();
-                } else {
-                    elementRow.show();
+                var elementRow = elementObj.closest('.field-set').parent();
+                if (1 > elementRow.length) {
+                    elementRow = elementObj.closest('.form-group').parent();
+                }
+
+                if (0 < elementRow.length) {
+                    if (false == arr[i].requirement.required) {
+                        elementRow.hide();
+                    } else {
+                        elementRow.show();
+                    }
                 }
             }
         }

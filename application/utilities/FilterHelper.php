@@ -32,9 +32,9 @@ class FilterHelper extends FatUtility
         $prodSrchObj->addSubscriptionValidCondition();*/
         $prodSrchObj->joinSellerProducts(0, '', $headerFormParamsAssocArr, true);
         $prodSrchObj->unsetDefaultLangForJoins();
-        $prodSrchObj->joinSellers();
+        // $prodSrchObj->joinSellers();
         $prodSrchObj->setGeoAddress();
-        $prodSrchObj->joinShops($langId);
+        $prodSrchObj->joinShops($langId, true, true, 0, true);
         $prodSrchObj->joinShopCountry();
         $prodSrchObj->joinShopState();
         $prodSrchObj->joinBrands($langId);
@@ -56,8 +56,8 @@ class FilterHelper extends FatUtility
 
         $topProducts = FatApp::getPostedData('top_products', FatUtility::VAR_INT, 0);
         if (0 < $topProducts) {
-            $prodSrchObj->joinProductRating();
-            $prodSrchObj->addCondition('prod_rating', '>=', 3);
+            // $prodSrchObj->joinProductRating();
+            $prodSrchObj->addCondition('product_rating', '>=', 3);
         }
 
         $brandId = FatApp::getPostedData('brand_id', FatUtility::VAR_INT, 0);
@@ -185,7 +185,7 @@ class FilterHelper extends FatUtility
         /* if needs to show product counts under brands[ */
         //$brandSrch->addFld('count(selprod_id) as totalProducts');
         /* ] */
-        $brandSrch->doNotCalculateRecords();        
+        $brandSrch->doNotCalculateRecords();
         $brandRs = $brandSrch->getResultSet();
         $brands = FatApp::getDb()->fetchAll($brandRs);
 

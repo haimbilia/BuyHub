@@ -40,6 +40,15 @@ You will require the following server specifications for setting up the Yokart s
 - [Documentation](https://www.yo-kart.com/resource-center.html) Find All The Resources At One Place To Help You Setup Your eCommerce Marketplace Successfully.
 - [Server Requirements](https://www.yo-kart.com/yokart-server-requirements.html) Server Requirements.
 
+## Version History
+- **Version 10.0.0** :
+- **Version 9.3.1** :
+- **Version 9.3.0** :
+- **Version 9.2.0** :
+- **Version 9.1.2** :
+- **Version 9.1.1** :
+- **Version 9.0.0** :
+
 ## Installation Instructions
 
 1. **Prerequisite**
@@ -183,7 +192,7 @@ You will require the following server specifications for setting up the Yokart s
 
 - Upload the latest script files into your root directory and make sure that the changes updated on the setup-files directory files shall be updated with your root script files.
 - Execute the updates.sql file which is placed under /path/to/your/rootdir/database direcotry.
-- Login to admin account and Open url https://yourdomain.com/admin/patch-update/update-shops-avg-rating to update reviews and ratings.
+- Login to admin account and Open url https://yourdomain.com/admin/patch-update/updateValidSubscription to update user_has_valid_subscription column for seller who has valid subscription plan. subscription.
+- Login to admin account and Open url https://yourdomain.com/admin/patch-update/updateProductRating to update Product ratings.
 - Labels table shall be updated from the sample.sql file which is placed under /path/to/your/rootdir/database/ directory 
 - user-uploads directory shall be remain same.
-- Hit /admin/patch-update/update-valid-subscription to update user_has_valid_subscription column for seller who has valid subscription plan.

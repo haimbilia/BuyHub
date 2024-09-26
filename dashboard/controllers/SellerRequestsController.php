@@ -285,7 +285,9 @@ class SellerRequestsController extends SellerBaseController
         if ($approvalRequired) {
             $msg = Labels::getLabel("MSG_CATEGORY_REQUEST_SUBMITTED_SUCCESSFULLY", $this->siteLangId);
         }
-
+        if ($approvalRequired && ProductCategory::REQUEST_PENDING == $post['prodcat_status']) {
+            CalculativeDataRecord::updateCategoryRequestCount();
+        }
         if ($this->get('langId') == 0 && !$this->isCategoryMediaUploaded($categoryReqId)) {
             $this->set('openMediaForm', true);
         }
@@ -575,7 +577,9 @@ class SellerRequestsController extends SellerBaseController
         if ($this->get('langId') == 0 && !$this->isBrandMediaUploaded($brandReqId)) {
             $this->set('openMediaForm', true);
         }
-
+        if (isset($brandData['brand_status']) && Brand::BRAND_REQUEST_PENDING == $brandData['brand_status']) {
+            CalculativeDataRecord::updateBrandRequestCount();
+        }
         $this->set('brandReqId', $brandReqId);
         $this->_template->render(false, false, 'json-success.php');
     }
@@ -1020,6 +1024,7 @@ class SellerRequestsController extends SellerBaseController
         LEFT JOIN tbl_badge_links blnk ON br.breq_blinkcond_id = blnk.badgelink_blinkcond_id
         WHERE br.breq_id = " . $badgeReqId;
         FatApp::getDb()->query($deleteQuery);
+        CalculativeDataRecord::updateBadgeRequestCount();
         FatUtility::dieJsonSuccess(Labels::getLabel('MSG_REMOVED', $this->siteLangId));
     }
 }

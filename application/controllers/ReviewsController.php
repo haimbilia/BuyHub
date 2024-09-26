@@ -70,6 +70,7 @@ class ReviewsController extends MyAppController
 
         $withImagesOnly = FatApp::getPostedData('withImages', FatUtility::VAR_INT, 0);
         $withoutImages = FatApp::getPostedData('withoutImages', FatUtility::VAR_INT, 0);
+        $noGroupBy = FatApp::getPostedData('noGroupBy', FatUtility::VAR_INT, 0);
 
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         $orderBy = FatApp::getPostedData('orderBy', FatUtility::VAR_STRING, 'most_recent');
@@ -84,7 +85,9 @@ class ReviewsController extends MyAppController
         $srch->addCondition('spr.spreview_product_id', '=', $productId);
         $srch->addCondition('spr.spreview_status', '=', SelProdReview::STATUS_APPROVED);
         $srch->addMultipleFields(array('spreview_id', 'spreview_selprod_id', 'spreview_title', 'spreview_description', 'spreview_posted_on', 'spreview_postedby_user_id', 'user_name', 'group_concat(case when sprh_helpful = 1 then concat(sprh_user_id,"~",1) else concat(sprh_user_id,"~",0) end ) usersMarked', 'sum(if(sprh_helpful = 1 , 1 ,0)) as helpful', 'sum(if(sprh_helpful = 0 , 1 ,0)) as notHelpful', 'count(sprh_spreview_id) as countUsersMarked', 'user_updated_on'));
-        $srch->addGroupBy('spr.spreview_id');
+        if (1 > $noGroupBy) {
+            $srch->addGroupBy('spr.spreview_id');
+        }
 
         if (0 < $withImagesOnly || 0 < $withoutImages) {
             $join = 0 < $withImagesOnly ? 'INNER' : 'LEFT';
@@ -114,6 +117,7 @@ class ReviewsController extends MyAppController
                 $srch->addOrder('spr.spreview_posted_on', 'desc');
                 break;
         }
+        // echo $srch->getQuery();
         $records = (array) FatApp::getDb()->fetchAll($srch->getResultSet(), 'spreview_id');
 
         $recordRatings = [];
@@ -142,7 +146,7 @@ class ReviewsController extends MyAppController
         }
 
         $prodSrch = new ProductSearch($this->siteLangId);
-        $prodSrch->setDefinedCriteria();
+        $prodSrch->setDefinedCriteria(0, 0, ['doNotJoinSpecialPrice' => true, 'doNotJoinSellers' => true]);
         $prodSrch->joinSellerSubscription();
         $prodSrch->addSubscriptionValidCondition();
         $prodSrch->joinProductToCategory();
@@ -177,14 +181,47 @@ class ReviewsController extends MyAppController
         FatUtility::dieJsonSuccess($json);
     }
 
+    public function getReviewsImages()
+    {
+        $selProdId = FatApp::getPostedData('selprod_id');
+        $pageSize = FatApp::getPostedData('pageSize', FatUtility::VAR_INT, 10);
+        $pageSize = 3;
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        if ($page < 2) {
+            $page = 1;
+        }
+
+        $srch = AttachedFile::getSearchObject();
+        $srch->joinTable(SelProdReview::DB_TBL, 'LEFT OUTER JOIN', 'spreview_id = afile_record_id');
+        $srch->addCondition('afile_type', '=', AttachedFile::FILETYPE_ORDER_FEEDBACK);
+        $srch->addCondition('spreview_status', '=', SelProdReview::STATUS_APPROVED);
+        $srch->addCondition('spreview_selprod_id', '=', $selProdId);
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pageSize);
+        $records = FatApp::getDb()->fetchAll($srch->getResultSet());
+        $totalRecords = $srch->recordCount();
+        $this->set('reviewsImages', $records);
+        $this->set('totalRecords', $totalRecords);
+        $this->set('pageSize', $pageSize);
+        $this->set('page', $page);
+        $this->set('pageCount', $srch->pages());
+        $this->set('selProdId', $selProdId);
+        $json['page'] = $page;
+        $json['html'] = $this->_template->render(false, false, 'reviews/reviews-with-images.php', true, false);
+        $json['total_records'] = $totalRecords;
+        FatUtility::dieJsonSuccess($json);
+    }
+
     public function shop($shop_id = 0, $reviewId = 0)
     {
         $shop_id = FatUtility::int($shop_id);
 
         if (1 > $shop_id) {
-            FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'Shop'));
+            CommonHelper::redirectUserReferer();
+        } else if (1 > FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) {
+            FatApp::redirectUser(UrlHelper::generateUrl('Shops', 'view', [$shop_id]));
         }
-
+        
         $srch = new ShopSearch($this->siteLangId);
         $srch->setDefinedCriteria($this->siteLangId);
         $srch->joinSellerSubscription();
@@ -273,6 +310,7 @@ class ReviewsController extends MyAppController
         }
 
         $this->includeFeatherLight();
+        $this->_template->addJs(['js/jquery.fancybox.min.js']);
         if (1 > $reviewId) {
             $this->_template->render();
         }
@@ -353,7 +391,6 @@ class ReviewsController extends MyAppController
         $json['startRecord'] = $startRecord;
         $json['recordsToDisplay'] = count($records);
         $json['totalRecords'] = $recordCount;
-
         $json['html'] = $this->_template->render(false, false, 'reviews/search-for-shop.php', true, false);
         $json['loadMoreBtnHtml'] = $this->_template->render(false, false, 'reviews/load-more-shop-reviews-btn.php', true, false);
         FatUtility::dieJsonSuccess($json);

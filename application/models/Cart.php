@@ -1,4 +1,7 @@
 <?php
+
+use Google\Service\AnalyticsReporting\Resource\UserActivity;
+
 class Cart extends FatModel
 {
     private $products = array();
@@ -18,8 +21,10 @@ class Cart extends FatModel
 
     private $hasPhysicalProduct = -1;
     private $hasDigitalProduct = -1;
+    private $hasServiceProduct = -1;
     private $isAnyOutOfStock = -1;
     private array $removedItems = [];
+    public int $singleCartSellerId = 0;
 
     public const DB_TBL = 'tbl_user_cart';
     public const DB_TBL_PREFIX = 'usercart_';
@@ -33,6 +38,10 @@ class Cart extends FatModel
     public const PAGE_TYPE_CHECKOUT = 2;
 
     public const CART_MAX_DISPLAY_QTY = 9;
+    public $cart_lang_id = 0;
+    public $cart_user_id = 0;
+    public $cart_id = 0;
+    public $cartSameSessionUser = 0;
 
     public function __construct($user_id = 0, $langId = 0, $tempCartUserId = 0, $pageType = 0)
     {
@@ -154,6 +163,15 @@ class Cart extends FatModel
             return false;
         }
 
+        $selProdData = SellerProduct::getAttributesById($selprod_id, ['selprod_user_id', 'selprod_track_inventory']);
+        if ($this->hasProducts() > 0 && FatApp::getConfig('CONF_SINGLE_SELLER_CART', FatUtility::VAR_INT, 0)) {
+            $this->getBasketProducts($this->cart_lang_id);
+            $sellerUserId = $selProdData['selprod_user_id'];
+            if ($this->singleCartSellerId > 0 && $sellerUserId != $this->singleCartSellerId) {
+                $this->clear();
+            }
+        }
+
         if ($qty > 0) {
             $key = static::CART_KEY_PREFIX_PRODUCT . $selprod_id;
             if ($prodgroup_id) {
@@ -174,13 +192,18 @@ class Cart extends FatModel
                 foreach ($products as $cartKey => $product) {
                     if ($product['is_batch'] && $prodgroup_id == $product['prodgroup_id']) {
                         foreach ($product['products'] as $pgProduct) {
+                            if (1 > $pgProduct['selprod_track_inventory']) {
+                                continue;
+                            }
                             $this->updateTempStockHold($pgProduct['selprod_id'], $this->SYSTEM_ARR['cart'][$key], $product['prodgroup_id']);
                         }
                     }
                 }
             }
         } else {
-            $this->updateTempStockHold($selprod_id, $this->SYSTEM_ARR['cart'][$key]);
+            if (0 < $selProdData['selprod_track_inventory']) {
+                $this->updateTempStockHold($selprod_id, $this->SYSTEM_ARR['cart'][$key]);
+            }
         }
         $this->removeCartDiscountCoupon();
         $this->updateUserCart();
@@ -250,6 +273,34 @@ class Cart extends FatModel
         return false;
     }
 
+    public function hasServiceProduct()
+    {
+        if (-1 !== $this->hasServiceProduct) {
+            return $this->hasServiceProduct;
+        }
+
+        foreach ($this->getBasketProducts($this->cart_lang_id) as $product) {
+            if (-1 !== $this->hasServiceProduct) {
+                return $this->hasServiceProduct;
+            }
+            if (isset($product['is_service_product']) && $product['is_service_product']) {
+                return true;
+            }
+
+            if ($product['is_batch'] && !empty($product['products'])) {
+                foreach ($product['products'] as $pgproduct) {
+                    if ($pgproduct['is_service_product']) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        $this->products = [];
+        $this->basketProducts = [];
+        return false;
+    }
+
     public function hasPhysicalProduct()
     {
         if (-1 !== $this->hasPhysicalProduct) {
@@ -284,6 +335,7 @@ class Cart extends FatModel
             $this->isAnyOutOfStock = true;
             $this->hasDigitalProduct = false;
             $this->hasPhysicalProduct = false;
+            $this->hasServiceProduct = false;
 
             $loggedUserId = 0;
             if (UserAuthentication::isUserLogged() || UserAuthentication::isGuestUserLogged()) {
@@ -324,13 +376,22 @@ class Cart extends FatModel
                     continue;
                 }
 
+                if (FatApp::getConfig('CONF_SINGLE_SELLER_CART', FatUtility::VAR_INT, 0)) {
+                    if ($this->singleCartSellerId > 0 && $this->singleCartSellerId != $sellerProductRow['selprod_user_id']) {
+                        $this->removeCartKey($key, $selprod_id, $quantity);
+                        continue;
+                    } else {
+                        $this->singleCartSellerId = $sellerProductRow['selprod_user_id'];
+                    }
+                }
+
                 $quantity = $sellerProductRow['quantity'];
                 $fulfilmentType = $this->fulfilmentType;
                 if (isset($this->SYSTEM_ARR['shopping_cart']['checkout_type'])) {
                     $fulfilmentType =  $this->SYSTEM_ARR['shopping_cart']['checkout_type'];
                 }
 
-                if ($this->valdateCheckoutType && isset($fulfilmentType) && $fulfilmentType > 0 && $sellerProductRow['selprod_fulfillment_type'] != Shipping::FULFILMENT_ALL && $sellerProductRow['selprod_fulfillment_type'] != $fulfilmentType && $sellerProductRow['product_type'] != Product::PRODUCT_TYPE_DIGITAL) {
+                if ($this->valdateCheckoutType && isset($fulfilmentType) && $fulfilmentType > 0 && $sellerProductRow['selprod_fulfillment_type'] != Shipping::FULFILMENT_ALL && $sellerProductRow['selprod_fulfillment_type'] != $fulfilmentType && !in_array($sellerProductRow['product_type'], [Product::PRODUCT_TYPE_DIGITAL, Product::PRODUCT_TYPE_SERVICE])) {
                     unset($this->basketProducts[$key]);
                     continue;
                 }
@@ -361,16 +422,26 @@ class Cart extends FatModel
                 }
                 /* Has Digital Product */
 
+                /* Has Service Product */
+                if (isset($sellerProductRow['is_service_product']) && $sellerProductRow['is_service_product'] && false === $this->hasServiceProduct) {
+                    $this->hasServiceProduct = true;
+                }
+                /* Has Service Product */
+
                 /* Has Physical Product */
                 if (isset($sellerProductRow['is_physical_product']) && !empty($sellerProductRow['is_physical_product']) && false === $this->hasPhysicalProduct) {
                     $this->hasPhysicalProduct = true;
                 }
                 /* Has Physical Product */
 
-                if (isset($sellerProductRow['is_batch']) && !empty($sellerProductRow['products']) && (false === $this->hasDigitalProduct || false === $this->hasPhysicalProduct)) {
+                if (isset($sellerProductRow['is_batch']) && !empty($sellerProductRow['products']) && (false === $this->hasDigitalProduct || false === $this->hasPhysicalProduct || false === $this->hasServiceProduct)) {
                     foreach ($sellerProductRow['products'] as $pgproduct) {
                         if ($pgproduct['is_digital_product'] && false === $this->hasDigitalProduct) {
                             $this->hasDigitalProduct = true;
+                        }
+
+                        if ($pgproduct['is_service_product'] && false === $this->hasServiceProduct) {
+                            $this->hasServiceProduct = true;
                         }
 
                         if ($pgproduct['is_physical_product'] && false === $this->hasPhysicalProduct) {
@@ -412,6 +483,7 @@ class Cart extends FatModel
             $this->isAnyOutOfStock = true;
             $this->hasDigitalProduct = false;
             $this->hasPhysicalProduct = false;
+            $this->hasServiceProduct = false;
             //$this->getBasketProducts($siteLangId);
 
             $productSelectedShippingMethodsArr = $this->getProductShippingMethod();
@@ -497,7 +569,7 @@ class Cart extends FatModel
                         $fulfilmentType =  $this->SYSTEM_ARR['shopping_cart']['checkout_type'];
                     }
 
-                    if ($this->valdateCheckoutType && isset($fulfilmentType) && $fulfilmentType > 0 && $sellerProductRow['selprod_fulfillment_type'] != Shipping::FULFILMENT_ALL && $sellerProductRow['selprod_fulfillment_type'] != $fulfilmentType && $sellerProductRow['product_type'] != Product::PRODUCT_TYPE_DIGITAL && $checkFulfilmentType) {
+                    if ($this->valdateCheckoutType && isset($fulfilmentType) && $fulfilmentType > 0 && $sellerProductRow['selprod_fulfillment_type'] != Shipping::FULFILMENT_ALL && $sellerProductRow['selprod_fulfillment_type'] != $fulfilmentType && !in_array($sellerProductRow['product_type'], [Product::PRODUCT_TYPE_DIGITAL, Product::PRODUCT_TYPE_SERVICE]) && $checkFulfilmentType) {
                         unset($this->products[$key]);
                         continue;
                     }
@@ -518,16 +590,26 @@ class Cart extends FatModel
                     }
                     /* Has Digital Product */
 
+                    /* Has Service Product */
+                    if (isset($sellerProductRow['is_service_product']) && $sellerProductRow['is_service_product'] && false === $this->hasServiceProduct) {
+                        $this->hasServiceProduct = true;
+                    }
+                    /* Has Digital Product */
+
                     /* Has Physical Product */
                     if (isset($sellerProductRow['is_physical_product']) && !empty($sellerProductRow['is_physical_product']) && false === $this->hasPhysicalProduct) {
                         $this->hasPhysicalProduct = true;
                     }
                     /* Has Physical Product */
 
-                    if (isset($sellerProductRow['is_batch']) && !empty($sellerProductRow['products']) && (false === $this->hasDigitalProduct || false === $this->hasPhysicalProduct)) {
+                    if (isset($sellerProductRow['is_batch']) && !empty($sellerProductRow['products']) && (false === $this->hasDigitalProduct || false === $this->hasPhysicalProduct || false === $this->hasServiceProduct)) {
                         foreach ($sellerProductRow['products'] as $pgproduct) {
                             if ($pgproduct['is_digital_product'] && false === $this->hasDigitalProduct) {
                                 $this->hasDigitalProduct = true;
+                            }
+
+                            if ($pgproduct['is_service_product'] && false === $this->hasServiceProduct) {
+                                $this->hasServiceProduct = true;
                             }
 
                             if ($pgproduct['is_physical_product'] && false === $this->hasPhysicalProduct) {
@@ -581,7 +663,7 @@ class Cart extends FatModel
                         $this->products[$key]['shipping_address'] = $address->getData(Address::TYPE_USER, UserAuthentication::getLoggedUserId());
                     }
                     /*]*/
-                    if ($this->products[$key]['product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
+                    if (in_array($this->products[$key]['product_type'], [Product::PRODUCT_TYPE_DIGITAL, Product::PRODUCT_TYPE_SERVICE])) {
                         if (UserAuthentication::isUserLogged() || UserAuthentication::isGuestUserLogged()) {
                             $addressBilling = new Address($this->getCartBillingAddress(), $siteLangId);
                             $this->products[$key]['billing_address'] = $addressBilling->getData(Address::TYPE_USER, UserAuthentication::getLoggedUserId());
@@ -701,14 +783,14 @@ class Cart extends FatModel
         $selProdIds = array_keys($cartData);
 
         $prodSrch = new ProductSearch($siteLangId);
-        $prodSrch->setDefinedCriteria(0, 0, ['selProdIds' => $selProdIds]);
+        $prodSrch->setDefinedCriteria(0, 0, ['selProdIds' => $selProdIds, 'doNotJoinSellers' => true]);
+        $prodSrch->joinShops(0, true, true, 0, true);
         $prodSrch->joinProductToCategory();
         $prodSrch->joinSellerSubscription();
         $prodSrch->addSubscriptionValidCondition();
         $prodSrch->joinProductShippedBy();
         $prodSrch->joinProductFreeShipping();
-        $prodSrch->joinSellers();
-        $prodSrch->joinShops();
+        // $prodSrch->joinSellers();        
         $prodSrch->doNotCalculateRecords();
         $prodSrch->doNotLimitRecords();
         $prodSrch->addDirectCondition('selprod_id IN (' . implode(',', $selProdIds) . ')');
@@ -718,7 +800,7 @@ class Cart extends FatModel
             'selprod_id', 'selprod_code', 'selprod_stock', 'selprod_user_id', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'selprod_min_order_qty',
             'special_price_found', 'theprice', 'shop_id', 'shop_free_ship_upto', 'shop_state_id', 'shop_country_id',
             'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'selprod_price', 'selprod_cost', 'case when product_seller_id=0 then IFNULL(psbs_user_id,0)   else product_seller_id end  as psbs_user_id', 'product_seller_id', 'product_cod_enabled', 'shop_fulfillment_type', 'selprod_fulfillment_type', 'selprod_cod_enabled', 'shippack_length', 'shippack_width', 'shippack_height', 'shippack_units',
-            'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name', 'product_updated_on'
+            'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name', 'product_updated_on', 'selprod_track_inventory'
         ));
 
         if ($siteLangId) {
@@ -752,7 +834,7 @@ class Cart extends FatModel
                 $shipFromCountryId = $sellerProductRow['shop_country_id'];
                 $shipToStateId = 0;
                 $shipToCountryId = 0;
-                if ($sellerProductRow['product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
+                if (in_array($sellerProductRow['product_type'], [Product::PRODUCT_TYPE_DIGITAL, Product::PRODUCT_TYPE_SERVICE])) {
                     $shippingAddressId = $this->getCartBillingAddress();
                 } else {
                     $shippingAddressId = $this->getCartShippingAddress();
@@ -907,6 +989,7 @@ class Cart extends FatModel
 
             $sellerProductRows[$key]['is_digital_product'] = ($sellerProductRow['product_type'] == Product::PRODUCT_TYPE_DIGITAL) ? 1 : 0;
             $sellerProductRows[$key]['is_physical_product'] = ($sellerProductRow['product_type'] == Product::PRODUCT_TYPE_PHYSICAL) ? 1 : 0;
+            $sellerProductRows[$key]['is_service_product'] = ($sellerProductRow['product_type'] == Product::PRODUCT_TYPE_SERVICE) ? 1 : 0;
 
 
             if ($siteLangId) {
@@ -933,7 +1016,7 @@ class Cart extends FatModel
                 }
             }
 
-            if ($sellerProductRow['product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
+            if (in_array($sellerProductRow['product_type'], [Product::PRODUCT_TYPE_DIGITAL, Product::PRODUCT_TYPE_SERVICE])) {
                 $fulfillmentType = Shipping::FULFILMENT_ALL;
             }
             $sellerProductRows[$key]['fulfillment_type'] = $fulfillmentType;
@@ -998,6 +1081,11 @@ class Cart extends FatModel
     public function getRemovedItems(): array
     {
         return $this->removedItems;
+    }
+
+    public function getSingleCartSellerId(): array
+    {
+        return $this->singleCartSellerId;
     }
 
     public function removeGroup($prodgroup_id)
@@ -1066,7 +1154,9 @@ class Cart extends FatModel
                         if ($quantity) {
                             $this->SYSTEM_ARR['cart'][$cartKey] = $quantity;
                             /* to keep track of temporary hold the product stock[ */
-                            $this->updateTempStockHold($product['selprod_id'], $quantity);
+                            if (0 < $product['selprod_track_inventory']) {
+                                $this->updateTempStockHold($product['selprod_id'], $quantity);
+                            }
                             /* ] */
                             if (is_numeric($this->cart_user_id) && $this->cart_user_id > 0) {
                                 AbandonedCart::saveAbandonedCart($this->cart_user_id, $product['selprod_id'], $quantity, AbandonedCart::ACTION_ADDED);
@@ -1139,7 +1229,9 @@ class Cart extends FatModel
                         if ($product['is_batch'] && $product['prodgroup_id'] == $prodgroup_id) {
                             $this->SYSTEM_ARR['cart'][$cartKey] = $quantity;
                             foreach ($product['products'] as $pgproduct) {
-                                $this->updateTempStockHold($pgproduct['selprod_id'], $quantity, $prodgroup_id);
+                                if (0 < $pgproduct['selprod_track_inventory']) {
+                                    $this->updateTempStockHold($pgproduct['selprod_id'], $quantity, $prodgroup_id);
+                                }
                             }
                         }
                     }
@@ -1424,6 +1516,40 @@ class Cart extends FatModel
         return $cartSummary;
     }
 
+    public function getCartGiftFinancialSummary($langId, $order_id)
+    {
+        $cartTotal = 0;
+        $orderPaymentGatewayCharges = 0;
+        $orderNetAmount = 0;
+        $cartRewardPoints = $this->getCartRewardPoint();
+        $userWalletBalance = User::getUserBalance(UserAuthentication::getLoggedUserId());
+        $srch = Orders::getSearchObject();
+        $srch->doNotCalculateRecords();
+        $srch->setPageSize(1);
+        $srch->addCondition('order_id', '=', $order_id);
+        $srch->addCondition('order_payment_status', '=', 'mysql_func_' . Orders::ORDER_PAYMENT_PENDING, 'AND', true);
+        $rs = $srch->getResultSet();
+        $orderInfo = FatApp::getDb()->fetch($rs);
+        if (!$orderInfo) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_ORDER_PAID_CANCELLED', $this->siteLangId));
+        }
+        $orderNetAmount = $orderInfo['order_net_amount'];
+        $WalletAmountCharge = ($this->isCartUserGiftWalletSelected()) ? min($orderNetAmount, $userWalletBalance) : 0;
+        $orderPaymentGatewayCharges = $orderNetAmount - $WalletAmountCharge;
+        $netChargeAmt = $cartTotal;
+        $cartSummary = array(
+            'cartTotal' => $cartTotal,
+            'cartRewardPoints' => $cartRewardPoints,
+            'cartWalletSelected' => $this->isCartUserGiftWalletSelected(),
+            'orderNetAmount' => $orderNetAmount,
+            'WalletAmountCharge' => $WalletAmountCharge,
+            'orderPaymentGatewayCharges' => $orderPaymentGatewayCharges,
+            'netChargeAmount' => $netChargeAmt,
+        );
+        return $cartSummary;
+    }
+
+
     public function getCouponDiscounts()
     {
         $couponObj = new DiscountCoupons();
@@ -1657,6 +1783,12 @@ class Cart extends FatModel
         return true;
     }
 
+    public function updateCartGiftWalletOption($val)
+    {
+        $this->SYSTEM_ARR['shopping_cart']['gift_Pay_from_wallet'] = $val;
+        $this->updateUserCart();
+        return true;
+    }
     public function updateCartDiscountCoupon($val)
     {
         $this->SYSTEM_ARR['shopping_cart']['discount_coupon'] = $val;
@@ -1731,6 +1863,11 @@ class Cart extends FatModel
     public function isCartUserWalletSelected()
     {
         return (isset($this->SYSTEM_ARR['shopping_cart']['Pay_from_wallet']) && intval($this->SYSTEM_ARR['shopping_cart']['Pay_from_wallet']) == 1) ? 1 : 0;
+    }
+
+    public function isCartUserGiftWalletSelected()
+    {
+        return (isset($this->SYSTEM_ARR['shopping_cart']['gift_Pay_from_wallet']) && intval($this->SYSTEM_ARR['shopping_cart']['gift_Pay_from_wallet']) == 1) ? 1 : 0;
     }
 
     public function updateUserCart()

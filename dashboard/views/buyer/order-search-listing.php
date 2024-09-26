@@ -19,20 +19,20 @@
     }
 
     $sr_no = 0;
-    $canCancelOrder = true;
-    $canReturnRefund = true;
+
     foreach ($orders as $sn => $order) {
         $sr_no++;
         $tr = $tbl->appendElement('tr', array('class' => ''));
         $orderDetailUrl = UrlHelper::generateUrl('Buyer', 'viewOrder', array($order['order_id'], $order['op_id']));
 
         if ($order['op_product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
-            $canCancelOrder = (in_array($order["op_status_id"], (array) Orders::getBuyerAllowedOrderCancellationStatuses(true)));
-            $canReturnRefund = (in_array($order["op_status_id"], (array) Orders::getBuyerAllowedOrderReturnStatuses(true)));
+            $canCancelOrder = true;
         } else {
-            $canCancelOrder = (in_array($order["op_status_id"], (array) Orders::getBuyerAllowedOrderCancellationStatuses()));
-            $canReturnRefund = (in_array($order["op_status_id"], (array) Orders::getBuyerAllowedOrderReturnStatuses()));
+            $canCancelOrder = false;
         }
+        $canCancelOrder = (in_array($order["op_status_id"], (array) Orders::getBuyerAllowedOrderCancellationStatuses($canCancelOrder)));
+        $canReturnRefund = (in_array($order["op_status_id"], (array) Orders::getBuyerAllowedOrderReturnStatuses($order['op_product_type'])));
+
         $isValidForReview = false;
         if (in_array($order["op_status_id"], SelProdReview::getBuyerAllowedOrderReviewStatuses())) {
             $isValidForReview = true;
@@ -71,7 +71,7 @@
                                 $orderStatus .= " - " . $order['plugin_name'];
                             }
                         }
-                        
+
                         $labelClass = isset($classArr[$order['orderstatus_color_class']]) ? $classArr[$order['orderstatus_color_class']] : 'badge-info';
                     }
 
@@ -80,15 +80,16 @@
                 case 'action':
                     $ul = $td->appendElement("ul", array("class" => "actions"), '', true);
 
-                    $opCancelUrl = UrlHelper::generateUrl('Buyer', 'orderCancellationRequest', array($order['op_id']));                          
+                    $opCancelUrl = UrlHelper::generateUrl('Buyer', 'orderCancellationRequest', array($order['op_id']));
                     $datediff = time() - strtotime($order['order_date_added']);
                     $daysSpent = $datediff / (60 * 60 * 24);
-                    $returnAge = $order['op_selprod_return_age'];           
+                    $returnAge = $order['op_selprod_return_age'];
                     $li = $ul->appendElement("li");
                     $li->appendElement(
                         'a',
                         array(
-                            'href' => $orderDetailUrl, 'class' => '',
+                            'href' => $orderDetailUrl,
+                            'class' => '',
                             'title' => Labels::getLabel('LBL_View_Order', $siteLangId)
                         ),
                         '<svg class="svg" width="18" height="18">
@@ -104,7 +105,8 @@
                         $li->appendElement(
                             'a',
                             array(
-                                'href' => $opCancelUrl, 'class' => '',
+                                'href' => $opCancelUrl,
+                                'class' => '',
                                 'title' => Labels::getLabel('LBL_Cancel_Order', $siteLangId)
                             ),
                             '<svg class="svg" width="18" height="18">
@@ -122,7 +124,8 @@
                         $li->appendElement(
                             'a',
                             array(
-                                'href' => $opFeedBackUrl, 'class' => '',
+                                'href' => $opFeedBackUrl,
+                                'class' => '',
                                 'title' => Labels::getLabel('LBL_Feedback', $siteLangId)
                             ),
                             '<svg class="svg" width="18" height="18">
@@ -140,7 +143,8 @@
                         $li->appendElement(
                             'a',
                             array(
-                                'href' => $opRefundRequestUrl, 'class' => '',
+                                'href' => $opRefundRequestUrl,
+                                'class' => '',
                                 'title' => Labels::getLabel('LBL_Refund', $siteLangId)
                             ),
                             '<svg class="svg" width="18" height="18">
@@ -156,7 +160,8 @@
                     $li->appendElement(
                         'a',
                         array(
-                            'href' => 'javascript:void(0)', 'onclick' => 'return addItemsToCart("' . $order['order_id'] . '");',
+                            'href' => 'javascript:void(0)',
+                            'onclick' => 'return addItemsToCart("' . $order['order_id'] . '");',
                             'title' => Labels::getLabel('LBL_Re-Order', $siteLangId)
                         ),
                         '<svg class="svg" width="18" height="18">

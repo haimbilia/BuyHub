@@ -143,7 +143,8 @@ class User extends MyAppModel
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $userId);
         $this->objMainTableRecord->setSensitiveFields(
             array(
-                'user_regdate', 'user_id'
+                'user_regdate',
+                'user_id'
             )
         );
 
@@ -1128,6 +1129,7 @@ class User extends MyAppModel
         /* [ */
 
         /* ] */
+        CalculativeDataRecord::updateSellerApprovalCount();
         return $supplier_request_id;
     }
 
@@ -1152,6 +1154,7 @@ class User extends MyAppModel
             $this->error = $this->db->getError();
             return false;
         }
+        CalculativeDataRecord::updateSellerApprovalCount();
         return true;
     }
 
@@ -2348,7 +2351,7 @@ class User extends MyAppModel
         $srch->addCondition('uttr_expiry', '>=', date('Y-m-d H:i:s'));
         $srch->addMultipleFields(array('uttr_user_id', 'uttr_token'));
         $srch->doNotCalculateRecords();
-        $srch->setPagesize(1);       
+        $srch->setPagesize(1);
         $rs = $srch->getResultSet();
         if ((!$row = FatApp::getDb()->fetch($rs)) || ($row['uttr_token'] !== $token)) {
             return false;
@@ -2462,7 +2465,7 @@ class User extends MyAppModel
         $srch->addCondition('uc.' . static::DB_TBL_CRED_PREFIX . 'verified', '=', 1);
         $srch->addCondition('uauth_fcm_id', '!=', '');
         $srch->addCondition('uauth_last_access', '>=', date('Y-m-d H:i:s', strtotime("-7 DAYS")));
-        $srch->addFld('uauth_fcm_id');
+        $srch->addMultipleFields(['uauth_fcm_id', 'uauth_device_os']);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $rs = $srch->getResultSet();
@@ -2506,7 +2509,7 @@ class User extends MyAppModel
 
         $email = isset($postedData['user_email']) && !empty($postedData['user_email']) ? $postedData['user_email'] : '';
 
-        if (!$this->validateUserForRegistration($postedData['user_username'], $email, $userPhone)) {
+        if (!$this->validateUserForRegistration(strtolower($postedData['user_username']), $email, $userPhone)) {
             return false;
         }
 
@@ -2603,6 +2606,14 @@ class User extends MyAppModel
                         $affiliateReferrerCodeSignup = $referral;
                     }
                 }
+            }
+        }
+
+        if (!empty($email)) {
+            if (!$this->assignGiftCard($email)) {
+                $db->rollbackTransaction();
+                $this->error = Labels::getLabel('MSG_USER_COULD_NOT_BE_SET');
+                return false;
             }
         }
 
@@ -2745,7 +2756,7 @@ class User extends MyAppModel
         $srch = $this->getUserSearchObj($attr);
         $srch->joinTable(static::DB_TBL_META, 'LEFT OUTER JOIN', 't_um.' . static::DB_TBL_META_PREFIX . 'user_id = u.user_id', 't_um');
 
-        $srch->addDirectCondition('(credential_email = "' . $email .'" OR (usermeta_key = "' . strtolower($keyName) . '_account_id" AND usermeta_value = "' . $socialAccountId . '"))');
+        $srch->addDirectCondition('(credential_email = "' . $email . '" OR (usermeta_key = "' . strtolower($keyName) . '_account_id" AND usermeta_value = "' . $socialAccountId . '"))');
 
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
@@ -3240,5 +3251,43 @@ class User extends MyAppModel
             return $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['credential_username'] = $result['credential_username'];
         }
         return '';
+    }
+
+    public function updateShopValidUser()
+    {
+        if (1 > $this->mainTableRecordId) {
+            return;
+        }
+        FatApp::getDb()->query("UPDATE tbl_shops SET shop_user_valid = 1 WHERE shop_user_id = ( SELECT u.user_id FROM tbl_users u INNER JOIN tbl_user_credentials c ON u.user_id = c.credential_user_id WHERE u.user_id = " . $this->mainTableRecordId . " AND u.user_is_supplier = 1 AND u.user_deleted = 0 AND c.credential_active = 1 AND c.credential_verified = 1 LIMIT 1 )");
+    }
+    
+    /* Get By Email
+     * 
+     * @param string $email
+     * @return null|array
+     */
+    public static function getByEmail(string $email)
+    {
+        $srch = new SearchBase(User::DB_TBL, 'u');
+        $srch->joinTable(static::DB_TBL_CRED, 'LEFT OUTER JOIN', 'uc.' . static::DB_TBL_CRED_PREFIX . 'user_id = u.user_id', 'uc');
+        $srch->addMultipleFields([
+            'u.user_id as user_id',
+            'user_name',
+            'credential_email',
+            'user_deleted'
+        ]);
+        $srch->addCondition('credential_email', '=', $email);
+        //  $srch->addCondition('user_deleted', '=', applicationConstants::NO);
+        $srch->doNotCalculateRecords();
+        return FatApp::getDb()->fetch($srch->getResultSet());
+    }
+
+    public function assignGiftCard(string $email): bool
+    {
+        if (!FatApp::getDb()->updateFromArray(GiftCards::DB_TBL, ['ogcards_receiver_id' => $this->getMainTableRecordId()], ['smt' => 'ogcards_receiver_email = ?', 'vals' => [$email]])) {
+            $this->error = FatApp::getDb()->getError();
+            return false;
+        }
+        return true;
     }
 }

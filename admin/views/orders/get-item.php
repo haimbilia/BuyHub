@@ -281,6 +281,18 @@ foreach ($op['taxOptions'] as $key => $val) {
                     </li>
                 <?php } ?>
             <?php } ?>
+
+            <?php
+            if (isset($op['op_comments']) && !empty($op['op_comments'])) {
+            ?>
+                <li class="list-stats-item list-stats-item-full">
+                    <span class="separator mb-0"></span>
+                </li>
+                <li class="list-stats-item">
+                    <span class="label"><?php echo Labels::getLabel('LBL_CUSTOMER_COMMENTS', $siteLangId); ?> </span>
+                    <span class="value"><?php echo $op['op_comments']; ?></span>
+                </li>
+            <?php } ?>
         </ul>
     </div>
 </div>

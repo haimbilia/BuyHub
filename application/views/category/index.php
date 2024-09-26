@@ -1,9 +1,9 @@
 <div id="body" class="body">
     <?php $this->includeTemplate('_partial/page-head-section.php', ['headLabel' => Labels::getLabel('LBL_SHOP_BY_CATEGORIES')]); ?>
-    <section class="section">
+    <section class="section" data-section="section">
         <div class="container">
             <div class="category-layout-2 category-layout-page">
-                <?php foreach ($categoriesArr as $category) {  ?>
+                <?php foreach ($categoriesArr as $category) { ?>
                     <div class="category">
                         <?php $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_CATEGORY_BANNER, $category['prodcat_id']);
                         $uploadedTime = AttachedFile::setTimeParam($fileRow['afile_updated_at']);
@@ -27,7 +27,8 @@
                         <div class="category-body">
                             <ul class="category-list">
                                 <li class="category-list-item category-list-head">
-                                    <a href="<?php echo UrlHelper::generateUrl('Category', 'View', array($category['prodcat_id'])); ?>">
+                                    <a
+                                        href="<?php echo UrlHelper::generateUrl('Category', 'View', array($category['prodcat_id'])); ?>">
                                         <?php echo $category['prodcat_name']; ?>
                                     </a>
                                 </li>
@@ -35,10 +36,11 @@
                                 if (array_key_exists('children', $category) && 0 < count($category['children'])) {
                                     foreach ($category['children'] as $subCat) { ?>
                                         <li class="category-list-item">
-                                            <a href="<?php echo UrlHelper::generateUrl('Category', 'View', array($subCat['prodcat_id'])); ?>">
+                                            <a
+                                                href="<?php echo UrlHelper::generateUrl('Category', 'View', array($subCat['prodcat_id'])); ?>">
                                                 <?php echo $subCat['prodcat_name']; ?></a>
                                         </li>
-                                <?php
+                                        <?php
                                     }
                                 } ?>
                             </ul>
@@ -50,7 +52,7 @@
     </section>
 </div>
 <script>
-    $(function() {
+    $(function () {
         function resizeMasonryItem(item) {
             /* Get the grid object, its row-gap, and the size of its implicit rows */
             var grid = document.getElementsByClassName('masonry')[0],
@@ -108,7 +110,7 @@
         function waitForImages() {
             var allItems = document.getElementsByClassName('masonry-item');
             for (var i = 0; i < allItems.length; i++) {
-                imagesLoaded(allItems[i], function(instance) {
+                imagesLoaded(allItems[i], function (instance) {
                     var item = instance.elements[0];
                     resizeMasonryItem(item);
                 });
@@ -117,7 +119,7 @@
 
         /* Resize all the grid items on the load and resize events */
         var masonryEvents = ['load', 'resize'];
-        masonryEvents.forEach(function(event) {
+        masonryEvents.forEach(function (event) {
             window.addEventListener(event, resizeAllMasonryItems);
         });
 

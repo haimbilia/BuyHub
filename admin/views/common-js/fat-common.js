@@ -128,6 +128,7 @@ var fcom = {
         var o = $.extend(true, { fOutMode: 'json' }, options);
         this.ajax(url, data, function (ans) {
             fcom.removeLoader();
+            $("." + $.ykmodal.element + ' .submitBtnJs').removeClass('loading').removeAttr('disabled');
             if (ans.status != 1) {
                 fcom.displayErrorMessage(ans.msg);
                 return;

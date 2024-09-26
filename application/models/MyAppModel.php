@@ -242,14 +242,17 @@ class MyAppModel extends FatModel
         $prefix = substr(static::DB_TBL_PREFIX, 0, -1);
 
         $db = FatApp::getDb();
-        $srch = new SearchBase(static::DB_TBL . '_lang', 'ln');
 
         if (NULL !== $primaryTableJoinType) {
+            $srch = new SearchBase(static::DB_TBL, 'm');
+            $primaryTableJoinType = ($primaryTableJoinType == applicationConstants::JOIN_INNER) ? applicationConstants::JOIN_INNER : applicationConstants::JOIN_LEFT;
             $joinTypes = applicationConstants::getJoinTypes();
             if (!array_key_exists($primaryTableJoinType, $joinTypes)) {
                 trigger_error('INVALID_JOIN_TYPE', E_ERROR);
             }
-            $srch->joinTable(static::DB_TBL, $joinTypes[$primaryTableJoinType] . ' JOIN', static::DB_TBL_PREFIX . 'id = ' . 'ln.' . $prefix . 'lang_' . static::DB_TBL_PREFIX . 'id and ln.' . $prefix . 'lang_lang_id=' . $langId, 'm');
+            $srch->joinTable(static::DB_TBL . '_lang', $joinTypes[$primaryTableJoinType] . ' JOIN', static::DB_TBL_PREFIX . 'id = ' . 'ln.' . $prefix . 'lang_' . static::DB_TBL_PREFIX . 'id and ln.' . $prefix . 'lang_lang_id=' . $langId, 'ln');
+        } else {
+            $srch = new SearchBase(static::DB_TBL . '_lang', 'ln');
         }
 
         $srch->doNotCalculateRecords();

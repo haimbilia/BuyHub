@@ -69,7 +69,7 @@ class ShippingProfileController extends ListingBaseController
         $prodCountSrch->doNotCalculateRecords();
         $prodCountSrch->doNotLimitRecords();
         $prodCountSrch->addGroupBy('shippro_shipprofile_id');
-        $prodCountSrch->addMultipleFields(array("COUNT(*) as totalProducts, shippro_shipprofile_id"));
+        $prodCountSrch->addMultipleFields(array("COUNT(1) as totalProducts, shippro_shipprofile_id"));
         $prodCountQuery = $prodCountSrch->getQuery();
 
         $srch = ShippingProfile::getSearchObject($this->siteLangId);

@@ -1,218 +1,235 @@
 .geo-location {
-    display: none;
+  display: none;
+  @include media-breakpoint-up(lg) {
+    display: block;
+    position: relative;
+    padding-#{$start-direction}: 1.5rem;
+  }
 
-    @include media-breakpoint-up(lg) {
-        display: block;
-        position: relative;
-        padding-#{$start-direction}: 1.5rem;
+  &::before {
+    content: "";
+    background: $border-color;
+    width: 1px;
+    height: 20px;
+    position: absolute;
+    #{$start-direction}: 0;
+  }
+
+  &_inner {
+    display: block;
+    align-items: center;
+  }
+
+  &_trigger {
+    text-align: inherit;
+    background: none;
+    border: none;
+    display: flex;
+    align-items: center;
+    color: currentColor;
+    padding: 0;
+    width: 100%;
+
+    .svg {
+      margin-#{$end-direction}: 6px;
+      fill: $secondary-color;
     }
+  }
 
-    &::before {
-        content: "";
-        background: $border-color;
-        width: 1px;
-        height: 20px;
-        position: absolute;
-        #{$start-direction}: 0;
+  &-selected {
+    white-space: nowrap;
+    max-width: 212px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    font-weight: $font-weight-regular;
+  }
+
+  &_body {
+    // min-width: 350px;
+    // width: 100%;
+    padding: 2rem;
+  }
+
+  .btn-detect {
+    display: flex;
+    align-items: center;
+    text-align: #{$start-direction};
+    font-weight: $font-weight-bold;
+    white-space: nowrap;
+
+    .svg {
+      fill: $secondary-color;
+      margin-#{$end-direction}: 8px;
     }
+  }
 
-    &_inner {
-        display: block;
-        align-items: center;
+  .or {
+    margin: 1.5rem 0;
+  }
+
+  &_input {
+    background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iY3VycmVudENvbG9yIj48cGF0aCBkPSJNMTIgMjAuODk5NUwxNi45NDk3IDE1Ljk0OTdDMTkuNjgzNCAxMy4yMTYxIDE5LjY4MzQgOC43ODM5MiAxNi45NDk3IDYuMDUwMjVDMTQuMjE2MSAzLjMxNjU4IDkuNzgzOTIgMy4zMTY1OCA3LjA1MDI1IDYuMDUwMjVDNC4zMTY1OCA4Ljc4MzkyIDQuMzE2NTggMTMuMjE2MSA3LjA1MDI1IDE1Ljk0OTdMMTIgMjAuODk5NVpNMTIgMjMuNzI3OUw1LjYzNjA0IDE3LjM2NEMyLjEyMTMyIDEzLjg0OTIgMi4xMjEzMiA4LjE1MDc2IDUuNjM2MDQgNC42MzYwNEM5LjE1MDc2IDEuMTIxMzIgMTQuODQ5MiAxLjEyMTMyIDE4LjM2NCA0LjYzNjA0QzIxLjg3ODcgOC4xNTA3NiAyMS44Nzg3IDEzLjg0OTIgMTguMzY0IDE3LjM2NEwxMiAyMy43Mjc5Wk0xMiAxM0MxMy4xMDQ2IDEzIDE0IDEyLjEwNDYgMTQgMTFDMTQgOS44OTU0MyAxMy4xMDQ2IDkgMTIgOUMxMC44OTU0IDkgMTAgOS44OTU0MyAxMCAxMUMxMCAxMi4xMDQ2IDEwLjg5NTQgMTMgMTIgMTNaTTEyIDE1QzkuNzkwODYgMTUgOCAxMy4yMDkxIDggMTFDOCA4Ljc5MDg2IDkuNzkwODYgNyAxMiA3QzE0LjIwOTEgNyAxNiA4Ljc5MDg2IDE2IDExQzE2IDEzLjIwOTEgMTQuMjA5MSAxNSAxMiAxNVoiPjwvcGF0aD48L3N2Zz4=);
+    border: $input-border-style $input-border-width $input-border-color;
+
+    // background-color: transparent;
+    background-repeat: no-repeat;
+    background-position: 13px center;
+    color: $input-color;
+    height: $input-height;
+    width: 100%;
+    padding: $input-padding;
+    font-size: $input-font-size;
+    line-height: $input-line-height;
+    border-radius: $input-border-radius;
+    outline: none;
+    font-family: inherit;
+    transition: 0.3s all ease-in-out;
+    appearance: none;
+    margin-bottom: 0;
+    background-size: 16px;
+    padding-#{$start-direction}: 40px;
+    [dir="rtl"] & {
+      background-position: calc(100% - 13px) center;
     }
-
-    &_trigger {
-        text-align: inherit;
-        background: none;
-        border: none;
-        display: flex;
-        align-items: center;
-        color: currentColor;
-        padding: 0;
-        width: 100%;
-
-        .svg {
-            margin-#{$end-direction}: 6px;
-            fill: $secondary-color;
-        }
+    &:hover,
+    &:focus {
+      border-color: #000;
     }
-
-    &-selected {
-        white-space: nowrap;
-        max-width: 212px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: block;
-        font-weight: $font-weight-regular;
-    }
-
-    &_body {
-        // min-width: 350px;
-        // width: 100%;
-        padding: 2rem;
-    }
-
-    .btn-detect {
-        display: flex;
-        align-items: center;
-        text-align: #{$start-direction};
-        font-weight: $font-weight-bold;
-        white-space: nowrap;
-
-        .svg {
-            fill: $secondary-color;
-            margin-#{$end-direction}: 8px;
-        }
-    }
-
-    .or {
-        margin: 1.5rem 0;
-    }
-
-    &_input {
-        border: $input-border-style $input-border-width $input-border-color;
-        background-color: transparent;
-        background-repeat: no-repeat;
-        color: $input-color;
-        height: $input-height;
-        width: 100%;
-        padding: $input-padding;
-        font-size: $input-font-size;
-        line-height: $input-line-height;
-        border-radius: $input-border-radius;
-        outline: none;
-        font-family: inherit;
-        transition: 0.3s all ease-in-out;
-        appearance: none;
-        margin-bottom: 2rem;
-    }
+  }
 }
 
+.geo-location-modal {
+  .btn-close {
+    float: #{$end-direction};
+    margin: 1.5rem;
+  }
+}
 .geo-location-mobile {
-    .button-geo-location {
-        margin-bottom: 1.5rem;
-    }
+  .button-geo-location {
+    margin-bottom: 1.5rem;
+  }
 
-    .geo-location_body {
-        //border: $border;
-        padding: 0;
-    }
+  .geo-location_body {
+    //border: $border;
+    padding: 0;
+  }
 }
 
 .location-popup-width {
-    max-width: 630px;
-    padding: 0 !important;
+  max-width: 630px;
+  padding: 0 !important;
 }
 
 .location-permission {
-    text-align: center;
-    background-image: url(images/retina/city-location.svg);
-    background-repeat: no-repeat;
-    background-position: bottom center;
-    background-size: contain;
-    padding-top: 30px;
-    padding-bottom: 100px;
+  text-align: center;
+  background-image: url(images/retina/city-location.svg);
+  background-repeat: no-repeat;
+  background-position: bottom center;
+  background-size: contain;
+  padding-top: 30px;
+  padding-bottom: 100px;
 
-    &_head {
-        max-width: 450px;
-        margin: 0 auto;
-        padding: 0 3rem;
+  &_head {
+    max-width: 450px;
+    margin: 0 auto;
+    padding: 0 3rem;
 
-        h5 {
-            font-weight: $font-weight-normal;
-            margin-bottom: 1rem;
-            line-height: 1.5;
-        }
-
-        p {
-            font-size: 0.89rem;
-            margin-bottom: 2rem;
-            color: $txt-gray;
-        }
+    h5 {
+      font-weight: $font-weight-normal;
+      margin-bottom: 1rem;
+      line-height: 1.5;
     }
 
-    &_body {
-        .default {
-            border: $border;
-            border-radius: $common-radius;
-            padding: 1rem;
-            padding-#{$end-direction}: 3rem;
-            display: inline-flex;
-            align-items: center;
-            color: $txt-gray;
-            margin: 0 1rem;
-            position: relative;
-            min-width: 300px;
-            font-weight: $font-weight-regular;
-
-            &:after {
-                position: absolute;
-                #{$end-direction}: 1.2rem;
-                top: calc(50% - 5px);
-                content: "";
-                display: block;
-                margin: 0;
-                width: 10px;
-                height: 10px;
-                border-top: 2px solid $brand-color;
-                border-right: 2px solid $brand-color;
-                transform: rotate(45deg);
-
-                [dir="rtl"] & {
-                    #{$start-direction}: 1.2rem;
-                    transform: rotate(-135deg);
-                }
-            }
-
-            .icn {
-                max-width: 30px;
-                margin-#{$end-direction}: 1rem;
-            }
-
-            .location-name {
-                font-size: 0.85rem;
-
-                strong {
-                    font-weight: $font-weight-bold;
-                    color: $txt-body;
-                }
-            }
-
-            &:hover {
-                border-color: $brand-color;
-            }
-        }
-
-        .or {
-            max-width: none;
-            margin: 1.5rem auto;
-            font-weight: $font-weight-regular;
-
-            &:after,
-            &:before {
-                width: 45%;
-                background: $border-color;
-            }
-        }
-
-        .location-search {
-            max-width: 300px;
-            margin: 0 auto;
-
-            input {
-                font-size: 0.8rem;
-                background-image: url(images/retina/magni-gray.svg);
-                background-repeat: no-repeat;
-                background-position: 15px center;
-                background-size: 20px;
-                padding: 1.5rem;
-                padding-#{$start-direction}: 45px;
-
-                [dir="rtl"] & {
-                    padding-#{$end-direction}: 45px;
-                    background-position: calc(100% - 10px) center;
-                }
-            }
-        }
+    p {
+      font-size: 0.89rem;
+      margin-bottom: 2rem;
+      color: $txt-gray;
     }
+  }
+
+  &_body {
+    .default {
+      border: $border;
+      border-radius: $common-radius;
+      padding: 1rem;
+      padding-#{$end-direction}: 3rem;
+      display: inline-flex;
+      align-items: center;
+      color: $txt-gray;
+      margin: 0 1rem;
+      position: relative;
+      min-width: 300px;
+      font-weight: $font-weight-regular;
+
+      &:after {
+        position: absolute;
+        #{$end-direction}: 1.2rem;
+        top: calc(50% - 5px);
+        content: "";
+        display: block;
+        margin: 0;
+        width: 10px;
+        height: 10px;
+        border-top: 2px solid currentColor;
+        border-right: 2px solid currentColor;
+        transform: rotate(45deg);
+
+        [dir="rtl"] & {
+          #{$start-direction}: 1.2rem;
+          transform: rotate(-135deg);
+        }
+      }
+
+      .icn {
+        max-width: 30px;
+        margin-#{$end-direction}: 1rem;
+      }
+
+      .location-name {
+        font-size: 0.85rem;
+
+        strong {
+          font-weight: $font-weight-bold;
+          color: $txt-body;
+        }
+      }
+
+      &:hover {
+        border-color: $brand-color;
+      }
+    }
+
+    .or {
+      max-width: none;
+      margin: 1.5rem auto;
+      font-weight: $font-weight-regular;
+
+      &:after,
+      &:before {
+        width: 45%;
+        background: $border-color;
+      }
+    }
+
+    .location-search {
+      max-width: 300px;
+      margin: 0 auto;
+
+      input {
+        font-size: 0.8rem;
+        background-image: url(images/retina/magni-gray.svg);
+        background-repeat: no-repeat;
+        background-position: 15px center;
+        background-size: 20px;
+        padding: 1.5rem;
+        padding-#{$start-direction}: 45px;
+
+        [dir="rtl"] & {
+          //padding-#{$end-direction}: 45px;
+          background-position: calc(100% - 10px) center;
+        }
+      }
+    }
+  }
 }

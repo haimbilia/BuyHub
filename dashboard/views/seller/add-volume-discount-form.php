@@ -38,6 +38,7 @@ if (!empty($data) && 0 < count($data)) {
 <script>
     $(document).ready(function() {
         var ele = $(".selProd--js");
+        var volumeDiscount = 1;
         ele.select2({
                 closeOnSelect: true,
                 dropdownParent: ele.closest('form'),
@@ -53,6 +54,7 @@ if (!empty($data) && 0 < count($data)) {
                         return {
                             keyword: params.term, // search term
                             page: params.page,
+                            volumeDiscount: volumeDiscount
                         };
                     },
                     processResults: function(data, params) {

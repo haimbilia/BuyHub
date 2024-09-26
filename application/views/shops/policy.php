@@ -15,21 +15,23 @@
     $sellerInfo = isset($shop['shop_seller_info']) && !empty(array_filter((array) $shop['shop_seller_info'])) ? $shop['shop_seller_info'] : [];
     ?>
     <?php if (!empty($description) || !empty($paymentPolicy) || !empty($deliveryPolicy) || !empty($refundPolicy) || !empty($additionalInfo) || !empty($sellerInfo)) { ?>
-        <section class="section">
+        <section class="section" data-section="section">
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-lg-12">
                         <?php if (!empty($description)) { ?>
                             <div class="cms">
                                 <h4><?php echo $description['title']; ?></h4>
-                                <p><?php echo !empty($description['description']) ? nl2br($description['description']) : ''; ?></p>
+                                <p><?php echo !empty($description['description']) ? nl2br($description['description']) : ''; ?>
+                                </p>
                             </div>
                         <?php } ?>
                         <div class="gap"></div>
                         <?php if (!empty($paymentPolicy)) { ?>
                             <div class="cms">
                                 <h4><?php echo $paymentPolicy['title']; ?></h4>
-                                <p><?php echo !empty($paymentPolicy['description']) ? nl2br($paymentPolicy['description']) : ''; ?></p>
+                                <p><?php echo !empty($paymentPolicy['description']) ? nl2br($paymentPolicy['description']) : ''; ?>
+                                </p>
                             </div>
                         <?php } ?>
                         <div class="gap"></div>
@@ -37,28 +39,32 @@
                         <?php if (!empty($deliveryPolicy)) { ?>
                             <div class="cms">
                                 <h4><?php echo $deliveryPolicy['title']; ?></h4>
-                                <p> <?php echo !empty($deliveryPolicy['description']) ? nl2br($deliveryPolicy['description']) : ''; ?> </p>
+                                <p> <?php echo !empty($deliveryPolicy['description']) ? nl2br($deliveryPolicy['description']) : ''; ?>
+                                </p>
                             </div>
                         <?php } ?>
 
                         <?php if (!empty($refundPolicy)) { ?>
                             <div class="cms">
                                 <h4> <?php echo $refundPolicy['title']; ?></h4>
-                                <p> <?php echo !empty($refundPolicy['description']) ? nl2br($refundPolicy['description']) : ''; ?> </p>
+                                <p> <?php echo !empty($refundPolicy['description']) ? nl2br($refundPolicy['description']) : ''; ?>
+                                </p>
                             </div>
                         <?php } ?>
 
                         <?php if (!empty($additionalInfo)) { ?>
                             <div class="cms">
                                 <h4> <?php echo $additionalInfo['title']; ?></h4>
-                                <p> <?php echo !empty($additionalInfo['description']) ? nl2br($additionalInfo['description']) : ''; ?> </p>
+                                <p> <?php echo !empty($additionalInfo['description']) ? nl2br($additionalInfo['description']) : ''; ?>
+                                </p>
                             </div>
                         <?php } ?>
 
                         <?php if (!empty($sellerInfo)) { ?>
                             <div class="cms">
                                 <h4> <?php echo $sellerInfo['title']; ?></h4>
-                                <p> <?php echo !empty($sellerInfo['description']) ? nl2br($sellerInfo['description']) : ''; ?> </p>
+                                <p> <?php echo !empty($sellerInfo['description']) ? nl2br($sellerInfo['description']) : ''; ?>
+                                </p>
                             </div>
                         <?php } ?>
                     </div>

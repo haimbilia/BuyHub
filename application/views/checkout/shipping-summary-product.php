@@ -55,13 +55,14 @@ $imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'pro
                     ?>
                 </a>
             </div>
-
         </div>
         <div class="block-cart-detail">
             <div class="block-cart-detail-top">
                 <div class="product-profile">
                     <div class="product-profile-data">
-                        <a class="title" href="<?php echo $productUrl; ?>"><?php echo ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name']; ?></a>
+                        <a class="title" href="<?php echo $productUrl; ?>">
+                            <?php echo ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name']; ?>
+                        </a>
                         <div class="products-price">
                             <span class="products-price-new"><?php echo trim(CommonHelper::displayMoneyFormat($product['theprice'])); ?></span>
                             <?php if (FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0)) { ?>
@@ -100,6 +101,16 @@ $imageWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'pro
                                 </use>
                             </svg>
                         </button>
+                    </div>
+                </div>
+            </div>
+            <div class="block-cart-detail-middle">
+                <div class="shipping-comments">
+                    <button class="btn-dropdown dropdown-toggle-custom  collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<?php echo $product['selprod_id']; ?>" aria-expanded="false" aria-controls="collapse<?php echo $product['selprod_id']; ?>">
+                        <?php echo Labels::getLabel('LBL_COMMENTS', $siteLangId); ?> <i class="dropdown-toggle-custom-arrow"></i>
+                    </button>
+                    <div class="collapse form" id="collapse<?php echo $product['selprod_id']; ?>">
+                        <textarea maxlength="250" class="form-textarea form-control opCommentsJs" placeholder="<?php echo Labels::getLabel('LBL_WRITE_YOUR_COMMENTS', $siteLangId); ?>" name="op_comments[<?php echo $product['selprod_id']; ?>]" spellcheck="false"></textarea>
                     </div>
                 </div>
             </div>

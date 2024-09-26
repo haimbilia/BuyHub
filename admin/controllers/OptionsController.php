@@ -8,6 +8,9 @@ class OptionsController extends ListingBaseController
     public function __construct($action)
     {
         parent::__construct($action);
+        if (FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', CommonHelper::getLangId()));
+        }
         $this->objPrivilege->canViewOptions();
     }
 
@@ -67,15 +70,19 @@ class OptionsController extends ListingBaseController
 
     public function search()
     {
-        $this->getListingData();
+        $loadPagination = FatApp::getPostedData('loadPagination', FatUtility::VAR_INT, 0);
+        $this->getListingData($loadPagination);
         $jsonData = [
-            'listingHtml' => $this->_template->render(false, false, 'options/search.php', true),
             'paginationHtml' => $this->_template->render(false, false, '_partial/listing/listing-foot.php', true)
         ];
+
+        if (!$loadPagination || !FatUtility::isAjaxCall()) {
+            $jsonData['listingHtml'] = $this->_template->render(false, false, 'options/search.php', true);
+        }
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
-    private function getListingData()
+    private function getListingData($loadPagination = 0)
     {
         $this->checkEditPrivilege(true);
 
@@ -114,15 +121,24 @@ class OptionsController extends ListingBaseController
                 $condition->attachCondition('u.user_name', 'like', '%' . $post['keyword'] . '%', 'OR');
             }
         }
-        $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+
+        if ($loadPagination && FatUtility::isAjaxCall()) {
+            $this->setRecordCount(clone $srch, $pageSize, $page, $post);
+        }
+
         $srch->doNotCalculateRecords();
         $srch->addMultipleFields(["o.*", "IFNULL( ol.option_name, o.option_identifier ) as option_name", "u.user_name"]);
         $srch->addOrder($sortBy, $sortOrder);
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
         $rs = $srch->getResultSet();
-        $arrListing = $db->fetchAll($rs);
-        $this->set("arrListing", $arrListing);
+
+        $records = [];
+        if (!$loadPagination) {
+            $records = $db->fetchAll($rs);
+        }
+
+        $this->set("arrListing", $records);
         $this->set('postedData', $post);
         $this->set('sortBy', $sortBy);
         $this->set('sortOrder', $sortOrder);

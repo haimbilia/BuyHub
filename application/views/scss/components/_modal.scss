@@ -1,93 +1,93 @@
 .modal {
-    &-backdrop {
-        opacity: 1 !important;
-        background-color: rgba(0, 0, 0, 0.5);
-        backdrop-filter: blur(4px);
+  &-backdrop {
+    opacity: 1 !important;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+  }
+
+  &-content {
+    border: none;
+    border-radius: $common-radius;
+    box-shadow: 0 2px 48px 0 rgba(0, 0, 0, 0.06);
+
+    .close {
+      font-weight: $font-weight-regular;
+    }
+  }
+
+  &-header {
+    .close {
+      margin: -1rem;
+      margin-#{$start-direction}: auto !important;
     }
 
-    &-content {
-        border: none;
-        border-radius: $common-radius;
-        box-shadow: 0 2px 48px 0 rgba(0, 0, 0, 0.06);
+    .btn-close {
+      margin-#{$start-direction}: auto !important;
+      margin-#{$end-direction}: 0 !important;
+    }
+  }
 
-        .close {
-            font-weight: $font-weight-regular;
-        }
+  &-title {
+    font-size: 1.2rem;
+    color: $txt-body;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+
+    //flex-direction: column;
+    small {
+      font-size: 0.8rem;
+    }
+  }
+
+  &-footer {
+    //justify-content: inherit;
+  }
+
+  &.fixed-right {
+    padding-#{$end-direction}: 0 !important;
+
+    &.fade .modal-dialog-vertical {
+      transform: translateX(100% * $transform-direction);
     }
 
-    &-header {
-        .close {
-            margin: -1rem;
-            margin-#{$start-direction}: auto !important;
-        }
-
-        .btn-close {
-            margin-#{$start-direction}: auto !important;
-            margin-#{$end-direction}: 0 !important;
-        }
+    &.show .modal-dialog-vertical {
+      transform: translateX(0 * $transform-direction);
     }
 
-    &-title {
-        font-size: 1.2rem;
-        color: $txt-body;
-        display: flex;
-        gap: 10px;
-        align-items: center;
+    .modal-content {
+      border-radius: 0 !important;
+    }
+  }
 
-        //flex-direction: column;
-        small {
-            font-size: 0.8rem;
-        }
+  &-dialog-vertical {
+    height: 100%;
+    max-width: 500px;
+    margin: 0;
+    margin-#{$start-direction}: auto;
+
+    .modal-content {
+      border-radius: $common-radius;
+      height: inherit;
+      overflow-y: auto;
+
+      .modal-header {
+        padding: 1.5rem 2rem;
+      }
     }
 
-    &-footer {
-        //justify-content: inherit;
+    &-sm {
+      max-width: 250px;
     }
 
-    &.fixed-right {
-        padding-#{$end-direction}: 0 !important;
-
-        &.fade .modal-dialog-vertical {
-            transform: translateX(100% * $transform-direction);
-        }
-
-        &.show .modal-dialog-vertical {
-            transform: translateX(0 * $transform-direction);
-        }
-
-        .modal-content {
-            border-radius: 0 !important;
-        }
+    &-md {
+      max-width: 750px;
     }
 
-    &-dialog-vertical {
-        height: 100%;
-        max-width: 500px;
-        margin: 0;
-        margin-#{$start-direction}: auto;
-
-        .modal-content {
-            border-radius: $common-radius;
-            height: inherit;
-            overflow-y: auto;
-
-            .modal-header {
-                padding: 1.5rem 2rem;
-            }
-        }
-
-        &-sm {
-            max-width: 250px;
-        }
-
-        &-md {
-            max-width: 750px;
-        }
-
-        &-lg {
-            max-width: 1000px;
-        }
+    &-lg {
+      max-width: 1000px;
     }
+  }
 }
 
 // .modal.fade .modal-dialog.modal-dialog-zoom {
@@ -98,35 +98,47 @@
 // }
 
 button.close {
-    font-weight: $font-weight-regular;
-    font-size: 1.5rem;
+  font-weight: $font-weight-regular;
+  font-size: 1.5rem;
 }
 
 .dialogue {
-    .icn {
-        font-size: 5rem;
-        margin-bottom: 2rem;
+  .icn {
+    font-size: 5rem;
+    margin-bottom: 2rem;
 
-        &-warning {
-            color: $warning-color;
-        }
-
-        &-success {
-            color: $success-color;
-        }
-
-        &-danger {
-            color: $danger-color;
-        }
+    &-warning {
+      color: $warning-color;
     }
+
+    &-success {
+      color: $success-color;
+    }
+
+    &-danger {
+      color: $danger-color;
+    }
+  }
 }
-.btn-close-start{
-    position: absolute;
-    top: 1rem;
-    left: 1rem;
+.btn-close-start {
+  position: absolute;
+  top: 1rem;
+  #{$start-direction}: 1rem;
 }
-.btn-close-end{
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
+.btn-close-end {
+  position: absolute;
+  top: 1rem;
+  #{$end-direction}: 1rem;
+}
+
+.custom-modal {
+  .title {
+    font-size: 1.25rem;
+    font-weight: $font-weight-bold;
+  }
+  .desc {
+    font-size: 0.85rem;
+    font-weight: $font-weight-normal;
+    padding-bottom: 1.5rem;
+  }
 }

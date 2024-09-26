@@ -68,6 +68,16 @@ class AccountController extends LoggedUserController
             Message::addErrorMessage(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Account', 'SupplierApprovalForm', [], CONF_WEBROOT_DASHBOARD));
         }
+
+        if ($supplierRequest["usuprequest_status"] == User::SUPPLIER_REQUEST_APPROVED) {
+            $userData = User::getAttributesById($this->userId, ['user_is_supplier', 'user_is_advertiser']);
+            $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['user_is_supplier'] = $userData['user_is_supplier'];
+            $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['user_is_advertiser'] = $userData['user_is_advertiser'];
+            $msg = Labels::getLabel('LBL_Hello', $this->siteLangId) . ', ' . $supplierRequest["user_name"] . ', ' . Labels::getLabel('LBL_Your_Application_Approved', $this->siteLangId);
+            Message::addMessage($msg);
+            FatApp::redirectUser(UrlHelper::generateUrl('Seller'));
+        }
+
         $maxAttempts = FatApp::getConfig('CONF_MAX_SUPPLIER_REQUEST_ATTEMPT', FatUtility::VAR_INT, 3);
         if ($supplierRequest && $supplierRequest['usuprequest_attempts'] >= $maxAttempts) {
             $this->set('maxAttemptsReached', true);
@@ -218,6 +228,9 @@ class AccountController extends LoggedUserController
         }
 
         $db->commitTransaction();
+        if (FatApp::getConfig("CONF_ADMIN_APPROVAL_SUPPLIER_REGISTRATION", FatUtility::VAR_INT, 1)) {
+            CalculativeDataRecord::updateSellerApprovalCount();
+        }
         $this->set('supplier_request_id', $supplier_request_id);
         $this->set('msg', $msg);
         $this->_template->render(false, false, 'json-success.php');
@@ -393,6 +406,17 @@ class AccountController extends LoggedUserController
         return $canAddMoneyToWallet;
     }
 
+
+    private function canRedeemGiftCard(): bool
+    {
+        if (User::isAffiliate()) {
+            return false;
+        }
+        
+        $giftCard = GiftCards::getGiftCards($this->userParentId);
+        return !empty($giftCard);
+    }
+
     public function walletRechargeForm()
     {
         if (false === $this->canAddMoneyWallet()) {
@@ -427,6 +451,7 @@ class AccountController extends LoggedUserController
         $this->set('keywordPlaceholder', Labels::getLabel('FRM_SEARCH_BY_TRANSACTION_ID,_ORDER_ID_OR_COMMENT', $this->siteLangId));
         $this->set('accountSummary', $accountSummary);
         $this->set('canAddMoneyToWallet', $this->canAddMoneyWallet());
+        $this->set('canRedeemGiftCard', $this->canRedeemGiftCard());
         $this->_template->render();
     }
 
@@ -625,6 +650,7 @@ class AccountController extends LoggedUserController
         $this->set('siteLangId', $this->siteLangId);
         $this->set('statusArr', Transactions::getStatusArr($this->siteLangId));
         $this->set('statusClassArr', Transactions::getStatusClassArr());
+        $this->set('canRedeemGiftCard', $this->canRedeemGiftCard());
         if (true === MOBILE_APP_API_CALL) {
             $this->creditsInfo();
             $this->_template->render();
@@ -802,7 +828,7 @@ class AccountController extends LoggedUserController
             $message = Labels::getLabel("MSG_NOTIFICATION_COULD_NOT_BE_SENT", $this->siteLangId);
             FatUtility::dieJsonError($message);
         }
-
+        CalculativeDataRecord::updateWithdrawalRequestCount();
         $this->set('msg', Labels::getLabel('MSG_Withdraw_request_placed_successfully', $this->siteLangId));
 
         if (true === MOBILE_APP_API_CALL) {
@@ -3019,6 +3045,7 @@ class AccountController extends LoggedUserController
             CommonHelper::redirectUserReferer();
         }
         /* ] */
+        CalculativeDataRecord::updateOrderReturnRequestCount();
         Message::addMessage(Labels::getLabel('MSG_YOUR_REQUEST_SENT', $this->siteLangId));
         CommonHelper::redirectUserReferer();
     }
@@ -3207,6 +3234,7 @@ class AccountController extends LoggedUserController
         if (!$userReqObj->save()) {
             LibHelper::exitWithError($userReqObj->getError());
         }
+        CalculativeDataRecord::updateGdprRequestCount();
         $this->set('msg', Labels::getLabel('MSG_Request_sent_successfully', $this->siteLangId));
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
@@ -3824,5 +3852,33 @@ class AccountController extends LoggedUserController
 
         $frm->addSubmitButton('', 'btn_submit', Labels::getLabel('BTN_SAVE', $this->siteLangId));
         return $frm;
+    }
+
+    public function redeemGiftCardForm()
+    {
+        $this->set('frm', $this->getGiftcardRedeemForm($this->siteLangId));
+        $this->_template->render(false, false);
+    }
+
+
+    private function getGiftcardRedeemForm($langId)
+    {
+        $frm = new Form('giftCardReeedem');
+        $frm->addTextBox('', 'giftcard_code');
+        $frm->addHtml('', 'btn_submit', HtmlHelper::addButtonHtml(Labels::getLabel('BTN_REDEEM', $langId), 'submit', 'btn_submit', 'btn-apply'));
+        return $frm;
+    }
+
+    public function reedemGiftcard()
+    {
+        $frm = $this->getGiftcardRedeemForm($this->siteLangId);
+        if (!$post = $frm->getFormDataFromArray(FatApp::getPostedData())) {
+            FatUtility::dieJsonError(current($frm->getValidationErrors()));
+        }
+        $giftcard = new GiftCards();
+        if (!$giftcard->redeem($post['giftcard_code'], UserAuthentication::getLoggedUserId(), $this->siteLangId)) {
+            FatUtility::dieJsonError($giftcard->getError());
+        }
+        FatUtility::dieJsonSuccess(Labels::getLabel('MSG_GIFTCARD_REDEEMED_SUCCESSFULLY'));
     }
 }

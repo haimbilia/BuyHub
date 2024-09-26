@@ -423,11 +423,13 @@ class ImportExportController extends SellerBaseController
         $fld = $frm->addCheckBox(Labels::getLabel("FRM_USE_CATALOG_PRODUCT_ID_INSTEAD_OF_CATALOG_PRODUCT_IDENTIFIER", $langId), 'CONF_USE_PRODUCT_ID', 1, array(), false, 0);
         HtmlHelper::configureSwitchForCheckbox($fld);
 
-        $fld = $frm->addCheckBox(Labels::getLabel("FRM_USE_OPTION_ID_INSTEAD_OF_OPTION_IDENTIFIER", $langId), 'CONF_USE_OPTION_ID', 1, array(), false, 0);
-        HtmlHelper::configureSwitchForCheckbox($fld);
+        if (!FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+            $fld = $frm->addCheckBox(Labels::getLabel("FRM_USE_OPTION_ID_INSTEAD_OF_OPTION_IDENTIFIER", $langId), 'CONF_USE_OPTION_ID', 1, array(), false, 0);
+            HtmlHelper::configureSwitchForCheckbox($fld);
 
-        $fld = $frm->addCheckBox(Labels::getLabel("FRM_USE_OPTION_VALUE_ID_INSTEAD_OF_OPTION_IDENTIFIER", $langId), 'CONF_OPTION_VALUE_ID', 1, array(), false, 0);
-        HtmlHelper::configureSwitchForCheckbox($fld);
+            $fld = $frm->addCheckBox(Labels::getLabel("FRM_USE_OPTION_VALUE_ID_INSTEAD_OF_OPTION_IDENTIFIER", $langId), 'CONF_OPTION_VALUE_ID', 1, array(), false, 0);
+            HtmlHelper::configureSwitchForCheckbox($fld);
+        }
 
         $fld = $frm->addCheckBox(Labels::getLabel("FRM_USE_TAG_ID_INSTEAD_OF_TAG_IDENTIFIER", $langId), 'CONF_USE_TAG_ID', 1, array(), false, 0);
         HtmlHelper::configureSwitchForCheckbox($fld);
