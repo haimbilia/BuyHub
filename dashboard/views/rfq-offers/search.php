@@ -19,9 +19,6 @@ if (count($arrListing) == 0) {
                     <h6 class="h6">
                         <?php echo Labels::getLabel('LBL_SELLER_LATEST_OFFER', $siteLangId); ?>
                         <span>(<?php echo $offersCountArr[$row['offer_primary_offer_id']]['sellerOffersCount'] ?? 0; ?> <?php echo Labels::getLabel('LBL_OFFERS', $siteLangId); ?>)</span>
-                        <?php if ($expiredOn < strtotime(date('Y-m-d'))) { ?>
-                            <span class="labels labels-danger ms-2"><?php echo Labels::getLabel('LBL_EXPIRED'); ?></span>
-                        <?php } ?>
                     </h6>
                     <?php
                     $basicConditions = ($expiredOn >= strtotime(date('Y-m-d')) &&
@@ -85,6 +82,9 @@ if (count($arrListing) == 0) {
                                 <span class="value">
                                     <?php if ($row['offer_expired_on'] != '0000-00-00 00:00:00') { ?>
                                         <?php echo FatDate::format($row['offer_expired_on']); ?>
+                                        <?php if ($expiredOn < strtotime(date('Y-m-d'))) { ?>
+                                            <span class="badge badge-danger ms-3"><?php echo Labels::getLabel('LBL_EXPIRED'); ?></span>
+                                        <?php } ?>
                                     <?php } else {
                                         echo Labels::getLabel('LBL_N/A', $siteLangId);
                                     } ?>
