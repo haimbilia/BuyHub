@@ -653,14 +653,19 @@ class ProductCategoriesController extends ListingBaseController
 
     public function autoComplete()
     {
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        if ($page < 2) {
+            $page = 1;
+        }
         $search_keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
         $search_keyword = urldecode($search_keyword);
         $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, $this->siteLangId);
         $excludeRecords = FatApp::getPostedData('excludeRecords', FatUtility::VAR_INT);
 
         $prodCateObj = new ProductCategory();
-        $categories = $prodCateObj->getProdCatAutoSuggest($search_keyword, 20, $langId, $excludeRecords);
+        [$categories, $pageCount] = $prodCateObj->getProdCatAutoSuggest($search_keyword, 20, $langId, $excludeRecords, $page);
         $json = array(
+            'pageCount' => $pageCount,
             'results' => []
         );
         foreach ($categories as $key => $val) {

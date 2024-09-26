@@ -526,7 +526,7 @@ class ProductCategory extends MyAppModel
         return false;
     }
 
-    public function getProdCatAutoSuggest($keywords = '', $limit = 20, $langId = 0, $excludeRecords = [])
+    public function getProdCatAutoSuggest($keywords = '', $limit = 20, $langId = 0, $excludeRecords = [], $page = 1)
     {
         $srch = static::getSearchObject(false, $langId);
         if (0 < $langId) {
@@ -554,7 +554,7 @@ class ProductCategory extends MyAppModel
         } else {
             $srch->addOrder('m.prodcat_identifier', 'asc');
         }
-        $srch->doNotCalculateRecords();
+        $srch->setPageNumber($page);
         $srch->setPageSize($limit);
         $rs = $srch->getResultSet();
         $records = FatApp::getDb()->fetchAll($rs);
@@ -570,7 +570,7 @@ class ProductCategory extends MyAppModel
                 $return[$row['prodcat_id']] = (0 < $langId) ? $row['prodcat_name'] : $row['prodcat_identifier'];
             }
         }
-        return $return;
+        return [$return, $srch->pages()];
     }
 
     public function getNestedArray($langId)
