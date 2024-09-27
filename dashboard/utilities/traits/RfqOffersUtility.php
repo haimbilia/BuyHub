@@ -119,18 +119,25 @@ trait RfqOffersUtility
 
 
             $hasAnySellerAcceptance = RfqOffers::hasAnySellerAcceptance($rfqId, $this->userParentId);
-            if ($hasAnySellerAcceptance || ($isOpenOffered && empty($linkedSelprodId)) || (empty($linkedSelprodId) && RequestForQuote::STATUS_ACCEPTED == $rfqData['rfq_status'] && RfqOffers::hasAnyBuyerAcceptedOffer($this->userParentId, $rfqId))) {
+            if ((RequestForQuote::VISIBILITY_TYPE_OPEN == $rfqInfo['rfq_visibility_type'] && $hasAnySellerAcceptance) || ($isOpenOffered && empty($linkedSelprodId)) || (empty($linkedSelprodId) && RequestForQuote::STATUS_ACCEPTED == $rfqData['rfq_status'] && RfqOffers::hasAnyBuyerAcceptedOffer($this->userParentId, $rfqId))) {
+                $title = Labels::getLabel('LBL_INVENTORY_NOT_LINKED_WITH_THIS_RFQ!!', $this->siteLangId);
+                $label = Labels::getLabel('BTN_LINK_INVENTORY', $this->siteLangId);
+                if ($linkedSelprodId > 0) {
+                    $title = Labels::getLabel('LBL_CHANGE_INVENTORY', $this->siteLangId);
+                    $label = Labels::getLabel('BTN_CHANGE_INVENTORY', $this->siteLangId);
+                }
+                
                 $otherButtons[] = [
                     'attr' => [
                         'onclick' => 'linkInventoryForm(' . $rfqId . ')',
                         'class' => 'btn-brand btn-icon',
-                        'title' => $linkedSelprodId > 0 ? Labels::getLabel('LBL_CHANGE_INVENTORY', $this->siteLangId) : Labels::getLabel('LBL_INVENTORY_NOT_LINKED_WITH_THIS_RFQ!!', $this->siteLangId)
+                        'title' => $title
                     ],
                     'icon' => "<svg class='svg btn-icon-start' width='18' height='18'>
                             <use xlink:href='" . CONF_WEBROOT_URL . "images/retina/sprite-actions.svg#inventories'>
                             </use>
                         </svg>",
-                    'label' => $linkedSelprodId > 0 ? Labels::getLabel('BTN_CHANGE_INVENTORY', $this->siteLangId) : Labels::getLabel('BTN_LINK_INVENTORY', $this->siteLangId)
+                    'label' => $label
                 ];
             }
         }
