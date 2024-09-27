@@ -1216,6 +1216,7 @@ trait RfqOffersUtility
 
         $messageData = RfqOffers::getMessageRow($messageId, $this->siteLangId);
         $this->set('romDate', date('Ymd', strtotime($messageData['rom_added_on'])));
+        $this->set('isSeller', $this->isSeller);
         $this->set('row', $messageData);
         $this->set('html', $this->_template->render(false, false, 'rfq-offers/attachment-record.php', true));
 

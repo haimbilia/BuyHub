@@ -721,7 +721,7 @@ class RfqOffers extends MyAppModel
             return [];
         }
         $srch = new SearchBase(self::DB_RO_MESSAGES, 'rom');
-        $srch->joinTable(AttachedFile::DB_TBL, 'LEFT JOIN', 'afile_record_id = rom_id AND afile_record_subid = rom_primary_offer_id AND afile_lang_id = ' . $langId);
+        $srch->joinTable(AttachedFile::DB_TBL, 'LEFT JOIN', 'afile_record_id = rom_id AND afile_record_subid = rom_primary_offer_id AND afile_type = ' . AttachedFile::FILETYPE_RFQ_OFFER_FILE);
         $srch->addCondition('rom_id', '=', $messageId);
         $srch->addMultipleFields(['rom_id', 'rom_message', 'rom_primary_offer_id', 'rom_added_on', 'rom_user_type', 'rom_buyer_access', 'afile_id', 'afile_name']);
         $srch->doNotCalculateRecords();

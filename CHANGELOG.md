@@ -145,6 +145,7 @@
     - Bug-087453 - << RFQ >> Multiple sellers can not share offers with the same quantity for any RFQ
     - Bug-087503 - Expired tag should appear on the buyer end as well.
     - Bug-087447 - <<RFQ+B1>> email notification in case of final approval is wrong
+    - Bug-087532 - Attachment selected does not appear on chat screen for RFQ offer
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  
