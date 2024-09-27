@@ -992,6 +992,12 @@ trait RfqOffersUtility
             'offer_quantity_unit' => $weightUnitsArr[$rfqOfferData['rfq_quantity_unit']],
         ];
         $db->commitTransaction();
+
+        if (MOBILE_APP_API_CALL) {
+            $this->set('data', ['session_id' => session_id()]);
+            $this->_template->render();
+        }
+
         FatApp::redirectUser(UrlHelper::generateUrl('Cart', '', [], CONF_WEBROOT_FRONT_URL));
     }
 
