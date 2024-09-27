@@ -146,6 +146,7 @@
     - Bug-087503 - Expired tag should appear on the buyer end as well.
     - Bug-087447 - <<RFQ+B1>> email notification in case of final approval is wrong
     - Bug-087532 - Attachment selected does not appear on chat screen for RFQ offer
+    - Bug-087529 - Calender selection does not works properly while placing an offer
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  

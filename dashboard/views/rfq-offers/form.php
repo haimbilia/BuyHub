@@ -60,6 +60,12 @@ if (null != $fld) {
             onClose: function() {
                 $(this).closest('form').find('[type="submit"]').focus();
             }
-        })
+        });
+        
+        $(document).mousedown(function(){
+            if ($.datepicker.initialized && !$(".fldDateJs").datepicker( "widget" ).is(":visible")) {
+                $('.submitBtnJs').focus();
+            }
+        });
     });
 </script>
