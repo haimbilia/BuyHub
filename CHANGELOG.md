@@ -147,6 +147,7 @@
     - Bug-087447 - <<RFQ+B1>> email notification in case of final approval is wrong
     - Bug-087532 - Attachment selected does not appear on chat screen for RFQ offer
     - Bug-087529 - Calender selection does not works properly while placing an offer
+    - Bug-087579 - <<RFQ+BRanch1>>Add to cart button should not appear in More seller section.
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  

@@ -6,6 +6,7 @@
 
             <?php
             $sellers[0]['isActive'] = true;
+            $displaySellerId = $product['selprod_user_id'];
             include ('more-sellers-rows.php');
             ?>
         </ul>

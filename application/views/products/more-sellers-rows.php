@@ -23,9 +23,15 @@ foreach ($sellers as $key => $sellerDetail) {
         <?php } ?>
         <div class="sold-by">
             <span class="sold-by-txt"><?php echo Labels::getLabel('LBL_SOLD_BY', $siteLangId); ?></span>
-            <a class="sold-by-name" href="<?php echo UrlHelper::generateFullUrl('Shops', 'View', array($sellerDetail['shop_id'])); ?>" title="<?php echo $sellerDetail['shop_name']; ?>">
-                <?php echo $sellerDetail['shop_name']; ?>
-            </a>
+            <?php if ($displaySellerId == $sellerDetail['selprod_user_id']) { ?>
+                <a class="sold-by-name" href="<?php echo UrlHelper::generateFullUrl('Shops', 'View', array($sellerDetail['shop_id'])); ?>" title="<?php echo $sellerDetail['shop_name']; ?>">
+                    <?php echo $sellerDetail['shop_name']; ?>
+                </a>
+            <?php } else { ?>
+                <a class="sold-by-name" href="<?php echo UrlHelper::generateFullUrl('Products', 'View', array($sellerDetail['selprod_id'])); ?>" title="<?php echo $sellerDetail['shop_name']; ?>">
+                    <?php echo $sellerDetail['shop_name']; ?>
+                </a>
+            <?php } ?>
         </div>
         <?php
         $badgesArr = Badge::getShopBadges($siteLangId, [$sellerDetail['shop_id']]);
@@ -46,7 +52,7 @@ foreach ($sellers as $key => $sellerDetail) {
                 </div>
             </div>
         <?php }
-        if (false === $isActive && 1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) { ?>
+        if (false === $isActive && 1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0) && !RequestForQuote::isCartTypeRfqOnly($sellerDetail['shop_rfq_enabled'], $sellerDetail['selprod_cart_type'])) { ?>
             <button class="btn btn-outline-black btn-sm btnAddToCart--js" data-id='<?php echo $sellerDetail['selprod_id']; ?>' data-min-qty="<?php echo $sellerDetail['selprod_min_order_qty']; ?>" type="button" data-cart-has-product="<?php echo $sellerDetail['selprod_user_id'] != $cartSellerId && 0 < FatApp::getConfig('CONF_SINGLE_SELLER_CART', FatUtility::VAR_INT, 0); ?>"><?php echo Labels::getLabel('BTN_ADD_TO_CART', $siteLangId); ?></button>
         <?php } ?>
     </li>

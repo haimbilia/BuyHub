@@ -2218,7 +2218,7 @@ END,   special_price_found ) as special_price_found'
         $moreSellerSrch->addMultipleFields(
             array(
                 'selprod_id', 'selprod_user_id', 'selprod_price', 'special_price_found', 'theprice', 'shop_id', 'shop_name', 'shop_user_id', 'product_seller_id',
-                'product_id', 'shop_country_l.country_name as shop_country_name', 'shop_state_l.state_name as shop_state_name', 'shop_city', 'selprod_cod_enabled',
+                'product_id', 'shop_country_l.country_name as shop_country_name', 'shop_state_l.state_name as shop_state_name', 'shop_city', 'shop_rfq_enabled', 'selprod_cod_enabled',
                 'product_cod_enabled', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'selprod_min_order_qty', 'selprod_available_from', 'shop_lat', 'shop_lng', 'product_updated_on', 'selprod_title', 'selprod_code', 'selprod_cart_type'
             )
         );
