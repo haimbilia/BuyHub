@@ -143,6 +143,14 @@ if (1 == $page) {
     $product['shippingDetails'] = empty($shippingDetails) ? (object) array() : $shippingDetails;
     $product['socialShareContent'] = empty($socialShareContent) ? (object) array() : $socialShareContent;
 
+    $defaultImage = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'product', array(0, ImageDimension::VIEW_MEDIUM, 0)), CONF_IMG_CACHE_TIME, '.jpg');
+    $firstImage = current($productImagesArr);
+    if (isset($firstImage['product_image_url']) && !empty($firstImage['product_image_url'])) {
+        $defaultImage = $firstImage['product_image_url'];
+    }
+
+    $product['productDefaultImage'] = $defaultImage;
+
     $previewLinks = $product['preview_links'] ?? [];
     $previewAttachments = $product['preview_attachments'] ?? [];
     unset($product['preview_links'], $product['preview_attachments']);
