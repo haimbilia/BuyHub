@@ -83,9 +83,10 @@
     - Bug-087200 - partial payment is not working with wallet + stripe
     - Bug-086479 - sender email should also be visible to receiver and admin.
     - Bug-087199 - Debit entry content need to be upadated
-
-## Hit URL:
-    - admin/patch-update/updateProductRating  
     - Bug-087215 - The user's phone number is missing in the GDPR request for the user registered with a phone number only
     - Bug-087213 - A warning appears when the user tries to place a pickup order in Arabic
     - Bug-087210 - The phone number direction is not correct in the RTL on the seller registration page
+    - Bug-087591 - Branch 1>> Missing payment info when user make payment using Wallet + bank transfer payment method
+
+## Hit URL:
+    - admin/patch-update/updateProductRating  

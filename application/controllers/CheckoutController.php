@@ -941,6 +941,13 @@ class CheckoutController extends MyAppController
             unset($paymentMethods[$cashOnDeliveryKey]);
         }
 
+        if ($cartSummary["cartWalletSelected"]) {
+            $transferBankKey = array_search('TransferBank', array_column($paymentMethods, 'plugin_code'));
+            if (false !== $transferBankKey) {
+                unset($paymentMethods[$transferBankKey]);
+            }
+        }
+
         /* ] */
 
         $opComments = FatApp::getPostedData('op_comments');
