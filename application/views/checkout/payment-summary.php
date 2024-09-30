@@ -119,7 +119,6 @@ if ($noPaymentMethod && $rewardsCurrAmtCanBeUsed < $cartSummary['orderNetAmount'
                                 <?php echo Labels::getLabel('LBL_SUCCESSFULLY_USED', $siteLangId); ?>
                             </span>
                             <button type="button" class="btn-close text-reset" onclick="removeRewardPoints()" aria-label="Close"></button>
-
                         </div>
                     <?php } ?>
                 </div>
@@ -163,7 +162,7 @@ if ($noPaymentMethod && $rewardsCurrAmtCanBeUsed < $cartSummary['orderNetAmount'
                                 <div class="wallet-payment">
                                     <div>
                                         <label class="checkbox wallet-credits">
-                                            <?php if ($canUseWalletOrRewards) { ?>
+                                            <?php if ($cartSummary["cartWalletSelected"] || $canUseWalletOrRewards) { ?>
                                                 <input onchange="walletSelection(this)" type="checkbox" <?php echo ($cartSummary["cartWalletSelected"]) ? 'checked="checked"' : ''; ?> name="pay_from_wallet" id="pay_from_wallet" value="1">
                                             <?php } ?>
                                             <?php echo Labels::getLabel('LBL_WALLET_CREDITS:', $siteLangId); ?>&nbsp;

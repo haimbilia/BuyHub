@@ -1778,11 +1778,19 @@ class ProductsController extends MyAppController
 
     public function linksAutocomplete()
     {
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        if ($page < 2) {
+            $page = 1;
+        }
         $prodCatObj = new ProductCategory();
         $search_keyword = FatApp::getPostedData('keyword', FatUtility::VAR_STRING, '');
         $search_keyword = urldecode($search_keyword);
-        $categories = $prodCatObj->getProdCatAutoSuggest($search_keyword, 20, $this->siteLangId);
-        $json = array();
+        //$categories = $prodCatObj->getAutoCompleteProdCatTreeStructure(0, $this->siteLangId, $search_keyword);
+        [$categories, $pageCount] = $prodCatObj->getProdCatAutoSuggest($search_keyword, 20, $this->siteLangId, [], $page);
+        $json = array(
+            'pageCount' => $pageCount,
+            'results' => []
+        );
         foreach ($categories as $key => $product) {
             $json['results'][] = array(
                 'id' => $key,

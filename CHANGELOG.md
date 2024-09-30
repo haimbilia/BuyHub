@@ -1,4 +1,4 @@
-# Multivendor - Released Version : RV-10.0.0
+# Multivendor - Released Version : RV-10.1.0
 
 > IOS/Android Buyer APP version : 2.0.1
 > System API version : 2.3
@@ -24,6 +24,8 @@
     - Displayed review images at the top of reviews list.
     - Performance optimization ar admin end, product search, filters and collections list.
     
+## Hit URL:
+    - admin/patch-update/updateProductRating  
 
 ## Bug Fixes:
     - Bug-074802 - Omise Payment gateway deprecated issue.
@@ -149,9 +151,8 @@
     - Bug-087529 - Calender selection does not works properly while placing an offer
     - Bug-087579 - <<RFQ+BRanch1>>Add to cart button should not appear in More seller section.
     - Bug-087595 - All Data should appear in the downloaded RFQ details in case of standard RFQ as well
-
-## Hit URL:
-    - admin/patch-update/updateProductRating  
     - Bug-087215 - The user's phone number is missing in the GDPR request for the user registered with a phone number only
     - Bug-087213 - A warning appears when the user tries to place a pickup order in Arabic
     - Bug-087210 - The phone number direction is not correct in the RTL on the seller registration page
+    - Bug-087591 - Missing payment info when user make payment using Wallet + bank transfer payment method
+    - Bug-087597 - Custom product request button should not appear on the seller end
