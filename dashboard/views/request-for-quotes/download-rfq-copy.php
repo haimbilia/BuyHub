@@ -117,21 +117,21 @@ $rfqQtyUnit = applicationConstants::getWeightUnitName($siteLangId, $rfqData['rfq
 
             </td>
         </tr>
-        <?php if (false == $isGlobal) { ?>
+        <?php /* if (false == $isGlobal && RequestForQuote::TYPE_INDIVIDUAL == FatApp::getConfig('CONF_RFQ_MODULE_TYPE', FatUtility::VAR_INT, RequestForQuote::TYPE_INDIVIDUAL)) { ?>
             <tr>
                 <td style="border-bottom: solid 1px #000; "><br>
                     <strong style=" padding-bottom:10px; "><?php echo Labels::getLabel('LBL_SOLD_BY', $siteLangId); ?>: <?php echo $rfqData['shop_name']; ?></strong>
                 </td>
             </tr>
-        <?php } ?>
+        <?php } */ ?>
         <tr>
             <td>
                 <table class="tbl-border" width="100%" border="0" cellpadding="10" cellspacing="0">
                     <thead>
                         <tr>
-                            <th width="<?php echo $isGlobal ? '50%' : '90%'; ?>" style="padding:10px; ;text-align: left; border-bottom:1px solid #ddd; background-color:#ddd; "><?php echo Labels::getLabel('LBL_ITEM', $siteLangId); ?></th>
+                            <th width="<?php echo $isGlobal ? '50%' : '70%'; ?>" style="padding:10px; ;text-align: left; border-bottom:1px solid #ddd; background-color:#ddd; "><?php echo Labels::getLabel('LBL_ITEM', $siteLangId); ?></th>
+                            <th width="20%" style="padding:10px; ;text-align: left; border-bottom:1px solid #ddd; background-color:#ddd; "><?php echo Labels::getLabel('LBL_PRODUCT_TYPE', $siteLangId); ?></th>
                             <?php if ($isGlobal) { ?>
-                                <th width="20%" style="padding:10px; ;text-align: left; border-bottom:1px solid #ddd; background-color:#ddd; "><?php echo Labels::getLabel('LBL_PRODUCT_TYPE', $siteLangId); ?></th>
                                 <th width="20%" style="padding:10px; ;text-align: left; border-bottom:1px solid #ddd; background-color:#ddd; "><?php echo Labels::getLabel('LBL_CATEGORY', $siteLangId); ?></th>
                             <?php } ?>
                             <th width="10%" style="padding:10px; ;text-align: left; border-bottom:1px solid #ddd; background-color:#ddd; "><?php echo Labels::getLabel('LBL_Qty', $siteLangId); ?></th>
@@ -140,8 +140,8 @@ $rfqQtyUnit = applicationConstants::getWeightUnitName($siteLangId, $rfqData['rfq
                     <tbody>
                         <tr>
                             <td style="padding:10px; ;text-align: left;"><?php echo $rfqData['rfq_title']; ?></td>
+                            <td style="padding:10px; ;text-align: left;"><?php echo $productTypeArr[$rfqData['rfq_product_type']]; ?></td>
                             <?php if ($isGlobal) { ?>
-                                <td style="padding:10px; ;text-align: left;"><?php echo $productTypeArr[$rfqData['rfq_product_type']]; ?></td>
                                 <td style="padding:10px; ;text-align: left;">
                                     <?php echo !empty($rfqData['prodcat_name']) ? $rfqData['prodcat_name'] : Labels::getLabel('LBL_N/A', $siteLangId); ?>
                                 </td>
@@ -149,10 +149,10 @@ $rfqQtyUnit = applicationConstants::getWeightUnitName($siteLangId, $rfqData['rfq
                             <td style="padding:10px; ;text-align: left;"><?php echo $rfqData['rfq_quantity']  . ' ' . $rfqQtyUnit; ?></td>
                         </tr>
                         <tr>
-                            <td style="padding:10px; ;text-align: left;font-weight:700;background-color: #ddd;" colspan="<?php echo ($isGlobal) ? 4 : 2; ?>"><?php echo Labels::getLabel('LBL_COMMENTS', $siteLangId) ?> </td>
+                            <td style="padding:10px; ;text-align: left;font-weight:700;background-color: #ddd;" colspan="<?php echo ($isGlobal) ? 4 : 3; ?>"><?php echo Labels::getLabel('LBL_COMMENTS', $siteLangId) ?> </td>
                         </tr>
                         <tr>
-                            <td style="padding:10px; ;text-align: left;" colspan="<?php echo ($isGlobal) ? 4 : 2; ?>"><?php echo $rfqData['rfq_description']; ?></td>
+                            <td style="padding:10px; ;text-align: left;" colspan="<?php echo ($isGlobal) ? 4 : 3; ?>"><?php echo $rfqData['rfq_description']; ?></td>
                         </tr>
                     </tbody>
                 </table>

@@ -148,6 +148,7 @@
     - Bug-087532 - Attachment selected does not appear on chat screen for RFQ offer
     - Bug-087529 - Calender selection does not works properly while placing an offer
     - Bug-087579 - <<RFQ+BRanch1>>Add to cart button should not appear in More seller section.
+    - Bug-087595 - All Data should appear in the downloaded RFQ details in case of standard RFQ as well
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  
