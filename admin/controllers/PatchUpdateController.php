@@ -448,7 +448,7 @@ class PatchUpdateController extends ListingBaseController
             ('Shops', 'index', 0, 0, 1, 0),
             ('Blog', 'index', 0, 0, 1, 0),
             ('Products', 'index', 0, 0, 1, 0)");
-            FatApp::getDb()->query("INSERT INTO `tbl_shipping_profile`(`shipprofile_user_id`, `shipprofile_identifier`, `shipprofile_active`, `shipprofile_default`) VALUES (0, 'Order Leval Shipping', 1, 1));
+            FatApp::getDb()->query("INSERT INTO `tbl_shipping_profile`(`shipprofile_user_id`, `shipprofile_identifier`, `shipprofile_active`, `shipprofile_default`) VALUES (0, 'Order Leval Shipping', 1, 1)");
         }
     }
 
