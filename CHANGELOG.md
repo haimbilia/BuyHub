@@ -156,3 +156,4 @@
     - Bug-087210 - The phone number direction is not correct in the RTL on the seller registration page
     - Bug-087591 - Missing payment info when user make payment using Wallet + bank transfer payment method
     - Bug-087597 - Custom product request button should not appear on the seller end
+    - Bug-087615 - UI issue in the pickup slots section on the checkout page

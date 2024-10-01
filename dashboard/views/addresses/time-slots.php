@@ -6,7 +6,7 @@ if(!empty($timeSlots)){
             continue;
         }
 ?>
-    <li> 
+    <li class="time-slot-item"> 
         <input <?php echo ($selectedSlot == $slot['tslot_id']) ? 'checked=checked': ''; ?> type="radio" class="control-input" name="timeSlot" id="<?php echo $slot['tslot_id'] ?>" onclick="selectTimeSlot(this, <?php echo $pickUpBy;?>);">
         <label class="control-label" for="<?php echo $slot['tslot_id'] ?>">
             <span class="time"><?php echo date('H:i', strtotime($slot['tslot_from_time'])); ?> - <?php echo date('H:i', strtotime($slot['tslot_to_time'])); ?> </span>
@@ -15,7 +15,7 @@ if(!empty($timeSlots)){
 <?php } 
 }else{
 ?>
-    <li>
+    <li class="time-slot-item">
         <label class="control-label">
             <span class="time"><?php echo Labels::getLabel('LBL_No_Time_slots_found', $siteLangId); ?></span>
         </label>
