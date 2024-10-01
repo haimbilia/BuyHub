@@ -157,3 +157,4 @@
     - Bug-087591 - Missing payment info when user make payment using Wallet + bank transfer payment method
     - Bug-087597 - Custom product request button should not appear on the seller end
     - Bug-087615 - UI issue in the pickup slots section on the checkout page
+    - Bug-087580 - Cart only setting is not working properly in case of more sellers
