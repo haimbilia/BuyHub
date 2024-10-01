@@ -23,8 +23,8 @@
     - Language and currency selection via popup.
     - Displayed review images at the top of reviews list.
     - Performance optimization ar admin end, product search, filters and collections list.
+    - Upgraded paypal payment library deprecated code.
     
-
 ## Hit URL:
     - admin/patch-update/updateProductRating  
 

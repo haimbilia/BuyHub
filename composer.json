@@ -14,7 +14,6 @@
         "php-http/curl-client": "2.2.1",
         "phpunit/phpunit": "9.5.26",
         "khipu/khipu-api-client": "2.9.1",
-        "paypal/paypal-checkout-sdk": "1.0.1",
         "easypost/easypost-php": "7.4.2",
         "mollie/mollie-api-php": "2.48.0",
         "phpmailer/phpmailer": "^6.5",
@@ -24,7 +23,8 @@
         "google/analytics-data": "0.17.1",
         "omise/omise-php": "dev-master",
         "guzzlehttp/guzzle": "7.8.0",
-        "aws/aws-sdk-php": "^3.281"
+        "aws/aws-sdk-php": "^3.281",
+        "phpjuice/paypal-checkout-sdk": "^3.2"
     },
     "config": {
         "platform": {
