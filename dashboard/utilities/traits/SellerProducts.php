@@ -2419,7 +2419,7 @@ trait SellerProducts
             $fld->requirements()->setRange($productData['product_min_selling_price'], 9999999999);
             $fld->requirements()->setCustomErrorMessage(Labels::getLabel('FRM_MINIMUM_SELLING_PRICE_FOR_THIS_PRODUCT_IS', $this->siteLangId) . ' ' . CommonHelper::displayMoneyFormat($productData['product_min_selling_price'], true, true));
         }
-        
+
         if (0 < FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0) && 1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) {
             $shopRfqEnabled = Shop::getAttributesByUserId($this->userParentId, 'shop_rfq_enabled', false);
             if (0 < $shopRfqEnabled) {
@@ -2435,9 +2435,9 @@ trait SellerProducts
 
         $frm->addDateField(Labels::getLabel('FRM_DATE_AVAILABLE', $this->siteLangId), 'selprod_available_from', '', array('readonly' => 'readonly'))->requirements()->setRequired();
 
-        $useShopPolicy = $frm->addCheckBox(Labels::getLabel('FRM_USE_SHOP_RETURN_AND_CANCELLATION_AGE_POLICY', $this->siteLangId), 'use_shop_policy', 1, ['id' => 'use_shop_policy'], false, 0);
 
-        if ($productData['product_type'] != Product::PRODUCT_TYPE_SERVICE) {
+        if (Product::PRODUCT_TYPE_PHYSICAL == $productData['product_type']) {
+            $useShopPolicy = $frm->addCheckBox(Labels::getLabel('FRM_USE_SHOP_RETURN_AND_CANCELLATION_AGE_POLICY', $this->siteLangId), 'use_shop_policy', 1, ['id' => 'use_shop_policy'], false, 0);
             $fld = $frm->addIntegerField(Labels::getLabel('FRM_ORDER_RETURN_AGE', $this->siteLangId), 'selprod_return_age');
             $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('FRM_WARRANTY_IN_DAYS', $this->siteLangId) . ' </span>';
 
@@ -2448,26 +2448,24 @@ trait SellerProducts
             $orderReturnAgeUnReqFld = new FormFieldRequirement('selprod_return_age', Labels::getLabel('FRM_ORDER_RETURN_AGE', $this->siteLangId));
             $orderReturnAgeUnReqFld->setRequired(false);
             $orderReturnAgeUnReqFld->setPositive();
-        }
 
-        $fld = $frm->addIntegerField(Labels::getLabel('FRM_ORDER_CANCELLATION_AGE', $this->siteLangId), 'selprod_cancellation_age');
-        $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('FRM_WARRANTY_IN_DAYS', $this->siteLangId) . ' </span>';
+            $fld = $frm->addIntegerField(Labels::getLabel('FRM_ORDER_CANCELLATION_AGE', $this->siteLangId), 'selprod_cancellation_age');
+            $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('FRM_WARRANTY_IN_DAYS', $this->siteLangId) . ' </span>';
 
-        $orderCancellationAgeReqFld = new FormFieldRequirement('selprod_cancellation_age', Labels::getLabel('FRM_ORDER_CANCELLATION_AGE', $this->siteLangId));
-        $orderCancellationAgeReqFld->setRequired(true);
-        $orderCancellationAgeReqFld->setPositive();
+            $orderCancellationAgeReqFld = new FormFieldRequirement('selprod_cancellation_age', Labels::getLabel('FRM_ORDER_CANCELLATION_AGE', $this->siteLangId));
+            $orderCancellationAgeReqFld->setRequired(true);
+            $orderCancellationAgeReqFld->setPositive();
 
-        $orderCancellationAgeUnReqFld = new FormFieldRequirement('selprod_cancellation_age', Labels::getLabel('FRM_ORDER_CANCELLATION_AGE', $this->siteLangId));
-        $orderCancellationAgeUnReqFld->setRequired(false);
-        $orderCancellationAgeUnReqFld->setPositive();
+            $orderCancellationAgeUnReqFld = new FormFieldRequirement('selprod_cancellation_age', Labels::getLabel('FRM_ORDER_CANCELLATION_AGE', $this->siteLangId));
+            $orderCancellationAgeUnReqFld->setRequired(false);
+            $orderCancellationAgeUnReqFld->setPositive();
 
-        if ($productData['product_type'] != Product::PRODUCT_TYPE_SERVICE) {
             $useShopPolicy->requirements()->addOnChangerequirementUpdate(Shop::USE_SHOP_POLICY, 'eq', 'selprod_return_age', $orderReturnAgeUnReqFld);
             $useShopPolicy->requirements()->addOnChangerequirementUpdate(Shop::USE_SHOP_POLICY, 'ne', 'selprod_return_age', $orderReturnAgeReqFld);
-        }
 
-        $useShopPolicy->requirements()->addOnChangerequirementUpdate(Shop::USE_SHOP_POLICY, 'eq', 'selprod_cancellation_age', $orderCancellationAgeUnReqFld);
-        $useShopPolicy->requirements()->addOnChangerequirementUpdate(Shop::USE_SHOP_POLICY, 'ne', 'selprod_cancellation_age', $orderCancellationAgeReqFld);
+            $useShopPolicy->requirements()->addOnChangerequirementUpdate(Shop::USE_SHOP_POLICY, 'eq', 'selprod_cancellation_age', $orderCancellationAgeUnReqFld);
+            $useShopPolicy->requirements()->addOnChangerequirementUpdate(Shop::USE_SHOP_POLICY, 'ne', 'selprod_cancellation_age', $orderCancellationAgeReqFld);
+        }
 
         $frm->addHiddenField('', 'selprod_product_id', $product_id);
         $frm->addHiddenField('', 'selprod_id', $selprod_id);
