@@ -158,3 +158,4 @@
     - Bug-087597 - Custom product request button should not appear on the seller end
     - Bug-087615 - UI issue in the pickup slots section on the checkout page
     - Bug-087580 - Cart only setting is not working properly in case of more sellers
+    - Bug-086852 - Branch 1 >> RTL >> Product description field appears on the product details page even if no details are added in the description.
