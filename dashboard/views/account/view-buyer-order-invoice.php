@@ -231,7 +231,7 @@ if ($orderDetail['order_is_wallet_selected'] > 0) {
                                 <th width="10%" style="padding:10px;text-align: center; border-bottom:1px solid #ddd;font-size:12px; background-color:#ddd;"><?php echo Labels::getLabel('LBL_Qty', $siteLangId); ?></th>
                                 <?php if ($col6) { ?>
                                     <th width="15%" style="padding:10px;text-align: center; border-bottom:1px solid #ddd;font-size:12px; background-color:#ddd;">
-                                        <?php if (FatApp::getConfig('CONF_TAX_CATEGORIES_CODE', FatUtility::VAR_INT, 1)) {
+                                        <?php if (isset($childOrder['op_tax_code']) && FatApp::getConfig('CONF_TAX_CATEGORIES_CODE', FatUtility::VAR_INT, 1)) {
                                             echo $childOrder['op_tax_code'] . ' (' . Labels::getLabel('LBL_Tax', $siteLangId) . ')'; ?>
                                         <?php } else {
                                             echo Labels::getLabel('LBL_Tax', $siteLangId);
