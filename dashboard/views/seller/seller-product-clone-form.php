@@ -21,9 +21,11 @@ if (null != $returnAgeFld) {
 }
 
 $fld = $frm->getField('use_shop_policy');
-HtmlHelper::configureSwitchForCheckbox($fld);
-$fld->developerTags['noCaptionTag'] = true;
-$fld->developerTags['colWidthValues'] = [null, '12', null, null]; ?>
+if (null != $fld) {
+    HtmlHelper::configureSwitchForCheckbox($fld);
+    $fld->developerTags['noCaptionTag'] = true;
+    $fld->developerTags['colWidthValues'] = [null, '12', null, null];
+} ?>
 <div class="modal-header">
     <h5 class="modal-title"><?php echo Labels::getLabel('LBL_Clone_Inventory', $siteLangId); ?></h5>
 </div>

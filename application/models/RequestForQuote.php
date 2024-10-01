@@ -629,6 +629,7 @@ class RequestForQuote extends MyAppModel
         $criteria['doNotJoinSpecialPrice'] = true;
         if (self::TYPE_VARIANT == $rfqType) {
             $srch->addCondition('selprod_code', 'LIKE', $selprodCode);
+            $srch->addCondition('selprod_cart_type', '!=', SellerProduct::CART_TYPE_CART_ONLY);
             $srch->addFld("selprod_id as rfqts_selprod_id");
         } else if (self::TYPE_CATALOG == $rfqType) {
             $prodId = explode('_', $selprodCode)[0];
