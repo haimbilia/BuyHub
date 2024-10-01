@@ -91,6 +91,7 @@
     - Bug-087617 - Branch 1 + RFQ >> Deprecation appears on the return request details page when no data is added for that language
     - Bug-087616 - RFQ + Branch 1>> A Fatal error occurs when the admin clicks on the view icon on the order details page
     - Bug-087607 - Order ID missing in the email subject for the bank transaction request notification
+    - Bug-087602 - Branch 1>> The Categories filters are not working on the shop details page
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  

@@ -288,6 +288,10 @@
     grid-gap: 3rem;
     grid-template-columns: repeat(auto-fill, minmax(144px, 1fr));
 
+    .item {
+        min-width: 0;
+    }
+
     @include media-breakpoint-up(xl) {
         &[data-view="2"] {
             grid-template-columns: repeat(2, 1fr);
@@ -507,5 +511,3 @@
 .item__price_off {
     color: $primary-color;
 }
-
- 
