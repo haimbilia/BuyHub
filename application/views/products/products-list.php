@@ -14,7 +14,6 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !em
             $showActionBtns = !empty($showActionBtns) ? $showActionBtns : false;
             $isWishList = isset($isWishList) ? $isWishList : 0;
             foreach ($products as $product) {
-
                 $selProdRibbons = [];
                 if (isset($tRightRibbons)) {
                     if (array_key_exists($product['selprod_id'], $tRightRibbons)) {
@@ -119,16 +118,12 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !em
         } else { ?>
 </div>
 <?php
-            $arr['recordDisplayCount'] = $recordCount;
-            $arr['pageRecordCount'] = FilterHelper::encrypt($recordCount);
-            echo FatUtility::createHiddenFormFromData($arr, array('name' => 'frmProductSearchPaging', 'id' => 'frmProductSearchPaging'));
-            $message = Labels::getLabel('LBL_No_Records_Found', $siteLangId);
-            $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId, 'message' => $message));
-?>
-<?php }
-?>
-</div>
-
+        $arr['recordDisplayCount'] = $recordCount;
+        $arr['pageRecordCount'] = FilterHelper::encrypt($recordCount);
+        echo FatUtility::createHiddenFormFromData($arr, array('name' => 'frmProductSearchPaging', 'id' => 'frmProductSearchPaging'));
+        $message = Labels::getLabel('LBL_No_Records_Found', $siteLangId);
+        $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId, 'message' => $message));
+} ?>
 <script>
     $(function() {
         var e = document.getElementById("pageSizeSelect");
@@ -139,3 +134,4 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !em
 
     })
 </script>
+</div>

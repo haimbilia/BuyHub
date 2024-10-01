@@ -3337,7 +3337,10 @@ class EmailHandler extends FatModel
 
         $vars = array(
             '{rfq_table}' => $rfqTableFormat,
-            '{rfq_number}' => $data['rfq_number']
+            '{rfq_number}' => $data['rfq_number'],
+            '{USER_NAME}' => $data['user_name'],
+            '{ORDER_ID}' => $data['order_number'],
+            '{STATUS}' => $data['txn_status'],
         );
 
         $attachmentsArr = [];

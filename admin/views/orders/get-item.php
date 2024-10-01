@@ -49,7 +49,7 @@ foreach ($op['taxOptions'] as $key => $val) {
                 $pickupAddress = (!empty($addresses[Orders::PICKUP_ADDRESS_TYPE])) ? $addresses[Orders::PICKUP_ADDRESS_TYPE] : array();
                 $pickupAddrPhone = "";
                 if (!empty($pickupAddress['oua_phone_dcode'])) {
-                    $pickupAddrPhone = '<span class="default-ltr">'. ValidateElement::formatDialCode($pickupAddress['oua_phone_dcode']) . $pickupAddress['oua_phone'] . '</span>';
+                    $pickupAddrPhone = '<span class="default-ltr">' . ValidateElement::formatDialCode($pickupAddress['oua_phone_dcode']) . $pickupAddress['oua_phone'] . '</span>';
                 }
                 $contactName = $pickupAddress['oua_name'];
 
@@ -86,7 +86,7 @@ foreach ($op['taxOptions'] as $key => $val) {
                         }
                     }
 
-                    echo OrderProduct::getStatusHtml($op["orderstatus_color_class"], $orderStatus);
+                    echo OrderProduct::getStatusHtml((int)$op["orderstatus_color_class"], $orderStatus);
                     ?>
                 </span>
             </li>

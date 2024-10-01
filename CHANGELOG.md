@@ -23,6 +23,7 @@
     - Language and currency selection via popup.
     - Displayed review images at the top of reviews list.
     - Performance optimization ar admin end, product search, filters and collections list.
+    - Upgraded paypal payment library deprecated code.
     
 ## Hit URL:
     - admin/patch-update/updateProductRating  
@@ -156,3 +157,9 @@
     - Bug-087210 - The phone number direction is not correct in the RTL on the seller registration page
     - Bug-087591 - Missing payment info when user make payment using Wallet + bank transfer payment method
     - Bug-087597 - Custom product request button should not appear on the seller end
+    - Bug-087597 - Custom product request button should not appear on the seller end
+    - Bug-087617 - Branch 1 + RFQ >> Deprecation appears on the return request details page when no data is added for that language
+    - Bug-087616 - RFQ + Branch 1>> A Fatal error occurs when the admin clicks on the view icon on the order details page
+    - Bug-087607 - Order ID missing in the email subject for the bank transaction request notification
+    - Bug-087602 - Branch 1>> The Categories filters are not working on the shop details page
+    - Bug-086852 - Branch 1 >> RTL >> Product description field appears on the product details page even if no details are added in the description.
