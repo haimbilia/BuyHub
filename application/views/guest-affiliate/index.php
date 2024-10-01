@@ -4,7 +4,7 @@ $bgImageUrl = '';
 $pageContent = '';
 if (!empty($bannerSlogan)) {
     $haveBgImage = AttachedFile::getAttachment(AttachedFile::FILETYPE_AFFILIATE_PAGE_SLOGAN_BG_IMAGE, $bannerSlogan['epage_id'], 0, $siteLangId);
-    $bgImageUrl = ($haveBgImage) ? "background-image:url(" . UrlHelper::generateFileUrl('Image', 'cblockBackgroundImage', array($bannerSlogan['epage_id'], $siteLangId, 'DEFAULT', AttachedFile::FILETYPE_AFFILIATE_PAGE_SLOGAN_BG_IMAGE)) . ");" : "background-image:url(" . CONF_WEBROOT_URL . "images/seller-bg.png);";
+    $bgImageUrl = ($haveBgImage) ? "background:url(" . UrlHelper::generateFileUrl('Image', 'cblockBackgroundImage', array($bannerSlogan['epage_id'], $siteLangId, 'DEFAULT', AttachedFile::FILETYPE_AFFILIATE_PAGE_SLOGAN_BG_IMAGE)) . ");" : "background:url(" . CONF_WEBROOT_URL . "images/seller-bg.png);";
     $imageRepeatType = $bannerSlogan['epage_extra_info'] && array_key_exists(Extrapage::TYPE_BKGROUND_IMAGE_REPEAT, $bannerSlogan['epage_extra_info']) ? $bannerSlogan['epage_extra_info'][Extrapage::TYPE_BKGROUND_IMAGE_REPEAT] : 'repeat';
     $bgImageUrl .= "background-repeat: $imageRepeatType;";
     $imageSizeType = $bannerSlogan['epage_extra_info'] && array_key_exists(Extrapage::TYPE_BKGROUND_IMAGE_SIZE, $bannerSlogan['epage_extra_info']) ? $bannerSlogan['epage_extra_info'][Extrapage::TYPE_BKGROUND_IMAGE_SIZE] : 'auto';
