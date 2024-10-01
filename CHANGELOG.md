@@ -25,6 +25,9 @@
     - Performance optimization ar admin end, product search, filters and collections list.
     
 
+## Hit URL:
+    - admin/patch-update/updateProductRating  
+
 ## Bug Fixes:
     - Bug-074802 - Omise Payment gateway deprecated issue.
     - Bug-076133 - Stripe payment gateway functionality upgrade
@@ -92,6 +95,4 @@
     - Bug-087616 - RFQ + Branch 1>> A Fatal error occurs when the admin clicks on the view icon on the order details page
     - Bug-087607 - Order ID missing in the email subject for the bank transaction request notification
     - Bug-087602 - Branch 1>> The Categories filters are not working on the shop details page
-
-## Hit URL:
-    - admin/patch-update/updateProductRating  
+    - Bug-086852 - Branch 1 >> RTL >> Product description field appears on the product details page even if no details are added in the description.
