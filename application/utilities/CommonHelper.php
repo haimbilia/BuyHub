@@ -1335,7 +1335,8 @@ class CommonHelper extends FatUtility
 
     public static function subStringByWords($str, $maxlength, $trailingString = '')
     {
-        if (strlen($str) < $maxlength) {
+        $str = (string) $str;
+        if (!empty($str) && strlen($str) < $maxlength) {
             return $str;
         }
         $str = substr($str, 0, $maxlength);

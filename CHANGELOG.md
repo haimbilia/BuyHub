@@ -88,6 +88,8 @@
     - Bug-087210 - The phone number direction is not correct in the RTL on the seller registration page
     - Bug-087591 - Missing payment info when user make payment using Wallet + bank transfer payment method
     - Bug-087597 - Custom product request button should not appear on the seller end
+    - Bug-087617 - Branch 1 + RFQ >> Deprecation appears on the return request details page when no data is added for that language
+    - Bug-087616 - RFQ + Branch 1>> A Fatal error occurs when the admin clicks on the view icon on the order details page
 
 ## Hit URL:
     - admin/patch-update/updateProductRating  
