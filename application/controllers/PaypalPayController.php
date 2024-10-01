@@ -100,7 +100,7 @@ class PaypalPayController extends PaymentController
         }
         $this->paymentInitiated($orderId);
         $order = $this->plugin->getResponse();
-        echo json_encode($order->result, JSON_PRETTY_PRINT);
+        echo json_encode($order, JSON_PRETTY_PRINT);
     }
 
     /**
@@ -118,7 +118,7 @@ class PaypalPayController extends PaymentController
             LibHelper::exitWithError($msg, true);
         }
         $order = $this->plugin->getResponse();
-        echo json_encode($order->result, JSON_PRETTY_PRINT);
+        echo json_encode($order, JSON_PRETTY_PRINT);
     }
 
     /**
@@ -157,7 +157,7 @@ class PaypalPayController extends PaymentController
         $currencyCode = $orderInfo["order_currency_code"];
         $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
 
-        if (false === $this->plugin->validatePaymentRequest($paypalOrderId, $orderInfo['order_number'], $currencyCode, $paymentAmount)) {
+        if (false === $this->plugin->validatePaymentRequest($paypalOrderId, $currencyCode, $paymentAmount)) {
             SystemLog::transaction(json_encode($post), self::KEY_NAME . "-" . $orderId);
             FatUtility::dieJsonError($this->plugin->getError());
         }

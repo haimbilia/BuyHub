@@ -3210,7 +3210,7 @@ class EmailHandler extends FatModel
         $tpl = 'BANK_TRANSFER_ORDER_PAYMENT_ACTIONS';
         $vars = array(
             '{USER_NAME}' => $d['user_name'],
-            '{ORDER-ID}' => $d['order_number'],
+            '{ORDER_ID}' => $d['order_number'],
             '{STATUS}' => $d['txn_status'],
         );
 

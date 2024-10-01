@@ -903,6 +903,7 @@ class ProductSearch extends SearchBase
                 return;
             }
 
+            $categoryArr = $category;
             if (!is_array($category)) {
                 $categoryArr = explode(",", $category);
             }
