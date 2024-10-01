@@ -1,4 +1,5 @@
 <?php
+
 use PayPal\Http\PayPalClient;
 use PayPal\Http\Environment\SandboxEnvironment;
 use PayPal\Http\Environment\ProductionEnvironment;
@@ -271,6 +272,8 @@ class Paypal extends PaymentMethodBase
         } catch (InvalidArgumentException $e) {
             return $this->handleError($e);
         } catch (\Exception $e) {
+            return $this->handleError($e);
+        } catch (\Error $e) {
             return $this->handleError($e);
         }
     }
