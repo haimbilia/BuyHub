@@ -232,7 +232,7 @@ if ($orderDetail['order_is_wallet_selected'] > 0) {
                                 <?php if ($col6) { ?>
                                     <th width="15%" style="padding:10px; ;text-align: <?php echo CommonHelper::getLayoutDirection() == 'rtl' ? 'right' : 'left'; ?>; border-bottom:1px solid #ddd; background-color:#ddd; ">
                                         <?php if (isset($childOrder['op_tax_code']) && FatApp::getConfig('CONF_TAX_CATEGORIES_CODE', FatUtility::VAR_INT, 1)) {
-                                            echo $orderDetail['op_tax_code'] . ' (' . Labels::getLabel('LBL_Tax', $siteLangId) . ')'; ?>
+                                            echo $childOrder['op_tax_code'] . ' (' . Labels::getLabel('LBL_Tax', $siteLangId) . ')'; ?>
                                         <?php } else {
                                             echo Labels::getLabel('LBL_Tax', $siteLangId);
                                         } ?>
