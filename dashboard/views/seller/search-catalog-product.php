@@ -65,7 +65,8 @@
                         $td->appendElement('span', array('class' => 'badge badge-inline ' . $activeInactiveClassArr[$row[$key]]), $activeInactiveArr[$row[$key]] . '<br>', true);
                         break;
                     case 'product_model':
-                        $td->appendElement('plaintext', array(), $row[$key], true);
+                        $lbl = !empty($row[$key]) ? $row[$key] : Labels::getLabel('LBL_N/A', $siteLangId);
+                        $td->appendElement('plaintext', array(), $lbl, true);
                         break;
                     case 'product_shipped_by':
                         $str = Labels::getLabel('LBL_N/A', $siteLangId);

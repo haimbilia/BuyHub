@@ -2529,7 +2529,7 @@ trait SellerProducts
         unset($sellerProductRow['selprod_id']);
         $data_to_be_save = $sellerProductRow;
         $data_to_be_save['selprod_price'] = $post['selprod_price'];
-        $data_to_be_save['selprod_stock'] = $post['selprod_stock'] ?? 1;
+        $data_to_be_save['selprod_stock'] = (isset($post['selprod_stock']) && $post['selprod_stock'] > 0) ? $post['selprod_stock'] : 1;
         $data_to_be_save['selprod_available_from'] = $post['selprod_available_from'];
         $data_to_be_save['selprod_cart_type'] = $post['selprod_cart_type'] ?? 0;
 
