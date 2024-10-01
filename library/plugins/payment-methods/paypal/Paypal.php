@@ -1,15 +1,21 @@
 <?php
-
-use PayPalCheckoutSdk\Core\PayPalHttpClient;
-use PayPalCheckoutSdk\Core\SandboxEnvironment;
-use PayPalCheckoutSdk\Core\ProductionEnvironment;
-use PayPalCheckoutSdk\Orders\OrdersCreateRequest;
-use PayPalCheckoutSdk\Orders\OrdersCaptureRequest;
-use PayPalCheckoutSdk\Orders\OrdersGetRequest;
+use PayPal\Http\PayPalClient;
+use PayPal\Http\Environment\SandboxEnvironment;
+use PayPal\Http\Environment\ProductionEnvironment;
+use PayPal\Checkout\Orders\AmountBreakdown;
+use PayPal\Checkout\Orders\Order;
+use PayPal\Checkout\Orders\ApplicationContext;
+use PayPal\Checkout\Orders\PurchaseUnit;
+use PayPal\Checkout\Requests\OrderCreateRequest;
+use PayPal\Checkout\Requests\OrderCaptureRequest;
+use PayPal\Checkout\Requests\OrderShowRequest;
 
 class Paypal extends PaymentMethodBase
 {
     public const KEY_NAME = __CLASS__;
+    public const CREATE_ORDER = 1;
+    public const CAPTURE_ORDER = 2;
+    public const VALIDATE_PAYMENT_REQUEST = 3;
 
     public $requiredKeys = [
         'client_id',
@@ -36,10 +42,10 @@ class Paypal extends PaymentMethodBase
      *
      * @return void
      */
-    public function requiredKeys()
+    private function requiredKeys(): void
     {
-        $envoirment = FatUtility::int($this->getKey('env'));
-        if (0 < $envoirment) {
+        $environment = FatUtility::int($this->getKey('env'));
+        if (0 < $environment) {
             $this->requiredKeys = [
                 'live_client_id',
                 'live_secret_key',
@@ -62,56 +68,57 @@ class Paypal extends PaymentMethodBase
         if (false === $this->loadBaseCurrencyCode()) {
             return false;
         }
-        
+
         if (0 < $userId) {
             if (false === $this->loadLoggedUserInfo($userId)) {
                 return false;
             }
         }
 
+        $live = (0 < $this->settings['env']) ? 'live_' : '';
+        $this->clientId = $this->settings[$live . 'client_id'];
+        $this->secretKey = $this->settings[$live . 'secret_key'];
 
-        $this->clientId = 0 < $this->settings['env'] ? $this->settings['live_client_id'] : $this->settings['client_id'];
-        $this->secretKey = 0 < $this->settings['env'] ? $this->settings['live_secret_key'] : $this->settings['secret_key'];
         return true;
     }
 
-    /**
-     * environment - Setup Paypal Environment.
-     *
-     * @return object
-     */
-    public function environment(): object
+
+    private function getClientObject(): PayPalClient
     {
-        return (0 < $this->settings['env'] ? new ProductionEnvironment($this->clientId, $this->secretKey) : new SandboxEnvironment($this->clientId, $this->secretKey));
+        $envoirmentObject = new SandboxEnvironment($this->clientId, $this->secretKey);
+        if ($this->settings['env'] > 0) {
+            $envoirmentObject = new ProductionEnvironment($this->clientId, $this->secretKey);
+        }
+
+        return new PayPalClient($envoirmentObject);
+    }
+
+    private function orderCreateRequest(array $data): OrderCreateRequest
+    {
+        $currency_code = $data['currency_code'];
+        $value = $data['value'];
+
+        $applicationContext = ApplicationContext::create();
+        $applicationContext->setReturnUrl($data['return_url']);
+        $applicationContext->setCancelUrl($data['cancel_url']);
+
+        $purchaseUnit = new PurchaseUnit(AmountBreakdown::of($value, $currency_code));
+        $order = (new Order())->addPurchaseUnit($purchaseUnit);
+        $order->setApplicationContext($applicationContext);
+
+        return (new OrderCreateRequest($order));
     }
 
     /**
-     * client - Setup Paypal Client.
+     * createOrder - Create paypal order
      *
-     * @return object
-     */
-    public function client(): object
-    {
-        return new PayPalHttpClient($this->environment());
-    }
-
-    /**
-     * createOrder - Create papal order
-     *
-     * @param  mixed $orderId
+     * @param  int $orderId
      * @return bool
      */
-    public function createOrder($orderId): bool
+    public function createOrder(int $orderId): bool
     {
-        //=== Create New Order Request
-        $request = new OrdersCreateRequest();
-        $request->prefer("return=representation");
-        $request->headers["PayPal-Request-Id"] = md5($orderId);
-
-        //=== Create Request Body
-        $request->body = $this->buildRequestBody($orderId);
-        //=== Call PayPal to set up a transaction
-        return $this->executeRequest($request);
+        $data = $this->buildRequestBody($orderId);
+        return $this->doRequest(self::CREATE_ORDER, $data);
     }
 
     /**
@@ -122,144 +129,87 @@ class Paypal extends PaymentMethodBase
      */
     public function captureOrder($paypalOrderId): bool
     {
-        $request = new OrdersCaptureRequest($paypalOrderId);
-        //=== Call PayPal to get the transaction details
-        return $this->executeRequest($request);
+        if (empty($paypalOrderId)) {
+            return false;
+        }
+
+        return $this->doRequest(self::CAPTURE_ORDER, $paypalOrderId);
     }
 
     /**
      * getResponse
      *
-     * @return object
+     * @return array
      */
-    public function getResponse(): object
+    public function getResponse(bool $decodeJson = true): array
     {
+        if ($decodeJson) {
+            return json_decode($this->resp->getBody()->getContents(), true);
+        }
+
         return $this->resp;
     }
 
     /**
      * buildRequestBody
      *
-     * @param  string $orderId
+     * @param  int $orderId
      * @return array
      */
-    private function buildRequestBody($orderId): array
+    private function buildRequestBody(int $orderId): array
     {
         $orderPaymentObj = new OrderPayment($orderId, $this->langId);
         $paymentAmount = $orderPaymentObj->getOrderPaymentGatewayAmount();
         $orderInfo = $orderPaymentObj->getOrderPrimaryinfo();
-        if ($orderInfo['order_type'] == Orders::ORDER_WALLET_RECHARGE) {
+
+        $cancelBtnUrl = CommonHelper::getPaymentCancelPageUrl();
+        if (Orders::ORDER_WALLET_RECHARGE == $orderInfo['order_type']) {
             $cancelBtnUrl = CommonHelper::getPaymentFailurePageUrl();
-        } else {
-            $orderObj = new Orders();
-            $orderAddresses = $orderObj->getOrderAddresses($orderId);
-            $shippingAddress = isset($orderAddresses[Orders::SHIPPING_ADDRESS_TYPE]) ? $orderAddresses[Orders::SHIPPING_ADDRESS_TYPE] : [];
-            $billingAddress = isset($orderAddresses[Orders::BILLING_ADDRESS_TYPE]) ? $orderAddresses[Orders::BILLING_ADDRESS_TYPE] : [];
-
-            $cancelBtnUrl = CommonHelper::getPaymentCancelPageUrl();
         }
-
-        $request_body = $purchase_units = $pu_amount = [];
-
-        //=== Prepare amount & break down of amount for order
-        $pu_amount["currency_code"] = $this->systemCurrencyCode;
-        $pu_amount["value"] =  number_format((float)$paymentAmount, 2, '.', '');
-        $purchase_units["reference_id"] = $orderId;
-        $purchase_units["invoice_id"] = $orderInfo['order_number'];
-        $purchase_units["amount"] = $pu_amount;
-     
-        if ($orderInfo['order_type'] == Orders::ORDER_PRODUCT && !empty($shippingAddress)) {
-            $purchase_units["shipping"] = [
-                "address_line_1" => $shippingAddress['oua_address1'],
-                "address_line_2" => $shippingAddress['oua_address2'],
-                "admin_area_1" => $shippingAddress['oua_state_code'],
-                "admin_area_2" => $shippingAddress['oua_city'],
-                "postal_code" => $shippingAddress['oua_zip'],
-                "country_code" => $shippingAddress['oua_country_code']
-            ];
-        }
-
-        $customerName = !isset($orderInfo['customer_name']) || empty($orderInfo['customer_name']) ? $this->userData['user_name'] : $orderInfo['customer_name'];
-        $customerEmail = !isset($orderInfo['customer_email']) || empty($orderInfo['customer_email']) ? $this->userData['credential_email'] : $orderInfo['customer_email'];
-
-        $request_body["intent"] = "CAPTURE";
-        $request_body["payer"] = [
-            "name" => [
-                "given_name" => $customerName,
-            ],
-            "email_address" => $customerEmail
-        ];
-
-
-        if ($orderInfo['order_type'] == Orders::ORDER_PRODUCT && !empty($billingAddress)) {
-            $request_body["payer"]['address'] = [
-                "address_line_1" => $billingAddress['oua_address1'],
-                "address_line_2" => $billingAddress['oua_address2'],
-                "admin_area_1" => $billingAddress['oua_state_code'],
-                "admin_area_2" => $billingAddress['oua_city'],
-                "postal_code" => $billingAddress['oua_zip'],
-                "country_code" => $billingAddress['oua_country_code']
-            ];
-        }
-
-        $request_body["purchase_units"][] = $purchase_units;
-        $request_body["application_context"] = [
+        return [
+            "currency_code" => $this->systemCurrencyCode,
+            "value" =>  number_format((float)$paymentAmount, 2, '.', ''),
             "cancel_url" => $cancelBtnUrl,
-            "return_url" => UrlHelper::generateFullUrl(self::KEY_NAME, "callback", [$orderId])
+            "return_url" => UrlHelper::generateFullUrl('PayPalPay', "callback", [$orderId])
         ];
-
-        return $request_body;
     }
-    
+
     /**
      * validatePaymentRequest
      *
      * @param  string $paypalOrderId
-     * @param  string $orderInvoiceId
      * @param  string $currencyCode
      * @param  float $totalAmount
      * @return bool
      */
-    public function validatePaymentRequest(string $paypalOrderId, string $orderInvoiceId, string $currencyCode, float $totalAmount): bool
+    public function validatePaymentRequest(string $paypalOrderId, string $currencyCode, float $totalAmount): bool
     {
         if (!empty(Orders::isExistTransactionId($paypalOrderId))) {
             $this->error = Labels::getLabel('ERR_INVALID_TXN_REQUEST._THIS_TRANSACTION_ALREADY_PROCESSED', $this->langId);
             return false;
         }
 
-        $request = new OrdersGetRequest($paypalOrderId);
-        //=== Call PayPal to get the transaction details
-        if (false === $this->executeRequest($request)) {
+        $request = $this->doRequest(self::VALIDATE_PAYMENT_REQUEST, $paypalOrderId);
+        if (false === $request) {
             return false;
         }
-        $response = $this->getResponse();
-
-        if (200 != $response->statusCode) {
-            $this->error = Labels::getLabel('ERR_SOMETHING_WENT_WRONG._INVALID_RESPONSE.', $this->langId);
-            return false;
-        }
-
-        $result = $response->result;
-        if ('COMPLETED' != $result->status || 'CAPTURE' != $result->intent) {
+        $result = $this->getResponse();
+        if ('COMPLETED' != $result['status'] || 'CAPTURE' != $result['intent']) {
             $this->error = Labels::getLabel('ERR_THIS_TXN_NOT_YET_CAPTURED/_COMPLETED', $this->langId);
             return false;
         }
-        
-        $purchaseUnit = isset($result->purchase_units) ? current($result->purchase_units) : [];
-        $capturePayment = isset($purchaseUnit->payments->captures) ? current($purchaseUnit->payments->captures) : [];
+        $purchaseUnit = isset($result['purchase_units']) ? current($result['purchase_units']) : [];
+        $capturePayment = isset($purchaseUnit['payments']['captures']) ? current($purchaseUnit['payments']['captures']) : [];
         if (empty($capturePayment)) {
             $this->error = Labels::getLabel('ERR_SOMETHING_WENT_WRONG._INVALID_CAPTURE_RESPONSE.', $this->langId);
             return false;
         }
 
-        if ($purchaseUnit->invoice_id != $orderInvoiceId) {
-            $this->error = Labels::getLabel('ERR_INVALID_ORDER.', $this->langId);
-            return false;
-        }
+        $amountArr = $capturePayment['amount'] ?? [];
 
-        $paidCurrency = isset($capturePayment->amount->currency_code) ? $capturePayment->amount->currency_code : '';
-        $paidAmount = isset($capturePayment->amount->value) ? $capturePayment->amount->value : [];
-        $payeeEmail = $purchaseUnit->payee->email_address;
+        $paidCurrency = isset($amountArr['currency_code']) ? $amountArr['currency_code'] : '';
+        $paidAmount = isset($amountArr['value']) ? $amountArr['value'] : [];
+        $payeeEmail = $purchaseUnit['payee']['email_address'];
 
         if ($currencyCode != $paidCurrency) {
             $this->error = Labels::getLabel('ERR_INVALID_CURRENCY.', $this->langId);
@@ -279,34 +229,49 @@ class Paypal extends PaymentMethodBase
         return true;
     }
 
+    /**
+     * Handle errors and set the error message
+     *
+     * @param Exception $e
+     */
+    private function handleError(Exception $e): bool
+    {
+        $msg = LibHelper::isJson($e->getMessage()) ? json_decode($e->getMessage(), true) : $e->getMessage();
+        $this->error = $msg;
+        return false;
+    }
 
     /**
-     * executeRequest
+     * doRequest
      *
-     * @param  mixed $request
+     * @param int $requestType
+     * @param mixed $request
      * @return bool
      */
-    private function executeRequest($request): bool
+    private function doRequest(int $requestType, $request): bool
     {
         try {
-            $client = $this->client();
-            //=== Return a response to the client.
-            $this->resp = $client->execute($request);
-        } catch (Exception $e) {
-            // Something else happened, completely unrelated to Paypal
-            $msg = LibHelper::isJson($e->getMessage()) ? json_decode($e->getMessage(), true) : $e->getMessage();
-            $this->error = $msg;
-            return false;
-        } catch (\Error $e) {
-            // Handle error
-            $msg = LibHelper::isJson($e->getMessage()) ? json_decode($e->getMessage(), true) : $e->getMessage();
-            $this->error = $msg;
-            return false;
+            switch ($requestType) {
+                case self::CREATE_ORDER:
+                    $requestBody = $this->orderCreateRequest($request);
+                    break;
+                case self::CAPTURE_ORDER:
+                    $requestBody = new OrderCaptureRequest($request);
+                    break;
+                case self::VALIDATE_PAYMENT_REQUEST:
+                    $requestBody = new OrderShowRequest($request);
+                    break;
+            }
+
+            $client = $this->getClientObject();
+            $this->resp = $client->send($requestBody);
+            return true;
         } catch (HttpException $e) {
-            $msg = LibHelper::isJson($e->getMessage()) ? json_decode($e->getMessage(), true) : $e->getMessage();
-            $this->error = $msg;
-            return false;
+            return $this->handleError($e);
+        } catch (InvalidArgumentException $e) {
+            return $this->handleError($e);
+        } catch (\Exception $e) {
+            return $this->handleError($e);
         }
-        return true;
     }
 }
