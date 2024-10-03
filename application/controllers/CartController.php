@@ -14,6 +14,19 @@ class CartController extends MyAppController
     public function index()
     {
         $cartObj = new Cart();
+
+        $loggedUserId = UserAuthentication::getLoggedUserId(true);
+        if (0 < $loggedUserId) {
+            $user_is_buyer = User::getAttributesById($loggedUserId, 'user_is_buyer');
+            if (!$user_is_buyer) {
+                $cartObj->clear(true);
+                $cartObj->updateUserCart();
+                $errMsg = Labels::getLabel('ERR_PLEASE_LOGIN_WITH_BUYER_ACCOUNT_TO_ADD_PRODUCTS_TO_CART', $this->siteLangId);
+                LibHelper::exitWithError($errMsg, false, true);
+                FatApp::redirectUser(UrlHelper::generateUrl());
+            }
+        }
+
         $cartObj->unsetCartCheckoutType();
         $cartObj->invalidateCheckoutType();
         $cartObj->removeProductShippingMethod();
@@ -564,7 +577,7 @@ class CartController extends MyAppController
 
         $cartObj = new Cart(UserAuthentication::getLoggedUserId(true), $this->siteLangId, $this->app_user['temp_user_id']);
         $key = $post['key'];
-        
+
         if ('all' == $key) {
             $cartObj->clear(true);
             $cartObj->updateUserCart();
@@ -584,7 +597,7 @@ class CartController extends MyAppController
             $cartObj->removeCartDiscountCoupon();
         }
         $total = $cartObj->countProducts();
-        
+
         LibHelper::sendAsyncRequest('POST', UrlHelper::generateFullUrl('Cart', 'loadRates'), ['sessionId' => LibHelper::getSessionId()]);
 
         $this->set('msg', Labels::getLabel("MSG_ITEM_REMOVED_FROM_CART", $this->siteLangId));
