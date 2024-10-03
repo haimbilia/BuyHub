@@ -82,10 +82,10 @@ class BlogPostsController extends ListingBaseController
                                     xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#in-active">
                                 </use>
                             </svg><span>' . Labels::getLabel('LBL_UNPUBLISHED', $this->siteLangId) . '</span>',
-            ],    
-                  
+            ],
+
         ];
-        if($this->objPrivilege->canEditBlogPosts($this->admin_id, true)){
+        if ($this->objPrivilege->canEditBlogPosts($this->admin_id, true)) {
             $actionItemsData['otherButtons'][] = [
                 'attr' => [
                     'href' => 'javascript:void(0)',
@@ -259,7 +259,17 @@ class BlogPostsController extends ListingBaseController
 
         $categories = '';
         if (isset($post['categories'])) {
-            $categories = $post['categories'];
+            $categories = json_decode($post['categories'], true);
+            foreach ($categories as $i => $catRow) {
+                if (!isset($catRow['id'])) {
+                    unset($categories[$i]);
+                }
+            }
+
+            if (empty($categories)) {
+                LibHelper::exitWithError(Labels::getLabel('LBL_PLEASE_SELECT_VALID_CATEGORIES', $this->siteLangId), true);
+            }
+
             unset($post['categories']);
         }
         $post['post_identifier'] = $post['post_title'];
@@ -283,10 +293,10 @@ class BlogPostsController extends ListingBaseController
         if (!$record->updateLangData(CommonHelper::getDefaultFormLangId(), $langData)) {
             LibHelper::exitWithError($record->getError(), true);
         }
-      
+
         /* link blog post to blog post categories[ */
-        if (!empty($categories) && true === LibHelper::isJson($categories)) {
-            $categories = array_column(json_decode($categories, true), 'id');
+        if (!empty($categories)) {
+            $categories = array_column($categories, 'id');
             if (!$record->addUpdateCategories($recordId, $categories)) {
                 LibHelper::exitWithError($record->getError(), true);
             }
@@ -417,7 +427,7 @@ class BlogPostsController extends ListingBaseController
 
         if (!$row = BlogPost::getAttributesById($recordId)) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
-        }      
+        }
         $this->set('languages', Language::getAllNames());
         $this->set('image', AttachedFile::getAttachment(AttachedFile::FILETYPE_BLOG_POST_IMAGE, $recordId, 0, $langId, (1 == count($languages)), 0, 1));
         $this->set('recordId', $recordId);
@@ -559,7 +569,7 @@ class BlogPostsController extends ListingBaseController
 
         $frm->addCheckBox(Labels::getLabel('FRM_FEATURED', $this->siteLangId), 'post_featured', 1, array(), false, 0);
         $frm->addCheckBox($postStatusArr[applicationConstants::PUBLISHED], 'post_published', 1, array(), false, 0);
-       
+
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         $languageArr = Language::getDropDownList();
         if (!empty($translatorSubscriptionKey) && 1 < count($languageArr)) {
@@ -686,7 +696,7 @@ class BlogPostsController extends ListingBaseController
         }
 
         $arr = [
-            'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),          
+            'select_all' => Labels::getLabel('LBL_SELECT_ALL', $this->siteLangId),
             'post_title' => Labels::getLabel('LBL_POST_TITLE', $this->siteLangId),
             'categories' => Labels::getLabel('LBL_POST_CATEGORY', $this->siteLangId),
             'post_published_on' => Labels::getLabel('LBL_PUBLISHED_DATE', $this->siteLangId),
@@ -701,7 +711,7 @@ class BlogPostsController extends ListingBaseController
     protected function getDefaultColumns(): array
     {
         return [
-            'select_all',          
+            'select_all',
             'post_title',
             'categories',
             'post_published_on',
