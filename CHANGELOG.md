@@ -96,3 +96,4 @@
     - Bug-087607 - Order ID missing in the email subject for the bank transaction request notification
     - Bug-087602 - Branch 1>> The Categories filters are not working on the shop details page
     - Bug-086852 - Branch 1 >> RTL >> Product description field appears on the product details page even if no details are added in the description.
+    - Bug-087648 - Deprecation appears on the product details page
