@@ -21,6 +21,18 @@ class CartController extends MyAppController
             CommonHelper::redirectUserReferer();
         }
 
+        $loggedUserId = UserAuthentication::getLoggedUserId(true);
+        if (0 < $loggedUserId) {
+            $user_is_buyer = User::getAttributesById($loggedUserId, 'user_is_buyer');
+            if (!$user_is_buyer) {
+                $cartObj->clear(true);
+                $cartObj->updateUserCart();
+                $errMsg = Labels::getLabel('ERR_PLEASE_LOGIN_WITH_BUYER_ACCOUNT_TO_ADD_PRODUCTS_TO_CART', $this->siteLangId);
+                LibHelper::exitWithError($errMsg, false, true);
+                FatApp::redirectUser(UrlHelper::generateUrl());
+            }
+        }
+
         $cartObj->unsetCartCheckoutType();
         $cartObj->invalidateCheckoutType();
         $cartObj->removeProductShippingMethod();

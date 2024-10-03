@@ -4,6 +4,7 @@ HtmlHelper::formatFormFields($frm);
 
 $frm->setFormTagAttribute('id', 'frmBlogPostJs');
 $frm->setFormTagAttribute('onsubmit', 'saveRecord($("#frmBlogPostJs"));');
+$frm->setFormTagAttribute('data-onclear', 'editRecord(' . $recordId . ', false, "modal-dialog-vertical-md")');
 
 $fld = $frm->getField('post_author_name');
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];
@@ -58,6 +59,9 @@ $otherButtons = [
         'isActive' => false
     ]
 ];
+
+$generalTab['attr']['onclick'] = 'editRecord(' . $recordId . ', false, "modal-dialog-vertical-md")';
+$langTabExtraClass = "modal-dialog-vertical-md";
 
 $formClassExtra = 'checkboxSwitchJs';
 require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
