@@ -845,22 +845,21 @@
 		border: none;
 		padding: 0;
 	}
-}
 
-.shop-detail {
-	display: flex;
-	gap: 10px;
-	justify-content: space-between;
-	width: 100%;
+	.shop-detail {
+		display: flex;
+		gap: 10px;
+		justify-content: space-between;
+		width: 100%;
 
-	&.shipping-select {
-		flex-direction: column;
+		&.shipping-select {
+			flex-direction: column;
+		}
+
+		&.pickup-select {
+			flex-flow: row wrap;
+		}
 	}
-
-	&.pickup-select {
-		flex-flow: row wrap;
-	}
-
 
 	.shipping-method {
 
@@ -930,6 +929,7 @@
 			// background-color: transparent;
 		}
 	}
+
 }
 
 .form-inline {
