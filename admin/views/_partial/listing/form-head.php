@@ -9,6 +9,10 @@ $formSubTitle = !empty($formSubTitle) ? $formSubTitle : '';
 $includeTabs = $includeTabs ?? true;
 $displayLangTab = $displayLangTab ?? true;
 $languages = $languages ?? [];
+
+$langTabExtraClass = $langTabExtraClass ?? '';
+$langTabExtraClass = !empty($langTabExtraClass) ? ', "' . $langTabExtraClass . '"': '';
+
 unset($languages[CommonHelper::getDefaultFormLangId()]); ?>
 <div class="modal-header">
     <h5 class="modal-title">
@@ -60,7 +64,7 @@ unset($languages[CommonHelper::getDefaultFormLangId()]); ?>
                     <?php echo $label; ?>
                 </a>
                 <?php if (0 < count($languages) && true === $displayLangTab) { ?>
-                    <a class="nav-link <?php echo $activeLangtab . $disabled; ?>" href="javascript:void(0);" <?php echo (0 < $recordId) ? "onclick='editLangData(" . $recordId . "," . array_key_first($languages) . ");'" : ""; ?> title="<?php echo Labels::getLabel('LBL_LANGUAGE_DATA', $siteLangId); ?>">
+                    <a class="nav-link <?php echo $activeLangtab . $disabled; ?>" href="javascript:void(0);" <?php echo (0 < $recordId) ? "onclick='editLangData(" . $recordId . "," . array_key_first($languages) . ", 0" . $langTabExtraClass . ");'" : ""; ?> title="<?php echo Labels::getLabel('LBL_LANGUAGE_DATA', $siteLangId); ?>">
                         <?php echo Labels::getLabel('LBL_LANGUAGE_DATA', $siteLangId); ?>
                     </a>
                 <?php } ?>
