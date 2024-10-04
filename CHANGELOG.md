@@ -99,3 +99,4 @@
     - Bug-087648 - Deprecation appears on the product details page
     - Bug-087664 - Error message appears when the buyer reports spam to any shop
     - Bug-087684 - The default comment appearing on the status change is incorrect for the service product
+    - Bug-087658 - <<Branch 1>> The master product requested by any seller appears in the My Product after approval instead of the marketplace products listing
