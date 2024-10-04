@@ -450,7 +450,7 @@ class CustomProductsController extends ListingBaseController
                 'product_type' => isset($data['product_type']) ? $data['product_type'] : '',
                 'product_model' => isset($data['product_model']) ? $data['product_model'] : '',
                 'product_brand_id' => isset($data['product_brand_id']) ? $data['product_brand_id'] : 0,
-                'product_seller_id' => isset($data['preq_user_id']) ? $data['preq_user_id'] : 0,
+                // 'product_seller_id' => isset($data['preq_user_id']) ? $data['preq_user_id'] : 0,
                 'product_added_by_admin_id' => applicationConstants::YES,
                 'product_min_selling_price' => isset($data['product_min_selling_price']) ? $data['product_min_selling_price'] : 0,
                 'product_length' => isset($data['product_length']) ? $data['product_length'] : 0,
@@ -1427,7 +1427,7 @@ class CustomProductsController extends ListingBaseController
     {
         $frm = new Form('frmRecordSearch');
         if (!empty($fields)) {
-            $this->addSortingElements($frm, 'preq_requested_on');
+            $this->addSortingElements($frm, 'preq_requested_on', applicationConstants::SORT_DESC);
         }
         $frm->setRequiredStarWith('caption');
         $fld = $frm->addTextBox(Labels::getLabel('FRM_KEYWORD', $this->siteLangId), 'keyword');
