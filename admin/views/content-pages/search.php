@@ -30,7 +30,7 @@ foreach ($arrListing as $sn => $row) {
                 ];
 
                 if ($canEdit) {
-                    $data['editButton'] = ['onclick'=>'editRecord(' . $row['cpage_id'] . ', false, "modal-dialog-vertical-md")'];
+                    $data['editButton'] = ['onclick'=>'editRecord(' . $row['cpage_id'] . ')'];
                     $data['deleteButton'] = [];
                 }
                 $actionItems = $this->includeTemplate('_partial/listing/listing-action-buttons.php', $data, false, true);
