@@ -97,3 +97,4 @@
     - Bug-087602 - Branch 1>> The Categories filters are not working on the shop details page
     - Bug-086852 - Branch 1 >> RTL >> Product description field appears on the product details page even if no details are added in the description.
     - Bug-087648 - Deprecation appears on the product details page
+    - Bug-087664 - Error message appears when the buyer reports spam to any shop

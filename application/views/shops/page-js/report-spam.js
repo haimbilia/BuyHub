@@ -16,8 +16,6 @@
 				setTimeout(function () { location.href = t.redirectUri; }, 1000);
 			}
 		});
-		setTimeout(function () { location.href = $('.backToStore-js').attr('href'); }, 1000);
-		return false;
 	}
 })();
 function pageRedirect(shopId) {
