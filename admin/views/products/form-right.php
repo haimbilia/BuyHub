@@ -87,7 +87,7 @@ if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0))
                                     aria-expanded="true">
                                     <?php echo $warrantTypes[$frm->getField('product_warranty_unit')->value] ?? current($warrantTypes); ?>
                                 </button>
-                                <div class="dropdown-menu">
+                                <div class="dropdown-menu dropdown-menu-end">
                                     <?php foreach ($warrantTypes as $type => $name) { ?>
                                     <a class="dropdown-item warrantyTypeJs" href="javascript:void(0)"
                                         data-type="<?php echo $type; ?>"><?php echo $name; ?></a>
