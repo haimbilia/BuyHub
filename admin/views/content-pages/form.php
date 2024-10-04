@@ -12,7 +12,7 @@ $otherButtons = [
     [
         'attr' => [
             'href' => 'javascript:void(0)',
-            'onclick' => 'editLangData(' . $recordId . ',' . CommonHelper::getDefaultFormLangId() . ');',
+            'onclick' => 'editLangData(' . $recordId . ',' . CommonHelper::getDefaultFormLangId() . ', 0, "modal-dialog-vertical-md");',
             'title' => Labels::getLabel('LBL_LANGUAGE_DATA', $siteLangId),
         ],
         'label' => Labels::getLabel('LBL_LANGUAGE_DATA', $siteLangId),
