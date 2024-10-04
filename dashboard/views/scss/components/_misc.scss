@@ -1763,3 +1763,51 @@ mark,
     direction: ltr;
     display: inline-flex;
 }
+
+ 
+.user-profile {
+    display: flex;
+    //align-items: center;
+    &_photo {
+        margin: 0;
+        //margin-top: 6px;
+        margin-#{$end-direction}: 1rem;
+        display: inline-block;
+        flex-shrink: 0;
+        position: relative;
+        border-radius: 0.475rem;
+        position: relative;
+        width: 40px;
+        height: 40px;
+        > img {
+            border-radius: 50%;
+            flex-shrink: 0;
+            display: inline-block;
+            background: $bg-placeholder;
+        }
+    }
+    &_data {
+        display: flex;
+        flex-direction: column;
+    }
+    &_title {
+        font-weight: 600;
+        font-size: 0.875rem;
+        margin: 0;
+        color: $txt-body;
+        &:hover {
+            color: $brand-color;
+        }
+    }
+    &-sm {
+        .user-profile_photo {
+            width: 20px;
+            height: 20px;
+            margin-#{$end-direction}: 0.5rem;
+            > img {
+                width: 20px;
+                height: 20px;
+            }
+        }
+    }
+}
