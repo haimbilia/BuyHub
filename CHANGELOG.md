@@ -165,3 +165,7 @@
     - Bug-087615 - UI issue in the pickup slots section on the checkout page
     - Bug-087580 - Cart only setting is not working properly in case of more sellers
     - Bug-087648 - Deprecation appears on the product details page
+    - Bug-087664 - Error message appears when the buyer reports spam to any shop
+    - Bug-087684 - The default comment appearing on the status change is incorrect for the service product
+    - Bug-087658 - <<Branch 1>> The master product requested by any seller appears in the My Product after approval instead of the marketplace products listing
+    - Bug-087657 - << Branch 1 >> UI issue on the master product request setup form

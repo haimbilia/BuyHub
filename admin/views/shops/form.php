@@ -1,4 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+
+$frm->setFormTagAttribute('data-onclear', 'editRecord(' . $recordId . ', false, "modal-dialog-vertical-md")');
+
 $countryFld = $frm->getField('shop_country_code');
 $countryFld->setFieldTagAttribute('id', 'geo_country_code');
 $countryFld->setFieldTagAttribute('class', 'addressSelection-js');
@@ -77,6 +80,9 @@ if ($fld != null) {
     $fld->developerTags['noCaptionTag'] = true;
     $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 }
+
+$generalTab['attr']['onclick'] = 'editRecord(' . $recordId . ', false, "modal-dialog-vertical-md")';
+$langTabExtraClass = "modal-dialog-vertical-md";
 
 $formTitle = Labels::getLabel('LBL_SHOP_SETUP', $siteLangId);
 require_once(CONF_THEME_PATH . '_partial/listing/form.php');

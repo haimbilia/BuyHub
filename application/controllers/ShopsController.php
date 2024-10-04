@@ -807,9 +807,7 @@ class ShopsController extends MyAppController
         $this->set('redirectUri', UrlHelper::generateUrl('Shops', 'View', [$shop_id]));
         $this->_template->render(false, false, 'json-success.php');
     }
-
-
-
+    
     public function policies($shop_id)
     {
         $shop = $this->getShopInfo($shop_id);

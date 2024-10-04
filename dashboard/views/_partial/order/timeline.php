@@ -105,7 +105,11 @@
                                 <?php if (isset($row['oshistory_comments']) && !empty(trim(($row['oshistory_comments'])))) { ?>
                                     <?php echo nl2br($row['oshistory_comments']); ?>
                                 <?php } else {
-                                    echo OrderStatus::getDefaultOrderStatusMsg($statusId, $siteLangId);
+                                    if (Product::PRODUCT_TYPE_SERVICE == $row['op_product_type'] && $row['oshistory_orderstatus_id'] ==  FatApp::getConfig("CONF_DEFAULT_INPROCESS_ORDER_STATUS")) {
+                                        echo Labels::getLabel('LBL_YOUR_SERVICE_PROVIDER_WILL_REACH_OUT_TO_YOU_SOON', $siteLangId);
+                                    } else {
+                                        echo OrderStatus::getDefaultOrderStatusMsg($statusId, $siteLangId);
+                                    }
                                 } ?>
                             </p>
                         </div>

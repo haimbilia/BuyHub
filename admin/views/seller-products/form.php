@@ -1,6 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
-$frm->setFormTagAttribute('data-onclear', 'editRecord(' . $recordId . ', false, "modal-dialog-vertical-md")');
 HtmlHelper::formatFormFields($frm);
 $fld = $frm->getField('use_shop_policy');
 $fld->setFieldTagAttribute('class', "fieldsVisibilityJs");
@@ -28,8 +27,6 @@ if (null != $fld) {
     $fld->developerTags['colWidthValues'] = [null, '6', null, null];
     HtmlHelper::addFieldLabelInfo($frm, 'selprod_threshold_stock_level', Labels::getLabel('MSG_ALERT_STOCK_LEVEL_HINT_INFO', $siteLangId), ['id' => 'selprod_threshold_stock_level']);
 }
-
-
 
 $fld = $frm->getField('selprod_cost');
 $fld->developerTags['colWidthValues'] = [null, '6', null, null];
@@ -141,6 +138,7 @@ if (null != $fld) {
     $fld->htmlAfterField = '<span class="form-text text-muted">' . HtmlHelper::seoFriendlyUrl(UrlHelper::generateFullUrl('Products', 'View', array($recordId), CONF_WEBROOT_FRONT_URL)) . '</span>';
     $fld->setFieldTagAttribute('onkeyup', "getUniqueSlugUrl(this,this.value,$recordId)");
 }
+
 $formTitle = Labels::getLabel('LBL_SELLER_INVENTORY_SETUP', $siteLangId);
 require_once(CONF_THEME_PATH . '_partial/listing/form.php');
 ?>

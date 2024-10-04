@@ -57,7 +57,7 @@ foreach ($arrListing as $sn => $row) {
                 ];
 
                 if ($canEdit) {
-                    $data['editButton'] = ['onclick' => 'editRecord(' . $row['selprod_id'] . ', false, "modal-dialog-vertical-md")'];
+                    $data['editButton'] = [];
                     $data['deleteButton'] = [];
                 }
                 if ($row['product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
