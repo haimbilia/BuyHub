@@ -74,7 +74,7 @@ if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0))
                     <div class="card-body">
                         <div class="row">
                             <?php
-                            echo HtmlHelper::getFieldHtml($frm, 'product_type', 6, ['onchange' => 'productType(this)', 'class' => 'productTypeJs']);
+                            echo HtmlHelper::getFieldHtml($frm, 'product_type', 12, ['onchange' => 'productType(this)', 'class' => 'productTypeJs']);
                             echo HtmlHelper::getFieldHtml($frm, 'product_identifier', 12, [], Labels::getLabel('MSG_A_UNIQUE_IDENTIFIER_ASSOCIATED_FOR_PRODUCT_NAME', $langId));
                             echo HtmlHelper::getFieldHtml($frm, 'product_name', 12, [], Labels::getLabel('MSG_A_NAME_OF_THE_PRODUCT_TO_BE_LISTED', $langId));
                             echo HtmlHelper::getFieldHtml($frm, 'selprod_url_keyword', 12);

@@ -26,6 +26,8 @@ $otherButtons = [
 ];
 
 $formTitle = Labels::getLabel('LBL_BLOG_POST_SETUP', $siteLangId);
+$generalTab['attr']['onclick'] = 'editRecord(' . $recordId . ', false, "modal-dialog-vertical-md")';
+$langTabExtraClass = "modal-dialog-vertical-md";
 
 require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
 

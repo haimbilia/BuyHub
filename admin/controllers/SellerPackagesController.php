@@ -37,6 +37,7 @@ class SellerPackagesController extends ListingBaseController
         $this->checkEditPrivilege();
         $this->setModel($constructorArgs);
         $this->formLangFields = [$this->modelObj::tblFld('name')];
+        $this->formLangFields = [$this->modelObj::tblFld('text')];
         $this->set('formTitle', Labels::getLabel('LBL_SUBSCRIPTION_PACKAGES_SETUP', $this->siteLangId));
     }
 

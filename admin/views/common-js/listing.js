@@ -351,7 +351,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         });
     };
 
-    editLangData = function (recordId, langId, autoFillLangData = 0) {
+    editLangData = function (recordId, langId, autoFillLangData = 0, dialogClass = '') {
         if (false === checkControllerName()) {
             return false;
         }
@@ -365,7 +365,7 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
             data,
             function (t) {
                 fcom.closeProcessing();
-                $.ykmodal(t.html, isPopupView);
+                $.ykmodal(t.html, isPopupView, dialogClass);
                 fcom.removeLoader();
             }
         );

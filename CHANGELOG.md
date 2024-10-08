@@ -96,3 +96,8 @@
     - Bug-087607 - Order ID missing in the email subject for the bank transaction request notification
     - Bug-087602 - Branch 1>> The Categories filters are not working on the shop details page
     - Bug-086852 - Branch 1 >> RTL >> Product description field appears on the product details page even if no details are added in the description.
+    - Bug-087648 - Deprecation appears on the product details page
+    - Bug-087664 - Error message appears when the buyer reports spam to any shop
+    - Bug-087684 - The default comment appearing on the status change is incorrect for the service product
+    - Bug-087658 - <<Branch 1>> The master product requested by any seller appears in the My Product after approval instead of the marketplace products listing
+    - Bug-087657 - << Branch 1 >> UI issue on the master product request setup form
