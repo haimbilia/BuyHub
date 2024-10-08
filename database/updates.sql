@@ -558,3 +558,6 @@ INSERT INTO `tbl_sms_templates` (`stpl_code`, `stpl_lang_id`, `stpl_name`, `stpl
 ('RFQ_OFFER_ACCEPTED_BY_SELLER',1,'Final confirmation for the RFQ by another Seller','Dear {shop_name} Seller,\r\nAnother seller shared a final confirmation for the RFQ ({rfq_number}) of {user_name}. \r\n\r\n{SITE_NAME} Team','[{\"title\":\"RFQ Number\", \"variable\":\"{rfq_number}\"},{\"title\":\"Seller`s Shop\", \"variable\":\"{shop_name}\"},{\"title\":\"Buyer Name\", \"variable\":\"{user_name}\"}, {\"title\":\"Website Name\", \"variable\":\"{SITE_NAME}\"}]',1)
 ON DUPLICATE KEY UPDATE stpl_name = VALUES(stpl_name), stpl_body = VALUES(stpl_body), stpl_replacements = VALUES(stpl_replacements);
 -- ----------------------TV-10.1.0.20240926------------------------------------
+
+
+ALTER TABLE `tbl_collections`  ADD `collection_full_width` TINYINT(1) NOT NULL  AFTER `collection_for_app`;

@@ -43,11 +43,12 @@
     </section>
     <?php if (1 < count($collection['testimonials'])) { ?>
         <script>
+            var displaySize = <?php echo 0 < $collection['collection_primary_records'] ? $collection['collection_primary_records'] : 4; ?>;
             $(function () {
                 $(".sliderTestimonialsjs").not('.slick-initialized').slick({
                     rtl: ('rtl' == langLbl.layoutDirection),
                     draggable: true,
-                    slidesToShow: 4,
+                    slidesToShow: displaySize,
                     dots: false,
                     arrows: true,
                     infinite: false,

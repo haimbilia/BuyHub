@@ -321,7 +321,7 @@ class CollectionsController extends ListingBaseController
         $recordId = $post['collection_id'];
 
         $post['collection_identifier'] = $post['collection_name'];
-        $post['collection_primary_records'] = $this->getLayoutLimit($post['collection_layout_type']);
+        $post['collection_primary_records'] = FatApp::getPostedData('collection_primary_records', FatUtility::VAR_INT, $this->getLayoutLimit($post['collection_layout_type']));
 
         $collectionForApp = $post['collection_for_app'] ?? 0;
         $post['collection_for_app'] = in_array($data['collection_layout_type'], Collections::COLLECTIONS_FOR_APP_ONLY) ? 1 : $collectionForApp;
@@ -378,6 +378,12 @@ class CollectionsController extends ListingBaseController
         if ($type == Collections::COLLECTION_TYPE_BANNER) {
             $frm->addTextBox(Labels::getLabel('FRM_PROMOTION_COST', $this->siteLangId), 'blocation_promotion_cost');
         }
+        
+        if (in_array($layoutType, Collections::COLLECTIONS_FOR_DISPLAY_COUNT)) {
+            $range = Collections::displayRecordsCount($layoutType);
+            $fld = $frm->addSelectBox(Labels::getLabel('FRM_DISPLAY_ITEMS_COUNT', $this->siteLangId), 'collection_primary_records', array_combine($range, $range));
+            $fld->requirements()->setRequired();
+        }
 
         if (!in_array($layoutType, Collections::COLLECTIONS_FOR_APP_ONLY)) {
             $frm->addCheckBox(Labels::getLabel("FRM_APPLICABLE_FOR_WEB", $this->siteLangId), 'collection_for_web', 1, array(), true, 0);
@@ -385,6 +391,10 @@ class CollectionsController extends ListingBaseController
 
         if (!in_array($layoutType, Collections::COLLECTIONS_NOT_FOR_APP)) {
             $frm->addCheckBox(Labels::getLabel("FRM_APPLICABLE_FOR_APP", $this->siteLangId), 'collection_for_app', 1, array(), true, 0);
+        }
+        
+        if (in_array($layoutType, Collections::COLLECTIONS_FULL_WIDTH)) {
+            $frm->addCheckBox(Labels::getLabel("FRM_FULL_WIDTH", $this->siteLangId), 'collection_full_width', 1, array(), true, 0);
         }
 
         $languageArr = Language::getDropDownList(CommonHelper::getDefaultFormLangId());

@@ -54,9 +54,10 @@
             <?php } ?>
         </div>
         <script>
+            var displaySize = <?php echo 0 < $collection['collection_primary_records'] ? $collection['collection_primary_records'] : 8; ?>;
             $('.industryCarousalJs').not('.slick-initialized').slick({
                 draggable: true,
-                slidesToShow: 7,
+                slidesToShow: displaySize,
                 slidesToScroll: 1,
                 arrows: true,
                 prevArrow: '<button class="slick-arrow slick-prev"><span></span> </button>',

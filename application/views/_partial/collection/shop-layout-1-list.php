@@ -50,6 +50,6 @@
 
     <?php $i++;
         isset($shop['shopData']['promotion_id']) ? Promotion::updateImpressionData($shop['shopData']['promotion_id']) : '';
-        if ($i == Collections::LIMIT_SHOP_LAYOUT1) break;
+        // if ($i == Collections::LIMIT_SHOP_LAYOUT1) break;
     } ?>
 </div>

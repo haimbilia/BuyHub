@@ -90,6 +90,7 @@ class HomeController extends MyAppController
                     $tpl = new FatTemplate('', '');
                     $tpl->set('siteLangId', $this->siteLangId);
                     $tpl->set('slides', $collection['slides']);
+                    $tpl->set('fullWidth', ($collection['collection_full_width'] ?? 1));
                     $sponsoredProdsLayout = $tpl->render(false, false, '_partial/homePageSlides.php', true, true);
                     $collectionTemplates[$collection['collection_id']]['html'] = $sponsoredProdsLayout;
                     break;
@@ -113,6 +114,7 @@ class HomeController extends MyAppController
                         $tpl = new FatTemplate('', '');
                         $tpl->set('siteLangId', $this->siteLangId);
                         $tpl->set('bannerLayout1', $collection['banners']);
+                        $tpl->set('fullWidth', ($collection['collection_full_width'] ?? 1));
                         $bannerFirstLayout = $tpl->render(false, false, '_partial/banners/home-banner-first-layout.php', true, true);
                         $collectionTemplates[$collection['collection_id']]['html'] = $bannerFirstLayout;
                     }
@@ -341,7 +343,15 @@ class HomeController extends MyAppController
 
     public function getSlidesHtml()
     {
+        $srch = new CollectionSearch();
+        $srch->setPageSize(1);
+        $srch->addFld('collection_full_width');
+        $srch->addCondition('collection_type', '=', Collections::COLLECTION_TYPE_HERO_SLIDES);
+        $srch->addCondition('collection_layout_type', '=', Collections::TYPE_HERO_SLIDES_LAYOUT1);
+        $data = FatApp::getDb()->fetch($srch->getResultSet());
+
         $this->set('slides', $this->getSlides());
+        $this->set('fullWidth', ($data['collection_full_width'] ?? 1));
         $this->set('html', $this->_template->render(false, false, '_partial/homePageSlides.php', true, true));
         $this->_template->render(false, false, 'json-success.php', false, false);
     }
@@ -649,7 +659,7 @@ class HomeController extends MyAppController
                 $srch->doNotLimitRecords();
             }
             $srch->addOrder('collection_display_order', 'ASC');
-            $srch->addMultipleFields(array('collection_id', 'IFNULL(collection_name,collection_identifier) as collection_name', 'IFNULL( collection_description, "" ) as collection_description', 'IFNULL(collection_link_caption, "") as collection_link_caption', 'collection_link_url', 'collection_layout_type', 'collection_type', 'collection_criteria', 'collection_child_records', 'collection_primary_records', 'collection_display_media_only', 'collection_for_app', 'collection_for_web', 'collection_display_order', 'collection_updated_on'));
+            $srch->addMultipleFields(array('collection_id', 'IFNULL(collection_name,collection_identifier) as collection_name', 'IFNULL( collection_description, "" ) as collection_description', 'IFNULL(collection_link_caption, "") as collection_link_caption', 'collection_link_url', 'collection_layout_type', 'collection_type', 'collection_criteria', 'collection_child_records', 'collection_primary_records', 'collection_display_media_only', 'collection_for_app', 'collection_for_web', 'collection_full_width', 'collection_display_order', 'collection_updated_on'));
 
             $applicableForCol = (true === MOBILE_APP_API_CALL) ? 'collection_for_app' : 'collection_for_web';
             $srch->addCondition($applicableForCol, '=', applicationConstants::YES);
@@ -755,7 +765,7 @@ class HomeController extends MyAppController
 
                     break;
                 case Collections::COLLECTION_TYPE_BANNER:
-                    $banners = BannerLocation::getPromotionalBanners($collection_id, $langId);
+                    $banners = BannerLocation::getPromotionalBanners($collection_id, $langId, $collection['collection_primary_records']);
                     $collections[$ind] = $collection;
 
                     if (true === MOBILE_APP_API_CALL && array_key_exists('banners', $banners) && !empty($banners['banners'])) {
@@ -821,7 +831,8 @@ class HomeController extends MyAppController
                     $productSrchTempObj->addGroupBy('selprod_id');
 
                     if (false === MOBILE_APP_API_CALL) {
-                        $productSrchTempObj->setPageSize($collection['collection_primary_records']);
+                        $pageSize = $collection['collection_primary_records'] ?? 4;
+                        $productSrchTempObj->setPageSize((0 < $pageSize ? $pageSize : 4));
                     }
 
                     $recordCount = $this->getRecordsCount(clone $productSrchTempObj, true);
@@ -884,7 +895,9 @@ class HomeController extends MyAppController
                     $productCatSrchTempObj->addCondition('prodcat_deleted', '=', applicationConstants::NO);
 
                     if (false === MOBILE_APP_API_CALL) {
-                        $productCatSrchTempObj->setPageSize($collection['collection_primary_records']);
+                        if (Collections::TYPE_CATEGORY_LAYOUT7 != $collection['collection_layout_type']) {
+                            $productCatSrchTempObj->setPageSize($collection['collection_primary_records']);
+                        }
                     }
 
                     $recordCount = $this->getRecordsCount(clone $productCatSrchTempObj);
@@ -960,7 +973,7 @@ class HomeController extends MyAppController
                             if ($collection['collection_layout_type'] == Collections::TYPE_CATEGORY_LAYOUT1) {
                                 $limit = Collections::LIMIT_CATEGORY_LAYOUT1_PRODUCT;
                             } else if ($collection['collection_layout_type'] == Collections::TYPE_CATEGORY_LAYOUT8) {
-                                $limit = Collections::LIMIT_CATEGORY_LAYOUT5;
+                                $limit = $collection['collection_primary_records'];
                             }
                             $productShopSrchTempObj->setPageSize($limit);
                             if (CommonHelper::demoUrl(true)) {
@@ -1090,7 +1103,8 @@ class HomeController extends MyAppController
                     $shopObj->joinTable('(' . $tempObj->getQuery() . ')', 'INNER JOIN', 'shop_id = ctr.ctr_record_id', 'ctr');
 
                     if (false === MOBILE_APP_API_CALL) {
-                        $shopObj->setPageSize($collection['collection_primary_records']);
+                        $pageSize = $collection['collection_primary_records'] ?? 4;
+                        $shopObj->setPageSize((0 < $pageSize ? $pageSize : 4));
                     }
 
                     $recordCount = $this->getRecordsCount(clone $shopObj);
@@ -1153,7 +1167,8 @@ class HomeController extends MyAppController
                     //$brandSearchTempObj->addCondition('brand_id', 'IN', array_keys($brandIds));
 
                     if (false === MOBILE_APP_API_CALL) {
-                        $brandSearchTempObj->setPageSize($collection['collection_primary_records']);
+                        $pageSize = $collection['collection_primary_records'];
+                        $brandSearchTempObj->setPageSize((0 < $pageSize ? $pageSize : 4));
                     }
 
                     $recordCount = $this->getRecordsCount(clone $brandSearchTempObj);
@@ -1337,7 +1352,12 @@ class HomeController extends MyAppController
                     $testimonialSrchObj->joinTable('(' . $tempObj->getQuery() . ')', 'INNER JOIN', 'testimonial_id = ctr.ctr_record_id', 'ctr');
                     $testimonialSrchObj->addMultipleFields($attr);
                     $testimonialSrchObj->addGroupBy('testimonial_id');
-                    $testimonialSrchObj->setPageSize(Collections::LIMIT_TESTIMONIAL_LAYOUT1);
+                    if ($collection['collection_layout_type'] == Collections::LIMIT_TESTIMONIAL_LAYOUT1) {
+                        $testimonialSrchObj->setPageSize(Collections::LIMIT_TESTIMONIAL_LAYOUT1);
+                    } else {
+                        $pageSize = $collection['collection_primary_records'] ?? 4;
+                        $testimonialSrchObj->setPageSize((0 < $pageSize ? $pageSize : 4));
+                    }
 
                     $recordCount = $this->getRecordsCount(clone $testimonialSrchObj, true);
                     if (empty($recordCount)) {
@@ -1419,7 +1439,6 @@ class HomeController extends MyAppController
             $totalSlidesPageSize = FatApp::getConfig('CONF_TOTAL_SLIDES_HOME_PAGE', FatUtility::VAR_INT, 4);
             $ppcSlidesPageSize = FatApp::getConfig('CONF_PPC_SLIDES_HOME_PAGE', FatUtility::VAR_INT, 4);
         }
-
 
         $ppcSlides = array();
         $adminSlides = array();

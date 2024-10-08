@@ -73,7 +73,7 @@ class Collections extends MyAppModel
     public const LIMIT_PRODUCT_LAYOUT1 = 12;
     public const LIMIT_PRODUCT_LAYOUT2 = 6;
     public const LIMIT_PRODUCT_LAYOUT3 = 3;
-    public const LIMIT_PRODUCT_LAYOUT4 = 6;
+    public const LIMIT_PRODUCT_LAYOUT4 = 8;
     public const LIMIT_PRODUCT_LAYOUT6 = 10;
     public const LIMIT_CATEGORY_LAYOUT1 = 8;
     public const LIMIT_CATEGORY_LAYOUT1_PRODUCT = 3;
@@ -150,6 +150,21 @@ class Collections extends MyAppModel
         self::TYPE_BLOG_LAYOUT1,
         self::TYPE_CONTENT_BLOCK_LAYOUT1,
         self::TYPE_CONTENT_BLOCK_LAYOUT2,
+    ];
+
+    public const COLLECTIONS_FULL_WIDTH = [
+        self::TYPE_HERO_SLIDES_LAYOUT1,
+        self::TYPE_BANNER_LAYOUT1,
+    ];
+
+    public const COLLECTIONS_FOR_DISPLAY_COUNT = [
+        self::TYPE_CATEGORY_LAYOUT7,
+        self::TYPE_CATEGORY_LAYOUT8,
+        self::TYPE_SHOP_LAYOUT1,
+        self::TYPE_PRODUCT_LAYOUT1,
+        self::TYPE_TESTIMONIAL_LAYOUT2,
+        self::TYPE_BRAND_LAYOUT1,
+        self::TYPE_BANNER_LAYOUT2,
     ];
 
     /**
@@ -1055,5 +1070,36 @@ class Collections extends MyAppModel
             8 => 8,
             12 => 12,
         ];
+    }
+
+    public static function displayRecordsCount(int $layoutType): array
+    {
+        switch ($layoutType) {
+            case self::TYPE_CATEGORY_LAYOUT7:
+                $range = range(6, 8);
+                break;
+            case self::TYPE_CATEGORY_LAYOUT8:
+                $range = range(4, 6);
+                break;
+            case self::TYPE_SHOP_LAYOUT1:
+                $range = range(4, 8);
+                break;
+            case self::TYPE_PRODUCT_LAYOUT1:
+                $range = range(4, 6);
+                break;
+            case self::TYPE_TESTIMONIAL_LAYOUT2:
+                $range = range(4, 6);
+                break;
+            case self::TYPE_BRAND_LAYOUT1:
+                $range = range(5, 8);
+                break;
+            case self::TYPE_BANNER_LAYOUT2:
+                $range = range(1, 3);
+                break;
+            default:
+                $range = range(3, 8);
+                break;
+        }
+        return $range;
     }
 }
