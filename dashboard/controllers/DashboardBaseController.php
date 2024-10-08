@@ -853,11 +853,11 @@ class DashboardBaseController extends FatController
 
     private function checkTempTokenLogin()
     {
-        if (!in_array($this->_controllerName, ['BuyerController', 'StripeConnectPayController'])) {
+        if (!in_array($this->_controllerName, ['BuyerController', 'StripeConnectPayController', 'RequestForQuotesController'])) {
             return;
         }
 
-        if (in_array($this->_controllerName, ['BuyerController']) && !in_array($this->_actionName, ['downloadDigitalFile', 'downloadDigitalFiles', 'downloadAttachedFileForReturn'])) {
+        if (in_array($this->_controllerName, ['BuyerController', 'RequestForQuotesController']) && !in_array($this->_actionName, ['downloadDigitalFile', 'downloadDigitalFiles', 'downloadAttachedFileForReturn', 'downloadFile'])) {
             return;
         }
 
