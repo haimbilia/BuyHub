@@ -42,7 +42,7 @@ $txt-secondary: $secondary-color;
 $txt-black: rgba(0, 0, 0, 1);
 $txt-body: rgba(0, 0, 0, 0.97);
 $txt-gray: rgba(0, 0, 0, 0.77);
-$text-muted: #888888 !default;
+$text-muted: #888888 ;
 $text-secondary: #696969;
 
 //Font weight
@@ -107,9 +107,9 @@ $radius1: 1px;
 $radius: 4px;
 
 //Space
-$space: 24px !default;
-$gap: 1.5rem !default;
-$gap-sm: 1rem !default;
+$space: 24px ;
+$gap: 1.5rem;
+$gap-sm: 1rem;
 
 //messages
 $success-color: #1dc9b7;
@@ -119,17 +119,17 @@ $danger-color: #fd397a;
 $star-color: #ff3a59;
 
 //Aspect ratio
-$product-ratio: 1/1 !default;
-$category-ratio: 1/1 !default;
-$seller-ratio: 1/1 !default;
-$category-mobile-ratio: 16/9 !default;
-$category-tablet-ratio: 16/9 !default;
-$shop-ratio: 1/1 !default;
-$shop-banner-ratio: 4/1 !default;
-$shop-banner-mobile-ratio: 4/3 !default;
-$hero-ratio: 10/3.33 !default;
-$video-ratio: 16/9 !default;
-$avatar-ratio: 1/1 !default;
+$product-ratio: 1/1 ;
+$category-ratio: 1/1 ;
+$seller-ratio: 1/1 ;
+$category-mobile-ratio: 16/9 ;
+$category-tablet-ratio: 16/9 ;
+$shop-ratio: 1/1 ;
+$shop-banner-ratio: 4/1 ;
+$shop-banner-mobile-ratio: 4/3 ;
+$hero-ratio: 10/3.33 ;
+$video-ratio: 16/9 ;
+$avatar-ratio: 1/1 ;
 
 //Bg brand
 @mixin bg-brand {

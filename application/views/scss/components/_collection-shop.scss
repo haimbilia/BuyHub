@@ -87,7 +87,7 @@
 
 .shop-layout-1 {
     display: grid;
-    grid-gap: 1rem;
+    gap: 1rem;
 
     @include media-breakpoint-down(lg) {
         grid-auto-flow: column;
@@ -95,7 +95,7 @@
     }
 
     @include media-breakpoint-up(lg) {
-        grid-gap: 3rem;
+        gap: $gap;
         grid-template-columns: repeat(4, 1fr);
     }
 

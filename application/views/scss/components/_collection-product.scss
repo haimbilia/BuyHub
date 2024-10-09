@@ -265,9 +265,8 @@
     display: grid;
     gap: 2px;
     grid-template-columns: repeat(2, 1fr);
-
     @include media-breakpoint-up(lg) {
-        gap: 2rem;
+        gap: $gap;
         grid-template-columns: repeat(6, 1fr);
     }
 

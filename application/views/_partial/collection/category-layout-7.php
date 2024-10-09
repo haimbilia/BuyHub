@@ -8,7 +8,7 @@
                 </div>
             </div> <?php */ ?>
             <div class="section-body">
-                <div class="industry-carousal industryCarousalJs">
+                <div class="industry-carousal industryCarousalJs" data-record="<?php echo $collection['collection_primary_records'];?>">
                     <?php
                     $i = 1;
                     foreach ($collection['categories'] as $category) {

@@ -12,7 +12,7 @@
                 </div>
             </div>
             <div class="section-body">
-                <div class="testimonials-layout-2 <?php echo (1 < count($collection['testimonials'])) ? 'sliderTestimonialsjs' : ''; ?>"
+                <div class="testimonials-layout-2 js-carousel <?php echo (1 < count($collection['testimonials'])) ? 'sliderTestimonialsjs' : ''; ?>"
                     data-slides="3,3,1,1" aria-label="carousel">
                     <?php foreach ($collection['testimonials'] as $testimonial) {
                         $uploadedTime = AttachedFile::setTimeParam($testimonial['testimonial_added_on']); ?>

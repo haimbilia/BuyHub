@@ -15,7 +15,7 @@
                     </div>
                 <?php } ?>
             </div>
-            <div class="product-layout-4" data-view="<?php echo count($collection['products']); ?>">
+            <div class="product-layout-4" data-view="<?php echo count($collection['products']); ?>" data-record="<?php echo $collection['collection_primary_records'];?>">
                 <?php
                 $tRightRibbons = $collection['tRightRibbons'];
                 $count = 0;

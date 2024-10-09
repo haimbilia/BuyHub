@@ -1,10 +1,10 @@
-<?php if (isset($collection['brands']) && count($collection['brands']) > 0) { ?>
+<?php  if (isset($collection['brands']) && count($collection['brands']) > 0) { ?>
     <section class="section" data-section="section">
         <div class="container">
             <div class="section-head section-head-center">
                 <?php echo ($collection['collection_name'] != '') ? ' <div class="section-heading"><h2>' . $collection['collection_name'] . '</h2></div>' : ''; ?>
             </div>
-            <div class="brand-layout-1">
+            <div class="brand-layout-1" data-record="<?php echo $collection['collection_primary_records'];?>">
                 <?php $i = 0;
                 foreach ($collection['brands'] as $brand) { ?>
                     <div class="brand">

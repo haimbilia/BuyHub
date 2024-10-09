@@ -343,15 +343,7 @@ class HomeController extends MyAppController
 
     public function getSlidesHtml()
     {
-        $srch = new CollectionSearch();
-        $srch->setPageSize(1);
-        $srch->addFld('collection_full_width');
-        $srch->addCondition('collection_type', '=', Collections::COLLECTION_TYPE_HERO_SLIDES);
-        $srch->addCondition('collection_layout_type', '=', Collections::TYPE_HERO_SLIDES_LAYOUT1);
-        $data = FatApp::getDb()->fetch($srch->getResultSet());
-
         $this->set('slides', $this->getSlides());
-        $this->set('fullWidth', ($data['collection_full_width'] ?? 1));
         $this->set('html', $this->_template->render(false, false, '_partial/homePageSlides.php', true, true));
         $this->_template->render(false, false, 'json-success.php', false, false);
     }
@@ -383,7 +375,7 @@ class HomeController extends MyAppController
         } */
 
         $productSrchObj->addCondition('selprod_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
-        $productSrchObj->addMultipleFields(array('product_id', 'selprod_id', 'IFNULL(product_name, product_identifier) as product_name','prodcat_code', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'product_updated_on', 'special_price_found', 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'theprice', 'selprod_price', 'selprod_stock', 'selprod_condition', 'prodcat_id', 'IFNULL(prodcat_name, prodcat_identifier) as prodcat_name', 'selprod_sold_count', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'shop_id', 'selprod_min_order_qty', 'selprod_cart_type'));
+        $productSrchObj->addMultipleFields(array('product_id', 'selprod_id', 'IFNULL(product_name, product_identifier) as product_name', 'prodcat_code', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'product_updated_on', 'special_price_found', 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'theprice', 'selprod_price', 'selprod_stock', 'selprod_condition', 'prodcat_id', 'IFNULL(prodcat_name, prodcat_identifier) as prodcat_name', 'selprod_sold_count', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'shop_id', 'selprod_min_order_qty', 'selprod_cart_type'));
         return $productSrchObj;
     }
 
@@ -451,18 +443,19 @@ class HomeController extends MyAppController
                     $redirectUrl = UrlHelper::generateFullUrl('', '', [], CONF_WEBROOT_FRONTEND, null, false, false, false);
 
                     if (false == $isDefaultLangId) {
-                        $redirectUrl .=  strtolower($langCodeArr[$langId]) . '/';
+                        $redirectUrl .= strtolower($langCodeArr[$langId]) . '/';
                     }
-                    $redirectUrl .=  $row['customurl'];
+                    $redirectUrl .= $row['customurl'];
                 }
             }
 
             if (empty($redirectUrl)) {
                 $redirectUrl = UrlHelper::generateFullUrl('', '', [], CONF_WEBROOT_FRONTEND, null, false, false, false);
                 if (false == $isDefaultLangId) {
-                    $redirectUrl .=  strtolower($langCodeArr[$langId]) . '/';
+                    $redirectUrl .= strtolower($langCodeArr[$langId]) . '/';
                 }
-                $redirectUrl .=  ltrim($pathname, '/');;
+                $redirectUrl .= ltrim($pathname, '/');
+                ;
             }
         } else {
             if (empty($redirectUrl)) {
@@ -695,7 +688,7 @@ class HomeController extends MyAppController
 
         $productCatSrchObj = ProductCategory::getSearchObject(false, $langId);
         $productCatSrchObj->addOrder('m.prodcat_active', 'DESC');
-        $productCatSrchObj->addMultipleFields(array('prodcat_id', 'IFNULL(prodcat_name, prodcat_identifier) as prodcat_name', 'prodcat_description','prodcat_code'));
+        $productCatSrchObj->addMultipleFields(array('prodcat_id', 'IFNULL(prodcat_name, prodcat_identifier) as prodcat_name', 'prodcat_description', 'prodcat_code'));
 
         $collectionObj = new CollectionSearch();
         $collectionObj->joinCollectionRecords();
@@ -866,7 +859,7 @@ class HomeController extends MyAppController
                     $collections[$ind]['products'] = (true === MOBILE_APP_API_CALL) ? array_values($products) : $products;
                     $collections[$ind]['totProducts'] = $recordCount;
 
-                    if (false  === MOBILE_APP_API_CALL) {
+                    if (false === MOBILE_APP_API_CALL) {
                         $collections[$ind]['tRightRibbons'] = $tRightRibbons;
                     }
                     /* ] */
@@ -1410,7 +1403,7 @@ class HomeController extends MyAppController
             $i++;
         }
         if ($collectionCache) {
-            return  unserialize($collectionCache);
+            return unserialize($collectionCache);
         }
 
         CacheHelper::create('collectionCache_' . $cacheKey, serialize($collections), CacheHelper::TYPE_COLLECTIONS);
@@ -1547,7 +1540,7 @@ class HomeController extends MyAppController
         $prodObj->doNotCalculateRecords();
         $prodObj->addMultipleFields(array('selprod_id as proSelProdId', 'promotion_id', 'promotion_record_id'));
 
-        $productSrchSponObj =  $this->getProductSearchObj($loggedUserId);
+        $productSrchSponObj = $this->getProductSearchObj($loggedUserId);
         $productSrchSponObj->joinTable('(' . $prodObj->getQuery() . ') ', 'INNER JOIN', 'selprod_id = ppr.proSelProdId ', 'ppr');
         $productSrchSponObj->addFld(array('promotion_id', 'promotion_record_id'));
         $productSrchSponObj->joinSellers();
@@ -1829,7 +1822,7 @@ class HomeController extends MyAppController
     }
 
     public function setGeoLocation()
-    {       
+    {
         $this->_template->render(false, false);
     }
 

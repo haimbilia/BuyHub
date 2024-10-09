@@ -8,12 +8,12 @@
         flex-flow: row;
     }
     @include media-breakpoint-up(lg) {
-        gap: 3rem;
+        gap: $gap;
         flex-flow: row wrap;
         justify-content: center;
     }
     .brand {
-        min-width: 200px;
+        min-width: 180px;
         &-logo {
             flex: 1 0 140px;
             @include media-breakpoint-down(lg) {

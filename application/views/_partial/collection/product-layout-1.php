@@ -22,7 +22,7 @@
             <?php 
             $slidesCount = (Collections::TYPE_PRODUCT_LAYOUT6 == $collection['collection_layout_type']) ? '6,3,2,2' : '4,3,2,2';
             ?>
-            <div class="product-layout-1 product-listing js-carousel" id="product-listing-<?php echo $collection['collection_id']; ?>" data-slides="<?php echo $slidesCount; ?>" data-view="4" dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
+            <div class="product-layout-1 product-listing js-carousel" id="product-listing-<?php echo $collection['collection_id']; ?>" data-slides="<?php echo $slidesCount; ?>" data-view="4" dir="<?php echo CommonHelper::getLayoutDirection(); ?>"  data-record="<?php echo $collection['collection_primary_records'];?>">
                 <?php
                 $tRightRibbons = $collection['tRightRibbons'];
                 foreach ($collection['products'] as $product) {
