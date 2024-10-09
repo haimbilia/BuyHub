@@ -1664,6 +1664,9 @@ class ConfigurationsController extends ListingBaseController
                 $fld = $frm->addCheckBox(Labels::getLabel("FRM_HEADER_MEGA_MENU", $langId), 'CONF_LAYOUT_MEGA_MENU', 1, array(), false, 0);
                 HtmlHelper::configureSwitchForCheckbox($fld);
 
+                $fld = $frm->addCheckBox(Labels::getLabel("FRM_HEADER_FULL_WIDTH", $langId), 'CONF_HEADER_FULL_WIDTH', 1, array(), false, 0);
+                HtmlHelper::configureSwitchForCheckbox($fld);
+
                 $fld = $frm->addCheckBox(Labels::getLabel("FRM_SINGLE_SELLER_CART", $langId), 'CONF_SINGLE_SELLER_CART', 1, array(), false, 0);
                 HtmlHelper::configureSwitchForCheckbox($fld);
 
