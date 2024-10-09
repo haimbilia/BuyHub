@@ -5,7 +5,7 @@
         </div>
     <?php } ?>
     <!--header start here-->
-    <header id="header" class="header no-print">
+    <header id="header" class="header <?php echo (FatApp::getConfig('CONF_HEADER_FULL_WIDTH', FatUtility::VAR_INT, 1) ? 'fluid' : '') ?> no-print">
         <?php if (FatApp::getConfig('CONF_AUTO_RESTORE_ON', FatUtility::VAR_INT, 1) && CommonHelper::demoUrl()) {
             $this->includeTemplate('restore-system/top-header.php');
         } ?>
