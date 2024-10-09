@@ -1,10 +1,16 @@
-<?php  if (isset($collection['brands']) && count($collection['brands']) > 0) { ?>
+<?php if (isset($collection['brands']) && count($collection['brands']) > 0) { ?>
     <section class="section" data-section="section">
         <div class="container">
-            <div class="section-head section-head-center">
+            <div class="section-head">
                 <?php echo ($collection['collection_name'] != '') ? ' <div class="section-heading"><h2>' . $collection['collection_name'] . '</h2></div>' : ''; ?>
+                <?php if ($collection['totBrands'] > Collections::LIMIT_BRAND_LAYOUT1) { ?>
+                    <div class="section-action">
+                        <a href="<?php echo UrlHelper::generateUrl('Collections', 'View', array($collection['collection_id'])); ?>"
+                            class="link-underline"><?php echo Labels::getLabel('LBL_VIEW_ALL', $siteLangId); ?></a>
+                    </div>
+                <?php } ?>
             </div>
-            <div class="brand-layout-1" data-record="<?php echo $collection['collection_primary_records'];?>">
+            <div class="brand-layout-1" data-record="<?php echo $collection['collection_primary_records']; ?>">
                 <?php $i = 0;
                 foreach ($collection['brands'] as $brand) { ?>
                     <div class="brand">
@@ -29,12 +35,7 @@
                 } ?>
             </div>
 
-            <?php if ($collection['totBrands'] > Collections::LIMIT_BRAND_LAYOUT1) { ?>
-                <div class="section-foot">
-                    <a href="<?php echo UrlHelper::generateUrl('Collections', 'View', array($collection['collection_id'])); ?>"
-                        class="link-underline"><?php echo Labels::getLabel('LBL_VIEW_ALL', $siteLangId); ?></a>
-                </div>
-            <?php } ?>
+
         </div>
     </section>
 <?php } ?>

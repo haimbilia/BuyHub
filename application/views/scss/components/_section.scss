@@ -1,11 +1,12 @@
+$section-space: calc(1rem + 2.5vw);
 .section {
-  padding: calc(1rem + 2.5vw) 0;
+  padding: $section-space 0;
   @include media-breakpoint-down(sm) {
     padding: calc(1rem + 3vw) 0;
   }
   &-head {
     width: 100%;
-    margin-bottom: 1.2rem;
+    margin-bottom: 0.5rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -16,7 +17,7 @@
 
     @include media-breakpoint-up(lg) {
       flex-direction: row;
-      margin-bottom: 2.5rem;
+      margin-bottom: 1rem;
     }
     &-space {
       @include media-breakpoint-up(lg) {
@@ -47,7 +48,7 @@
     h2 {
       max-inline-size: 50ch;
       text-wrap: balance;
-      font-size: clamp(1rem, 2vw, 3rem);
+      font-size: clamp(1rem, 1.5vw, 3rem);
 
       > span {
         display: block;
@@ -68,6 +69,9 @@
   }
 
   &-action {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
     // overflow: auto;
   }
 

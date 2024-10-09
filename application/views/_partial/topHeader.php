@@ -9,6 +9,31 @@
         <?php if (FatApp::getConfig('CONF_AUTO_RESTORE_ON', FatUtility::VAR_INT, 1) && CommonHelper::demoUrl()) {
             $this->includeTemplate('restore-system/top-header.php');
         } ?>
+        <div class="black-bar">
+            <div class="container">
+                <div class="black-bar-inner">
+                    <div class="black-bar-start">
+                        <ul class="prompt-nav">
+                            <li class="prompt-nav-item">
+                                <a class="prompt-nav-link" href="">Buyer Central </a>
+                            </li>
+                            <li class="prompt-nav-item">
+                                <a class="prompt-nav-link" href="">Help Center </a>
+                            </li>
+                            <li class="prompt-nav-item">
+                                <a class="prompt-nav-link" href="">Get the app </a>
+                            </li>
+                            <li class="prompt-nav-item">
+                                <a class="prompt-nav-link" href="">Become a supplier</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="black-bar-end">
+                        <?php $this->includeTemplate('_partial/headerLanguageArea.php'); ?>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="top-bar no-print">
             <div class="container">
                 <div class="top-bar__inner">
@@ -37,7 +62,7 @@
                         if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, '')) && $diplayGeoLocation ) { ?>
                         <div class="geo-location">
                             <div class="geo-location_inner">
-                                <div class="dropdown"> 
+                                <div class="dropdown">
                                     <?php
                                         $geoAddress = '';
                                         if ((!isset($_COOKIE['_ykGeoLat']) || !isset($_COOKIE['_ykGeoLng']) || !isset($_COOKIE['_ykGeoCountryCode'])) && FatApp::getConfig('CONF_DEFAULT_GEO_LOCATION', FatUtility::VAR_INT, 0)) {
@@ -68,10 +93,28 @@
                             </div>
                         </div>
                         <?php } ?>
+                        <div class="open-search">
+                            <form class="open-search-form">
+                                <select class="open-search-select" name="" id="">
+                                    <option value="">Select</option>
+                                </select>
+                                <input class="open-search-input" placeholder="Search..." type="search" name="keyword"
+                                    value="">
+                                <button class="open-search-btn">
+                                    <svg class="svg" width="18" height="18" xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 24 24" fill="currentColor">
+                                        <path
+                                            d="M18.031 16.6168L22.3137 20.8995L20.8995 22.3137L16.6168 18.031C15.0769 19.263 13.124 20 11 20C6.032 20 2 15.968 2 11C2 6.032 6.032 2 11 2C15.968 2 20 6.032 20 11C20 13.124 19.263 15.0769 18.031 16.6168ZM16.0247 15.8748C17.2475 14.6146 18 12.8956 18 11C18 7.1325 14.8675 4 11 4C7.1325 4 4 7.1325 4 11C4 14.8675 7.1325 18 11 18C12.8956 18 14.6146 17.2475 15.8748 16.0247L16.0247 15.8748Z">
+                                        </path>
+                                    </svg></button>
+                            </form>
+
+                            <div class="search-suggestions-js"> </div>
+                        </div>
+
                     </div>
                     <div class="top-bar__right">
                         <ul class="quick-nav">
-                            <?php $this->includeTemplate('_partial/headerUserArea.php', ['layoutType' => applicationConstants::SCREEN_DESKTOP]); ?>
                             <li class="quick-nav-item item-desktop wishListJs">
                                 <button class="quick-nav-link button-store" type="button">
                                     <svg class="svg" width="20" height="20">
@@ -83,17 +126,9 @@
                                         class="txt"><?php echo FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) ? Labels::getLabel('NAV_WISHLIST', $siteLangId) : Labels::getLabel('LBL_FAVORITES', $siteLangId); ?></span>
                                 </button>
                             </li>
-                            <li class="quick-nav-item item-mobile">
-                                <button class="quick-nav-link btn-mega-search toggle--search" role="button"
-                                    data-bs-backdrop="true" data-bs-toggle="offcanvas" data-bs-target="#mega-nav-search"
-                                    aria-label="search">
-                                    <svg class="svg" width="20" height="20">
-                                        <use
-                                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#magnifying">
-                                        </use>
-                                    </svg>
-                                </button>
-                            </li>
+                            <?php $this->includeTemplate('_partial/headerUserArea.php', ['layoutType' => applicationConstants::SCREEN_DESKTOP]); ?>
+
+
                             <?php if ($controllerName != 'Cart' && (User::isBuyer(true) || (!UserAuthentication::isUserLogged()))) { ?>
                             <li class="quick-nav-item" id="cartSummaryJs">
                                 <button class="quick-nav-link button-cart" type="button" data-bs-toggle="offcanvas"
@@ -110,12 +145,12 @@
                                             $qty = FatUtility::int($qty) - (isset($_SESSION['offer_checkout']) ? 1 : 0);
                                             echo (0 > $qty ? 0 : $qty);
                                             ?>
-                                        </span>
-                                        <span class="txt">
-                                            <?php echo Labels::getLabel("LBL_MY_BAG", $siteLangId); ?>
-                                        </span>
-                                    </button>
-                                </li>
+                                    </span>
+                                    <span class="txt">
+                                        <?php echo Labels::getLabel("LBL_Cart", $siteLangId); ?>
+                                    </span>
+                                </button>
+                            </li>
                             <?php }
 
                             if (FatApp::getConfig("CONF_ENABLE_ENGAGESPOT_PUSH_NOTIFICATION", FatUtility::VAR_STRING, '') && UserAuthentication::getLoggedUserId(true) > 0) {
@@ -144,16 +179,14 @@
             <div class="container">
                 <div class="main-bar__inner">
                     <?php $this->includeTemplate('_partial/headerNavigation.php', ['layoutType' => applicationConstants::SCREEN_DESKTOP]); ?>
-                    <div class="main-search">
-                        <button class="btn-mega-search toggle--search" data-bs-backdrop="true"
-                            data-bs-toggle="offcanvas" data-bs-target="#mega-nav-search" aria-label="search">
-                            <svg class="svg" width="20" height="20">
-                                <use
-                                    xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#magnifying">
-                                </use>
-                            </svg>
-                        </button>
-                    </div>
+                    <?php if ($layoutType == applicationConstants::SCREEN_DESKTOP) {
+                                 if (0 < FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0) && (User::isBuyer(true) || !UserAuthentication::isUserLogged())) { ?>
+                    <button class="btn btn-brand btn-sm btn-rfq" type="button" onclick="requestForQuoteFn(0);">
+                        <?php echo Labels::getLabel('LBL_REQUEST_FOR_QUOTE', $siteLangId); ?>
+                    </button>
+                    <?php }
+                            }?>
+
                 </div>
             </div>
         </div>

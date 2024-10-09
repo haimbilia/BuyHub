@@ -7,6 +7,12 @@
                     <h2><?php echo ($collection['collection_name'] != '') ? $collection['collection_name'] : ''; ?></h2>
                 </div>
                 <div class="section-action">
+                    <?php if ($collection['totProducts'] > $collection['collection_primary_records']) { ?>
+                        <a href="<?php echo UrlHelper::generateUrl('Collections', 'View', array($collection['collection_id'])); ?>"
+                            class="link-underline">
+                            <?php echo Labels::getLabel('LBL_VIEW_ALL', $siteLangId); ?>
+                        </a>
+                    <?php } ?>
                     <div class="slider-controls">
                         <button class="btn btn-prev" type="button"
                             data-href="#product-listing-<?php echo $collection['collection_id']; ?>" aria-label="Previous">
@@ -19,10 +25,13 @@
                     </div>
                 </div>
             </div>
-            <?php 
+            <?php
             $slidesCount = (Collections::TYPE_PRODUCT_LAYOUT6 == $collection['collection_layout_type']) ? '6,3,2,2' : '4,3,2,2';
             ?>
-            <div class="product-layout-1 product-listing js-carousel" id="product-listing-<?php echo $collection['collection_id']; ?>" data-slides="<?php echo $slidesCount; ?>" data-view="4" dir="<?php echo CommonHelper::getLayoutDirection(); ?>"  data-record="<?php echo $collection['collection_primary_records'];?>">
+            <div class="product-layout-1 product-listing js-carousel"
+                id="product-listing-<?php echo $collection['collection_id']; ?>" data-slides="<?php echo $slidesCount; ?>"
+                data-view="4" dir="<?php echo CommonHelper::getLayoutDirection(); ?>"
+                data-record="<?php echo $collection['collection_primary_records']; ?>">
                 <?php
                 $tRightRibbons = $collection['tRightRibbons'];
                 foreach ($collection['products'] as $product) {
@@ -37,18 +46,11 @@
                         if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) {
                             $displayProductNotAvailableLable = true;
                         }
-                        include ('product-layout-1-list.php'); ?>
+                        include('product-layout-1-list.php'); ?>
                     </div>
                 <?php } ?>
             </div>
-            <?php if ($collection['totProducts'] > $collection['collection_primary_records']) { ?>
-                <div class="section-foot">
-                    <a href="<?php echo UrlHelper::generateUrl('Collections', 'View', array($collection['collection_id'])); ?>"
-                        class="link-underline">
-                        <?php echo Labels::getLabel('LBL_VIEW_ALL', $siteLangId); ?>
-                    </a>
-                </div>
-            <?php } ?>
+
         </div>
     </section>
 <?php }

@@ -5,7 +5,7 @@ array_walk($jsVariables, function (&$item1, $key) {
     $item1 = html_entity_decode($item1, ENT_QUOTES, 'UTF-8');
 });
 $commonHeadData = array(
-    'siteLangId' => $siteLangId,        
+    'siteLangId' => $siteLangId,
     'controllerName' => $controllerName,
     'action' => $action,
     'jsVariables' => $jsVariables,
@@ -29,7 +29,7 @@ echo $this->getJsCssIncludeHtml(!CONF_DEVELOPMENT_MODE);
 $this->includeTemplate('_partial/header/commonHeadBottom.php', $commonHeadData, false);
 
 if (!isset($exculdeMainHeaderDiv)) {
-    $this->includeTemplate('_partial/topHeader.php', array('siteLangId' => $siteLangId, 'controllerName' => $controllerName), false);
+    $this->includeTemplate('_partial/topHeader.php', array('siteLangId' => $siteLangId, 'layoutType' => applicationConstants::SCREEN_DESKTOP, 'controllerName' => $controllerName), false);
 }
 
 if (!$isAppUser) {

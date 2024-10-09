@@ -145,7 +145,7 @@
   }
   &-fixed {
     border-radius: $radius;
-    margin-top: 1.5rem;
+    margin-top: $section-space;
   }
 
   .slider-track {

@@ -189,14 +189,22 @@ body {
 }
 
 .hamburger-categories {
-  background-color: transparent;
+  // background-color: transparent;
   border: none;
+  border-radius: 20px;
+  @include bg-gray;
   font-size: 1rem;
   font-weight: $font-weight-bold;
   color: $txt-body;
   display: flex;
   align-items: center;
   gap: 10px;
+  margin: 0;
+  padding: 0.25rem 0.75rem;
+  padding-#{$end-direction}: 4rem;
+  .dropdown-toggle-custom-arrow {
+    #{$end-direction}: 12px;
+  }
 }
 
 .seemore {
