@@ -110,7 +110,17 @@
                                 </button>
                             </li>
                             <?php $this->includeTemplate('_partial/headerUserArea.php', ['layoutType' => applicationConstants::SCREEN_DESKTOP]); ?>
-
+                            <li class="quick-nav-item item-mobile">
+                                <button class="quick-nav-link btn-mega-search toggle--search" role="button"
+                                    data-bs-backdrop="true" data-bs-toggle="offcanvas" data-bs-target="#mega-nav-search"
+                                    aria-label="search">
+                                    <svg class="svg" width="20" height="20">
+                                        <use
+                                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#magnifying">
+                                        </use>
+                                    </svg>
+                                </button>
+                            </li>
 
                             <?php if ($controllerName != 'Cart' && (User::isBuyer(true) || (!UserAuthentication::isUserLogged()))) { ?>
                                 <li class="quick-nav-item" id="cartSummaryJs">

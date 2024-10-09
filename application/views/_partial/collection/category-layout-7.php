@@ -19,9 +19,9 @@
                         $rootParentId = FatUtility::int(current(explode('_', $category['prodcat_code'])));
                         $rootParentId = (1 > $rootParentId) ? $category['prodcat_id'] : $rootParentId;
                         if (1 == $i) { ?>
-                            <div class="industry-carousal-item">
-                            <?php } ?>
-                            <?php
+                <div class="industry-carousal-item">
+                    <?php } ?>
+                    <?php
                             $image = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_ICON, $category['prodcat_id']);
                             if (!empty($image) && $image['afile_id'] <= 0) {
                                 $image = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_ICON, $rootParentId);
@@ -48,16 +48,7 @@
                         $i = ($i == $loopBreakCount) ? 1 : ($i + 1);
                     }
                     ?>
-                </div>
             </div>
-            <?php if (count($collection['categories']) > Collections::LIMIT_CATEGORY_LAYOUT3) { ?>
-                <div class="section-foot">
-                    <a href="<?php echo UrlHelper::generateUrl('Collections', 'View', array($collection['collection_id'])); ?>"
-                        class="link-underline">
-                        <?php echo Labels::getLabel('LBL_VIEW_ALL', $siteLangId); ?>
-                    </a>
-                </div>
-            <?php } ?>
         </div>
         <script>
             var displaySize = <?php echo 0 < $displaySize ? $displaySize : 8; ?>;
@@ -71,19 +62,19 @@
                 responsive: [{
                         breakpoint: 1180,
                         settings: {
-                            slidesToShow: 5,
+                            slidesToShow: 8,
                         }
                     },
                     {
                         breakpoint: 769,
                         settings: {
-                            slidesToShow: 4,
+                            slidesToShow: 5,
                         }
                     },
                     {
                         breakpoint: 480,
                         settings: {
-                            slidesToShow: 2,
+                            slidesToShow: 4,
                         }
                     }
                 ]
