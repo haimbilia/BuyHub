@@ -838,7 +838,7 @@ function initMutipleMapMarker(markers, elementId, centeredLat, centeredLng, drag
         position: new google.maps.LatLng(centeredLat, centeredLng),
         map: map,
         title: langLbl.currentSearchLocation,
-        icon: fcom.makeUrl() + 'images/pin3.png',
+        icon: '/images/pin3.png',
     });
     infowindow = new google.maps.InfoWindow();
     createMarkers(markers);
@@ -947,7 +947,7 @@ function createMarkers(markers) {
                 position: new google.maps.LatLng(marker['lat'], marker['lng']),
                 map: map,
                 //title: marker['title'],
-                icon: fcom.makeUrl() + 'images/pin.png',
+                icon: '/images/pin.png',
                 refId: index
             });
 
