@@ -1,5 +1,8 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<?php if (isset($collection['categories']) && count($collection['categories'])) { ?>
+<?php if (isset($collection['categories']) && count($collection['categories'])) {
+    $displaySize = (8 < $collection['collection_primary_records']) ? $collection['collection_primary_records'] / 2 : $collection['collection_primary_records'];
+    $loopBreakCount = (8 < $collection['collection_primary_records']) ? 2 : 1;
+?>
     <section class="section pt-0" data-collection="collection-categories">
         <div class="container">
             <?php /*?><div class="section-head section-head-center">
@@ -9,7 +12,7 @@
        </div> <?php */ ?>
             <div class="section-body">
                 <div class="industry-carousal industryCarousalJs"
-                    data-record="<?php echo $collection['collection_primary_records']; ?>">
+                    data-record="<?php echo (0 < $collection['collection_primary_records']) ? $collection['collection_primary_records'] / 2 : 0; ?>">
                     <?php
                     $i = 1;
                     foreach ($collection['categories'] as $category) {
@@ -38,11 +41,11 @@
                                     </div>
                                 </div>
                             </a>
-                            <?php if (2 == $i) { ?>
+                            <?php if ($loopBreakCount == $i) { ?>
                             </div>
                         <?php } ?>
-                        <?php
-                        $i = ($i == 2) ? 1 : ($i + 1);
+                    <?php
+                        $i = ($i == $loopBreakCount) ? 1 : ($i + 1);
                     }
                     ?>
                 </div>
@@ -57,7 +60,7 @@
             <?php } ?>
         </div>
         <script>
-            var displaySize = <?php echo 0 < $collection['collection_primary_records'] ? $collection['collection_primary_records'] : 8; ?>;
+            var displaySize = <?php echo 0 < $displaySize ? $displaySize : 8; ?>;
             $('.industryCarousalJs').not('.slick-initialized').slick({
                 draggable: true,
                 slidesToShow: displaySize,
@@ -66,23 +69,23 @@
                 prevArrow: '<button class="slick-arrow slick-prev"><span></span> </button>',
                 nextArrow: '<button class="slick-arrow slick-next"><span></span> </button>',
                 responsive: [{
-                    breakpoint: 1180,
-                    settings: {
-                        slidesToShow: 5,
+                        breakpoint: 1180,
+                        settings: {
+                            slidesToShow: 5,
+                        }
+                    },
+                    {
+                        breakpoint: 769,
+                        settings: {
+                            slidesToShow: 4,
+                        }
+                    },
+                    {
+                        breakpoint: 480,
+                        settings: {
+                            slidesToShow: 2,
+                        }
                     }
-                },
-                {
-                    breakpoint: 769,
-                    settings: {
-                        slidesToShow: 4,
-                    }
-                },
-                {
-                    breakpoint: 480,
-                    settings: {
-                        slidesToShow: 2,
-                    }
-                }
                 ]
             })
         </script>
