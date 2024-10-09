@@ -24,6 +24,7 @@
   }
 
   &-form {
+    overflow: hidden;
     display: flex;
     align-items: center;
     position: relative;
@@ -103,6 +104,22 @@
     &:hover {
       @include bg-black;
     }
+  }
+  .search-suggestions {
+    @include bg-white;
+    box-shadow: $shadow;
+    position: absolute;
+    z-index: 1000;
+    width: 100%;
+    max-height: 350px;
+    overflow: auto;
+    font-size: 0.8rem;
+    display: flex;
+    flex-direction: row;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    border-radius: 12px;
+    text-align: #{$start-direction};
   }
 }
 

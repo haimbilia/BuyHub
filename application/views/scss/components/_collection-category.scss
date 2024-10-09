@@ -457,9 +457,8 @@
     border: solid 1px rgba(0, 0, 0, 0.2);
     padding: 1rem;
     margin: 1rem auto;
-
-    width: 10.75rem;
-    height: 10.75rem;
+    width: 5rem;
+    height: 5rem;
     aspect-ratio: 1/1;
     border-radius: 100%;
     box-shadow: none;
@@ -532,5 +531,9 @@
   &-name {
     text-decoration: none;
     font-size: 0.85rem;
+    display: none;
+    @include media-breakpoint-up(xl) {
+      display: block;
+    }
   }
 }
