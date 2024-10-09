@@ -64,7 +64,7 @@ if (null != $fld) {
         
         $(document).mousedown(function(){
             if ($.datepicker.initialized && !$(".fldDateJs").datepicker( "widget" ).is(":visible")) {
-                $('.submitBtnJs').focus();
+                $('.' + $.ykmodal.element).find('.submitBtnJs').focus();
             }
         });
     });
