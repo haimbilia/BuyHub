@@ -317,11 +317,15 @@ class CollectionsController extends ListingBaseController
         if (false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
-
         $recordId = $post['collection_id'];
+        $defaultItemsCount = $this->getLayoutLimit($post['collection_layout_type']);
+        $displayItemsCount = FatApp::getPostedData('collection_primary_records', FatUtility::VAR_INT, $defaultItemsCount);
+        if (!in_array($data['collection_layout_type'], Collections::COLLECTIONS_FOR_DISPLAY_COUNT)) {
+            $displayItemsCount = $defaultItemsCount;
+        }
 
         $post['collection_identifier'] = $post['collection_name'];
-        $post['collection_primary_records'] = FatApp::getPostedData('collection_primary_records', FatUtility::VAR_INT, $this->getLayoutLimit($post['collection_layout_type']));
+        $post['collection_primary_records'] = $displayItemsCount;
 
         $collectionForApp = $post['collection_for_app'] ?? 0;
         $post['collection_for_app'] = in_array($data['collection_layout_type'], Collections::COLLECTIONS_FOR_APP_ONLY) ? 1 : $collectionForApp;
@@ -368,7 +372,9 @@ class CollectionsController extends ListingBaseController
         $frm->addHiddenField('', 'collection_type', $type);
         // $frm->addHiddenField('', 'collection_layout_type', $layoutType);
         $productTypeLayoutArr = Collections::getTypeSpecificLayouts($this->siteLangId);
-        $frm->addSelectBox(Labels::getLabel('FRM_Collection_Layout_Type', $this->siteLangId), 'collection_layout_type', $productTypeLayoutArr[$type], $layoutType, array(), '');
+        
+        $layoutTypeFld = $frm->addSelectBox(Labels::getLabel('FRM_COLLECTION_LAYOUT_TYPE', $this->siteLangId), 'collection_layout_type', $productTypeLayoutArr[$type], $layoutType, ['class' => 'fieldsVisibilityJs'], '');
+
         $frm->addRequiredField(Labels::getLabel('FRM_NAME', $this->siteLangId), 'collection_name');
 
         if (Collections::COLLECTION_TYPE_CONTENT_BLOCK == $type) {
@@ -379,10 +385,22 @@ class CollectionsController extends ListingBaseController
             $frm->addTextBox(Labels::getLabel('FRM_PROMOTION_COST', $this->siteLangId), 'blocation_promotion_cost');
         }
         
-        if (in_array($layoutType, Collections::COLLECTIONS_FOR_DISPLAY_COUNT)) {
-            $range = Collections::displayRecordsCount($layoutType);
-            $fld = $frm->addSelectBox(Labels::getLabel('FRM_DISPLAY_ITEMS_COUNT', $this->siteLangId), 'collection_primary_records', array_combine($range, $range));
-            $fld->requirements()->setRequired();
+        $range = Collections::displayRecordsCount($layoutType);
+        $fld = $frm->addSelectBox(Labels::getLabel('FRM_DISPLAY_ITEMS_COUNT', $this->siteLangId), 'collection_primary_records', array_combine($range, $range));
+        $fld->requirements()->setRequired();
+
+        $displayItemCountFld = new FormFieldRequirement('collection_primary_records', Labels::getLabel('FRM_DISPLAY_ITEMS_COUNT', $this->siteLangId));
+        $displayItemCountFld->setRequired(false);
+        $reqDisplayItemCountFldFld = new FormFieldRequirement('collection_primary_records', Labels::getLabel('FRM_DISPLAY_ITEMS_COUNT', $this->siteLangId));
+        $reqDisplayItemCountFldFld->setRequired(true);
+
+        foreach (Collections::COLLECTIONS_FOR_DISPLAY_COUNT as $layoutType) {
+            $layoutTypeFld->requirements()->addOnChangerequirementUpdate($layoutType, 'eq', 'collection_primary_records', $reqDisplayItemCountFldFld);
+        }
+        
+        $nonDisplayCount = array_diff(array_keys(Collections::getTypeSpecificLayouts($this->siteLangId)[$type]), Collections::COLLECTIONS_FOR_DISPLAY_COUNT);
+        foreach ($nonDisplayCount as $layoutType) {
+            $layoutTypeFld->requirements()->addOnChangerequirementUpdate($layoutType, 'eq', 'collection_primary_records', $displayItemCountFld);
         }
 
         if (!in_array($layoutType, Collections::COLLECTIONS_FOR_APP_ONLY)) {
