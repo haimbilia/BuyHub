@@ -24,8 +24,11 @@ $header-height: 122px;
 
   // black bar
   .black-bar {
-    @include bg-black;
-
+    display: none;
+    @include media-breakpoint-up(lg) {
+      @include bg-black;
+      display: block;
+    }
     &-inner {
       padding: 0.3rem 0;
       display: grid;
@@ -60,12 +63,12 @@ $header-height: 122px;
     }
 
     &__inner {
-      padding-top: 1rem;
       display: grid;
       align-items: center;
       grid-template-columns: 2fr 1fr;
 
       @include media-breakpoint-up(lg) {
+        padding-top: 1rem;
         //grid-template-columns: auto;
       }
     }

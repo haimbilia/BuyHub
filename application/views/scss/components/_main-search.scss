@@ -18,6 +18,10 @@
   position: relative;
   flex: 1;
   width: 100%;
+  display: none;
+  @include media-breakpoint-up(lg) {
+    display: block;
+  }
 
   &-form {
     display: flex;
@@ -222,12 +226,6 @@
 
 .btn-mega-search {
   background-color: transparent;
-
-  @include media-breakpoint-up(lg) {
-    background-color: $secondary-color;
-  }
-
-  color: $secondary-color-inverse;
   border-radius: 50%;
   width: 2.625rem;
   height: 2.625rem;
@@ -235,6 +233,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  @include media-breakpoint-up(lg) {
+  }
 }
 
 .search-suggestions {
