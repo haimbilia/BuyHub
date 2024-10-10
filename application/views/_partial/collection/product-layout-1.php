@@ -27,7 +27,7 @@
         </div>
         <?php
             $displayCount = (0 < $collection['collection_primary_records']) ? $collection['collection_primary_records'] : 4;
-            $slidesCount = (Collections::TYPE_PRODUCT_LAYOUT6 == $collection['collection_layout_type']) ? '6,3,2,2' : $displayCount;
+            $slidesCount = (Collections::TYPE_PRODUCT_LAYOUT6 == $collection['collection_layout_type']) ? '6,3,2,2' : min($displayCount, 6);
             ?>
         <div class="product-layout-1 product-listing js-carousel"
             id="product-listing-<?php echo $collection['collection_id']; ?>" data-slides="<?php echo $slidesCount; ?>"
