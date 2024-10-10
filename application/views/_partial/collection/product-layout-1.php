@@ -26,11 +26,12 @@
                 </div>
             </div>
             <?php
-            $slidesCount = (Collections::TYPE_PRODUCT_LAYOUT6 == $collection['collection_layout_type']) ? '6,3,2,2' : '4,3,2,2';
+            $displayCount = (0 < $collection['collection_primary_records']) ? $collection['collection_primary_records'] : 4;
+            $slidesCount = (Collections::TYPE_PRODUCT_LAYOUT6 == $collection['collection_layout_type']) ? '6,3,2,2' : $displayCount;
             ?>
             <div class="product-layout-1 product-listing js-carousel"
                 id="product-listing-<?php echo $collection['collection_id']; ?>" data-slides="<?php echo $slidesCount; ?>"
-                data-view="4" dir="<?php echo CommonHelper::getLayoutDirection(); ?>"
+                data-view="<?php echo $displayCount; ?>" dir="<?php echo CommonHelper::getLayoutDirection(); ?>"
                 data-record="<?php echo $collection['collection_primary_records']; ?>">
                 <?php
                 $tRightRibbons = $collection['tRightRibbons'];
@@ -39,7 +40,7 @@
                     if (array_key_exists($product['selprod_id'], $tRightRibbons)) {
                         $selProdRibbons[] = $tRightRibbons[$product['selprod_id']];
                     }
-                    ?>
+                ?>
                     <div class="item">
                         <?php
                         $displayProductNotAvailableLable = false;
