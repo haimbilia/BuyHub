@@ -10,7 +10,7 @@
                     </div>
                 <?php } ?>
             </div>
-            <div class="brand-layout-1" data-record="<?php echo $collection['collection_primary_records']; ?>">
+            <div class="brand-layout-1" data-record="<?php echo (0 < $collection['collection_primary_records'] ? $collection['collection_primary_records'] : 1); ?>">
                 <?php $i = 0;
                 foreach ($collection['brands'] as $brand) { ?>
                     <div class="brand">
@@ -31,7 +31,7 @@
 
                         </a>
                     </div>
-                    <?php $i++;
+                <?php $i++;
                 } ?>
             </div>
 
