@@ -269,10 +269,10 @@
   @include media-breakpoint-up(lg) {
     gap: $gap;
 
-    &[data-record="6"] {
+    &[data-view="6"] {
       grid-template-columns: repeat(6, 1fr);
     }
-    &[data-record="8"] {
+    &[data-view="8"] {
       grid-template-columns: repeat(7, 1fr);
     }
   }

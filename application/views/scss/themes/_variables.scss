@@ -262,30 +262,18 @@ $avatar-ratio: 1/1;
 }
 
 @mixin placeholder {
-  animation: placeholderShimmer 2s linear;
-  animation-iteration-count: infinite;
-  background-color: #fff;
-  background-image: -webkit-gradient(
-    linear,
-    left top,
-    right top,
-    from(rgba(0, 0, 0, 0.08)),
-    color-stop(15%, rgba(0, 0, 0, 0.15)),
-    color-stop(30%, rgba(0, 0, 0, 0.08))
-  );
-  background-image: -webkit-linear-gradient(
-    left,
-    rgba(0, 0, 0, 0.08) 0,
-    rgba(0, 0, 0, 0.15) 15%,
-    rgba(0, 0, 0, 0.08) 30%
-  );
-  background-image: linear-gradient(
-    to right,
-    rgba(0, 0, 0, 0.08) 0,
-    rgba(0, 0, 0, 0.15) 15%,
-    rgba(0, 0, 0, 0.08) 30%
-  );
-  background-size: 1200px 100%;
+  // animation: placeholderShimmer 2s linear;
+  // animation-iteration-count: infinite;
+  //  background-color: $bg-white;
+  // background-image: -webkit-gradient(linear, left top, right top, from(rgba(0, 0, 0, 0.08)), color-stop(15%, rgba(0, 0, 0, 0.15)), color-stop(30%, rgba(0, 0, 0, 0.08)));
+  // background-image: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.08) 0, rgba(0, 0, 0, 0.15) 15%, rgba(0, 0, 0, 0.08) 30%);
+  // background-image: linear-gradient(to right, rgba(0, 0, 0, 0.08) 0, rgba(0, 0, 0, 0.15) 15%, rgba(0, 0, 0, 0.08) 30%);
+  // background-size: 1200px 100%;
+  background-color: $bg-placeholder;
+  background-image: url(images/retina/image.svg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 50% 50%;
 }
 
 @-webkit-keyframes placeholderShimmer {

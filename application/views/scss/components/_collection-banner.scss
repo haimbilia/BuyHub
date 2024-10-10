@@ -31,10 +31,10 @@
   @include media-breakpoint-down(sm) {
     //display: block;
   }
-  &[data-record="2"] {
+  &[data-view="2"] {
     grid-template-columns: repeat(2, 1fr);
   }
-  &[data-record="3"] {
+  &[data-view="3"] {
     grid-template-columns: repeat(3, 1fr);
   }
   .poster {

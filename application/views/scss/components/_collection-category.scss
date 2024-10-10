@@ -5,8 +5,13 @@
   overflow-x: scroll;
 
   @include media-breakpoint-up(xl) {
-    grid-gap: 3rem;
-    grid-template-columns: repeat(4, 1fr);
+    grid-gap: $gap;
+    &[data-view="4"] {
+      grid-template-columns: repeat(4, 1fr);
+    }
+    &[data-view="5"] {
+      grid-template-columns: repeat(5, 1fr);
+    }
   }
 
   .category {
@@ -19,7 +24,10 @@
     min-width: 200px;
 
     &-head {
+      @include placeholder;
+      //background-color: $bg-placeholder;
       aspect-ratio: 4/1;
+      width: 100%;
 
       img {
         object-fit: cover;

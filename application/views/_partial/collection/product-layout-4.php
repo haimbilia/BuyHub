@@ -1,22 +1,23 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <?php if (isset($collection['products']) && count($collection['products']) > 0) { ?>
-    <section class="section" data-section="section">
-        <div class="container">
-            <div class="section-head">
-                <div class="section-heading">
-                    <h2><?php echo ($collection['collection_name'] != '') ? $collection['collection_name'] : ''; ?></h2>
-                </div>
-                <?php if ($collection['totProducts'] > $collection['collection_primary_records']) { ?>
-                    <div class="section-action">
-                        <a href="<?php echo UrlHelper::generateUrl('Collections', 'View', array($collection['collection_id'])); ?>"
-                            class="link-underline">
-                            <?php echo Labels::getLabel('LBL_VIEW_ALL', $siteLangId); ?>
-                        </a>
-                    </div>
-                <?php } ?>
+<section class="section" data-section="section">
+    <div class="container">
+        <div class="section-head">
+            <div class="section-heading">
+                <h2><?php echo ($collection['collection_name'] != '') ? $collection['collection_name'] : ''; ?></h2>
             </div>
-            <div class="product-layout-4" data-view="<?php echo count($collection['products']); ?>" data-record="<?php echo $collection['collection_primary_records'];?>">
-                <?php
+            <?php if ($collection['totProducts'] > $collection['collection_primary_records']) { ?>
+            <div class="section-action">
+                <a href="<?php echo UrlHelper::generateUrl('Collections', 'View', array($collection['collection_id'])); ?>"
+                    class="link-underline">
+                    <?php echo Labels::getLabel('LBL_VIEW_ALL', $siteLangId); ?>
+                </a>
+            </div>
+            <?php } ?>
+        </div>
+        <div class="product-layout-4"
+            data-view="<?php echo (0 < $collection['collection_primary_records']) ? $collection['collection_primary_records'] : count($collection['products']); ?>">
+            <?php
                 $tRightRibbons = $collection['tRightRibbons'];
                 $count = 0;
                 foreach ($collection['products'] as $product) {
@@ -33,11 +34,11 @@
 
                     $productThumb = (in_array($count, [1, 4])) ? ImageDimension::VIEW_CLAYOUT4 : ImageDimension::VIEW_SMALL;
                     ?>
-                    <div class="products-<?php echo $count; ?>">
-                        <?php include ('product-layout-4-list.php'); ?>
-                    </div>
-                <?php } ?>
+            <div class="products-<?php echo $count; ?>">
+                <?php include('product-layout-4-list.php'); ?>
             </div>
+            <?php } ?>
         </div>
-    </section>
+    </div>
+</section>
 <?php } ?>
