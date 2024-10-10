@@ -65,7 +65,8 @@ $header-height: 122px;
     &__inner {
       display: grid;
       align-items: center;
-      grid-template-columns: 2fr 1fr;
+      grid-template-columns: 1fr auto;
+      gap: $gap;
 
       @include media-breakpoint-up(lg) {
         padding-top: 1rem;
@@ -76,7 +77,7 @@ $header-height: 122px;
     &__left {
       display: flex;
       align-items: center;
-      gap: $gap * 1.5;
+      gap: $gap;
     }
 
     .slogan {
