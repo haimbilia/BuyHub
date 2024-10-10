@@ -1,4 +1,5 @@
-<div class="shop-layout-1">
+<div class="shop-layout-1"
+    data-view="<?php echo (0 < $collection['collection_primary_records']) ? $collection['collection_primary_records'] : 4; ?>">
     <?php $i = 0;
     foreach ($collection['shops'] as $shop) {
         $uploadedTime = AttachedFile::setTimeParam($shop['shopData']['shop_updated_on']); ?>
@@ -25,7 +26,9 @@
                     href="<?php echo (!isset($shop['shopData']['promotion_id']) ? UrlHelper::generateUrl('shops', 'view', array($shop['shopData']['shop_id'])) : UrlHelper::generateUrl('shops', 'track', array($shop['shopData']['promotion_record_id']))); ?>"><?php echo $shop['shopData']['shop_name']; ?></a>
             </div>
             <div class="shop-location">
-                <?php echo $shop['shopData']['state_name']; ?><?php echo ($shop['shopData']['country_name'] && $shop['shopData']['state_name']) ? ', ' : ''; ?><?php echo $shop['shopData']['country_name']; ?>
+                <?php echo $shop['shopData']['state_name']; ?>
+                <?php echo ($shop['shopData']['country_name'] && $shop['shopData']['state_name']) ? ', ' : ''; ?>
+                <?php echo $shop['shopData']['country_name']; ?>
             </div>
             <?php if (round($collection['rating'][$shop['shopData']['shop_id']]) > 0) { ?>
             <div class="product-ratings">
@@ -33,7 +36,7 @@
                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow"></use>
                 </svg>
                 <span class="rate">
-                    <?php echo  round($collection['rating'][$shop['shopData']['shop_id']], 1); ?>
+                    <?php echo round($collection['rating'][$shop['shopData']['shop_id']], 1); ?>
 
                 </span>
             </div>

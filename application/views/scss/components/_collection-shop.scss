@@ -97,7 +97,12 @@
 
   @include media-breakpoint-up(lg) {
     gap: $gap;
-    grid-template-columns: repeat(6, 1fr);
+    &[data-view="4"] {
+      grid-template-columns: repeat(4, 1fr);
+    }
+    &[data-view="6"] {
+      grid-template-columns: repeat(6, 1fr);
+    }
   }
 
   .shop {
