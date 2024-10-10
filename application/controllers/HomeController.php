@@ -229,6 +229,17 @@ class HomeController extends MyAppController
                     $collectionTemplates[$collection['collection_id']]['html'] = $homePageCatLayout4;
                     break;
                 case Collections::TYPE_CATEGORY_LAYOUT7:
+                    $homePageCatLayout7 = CacheHelper::get('homePageCatLayout7' . $collection['collection_id'] . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
+                    if (!$homePageCatLayout7) {
+                        $tpl = new FatTemplate('', '');
+                        $tpl->set('siteLangId', $this->siteLangId);
+                        $tpl->set('collection', $collection);
+                        $tpl->set('`displayProductNotAvailableLable`', $displayProductNotAvailableLable);
+                        $homePageCatLayout7 = $tpl->render(false, false, '_partial/collection/category-layout-7.php', true, true);
+                        CacheHelper::create('homePageCatLayout7' . $collection['collection_id'] . $cacheKey, $homePageCatLayout7, CacheHelper::TYPE_COLLECTIONS);
+                    }
+                    $collectionTemplates[$collection['collection_id']]['html'] = $homePageCatLayout7;
+                    break;
                 case Collections::TYPE_CATEGORY_LAYOUT9:
                     $homePageCatLayout7 = CacheHelper::get('homePageCatLayout7' . $collection['collection_id'] . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
                     if (!$homePageCatLayout7) {
