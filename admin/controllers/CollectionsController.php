@@ -215,11 +215,10 @@ class CollectionsController extends ListingBaseController
     }
 
     public function form(int $type, int $layoutType)
-    {        
+    {
         $type = FatUtility::int($type);
         $layoutType = FatUtility::int($layoutType);
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
-
         $frm = $this->getForm($type, $layoutType, $recordId);
 
         if (0 < $recordId) {
@@ -283,6 +282,7 @@ class CollectionsController extends ListingBaseController
                 $limit = Collections::LIMIT_CATEGORY_LAYOUT6;
                 break;
             case Collections::TYPE_CATEGORY_LAYOUT7:
+            case Collections::TYPE_CATEGORY_LAYOUT9:
                 $limit = Collections::LIMIT_CATEGORY_LAYOUT7;
                 break;
             case Collections::TYPE_SHOP_LAYOUT1:
@@ -394,22 +394,32 @@ class CollectionsController extends ListingBaseController
         $reqDisplayItemCountFldFld = new FormFieldRequirement('collection_primary_records', Labels::getLabel('FRM_DISPLAY_ITEMS_COUNT', $this->siteLangId));
         $reqDisplayItemCountFldFld->setRequired(true);
 
-        foreach (Collections::COLLECTIONS_FOR_DISPLAY_COUNT as $layoutType) {
-            $layoutTypeFld->requirements()->addOnChangerequirementUpdate($layoutType, 'eq', 'collection_primary_records', $reqDisplayItemCountFldFld);
+        foreach (Collections::COLLECTIONS_FOR_DISPLAY_COUNT as $layoutTypeVar) {
+            $layoutTypeFld->requirements()->addOnChangerequirementUpdate($layoutTypeVar, 'eq', 'collection_primary_records', $reqDisplayItemCountFldFld);
         }
 
         $nonDisplayCount = array_diff(array_keys(Collections::getTypeSpecificLayouts($this->siteLangId)[$type]), Collections::COLLECTIONS_FOR_DISPLAY_COUNT);
-        foreach ($nonDisplayCount as $layoutType) {
-            $layoutTypeFld->requirements()->addOnChangerequirementUpdate($layoutType, 'eq', 'collection_primary_records', $displayItemCountFld);
+        foreach ($nonDisplayCount as $layoutTypeVar) {
+            $layoutTypeFld->requirements()->addOnChangerequirementUpdate($layoutTypeVar, 'eq', 'collection_primary_records', $displayItemCountFld);
         }
 
-        if (!in_array($layoutType, Collections::COLLECTIONS_FOR_APP_ONLY)) {
+
+        if (in_array($layoutType, Collections::COLLECTIONS_FOR_APP_ONLY)) {
+            $frm->addHiddenField('', 'collection_for_app', 1);
+        } else if (in_array($layoutType, Collections::COLLECTIONS_FOR_WEB_ONLY)) {
+            $frm->addHiddenField('', 'collection_for_web', 1);
+        } else {
+            $frm->addCheckBox(Labels::getLabel("FRM_APPLICABLE_FOR_WEB", $this->siteLangId), 'collection_for_web', 1, array(), true, 0);
+            $frm->addCheckBox(Labels::getLabel("FRM_APPLICABLE_FOR_APP", $this->siteLangId), 'collection_for_app', 1, array(), true, 0);
+        }
+
+        /* if (!in_array($layoutType, Collections::COLLECTIONS_FOR_APP_ONLY)) {
             $frm->addCheckBox(Labels::getLabel("FRM_APPLICABLE_FOR_WEB", $this->siteLangId), 'collection_for_web', 1, array(), true, 0);
         }
 
-        if (!in_array($layoutType, Collections::COLLECTIONS_NOT_FOR_APP)) {
+        if (!in_array($layoutType, Collections::COLLECTIONS_FOR_WEB_ONLY)) {
             $frm->addCheckBox(Labels::getLabel("FRM_APPLICABLE_FOR_APP", $this->siteLangId), 'collection_for_app', 1, array(), true, 0);
-        }
+        } */
 
         if (in_array($layoutType, Collections::COLLECTIONS_FULL_WIDTH)) {
             $frm->addCheckBox(Labels::getLabel("FRM_FULL_WIDTH", $this->siteLangId), 'collection_full_width', 1, array(), true, 0);
@@ -556,7 +566,7 @@ class CollectionsController extends ListingBaseController
         $this->setFormTitle($collectionType, $data['collection_layout_type']);
 
         $frm = $this->getRecordsForm($recordId, $collectionType);
-        if (Collections::TYPE_CATEGORY_LAYOUT7 == $data['collection_layout_type']) {
+        if (in_array($data['collection_layout_type'], [Collections::TYPE_CATEGORY_LAYOUT7, Collections::TYPE_CATEGORY_LAYOUT9])) {
             $fld = $frm->getField('collection_records[]');
             $lbl = CommonHelper::replaceStringData(Labels::getLabel('LBL_BIND_ATLEAST_{LIMIT}_RECORDS_FOR_BETTER_COLLECTION_VIEW'), ['{LIMIT}' => Collections::LIMIT_CATEGORY_LAYOUT7]);
             $fld->htmlAfterField = '<span class="form-text text-muted">' . $lbl . '</span>';

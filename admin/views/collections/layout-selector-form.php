@@ -18,7 +18,7 @@
                 <div class="layout-data collapse" id="collectionType<?php echo $type; ?>">
                     <?php
                         $appOnlyCollections = Collections::COLLECTIONS_FOR_APP_ONLY;
-                        $webOnlyCollections = Collections::COLLECTIONS_NOT_FOR_APP;
+                        $webOnlyCollections = Collections::COLLECTIONS_FOR_WEB_ONLY;
                         foreach ($layouts as $layoutId => $layout) {
                         ?>
                     <div class="layout-block" data-bs-toggle="tooltip" data-bs-placement="top"

@@ -45,6 +45,7 @@ class Collections extends MyAppModel
     public const TYPE_CATEGORY_LAYOUT6 = 27; /* Applicable For Apps only. */
     public const TYPE_CATEGORY_LAYOUT7 = 32;
     public const TYPE_CATEGORY_LAYOUT8 = 34;
+    public const TYPE_CATEGORY_LAYOUT9 = 35;
 
     public const TYPE_SHOP_LAYOUT1 = 6;
     public const TYPE_SHOP_LAYOUT2 = 22;
@@ -134,12 +135,13 @@ class Collections extends MyAppModel
         self::TYPE_PRODUCT_LAYOUT5,
     ];
 
-    public const COLLECTIONS_NOT_FOR_APP = [
+    public const COLLECTIONS_FOR_WEB_ONLY = [
         self::TYPE_CATEGORY_LAYOUT2,
         self::TYPE_CATEGORY_LAYOUT3,
         self::TYPE_CATEGORY_LAYOUT4,
         self::TYPE_CATEGORY_LAYOUT7,
         self::TYPE_CATEGORY_LAYOUT8,
+        self::TYPE_CATEGORY_LAYOUT9,
         self::TYPE_BRAND_LAYOUT2,
         self::TYPE_SHOP_LAYOUT2,
         self::TYPE_PRODUCT_LAYOUT3,
@@ -160,6 +162,7 @@ class Collections extends MyAppModel
     public const COLLECTIONS_FOR_DISPLAY_COUNT = [
         self::TYPE_CATEGORY_LAYOUT7,
         self::TYPE_CATEGORY_LAYOUT8,
+        self::TYPE_CATEGORY_LAYOUT9,
         self::TYPE_SHOP_LAYOUT1,
         self::TYPE_PRODUCT_LAYOUT1,
         self::TYPE_PRODUCT_LAYOUT3,
@@ -276,6 +279,7 @@ class Collections extends MyAppModel
             self::TYPE_CATEGORY_LAYOUT5 => Labels::getLabel('LBL_MOBILE_CATEGORY_LAYOUT5', $langId),
             self::TYPE_CATEGORY_LAYOUT6 => Labels::getLabel('LBL_MOBILE_CATEGORY_LAYOUT6', $langId),
             self::TYPE_CATEGORY_LAYOUT8 => Labels::getLabel('LBL_CATEGORY_LAYOUT8', $langId),
+            self::TYPE_CATEGORY_LAYOUT9 => Labels::getLabel('LBL_CATEGORY_LAYOUT9', $langId),
             self::TYPE_SHOP_LAYOUT1 => Labels::getLabel('LBL_SHOP_LAYOUT1', $langId),
             self::TYPE_SHOP_LAYOUT2 => Labels::getLabel('LBL_SHOP_LAYOUT2', $langId),
             self::TYPE_BRAND_LAYOUT1 => Labels::getLabel('LBL_BRAND_LAYOUT1', $langId),
@@ -331,6 +335,7 @@ class Collections extends MyAppModel
                 self::TYPE_CATEGORY_LAYOUT6 => Labels::getLabel('LBL_MOBILE_CATEGORY_LAYOUT6', $langId),
                 self::TYPE_CATEGORY_LAYOUT7 => Labels::getLabel('LBL_CATEGORY_LAYOUT7', $langId),
                 self::TYPE_CATEGORY_LAYOUT8 => Labels::getLabel('LBL_CATEGORY_LAYOUT8', $langId),
+                self::TYPE_CATEGORY_LAYOUT9 => Labels::getLabel('LBL_CATEGORY_LAYOUT9', $langId),
             ],
             self::COLLECTION_TYPE_PRODUCT => [
                 self::TYPE_PRODUCT_LAYOUT1 => Labels::getLabel('LBL_PRODUCT_LAYOUT1', $langId),
@@ -459,6 +464,8 @@ class Collections extends MyAppModel
             self::TYPE_CATEGORY_LAYOUT5 => 'Category-Layout-5.png',
             self::TYPE_CATEGORY_LAYOUT6 => 'Category-Layout-6.png',
             self::TYPE_CATEGORY_LAYOUT7 => 'Category-Layout-7.png',
+            self::TYPE_CATEGORY_LAYOUT8 => 'Category-Layout-8.png',
+            self::TYPE_CATEGORY_LAYOUT9 => 'Category-Layout-7.png',
             self::TYPE_SHOP_LAYOUT1 => 'Shop-Layout-1.png',
             self::TYPE_BRAND_LAYOUT1 => 'Brand-Layout-1.png',
             self::TYPE_BLOG_LAYOUT1 => 'Blog-Layout-1.png',
@@ -1044,6 +1051,7 @@ class Collections extends MyAppModel
             self::TYPE_CATEGORY_LAYOUT6 => 'category-layout-6',
             self::TYPE_CATEGORY_LAYOUT7 => 'category-layout-7',
             self::TYPE_CATEGORY_LAYOUT8 => 'category-layout-8',
+            self::TYPE_CATEGORY_LAYOUT9 => 'category-layout-7',
             self::TYPE_SHOP_LAYOUT1 => 'shop-layout-1',
             self::TYPE_SHOP_LAYOUT2 => 'shop-layout-2',
             self::TYPE_BRAND_LAYOUT1 => 'brand-layout-1',
@@ -1079,6 +1087,7 @@ class Collections extends MyAppModel
     {
         switch ($layoutType) {
             case self::TYPE_CATEGORY_LAYOUT7:
+            case self::TYPE_CATEGORY_LAYOUT9:
                 $range = [6, 7, 8, 12, 14, 16];
                 break;
             case self::TYPE_CATEGORY_LAYOUT8:

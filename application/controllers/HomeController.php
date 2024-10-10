@@ -229,6 +229,7 @@ class HomeController extends MyAppController
                     $collectionTemplates[$collection['collection_id']]['html'] = $homePageCatLayout4;
                     break;
                 case Collections::TYPE_CATEGORY_LAYOUT7:
+                case Collections::TYPE_CATEGORY_LAYOUT9:
                     $homePageCatLayout7 = CacheHelper::get('homePageCatLayout7' . $collection['collection_id'] . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
                     if (!$homePageCatLayout7) {
                         $tpl = new FatTemplate('', '');
@@ -455,8 +456,7 @@ class HomeController extends MyAppController
                 if (false == $isDefaultLangId) {
                     $redirectUrl .= strtolower($langCodeArr[$langId]) . '/';
                 }
-                $redirectUrl .= ltrim($pathname, '/');
-                ;
+                $redirectUrl .= ltrim($pathname, '/');;
             }
         } else {
             if (empty($redirectUrl)) {
@@ -889,7 +889,7 @@ class HomeController extends MyAppController
                     $productCatSrchTempObj->addCondition('prodcat_deleted', '=', applicationConstants::NO);
 
                     if (false === MOBILE_APP_API_CALL) {
-                        if (Collections::TYPE_CATEGORY_LAYOUT7 != $collection['collection_layout_type']) {
+                        if (!in_array($collection['collection_layout_type'], [Collections::TYPE_CATEGORY_LAYOUT7, Collections::TYPE_CATEGORY_LAYOUT9])) {
                             $productCatSrchTempObj->setPageSize($collection['collection_primary_records']);
                         }
                     }
@@ -906,7 +906,7 @@ class HomeController extends MyAppController
                     /* ] */
                     $collections[$ind] = $collection;
                     $counter = 0;
-                    if (in_array($collection['collection_layout_type'], [Collections::TYPE_CATEGORY_LAYOUT2, Collections::TYPE_CATEGORY_LAYOUT3, Collections::TYPE_CATEGORY_LAYOUT5, Collections::TYPE_CATEGORY_LAYOUT6, Collections::TYPE_CATEGORY_LAYOUT7])) {
+                    if (in_array($collection['collection_layout_type'], [Collections::TYPE_CATEGORY_LAYOUT2, Collections::TYPE_CATEGORY_LAYOUT3, Collections::TYPE_CATEGORY_LAYOUT5, Collections::TYPE_CATEGORY_LAYOUT6, Collections::TYPE_CATEGORY_LAYOUT7, Collections::TYPE_CATEGORY_LAYOUT9])) {
                         while ($catData = $db->fetch($rs)) {
                             if (true === MOBILE_APP_API_CALL) {
                                 $imgUpdatedOn = ProductCategory::getAttributesById($catData['prodcat_id'], 'prodcat_updated_on');
@@ -922,7 +922,7 @@ class HomeController extends MyAppController
                                 $collections[$ind]['categories'][$counter] = $catData;
                             } else {
                                 $subCategories = [];
-                                if (Collections::TYPE_CATEGORY_LAYOUT7 != $collection['collection_layout_type']) {
+                                if (!in_array($collection['collection_layout_type'], [Collections::TYPE_CATEGORY_LAYOUT7, Collections::TYPE_CATEGORY_LAYOUT9])) {
                                     /* fetch Sub-Categories[ */
                                     $subCategorySrch = clone $productCatSrchObj;
                                     $subCategorySrch->doNotCalculateRecords();

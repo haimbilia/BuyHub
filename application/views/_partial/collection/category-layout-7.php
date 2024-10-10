@@ -2,6 +2,7 @@
 <?php if (isset($collection['categories']) && count($collection['categories'])) {
     $displaySize = (8 < $collection['collection_primary_records']) ? min($collection['collection_primary_records'], 16) / 2 : (0 < $collection['collection_primary_records'] ? $collection['collection_primary_records'] : 8);
     $loopBreakCount = (8 < $collection['collection_primary_records']) ? 2 : 1;
+    $displayIcon = (Collections::TYPE_CATEGORY_LAYOUT7 == $collection['collection_layout_type']) ? true : false;
 ?>
     <section class="section" data-collection="collection-categories">
         <div class="container">
@@ -22,15 +23,18 @@
                             <div class="industry-carousal-item">
                             <?php } ?>
                             <?php
-                            $image = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_ICON, $category['prodcat_id']);
+                            $imageType = ($displayIcon == true) ? AttachedFile::FILETYPE_CATEGORY_ICON : AttachedFile::FILETYPE_CATEGORY_IMAGE;
+                            $image = AttachedFile::getAttachment($imageType, $category['prodcat_id']);
                             if (!empty($image) && $image['afile_id'] <= 0) {
-                                $image = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_ICON, $rootParentId);
+                                $image = AttachedFile::getAttachment($imageType, $rootParentId);
                             }
                             $uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);
                             $afile_record_id = $image['afile_record_id'];
                             $afile_lang_id = $image['afile_lang_id'];
                             $afile_id = $image['afile_id'];
-                            $catIconUrl = UrlHelper::generateFileUrl('Category', ImageDimension::VIEW_ICON, array($afile_record_id, $afile_lang_id, ImageDimension::VIEW_THUMB, $afile_id), CONF_WEBROOT_FRONT_URL) . $uploadedTime;
+
+                            $viewType = ($displayIcon == true) ? ImageDimension::VIEW_ICON : ImageDimension::VIEW_THUMB;
+                            $catIconUrl = UrlHelper::generateFileUrl('Category', $viewType, array($afile_record_id, $afile_lang_id, ImageDimension::VIEW_THUMB, $afile_id), CONF_WEBROOT_FRONT_URL) . $uploadedTime;
                             $prodCatUrl = UrlHelper::generateUrl('Category', 'View', array($category['prodcat_id']));
                             ?>
                             <a class="industry-carousal-link" title="<?php echo $category['prodcat_name']; ?>"
