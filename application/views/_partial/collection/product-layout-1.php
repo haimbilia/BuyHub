@@ -32,7 +32,7 @@
             <div class="product-layout-1 product-listing js-carousel"
                 id="product-listing-<?php echo $collection['collection_id']; ?>" data-slides="<?php echo $slidesCount; ?>"
                 data-view="<?php echo $displayCount; ?>" dir="<?php echo CommonHelper::getLayoutDirection(); ?>"
-                data-record="<?php echo $collection['collection_primary_records']; ?>">
+                data-record="<?php echo $displayCount; ?>">
                 <?php
                 $tRightRibbons = $collection['tRightRibbons'];
                 foreach ($collection['products'] as $product) {

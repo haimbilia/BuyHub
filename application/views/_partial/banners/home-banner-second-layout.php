@@ -5,8 +5,10 @@ $bCount = 1;
 
 if (!empty($bannerLayout1['banners']) && $bannerLayout1['blocation_active']) { ?>
     <section class="section" data-section="section">
-        <div class="container">
-            <div class="poster-layout" data-record="<?php echo $collection['collection_primary_records']; ?>">
+        <?php if (!$collection['collection_full_width']) { ?>
+            <div class="container">
+            <?php } ?>
+            <div class="poster-layout" data-record="<?php echo (0 < $collection['collection_primary_records'] ? $collection['collection_primary_records'] : 2); ?>">
                 <?php foreach ($bannerLayout1['banners'] as $val) {
                     $desktopUrl = $desktopWebpUrl = '';
                     $tabletUrl = $tabletWebpUrl = '';
@@ -19,7 +21,7 @@ if (!empty($bannerLayout1['banners']) && $bannerLayout1['blocation_active']) { ?
                         foreach ($slideArr as $slideScreen) {
                             $uploadedTime = AttachedFile::setTimeParam($slideScreen['afile_updated_at']);
                             switch ($slideScreen['afile_screen']) {
-                                /*  case applicationConstants::SCREEN_MOBILE:
+                                    /*  case applicationConstants::SCREEN_MOBILE:
                                      $mobileUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'Banner', array($val['banner_id'], Collections::TYPE_BANNER_LAYOUT2, $siteLangId, applicationConstants::SCREEN_MOBILE, ImageDimension::VIEW_MOBILE)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                                      $mobileWebpUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'Banner', array($val['banner_id'], Collections::TYPE_BANNER_LAYOUT2, $siteLangId, applicationConstants::SCREEN_MOBILE, 'webp' . ImageDimension::VIEW_MOBILE)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp');
                                      break;
@@ -66,9 +68,11 @@ if (!empty($bannerLayout1['banners']) && $bannerLayout1['blocation_active']) { ?
                         </a>
                     </div>
 
-                    <?php $bCount++;
+                <?php $bCount++;
                 } ?>
             </div>
-        </div>
+            <?php if (!$collection['collection_full_width']) { ?>
+            </div>
+        <?php } ?>
     </section>
 <?php } ?>
