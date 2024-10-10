@@ -1,21 +1,21 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 if (isset($collection['products']) && count($collection['products']) > 0) { ?>
-<section class="section bg-gray" data-section="section">
-    <div class="container">
-        <div class="section-head">
-            <div class="section-heading">
-                <h2><?php echo ($collection['collection_name'] != '') ? $collection['collection_name'] : ''; ?></h2>
-            </div> <?php if ($collection['totProducts'] > $collection['collection_primary_records']) { ?>
-            <div class="section-action">
-                <a href="<?php echo UrlHelper::generateUrl('Collections', 'View', array($collection['collection_id'])); ?>"
-                    class="link-underline">
-                    <?php echo Labels::getLabel('LBL_VIEW_ALL', $siteLangId); ?>
-                </a>
+    <section class="section bg-gray" data-section="section">
+        <div class="container">
+            <div class="section-head">
+                <div class="section-heading">
+                    <h2><?php echo ($collection['collection_name'] != '') ? $collection['collection_name'] : ''; ?></h2>
+                </div> <?php if ($collection['totProducts'] > $collection['collection_primary_records']) { ?>
+                    <div class="section-action">
+                        <a href="<?php echo UrlHelper::generateUrl('Collections', 'View', array($collection['collection_id'])); ?>"
+                            class="link-underline">
+                            <?php echo Labels::getLabel('LBL_VIEW_ALL', $siteLangId); ?>
+                        </a>
+                    </div>
+                <?php } ?>
             </div>
-            <?php } ?>
-        </div>
-        <div class="product-layout-3">
-            <?php
+            <div class="product-layout-3" data-view="<?php echo (0 < $collection['collection_primary_records'] ? $collection['collection_primary_records'] : 3); ?>">
+                <?php
                 $tRightRibbons = $collection['tRightRibbons'];
                 $i = 1;
                 foreach ($collection['products'] as $product) {
@@ -32,8 +32,8 @@ if (isset($collection['products']) && count($collection['products']) > 0) { ?>
                     include('product-layout-3-list.php');
                     $i++;
                 } ?>
-        </div>
+            </div>
 
-    </div>
-</section>
+        </div>
+    </section>
 <?php }

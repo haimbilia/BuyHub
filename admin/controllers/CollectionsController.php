@@ -215,7 +215,7 @@ class CollectionsController extends ListingBaseController
     }
 
     public function form(int $type, int $layoutType)
-    {
+    {        
         $type = FatUtility::int($type);
         $layoutType = FatUtility::int($layoutType);
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);

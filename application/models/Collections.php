@@ -126,7 +126,7 @@ class Collections extends MyAppModel
     ];
 
     public const COLLECTIONS_FOR_APP_ONLY = [
-            // self::TYPE_BANNER_LAYOUT3,
+        // self::TYPE_BANNER_LAYOUT3,
         self::TYPE_PENDING_REVIEWS1,
         self::TYPE_CATEGORY_LAYOUT5,
         self::TYPE_CATEGORY_LAYOUT6,
@@ -162,6 +162,7 @@ class Collections extends MyAppModel
         self::TYPE_CATEGORY_LAYOUT8,
         self::TYPE_SHOP_LAYOUT1,
         self::TYPE_PRODUCT_LAYOUT1,
+        self::TYPE_PRODUCT_LAYOUT3,
         self::TYPE_TESTIMONIAL_LAYOUT2,
         self::TYPE_BRAND_LAYOUT1,
         self::TYPE_BANNER_LAYOUT2,
@@ -285,7 +286,7 @@ class Collections extends MyAppModel
             self::TYPE_SPONSORED_SHOP_LAYOUT => Labels::getLabel('LBL_SPONSORED_SHOPS', $langId),
             self::TYPE_BANNER_LAYOUT1 => Labels::getLabel('LBL_BANNER_LAYOUT1', $langId),
             self::TYPE_BANNER_LAYOUT2 => Labels::getLabel('LBL_BANNER_LAYOUT2', $langId),
-                // self::TYPE_BANNER_LAYOUT3 => Labels::getLabel('LBL_MOBILE_BANNER_LAYOUT', $langId),
+            // self::TYPE_BANNER_LAYOUT3 => Labels::getLabel('LBL_MOBILE_BANNER_LAYOUT', $langId),
             self::TYPE_FAQ_LAYOUT1 => Labels::getLabel('LBL_FAQ_LAYOUT1', $langId),
             self::TYPE_TESTIMONIAL_LAYOUT1 => Labels::getLabel('LBL_TESTIMONIAL_LAYOUT1', $langId),
             self::TYPE_TESTIMONIAL_LAYOUT2 => Labels::getLabel('LBL_TESTIMONIAL_LAYOUT2', $langId),
@@ -356,7 +357,7 @@ class Collections extends MyAppModel
             self::COLLECTION_TYPE_FAQ => [
                 self::TYPE_FAQ_LAYOUT1 => Labels::getLabel('LBL_FAQ', $langId),
             ],
-                /* self::COLLECTION_TYPE_FAQ_CATEGORY => [
+            /* self::COLLECTION_TYPE_FAQ_CATEGORY => [
                         self::TYPE_FAQ_CATEGORY_LAYOUT1 => Labels::getLabel('LBL_FAQ_CATEGORY', $langId),
                     ], 
                     self::COLLECTION_TYPE_REVIEWS => [
@@ -465,9 +466,9 @@ class Collections extends MyAppModel
             self::TYPE_SPONSORED_SHOP_LAYOUT => 'Sponsored-Shops.png',
             self::TYPE_BANNER_LAYOUT1 => 'Banner-Layout-1.png',
             self::TYPE_BANNER_LAYOUT2 => 'Banner-Layout-2.png',
-                // self::TYPE_BANNER_LAYOUT3 => 'Banner-Layout-2.png',
+            // self::TYPE_BANNER_LAYOUT3 => 'Banner-Layout-2.png',
             self::TYPE_FAQ_LAYOUT1 => 'Faq-Layout-1.png',
-                // self::TYPE_FAQ_CATEGORY_LAYOUT1 => 'Faq-Layout-1.png',
+            // self::TYPE_FAQ_CATEGORY_LAYOUT1 => 'Faq-Layout-1.png',
             self::TYPE_TESTIMONIAL_LAYOUT1 => 'Testimonial-layout-1.png',
             self::TYPE_TESTIMONIAL_LAYOUT2 => 'Testimonial-layout-2.png',
             self::TYPE_CONTENT_BLOCK_LAYOUT1 => 'Content-Block-layout-1.png',
@@ -1053,7 +1054,7 @@ class Collections extends MyAppModel
             self::TYPE_SPONSORED_SHOP_LAYOUT => 'sponsored-shop-layout',
             self::TYPE_BANNER_LAYOUT1 => 'banner-layout-1',
             self::TYPE_BANNER_LAYOUT2 => 'banner-layout-2',
-                // self::TYPE_BANNER_LAYOUT3 => 'banner-layout-3',
+            // self::TYPE_BANNER_LAYOUT3 => 'banner-layout-3',
             self::TYPE_FAQ_LAYOUT1 => 'faq-layout-1',
             self::TYPE_TESTIMONIAL_LAYOUT1 => 'testimonial-layout-1',
             self::TYPE_TESTIMONIAL_LAYOUT2 => 'testimonial-layout-2',
@@ -1088,6 +1089,9 @@ class Collections extends MyAppModel
                 break;
             case self::TYPE_PRODUCT_LAYOUT1:
                 $range = range(4, 6);
+                break;
+            case self::TYPE_PRODUCT_LAYOUT3:
+                $range = [3, 5];
                 break;
             case self::TYPE_TESTIMONIAL_LAYOUT2:
                 $range = range(4, 6);
