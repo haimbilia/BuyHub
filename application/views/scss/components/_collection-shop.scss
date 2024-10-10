@@ -101,6 +101,7 @@
   }
 
   .shop {
+    border-radius: $kart;
     transition: all 0.2s linear;
     animation: slideRight 600ms ease both;
   }
@@ -122,14 +123,15 @@
   }
 
   .shop {
+    background-color: transparent;
+    border: 0;
+    border-radius: $kart;
     display: flex;
     flex-direction: column;
     text-align: center;
     max-width: 488px;
     flex: 1 0 200px;
     min-width: 0;
-    background-color: transparent;
-    border: 0;
     padding: 0;
     overflow: unset;
 

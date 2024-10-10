@@ -106,8 +106,8 @@ class CollectionsController extends ListingBaseController
         $pageSize = applicationConstants::getPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
         $fields = $this->getFormColumns();
         $selectedFlds = FatApp::getPostedData('reportColumns', FatUtility::VAR_STRING, '');
-        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) +  $this->getDefaultColumns() : $this->getDefaultColumns();
-        $fields =  FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
+        $selectedFlds = !empty($selectedFlds) ? json_decode($selectedFlds) + $this->getDefaultColumns() : $this->getDefaultColumns();
+        $fields = FilterHelper::parseArrayByKeys($fields, $selectedFlds, true);
 
         $allowedKeysForSorting = $this->excludeKeysForSort(array_keys($fields));
         $sortBy = FatApp::getPostedData('sortBy', FatUtility::VAR_STRING, 'collection_display_order');
@@ -372,7 +372,7 @@ class CollectionsController extends ListingBaseController
         $frm->addHiddenField('', 'collection_type', $type);
         // $frm->addHiddenField('', 'collection_layout_type', $layoutType);
         $productTypeLayoutArr = Collections::getTypeSpecificLayouts($this->siteLangId);
-        
+
         $layoutTypeFld = $frm->addSelectBox(Labels::getLabel('FRM_COLLECTION_LAYOUT_TYPE', $this->siteLangId), 'collection_layout_type', $productTypeLayoutArr[$type], $layoutType, ['class' => 'fieldsVisibilityJs'], '');
 
         $frm->addRequiredField(Labels::getLabel('FRM_NAME', $this->siteLangId), 'collection_name');
@@ -384,7 +384,7 @@ class CollectionsController extends ListingBaseController
         if ($type == Collections::COLLECTION_TYPE_BANNER) {
             $frm->addTextBox(Labels::getLabel('FRM_PROMOTION_COST', $this->siteLangId), 'blocation_promotion_cost');
         }
-        
+
         $range = Collections::displayRecordsCount($layoutType);
         $fld = $frm->addSelectBox(Labels::getLabel('FRM_DISPLAY_ITEMS_COUNT', $this->siteLangId), 'collection_primary_records', array_combine($range, $range));
         $fld->requirements()->setRequired();
@@ -397,7 +397,7 @@ class CollectionsController extends ListingBaseController
         foreach (Collections::COLLECTIONS_FOR_DISPLAY_COUNT as $layoutType) {
             $layoutTypeFld->requirements()->addOnChangerequirementUpdate($layoutType, 'eq', 'collection_primary_records', $reqDisplayItemCountFldFld);
         }
-        
+
         $nonDisplayCount = array_diff(array_keys(Collections::getTypeSpecificLayouts($this->siteLangId)[$type]), Collections::COLLECTIONS_FOR_DISPLAY_COUNT);
         foreach ($nonDisplayCount as $layoutType) {
             $layoutTypeFld->requirements()->addOnChangerequirementUpdate($layoutType, 'eq', 'collection_primary_records', $displayItemCountFld);
@@ -410,7 +410,7 @@ class CollectionsController extends ListingBaseController
         if (!in_array($layoutType, Collections::COLLECTIONS_NOT_FOR_APP)) {
             $frm->addCheckBox(Labels::getLabel("FRM_APPLICABLE_FOR_APP", $this->siteLangId), 'collection_for_app', 1, array(), true, 0);
         }
-        
+
         if (in_array($layoutType, Collections::COLLECTIONS_FULL_WIDTH)) {
             $frm->addCheckBox(Labels::getLabel("FRM_FULL_WIDTH", $this->siteLangId), 'collection_full_width', 1, array(), true, 0);
         }
@@ -703,7 +703,7 @@ class CollectionsController extends ListingBaseController
         $this->checkEditPrivilege(true);
         $languages = Language::getAllNames();
         if (count($languages) <= 1) {
-            $langId =  array_key_first($languages);
+            $langId = array_key_first($languages);
         }
 
         $recordId = FatUtility::int($recordId);
@@ -777,16 +777,18 @@ class CollectionsController extends ListingBaseController
         }
 
         $fileHandlerObj = new AttachedFile();
-        if (!$res = $fileHandlerObj->saveAttachment(
-            $_FILES['cropped_image']['tmp_name'],
-            $file_type,
-            $collection_id,
-            0,
-            $_FILES['cropped_image']['name'],
-            -1,
-            true,
-            $lang_id
-        )) {
+        if (
+            !$res = $fileHandlerObj->saveAttachment(
+                $_FILES['cropped_image']['tmp_name'],
+                $file_type,
+                $collection_id,
+                0,
+                $_FILES['cropped_image']['name'],
+                -1,
+                true,
+                $lang_id
+            )
+        ) {
             LibHelper::exitWithError($fileHandlerObj->getError(), true);
         }
 
@@ -1231,18 +1233,20 @@ class CollectionsController extends ListingBaseController
         Banner::deleteImagesWithoutBannerId($file_type);
 
         $fileHandlerObj = new AttachedFile($afileId);
-        if (!$res = $fileHandlerObj->saveImage(
-            $_FILES['cropped_image']['tmp_name'],
-            $file_type,
-            $banner_id,
-            0,
-            $_FILES['cropped_image']['name'],
-            -1,
-            true,
-            $lang_id,
-            $_FILES['cropped_image']['type'],
-            $slide_screen
-        )) {
+        if (
+            !$res = $fileHandlerObj->saveImage(
+                $_FILES['cropped_image']['tmp_name'],
+                $file_type,
+                $banner_id,
+                0,
+                $_FILES['cropped_image']['name'],
+                -1,
+                true,
+                $lang_id,
+                $_FILES['cropped_image']['type'],
+                $slide_screen
+            )
+        ) {
             LibHelper::exitWithError($fileHandlerObj->getError(), true);
         }
         Banner::setLastModified($banner_id);
@@ -1266,7 +1270,7 @@ class CollectionsController extends ListingBaseController
         }
         $languages = Language::getAllNames();
         if (count($languages) <= 1) {
-            $lang_id =  array_key_first($languages);
+            $lang_id = array_key_first($languages);
         }
 
         $collectionDetails = Collections::getAttributesById($collectionId);

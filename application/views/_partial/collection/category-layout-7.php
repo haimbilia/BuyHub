@@ -50,14 +50,14 @@
                     ?>
                 </div>
             </div>
-            <?php if (count($collection['categories']) > Collections::LIMIT_CATEGORY_LAYOUT3) { ?>
-                <div class="section-foot">
-                    <a href="<?php echo UrlHelper::generateUrl('Collections', 'View', array($collection['collection_id'])); ?>"
-                        class="link-underline">
-                        <?php echo Labels::getLabel('LBL_VIEW_ALL', $siteLangId); ?>
-                    </a>
-                </div>
-            <?php } ?>
+            <?php /*if (count($collection['categories']) > Collections::LIMIT_CATEGORY_LAYOUT3) { ?>
+       <div class="section-foot">
+           <a href="<?php echo UrlHelper::generateUrl('Collections', 'View', array($collection['collection_id'])); ?>"
+               class="link-underline">
+               <?php echo Labels::getLabel('LBL_VIEW_ALL', $siteLangId); ?>
+           </a>
+       </div>
+       <?php } */ ?>
         </div>
         <script>
             var displaySize = <?php echo 0 < $displaySize ? $displaySize : 8; ?>;

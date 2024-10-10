@@ -113,7 +113,7 @@
   .category {
     display: flex;
     background-color: $bg-gray;
-
+    border-radius: $kart;
     @include media-breakpoint-up(xl) {
       flex-flow: row wrap;
     }
@@ -383,7 +383,7 @@
   display: flex;
   gap: 1rem;
   align-items: center;
-
+  margin-bottom: 0 !important;
   .slick-list {
     overflow: hidden;
     mask: linear-gradient(

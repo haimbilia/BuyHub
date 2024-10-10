@@ -124,6 +124,7 @@ class HomeController extends MyAppController
                         $tpl = new FatTemplate('', '');
                         $tpl->set('siteLangId', $this->siteLangId);
                         $tpl->set('bannerLayout1', $collection['banners']);
+                        $tpl->set('collection', $collection);
                         $bannersecondLayout = $tpl->render(false, false, '_partial/banners/home-banner-second-layout.php', true, true);
                         $collectionTemplates[$collection['collection_id']]['html'] = $bannersecondLayout;
                     }

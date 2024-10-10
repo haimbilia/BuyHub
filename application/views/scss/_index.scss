@@ -140,19 +140,16 @@
   background-color: $bg-gray;
   overflow: hidden;
   margin-bottom: 0 !important;
-
   @include media-breakpoint-up(lg) {
     aspect-ratio: 10/3.33;
   }
   &-fixed {
-    border-radius: $radius;
+    border-radius: $kart;
     margin-top: $section-space;
   }
-
   .slider-track {
     transition: all 1s cubic-bezier(0.7, 0, 0.3, 1);
   }
-
   &-item {
     position: relative;
     height: 100%;
@@ -161,7 +158,6 @@
     margin: 0;
     position: relative;
     padding: 0;
-
     @include media-breakpoint-down(sm) {
     }
   }

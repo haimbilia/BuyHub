@@ -6,7 +6,7 @@ $bCount = 1;
 if (!empty($bannerLayout1['banners']) && $bannerLayout1['blocation_active']) { ?>
     <section class="section" data-section="section">
         <div class="container">
-            <div class="poster-layout-2">
+            <div class="poster-layout" data-record="<?php echo $collection['collection_primary_records']; ?>">
                 <?php foreach ($bannerLayout1['banners'] as $val) {
                     $desktopUrl = $desktopWebpUrl = '';
                     $tabletUrl = $tabletWebpUrl = '';
@@ -43,8 +43,8 @@ if (!empty($bannerLayout1['banners']) && $bannerLayout1['blocation_active']) { ?
                     if ($val['banner_record_id'] > 0 && $val['banner_type'] == Banner::TYPE_PPC) {
                         Promotion::updateImpressionData($val['banner_record_id']);
                     }/* else{
-           Banner::updateImpressionData($val['banner_id']);
-       } */ ?>
+        Banner::updateImpressionData($val['banner_id']);
+    } */ ?>
 
                     <div class="poster">
                         <a target="<?php echo $val['banner_target']; ?>"
