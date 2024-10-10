@@ -13,20 +13,7 @@
             <div class="container">
                 <div class="black-bar-inner">
                     <div class="black-bar-start">
-                        <ul class="prompt-nav">
-                            <li class="prompt-nav-item">
-                                <a class="prompt-nav-link" href="">Buyer Central </a>
-                            </li>
-                            <li class="prompt-nav-item">
-                                <a class="prompt-nav-link" href="">Help Center </a>
-                            </li>
-                            <li class="prompt-nav-item">
-                                <a class="prompt-nav-link" href="">Get the app </a>
-                            </li>
-                            <li class="prompt-nav-item">
-                                <a class="prompt-nav-link" href="">Become a supplier</a>
-                            </li>
-                        </ul>
+                        <?php $this->includeTemplate('_partial/footerNavigation.php', ['topHeadLinks' => true]); ?>
                     </div>
                     <div class="black-bar-end">
                         <?php $this->includeTemplate('_partial/headerLanguageArea.php'); ?>
