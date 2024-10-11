@@ -1,9 +1,11 @@
-$(document).ready(function () {
+$(document).ready(function () {    
+    var fullWidth = $('.jsSliderSection').attr("data-width");
+    var data = 'fullWidth=' + fullWidth;
     fcom.ajax(
         fcom.makeUrl("Home", "getSlidesHtml"),
-        "",
+        data,
         function (t) {
-            $('.js-hero-slider').replaceWith(t.html);
+            $('.jsSliderSection').replaceWith(t.html);
             bindHeroSlider();
         }, { 'fOutMode': 'json' }
     );
