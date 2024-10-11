@@ -1,14 +1,10 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage');
 
 $bCount = 1;
-
 if (!empty($bannerLayout1['banners']) && $bannerLayout1['blocation_active']) { ?>
-    <section class="section section-banner" data-section="poster">
-        <?php if (!$collection['collection_full_width']) { ?>
-            <div class="container">
-            <?php } ?>
-            <div class="poster-layout"
-                data-view="<?php echo (0 < $collection['collection_primary_records'] ? $collection['collection_primary_records'] : 2); ?>">
+    <section class="<?php echo (1 == $collection['collection_display_order']) ? 'section' : ''; ?>" data-section="poster">
+        <div class="container">
+            <div class="hero-banners">
                 <?php foreach ($bannerLayout1['banners'] as $val) {
                     $desktopUrl = $desktopWebpUrl = '';
                     $tabletUrl = $tabletWebpUrl = '';
@@ -38,7 +34,7 @@ if (!empty($bannerLayout1['banners']) && $bannerLayout1['blocation_active']) { ?
                         Promotion::updateImpressionData($val['banner_record_id']);
                     } ?>
 
-                    <div class="poster">
+                    <div class="banners">
                         <a target="<?php echo $val['banner_target']; ?>"
                             href="<?php echo UrlHelper::generateUrl('Banner', 'track', array($val['banner_id'])); ?>"
                             title="<?php echo $val['banner_title']; ?>">
@@ -58,11 +54,9 @@ if (!empty($bannerLayout1['banners']) && $bannerLayout1['blocation_active']) { ?
                         </a>
                     </div>
 
-                <?php $bCount++;
+                    <?php $bCount++;
                 } ?>
             </div>
-            <?php if (!$collection['collection_full_width']) { ?>
-            </div>
-        <?php } ?>
-    </section>
+        </div>
+        </section>
 <?php } ?>
