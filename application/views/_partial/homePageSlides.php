@@ -1,10 +1,10 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 $fullWidth = $fullWidth ?? 1;
 if (isset($slides) && count($slides)) { ?>
-    <?php if (1 > $fullWidth) { ?>
-        <div class="container">
-    <?php } ?>
-        <section class="js-hero-slider hero-slider <?php echo (1 > $fullWidth) ? 'hero-slider-full' : 'hero-slider-fixed' ?>" dir="<?php echo CommonHelper::getLayoutDirection(); ?> " role="region" aria-label="hero carousel">
+    <section class="section js-hero-slider hero-slider <?php echo (1 > $fullWidth) ? 'hero-slider-full' : 'hero-slider-fixed' ?>" dir="<?php echo CommonHelper::getLayoutDirection(); ?> " role="region" aria-label="hero carousel">
+        <?php if (1 > $fullWidth) { ?>
+            <div class="container">
+            <?php } ?>
             <?php foreach ($slides as $slide) {
                 $desktopUrl = $desktopWebpUrl = '';
                 $tabletUrl = $tabletWebpUrl = '';
@@ -80,8 +80,8 @@ if (isset($slides) && count($slides)) { ?>
                     Promotion::updateImpressionData($slide['promotion_id']);
                 }
             } ?>
-        </section>
-    <?php if (1 > $fullWidth) { ?>
-        </div>
-    <?php } ?>
+            <?php if (1 > $fullWidth) { ?>
+            </div>
+        <?php } ?>
+    </section>
 <?php } ?>
