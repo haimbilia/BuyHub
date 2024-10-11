@@ -3,11 +3,11 @@
 $bCount = 1;
 
 if (!empty($bannerLayout1['banners']) && $bannerLayout1['blocation_active']) { ?>
-<?php if (1 > $fullWidth) { ?>
-<div class="container">
-    <?php } ?>
-    <section class="poster-layout-1" data-section="poster">
-        <?php foreach ($bannerLayout1['banners'] as $val) {
+    <section class="poster-layout-1 section-banner" data-section="poster">
+        <?php if (1 > $fullWidth) { ?>
+            <div class="container">
+            <?php } ?>
+            <?php foreach ($bannerLayout1['banners'] as $val) {
                 $desktopUrl = $desktopWebpUrl = '';
                 $tabletUrl = $tabletWebpUrl = '';
                 $mobileUrl = $mobileWebpUrl = '';
@@ -47,11 +47,11 @@ if (!empty($bannerLayout1['banners']) && $bannerLayout1['blocation_active']) { ?
                 } ?>
 
 
-        <div class="poster">
-            <a target="<?php echo $val['banner_target']; ?>"
-                href="<?php echo UrlHelper::generateUrl('Banner', 'track', array($val['banner_id'])); ?>"
-                title="<?php echo $val['banner_title']; ?>">
-                <?php
+                <div class="poster">
+                    <a target="<?php echo $val['banner_target']; ?>"
+                        href="<?php echo UrlHelper::generateUrl('Banner', 'track', array($val['banner_id'])); ?>"
+                        title="<?php echo $val['banner_title']; ?>">
+                        <?php
                         $bannerDimension = ImageDimension::getBannerData('', Collections::TYPE_BANNER_LAYOUT1);
                         $pictureAttr = [
                             'webpImageUrl' => [ImageDimension::VIEW_MOBILE => $mobileWebpUrl, ImageDimension::VIEW_TABLET => $tabletWebpUrl, ImageDimension::VIEW_DESKTOP => $desktopWebpUrl],
@@ -64,13 +64,14 @@ if (!empty($bannerLayout1['banners']) && $bannerLayout1['blocation_active']) { ?
 
                         $this->includeTemplate('_partial/picture-tag.php', $pictureAttr);
                         ?>
-            </a>
-        </div>
-        <?php $bCount++;
+                    </a>
+                </div>
+            <?php $bCount++;
             } ?>
+            <?php if (1 > $fullWidth) { ?>
+            </div>
+        <?php } ?>
     </section>
-    <?php if (1 > $fullWidth) { ?>
-</div>
-<?php } ?>
+
 <?php
 } ?>

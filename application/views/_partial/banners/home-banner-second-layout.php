@@ -4,7 +4,7 @@ defined('SYSTEM_INIT') or die('Invalid Usage');
 $bCount = 1;
 
 if (!empty($bannerLayout1['banners']) && $bannerLayout1['blocation_active']) { ?>
-<section class="section" data-section="section">
+<section class="section section-banner" data-section="section">
     <?php if (!$collection['collection_full_width']) { ?>
     <div class="container">
         <?php } ?>
