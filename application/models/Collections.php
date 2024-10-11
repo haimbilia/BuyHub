@@ -61,6 +61,7 @@ class Collections extends MyAppModel
     public const TYPE_BANNER_LAYOUT1 = 11;
     public const TYPE_BANNER_LAYOUT2 = 12;
     // public const TYPE_BANNER_LAYOUT3 = 13; /* Applicable For Apps only. */
+    public const TYPE_BANNER_LAYOUT4 = 14;
 
     public const TYPE_FAQ_LAYOUT1 = 14;
     public const TYPE_TESTIMONIAL_LAYOUT1 = 15;
@@ -152,6 +153,7 @@ class Collections extends MyAppModel
         self::TYPE_BLOG_LAYOUT1,
         self::TYPE_CONTENT_BLOCK_LAYOUT1,
         self::TYPE_CONTENT_BLOCK_LAYOUT2,
+        self::TYPE_BANNER_LAYOUT4,
     ];
 
     public const COLLECTIONS_FULL_WIDTH = [
@@ -289,6 +291,7 @@ class Collections extends MyAppModel
             self::TYPE_SPONSORED_SHOP_LAYOUT => Labels::getLabel('LBL_SPONSORED_SHOPS', $langId),
             self::TYPE_BANNER_LAYOUT1 => Labels::getLabel('LBL_BANNER_LAYOUT1', $langId),
             self::TYPE_BANNER_LAYOUT2 => Labels::getLabel('LBL_BANNER_LAYOUT2', $langId),
+            self::TYPE_BANNER_LAYOUT4 => Labels::getLabel('LBL_BANNER_LAYOUT4', $langId),
             // self::TYPE_BANNER_LAYOUT3 => Labels::getLabel('LBL_MOBILE_BANNER_LAYOUT', $langId),
             self::TYPE_FAQ_LAYOUT1 => Labels::getLabel('LBL_FAQ_LAYOUT1', $langId),
             self::TYPE_TESTIMONIAL_LAYOUT1 => Labels::getLabel('LBL_TESTIMONIAL_LAYOUT1', $langId),
@@ -315,6 +318,7 @@ class Collections extends MyAppModel
             self::COLLECTION_TYPE_BANNER => [
                 self::TYPE_BANNER_LAYOUT1 => Labels::getLabel('LBL_BANNER_LAYOUT1', $langId),
                 self::TYPE_BANNER_LAYOUT2 => Labels::getLabel('LBL_BANNER_LAYOUT2', $langId),
+                self::TYPE_BANNER_LAYOUT4 => Labels::getLabel('LBL_BANNER_LAYOUT4', $langId),
                 // self::TYPE_BANNER_LAYOUT3 => Labels::getLabel('LBL_MOBILE_BANNER_LAYOUT', $langId),
             ],
             self::COLLECTION_TYPE_BRAND => [
@@ -384,6 +388,7 @@ class Collections extends MyAppModel
         return [
             self::TYPE_BANNER_LAYOUT1 => 1,
             self::TYPE_BANNER_LAYOUT2 => 2,
+            self::TYPE_BANNER_LAYOUT4 => 3,
             // self::TYPE_BANNER_LAYOUT3 => 1
         ];
     }
@@ -472,6 +477,7 @@ class Collections extends MyAppModel
             self::TYPE_SPONSORED_SHOP_LAYOUT => 'Sponsored-Shops.png',
             self::TYPE_BANNER_LAYOUT1 => 'Banner-Layout-1.png',
             self::TYPE_BANNER_LAYOUT2 => 'Banner-Layout-2.png',
+            self::TYPE_BANNER_LAYOUT4 => 'Banner-Layout-4.png',
             // self::TYPE_BANNER_LAYOUT3 => 'Banner-Layout-2.png',
             self::TYPE_FAQ_LAYOUT1 => 'Faq-Layout-1.png',
             // self::TYPE_FAQ_CATEGORY_LAYOUT1 => 'Faq-Layout-1.png',
@@ -1061,6 +1067,7 @@ class Collections extends MyAppModel
             self::TYPE_SPONSORED_SHOP_LAYOUT => 'sponsored-shop-layout',
             self::TYPE_BANNER_LAYOUT1 => 'banner-layout-1',
             self::TYPE_BANNER_LAYOUT2 => 'banner-layout-2',
+            self::TYPE_BANNER_LAYOUT4 => 'banner-layout-4',
             // self::TYPE_BANNER_LAYOUT3 => 'banner-layout-3',
             self::TYPE_FAQ_LAYOUT1 => 'faq-layout-1',
             self::TYPE_TESTIMONIAL_LAYOUT1 => 'testimonial-layout-1',
@@ -1098,7 +1105,7 @@ class Collections extends MyAppModel
             case self::TYPE_PRODUCT_LAYOUT1:
                 $range = range(4, 6);
                 break;
-        /*     case self::TYPE_PRODUCT_LAYOUT3:
+            /* case self::TYPE_PRODUCT_LAYOUT3:
                 $range = [3, 5];
                 break; */
             case self::TYPE_TESTIMONIAL_LAYOUT2:

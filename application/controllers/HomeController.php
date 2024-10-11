@@ -129,6 +129,16 @@ class HomeController extends MyAppController
                         $collectionTemplates[$collection['collection_id']]['html'] = $bannersecondLayout;
                     }
                     break;
+                case Collections::TYPE_BANNER_LAYOUT4:
+                    if (isset($collection['banners'])) {
+                        $tpl = new FatTemplate('', '');
+                        $tpl->set('siteLangId', $this->siteLangId);
+                        $tpl->set('bannerLayout1', $collection['banners']);
+                        $tpl->set('collection', $collection);
+                        $bannersecondLayout = $tpl->render(false, false, '_partial/banners/home-banner-fourth-layout.php', true, true);
+                        $collectionTemplates[$collection['collection_id']]['html'] = $bannersecondLayout;
+                    }
+                    break;
                 case Collections::TYPE_PRODUCT_LAYOUT1:
                 case Collections::TYPE_PRODUCT_LAYOUT6:
                     $homePageProdLayout1 = CacheHelper::get('homePageProdLayout1' . $collection['collection_id'] . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');

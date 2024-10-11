@@ -381,7 +381,7 @@ class CollectionsController extends ListingBaseController
             $frm->addHtmlEditor(Labels::getLabel('FRM_DESCRIPTION', $this->siteLangId), 'collection_description');
         }
 
-        if ($type == Collections::COLLECTION_TYPE_BANNER) {
+        if ($type == Collections::COLLECTION_TYPE_BANNER && Collections::TYPE_BANNER_LAYOUT4 != $layoutType) {
             $frm->addTextBox(Labels::getLabel('FRM_PROMOTION_COST', $this->siteLangId), 'blocation_promotion_cost');
         }
 
@@ -879,7 +879,7 @@ class CollectionsController extends ListingBaseController
             'blocation_identifier' => $post['collection_name'],
             'blocation_collection_id' => $post['collection_id'],
             'blocation_banner_count' => Collections::getBannersCount()[$post['collection_layout_type']],
-            'blocation_promotion_cost' => $post['blocation_promotion_cost'],
+            'blocation_promotion_cost' => $post['blocation_promotion_cost'] ?? 0,
             'blocation_active' => applicationConstants::ACTIVE
         ];
         $bannerLoc = new BannerLocation($blocationId);
@@ -901,7 +901,7 @@ class CollectionsController extends ListingBaseController
         }
 
         $bannerDimensions = Collections::getBannersDimensions();
-        foreach ($bannerDimensions[$post['collection_layout_type']] as $key => $val) {
+        foreach (($bannerDimensions[$post['collection_layout_type']] ?? []) as $key => $val) {
             $dataToSave = [
                 'bldimension_blocation_id' => $blocationId,
                 'bldimension_device_type' => $key,
