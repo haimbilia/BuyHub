@@ -90,7 +90,7 @@ class HomeController extends MyAppController
                     $tpl = new FatTemplate('', '');
                     $tpl->set('siteLangId', $this->siteLangId);
                     $tpl->set('slides', $collection['slides']);
-                    $tpl->set('fullWidth', ($collection['collection_full_width'] ?? 1));
+                    $tpl->set('fullWidth', $collection['collection_full_width']);
                     $sponsoredProdsLayout = $tpl->render(false, false, '_partial/homePageSlides.php', true, true);
                     $collectionTemplates[$collection['collection_id']]['html'] = $sponsoredProdsLayout;
                     break;
@@ -367,6 +367,7 @@ class HomeController extends MyAppController
     public function getSlidesHtml()
     {
         $this->set('slides', $this->getSlides());
+        $this->set('fullWidth', FatApp::getPostedData('fullWidth', FatUtility::VAR_INT, 0));
         $this->set('html', $this->_template->render(false, false, '_partial/homePageSlides.php', true, true));
         $this->_template->render(false, false, 'json-success.php', false, false);
     }
@@ -892,7 +893,7 @@ class HomeController extends MyAppController
                 case Collections::COLLECTION_TYPE_CATEGORY:
                     if (true === MOBILE_APP_API_CALL && Collections::TYPE_CATEGORY_LAYOUT2 == $collection['collection_layout_type']) {
                         continue 2;
-                    }                   
+                    }
                     $tempObj = clone $collectionObj;
                     $tempObj->addCondition('collection_id', '=', $collection_id);
                     $tempObj->doNotCalculateRecords();

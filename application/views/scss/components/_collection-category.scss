@@ -654,11 +654,14 @@
     justify-content: center;
     flex-direction: column;
     text-align: center;
+    min-width: 0;
   }
 
   &-name {
+    @include truncate(100%);
     text-decoration: none;
     font-size: 0.85rem;
+    font-weight: 600;
     display: none;
     @include media-breakpoint-up(xl) {
       display: block;
