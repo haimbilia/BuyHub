@@ -1,3 +1,6 @@
+.section-banner {
+  padding: 0;
+}
 .banner-wrappers {
   .banner-ppc {
     border-radius: $common-radius;
@@ -16,9 +19,11 @@
 .poster-layout-1 {
   padding: 0;
   .poster {
-    text-align: center;
     background: $bg-placeholder;
+    border-radius: $kart;
+    text-align: center;
     aspect-ratio: 3/1;
+    overflow: hidden;
     img {
       width: 100%;
     }
