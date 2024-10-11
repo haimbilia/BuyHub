@@ -6,7 +6,7 @@
   }
   .item {
     @include media-breakpoint-up(lg) {
-      padding-inline:$gap/2;
+      padding-inline: $gap/2;
     }
   }
   .slick-track {

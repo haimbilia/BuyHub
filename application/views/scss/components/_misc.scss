@@ -400,6 +400,7 @@ mark,
   }
 }
 
+//.slider-controls
 .slider-controls {
   display: flex;
   align-items: center;
@@ -445,7 +446,7 @@ mark,
 
     &:hover {
       border-color: $brand-color;
-
+      box-shadow: none;
       span {
         border-color: $brand-color;
       }
