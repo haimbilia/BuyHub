@@ -30,7 +30,7 @@
                             $afile_lang_id = $image['afile_lang_id'];
                             $afile_id = $image['afile_id'];
 
-                            $catIconUrl = UrlHelper::generateFileUrl('Category', ImageDimension::VIEW_THUMB, array($afile_record_id, $afile_lang_id, ImageDimension::VIEW_THUMB, $afile_id), CONF_WEBROOT_FRONT_URL) . $uploadedTime;
+                            $catIconUrl = UrlHelper::generateFileUrl('Category', 'thumb', array($afile_record_id, $afile_lang_id, ImageDimension::VIEW_ICON, $afile_id), CONF_WEBROOT_FRONT_URL) . $uploadedTime;
                             $prodCatUrl = UrlHelper::generateUrl('Category', 'View', array($category['prodcat_id']));
                             ?>
                     <a class="catalog-carousal-link" title="<?php echo $category['prodcat_name']; ?>"
