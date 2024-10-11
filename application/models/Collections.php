@@ -1108,7 +1108,7 @@ class Collections extends MyAppModel
                 $range = range(5, 8);
                 break;
             case self::TYPE_BANNER_LAYOUT2:
-                $range = range(1, 3);
+                $range = range(2, 3);
                 break;
             default:
                 $range = range(3, 8);
