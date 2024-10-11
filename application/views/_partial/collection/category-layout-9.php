@@ -22,9 +22,9 @@
                             <div class="industry-carousal-item">
                             <?php } ?>
                             <?php
-                            $image = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_IMAGE, $category['prodcat_id']);
+                            $image = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_THUMB, $category['prodcat_id']);
                             if (!empty($image) && $image['afile_id'] <= 0) {
-                                $image = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_IMAGE, $rootParentId);
+                                $image = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_THUMB, $rootParentId);
                             }
                             $uploadedTime = AttachedFile::setTimeParam($image['afile_updated_at']);
                             $afile_record_id = $image['afile_record_id'];

@@ -165,7 +165,6 @@ class Collections extends MyAppModel
         self::TYPE_CATEGORY_LAYOUT9,
         self::TYPE_SHOP_LAYOUT1,
         self::TYPE_PRODUCT_LAYOUT1,
-        self::TYPE_PRODUCT_LAYOUT3,
         self::TYPE_TESTIMONIAL_LAYOUT2,
         self::TYPE_BRAND_LAYOUT1,
         self::TYPE_BANNER_LAYOUT2,
@@ -1099,9 +1098,9 @@ class Collections extends MyAppModel
             case self::TYPE_PRODUCT_LAYOUT1:
                 $range = range(4, 6);
                 break;
-            case self::TYPE_PRODUCT_LAYOUT3:
+        /*     case self::TYPE_PRODUCT_LAYOUT3:
                 $range = [3, 5];
-                break;
+                break; */
             case self::TYPE_TESTIMONIAL_LAYOUT2:
                 $range = range(4, 6);
                 break;

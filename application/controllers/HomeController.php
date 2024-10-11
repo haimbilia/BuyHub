@@ -241,16 +241,16 @@ class HomeController extends MyAppController
                     $collectionTemplates[$collection['collection_id']]['html'] = $homePageCatLayout7;
                     break;
                 case Collections::TYPE_CATEGORY_LAYOUT9:
-                    $homePageCatLayout7 = CacheHelper::get('homePageCatLayout7' . $collection['collection_id'] . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
-                    if (!$homePageCatLayout7) {
+                    $homePageCatLayout9 = CacheHelper::get('homePageCatLayout9' . $collection['collection_id'] . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
+                    if (!$homePageCatLayout9) {
                         $tpl = new FatTemplate('', '');
                         $tpl->set('siteLangId', $this->siteLangId);
                         $tpl->set('collection', $collection);
                         $tpl->set('`displayProductNotAvailableLable`', $displayProductNotAvailableLable);
-                        $homePageCatLayout7 = $tpl->render(false, false, '_partial/collection/category-layout-7.php', true, true);
-                        CacheHelper::create('homePageCatLayout7' . $collection['collection_id'] . $cacheKey, $homePageCatLayout7, CacheHelper::TYPE_COLLECTIONS);
+                        $homePageCatLayout9 = $tpl->render(false, false, '_partial/collection/category-layout-9.php', true, true);
+                        CacheHelper::create('homePageCatLayout9' . $collection['collection_id'] . $cacheKey, $homePageCatLayout9, CacheHelper::TYPE_COLLECTIONS);
                     }
-                    $collectionTemplates[$collection['collection_id']]['html'] = $homePageCatLayout7;
+                    $collectionTemplates[$collection['collection_id']]['html'] = $homePageCatLayout9;
                     break;
                 case Collections::TYPE_SHOP_LAYOUT1:
                     $homePageShopLayout1 = CacheHelper::get('homePageShopLayout1' . $collection['collection_id'] . $cacheKey, CONF_HOME_PAGE_CACHE_TIME, '.txt');
@@ -882,8 +882,7 @@ class HomeController extends MyAppController
                 case Collections::COLLECTION_TYPE_CATEGORY:
                     if (true === MOBILE_APP_API_CALL && Collections::TYPE_CATEGORY_LAYOUT2 == $collection['collection_layout_type']) {
                         continue 2;
-                    }
-
+                    }                   
                     $tempObj = clone $collectionObj;
                     $tempObj->addCondition('collection_id', '=', $collection_id);
                     $tempObj->doNotCalculateRecords();
