@@ -143,8 +143,12 @@
   }
   .banners {
     background-color: $bg-placeholder;
-    border-radius: $kart;
     border: none;
+    border-radius: $kart;
+    aspect-ratio: 10/3.33;
+    width: 100%;
+    overflow: hidden;
+
     &:first-of-type {
       grid-row-start: 1;
       grid-row-end: 3;
@@ -211,7 +215,7 @@
     z-index: 5;
     top: 50%;
     transform: translateY(-50%);
-    background: #858835;
+    background-color: transparent;
     border-radius: 50%;
     width: 75px;
     height: 76px;
