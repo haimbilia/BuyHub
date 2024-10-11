@@ -27,7 +27,7 @@
                 </div>
                 <div class="js-carousel shop-slider" id="shop-collection-listing" data-slides="3,3,2,2">
                     <?php foreach ($collectionData as $collection) { ?>
-                        <div class="item">
+                        <div class="js-carousel-item">
                             <div class="shop-slider-item">
                                 <img class=""
                                     src="<?php echo UrlHelper::generateFileUrl('Image', 'shopCollectionImage', array($collection['scollection_id'], $siteLangId, ImageDimension::VIEW_SHOP)); ?>"

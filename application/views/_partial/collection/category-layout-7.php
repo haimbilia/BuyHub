@@ -19,7 +19,7 @@
                         $rootParentId = FatUtility::int(current(explode('_', $category['prodcat_code'])));
                         $rootParentId = (1 > $rootParentId) ? $category['prodcat_id'] : $rootParentId;
                         if (1 == $i) { ?>
-                <div class="item industry-carousal-item">
+                <div class="js-carousel-item industry-carousal-item">
                     <?php } ?>
                     <?php
                             $imageType = ($displayIcon == true) ? AttachedFile::FILETYPE_CATEGORY_ICON : AttachedFile::FILETYPE_CATEGORY_IMAGE;

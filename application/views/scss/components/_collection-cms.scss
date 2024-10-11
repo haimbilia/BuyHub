@@ -9,6 +9,8 @@
   width: 100%;
   color: #fff;
   position: relative;
+  // padding: $section-space ;
+  padding: calc(1rem + 3vw) 0;
   &::after {
     content: "";
     position: absolute;
@@ -20,11 +22,17 @@
     position: relative;
     z-index: 2;
   }
+  .section-head {
+    margin-bottom: 2.5rem;
+    p {
+      padding-top: 1.5rem;
+    }
+  }
 
   &-card {
     backdrop-filter: blur(50px);
     background: hsla(0, 0%, 100%, 0.11);
-    border-radius: 20px;
+    border-radius: 10px;
     font-size: 1rem;
     overflow: hidden;
     padding: 1.5rem;
@@ -36,7 +44,7 @@
     gap: 1rem;
     flex-direction: column;
     @include media-breakpoint-up(lg) {
-      padding: 3rem;
+      padding: 1.5rem;
     }
     &:first-child {
       @include media-breakpoint-down(lg) {

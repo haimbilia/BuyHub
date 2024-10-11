@@ -134,6 +134,28 @@
 //@import "pages/order-completed";
 //
 
+.hero-banners {
+  display: grid;
+  grid-template-columns: 68% 1fr;
+  gap: 6px;
+  @include media-breakpoint-up(lg) {
+    gap: $gap;
+  }
+  .banners {
+    background-color: $bg-placeholder;
+    border-radius: $kart;
+    border: none;
+    &:first-of-type {
+      grid-row-start: 1;
+      grid-row-end: 3;
+    }
+    img {
+      height: 100%;
+      width: 100%;
+    }
+  }
+}
+
 .hero-slider {
   position: relative;
   margin: 0 auto;

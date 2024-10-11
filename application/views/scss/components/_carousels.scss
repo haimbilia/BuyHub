@@ -1,10 +1,11 @@
 .js-carousel {
   //display: block;
   grid-auto-flow: column;
+
   @include media-breakpoint-up(lg) {
     margin-inline: -$gap/2;
   }
-  .item {
+  &-item {
     @include media-breakpoint-up(lg) {
       padding-inline: $gap/2;
     }

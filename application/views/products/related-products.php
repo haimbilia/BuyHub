@@ -26,7 +26,7 @@ if ($relatedProductsRs) { ?>
                         $selProdRibbons[] = $tRightRibbons[$rProduct['selprod_id']];
                     }
                     $productUrl = UrlHelper::generateUrl('Products', 'View', array($rProduct['selprod_id'])); ?>
-                    <div class="item">
+                    <div class="js-carousel-item">
                         <div class="products">
                             <div class="products-body">
                                 <?php
