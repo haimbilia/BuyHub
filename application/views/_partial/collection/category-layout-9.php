@@ -12,7 +12,7 @@
            </div>
        </div> <?php */ ?>
             <div class="section-body">
-                <div class="catalog-carousal js-carousel industryCarousalJs" data-view="<?php echo $displaySize; ?>">
+                <div class="catalog-carousal <?php if($displaySize < count($collection['categories'])){?> js-carousel industryCarousalJs <?php }?>" data-view="<?php echo $displaySize; ?>">
                     <?php
                     $i = 1;
                     foreach ($collection['categories'] as $category) {
