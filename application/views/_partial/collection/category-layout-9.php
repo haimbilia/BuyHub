@@ -3,7 +3,7 @@
     $displaySize = (8 < $collection['collection_primary_records']) ? min($collection['collection_primary_records'], 16) / 2 : (0 < $collection['collection_primary_records'] ? $collection['collection_primary_records'] : 8);
     $loopBreakCount = (8 < $collection['collection_primary_records']) ? 2 : 1;
     $recordCount = count($collection['categories']);
-    ?>
+?>
     <section class="section" data-collection="collection-categories">
         <div class="container">
             <?php /*?><div class="section-head section-head-center">
@@ -45,7 +45,7 @@
                             <?php if ($loopBreakCount == $i) { ?>
                             </div>
                         <?php } ?>
-                        <?php
+                    <?php
                         $i = ($i == $loopBreakCount) ? 1 : ($i + 1);
                     }
                     ?>
@@ -60,35 +60,37 @@
        </div>
        <?php } */ ?>
         </div>
-        <script>
-            var displaySize = <?php echo 0 < $displaySize ? $displaySize : 8; ?>;
-            $('.industryCarousalJs').not('.slick-initialized').slick({
-                draggable: true,
-                slidesToShow: displaySize,
-                slidesToScroll: 1,
-                arrows: <?php echo ($recordCount > $displaySize) ? 'true' : 'false';?>,
-                prevArrow: '<button class="slick-arrow slick-prev"><span></span> </button>',
-                nextArrow: '<button class="slick-arrow slick-next"><span></span> </button>',
-                responsive: [{
-                    breakpoint: 1180,
-                    settings: {
-                        slidesToShow: displaySize,
-                    }
-                },
-                {
-                    breakpoint: 769,
-                    settings: {
-                        slidesToShow: 5,
-                    }
-                },
-                {
-                    breakpoint: 480,
-                    settings: {
-                        slidesToShow: 4,
-                    }
-                }
-                ]
-            })
-        </script>
+        <?php if ($recordCount > $displaySize) { ?>
+            <script>
+                var displaySize = <?php echo 0 < $displaySize ? $displaySize : 8; ?>;
+                $('.industryCarousalJs').not('.slick-initialized').slick({
+                    draggable: true,
+                    slidesToShow: displaySize,
+                    slidesToScroll: 1,
+                    arrows: true,
+                    prevArrow: '<button class="slick-arrow slick-prev"><span></span> </button>',
+                    nextArrow: '<button class="slick-arrow slick-next"><span></span> </button>',
+                    responsive: [{
+                            breakpoint: 1180,
+                            settings: {
+                                slidesToShow: displaySize,
+                            }
+                        },
+                        {
+                            breakpoint: 769,
+                            settings: {
+                                slidesToShow: 5,
+                            }
+                        },
+                        {
+                            breakpoint: 480,
+                            settings: {
+                                slidesToShow: 4,
+                            }
+                        }
+                    ]
+                })
+            </script>
+        <?php } ?>
     </section>
 <?php } ?>
