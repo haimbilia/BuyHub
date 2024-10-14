@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 if (isset($slides) && count($slides)) { ?>
-    <section class="jsSliderSection" data-width="<?php echo $fullWidth; ?>">
+    <section class="jsSliderSection" data-width="<?php echo $fullWidth; ?>" data-section="hero-slides">
         <?php if (0 == $fullWidth) { ?>
             <div class="container">
             <?php } ?>

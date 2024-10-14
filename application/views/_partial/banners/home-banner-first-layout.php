@@ -3,7 +3,7 @@
 $bCount = 1;
 
 if (!empty($bannerLayout1['banners']) && $bannerLayout1['blocation_active']) { ?>
-    <section class="section section-banner " data-section="poster">
+    <section class="section section-banner " data-section="poster" <?php echo ($fullWidth) ? 'data-section-size="full"' : ''; ?>>
         <?php if (1 > $fullWidth) { ?>
             <div class="container">
             <?php } ?>
@@ -67,7 +67,7 @@ if (!empty($bannerLayout1['banners']) && $bannerLayout1['blocation_active']) { ?
                             ?>
                         </a>
                     </div>
-                    <?php $bCount++;
+                <?php $bCount++;
                 } ?>
 
             </div>
@@ -76,5 +76,5 @@ if (!empty($bannerLayout1['banners']) && $bannerLayout1['blocation_active']) { ?
         <?php } ?>
     </section>
 
-    <?php
+<?php
 } ?>

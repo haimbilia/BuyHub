@@ -2,7 +2,7 @@
 
 $bCount = 1;
 if (!empty($bannerLayout1['banners']) && $bannerLayout1['blocation_active']) { ?>
-    <section class="<?php echo (1 == $collection['collection_display_order']) ? 'section' : ''; ?>" data-section="poster">
+    <section class="section section-banner" data-section="poster">
         <div class="container">
             <div class="hero-banners">
                 <?php foreach ($bannerLayout1['banners'] as $val) {
