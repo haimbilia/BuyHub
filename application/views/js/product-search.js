@@ -231,9 +231,9 @@ $(document).on('mouseover mouseout', '.productsListItemsJs', function (e) {
     let shopId = $(this).data('shopid');
     $.each(mapMarker, function (index, marker) {
         if (typeof marker != 'undefined') {
-            let iconImage = fcom.makeUrl() + 'images/pin.png';
+            let iconImage = '/images/pin.png';
             if (marker['refId'] == shopId && e.type == 'mouseover') {
-                iconImage = fcom.makeUrl() + 'images/pin2.png';
+                iconImage = '/images/pin2.png';
             }
             marker.setIcon(iconImage);
             //google.maps.event.trigger( marker, 'click' );
