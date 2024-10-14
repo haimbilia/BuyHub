@@ -60,7 +60,7 @@
        </div>
        <?php } */ ?>
         </div>
-        <?php if ($recordCount > $displaySize) { ?>
+        <?php /* if ($recordCount > $displaySize) { */ ?>
             <script>
                 var displaySize = <?php echo 0 < $displaySize ? $displaySize : 8; ?>;
                 $('.industryCarousalJs').not('.slick-initialized').slick({
@@ -91,6 +91,6 @@
                     ]
                 })
             </script>
-        <?php } ?>
+        <?php /* }  */?>
     </section>
 <?php } ?>
