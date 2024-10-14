@@ -2,6 +2,7 @@
 <?php if (isset($collection['categories']) && count($collection['categories'])) {
     $displaySize = (8 < $collection['collection_primary_records']) ? min($collection['collection_primary_records'], 16) / 2 : (0 < $collection['collection_primary_records'] ? $collection['collection_primary_records'] : 8);
     $loopBreakCount = (8 < $collection['collection_primary_records']) ? 2 : 1;
+    $recordCount = count($collection['categories']);
     ?>
     <section class="section" data-collection="collection-categories">
         <div class="container">
@@ -65,7 +66,7 @@
                 draggable: true,
                 slidesToShow: displaySize,
                 slidesToScroll: 1,
-                arrows: true,
+                arrows: <?php echo ($recordCount > $displaySize) ? 'true' : 'false';?>,
                 prevArrow: '<button class="slick-arrow slick-prev"><span></span> </button>',
                 nextArrow: '<button class="slick-arrow slick-next"><span></span> </button>',
                 responsive: [{
