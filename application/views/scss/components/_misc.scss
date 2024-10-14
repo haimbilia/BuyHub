@@ -523,7 +523,7 @@ mark,
 
     &-arrow {
         position: absolute;
-        transform: translate(-6px, 0);
+        transform: translate(-6px * $transform-direction, 0);
         top: calc(50% - 4px);
         #{$end-direction}: 0;
 
@@ -538,20 +538,20 @@ mark,
         }
 
         &:before {
-            transform: translate(-3px * $transform-direction, 0) rotate(-45deg);
+            transform: translate(-3px , 0) rotate(-45deg);
         }
 
         &:after {
-            transform: translate(3px * $transform-direction, 0) rotate(45deg);
+            transform: translate(3px , 0) rotate(45deg);
         }
 
         [aria-expanded="true"] & {
             &:before {
-                transform: translate(-3px * $transform-direction, 0) rotate(45deg);
+                transform: translate(-3px , 0) rotate(45deg);
             }
 
             &:after {
-                transform: translate(3px * $transform-direction, 0) rotate(-45deg);
+                transform: translate(3px , 0) rotate(-45deg);
             }
         }
     }
