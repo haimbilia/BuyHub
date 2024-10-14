@@ -373,3 +373,16 @@ $quick-nav-gap: 1.5rem;
     }
   }
 }
+
+.main {
+  .section-banner {
+    &:first-child {
+      &[data-section="poster"] {
+        padding-top: $section-space;
+      }
+    }
+  }
+  .section-banner + .section-banner {
+    padding-top: $section-space;
+  }
+}
