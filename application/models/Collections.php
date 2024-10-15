@@ -1100,7 +1100,7 @@ class Collections extends MyAppModel
                 $range = range(4, 6);
                 break;
             case self::TYPE_SHOP_LAYOUT1:
-                $range = [4, 6];
+                $range = [4,5,6];
                 break;
             case self::TYPE_PRODUCT_LAYOUT1:
                 $range = range(4, 6);
