@@ -69,7 +69,7 @@ class Collections extends MyAppModel
     public const TYPE_PENDING_REVIEWS1 = 17; /* Applicable For Apps only. */
     // public const TYPE_FAQ_CATEGORY_LAYOUT1 = 18; /* Applicable For Apps only. */
     public const TYPE_HERO_SLIDES_LAYOUT1 = 25;
-    public const TYPE_BANNER_LAYOUT4 = 26;
+    public const TYPE_BANNER_LAYOUT4 = 36;
 
     public const LIMIT_PRODUCT_LAYOUT1 = 12;
     public const LIMIT_PRODUCT_LAYOUT2 = 6;
