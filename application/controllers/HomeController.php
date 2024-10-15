@@ -1304,7 +1304,7 @@ class HomeController extends MyAppController
 
                     $faqSearchTempObj->addOrder('ctr.ctr_display_order', 'ASC');
                     $res = $faqSearchTempObj->getResultSet();
-                    $faqsDetail = $db->fetchAll($res);
+                    $faqsDetail = $db->fetchAll($res);                    
                     /* ] */
                     $collections[$ind] = $collection;
                     $collections[$ind]['totFaqs'] = $recordCount;
