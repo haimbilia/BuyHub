@@ -12,14 +12,14 @@
             </div>
         </div> <?php */ ?>
         <div class="section-body">
-            <div class="industry-carousal js-carousel industryCarousalJs" data-view="<?php echo $displaySize; ?>">
+            <div class="industry-carousal industryCarousalJs" data-view="<?php echo $displaySize; ?>">
                 <?php
                     $i = 1;
                     foreach ($collection['categories'] as $category) {
                         $rootParentId = FatUtility::int(current(explode('_', $category['prodcat_code'])));
                         $rootParentId = (1 > $rootParentId) ? $category['prodcat_id'] : $rootParentId;
                         if (1 == $i) { ?>
-                <div class="js-carousel-item industry-carousal-item">
+                <div class="industry-carousal-item">
                     <?php } ?>
                     <?php
                             $imageType = ($displayIcon == true) ? AttachedFile::FILETYPE_CATEGORY_ICON : AttachedFile::FILETYPE_CATEGORY_IMAGE;

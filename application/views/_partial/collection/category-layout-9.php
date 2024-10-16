@@ -12,7 +12,7 @@
            </div>
        </div> <?php */ ?>
             <div class="section-body">
-                <div class="catalog-carousal <?php if($displaySize < count($collection['categories'])){?> js-carousel industryCarousalJs <?php }?>" data-view="<?php echo $displaySize; ?>">
+                <div class="catalog-carousal  industryCarousalJs" data-view="<?php echo $displaySize; ?>">
                     <?php
                     $i = 1;
                     foreach ($collection['categories'] as $category) {
@@ -60,37 +60,40 @@
        </div>
        <?php } */ ?>
         </div>
-        <?php /* if ($recordCount > $displaySize) { */ ?>
-            <script>
-                var displaySize = <?php echo 0 < $displaySize ? $displaySize : 8; ?>;
-                $('.industryCarousalJs').not('.slick-initialized').slick({
-                    draggable: true,
-                    slidesToShow: displaySize,
-                    slidesToScroll: 1,
-                    arrows: true,
-                    prevArrow: '<button class="slick-arrow slick-prev"><span></span> </button>',
-                    nextArrow: '<button class="slick-arrow slick-next"><span></span> </button>',
-                    responsive: [{
-                            breakpoint: 1180,
+        <script>
+            var displaySize = <?php echo 0 < $displaySize ? $displaySize : 8; ?>;
+            $('.industryCarousalJs').not('.slick-initialized').slick({
+                draggable: true,
+                slidesToShow: displaySize,
+                slidesToScroll: 1,
+                arrows: true,
+                prevArrow: '<button class="slick-arrow slick-prev"><span></span> </button>',
+                nextArrow: '<button class="slick-arrow slick-next"><span></span> </button>',
+                responsive: [{
+                        breakpoint: 1180,
+                        <?php if ($recordCount > $displaySize) { ?>
                             settings: {
                                 slidesToShow: displaySize,
                             }
-                        },
-                        {
-                            breakpoint: 769,
-                            settings: {
-                                slidesToShow: 5,
-                            }
-                        },
-                        {
-                            breakpoint: 480,
-                            settings: {
-                                slidesToShow: 4,
-                            }
+                        <?php } else { ?>
+                            settings: "unslick",
+                        <?php } ?>
+
+                    },
+                    {
+                        breakpoint: 769,
+                        settings: {
+                            slidesToShow: 5,
                         }
-                    ]
-                })
-            </script>
-        <?php /* }  */?>
+                    },
+                    {
+                        breakpoint: 480,
+                        settings: {
+                            slidesToShow: 4,
+                        }
+                    }
+                ]
+            })
+        </script>
     </section>
 <?php } ?>
