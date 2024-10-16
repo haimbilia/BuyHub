@@ -44,6 +44,7 @@
 //@import "components/multi-list";
 //@import "components/pagination";
 @import "components/product-card";
+@import "components/product-prices";
 @import "components/pro-info";
 @import "components/slider";
 @import "components/social-profiles";
@@ -155,6 +156,33 @@
     }
     img {
       height: 100%;
+      width: 100%;
+    }
+  }
+}
+
+.hero-banners-1 {
+  display: grid;
+  grid-template-columns: 68% 1fr;
+  gap: 6px;
+  @include media-breakpoint-up(lg) {
+    gap: $gap;
+  }
+  .banners {
+    background-color: $bg-placeholder;
+    border: none;
+    border-radius: $kart;
+    aspect-ratio: 10/4;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    &:first-of-type {
+      grid-row-start: 1;
+      grid-row-end: 3;
+    }
+    img {
+      object-fit: cover;
+      // height: 100%;
       width: 100%;
     }
   }
