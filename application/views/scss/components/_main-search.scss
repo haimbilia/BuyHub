@@ -29,7 +29,7 @@
     align-items: center;
     position: relative;
     background-color: transparent;
-    border: solid 2px $brand-color;
+    border: solid 2px #191919;
     border-radius: 40px;
     margin: 0;
     padding: 0;
@@ -87,7 +87,9 @@
     }
   }
   &-btn {
-    @include bg-brand;
+    //@include bg-brand;
+    background-color: #191919;
+    color: #fff;
     position: absolute;
     top: 5px;
     bottom: 5px;

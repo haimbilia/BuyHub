@@ -242,6 +242,7 @@ $right-space: 3rem;
 }
 
 .fixed-right-btn {
+  @include bg-black;
   position: fixed;
   z-index: 999;
   right: 0;
@@ -249,15 +250,12 @@ $right-space: 3rem;
   transform-origin: bottom right;
   transform: rotate(-90deg) translateX(100%);
   border-right: none;
-  background-color: $brand-color;
   border-radius: 5px 5px 0 0;
   border-bottom: none;
   //overflow: hidden;
-
   @media (max-width: 992px) and (min-width: 768px) and (orientation: landscape) {
     top: 65%;
   }
-
   @media only screen and (max-width: 767px) {
     box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
     display: block;
@@ -269,13 +267,11 @@ $right-space: 3rem;
     transform: none;
     margin: 0 auto;
     padding: 0px;
-
     a {
       width: 100%;
       padding: 18px ​15px;
     }
   }
-
   .sticker-Btn {
     background-color: transparent;
     border: none;
@@ -286,7 +282,6 @@ $right-space: 3rem;
     line-height: 1;
     font-weight: $font-weight-bold;
     white-space: pre;
-
     @media (max-width: 767px) {
       padding: 20px 15px;
     }
