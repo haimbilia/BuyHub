@@ -1,45 +1,66 @@
 .product-ratings {
+  padding: 0;
+  margin: 5px 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  gap: 5px;
+
+  a {
+    color: inherit;
+    font-size: inherit;
+  }
+
+  .svg {
+    // margin-#{$end-direction}: 8px;
+    fill: $secondary-color;
+  }
+
+  .rate {
+    margin: 0;
     padding: 0;
-    margin: 5px 0;
-    display: inline-flex;
-    align-items: center;
-    justify-content: flex-start;
-    font-size: 0.85rem;
-    line-height: 1.5;
-    gap: 5px;
+    line-height: inherit;
+    font-weight: $font-weight-normal;
+    white-space: nowrap;
+  }
 
-    a {
-        color: inherit;
-        font-size: inherit;
-    }
+  .be-first {
+    line-height: 1;
+    font-size: 0.9em;
+    font-weight: $font-weight-regular;
+    display: inline-block;
+    vertical-align: top;
+    color: $secondary-color;
+  }
 
-    .svg {
-        // margin-#{$end-direction}: 8px;
-        fill: $secondary-color;
-    }
+  .totals-review {
+    color: currentColor;
+    background-color: transparent;
+    border: none;
+    text-decoration: underline;
+    margin-#{$start-direction}: 10px;
+  }
+}
+.rating {
+  display: flex;
+  align-items: center;
+}
 
-    .rate {
-        margin: 0;
-        padding: 0;
-        line-height: inherit;
-        font-weight: $font-weight-normal;
-        white-space: nowrap;
-    }
+.products-reviews {
+  display: inline-block;
+  vertical-align: middle;
 
-    .be-first {
-        line-height: 1;
-        font-size: 0.9em;
-        font-weight: $font-weight-regular;
-        display: inline-block;
-        vertical-align: top;
-        color: $secondary-color;
-    }
+  .totals-review {
+    color: $brand-color;
+    display: block;
 
-    .totals-review {
-        color: currentColor;
-        background-color: transparent;
-        border: none;
-        text-decoration: underline;
-        margin-#{$start-direction}: 10px;
+    .link {
+      &:after {
+        background: $brand-color;
+        color: $brand-color-inverse;
+      }
     }
+  }
 }

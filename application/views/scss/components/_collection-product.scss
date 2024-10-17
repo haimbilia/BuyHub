@@ -412,3 +412,30 @@
   transform: translate(-50%, -50%);
   transition: all 0.3s ease-in-out 0s;
 }
+
+//B2B collection
+.product-layout-5 {
+  background-color: transparent;
+  border: $border;
+  border-radius: $kart;
+  display: flex;
+  flex-direction: row;
+
+  .products {
+    padding: 1rem;
+    border-#{$end-direction}: $border;
+  }
+  .price-off {
+    background-color: #fbd33f;
+    color: #000;
+    border-bottom-#{$start-direction}-radius: 9px;
+    padding: 4px 7px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1;
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    #{$end-direction}: 0;
+  }
+}

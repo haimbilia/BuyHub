@@ -20,7 +20,7 @@ if ($recommendedProducts) { ?>
                 </div>
             </div>
         </div>
-        <div class="js-carousel product-listing recommended-products" id="product-listing-rp" data-slides="4,4,3,2"
+        <div class="js-carousel recommended-products" id="product-listing-rp" data-slides="4,4,3,2"
             dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
             <?php
                 $tRightRibbons = $recommendedProductsRibbons['tRightRibbons'];
