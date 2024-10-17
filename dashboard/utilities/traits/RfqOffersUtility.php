@@ -130,7 +130,7 @@ trait RfqOffersUtility
                 $otherButtons[] = [
                     'attr' => [
                         'onclick' => 'linkInventoryForm(' . $rfqId . ')',
-                        'class' => 'btn-brand btn-icon',
+                        'class' => 'btn-outline-gray btn-icon',
                         'title' => $title
                     ],
                     'icon' => "<svg class='svg btn-icon-start' width='18' height='18'>
@@ -143,7 +143,7 @@ trait RfqOffersUtility
         }
         $otherButtons[] = [
             'attr' => [
-                'class' => 'btn-outline-brand btn-icon',
+                'class' => 'btn-outline-gray btn-icon',
                 'onclick' => 'viewRfq(' . $rfqId . ')',
                 'title' => Labels::getLabel('LBL_VIEW_RFQ_INFORMATION', $this->siteLangId)
             ],
