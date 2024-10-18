@@ -5,5 +5,6 @@ $commonData = array(
     'totalFavouriteItems' => $totalFavouriteItems ?? 0,
     'totalUnreadMessageCount' => $totalUnreadMessageCount ?? 0,
     'totalUnreadNotificationCount' => $totalUnreadNotificationCount ?? 0,
-    'cartItemsCount' => $cartItemsCount
+    'cartItemsCount' => $cartItemsCount,
+    'offerCheckout' => $_SESSION['offer_checkout'] ?? [],
 );
