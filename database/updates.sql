@@ -232,3 +232,5 @@ INSERT INTO `tbl_email_templates` (`etpl_code`, `etpl_lang_id`, `etpl_name`, `et
     </tbody>
 </table>', '\r\n{recipient_email} Receiver Email<br/> {recipient_name} Receiver Name<br/> {giftcard_code} Redeem Code <br/> {sender_name} Sender Name <br/>{sender_email} Sender Email <br/> {giftcard_amount} Total Amount <br/>', '5', '1')
 ON DUPLICATE KEY UPDATE etpl_subject = VALUES(etpl_subject), etpl_body = VALUES(etpl_body), etpl_replacements = VALUES(etpl_replacements);
+
+-- ----------------------TV-10.1.0.20240926------------------------------------

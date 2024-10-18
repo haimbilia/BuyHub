@@ -1,5 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$this->includeTemplate('_partial/dashboardNavigation.php'); ?>
+$this->includeTemplate('_partial/dashboardNavigation.php'); 
+$canRequestCustomProducts = (0 < FatApp::getConfig('CONF_SELLER_CAN_REQUEST_CUSTOM_PRODUCT', FatUtility::VAR_INT, 0) && 1 > FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0));
+?>
 <div class="content-wrapper content-space">
     <?php
     $data = [
@@ -14,7 +16,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                 </button>
                                 
                                     <ul class="dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim" aria-labelledby="dashboardDropdown">';
-        if (FatApp::getConfig('CONF_SELLER_CAN_REQUEST_CUSTOM_PRODUCT', FatUtility::VAR_INT, 0) && 1 > FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+        if ($canRequestCustomProducts) {
             $otherBtnHtml .= '<li class="dropdown-menu-item">
                                                 <a class="dropdown-menu-link" href="' . UrlHelper::generateUrl('customProducts', 'form') . '">
                                                     ' . Labels::getLabel('LBL_Marketplace_Product', $siteLangId) . '
@@ -79,7 +81,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                             </div>
                         </div>
                         <div class="row justify-content-center">
-                            <?php if (FatApp::getConfig('CONF_SELLER_CAN_REQUEST_CUSTOM_PRODUCT', FatUtility::VAR_INT, 0)) { ?>
+                            <?php if ($canRequestCustomProducts) { ?>
                                 <div class="col-md-3">
                                     <div class="no-data-found">
                                         <div class="img">
@@ -176,7 +178,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 </div>
 <script>
     var ratioTypeSquare = <?php echo AttachedFile::RATIO_TYPE_SQUARE; ?>;
-    var canRequestCustomProduct = <?php echo FatApp::getConfig('CONF_SELLER_CAN_REQUEST_CUSTOM_PRODUCT', FatUtility::VAR_INT, 0); ?>;
+    var canRequestCustomProduct = <?php echo $canRequestCustomProducts; ?>;
     var withoutVariants = <?php echo FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0); ?>;
     $(document).ready(function() {
         if (canRequestCustomProduct && 1 > withoutVariants) {

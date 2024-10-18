@@ -61,6 +61,15 @@ class CheckoutController extends MyAppController
             $this->cartObj->setShippingAddressSameAsBilling();
         }
 
+        $user_is_buyer = User::getAttributesById(UserAuthentication::getLoggedUserId(), 'user_is_buyer');
+        if (!$user_is_buyer) {
+            $this->cartObj->clear(true);
+            $this->cartObj->updateUserCart();
+            $errMsg = Labels::getLabel('ERR_PLEASE_LOGIN_WITH_BUYER_ACCOUNT_TO_ADD_PRODUCTS_TO_CART', $this->siteLangId);
+            LibHelper::exitWithError($errMsg, false, true);
+            FatApp::redirectUser(UrlHelper::generateUrl());
+        }
+
         $this->set('exculdeMainHeaderDiv', true);
     }
 
@@ -939,6 +948,13 @@ class CheckoutController extends MyAppController
         $cashOnDeliveryKey = array_search('CashOnDelivery', array_column($paymentMethods, 'plugin_code'));
         if ($this->cartObj->hasServiceProduct() && false !== $cashOnDeliveryKey) {
             unset($paymentMethods[$cashOnDeliveryKey]);
+        }
+
+        if ($cartSummary["cartWalletSelected"]) {
+            $transferBankKey = array_search('TransferBank', array_column($paymentMethods, 'plugin_code'));
+            if (false !== $transferBankKey) {
+                unset($paymentMethods[$transferBankKey]);
+            }
         }
 
         /* ] */

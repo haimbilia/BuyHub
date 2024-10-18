@@ -885,7 +885,7 @@ class ProductSearch extends SearchBase
         if (!empty($category) && true == $joinWithRelationTableInstead) {
             $this->joinTable(ProductCategory::DB_TBL_PROD_CAT_RELATIONS, 'INNER JOIN', 'pcr.pcr_prodcat_id = c.prodcat_id', 'pcr');
         }
-
+        
         $categoryArr = [];
         if (is_numeric($category)) {
             $category_id = FatUtility::int($category);
@@ -902,7 +902,7 @@ class ProductSearch extends SearchBase
             if (empty($category)) {
                 return;
             }
-
+            $categoryArr = $category;
             if (!is_array($category)) {
                 $categoryArr = explode(",", $category);
             }

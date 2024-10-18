@@ -35,7 +35,7 @@
                             <?php
                             if (isset($row['oshistory_orderstatus_id']) && $row['oshistory_orderstatus_id'] ==  FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS")) {
 
-                                $trackingNumbers = !empty($childOrderDetail['opship_tracking_number']) ? explode(",", $childOrderDetail['opship_tracking_number']) : '';
+                                $trackingNumbers = !empty($childOrderDetail['opship_tracking_number']) ? explode(",", $childOrderDetail['opship_tracking_number']) : [];
 
                                 $carrier = $row['oshistory_courier']; ?>
                                 <h6><?php echo Labels::getLabel('MSG_TRACKING_NUMBER', $siteLangId); ?></h6>
@@ -105,7 +105,11 @@
                                 <?php if (isset($row['oshistory_comments']) && !empty(trim(($row['oshistory_comments'])))) { ?>
                                     <?php echo nl2br($row['oshistory_comments']); ?>
                                 <?php } else {
-                                    echo OrderStatus::getDefaultOrderStatusMsg($statusId, $siteLangId);
+                                    if (Product::PRODUCT_TYPE_SERVICE == $row['op_product_type'] && $row['oshistory_orderstatus_id'] ==  FatApp::getConfig("CONF_DEFAULT_INPROCESS_ORDER_STATUS")) {
+                                        echo Labels::getLabel('LBL_YOUR_SERVICE_PROVIDER_WILL_REACH_OUT_TO_YOU_SOON', $siteLangId);
+                                    } else {
+                                        echo OrderStatus::getDefaultOrderStatusMsg($statusId, $siteLangId);
+                                    }
                                 } ?>
                             </p>
                         </div>

@@ -83,6 +83,9 @@ class SupplierController extends MyAppController
 
         $obj = new Extrapage();
         $slogan = $obj->getContentByPageType(Extrapage::SELLER_BANNER_SLOGAN, $this->siteLangId);
+        if (!empty($slogan)) {
+            $slogan['epage_extra_info'] = !empty($slogan['epage_extra_info']) ? json_decode($slogan['epage_extra_info'], true) : [];
+        }
         $this->set('slogan', $slogan);
         $this->set('postedData', $postedData);
         $this->set('siteLangId', $this->siteLangId);

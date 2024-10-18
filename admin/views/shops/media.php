@@ -62,6 +62,9 @@ $otherButtons = [
     ]
 ];
 
+$generalTab['attr']['onclick'] = 'editRecord(' . $recordId . ', false, "modal-dialog-vertical-md")';
+$langTabExtraClass = "modal-dialog-vertical-md";
+
 $formTitle = Labels::getLabel('LBL_SHOP_SETUP', $siteLangId); ?>
 
 <?php require_once(CONF_THEME_PATH . '_partial/listing/form-head.php'); ?>

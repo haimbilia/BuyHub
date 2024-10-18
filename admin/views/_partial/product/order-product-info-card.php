@@ -40,11 +40,13 @@ $includeInvoiceNo = $includeInvoiceNo ?? true;
                 <?php echo $order['op_invoice_number']; ?>
             </div>
         <?php } ?>
-        <div class="title">
-            <span class="d-inline-block" data-html="true" tabindex="0" data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="hover focus" data-popover-html="#options-<?php echo $order['op_selprod_id']; ?>">
-                <?php echo CommonHelper::subStringByWords($order['op_selprod_title'], 35, '...'); ?>
-            </span>
-        </div>
+        <?php if (!empty($order['op_selprod_title'])) { ?>
+            <div class="title">
+                <span class="d-inline-block" data-html="true" tabindex="0" data-bs-toggle="popover" data-bs-placement="top" data-bs-trigger="hover focus" data-popover-html="#options-<?php echo $order['op_selprod_id']; ?>">
+                    <?php echo CommonHelper::subStringByWords($order['op_selprod_title'], 35, '...'); ?>
+                </span>
+            </div>
+        <?php } ?>
         <?php if (true === $includeShopName) { ?>
             <div class="sold_by">
                 <svg class="svg" width="20" height="20">

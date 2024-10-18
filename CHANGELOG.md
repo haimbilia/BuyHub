@@ -1,4 +1,4 @@
-# Multivendor - Released Version : RV-10.0.0
+# Multivendor - Released Version : RV-10.1.0
 
 > IOS/Android Buyer APP version : 2.0.1
 > System API version : 2.3
@@ -23,7 +23,10 @@
     - Language and currency selection via popup.
     - Displayed review images at the top of reviews list.
     - Performance optimization ar admin end, product search, filters and collections list.
+    - Upgraded paypal payment library deprecated code.
     
+## Hit URL:
+    - admin/patch-update/updateProductRating  
 
 ## Bug Fixes:
     - Bug-074802 - Omise Payment gateway deprecated issue.
@@ -83,9 +86,18 @@
     - Bug-087200 - partial payment is not working with wallet + stripe
     - Bug-086479 - sender email should also be visible to receiver and admin.
     - Bug-087199 - Debit entry content need to be upadated
-
-## Hit URL:
-    - admin/patch-update/updateProductRating  
     - Bug-087215 - The user's phone number is missing in the GDPR request for the user registered with a phone number only
     - Bug-087213 - A warning appears when the user tries to place a pickup order in Arabic
     - Bug-087210 - The phone number direction is not correct in the RTL on the seller registration page
+    - Bug-087591 - Missing payment info when user make payment using Wallet + bank transfer payment method
+    - Bug-087597 - Custom product request button should not appear on the seller end
+    - Bug-087617 - Branch 1 + RFQ >> Deprecation appears on the return request details page when no data is added for that language
+    - Bug-087616 - RFQ + Branch 1>> A Fatal error occurs when the admin clicks on the view icon on the order details page
+    - Bug-087607 - Order ID missing in the email subject for the bank transaction request notification
+    - Bug-087602 - Branch 1>> The Categories filters are not working on the shop details page
+    - Bug-086852 - Branch 1 >> RTL >> Product description field appears on the product details page even if no details are added in the description.
+    - Bug-087648 - Deprecation appears on the product details page
+    - Bug-087664 - Error message appears when the buyer reports spam to any shop
+    - Bug-087684 - The default comment appearing on the status change is incorrect for the service product
+    - Bug-087658 - <<Branch 1>> The master product requested by any seller appears in the My Product after approval instead of the marketplace products listing
+    - Bug-087657 - << Branch 1 >> UI issue on the master product request setup form
