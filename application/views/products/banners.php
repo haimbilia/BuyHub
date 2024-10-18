@@ -2,7 +2,7 @@
 <?php if (isset($banners) && isset($banners['blocation_active']) && $banners['blocation_active'] && count($banners['banners'])) { ?>
 <section class="section" data-section="section">
     <div class="container">
-        <div class="poster-layout">
+        <div class="poster-layout" data-view="2">
             <?php
                 foreach ($banners['banners'] as $val) {
                     $desktop_url = '';
