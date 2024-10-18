@@ -6,5 +6,5 @@ $commonData = array(
     'totalUnreadMessageCount' => $totalUnreadMessageCount,
     'totalUnreadNotificationCount' => $totalUnreadNotificationCount,
     'cartItemsCount' => $cartItemsCount,
-    'offerCheckout' => $_SESSION['offer_checkout'] ?? [],
+    'offerCheckout' => $_SESSION['offer_checkout'] ?? (object)[],
 );
