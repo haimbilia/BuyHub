@@ -868,14 +868,28 @@ class DashboardBaseController extends FatController
 
     private function checkTempTokenLogin()
     {
-        if (!in_array($this->_controllerName, ['BuyerController', 'StripeConnectPayController', 'RequestForQuotesController'])) {
+        if (!in_array($this->_controllerName, ['BuyerController', 'StripeConnectPayController', 'RequestForQuotesController', 'RfqOffersController'])) {
             return;
         }
 
-        if (in_array($this->_controllerName, ['BuyerController', 'RequestForQuotesController']) && !in_array($this->_actionName, ['downloadDigitalFile', 'downloadDigitalFiles', 'downloadAttachedFileForReturn', 'downloadFile'])) {
-            return;
+        switch ($this->_controllerName) {
+            case 'BuyerController':
+                if (!in_array($this->_actionName, ['downloadDigitalFile', 'downloadDigitalFiles', 'downloadAttachedFileForReturn'])) {
+                    return;
+                }
+                break;
+            case 'RequestForQuotesController':
+                if (!in_array($this->_actionName, ['downloadFile'])) {
+                    return;
+                }
+                break;
+            case 'RfqOffersController':
+                if (!in_array($this->_actionName, ['downloadAttachmentFile'])) {
+                    return;
+                }
+                break;
         }
-
+        
         $get = FatApp::getQueryStringData();
         if (empty($get) || !array_key_exists('ttk', $get)) {
             return;
