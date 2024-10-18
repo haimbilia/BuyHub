@@ -1001,7 +1001,7 @@ trait RfqOffersUtility
         $db->commitTransaction();
 
         if (MOBILE_APP_API_CALL) {
-            $this->set('data', ['session_id' => session_id()]);
+            $this->set('data', ['offer_checkout' => $_SESSION['offer_checkout']]);
             $this->_template->render();
         }
 

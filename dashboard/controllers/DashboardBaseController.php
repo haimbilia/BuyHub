@@ -56,9 +56,8 @@ class DashboardBaseController extends FatController
         $this->str_setup_successful = $arr['str_setup_successful'];
 
         $this->app_user['temp_user_id'] = 0;
-        if (true === MOBILE_APP_API_CALL) {
-            $this->setApiVariables();
-        }
+
+        $this->setApiVariables();
 
         if (0 < FatApp::getPostedData('appUser', FatUtility::VAR_INT, 0)) {
             CommonHelper::setAppUser();
@@ -239,6 +238,22 @@ class DashboardBaseController extends FatController
 
     private function setApiVariables()
     {
+        if (false === MOBILE_APP_API_CALL) {
+            return;
+        }
+
+        if (
+            isset($_SERVER['HTTP_X_APP_SESSION_ID']) &&
+            !empty($_SERVER['HTTP_X_APP_SESSION_ID']) &&
+            (session_status() !== PHP_SESSION_ACTIVE ||
+                $_SERVER['HTTP_X_APP_SESSION_ID'] != session_id()
+            )
+        ) {
+            session_destroy();
+            session_id($_SERVER['HTTP_X_APP_SESSION_ID']);
+            session_start();
+        }
+
         $this->db = FatApp::getDb();
         $post = FatApp::getPostedData();
 
