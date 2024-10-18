@@ -126,7 +126,7 @@ trait RfqOffersUtility
                     $title = Labels::getLabel('LBL_CHANGE_INVENTORY', $this->siteLangId);
                     $label = Labels::getLabel('BTN_CHANGE_INVENTORY', $this->siteLangId);
                 }
-                
+
                 $otherButtons[] = [
                     'attr' => [
                         'onclick' => 'linkInventoryForm(' . $rfqId . ')',
@@ -1231,8 +1231,17 @@ trait RfqOffersUtility
         $this->set('romDate', date('Ymd', strtotime($messageData['rom_added_on'])));
         $this->set('isSeller', $this->isSeller);
         $this->set('row', $messageData);
-        $this->set('html', $this->_template->render(false, false, 'rfq-offers/attachment-record.php', true));
+        if (MOBILE_APP_API_CALL) {
+            $attachmentLink = '';
+            if (0 < $messageData['afile_id']) {
+                $attachmentLink = UrlHelper::generateFullUrl('RfqOffers', 'downloadAttachmentFile', array($messageData['rom_id'], $messageData['rom_primary_offer_id']));
+            }
+            $messageData['attachmentLink'] = $attachmentLink;
+            $this->set('data', array('message' => $messageData));
+            $this->_template->render();
+        }
 
+        $this->set('html', $this->_template->render(false, false, 'rfq-offers/attachment-record.php', true));
         $this->_template->render(false, false, 'json-success.php', false, false);
     }
 
