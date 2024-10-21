@@ -67,25 +67,24 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !em
                                     <span class="location">
                                         <?php echo $moresellers['shop_state_name'] . "," . $moresellers['shop_country_name']; ?>
                                     </span>
-                                    <span class="price">
-                                        <?php echo CommonHelper::displayMoneyFormat($moresellers['theprice']);
-                                        if ($moresellers['selprod_price'] > $moresellers['theprice']) { ?>
-                                            <span
-                                                class="item__price_old"><?php echo CommonHelper::displayMoneyFormat($moresellers['selprod_price']); ?></span>
-                                            <div class="item__price_off">
-                                                <?php echo CommonHelper::showProductDiscountedText($moresellers, $siteLangId); ?>
-                                            </div>
-                                        <?php } ?>
-                                    </span>
-                                    <span class="payment-mode">
-                                        <?php
-                                        $codAvailableTxt = '';
-                                        if (Plugin::isActive('CashOnDelivery') && !empty($product['cod'][$moresellers['selprod_user_id']]) && $product['cod'][$moresellers['selprod_user_id']]) {
-                                            $codAvailableTxt = Labels::getLabel('LBL_CASH_ON_DELIVERY_AVAILABLE', $siteLangId);
-                                        }
-                                        echo $codAvailableTxt;
-                                        ?>
-                                    </span>
+                                    <?php if (1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) { ?>
+                                        <span class="price">
+                                            <?php echo CommonHelper::displayMoneyFormat($moresellers['theprice']);
+                                            if ($moresellers['selprod_price'] > $moresellers['theprice']) { ?>
+                                                <span
+                                                    class="item__price_old"><?php echo CommonHelper::displayMoneyFormat($moresellers['selprod_price']); ?></span>
+                                                <div class="item__price_off">
+                                                    <?php echo CommonHelper::showProductDiscountedText($moresellers, $siteLangId); ?>
+                                                </div>
+                                            <?php } ?>
+                                        </span>
+                                    <?php } ?>
+                                    <?php
+                                    if (Plugin::isActive('CashOnDelivery') && !empty($product['cod'][$moresellers['selprod_user_id']]) && $product['cod'][$moresellers['selprod_user_id']]) { ?>
+                                        <span class="payment-mode">
+                                            <?php echo Labels::getLabel('LBL_CASH_ON_DELIVERY_AVAILABLE', $siteLangId); ?>
+                                        </span>
+                                    <?php } ?>
                                 </div>
                                 <div class="seller-card-foot">
                                     <a class="link-underline"
@@ -94,12 +93,12 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !em
                                     </a>
                                     <?php if (true == $displayProductNotAvailableLable && array_key_exists('availableInLocation', $product) && 0 == $product['availableInLocation']) { ?>
                                         <span class="text-danger"><?php echo Labels::getLabel('LBL_NOT_AVAILABLE', $siteLangId); ?></span>
-                                        <?php } else {
-                                        if (date('Y-m-d', strtotime($moresellers['selprod_available_from'])) <= FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d') && 1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) { ?>
+                                        <?php } else if (1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) {
+                                        if (date('Y-m-d', strtotime($moresellers['selprod_available_from'])) <= FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d')) { ?>
                                             <button class="btn btn-outline-black btn-sm btnAddToCart--js" type="button" data-id="<?php echo $moresellers['selprod_id']; ?>" data-min-qty="<?php echo $moresellers['selprod_min_order_qty']; ?>">
                                                 <?php echo Labels::getLabel('LBL_Add_To_Cart', $siteLangId); ?>
                                             </button>
-                                        <?php } else {
+                                    <?php } else {
                                             echo CommonHelper::replaceStringData(Labels::getLabel('LBL_THIS_ITEM_WILL_BE_AVAILABLE_FROM_{AVAILABLE-DATE}', $siteLangId), ['{AVAILABLE-DATE}' => FatDate::Format($moresellers['selprod_available_from'])]);
                                         }
                                     } ?>

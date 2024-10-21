@@ -9,6 +9,7 @@ $input-border: none;
 $input-border-radius: 1px;
 $input-bg: $bg-gray;
 $input-color: #474747;
+
 @mixin input {
     border: $input-border-style 0 $input-border-color;
     background-color: $input-bg;
@@ -25,6 +26,7 @@ $input-color: #474747;
     font-family: inherit;
     transition: 0.3s all ease-in-out;
     appearance: none;
+
     &:focus,
     &:hover {
         outline: none;
@@ -32,16 +34,20 @@ $input-color: #474747;
         background-color: darken($input-bg, 5%);
         transition: 0.3s all ease-in-out;
     }
+
     &:focus-visible {
         outline: $focus-outline;
         box-shadow: none;
     }
+
     &:disabled {
         opacity: 0.5;
+
         &:hover {
             cursor: not-allowed;
         }
     }
+
     &.error {
         border: 1px solid $danger-color;
         background-color: transparent;
@@ -56,24 +62,30 @@ $input-color: #474747;
     background-repeat: no-repeat;
     background-position: calc(100% - 12px) center;
     color: $txt-gray;
+
     &:hover {
         cursor: pointer;
     }
+
     &:disabled {
         opacity: 0.5;
+
         &:hover {
             cursor: not-allowed;
         }
     }
+
     .main[dir="rtl"] & {
         padding-#{$start-direction}: 30px;
         padding-#{$end-direction}: 1rem;
     }
+
     .main[dir="ltr"] & {
         background-position: calc(100% - 12px) center;
         padding-#{$start-direction}: 30px;
         padding-#{$end-direction}: 1rem;
     }
+
     [dir="rtl"] & {
         background-position: calc(0% - -12px) center;
     }
@@ -102,6 +114,7 @@ $input-color: #474747;
     .form-group {
         margin-bottom: 1.8rem;
     }
+
     &-label,
     .label {
         font-size: 0.8rem;
@@ -113,21 +126,26 @@ $input-color: #474747;
         cursor: default;
         /*opacity: 0.6;*/
         font-weight: 500;
+
         &:empty {
             min-height: 21px;
             display: block;
         }
     }
+
     input {
         &[type="text"] {
             @include input;
         }
+
         &[type="email"] {
             @include input;
         }
+
         &[type="phone"] {
             @include input;
         }
+
         &[type="search"] {
             @include input;
             appearance: none;
@@ -144,9 +162,11 @@ $input-color: #474747;
                 direction: rtl;
                 padding-#{$start-direction}: 1rem !important;
             }
+
             [dir="rtl"] & {
                 background-position: calc(100% - 13px) center;
             }
+
             .form[dir="ltr"],
             .main[dir="ltr"] & {
                 padding-#{$end-direction}: 40px;
@@ -155,43 +175,48 @@ $input-color: #474747;
                 direction: ltr;
                 padding-#{$start-direction}: 1rem !important;
             }
+
             &::-webkit-search-cancel-button {
                 -webkit-appearance: none;
                 height: 1.25em;
                 width: 1.25em;
                 border-radius: 50em;
-                background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath fill='none' d='M0 0h24v24H0z'/%3E%3Cpath d='M12 10.586l4.95-4.95 1.414 1.414-4.95 4.95 4.95 4.95-1.414 1.414-4.95-4.95-4.95 4.95-1.414-1.414 4.95-4.95-4.95-4.95L7.05 5.636z'/%3E%3C/svg%3E")
-                    no-repeat 50% 50%;
+                background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath fill='none' d='M0 0h24v24H0z'/%3E%3Cpath d='M12 10.586l4.95-4.95 1.414 1.414-4.95 4.95 4.95 4.95-1.414 1.414-4.95-4.95-4.95 4.95-1.414-1.414 4.95-4.95-4.95-4.95L7.05 5.636z'/%3E%3C/svg%3E") no-repeat 50% 50%;
                 background-size: contain;
+
                 &:hover {
                     cursor: pointer;
                 }
             }
         }
+
         &[type="password"] {
             @include input;
         }
+
         &[type="date"] {
             @include input;
         }
+
         &[type="url"] {
             @include input;
         }
+
         &[type="tel"] {
             @include input;
         }
+
         &[type="number"] {
             @include input;
         }
+
         &[type="file"] {
             @include input;
-            width: auto;
             overflow: hidden;
-        }
-        &[type="file"] {
             height: auto;
             width: 100%;
         }
+
         &.field--calender,
         &[type="date"] {
             padding-#{$end-direction}: 38px !important;
@@ -199,15 +224,18 @@ $input-color: #474747;
             background-size: 16px;
             background-repeat: no-repeat;
             background-position: calc(100% - 11px) center;
+
             [dir="rtl"] & {
                 padding-#{$start-direction}: 38px !important;
                 background-position: calc(0% - -11px) center;
             }
         }
     }
+
     select {
         @include select;
     }
+
     textarea {
         @include input;
         resize: vertical;
@@ -215,10 +243,12 @@ $input-color: #474747;
         height: 120px;
         line-height: 1.5;
         padding-top: 10px;
+
         &.txtarea-height {
             height: 85px;
         }
     }
+
     //focus
     &:disabled {
         color: rgba(0, 0, 0, 0.38);
@@ -227,53 +257,66 @@ $input-color: #474747;
         cursor: initial;
         border-color: transparent;
     }
+
     &.is-invalid {
         border-color: $danger;
     }
+
     input {
         &[type="submit"] {
             @include submit;
+
             &:hover,
             &:focus {
                 box-shadow: 0px 1px 2px -1px rgba(0, 0, 0, 0.05), 0px 4px 5px 0px rgba(0, 0, 0, 0.05), 0px 1px 10px 0px rgba(0, 0, 0, 0.05);
             }
+
             &:active {
                 box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.04), 0px 4px 5px 0px rgba(0, 0, 0, 0.04), 0px 1px 10px 0px rgba(0, 0, 0, 0.04);
             }
         }
     }
+
     //button
     [type="button"] {
         //@include submit;
     }
+
     [type="reset"] {
         // @include submit;
     }
+
     input button {
         @include submit;
     }
+
     button {
+
         //@include submit;
         i {
             &:before {
                 opacity: 1 !important;
             }
         }
+
         &:focus {
             > :before {
                 opacity: 0.2;
             }
         }
+
         &:active {
             > :before {
                 opacity: 0.32;
             }
         }
+
         &:disabled {
             :before {
                 //opacity: 0;
             }
         }
+
         &:active {
             :after {
                 opacity: 0.4;
@@ -281,18 +324,21 @@ $input-color: #474747;
                 transition: transform 0s;
             }
         }
+
         &:disabled {
             :after {
                 opacity: 0;
             }
         }
     }
+
     .no-focus {
         &:focus {
             outline: none !important;
             border-color: inherit !important;
         }
     }
+
     &[dir="ltr"] {
         select {
             padding-#{$start-direction}: 30px;
@@ -300,6 +346,7 @@ $input-color: #474747;
             background-position: calc(100% - 12px) center;
         }
     }
+
     &[dir="rtl"] {
         select {
             padding-#{$start-direction}: 30px;
@@ -320,6 +367,7 @@ $input-color: #474747;
 .required,
 .spn_must_field {
     color: $danger-color;
+
     &:after {
         //content: "*";
         position: relative;
@@ -354,6 +402,7 @@ $input-color: #474747;
     overflow: hidden;
     position: relative;
     cursor: pointer;
+
     & input {
         opacity: 0;
         position: absolute;
@@ -364,9 +413,11 @@ $input-color: #474747;
         cursor: pointer;
         height: auto !important;
     }
+
     & .uploadedphoto {
         margin: 25px 0;
         display: block;
+
         img {
             display: inline-block;
             vertical-align: top;
@@ -383,12 +434,14 @@ form.custom-form {
     display: flex;
     align-items: center;
     justify-content: center;
+
     input[type="text"] {
         width: auto;
         margin: 0;
         margin-#{$end-direction}: 5px;
         flex: 1;
     }
+
     input[type="submit"] {
         margin: 0;
     }
@@ -399,10 +452,12 @@ form.custom-form {
         display: flex;
         align-items: center;
     }
+
     .otp-col {
         display: flex;
         align-items: center;
         flex: 1;
+
         input {
             text-align: center;
         }
@@ -416,33 +471,40 @@ form.custom-form {
     flex-wrap: wrap;
     align-items: stretch;
     width: 100%;
+
     //gap: 10px;
     input {
         position: relative;
         flex: 1 1 auto;
         width: 1% !important;
         margin-bottom: 0;
+
         &:not(:first-child) {
             border-top-#{$start-direction}-radius: 0;
             border-bottom-#{$start-direction}-radius: 0;
         }
+
         &:not(:last-child) {
             border-top-#{$end-direction}-radius: 0;
             border-bottom-#{$end-direction}-radius: 0;
         }
     }
+
     &--lg {
         .input-group-text {
             font-size: 1.5rem;
         }
+
         input {
             height: 3rem !important;
         }
     }
+
     &--sm {
         .input-group-text {
             font-size: 0.85rem;
         }
+
         input {
             height: 2rem !important;
         }
@@ -452,6 +514,7 @@ form.custom-form {
 .icon-group {
     display: flex;
     align-items: center;
+
     .btn {
         margin-#{$start-direction}: 5px;
     }
@@ -465,6 +528,7 @@ form.custom-form {
     &__group {
         position: relative;
     }
+
     &__label {
         position: absolute;
         left: 1rem;
@@ -478,6 +542,7 @@ form.custom-form {
         transition: transform 0.2s ease-in-out;
         pointer-events: none;
     }
+
     &__field {
         padding-top: 16px !important;
         width: 100%;
@@ -485,14 +550,17 @@ form.custom-form {
         line-height: normal;
         resize: none;
         transition: all 0.35s ease-in-out;
+
         &:focus {
             outline-color: $brand-color;
             border-color: $brand-color;
-            + .form-floating__label {
+
+            +.form-floating__label {
                 transform: translateY(-6px) scale(0.8);
             }
         }
-        &.filled + .form-floating__label {
+
+        &.filled+.form-floating__label {
             opacity: 0.7;
             transform: translateY(-6px) scale(0.8);
         }
@@ -501,9 +569,11 @@ form.custom-form {
 
 .form-fly {
     position: relative;
+
     .fly-field {
         padding-#{$end-direction}: 3rem;
     }
+
     .fly-btn {
         position: absolute;
         top: 0;
@@ -520,13 +590,16 @@ form.custom-form {
         color: $brand-color;
         z-index: 3;
         width: 40px;
+
         .svg {
             width: 16px;
             height: 16px;
         }
+
         &:hover {
             box-shadow: none;
         }
+
         &[disabled] {
             color: $txt-gray;
             opacity: 0.5;
@@ -536,6 +609,7 @@ form.custom-form {
 
 .form-inline {
     display: flex;
+
     .form-group {
         margin-#{$end-direction}: 10px;
         flex: 1;
@@ -544,6 +618,7 @@ form.custom-form {
 
 .date-selector {
     position: relative;
+
     .date-picker-wrapper {
         display: block;
         position: absolute;
@@ -553,28 +628,34 @@ form.custom-form {
         padding: 10px;
         border-radius: 10px;
         box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px;
+
         .drp_top-bar {
             button {
                 height: auto;
                 padding: 5px;
             }
         }
+
         .month-wrapper {
             padding: 0;
             border: 0;
+
             table {
                 .day {
                     padding: 8px;
                 }
             }
         }
+
         .apply-btn,
         .footer {
             display: none;
         }
+
         .prev,
         .next {
             font-size: 1.1rem;
+
             &:hover {
                 background: none !important;
                 color: $brand-color !important;
@@ -582,10 +663,12 @@ form.custom-form {
         }
     }
 }
+
 $checkbox-size: 18px;
 $checkbox-hover-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.04), 0px 4px 5px 0px rgba(0, 0, 0, 0.04), 0px 1px 10px 0px rgba(0, 0, 0, 0.04);
 $checkbox-focus-shadow: inset 0px 1px 2px -1px rgba(0, 0, 0, 0.08), inset 0px 4px 5px 0px rgba(0, 0, 0, 0.08), inset 0px 1px 10px 0px rgba(0, 0, 0, 0.08);
 $checkbox-active-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.04), 0px 4px 5px 0px rgba(0, 0, 0, 0.04), 0px 1px 10px 0px rgba(0, 0, 0, 0.04);
+
 .checkbox {
     margin: 0;
     font-size: 0.8rem;
@@ -594,10 +677,12 @@ $checkbox-active-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.04), 0px 4px 5px 0px rg
     cursor: pointer;
     display: flex;
     gap: 8px;
+
     a {
         color: $brand-color;
         text-decoration: underline;
     }
+
     input {
         accent-color: $brand-color;
         //appearance: none;
@@ -615,6 +700,7 @@ $checkbox-active-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.04), 0px 4px 5px 0px rg
         border-radius: 2px;
         // background-color: transparent;
         cursor: pointer;
+
         // display: inline-block;
         // //margin-#{$end-direction}: 0.5rem;
         // padding: 0 !important;
@@ -632,15 +718,18 @@ $checkbox-active-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.04), 0px 4px 5px 0px rg
             text-decoration: none !important;
             //box-shadow: $checkbox-hover-shadow;
         }
+
         &:focus {
             outline: none !important;
             //box-shadow: $checkbox-focus-shadow;
         }
+
         &:active {
             //box-shadow: $checkbox-active-shadow;
         }
 
         &:checked {
+
             // background: $brand-color;
             // color: $brand-color-inverse;
             // background: #000;
@@ -662,6 +751,7 @@ $checkbox-active-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.04), 0px 4px 5px 0px rg
                 // top: 50%;
                 // margin: -7px 0 0 -3px;
             }
+
             &:after {
                 // background: #000;
                 // color: #fff;
@@ -672,10 +762,13 @@ $checkbox-active-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.04), 0px 4px 5px 0px rg
         }
     }
 }
+
 .radio {
     @extend .checkbox;
+
     input {
         border-radius: 50% !important;
+
         &:after {
             border-radius: 50%;
         }
@@ -698,6 +791,7 @@ $checkbox-active-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.04), 0px 4px 5px 0px rg
 
     .omni-search {
         border: none !important;
+
         &:hover,
         &:focus,
         &:focus-visible {
@@ -706,12 +800,15 @@ $checkbox-active-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.04), 0px 4px 5px 0px rg
         }
     }
 }
+
 .input-clipboard {
     position: relative;
+
     input {
         height: 40px;
         border-radius: 1.5rem !important;
     }
+
     .btn {
         width: 40px;
         height: 40px;
@@ -724,10 +821,12 @@ $checkbox-active-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.04), 0px 4px 5px 0px rg
         position: absolute;
         top: 0;
         #{$end-direction}: 0;
+
         &:hover {
             background-color: lighten($brand-color, 50%);
             color: $brand-color;
         }
+
         i {
             font-size: 1.5rem;
         }
@@ -736,24 +835,29 @@ $checkbox-active-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.04), 0px 4px 5px 0px rg
 
 .radio-button-group {
     display: flex;
+
     .item {
         max-width: 120px;
         width: 100%;
-        &:first-of-type .radio-button + label {
+
+        &:first-of-type .radio-button+label {
             border-top-left-radius: $input-border-radius;
             border-bottom-left-radius: $input-border-radius;
         }
-        &:last-of-type .radio-button + label {
+
+        &:last-of-type .radio-button+label {
             border-top-right-radius: $input-border-radius;
             border-bottom-right-radius: $input-border-radius;
         }
     }
+
     .radio-button {
         position: absolute;
         width: 1px;
         height: 1px;
         opacity: 0;
-        & + label {
+
+        &+label {
             font-size: 0.85rem;
             padding: $input-padding;
             cursor: pointer;
@@ -764,7 +868,8 @@ $checkbox-active-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.04), 0px 4px 5px 0px rg
             display: block;
             text-align: center;
         }
-        &:checked + label {
+
+        &:checked+label {
             // // background-color: $brand-color;
             // color:  lighten($brand-color, 55%);
             @include bg-brand();
@@ -778,13 +883,14 @@ $checkbox-active-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.04), 0px 4px 5px 0px rg
     list-style: none;
     font-size: 0.75rem;
     padding: 4px;
+
     a {
         color: currentColor;
     }
 }
 
 .field-translate {
-    > div {
+    >div {
         display: flex;
     }
 }
@@ -799,19 +905,23 @@ $checkbox-active-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.04), 0px 4px 5px 0px rg
             align-items: inherit;
         }
     }
-    .card-head-label ~ .card-toolbar {
+
+    .card-head-label~.card-toolbar {
         @include media-breakpoint-up(lg) {
             // max-width: 60%;
             // flex: 0 0 60%;
             margin-#{$start-direction}: 5rem;
         }
     }
+
     .btn-search {
         margin-#{$start-direction}: 0.5rem;
-        + .btn {
+
+        +.btn {
             margin-#{$start-direction}: 0.5rem;
         }
     }
+
     .btn[disabled="disabled"] {
         background-color: #999;
         cursor: not-allowed;
