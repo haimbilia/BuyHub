@@ -323,7 +323,18 @@ trait RfqOffersUtility
         if (!$rfqData) {
             LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST_ID', $this->siteLangId), true);
         }
-
+        $rfq = new RequestForQuote($rfqId);
+        $attr = [
+            'rfq_product_type',
+            'rfq_title',
+            'rfqts_user_id as seller_id',
+            'rfqts_selprod_id'
+        ];
+        $rfqDataArr = $rfq->get($this->siteLangId, $attr, 'LEFT', UserAuthentication::getLoggedUserId());
+        $selProdPrice = 0;
+        if (!empty($rfqDataArr) && !empty($rfqDataArr['rfqts_selprod_id'])) {
+            $selProdPrice = SellerProduct::getAttributesById($rfqDataArr['rfqts_selprod_id'], 'selprod_price');
+        }
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $rfqOfferData = (array)RfqOffers::getAttributesById($recordId, RfqOffers::FIELDS);
         /* if (0 < $recordId && $rfqOfferData['offer_status'] != RfqOffers::STATUS_OPEN) {
@@ -376,6 +387,7 @@ trait RfqOffersUtility
         }
 
         $frm->fill($data);
+        $this->set('selProdPrice', $selProdPrice);
         $this->set('frm', $frm);
         $this->set('rfqId', $rfqId);
         $this->set('rfq_quantity_unit', $rfqData['rfq_quantity_unit']);

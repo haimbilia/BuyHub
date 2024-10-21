@@ -203,7 +203,7 @@ class RequestForQuote extends MyAppModel
      * @param string $defaultJoinType The default join type to use when setting up the search query.
      * @return array An array containing the requested request for quote record data.
      */
-    public function get(int $langId, array $fields = [], string $defaultJoinType = 'INNER'): array
+    public function get(int $langId, array $fields = [], string $defaultJoinType = 'INNER', int $shopUserId = 0): array
     {
         if (1 > $this->getMainTableRecordId()) {
             return [];
@@ -211,7 +211,7 @@ class RequestForQuote extends MyAppModel
 
         $fields = !empty($fields) ? $fields : self::FIELDS;
         $srch = new RequestForQuoteSearch();
-        $srch->setDefaultJoins($langId, $defaultJoinType);
+        $srch->setDefaultJoins($langId, $defaultJoinType, $shopUserId);
         $srch->addMultipleFields($fields);
         $srch->addCondition('rfq_id', '=', $this->getMainTableRecordId());
         return (array)FatApp::getDb()->fetch($srch->getDataResultSet());
