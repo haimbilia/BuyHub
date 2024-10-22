@@ -879,7 +879,7 @@ class DashboardBaseController extends FatController
                 }
                 break;
             case 'RequestForQuotesController':
-                if (!in_array($this->_actionName, ['downloadFile'])) {
+                if (!in_array($this->_actionName, ['downloadFile', 'downloadRfqCopy'])) {
                     return;
                 }
                 break;
