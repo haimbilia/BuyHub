@@ -105,3 +105,4 @@
     - Bug-088262 - The discount coupon appears applied on the order details page even if the seller has not applied any discount on the subscription order.
     - Bug-088170 - << Branch 1>> Deprecation appears on the special price listing page on the seller's end.
     - Bug-088324 - << Branch 1 >> Shipping profile is mandatory to bind with service in case of service product through import
+    - Bug-088567 - Error occurs on the payment page when the advertiser tries to add money to the wallet
