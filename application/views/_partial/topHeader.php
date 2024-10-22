@@ -10,26 +10,7 @@
         <?php if (FatApp::getConfig('CONF_AUTO_RESTORE_ON', FatUtility::VAR_INT, 1) && CommonHelper::demoUrl()) {
             $this->includeTemplate('restore-system/top-header.php');
         } ?>
-        <div class="black-bar">
-            <div class="container">
-                <div class="black-bar-inner">
-                    <div class="black-bar-start">
-                        <?php $this->includeTemplate('_partial/footerNavigation.php', ['topHeadLinks' => true]); ?>
-                    </div>
-                    <div class="black-bar-end">
-                        <?php 
-                        if (CommonHelper::demoUrl()) { ?>
-                        <a class="btn-cta-outline" href="https://www.yo-kart.com/contact-us.html?demo-cta"
-                            rel="noopener" target="_blank"
-                            title="Connect with Yo!Kart team to build a Multivendor Marketplace">Start Your
-                            Marketplace</a>
 
-                        <?php }?>
-                        <?php $this->includeTemplate('_partial/headerLanguageArea.php'); ?>
-                    </div>
-                </div>
-            </div>
-        </div>
         <div class="top-bar no-print">
             <div class="container">
                 <div class="top-bar__inner">
@@ -158,8 +139,17 @@
             <div class="container">
                 <div class="main-bar__inner">
                     <?php $this->includeTemplate('_partial/headerNavigation.php', ['layoutType' => applicationConstants::SCREEN_DESKTOP]); ?>
+
+                    <?php 
+                        if (CommonHelper::demoUrl()) { ?>
+                    <a class="btn-cta-outline" href="https://www.yo-kart.com/contact-us.html?demo-cta" rel="noopener"
+                        target="_blank" title="Connect with Yo!Kart team to build a Multivendor Marketplace">Start Your
+                        Marketplace</a>
+                    <?php }?>
+
                     <?php if ($layoutType == applicationConstants::SCREEN_DESKTOP) {
                         if (0 < FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0) && (User::isBuyer(true) || !UserAuthentication::isUserLogged())) { ?>
+
                     <button class="btn btn-brand btn-rfq" type="button" onclick="requestForQuoteFn(0);">
                         <?php echo Labels::getLabel('LBL_REQUEST_FOR_QUOTE', $siteLangId); ?>
                     </button>

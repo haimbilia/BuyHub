@@ -101,14 +101,6 @@ mark,
   padding: 0;
 }
 
-.mleft-auto {
-  margin-#{$start-direction}: auto !important;
-}
-
-.mright-auto {
-  margin-#{$end-direction}: auto !important;
-}
-
 .text-left {
   text-align: #{$start-direction} !important;
 }
@@ -163,21 +155,11 @@ mark,
   display: none !important;
 }
 
-.-inline-link {
-  text-decoration: underline;
-  font-size: 0.9em;
-  color: $brand-color !important;
-}
-
 .gap {
   height: 1rem;
   clear: both;
   display: table;
   width: 100%;
-}
-
-.padding20 {
-  padding: 20px;
 }
 
 .align-center {
@@ -221,7 +203,6 @@ mark,
   margin: auto;
   color: var(--body-color);
   height: 100%;
-
   .cards-message-icon {
     display: flex;
     align-items: center;
@@ -405,50 +386,50 @@ mark,
   display: flex;
   align-items: center;
   justify-content: center;
-  grid-gap: 0.8rem;
+  grid-gap: 0.5rem;
   flex-direction: row;
   flex-wrap: nowrap;
 
   .btn {
-    background-color: #fff;
-    @include media-breakpoint-up(lg) {
-      border: $border-black;
-    }
-
+    background-color: #f1f1f1;
+    color: #000;
+    border: solid 1px transparent;
     padding: 0;
-    width: 36px;
-    height: 36px;
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
     // display: block;
     display: flex;
     align-items: center;
     justify-content: center;
-
+    @include media-breakpoint-up(lg) {
+      //border: $border-black;
+    }
     &-prev span {
       display: inline-block;
       border-#{$end-direction}: 2px solid currentColor;
       border-bottom: 2px solid currentColor;
-      width: 10px;
-      height: 10px;
+      width: 8px;
+      height: 8px;
       transform: rotate(136deg * $transform-direction);
-      margin-#{$end-direction}: -5px;
+      margin-#{$end-direction}: -3px;
     }
 
     &-next span {
       display: inline-block;
       border-#{$end-direction}: 2px solid currentColor;
       border-bottom: 2px solid currentColor;
-      width: 10px;
-      height: 10px;
+      width: 8px;
+      height: 8px;
       transform: rotate(-45deg * $transform-direction);
-      margin-#{$start-direction}: -5px;
+      margin-#{$start-direction}: -3px;
     }
 
-    &:hover {
-      border-color: $brand-color;
+    &:is(:hover, :focus) {
+      background-color: #000;
+      color: #fff;
       box-shadow: none;
       span {
-        border-color: $brand-color;
       }
     }
   }

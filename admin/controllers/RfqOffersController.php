@@ -295,9 +295,22 @@ class RfqOffersController extends ListingBaseController
         $counterOfferId = FatApp::getPostedData('offer_counter_offer_id', FatUtility::VAR_INT, 0);
 
         $options = [];
+        $selProdPrice = 0;
         if (0 < $recordId) {
             $shopUserId = (int)RfqOffers::getAttributesById($recordId, 'offer_user_id');
             $options = $this->getShopUser($shopUserId);
+            $rfq = new RequestForQuote($rfqId);
+            $attr = [
+                'rfq_product_type',
+                'rfq_title',
+                'rfqts_user_id as seller_id',
+                'rfqts_selprod_id'
+            ];
+            $rfqDataArr = $rfq->get($this->siteLangId, $attr, 'LEFT', $shopUserId);
+            
+            if (!empty($rfqDataArr) && !empty($rfqDataArr['rfqts_selprod_id'])) {
+                $selProdPrice = SellerProduct::getAttributesById($rfqDataArr['rfqts_selprod_id'], 'selprod_price');
+            }
         } else {
             $sellerData = RequestForQuote::getSellersByRecordId($rfqId);
             $sellerIds = array_column($sellerData, 'rfqts_user_id');
@@ -353,6 +366,7 @@ class RfqOffersController extends ListingBaseController
         $frm->fill($data);
 
         $this->set('isGlobal', $rfqData['rfq_visibility_type']);
+        $this->set('selProdPrice', $selProdPrice);
         $this->set('frm', $frm);
         $this->set('rfqId', $rfqId);
         $this->set('rfq_quantity_unit', $qtyUnit);
@@ -1056,5 +1070,26 @@ class RfqOffersController extends ListingBaseController
                 ];
         }
         return $this->nodes;
+    }
+
+    public function getSelProdPrice($rfqId, $userId)
+    {
+        $rfq = new RequestForQuote($rfqId);
+        $attr = [
+            'rfq_product_type',
+            'rfq_title',
+            'rfqts_user_id as seller_id',
+            'rfqts_selprod_id'
+        ];
+        $rfqDataArr = $rfq->get($this->siteLangId, $attr, 'LEFT', $userId);
+        $selProdPrice = 0;
+        if (!empty($rfqDataArr) && !empty($rfqDataArr['rfqts_selprod_id'])) {
+            $selProdPrice = SellerProduct::getAttributesById($rfqDataArr['rfqts_selprod_id'], 'selprod_price');
+        }
+        $selProdPrice = 0 < $selProdPrice ? CommonHelper::displayMoneyFormat($selProdPrice) : $selProdPrice;
+        $jsonData = [
+            'selProdPrice' => $selProdPrice,
+        ];
+        LibHelper::exitWithSuccess($jsonData, true);
     }
 }

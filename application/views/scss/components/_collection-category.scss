@@ -1,3 +1,104 @@
+.category-layout {
+  display: flex;
+  flex-direction: column;
+  gap: $gap;
+
+  @include media-breakpoint-up(xl) {
+    flex-direction: row;
+  }
+  &-banner {
+    @include media-breakpoint-up(xl) {
+      max-width: 278px;
+      flex: 0 0 278px;
+    }
+  }
+  &-grid {
+    flex: 1;
+    grid-column-gap: 1px;
+    grid-row-gap: 1px;
+    background-color: $border-color;
+
+    display: grid;
+    border: $border;
+    border-radius: $kart;
+    overflow: hidden;
+    @include media-breakpoint-up(xl) {
+      grid-template-rows: auto auto;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-auto-columns: 1fr;
+    }
+  }
+  &-item {
+    background-color: #fff;
+    padding: $gap;
+    // border: $border;
+  }
+  &-head {
+    font-size: 1rem;
+    color: $txt-body;
+    margin-bottom: 0.5rem;
+  }
+  &-body {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-direction: row;
+  }
+  &-links {
+    flex: 1;
+    a {
+      font-size: 0.8rem;
+      color: $txt-gray;
+      &:hover {
+        color: $txt-body;
+      }
+    }
+  }
+  &-product {
+    max-width: 128px;
+  }
+}
+.category-layout-1 {
+  display: grid;
+  gap: $gap;
+  grid-template-columns: auto;
+  @include media-breakpoint-up(xl) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  &-item {
+    border: $border;
+    border-radius: $kart;
+  }
+  .section-head {
+    padding: 1rem;
+    margin: 0;
+    border-bottom: $border;
+    h2 {
+      font-size: 1.2rem;
+    }
+  }
+  .product-item {
+    padding: 1rem;
+    border-bottom: $border;
+    display: flex;
+    flex-direction: row;
+    &:last-child {
+      border-bottom: none;
+    }
+    .products-body {
+      max-width: 102px;
+    }
+    .products-foot {
+      padding: 0;
+    }
+  }
+  &-head {
+  }
+  &-head {
+  }
+  &-head {
+  }
+}
 .category-layout-2 {
   display: grid;
   grid-gap: 1rem;
@@ -107,7 +208,6 @@
     }
   }
 }
-
 .category-layout-3 {
   display: grid;
   grid-gap: 1px;
@@ -179,7 +279,32 @@
     }
   }
 }
-
+.category-layout-4 {
+  display: grid;
+  gap: $gap;
+  grid-template-columns: auto;
+  @include media-breakpoint-up(xl) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  &-item {
+    background-color: #fff;
+    border-radius: $kart;
+    border: 1px solid #ebebeb;
+    padding: $gap;
+    // border: $border;
+  }
+  &-head {
+    font-size: 1rem;
+    color: $txt-body;
+    margin-bottom: 1rem;
+  }
+  &-body {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-direction: row;
+  }
+}
 .category-layout-page {
   grid-template-columns: repeat(1, 1fr);
   overflow: visible;
@@ -193,7 +318,6 @@
     grid-template-columns: repeat(4, 1fr);
   }
 }
-
 .page-category {
   padding: 0;
   position: relative;
@@ -209,76 +333,6 @@
 
     p {
       font-size: 0.9em;
-    }
-  }
-}
-
-.cg-nav-wrapper {
-  margin-bottom: 2rem;
-
-  ul {
-    display: flex;
-    flex: 1;
-    flex-wrap: wrap;
-    color: $txt-body;
-
-    @include media-breakpoint-down(md) {
-      flex-wrap: nowrap;
-      overflow-x: auto;
-    }
-
-    li {
-      flex: 0 0 25%;
-      max-width: 25%;
-      padding: 5px;
-
-      @include media-breakpoint-down(md) {
-        flex: auto;
-        max-width: inherit;
-      }
-
-      &:first-child {
-      }
-
-      a {
-        background: #fff;
-        border: $border;
-        border-radius: $common-radius;
-        color: inherit;
-        display: flex;
-        align-items: center;
-        padding: 0;
-
-        .cg-icon {
-          height: 2.5rem;
-          width: 2.5rem;
-          display: flex;
-          align-items: center;
-          border-right: $border;
-          overflow: hidden;
-          padding: 0.5rem;
-          margin-right: 0.5rem;
-        }
-
-        .caption {
-          padding: 0.5rem;
-
-          @include media-breakpoint-down(md) {
-            white-space: nowrap;
-          }
-        }
-      }
-
-      &.iss--active {
-        a {
-          color: $primary-color;
-          border-color: $primary-color;
-
-          .cg-icon {
-            border-color: $primary-color;
-          }
-        }
-      }
     }
   }
 }
@@ -392,8 +446,9 @@
   gap: 1rem;
   align-items: center;
   margin-bottom: 0 !important;
+  padding: 0 4rem;
   .slick-list {
-   /*  overflow: hidden;
+    /*  overflow: hidden;
     mask: linear-gradient(
       90deg,
       transparent,

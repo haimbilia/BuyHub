@@ -25,6 +25,7 @@
 @import "components/form";
 @import "components/checkbox";
 @import "components/button";
+@import "components/link";
 @import "components/side-cart";
 //@import "components/catalog-popup";
 @import "components/section";
@@ -44,6 +45,8 @@
 //@import "components/multi-list";
 //@import "components/pagination";
 @import "components/product-card";
+@import "components/shop-profile";
+@import "components/product-prices";
 @import "components/pro-info";
 @import "components/slider";
 @import "components/social-profiles";
@@ -86,6 +89,7 @@
 @import "components/collection-incentives";
 @import "components/collection-newsletter";
 @import "components/collection-blog";
+@import "components/collection-rfq";
 //@import "components/ion.rangeSlider";
 //@import "components/ion.rangeSlider.skinHTML5";
 //@import "components/jquery.datetimepicker";
@@ -119,7 +123,7 @@
 // @import "pages/index";
 @import "pages/collections";
 @import "pages/login";
-//@import "pages/listing";
+@import "pages/listing";
 //@import "pages/detail";
 @import "pages/cart";
 //@import "pages/checkout";
@@ -155,6 +159,33 @@
     }
     img {
       height: 100%;
+      width: 100%;
+    }
+  }
+}
+
+.hero-banners-1 {
+  display: grid;
+  grid-template-columns: 68% 1fr;
+  gap: 6px;
+  @include media-breakpoint-up(lg) {
+    gap: $gap;
+  }
+  .banners {
+    background-color: $bg-placeholder;
+    border: none;
+    border-radius: $kart;
+    aspect-ratio: 10/4;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    &:first-of-type {
+      grid-row-start: 1;
+      grid-row-end: 3;
+    }
+    img {
+      object-fit: cover;
+      // height: 100%;
       width: 100%;
     }
   }

@@ -196,6 +196,17 @@ class CollectionsController extends ListingBaseController
     {
         $typeLayouts = Collections::getTypeSpecificLayouts($this->siteLangId);
         $typeArr = Collections::getTypeArr($this->siteLangId);
+
+        $sliderSrch = Collections::getSearchObject(false, 0);
+        $sliderSrch->addCondition('collection_type', '=', Collections::COLLECTION_TYPE_HERO_SLIDES);
+        $sliderSrch->doNotCalculateRecords();
+        $rs = $sliderSrch->getResultSet();
+        $row = (array) FatApp::getDb()->fetch($rs);
+        if (!empty($row)) {
+            unset($typeArr[Collections::COLLECTION_TYPE_HERO_SLIDES]);
+            unset($typeLayouts[Collections::COLLECTION_TYPE_HERO_SLIDES]);
+        }
+
         $this->set('typeLayouts', $typeLayouts);
         $this->set('typeArr', $typeArr);
         $this->set('html', $this->_template->render(false, false, NULL, true));

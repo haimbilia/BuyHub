@@ -21,62 +21,68 @@ if ($totReviews) {
 }
 ?>
 <div class="rating-block">
-    <p class="text-muted text-info"><?php echo $totalType . ' ' . Labels::getLabel('LBL_RATING`S_TYPE', $siteLangId); ?></p>
+    <p class="text-muted text-info"><?php echo $totalType . ' ' . Labels::getLabel('LBL_RATING`S_TYPE', $siteLangId); ?>
+    </p>
     <ul class="progress-block">
         <li class="progress-block-item">
             <span class="star">
-                <span class="txt">5</span> <svg class="svg" width="9" height="9">
+                <span class="txt">5</span> <svg class="svg svg-star" width="9" height="9">
                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
                     </use>
                 </svg></span>
-            <progress class="progress" min="0" max="100" value="<?php echo $rate_5_width; ?>" data-rating="<?php echo $rated_5; ?>"></progress>
+            <progress class="progress" min="0" max="100" value="<?php echo $rate_5_width; ?>"
+                data-rating="<?php echo $rated_5; ?>"></progress>
             <span class="count"><?php echo $rate_5_width; ?>%</span>
         </li>
         <li class="progress-block-item">
             <span class="star">
-                <span class="txt">4</span><svg class="svg" width="9" height="9">
+                <span class="txt">4</span><svg class="svg svg-star" width="9" height="9">
                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
                     </use>
                 </svg></span>
-            <progress class="progress" min="0" max="100" value="<?php echo $rate_4_width; ?>" data-rating="<?php echo $rated_4; ?>"></progress>
+            <progress class="progress" min="0" max="100" value="<?php echo $rate_4_width; ?>"
+                data-rating="<?php echo $rated_4; ?>"></progress>
             <span class="count"><?php echo $rate_4_width; ?>%</span>
         </li>
         <li class="progress-block-item">
             <span class="star">
-                <span class="txt">3</span> <svg class="svg" width="9" height="9">
+                <span class="txt">3</span> <svg class="svg svg-star" width="9" height="9">
                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
                     </use>
                 </svg></span>
-            <progress class="progress" min="0" max="100" value="<?php echo $rate_3_width; ?>" data-rating="<?php echo $rated_3; ?>"></progress>
+            <progress class="progress" min="0" max="100" value="<?php echo $rate_3_width; ?>"
+                data-rating="<?php echo $rated_3; ?>"></progress>
             <span class="count"><?php echo $rate_3_width; ?>%</span>
         </li>
         <li class="progress-block-item">
             <span class="star">
-                <span class="txt">2</span><svg class="svg" width="9" height="9">
+                <span class="txt">2</span><svg class="svg svg-star" width="9" height="9">
                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
                     </use>
                 </svg></span>
-            <progress class="progress" min="0" max="100" value="<?php echo $rate_2_width; ?>" data-rating="<?php echo $rated_4; ?>"></progress>
+            <progress class="progress" min="0" max="100" value="<?php echo $rate_2_width; ?>"
+                data-rating="<?php echo $rated_4; ?>"></progress>
             <span class="count"><?php echo $rate_2_width; ?>%</span>
         </li>
         <li class="progress-block-item">
             <span class="star">
                 <span class="txt">1</span>
-                <svg class="svg" width="9" height="9">
+                <svg class="svg svg-star" width="9" height="9">
                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
                     </use>
                 </svg></span>
-            <progress class="progress" min="0" max="100" value="<?php echo $rate_1_width; ?>" data-rating="<?php echo $rated_1; ?>"></progress>
+            <progress class="progress" min="0" max="100" value="<?php echo $rate_1_width; ?>"
+                data-rating="<?php echo $rated_1; ?>"></progress>
             <span class="count"><?php echo $rate_1_width; ?>%</span>
         </li>
     </ul>
 </div>
 <?php if (0 < count($ratingAspects)) { ?>
-    <div class="divider"></div>
-    <div class="rating-block">
-        <h5 class="title-sub"><?php echo Labels::getLabel('LBL_BY_CATEGORY', $siteLangId); ?></h5>
-        <ul class="rating-by-category">
-            <?php foreach ($ratingAspects as $rating) {
+<div class="divider"></div>
+<div class="rating-block">
+    <h5 class="title-sub"><?php echo Labels::getLabel('LBL_BY_CATEGORY', $siteLangId); ?></h5>
+    <ul class="rating-by-category">
+        <?php foreach ($ratingAspects as $rating) {
                 $ratingValue = CommonHelper::numberFormat($rating['prod_rating'], false, true, 1);
                 $width = round(FatUtility::convertToType($rating['prod_rating'] / 5 * 100, FatUtility::VAR_FLOAT), 2);
                 $label = Labels::getLabel('LBL_{RATING}_RATING_OUT_OF_5_FOR_{NAME}', $siteLangId);
@@ -85,31 +91,32 @@ if ($totReviews) {
                     '{NAME}' => $rating['ratingtype_name'],
                 ]);
             ?>
-                <li class="rating-by-category-item">
-                    <span class="label">
-                        <?php echo $rating['ratingtype_name']; ?>
-                    </span>
-                    <span class="value">
-                        <svg class="svg" width="11" height="11">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
-                            </use>
-                        </svg>
-                        <span class="out-of"><?php echo $ratingValue; ?> /5</span>
-                    </span>
-                </li>
-            <?php } ?>
-        </ul>
-    </div>
+        <li class="rating-by-category-item">
+            <span class="label">
+                <?php echo $rating['ratingtype_name']; ?>
+            </span>
+            <span class="value">
+                <svg class="svg svg-star" width="11" height="11">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
+                    </use>
+                </svg>
+                <span class="out-of"><?php echo $ratingValue; ?> /5</span>
+            </span>
+        </li>
+        <?php } ?>
+    </ul>
+</div>
 <?php } ?>
 <?php if ($canSubmitFeedback) { ?>
-    <div class="divider"></div>
-    <div class="rating-block">
-        <div class="review-cta">
-            <h5 class="title-sub"><?php echo Labels::getLabel('LBL_REVIEW_THIS_PRODUCT', $siteLangId); ?></h5>
-            <p><?php echo Labels::getLabel('LBL_SHARE_YOUR_THOUGHTS_WITH_OTHER_CUSTOMERS', $siteLangId); ?></p>
-            <button class="btn btn-brand btn-block" type="button" onclick="rateAndReviewProduct(<?php echo $product_id; ?>)">
-                <?php echo Labels::getLabel('LBL_WRITE_A_REVIEW', $siteLangId); ?>
-            </button>
-        </div>
+<div class="divider"></div>
+<div class="rating-block">
+    <div class="review-cta">
+        <h5 class="title-sub"><?php echo Labels::getLabel('LBL_REVIEW_THIS_PRODUCT', $siteLangId); ?></h5>
+        <p><?php echo Labels::getLabel('LBL_SHARE_YOUR_THOUGHTS_WITH_OTHER_CUSTOMERS', $siteLangId); ?></p>
+        <button class="btn btn-brand btn-block" type="button"
+            onclick="rateAndReviewProduct(<?php echo $product_id; ?>)">
+            <?php echo Labels::getLabel('LBL_WRITE_A_REVIEW', $siteLangId); ?>
+        </button>
     </div>
+</div>
 <?php } ?>

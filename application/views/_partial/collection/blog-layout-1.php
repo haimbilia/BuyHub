@@ -1,7 +1,7 @@
 <?php if (isset($collection['blogs']) && count($collection['blogs']) > 0) { ?>
 <section class="section" data-section="section">
     <div class="container">
-        <div class="section-head">
+        <header class="section-head">
             <?php echo (isset($collection['collection_name']) && $collection['collection_name'] != '') ? ' <div class="section-heading"><h2>' . $collection['collection_name'] . '</h2></div>' : ''; ?>
             <?php if (isset($collection['totBlogs']) && $collection['totBlogs'] > Collections::LIMIT_BLOG_LAYOUT1) { ?>
             <div class="section-foot">
@@ -12,7 +12,7 @@
                 </div>
             </div>
             <?php } ?>
-        </div>
+        </header>
         <div class="row">
             <?php foreach ($collection['blogs'] as $blog) { ?>
             <div class="col-md-4 mb-4 mb-md-0">
@@ -60,7 +60,6 @@
             </div>
             <?php } ?>
         </div>
-
     </div>
 </section>
 <?php } ?>

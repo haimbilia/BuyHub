@@ -139,9 +139,9 @@
 }
 
 .buy-action {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .select-options {
@@ -659,11 +659,6 @@ $sharing-height: 50px;
 
 .refresh {
   margin: 5px 10px;
-}
-
-.shop-profile {
-  border-radius: $common-radius;
-  border: $border;
 }
 
 .shop-avatar {

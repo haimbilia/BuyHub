@@ -72,68 +72,24 @@
     text-align: #{$start-direction};
     color: $txt-body;
     @include media-breakpoint-up(lg) {
-      text-align: center;
+      //  text-align: center;
     }
   }
   &-img {
     display: block;
     margin: 0;
-    aspect-ratio: 1/1;
+    aspect-ratio: $product-ratio;
     position: relative;
     width: 100%;
     overflow: hidden;
     background-color: $bg-gray;
     border-radius: $kart;
-    &:before {
-      position: absolute;
-      top: 0;
-      left: -75%;
-      z-index: 2;
-      display: block;
-      //content: "";
-      width: 50%;
-      height: 100%;
-      background: -webkit-linear-gradient(
-        left,
-        rgba(255, 255, 255, 0) 0%,
-        rgba(255, 255, 255, 0.3) 100%
-      );
-      background: linear-gradient(
-        to right,
-        rgba(255, 255, 255, 0) 0%,
-        rgba(255, 255, 255, 0.3) 100%
-      );
-      transform: skewX(-25deg);
-    }
-
-    &:hover::before {
-      //animation: shine 0.75s;
-    }
-
-    @-webkit-keyframes shine {
-      100% {
-        left: 125%;
-      }
-    }
-
-    @keyframes shine {
-      100% {
-        left: 125%;
-      }
-    }
-
     img {
-      border: solid 1px lighten($border-color, 8);
-      mix-blend-mode: multiply;
+      // border: solid 1px lighten($border-color, 8);
+      //  mix-blend-mode: multiply;
       object-fit: cover;
       max-width: 100%;
       width: 100%;
-      bottom: 0;
-      left: 0;
-      margin: auto;
-      position: absolute;
-      right: 0;
-      top: 0;
       transition: all 0.5s linear;
     }
   }
@@ -150,6 +106,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    display: block;
     // white-space: nowrap;
     // max-width: 100%;
     //text-overflow: ellipsis;
@@ -162,7 +119,6 @@
       // overflow: hidden;
       // text-overflow: ellipsis;
     }
-
     a {
       color: inherit;
       font-size: inherit;
@@ -176,104 +132,17 @@
     font-weight: $font-weight-regular;
     //margin-bottom: 8px;
   }
-
-  //.products-price
-
-  &-price {
-    display: inline-flex;
-    align-items: center;
-    flex-flow: row wrap;
-    // justify-content: center;
+  &-brand {
+    color: $txt-gray;
     font-size: 0.85rem;
-    color: inherit;
-    padding: 0;
-    gap: 5px;
-
-    // display: inline-flex;
-    //justify-content: center;
-    &-new {
-      font-weight: $font-weight-bold;
-    }
-
-    &-old {
-      //padding: 0 6px;
-      text-decoration: line-through;
-      color: $txt-gray;
-    }
-
-    &-off {
-      // padding: 0 6px;
-      font-weight: $font-weight-regular;
-      color: $txt-body;
-      white-space: nowrap;
-    }
+    font-weight: $font-weight-regular;
+    //margin-bottom: 8px;
   }
 
   .products-head-specification {
     color: lighten($txt-body, 50%);
     font-size: 1em;
     font-weight: $font-weight-regular;
-  }
-
-  .products_ft_list {
-    li {
-      color: lighten($txt-body, 50%);
-      font-size: 0.9em;
-      font-weight: $font-weight-regular;
-      margin: 4px 0;
-      position: relative;
-      padding: 0 16px;
-
-      &:before {
-        border-radius: 50%;
-        width: 9px;
-        height: 9px;
-        background: #d9d9d9;
-        position: absolute;
-        #{$start-direction}: 0;
-        top: 5px;
-        display: block;
-        content: "";
-      }
-    }
-  }
-}
-
-@-webkit-keyframes fadein {
-  0% {
-    filter: opacity(0%) blur(6px);
-  }
-
-  50% {
-    filter: opacity(100%) blur(3px);
-  }
-
-  100% {
-    filter: opacity(100%) blur(1px);
-  }
-}
-
-@-webkit-keyframes slideRight {
-  0% {
-    opacity: 0;
-    #{$start-direction}: 30px;
-  }
-
-  100% {
-    opacity: 1;
-    #{$start-direction}: 0;
-  }
-}
-
-@keyframes slideRight {
-  0% {
-    opacity: 0;
-    #{$start-direction}: 30px;
-  }
-
-  100% {
-    opacity: 1;
-    #{$start-direction}: 0;
   }
 }
 
@@ -282,79 +151,7 @@
   padding: 15px;
 }
 
-.product-listing {
-  display: grid;
-  grid-gap: $gap;
-  grid-template-columns: repeat(auto-fill, minmax(144px, 1fr));
-
-  .item {
-    min-width: 0;
-  }
-
-  @include media-breakpoint-up(xl) {
-    &[data-view="2"] {
-      grid-template-columns: repeat(2, 1fr);
-    }
-
-    &[data-view="3"] {
-      grid-template-columns: repeat(3, 1fr);
-    }
-
-    &[data-view="4"] {
-      grid-template-columns: repeat(4, 1fr);
-    }
-
-    &[data-view="5"] {
-      grid-template-columns: repeat(5, 1fr);
-    }
-
-    &[data-view="6"] {
-      grid-template-columns: repeat(6, 1fr);
-    }
-  }
-
-  // @include media-breakpoint-down(md) {
-  //     &[data-view="3"] {
-  //         grid-template-columns: repeat(3, 1fr);
-  //     }
-  //     &[data-view="4"] {
-  //         grid-template-columns: repeat(3, 1fr);
-  //     }
-  //     &[data-view="5"] {
-  //         grid-template-columns: repeat(3, 1fr);
-  //     }
-  //     &[data-view="6"] {
-  //         grid-template-columns: repeat(3, 1fr);
-  //     }
-  // }
-  // @include media-breakpoint-down(sm) {
-  //     grid-gap: 1px;
-  //     &[data-view="3"] {
-  //         grid-template-columns: repeat(2, 1fr);
-  //     }
-  //     &[data-view="4"] {
-  //         grid-template-columns: repeat(2, 1fr);
-  //     }
-  //     &[data-view="5"] {
-  //         grid-template-columns: repeat(2, 1fr);
-  //     }
-  //     &[data-view="6"] {
-  //         grid-template-columns: repeat(2, 1fr);
-  //     }
-  // }
-  @include media-breakpoint-down(sm) {
-    grid-gap: 1px;
-
-    .products {
-      border-radius: 0px;
-    }
-  }
-
-  .products {
-    height: 100%;
-  }
-}
-
+//not-available
 .not-available {
   position: absolute;
   bottom: 0;
@@ -384,6 +181,7 @@
   }
 }
 
+//out-of-stock
 .out-of-stock {
   // opacity: 0.3;
   &-txt {
@@ -406,106 +204,4 @@
     justify-content: center;
     // width: 100%;
   }
-}
-
-.collections-ui {
-  position: absolute;
-  #{$end-direction}: 2.5rem;
-  bottom: 0;
-  z-index: 1;
-  transition-delay: 500ms;
-
-  &.static--collection {
-    #{$end-direction}: 0;
-
-    > ul > li {
-      display: inline-block;
-      vertical-align: top;
-      margin: 0 4px;
-      position: relative;
-    }
-  }
-
-  > ul {
-    > li {
-      > span {
-        display: block;
-        width: 2.5rem;
-        background: $brand-color;
-        color: $brand-color-inverse;
-        border-radius: 50%;
-        height: 2.5rem;
-        cursor: pointer;
-      }
-    }
-  }
-
-  .svg {
-    width: 16px;
-    height: 16px;
-    fill: #fff;
-    top: 50%;
-    #{$start-direction}: 50%;
-    transform: translate(-50%, -50%);
-    position: absolute;
-  }
-
-  .fa {
-    color: #fff;
-    font-size: 16px;
-  }
-
-  .svg,
-  img {
-    max-width: 100%;
-    height: auto;
-  }
-
-  > ul > li.is-active > span {
-    background: $secondary-color;
-    color: $secondary-color-inverse;
-  }
-}
-
-.collection-toggle.is-active .svg {
-  fill: $secondary-color;
-}
-
-.rating {
-  display: flex;
-  align-items: center;
-}
-
-.products-reviews {
-  display: inline-block;
-  vertical-align: middle;
-
-  .totals-review {
-    color: $brand-color;
-    display: block;
-
-    .link {
-      &:after {
-        background: $brand-color;
-        color: $brand-color-inverse;
-      }
-    }
-  }
-}
-
-.item__price {
-  font-weight: $font-weight-bold;
-
-  &_old {
-    color: $txt-gray;
-    font-weight: $font-weight-regular;
-  }
-
-  &_off {
-    font-weight: $font-weight-regular;
-  }
-}
-
-.item__price_off {
-  color: $primary-color;
 }

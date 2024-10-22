@@ -1,19 +1,17 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 $pixelId = FatApp::getConfig("CONF_FACEBOOK_PIXEL_ID", FatUtility::VAR_STRING, '');
-if ('' !=  $pixelId) {  ?>
+if ('' != $pixelId) { ?>
 <img alt="Facebook Pixel" height="1" width="1" style="display:none"
     src="https://www.facebook.com/tr?id=<?php echo $pixelId; ?>&ev=PageView&noscript=1" />
 <?php } ?>
 
 <?php if (FatApp::getConfig('CONF_ENABLE_NEWSLETTER_SUBSCRIPTION', FatUtility::VAR_INT, 0)) { ?>
-<section class="section bg-newsletter no-print"
-    style="background-image:url(<?php echo CONF_WEBROOT_URL; ?>images/bg/bg-newsletter.jpg) ;">
+<section class="section bg-newsletter no-print">
     <?php
         $this->includeTemplate('_partial/footerNewsLetterForm.php'); ?>
 </section>
-<?php  } ?>
-
+<?php } ?>
 <footer class="footer section no-print" id="footer">
     <section class="footer-top">
         <div class="container">
@@ -35,8 +33,8 @@ if ('' !=  $pixelId) {  ?>
 
                     <ul class="contact-info">
                         <?php
-                        $dialCode =  FatApp::getConfig('CONF_SITE_PHONE_DCODE', FatUtility::VAR_STRING, '');
-                        $site_conatct =  FatApp::getConfig('CONF_SITE_PHONE', FatUtility::VAR_INT, '');
+                        $dialCode = FatApp::getConfig('CONF_SITE_PHONE_DCODE', FatUtility::VAR_STRING, '');
+                        $site_conatct = FatApp::getConfig('CONF_SITE_PHONE', FatUtility::VAR_INT, '');
                         if ($site_conatct) { ?>
                         <li class="contact-info-item">
                             <span
@@ -55,7 +53,7 @@ if ('' !=  $pixelId) {  ?>
                     <?php
                     $this->includeTemplate('_partial/headerLanguageArea.php');
                     if (!empty(CommonHelper::getTechPartner())) {
-                    ?>
+                        ?>
                     <div class="payment mt-3">
                         <img src="<?php echo CONF_WEBROOT_URL; ?>images/payment-method/payment-1.svg" width="36"
                             height="23" alt="<?php echo Labels::getLabel('LBL_PAYMENT_OPTIONS', $siteLangId); ?>">
@@ -93,7 +91,7 @@ if ('' !=  $pixelId) {  ?>
                     <?php echo CommonHelper::getCopyRight($siteLangId); ?>
                 </div>
                 <?php if (empty(CommonHelper::getTechPartner())) {
-                ?>
+                    ?>
                 <div class="payment">
                     <img src="<?php echo CONF_WEBROOT_URL; ?>images/payment-method/payment-1.svg" width="36" height="23"
                         alt="<?php echo Labels::getLabel('LBL_PAYMENT_OPTIONS', $siteLangId); ?>">
@@ -167,12 +165,12 @@ if ('' !=  $pixelId) {  ?>
             </button>
         </div>
         <div class="mobile-actions-item">
-            <?php if ((!UserAuthentication::isUserLogged() && UserAuthentication::isGuestUserLogged()) ||  UserAuthentication::isUserLogged()) { ?>
+            <?php if ((!UserAuthentication::isUserLogged() && UserAuthentication::isGuestUserLogged()) || UserAuthentication::isUserLogged()) { ?>
             <button class="mobile-actions-link" type="button" data-bs-toggle="offcanvas"
                 data-bs-target="#offcanvas-account">
                 <?php } else { ?>
                 <button class="mobile-actions-link sign-in-popup-js" type="button">
-                    <?php  } ?>
+                    <?php } ?>
                     <svg class="svg" width="24" height="24">
                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#mbl-account">
                         </use>
@@ -295,7 +293,7 @@ $.getScript("https://cdn.engagespot.co/engagespot-client.min.js", function(data,
             var x = setInterval(function() {
                 var now = new Date($.now());
                 var diffMs = (now.getTime() - parseInt(getCookie(
-                "demoSessionStartTime"))); // milliseconds between now & stored time
+                    "demoSessionStartTime"))); // milliseconds between now & stored time
                 var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes
 
                 if (diffMins > 1 && getCookie("demoImgpopup1") != 1) {

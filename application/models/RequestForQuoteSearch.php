@@ -24,9 +24,9 @@ class RequestForQuoteSearch extends SearchBase
      * @param  int $langId
      * @return void
      */
-    public function setDefaultJoins(int $langId = 0, string $defaultJoinType = 'INNER'): void
+    public function setDefaultJoins(int $langId = 0, string $defaultJoinType = 'INNER', int $shopUserId = 0): void
     {
-        $this->joinSellers($defaultJoinType);
+        $this->joinSellers($defaultJoinType,$shopUserId);
         $this->joinProduct((0 < $langId), $defaultJoinType);
         $this->joinBuyer();
         $this->joinSellerShop((0 < $langId));

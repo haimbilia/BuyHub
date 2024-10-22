@@ -203,7 +203,7 @@
       // padding: 0;
       min-height: 50%;
       min-width: 0;
-
+      padding: 1rem;
       @include media-breakpoint-up(lg) {
         align-items: center;
         min-height: 234px;
@@ -411,4 +411,35 @@
   opacity: 0;
   transform: translate(-50%, -50%);
   transition: all 0.3s ease-in-out 0s;
+}
+
+//B2B collection
+.product-layout-5 {
+  background-color: transparent;
+  border: $border;
+  border-radius: $kart;
+  display: flex;
+  flex-direction: row;
+  margin: 0;
+  padding: 0;
+  .js-carousel-item {
+    padding: 0;
+  }
+  .products {
+    padding: 1rem;
+    border-#{$end-direction}: $border;
+  }
+  .price-off {
+    background-color: #fbd33f;
+    color: #000;
+    border-bottom-#{$start-direction}-radius: 9px;
+    padding: 4px 7px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1;
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    #{$end-direction}: 0;
+  }
 }

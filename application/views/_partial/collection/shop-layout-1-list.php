@@ -32,7 +32,7 @@
             </div>
             <?php if (round($collection['rating'][$shop['shopData']['shop_id']]) > 0) { ?>
             <div class="product-ratings">
-                <svg class="svg" width="14" height="14">
+                <svg class="svg svg-star" width="14" height="14">
                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow"></use>
                 </svg>
                 <span class="rate">
