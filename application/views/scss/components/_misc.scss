@@ -101,14 +101,6 @@ mark,
   padding: 0;
 }
 
-.mleft-auto {
-  margin-#{$start-direction}: auto !important;
-}
-
-.mright-auto {
-  margin-#{$end-direction}: auto !important;
-}
-
 .text-left {
   text-align: #{$start-direction} !important;
 }
@@ -163,21 +155,11 @@ mark,
   display: none !important;
 }
 
-.-inline-link {
-  text-decoration: underline;
-  font-size: 0.9em;
-  color: $brand-color !important;
-}
-
 .gap {
   height: 1rem;
   clear: both;
   display: table;
   width: 100%;
-}
-
-.padding20 {
-  padding: 20px;
 }
 
 .align-center {
@@ -221,7 +203,6 @@ mark,
   margin: auto;
   color: var(--body-color);
   height: 100%;
-
   .cards-message-icon {
     display: flex;
     align-items: center;

@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 
 <script>
-    ykevents.viewContent();
+ykevents.viewContent();
 </script>
 
 <main id="main" class="main">

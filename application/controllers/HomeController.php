@@ -1851,6 +1851,7 @@ class HomeController extends MyAppController
 
     public function dummy()
     {
+        $this->_template->addJs(['js/slick.min.js', 'js/slick-carousels.js']);
         $this->_template->render();
     }
     public function dummy2()

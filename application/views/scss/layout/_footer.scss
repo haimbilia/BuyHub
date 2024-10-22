@@ -1,6 +1,5 @@
 .footer {
-  color: $txt-gray;
-  background: $bg-white;
+  @include bg-white;
   padding-bottom: 5rem !important;
 
   @include media-breakpoint-up(lg) {
@@ -23,7 +22,7 @@
       margin: 0;
       font-size: 0.875rem;
       font-weight: $font-weight-bold;
-      color: $txt-body;
+      color: currentColor;
 
       .icn {
         margin-#{$end-direction}: 8px;
@@ -36,7 +35,7 @@
     }
 
     &-link {
-      color: inherit;
+      color: currentColor;
       text-decoration: underline;
     }
   }
@@ -65,26 +64,24 @@
 
   &-bottom {
     border-top: $border;
-
     &-inner {
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 1.5rem 0;
       flex-direction: column;
-
       @include media-breakpoint-up(lg) {
         flex-direction: row;
       }
 
       .copyright,
       .tech-partner {
-        color: $txt-gray;
+        color: currentColor;
         font-size: 0.75rem;
         padding: 10px 0;
 
         a {
-          color: $txt-body;
+          color: currentColor;
           font-weight: $font-weight-bold;
           text-decoration: underline;
 
@@ -137,7 +134,7 @@
 
   .footer-group {
     &-head {
-      color: $txt-body;
+      color: currentColor;
       font-size: 1rem;
       font-weight: $font-weight-normal;
       padding: 5px 0;
@@ -175,7 +172,7 @@
       }
 
       &-item {
-        color: inherit;
+        color: currentColor;
         font-size: 0.875em;
         font-weight: $font-weight-regular;
         padding: 5px 0;
@@ -183,7 +180,7 @@
       }
 
       &-link {
-        color: $txt-gray;
+        color: currentColor;
         font-size: inherit;
         position: relative;
         text-rendering: optimizeLegibility;
@@ -196,7 +193,7 @@
 
         &:hover,
         &:focus {
-          color: $brand-color;
+          color: currentColor;
           text-decoration: none;
           background-size: 100% 1px;
         }
@@ -210,7 +207,7 @@
   min-width: 330px;
   font-size: 0.85rem;
   padding: 2rem;
-  color: $txt-gray;
+  color: currentColor;
 
   .h6 {
     display: block;
@@ -236,7 +233,7 @@
           // border-color: $brand-color;
           // color: $brand-color;
           border-color: #000;
-          color: $txt-body;
+          color: currentColor;
         }
       }
 
@@ -290,12 +287,12 @@
 
   &-link {
     display: inline-flex;
-    color: $txt-body;
+    color: currentColor;
     font-weight: $font-weight-bold;
 
     &:hover,
     &:focus {
-      color: $brand-color;
+      color: currentColor;
     }
   }
 
@@ -330,72 +327,6 @@
   }
 }
 
-.accordion-footer {
-  margin-bottom: 25px;
-  border-bottom: $border;
-}
-
-.accordion_triger {
-  padding: 15px 0;
-  position: relative;
-  color: inherit;
-  font-size: 0.9em;
-  font-weight: $font-weight-bold;
-  text-transform: uppercase;
-  line-height: 1;
-  cursor: pointer;
-}
-
-.accordion_triger span {
-  float: right;
-  font-size: inherit;
-  font-weight: inherit;
-  position: relative;
-  line-height: 1;
-}
-
-.accordion_triger span:after {
-  content: "+";
-  padding-#{$start-direction}: 5px;
-}
-
-.accordion_triger.active span:after {
-  content: "-";
-}
-
-.accordion_content {
-  display: none;
-  padding: 10px 0;
-  padding-top: 0;
-}
-
-.footerSubCategories li {
-  display: inline-block;
-  font-size: 0.8em;
-  color: inherit;
-  line-height: 1;
-  font-weight: $font-weight-regular;
-  position: relative;
-}
-
-.footerSubCategories li a {
-  font-size: inherit;
-  color: inherit;
-}
-
-.footerSubCategories li:after {
-  content: "|";
-  padding-#{$start-direction}: 2px;
-}
-
-.footerSubCategories li:last-child:after {
-  content: normal;
-}
-
-.footerSubCategories li a:hover {
-  color: $brand-color;
-}
-
 .about-platform {
   margin-bottom: 2rem;
 
@@ -407,13 +338,13 @@
   h2,
   h3 {
     font-weight: $font-weight-normal;
-    color: $txt-body;
+    color: currentColor;
     font-size: 18px;
     margin-bottom: 0.5rem;
   }
 
   p {
-    color: $txt-gray;
+    color: currentColor;
     font-size: 14px;
     margin-bottom: 1rem;
   }

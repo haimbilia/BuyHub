@@ -181,3 +181,33 @@
     }
   }
 }
+
+.recommended-layout {
+  display: grid;
+  gap: $gap;
+  grid-template-columns: auto;
+  @include media-breakpoint-up(xl) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  &-item {
+    background-color: #f6f5f4;
+    border-radius: $kart;
+    padding: 1px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  &-head {
+    padding: $gap;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+  }
+  &-body {
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-direction: row;
+  }
+}

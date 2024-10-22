@@ -95,13 +95,13 @@ $productView = $productView ?? false;
                                             <?php
                                                 if (!empty($product) && !$productView) { ?>
                                             <div class="product-description">
-                                                <?php include (CONF_THEME_PATH . 'products/product-info.php'); ?>
+                                                <?php include(CONF_THEME_PATH . 'products/product-info.php'); ?>
                                             </div>
                                             <?php } ?>
                                             <div class="rating-block">
                                                 <div class="average-rating">
                                                     <span class="rate"><?php echo round($avgRating, 1); ?>
-                                                        <svg class="svg" width="16" height="16">
+                                                        <svg class="svg svg-star" width="16" height="16">
                                                             <use
                                                                 xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
                                                             </use>

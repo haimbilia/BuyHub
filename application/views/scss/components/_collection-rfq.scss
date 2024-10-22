@@ -1,0 +1,55 @@
+.bg-rfq {
+  position: relative;
+  &:after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+}
+.rfq-layout {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  justify-content: space-between;
+  @include media-breakpoint-up(xl) {
+    flex-direction: row;
+  }
+
+  &-start {
+  }
+  &-end {
+    flex: 1;
+  }
+  .section-heading {
+    color: #fff;
+    h2 {
+      margin-bottom: 1rem;
+    }
+    p {
+      margin-bottom: 0.5rem;
+    }
+    a {
+      margin-top: 1rem;
+      color: currentColor;
+    }
+  }
+  .form-quotations {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(4px);
+    border-radius: $kart;
+    padding: 2rem;
+    max-width: 648px;
+    margin-#{$start-direction}: auto;
+    .form-input {
+      border-radius: 40px;
+    }
+    .btn-submit {
+      border-radius: 40px;
+    }
+  }
+}

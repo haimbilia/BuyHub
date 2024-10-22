@@ -2,7 +2,7 @@
 <?php if (isset($collection['products']) && count($collection['products']) > 0) { ?>
 <section class="section" data-section="section">
     <div class="container">
-        <div class="section-head">
+        <header class="section-head">
             <div class="section-heading">
                 <h2><?php echo ($collection['collection_name'] != '') ? $collection['collection_name'] : ''; ?></h2>
             </div>
@@ -24,7 +24,7 @@
                     </button>
                 </div>
             </div>
-        </div>
+        </header>
         <?php
             $displayCount = (0 < $collection['collection_primary_records']) ? $collection['collection_primary_records'] : 4;
             $slidesCount = (Collections::TYPE_PRODUCT_LAYOUT6 == $collection['collection_layout_type']) ? '6,3,2,2' : min($displayCount, 6);

@@ -1,3 +1,4 @@
+//.product-ratings
 .product-ratings {
   padding: 0;
   margin: 5px 0;
@@ -13,9 +14,9 @@
     font-size: inherit;
   }
 
-  .svg {
+  .svg-star {
     // margin-#{$end-direction}: 8px;
-    fill: $secondary-color;
+    // fill: $secondary-color;
   }
 
   .rate {
@@ -34,7 +35,6 @@
     vertical-align: top;
     color: $secondary-color;
   }
-
   .totals-review {
     color: currentColor;
     background-color: transparent;
