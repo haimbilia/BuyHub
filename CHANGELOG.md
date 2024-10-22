@@ -194,3 +194,4 @@
     - Bug-088542 - Deprecation appears in testimonials layout 2
     - Bug-088559 - RFQ offer limit flow is not working properly.
     - Bug-088558 - Flow conflicts due to hide price functionality on inventory level
+    - Bug-088567 - Error occurs on the payment page when the advertiser tries to add money to the wallet

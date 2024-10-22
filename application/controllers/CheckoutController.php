@@ -61,11 +61,13 @@ class CheckoutController extends MyAppController
             $this->cartObj->setShippingAddressSameAsBilling();
         }
 
+        $orderType = FatApp::getPostedData('order_type', FatUtility::VAR_INT, 0);
+
         $user_is_buyer = User::getAttributesById(UserAuthentication::getLoggedUserId(), 'user_is_buyer');
-        if (!$user_is_buyer) {
+        if (!$user_is_buyer && Orders::ORDER_PRODUCT == $orderType) {
             $this->cartObj->clear(true);
             $this->cartObj->updateUserCart();
-            $errMsg = Labels::getLabel('ERR_PLEASE_LOGIN_WITH_BUYER_ACCOUNT_TO_ADD_PRODUCTS_TO_CART', $this->siteLangId);
+            $errMsg = Labels::getLabel('ERR_PLEASE_LOGIN_WITH_BUYER_ACCOUNT_TO_PROCEED_AHEAD', $this->siteLangId);
             LibHelper::exitWithError($errMsg, false, true);
             FatApp::redirectUser(UrlHelper::generateUrl());
         }
@@ -1565,10 +1567,10 @@ class CheckoutController extends MyAppController
         $this->set('shippingAddressArr', $shippingAddressArr);
         $this->set('orderId', $order_id);
         $this->set('opComments', $opComments);
+        $this->set('orderType', $orderData['order_type']);
 
         if (true === MOBILE_APP_API_CALL) {
             $this->set('products', $cartProducts);
-            $this->set('orderType', $orderData['order_type']);
             if (0 < $useRewardPoints) {
                 $this->set('msg', Labels::getLabel("MSG_USED_REWARD_POINT", $this->siteLangId) . '-' . $useRewardPoints);
                 $this->_template->render(true, true, 'checkout/use-reward-points.php');
