@@ -213,11 +213,11 @@ class ConfigurationsController extends ListingBaseController
             }
         }
 
-        if (isset($post['CONF_PRODUCT_INCLUSIVE_TAX']) && 1 == $post['CONF_PRODUCT_INCLUSIVE_TAX']) {
+        /* if (isset($post['CONF_PRODUCT_INCLUSIVE_TAX']) && 1 == $post['CONF_PRODUCT_INCLUSIVE_TAX']) {
             $post['CONF_TAX_AFTER_DISOCUNT'] = 0;
         } elseif (!isset($post['CONF_PRODUCT_INCLUSIVE_TAX']) && 1 == FatApp::getConfig('CONF_PRODUCT_INCLUSIVE_TAX', FatUtility::VAR_INT, 0)) {
             $post['CONF_TAX_AFTER_DISOCUNT'] = 0;
-        }
+        } */
 
 
         if (isset($post['CONF_WITHOUT_PROD_VARIANTS']) && FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0) != $post['CONF_WITHOUT_PROD_VARIANTS']) {
