@@ -69,14 +69,14 @@ $productView = $productView ?? false;
                     <?php } ?>
                     <?php if ($totReviews > 0) { ?>
                     <div class="customer-reviews-body">
-                        <div class="all-reviews-images">
+                        <div class="all-reviews-images reviewsImageblockJs" style="display:none;">
                             <h6 class="h6"> <?php echo Labels::getLabel('LBL_REVIEWS_WITH_IMAGES'); ?></h6>
                             <div class="review-images reviewImagesListJs"></div>
                             <script>
                             reviewsWithImages(<?php echo $product['selprod_id']; ?>);
                             </script>
                         </div>
-                        <div class="divider my-5"></div>
+                        <div class="divider my-5 reviewsImageblockJs" style="display:none;"></div>
                         <div class="rating-layout">
                             <!-- Rating Section -->
                             <div class="rating-layout-start">

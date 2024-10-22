@@ -171,3 +171,5 @@
     - Bug-087657 - << Branch 1 >> UI issue on the master product request setup form
     - Bug-087541 - Offer listing page's design should get some enhancements
     - Bug-087739 - The edit button does not work when the seller tries to edit the sent RFQ offer
+    - Bug-088088 - <<RFQ+ BRanch1>> wrong infomation appears
+    - Bug-088118 - The homepage slides are not working properly when added multiple times in the collection

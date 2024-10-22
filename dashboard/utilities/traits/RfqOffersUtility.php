@@ -126,11 +126,11 @@ trait RfqOffersUtility
                     $title = Labels::getLabel('LBL_CHANGE_INVENTORY', $this->siteLangId);
                     $label = Labels::getLabel('BTN_CHANGE_INVENTORY', $this->siteLangId);
                 }
-                
+
                 $otherButtons[] = [
                     'attr' => [
                         'onclick' => 'linkInventoryForm(' . $rfqId . ')',
-                        'class' => 'btn-brand btn-icon',
+                        'class' => 'btn-outline-gray btn-icon',
                         'title' => $title
                     ],
                     'icon' => "<svg class='svg btn-icon-start' width='18' height='18'>
@@ -143,7 +143,7 @@ trait RfqOffersUtility
         }
         $otherButtons[] = [
             'attr' => [
-                'class' => 'btn-outline-brand btn-icon',
+                'class' => 'btn-outline-gray btn-icon',
                 'onclick' => 'viewRfq(' . $rfqId . ')',
                 'title' => Labels::getLabel('LBL_VIEW_RFQ_INFORMATION', $this->siteLangId)
             ],
@@ -323,7 +323,18 @@ trait RfqOffersUtility
         if (!$rfqData) {
             LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST_ID', $this->siteLangId), true);
         }
-
+        $rfq = new RequestForQuote($rfqId);
+        $attr = [
+            'rfq_product_type',
+            'rfq_title',
+            'rfqts_user_id as seller_id',
+            'rfqts_selprod_id'
+        ];
+        $rfqDataArr = $rfq->get($this->siteLangId, $attr, 'LEFT', UserAuthentication::getLoggedUserId());
+        $selProdPrice = 0;
+        if (!empty($rfqDataArr) && !empty($rfqDataArr['rfqts_selprod_id'])) {
+            $selProdPrice = SellerProduct::getAttributesById($rfqDataArr['rfqts_selprod_id'], 'selprod_price');
+        }
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $rfqOfferData = (array)RfqOffers::getAttributesById($recordId, RfqOffers::FIELDS);
         /* if (0 < $recordId && $rfqOfferData['offer_status'] != RfqOffers::STATUS_OPEN) {
@@ -376,6 +387,7 @@ trait RfqOffersUtility
         }
 
         $frm->fill($data);
+        $this->set('selProdPrice', $selProdPrice);
         $this->set('frm', $frm);
         $this->set('rfqId', $rfqId);
         $this->set('rfq_quantity_unit', $rfqData['rfq_quantity_unit']);
@@ -1001,7 +1013,7 @@ trait RfqOffersUtility
         $db->commitTransaction();
 
         if (MOBILE_APP_API_CALL) {
-            $this->set('data', ['session_id' => session_id()]);
+            $this->set('data', ['offer_checkout' => $_SESSION['offer_checkout']]);
             $this->_template->render();
         }
 
@@ -1231,8 +1243,17 @@ trait RfqOffersUtility
         $this->set('romDate', date('Ymd', strtotime($messageData['rom_added_on'])));
         $this->set('isSeller', $this->isSeller);
         $this->set('row', $messageData);
-        $this->set('html', $this->_template->render(false, false, 'rfq-offers/attachment-record.php', true));
+        if (MOBILE_APP_API_CALL) {
+            $attachmentLink = '';
+            if (0 < $messageData['afile_id']) {
+                $attachmentLink = UrlHelper::generateFullUrl('RfqOffers', 'downloadAttachmentFile', array($messageData['rom_id'], $messageData['rom_primary_offer_id']));
+            }
+            $messageData['attachmentLink'] = $attachmentLink;
+            $this->set('data', array('message' => $messageData));
+            $this->_template->render();
+        }
 
+        $this->set('html', $this->_template->render(false, false, 'rfq-offers/attachment-record.php', true));
         $this->_template->render(false, false, 'json-success.php', false, false);
     }
 

@@ -199,9 +199,10 @@ class GuestUserController extends MyAppController
             }
 
             $userInfo = $uObj->getUserInfo(array('user_name', 'user_id', 'user_phone_dcode', 'user_phone', 'credential_email'), true, true, true);
-
+            $appSessionId = isset($_SERVER['HTTP_X_APP_SESSION_ID']) && !empty($_SERVER['HTTP_X_APP_SESSION_ID']) ? $_SERVER['HTTP_X_APP_SESSION_ID'] : session_id();
             $this->set('token', $token);
             $this->set('userInfo', $userInfo);
+            $this->set('app_session_id', $appSessionId);
             $this->_template->render();
         }
 

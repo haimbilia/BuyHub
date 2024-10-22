@@ -6,7 +6,7 @@ $data = array_merge($commonData, $data);
 $responseCode = isset($responseCode) ? $responseCode : LibHelper::RC_OK;
 
 if (applicationConstants::FAILURE == $status && (!isset($msg) || empty($msg))) {
-    $msg = Labels::getLabel('ERR_RECORD_NOT_FOUND', $siteLangId);
+    $msg = Labels::getLabel('ERR_NO_RESULT_FOUND', $siteLangId);
 } else if (applicationConstants::SUCCESS == $status && (!isset($msg) || empty($msg))) {
     $msg = Labels::getLabel('MSG_SUCCESS', $siteLangId);
 }

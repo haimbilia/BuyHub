@@ -37,6 +37,12 @@ if (false == RfqOffers::isPosted($rfqId, 0, $recordId)) {
 $fld->changeCaption(Labels::getLabel('LBL_OFFER_QUANTITY[' . applicationConstants::getWeightUnitName($siteLangId, $rfq_quantity_unit, true) . ']'));
 
 $colWidthValuesDefault = 6;
+$hidden  = 0 < $selProdPrice ? '' : 'hidden';
+$selProdPrice = CommonHelper::displayMoneyFormat($selProdPrice);
+
+$prependHtml = "<span id='wrapSelProdPriceJs' class='badge badge-inline badge-info " . $hidden ."' >
+" . Labels::getLabel('LBL_SELLING_PRICE', $siteLangId). ": <span id='selProdPrice'>" . $selProdPrice . "</span></span>";
+
 require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
 <script>
     $(document).ready(function() {
@@ -51,5 +57,23 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
                 $('textarea[name="offer_comments"]').focus();
             }
         })
+    });
+    $('#sellerJs').on('select2:select', function (e) {
+        let rfqId = $('input[name="offer_rfq_id"]').val();
+        var userId = e.params.data.id;
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, "getSelProdPrice", [rfqId, userId]), '', function (t) {
+            fcom.closeProcessing();
+            if(0 != t.selProdPrice) {
+                $('#selProdPrice').html(t.selProdPrice);
+                $('#wrapSelProdPriceJs').removeClass('hidden');
+            } else{
+                $('#wrapSelProdPriceJs').addClass('hidden');
+            }
+
+        });
+    });
+
+    $('#sellerJs').on('select2:unselecting', function (e) {
+        $('#wrapSelProdPriceJs').addClass('hidden');
     });
 </script>

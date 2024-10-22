@@ -46,6 +46,12 @@ if (null != $fld) {
     </h5>
 </div>
 <div class="modal-body form-edit">
+    <?php if(0 < $selProdPrice && $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] != 'B') {?>
+    <span class="badge badge-inline badge-info"><?php 
+        $selProdPrice = CommonHelper::displayMoneyFormat($selProdPrice);
+        $msg = commonHelper::replaceStringData(Labels::getLabel('LBL_SELLING_PRICE:_{selProdPrice}', $siteLangId), ['{selProdPrice}' => $selProdPrice]);
+        echo $msg;?></span>
+    <?php }?>
     <div class="form-edit-body loaderContainerJs">
         <?php echo $frm->getFormHtml(); ?>
     </div>

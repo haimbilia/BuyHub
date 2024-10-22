@@ -311,7 +311,7 @@
                         {
                             $unreadMessages = RfqOffers::unreadMessagesForSeller($row['rlo_seller_user_id'], $row['rlo_primary_offer_id']);
                         ?>
-                            <button class="btn btn-outline-info btn-icon" onclick="attachmentForm(<?php echo $row['rlo_primary_offer_id']; ?>)">
+                            <button class="btn btn-outline-gray btn-icon" onclick="attachmentForm(<?php echo $row['rlo_primary_offer_id']; ?>)">
                                 <?php if (0 < $unreadMessages['attachmentCount']) { ?>
                                     <span class="dot"></span>
                                 <?php } ?>
