@@ -180,23 +180,27 @@ if ($fld != null) {
                         </div>
                     </div>
                 </div>
-
-                <?php if ($product_type == Product::PRODUCT_TYPE_PHYSICAL) { ?>
-                    <div class="col-md-6">
-                        <div class="field-set">
-                            <div class="caption-wraper"><label class="field_label"><?php echo $frmSellerProduct->getField('selprod_condition')->getCaption(); ?><span class="spn_must_field">*</span></label></div>
-                            <div class="field-wraper">
-                                <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_condition'); ?>
+            </div>
+            <?php if (in_array($product_type, [Product::PRODUCT_TYPE_PHYSICAL, Product::PRODUCT_TYPE_SERVICE])) { ?>
+                <div class="row">
+                    <?php if ($product_type == Product::PRODUCT_TYPE_PHYSICAL) { ?>
+                        <div class="col-md-6">
+                            <div class="field-set">
+                                <div class="caption-wraper"><label class="field_label"><?php echo $frmSellerProduct->getField('selprod_condition')->getCaption(); ?><span class="spn_must_field">*</span></label></div>
+                                <div class="field-wraper">
+                                    <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_condition'); ?>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                <?php } ?>
-                
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <div class="setting-block">
-                            <?php echo $frmSellerProduct->getFieldHtml('selprod_active'); ?>
+                    <?php } ?>
+                    <div class="col-md-<?php echo ($product_type == Product::PRODUCT_TYPE_PHYSICAL) ? 6 : 12; ?>">
+                        <div class="field-set">
+                            <div class="caption-wraper"><label class="field_label"></label></div>
+                            <div class="field-wraper">
+                                <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('use_shop_policy'); ?>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -213,16 +217,18 @@ if ($fld != null) {
             </div>
             <?php if ($product_type == Product::PRODUCT_TYPE_PHYSICAL) { ?>
                 <div class="row use-shop-policy <?php echo $hidden; ?>">
-                    <div class="col-md-6">
-                        <div class="field-set">
-                            <div class="caption-wraper"><label class="field_label"><?php echo $frmSellerProduct->getField('selprod_return_age')->getCaption(); ?></label>
-                            </div>
-                            <div class="field-wraper">
-                                <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_return_age'); ?>
+                    <?php if ($product_type == Product::PRODUCT_TYPE_PHYSICAL) { ?>
+                        <div class="col-md-6">
+                            <div class="field-set">
+                                <div class="caption-wraper"><label class="field_label"><?php echo $frmSellerProduct->getField('selprod_return_age')->getCaption(); ?></label>
+                                </div>
+                                <div class="field-wraper">
+                                    <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_return_age'); ?>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    <?php } ?>
                     <div class="col-md-6">
                         <div class="field-set">
                             <div class="caption-wraper"><label class="field_label"><?php echo $frmSellerProduct->getField('selprod_cancellation_age')->getCaption(); ?></label>
