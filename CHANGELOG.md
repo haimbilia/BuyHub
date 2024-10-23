@@ -174,3 +174,4 @@
     - Bug-088088 - <<RFQ+ BRanch1>> wrong infomation appears
     - Bug-088118 - The homepage slides are not working properly when added multiple times in the collection
     - Bug-088212 - <<RFQ>> link inventory icon does not appear in a condition
+    - Bug-088131 - << RFQ Collections >> Extra spacing appears in the category banner on the category collection 2 layout

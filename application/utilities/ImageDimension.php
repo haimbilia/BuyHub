@@ -742,7 +742,7 @@ class ImageDimension extends FatUtility
     {
         $arr =  [
             self::VIEW_THUMB => [self::WIDTH => 200, self::HEIGHT => 112],
-            self::VIEW_MEDIUM => [self::WIDTH => 300, self::HEIGHT => 168],
+            self::VIEW_MEDIUM => [self::WIDTH => 300, self::HEIGHT => 75],
             self::VIEW_MOBILE => [self::WIDTH => 640, self::HEIGHT => 360],
             self::VIEW_TABLET => [self::WIDTH => 1024, self::HEIGHT => 576],
             self::VIEW_DESKTOP => [self::WIDTH => 2000, self::HEIGHT => 500],
