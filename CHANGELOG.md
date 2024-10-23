@@ -101,3 +101,4 @@
     - Bug-087684 - The default comment appearing on the status change is incorrect for the service product
     - Bug-087658 - <<Branch 1>> The master product requested by any seller appears in the My Product after approval instead of the marketplace products listing
     - Bug-087657 - << Branch 1 >> UI issue on the master product request setup form
+    - Bug-088170 - << Branch 1>> Deprecation appears on the special price listing page on the seller's end.
