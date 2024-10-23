@@ -203,18 +203,18 @@ if ($fld != null) {
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <?php if ($product_type == Product::PRODUCT_TYPE_PHYSICAL) { ?>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <div class="setting-block">
-                                <?php echo $frmSellerProduct->getFieldHtml('use_shop_policy'); ?>
+                    <?php if ($product_type == Product::PRODUCT_TYPE_PHYSICAL) { ?>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="setting-block">
+                                    <?php echo $frmSellerProduct->getFieldHtml('use_shop_policy'); ?>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                <?php } ?>
-            </div>
+                    <?php } ?>
+                </div>
+            <?php } ?>
             <?php if ($product_type == Product::PRODUCT_TYPE_PHYSICAL) { ?>
                 <div class="row use-shop-policy <?php echo $hidden; ?>">
                     <?php if ($product_type == Product::PRODUCT_TYPE_PHYSICAL) { ?>
@@ -324,8 +324,8 @@ if ($fld != null) {
                             </thead>
                             <tbody>
                                 <?php if ($selprod_id == 0 && !empty($availableOptions)) {
-                                    $i = $j = 0; ?>
-                                    <?php foreach ($availableOptions as $optionKey => $optionValue) {
+                                    $i = $j = 0;
+                                    foreach ($availableOptions as $optionKey => $optionValue) {
                                         if (SellerProduct::UPDATE_OPTIONS_COUNT < $i) {
                                             $j++;
                                             $i = 0;
@@ -446,8 +446,7 @@ if ($fld != null) {
                                     </div>
                                 </div>
                             </div>
-                        <?php
-                        } ?>
+                        <?php } ?>
                     </div>
                 </div>
             <?php } ?>
