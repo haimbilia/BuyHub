@@ -170,17 +170,6 @@ if ($fld != null) {
                 </div>
                 <?php echo $frmSellerProduct->getFieldHtml('selprod_condition'); ?>
             <?php } ?>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="field-set">
-                        <div class="caption-wraper"><label class="field_label"><?php echo $frmSellerProduct->getField('selprod_available_from')->getCaption(); ?><span class="spn_must_field">*</span></label></div>
-                        <div class="field-wraper">
-                            <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_available_from'); ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <?php if (in_array($product_type, [Product::PRODUCT_TYPE_PHYSICAL, Product::PRODUCT_TYPE_SERVICE])) { ?>
                 <div class="row">
                     <?php if ($product_type == Product::PRODUCT_TYPE_PHYSICAL) { ?>
@@ -194,18 +183,9 @@ if ($fld != null) {
                             </div>
                         </div>
                     <?php } ?>
-                    <div class="col-md-<?php echo ($product_type == Product::PRODUCT_TYPE_PHYSICAL) ? 6 : 12; ?>">
-                        <div class="field-set">
-                            <div class="caption-wraper"><label class="field_label"></label></div>
-                            <div class="field-wraper">
-                                <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('use_shop_policy'); ?>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
                     <?php if ($product_type == Product::PRODUCT_TYPE_PHYSICAL) { ?>
-                        <div class="col-md-6">
+                        <div class="col-md-<?php echo ($product_type == Product::PRODUCT_TYPE_PHYSICAL) ? 6 : 12; ?>">
                             <div class="form-group">
                                 <div class="setting-block">
                                     <?php echo $frmSellerProduct->getFieldHtml('use_shop_policy'); ?>
@@ -268,6 +248,22 @@ if ($fld != null) {
                 <?php } ?>
             </div>
             <div class="row">
+                <div class="col-md-6">
+                    <div class="field-set">
+                        <div class="caption-wraper"><label class="field_label"><?php echo $frmSellerProduct->getField('selprod_available_from')->getCaption(); ?><span class="spn_must_field">*</span></label></div>
+                        <div class="field-wraper">
+                            <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_available_from'); ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="setting-block">
+                            <?php echo $frmSellerProduct->getFieldHtml('selprod_active'); ?>
+                        </div>
+                    </div>
+                </div>
                 <?php if (null != $frmSellerProduct->getField('selprod_cart_type')) { ?>
                     <div class="col-md-6">
                         <div class="field-set">
