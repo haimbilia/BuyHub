@@ -203,13 +203,13 @@ if ($fld != null) {
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <?php if ($product_type == Product::PRODUCT_TYPE_PHYSICAL) { ?>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <div class="setting-block">
-                                <?php echo $frmSellerProduct->getFieldHtml('use_shop_policy'); ?>
+                    <?php if ($product_type == Product::PRODUCT_TYPE_PHYSICAL) { ?>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="setting-block">
+                                    <?php echo $frmSellerProduct->getFieldHtml('use_shop_policy'); ?>
+                                </div>
                             </div>
                         </div>
                     </div>
