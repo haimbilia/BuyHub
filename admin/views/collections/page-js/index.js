@@ -130,12 +130,12 @@ $(document).on('change', '.prefDimensionsJs', function () {
                 fcom.closeProcessing();
                 fcom.removeLoader();
                 $.ykmodal(t.html, false, "modal-dialog-vertical-md");
-                if (0 < $(".displayMediaOnlyJs:checked").val()) {
+                /* if (0 < $(".displayMediaOnlyJs:checked").val()) {
                     $('.mediaElementsJs').show();
                     loadImages(collection_id);
                 } else {
                     $('.mediaElementsJs').hide();
-                }
+                } */
             }
         );
     };
@@ -167,9 +167,9 @@ $(document).on('change', '.prefDimensionsJs', function () {
                 fcom.displayErrorMessage(ans.msg);
                 $(obj).prop('checked', false);
                 return false
-            } else {
+            } /* else {
                 (0 < value) ? $('.mediaElementsJs').show() : $('.mediaElementsJs').hide();
-            }
+            } */
         });
     };
 

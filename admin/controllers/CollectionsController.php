@@ -273,6 +273,9 @@ class CollectionsController extends ListingBaseController
             case Collections::TYPE_PRODUCT_LAYOUT6:
                 $limit = Collections::LIMIT_PRODUCT_LAYOUT6;
                 break;
+            case Collections::TYPE_PRODUCT_LAYOUT7:
+                $limit = Collections::LIMIT_PRODUCT_LAYOUT7;
+                break;
             case Collections::TYPE_CATEGORY_LAYOUT1:
                 $limit = Collections::LIMIT_CATEGORY_LAYOUT1;
                 break;
@@ -286,10 +289,11 @@ class CollectionsController extends ListingBaseController
                 $limit = Collections::LIMIT_CATEGORY_LAYOUT4;
                 break;
             case Collections::TYPE_CATEGORY_LAYOUT5:
-            case Collections::TYPE_CATEGORY_LAYOUT8:
+            case Collections::TYPE_CATEGORY_LAYOUT10:
                 $limit = Collections::LIMIT_CATEGORY_LAYOUT5;
                 break;
             case Collections::TYPE_CATEGORY_LAYOUT6:
+            case Collections::TYPE_CATEGORY_LAYOUT9:
                 $limit = Collections::LIMIT_CATEGORY_LAYOUT6;
                 break;
             case Collections::TYPE_CATEGORY_LAYOUT7:
@@ -705,6 +709,7 @@ class CollectionsController extends ListingBaseController
             LibHelper::exitWithError($this->str_invalid_request_id, true);
         }
         $this->setFormTitle($collectionType, $data['collection_layout_type']);
+        $mediaType = ($data['collection_layout_type'] != Collections::TYPE_CATEGORY_LAYOUT12) ? ImageDimension::VIEW_MOBILE : ImageDimension::VIEW_DESKTOP;
 
         $frm = $this->getMediaForm($recordId);
         $this->set('recordId', $recordId);
@@ -714,7 +719,7 @@ class CollectionsController extends ListingBaseController
         $this->set('displayFooterButtons', false);
         $this->set('activeGentab', false);
         $this->set('displayMediaOnly', $data['collection_display_media_only']);
-        $this->set('imageDimension', ImageDimension::getDisplayCollectionImageData(ImageDimension::VIEW_MOBILE));
+        $this->set('imageDimension', ImageDimension::getDisplayCollectionImageData($mediaType));
         $this->set('html', $this->_template->render(false, false, NULL, true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }

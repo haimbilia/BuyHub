@@ -1,7 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <?php if (isset($collection['categories']) && count($collection['categories'])) {
-    $displaySize = (8 < $collection['collection_primary_records']) ? min($collection['collection_primary_records'], 16) / 2 : (0 < $collection['collection_primary_records'] ? $collection['collection_primary_records'] : 8);
-    $loopBreakCount = (8 < $collection['collection_primary_records']) ? 2 : 1;
     $recordCount = count($collection['categories']);
 ?>
     <section class="section" data-collection="collection-categories">
@@ -12,15 +10,13 @@
            </div>
        </div> <?php */ ?>
             <div class="section-body">
-                <div class="catalog-carousal  industryCarousalJs" data-view="<?php echo $displaySize; ?>">
+                <div class="catalog-carousal  industryCarousalJs" data-view="8">
                     <?php
-                    $i = 1;
                     foreach ($collection['categories'] as $category) {
                         $rootParentId = FatUtility::int(current(explode('_', $category['prodcat_code'])));
                         $rootParentId = (1 > $rootParentId) ? $category['prodcat_id'] : $rootParentId;
-                        if (1 == $i) { ?>
-                            <div class="js-carousel-item catalog-carousal-item">
-                            <?php } ?>
+                    ?>
+                        <div class="js-carousel-item catalog-carousal-item">
                             <?php
                             $image = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_THUMB, $category['prodcat_id']);
                             if (!empty($image) && $image['afile_id'] <= 0) {
@@ -42,13 +38,9 @@
                                     </div>
                                 </div>
                             </a>
-                            <?php if ($loopBreakCount == $i) { ?>
-                            </div>
-                        <?php } ?>
-                    <?php
-                        $i = ($i == $loopBreakCount) ? 1 : ($i + 1);
-                    }
-                    ?>
+
+                        </div>
+                    <?php } ?>
                 </div>
             </div>
             <?php /*if (count($collection['categories']) > Collections::LIMIT_CATEGORY_LAYOUT3) { ?>
@@ -61,24 +53,18 @@
        <?php } */ ?>
         </div>
         <script>
-            var displaySize = <?php echo 0 < $displaySize ? $displaySize : 8; ?>;
             $('.industryCarousalJs').not('.slick-initialized').slick({
                 draggable: true,
-                slidesToShow: displaySize,
+                slidesToShow: 8,
                 slidesToScroll: 1,
                 arrows: true,
                 prevArrow: '<button class="slick-arrow slick-prev"><span></span> </button>',
                 nextArrow: '<button class="slick-arrow slick-next"><span></span> </button>',
                 responsive: [{
                         breakpoint: 1180,
-                        <?php if ($recordCount > $displaySize) { ?>
-                            settings: {
-                                slidesToShow: displaySize,
-                            }
-                        <?php } else { ?>
-                            settings: "unslick",
-                        <?php } ?>
-
+                        settings: {
+                            slidesToShow: 8,
+                        }
                     },
                     {
                         breakpoint: 769,
