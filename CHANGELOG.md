@@ -101,3 +101,5 @@
     - Bug-087684 - The default comment appearing on the status change is incorrect for the service product
     - Bug-087658 - <<Branch 1>> The master product requested by any seller appears in the My Product after approval instead of the marketplace products listing
     - Bug-087657 - << Branch 1 >> UI issue on the master product request setup form
+    - Bug-088263 - UI issue on the subscription order details page on the admin end.
+    - Bug-088262 - The discount coupon appears applied on the order details page even if the seller has not applied any discount on the subscription order.

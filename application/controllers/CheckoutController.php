@@ -1075,6 +1075,12 @@ class CheckoutController extends MyAppController
             $orderData['order_discount_value'] = $cartSummary["cartDiscounts"]["coupon_discount_value"];
             $orderData['order_discount_total'] = $cartSummary["cartDiscounts"]["coupon_discount_total"];
             $orderData['order_discount_info'] = $cartSummary["cartDiscounts"]["coupon_info"];
+        } else {
+            $orderData['order_discount_coupon_code'] = '';
+            $orderData['order_discount_type'] = '';
+            $orderData['order_discount_value'] = '';
+            $orderData['order_discount_total'] = '';
+            $orderData['order_discount_info'] = '';
         }
 
         $orderData['order_reward_point_used'] = $cartSummary["cartRewardPoints"];
