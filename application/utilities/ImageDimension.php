@@ -365,7 +365,6 @@ class ImageDimension extends FatUtility
             self::VIEW_TABLET => [self::WIDTH => 1024, self::HEIGHT => 576],
             self::VIEW_DESKTOP => [self::WIDTH => 2000, self::HEIGHT => 500],
         ];
-
         return self::returnData($arr, self::VIEW_DESKTOP, $sizeType);
     }
 
