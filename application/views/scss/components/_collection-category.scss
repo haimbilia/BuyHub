@@ -81,7 +81,9 @@
     padding: 1rem;
     border-bottom: $border;
     display: flex;
+    min-width: 0;
     flex-direction: row;
+    gap: $gap;
     &:last-child {
       border-bottom: none;
     }
@@ -94,9 +96,9 @@
   }
   &-head {
   }
-  &-head {
+  &-body {
   }
-  &-head {
+  &-foot {
   }
 }
 .category-layout-2 {
@@ -299,10 +301,12 @@
     margin-bottom: 1rem;
   }
   &-body {
-    display: flex;
-    justify-content: space-between;
-    gap: 1rem;
-    flex-direction: row;
+    display: grid;
+    gap: $gap;
+    grid-template-columns: auto;
+    @include media-breakpoint-up(xl) {
+      grid-template-columns: repeat(4, 1fr);
+    }
   }
 }
 .category-layout-page {

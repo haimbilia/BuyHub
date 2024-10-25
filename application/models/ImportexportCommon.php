@@ -404,7 +404,7 @@ class ImportexportCommon extends FatModel
             }
 
             $arr['product_warranty'] = Labels::getLabel('LBL_PRODUCT_WARRANTY_(DAYS)', $langId);
-            $arr['product_upc'] = Labels::getLabel('LBL_EAN/UPC/GTIN_CODE', $langId);
+            // $arr['product_upc'] = Labels::getLabel('LBL_EAN/UPC/GTIN_CODE', $langId);
 
             if ((0 == $userId && $shippedBy) || !$shippedBy) {
                 if ($this->settings['CONF_USE_COUNTRY_ID']) {
