@@ -1824,8 +1824,8 @@ class HomeController extends MyAppController
         $data['newsletterEnabled'] = FatApp::getConfig('CONF_ENABLE_NEWSLETTER_SUBSCRIPTION', FatUtility::VAR_INT, 1);
 
         $data['app_session_id'] = isset($_SERVER['HTTP_X_APP_SESSION_ID']) && !empty($_SERVER['HTTP_X_APP_SESSION_ID']) ? $_SERVER['HTTP_X_APP_SESSION_ID'] : session_id();
+        $data['CONF_RFQ_MODULE_TYPE'] = FatApp::getConfig('CONF_RFQ_MODULE_TYPE', FatUtility::VAR_INT, 0);
 
-        $this->set('data', $data);
         $this->set('data', $data);
         $this->_template->render();
     }
