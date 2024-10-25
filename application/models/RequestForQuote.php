@@ -629,6 +629,7 @@ class RequestForQuote extends MyAppModel
         $criteria['doNotJoinSpecialPrice'] = true;
         if (self::TYPE_VARIANT == $rfqType) {
             $srch->addCondition('selprod_code', 'LIKE', $selprodCode);
+            $srch->addCondition('selprod_active', '=', applicationConstants::ACTIVE);
             $srch->addCondition('selprod_cart_type', '!=', SellerProduct::CART_TYPE_CART_ONLY);
             $srch->addFld("selprod_id as rfqts_selprod_id");
         } else if (self::TYPE_CATALOG == $rfqType) {
@@ -638,8 +639,10 @@ class RequestForQuote extends MyAppModel
             $sp->addFld('sp.selprod_id');
             $sp->doNotCalculateRecords();
             $sp->doNotLimitRecords();
+            $sp->addCondition('sp.selprod_active', '=', applicationConstants::ACTIVE);
             $sp->addCondition('sp.selprod_user_id', '=', 'mysql_func_sprods.selprod_user_id', 'AND ', true);
             $sp->addCondition('sp.selprod_code', 'LIKE', $selprodCode);
+            $sp->addCondition('sp.selprod_cart_type', '!=', SellerProduct::CART_TYPE_CART_ONLY);
             $srch->addFld("(" . $sp->getQuery() . ") as rfqts_selprod_id");
         }
         $srch->joinSellerProducts(criteria: $criteria);

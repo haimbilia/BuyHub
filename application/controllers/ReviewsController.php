@@ -185,7 +185,6 @@ class ReviewsController extends MyAppController
     {
         $selProdId = FatApp::getPostedData('selprod_id');
         $pageSize = FatApp::getPostedData('pageSize', FatUtility::VAR_INT, 10);
-        $pageSize = 3;
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
         if ($page < 2) {
             $page = 1;

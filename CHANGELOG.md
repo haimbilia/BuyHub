@@ -173,3 +173,8 @@
     - Bug-087739 - The edit button does not work when the seller tries to edit the sent RFQ offer
     - Bug-088088 - <<RFQ+ BRanch1>> wrong infomation appears
     - Bug-088118 - The homepage slides are not working properly when added multiple times in the collection
+    - Bug-088212 - <<RFQ>> link inventory icon does not appear in a condition
+    - Bug-088131 - << RFQ Collections >> Extra spacing appears in the category banner on the category collection 2 layout
+    - Bug-088263 - UI issue on the subscription order details page on the admin end.
+    - Bug-088262 - The discount coupon appears applied on the order details page even if the seller has not applied any discount on the subscription order.
+    - Bug-088170 - << Branch 1>> Deprecation appears on the special price listing page on the seller's end.

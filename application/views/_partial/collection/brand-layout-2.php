@@ -7,7 +7,7 @@
             <div class="brand-layout-2">
                 <?php $i = 0;
                 foreach ($collection['brands'] as $brand) {
-                    $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_BRAND_LOGO, $brand['brand_id'], 0, 0, false);
+                    $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_BRAND_IMAGE, $brand['brand_id'], 0, 0, false, ImageDimension::VIEW_MOBILE);
                     $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
                     $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
                     $ratio = "";
@@ -35,7 +35,7 @@
                         </div>
                         <div class="brand-logo">
                             <img loading='lazy' data-ratio="<?php echo $ratio; ?>"
-                                src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'brand', array($brand['brand_id'], $siteLangId, ImageDimension::VIEW_MOBILE)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>"
+                                src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'brandImage', array($brand['brand_id'], $siteLangId, ImageDimension::VIEW_MOBILE, $fileData['afile_id'], applicationConstants::SCREEN_MOBILE)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>"
                                 alt="<?php echo (!empty($fileData['afile_attribute_alt'])) ? $fileData['afile_attribute_alt'] : $brand['brand_name']; ?>"
                                 title="<?php echo (!empty($fileData['afile_attribute_alt'])) ? $fileData['afile_attribute_alt'] : $brand['brand_name']; ?>">
                         </div>

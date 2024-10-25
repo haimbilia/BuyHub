@@ -295,7 +295,7 @@ class Orders extends MyAppModel
 
         $discountInfo = [];
         if (array_key_exists('order_discount_info', $data)) {
-            $discountInfo = json_decode($data['order_discount_info'], true);
+            $discountInfo = !empty($data['order_discount_info']) ? json_decode($data['order_discount_info'], true): [];
         }
 
         $products = [];
@@ -779,7 +779,7 @@ class Orders extends MyAppModel
 
         $discountInfo = [];
         if (array_key_exists('order_discount_info', $data)) {
-            $discountInfo = json_decode($data['order_discount_info'], true);
+            $discountInfo = !empty($data['order_discount_info']) ? json_decode($data['order_discount_info'], true) : [];
         }
 
         if (!empty($data['order_id'])) {

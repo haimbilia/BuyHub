@@ -128,4 +128,14 @@ class SubscriptionOrdersController extends ListingBaseController
         $this->set('msg', Labels::getLabel('MSG_ORDER_CANCELLED', $this->siteLangId));
         $this->_template->render(false, false, 'json-success.php');
     }
+
+    public function viewPaymemntGatewayResponse()
+    {
+        $orderId = FatApp::getPostedData('order_id', FatUtility::VAR_INT, 0);
+        $oPayment = new OrderPayment($orderId);
+        $response = $oPayment->getPaymentGatewayResponse();
+        $this->set('response', $response);
+        $this->set('html', $this->_template->render(false, false, NULL, true));
+        $this->_template->render(false, false, 'json-success.php', true, false);
+    }
 }

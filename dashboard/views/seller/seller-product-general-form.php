@@ -170,59 +170,45 @@ if ($fld != null) {
                 </div>
                 <?php echo $frmSellerProduct->getFieldHtml('selprod_condition'); ?>
             <?php } ?>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="field-set">
-                        <div class="caption-wraper"><label class="field_label"><?php echo $frmSellerProduct->getField('selprod_available_from')->getCaption(); ?><span class="spn_must_field">*</span></label></div>
-                        <div class="field-wraper">
-                            <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_available_from'); ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <?php if ($product_type == Product::PRODUCT_TYPE_PHYSICAL) { ?>
-                    <div class="col-md-6">
-                        <div class="field-set">
-                            <div class="caption-wraper"><label class="field_label"><?php echo $frmSellerProduct->getField('selprod_condition')->getCaption(); ?><span class="spn_must_field">*</span></label></div>
-                            <div class="field-wraper">
-                                <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_condition'); ?>
+            <?php if (in_array($product_type, [Product::PRODUCT_TYPE_PHYSICAL, Product::PRODUCT_TYPE_SERVICE])) { ?>
+                <div class="row">
+                    <?php if ($product_type == Product::PRODUCT_TYPE_PHYSICAL) { ?>
+                        <div class="col-md-6">
+                            <div class="field-set">
+                                <div class="caption-wraper"><label class="field_label"><?php echo $frmSellerProduct->getField('selprod_condition')->getCaption(); ?><span class="spn_must_field">*</span></label></div>
+                                <div class="field-wraper">
+                                    <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_condition'); ?>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                <?php } ?>
-                
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <div class="setting-block">
-                            <?php echo $frmSellerProduct->getFieldHtml('selprod_active'); ?>
-                        </div>
-                    </div>
-                </div>
+                    <?php } ?>
 
-                <?php if ($product_type == Product::PRODUCT_TYPE_PHYSICAL) { ?>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <div class="setting-block">
-                                <?php echo $frmSellerProduct->getFieldHtml('use_shop_policy'); ?>
+                    <?php if ($product_type == Product::PRODUCT_TYPE_PHYSICAL) { ?>
+                        <div class="col-md-<?php echo ($product_type == Product::PRODUCT_TYPE_PHYSICAL) ? 6 : 12; ?>">
+                            <div class="form-group">
+                                <div class="setting-block">
+                                    <?php echo $frmSellerProduct->getFieldHtml('use_shop_policy'); ?>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                <?php } ?>
-            </div>
+                    <?php } ?>
+                </div>
+            <?php } ?>
             <?php if ($product_type == Product::PRODUCT_TYPE_PHYSICAL) { ?>
                 <div class="row use-shop-policy <?php echo $hidden; ?>">
-                    <div class="col-md-6">
-                        <div class="field-set">
-                            <div class="caption-wraper"><label class="field_label"><?php echo $frmSellerProduct->getField('selprod_return_age')->getCaption(); ?></label>
-                            </div>
-                            <div class="field-wraper">
-                                <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_return_age'); ?>
+                    <?php if ($product_type == Product::PRODUCT_TYPE_PHYSICAL) { ?>
+                        <div class="col-md-6">
+                            <div class="field-set">
+                                <div class="caption-wraper"><label class="field_label"><?php echo $frmSellerProduct->getField('selprod_return_age')->getCaption(); ?></label>
+                                </div>
+                                <div class="field-wraper">
+                                    <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_return_age'); ?>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    <?php } ?>
                     <div class="col-md-6">
                         <div class="field-set">
                             <div class="caption-wraper"><label class="field_label"><?php echo $frmSellerProduct->getField('selprod_cancellation_age')->getCaption(); ?></label>
@@ -262,6 +248,22 @@ if ($fld != null) {
                 <?php } ?>
             </div>
             <div class="row">
+                <div class="col-md-6">
+                    <div class="field-set">
+                        <div class="caption-wraper"><label class="field_label"><?php echo $frmSellerProduct->getField('selprod_available_from')->getCaption(); ?><span class="spn_must_field">*</span></label></div>
+                        <div class="field-wraper">
+                            <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_available_from'); ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="setting-block">
+                            <?php echo $frmSellerProduct->getFieldHtml('selprod_active'); ?>
+                        </div>
+                    </div>
+                </div>
                 <?php if (null != $frmSellerProduct->getField('selprod_cart_type')) { ?>
                     <div class="col-md-6">
                         <div class="field-set">
@@ -318,8 +320,8 @@ if ($fld != null) {
                             </thead>
                             <tbody>
                                 <?php if ($selprod_id == 0 && !empty($availableOptions)) {
-                                    $i = $j = 0; ?>
-                                    <?php foreach ($availableOptions as $optionKey => $optionValue) {
+                                    $i = $j = 0;
+                                    foreach ($availableOptions as $optionKey => $optionValue) {
                                         if (SellerProduct::UPDATE_OPTIONS_COUNT < $i) {
                                             $j++;
                                             $i = 0;
@@ -440,8 +442,7 @@ if ($fld != null) {
                                     </div>
                                 </div>
                             </div>
-                        <?php
-                        } ?>
+                        <?php } ?>
                     </div>
                 </div>
             <?php } ?>

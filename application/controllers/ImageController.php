@@ -288,10 +288,9 @@ class ImageController extends FatController
         }
     }
 
-
     public function displayBrandImage($recordId, $langId = 0, $sizeType = '', $afile_id = 0, $screen = 0, $displayUniversalImage = true)
     {
-        $default_image = 'brand_deafult_image.jpg';
+        $default_image = 'brand_deafult_banner_image.jpg';
         $recordId = FatUtility::int($recordId);
         $afile_id = FatUtility::int($afile_id);
         $langId = FatUtility::int($langId);
@@ -310,8 +309,6 @@ class ImageController extends FatController
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_BRAND_IMAGE, $sizeType);
 
         if ($sizeType && $sizeType != ImageDimension::VIEW_COLLECTION_PAGE) {
-
-
             AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'], $default_image);
         } else {
             AttachedFile::displayOriginalImage($image_name, $default_image);

@@ -92,6 +92,7 @@ class SellerRfqOffersController extends SellerBaseController
         $srch->addCondition('product_deleted', '=', applicationConstants::NO);
         $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
         $srch->addCondition('selprod_active', '=', applicationConstants::ACTIVE);
+        $srch->addCondition('selprod_cart_type', '!=', SellerProduct::CART_TYPE_CART_ONLY);
         if ($rfqData['rfq_selprod_id'] > 0 && $rfqData['rfq_product_id'] > 0) {
             $srch->addCondition('selprod_code', 'LIKE', $selprodCode);
         }
