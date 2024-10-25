@@ -46,6 +46,8 @@
                         if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) {
                             $displayProductNotAvailableLable = true;
                         }
+                        $prodImgSize = ImageDimension::VIEW_MOBILE;
+                $i = 1;
                         include('product-layout-1-list.php'); ?>
             </div>
             <?php } ?>
