@@ -2615,7 +2615,6 @@ class SellerController extends SellerBaseController
         }
 
         $post['shop_phone_dcode'] = FatApp::getPostedData('shop_phone_dcode', FatUtility::VAR_STRING, '');
-
         $shopObj = new Shop($shop_id);
         $shopObj->assignValues($post);
 
@@ -2623,6 +2622,8 @@ class SellerController extends SellerBaseController
             FatUtility::dieJsonError($shopObj->getError());
         }
         $shop_id = $shopObj->getMainTableRecordId();
+
+        Shop::updateValidSubscription($userId);
 
         $user = new User($userId);
         $user->updateShopValidUser();
