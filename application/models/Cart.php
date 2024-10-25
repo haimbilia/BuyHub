@@ -942,7 +942,7 @@ class Cart extends FatModel
 
             if (FatApp::getConfig('CONF_TAX_AFTER_DISOCUNT', FatUtility::VAR_INT, 0) && FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0)) {
                 if (!empty($this->discounts) && isset($this->discounts['discountedSelProdIds'][$sellerProductRow['selprod_id']])) {
-                    $discountedPrice = $this->discounts['discountedSelProdIds'][$sellerProductRow['selprod_id']];
+                    $discountedPrice = $this->discounts['discountedSelProdIds'][$sellerProductRow['selprod_id']]/$quantity;
                     $taxableProdPrice = $taxableProdPrice - $discountedPrice;
                 }
             }
@@ -964,7 +964,7 @@ class Cart extends FatModel
                 }
 
                 if (0 < $discountedPrice) {
-                    $thePriceincludingTax = $thePriceincludingTax + (($discountedPrice * $taxData['rate']) / 100);
+                    $thePriceincludingTax = $thePriceincludingTax + (($discountedPrice * $quantity * $taxData['rate']) / 100);
                 }
 
                 if ($originalTotalPrice != $thePriceincludingTax && 0 < $taxableProdPrice && 0 < $taxData['rate']) {
