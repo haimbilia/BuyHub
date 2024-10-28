@@ -325,25 +325,28 @@ class CollectionsController extends ListingBaseController
     public function setup()
     {
         $this->objPrivilege->canEditCollections();
-        $data = FatApp::getPostedData();
-        $frm = $this->getForm($data['collection_type'], $data['collection_layout_type']);
-        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
+        $post = FatApp::getPostedData();
+        // $frm = $this->getForm($post['collection_type'], $post['collection_layout_type']);
+        /* $post = $frm->getFormDataFromArray(FatApp::getPostedData());
 
         if (false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
-        }
+        } */
+        
         $recordId = $post['collection_id'];
         $defaultItemsCount = $this->getLayoutLimit($post['collection_layout_type']);
         $displayItemsCount = FatApp::getPostedData('collection_primary_records', FatUtility::VAR_INT, $defaultItemsCount);
-        if (!in_array($data['collection_layout_type'], Collections::COLLECTIONS_FOR_DISPLAY_COUNT)) {
+        if (!in_array($post['collection_layout_type'], Collections::COLLECTIONS_FOR_DISPLAY_COUNT)) {
             $displayItemsCount = $defaultItemsCount;
         }
 
         $post['collection_identifier'] = $post['collection_name'];
         $post['collection_primary_records'] = $displayItemsCount;
 
-        $collectionForApp = $post['collection_for_app'] ?? 0;
-        $post['collection_for_app'] = in_array($data['collection_layout_type'], Collections::COLLECTIONS_FOR_APP_ONLY) ? 1 : $collectionForApp;
+        $post['collection_for_app'] = $post['collection_for_app'] ?? 0;
+        $post['collection_for_web'] = $post['collection_for_web'] ?? 0;
+        $post['collection_full_width'] = $post['collection_full_width'] ?? 0;
+
         if (1 > $recordId) {
             $maxDisplayOrder = Collections::getMaxDisplayOrder();
             $post['collection_display_order'] = $maxDisplayOrder + 1;
@@ -388,7 +391,7 @@ class CollectionsController extends ListingBaseController
         // $frm->addHiddenField('', 'collection_layout_type', $layoutType);
         $productTypeLayoutArr = Collections::getTypeSpecificLayouts($this->siteLangId);
 
-        $layoutTypeFld = $frm->addSelectBox(Labels::getLabel('FRM_COLLECTION_LAYOUT_TYPE', $this->siteLangId), 'collection_layout_type', $productTypeLayoutArr[$type], $layoutType, ['class' => 'fieldsVisibilityJs'], '');
+        $layoutTypeFld = $frm->addSelectBox(Labels::getLabel('FRM_COLLECTION_LAYOUT_TYPE', $this->siteLangId), 'collection_layout_type', $productTypeLayoutArr[$type], $layoutType, ['class' => 'fieldsVisibilityJs onlyShowHideJs'], '');
 
         $frm->addRequiredField(Labels::getLabel('FRM_NAME', $this->siteLangId), 'collection_name');
 
@@ -401,41 +404,47 @@ class CollectionsController extends ListingBaseController
         }
 
         $range = Collections::displayRecordsCount($layoutType);
-        $fld = $frm->addSelectBox(Labels::getLabel('FRM_DISPLAY_ITEMS_COUNT', $this->siteLangId), 'collection_primary_records', array_combine($range, $range));
-        $fld->requirements()->setRequired();
+        $frm->addSelectBox(Labels::getLabel('FRM_DISPLAY_ITEMS_COUNT', $this->siteLangId), 'collection_primary_records', array_combine($range, $range));
 
         $displayItemCountFld = new FormFieldRequirement('collection_primary_records', Labels::getLabel('FRM_DISPLAY_ITEMS_COUNT', $this->siteLangId));
         $displayItemCountFld->setRequired(false);
         $reqDisplayItemCountFldFld = new FormFieldRequirement('collection_primary_records', Labels::getLabel('FRM_DISPLAY_ITEMS_COUNT', $this->siteLangId));
         $reqDisplayItemCountFldFld->setRequired(true);
 
-        foreach (Collections::COLLECTIONS_FOR_DISPLAY_COUNT as $layoutTypeVar) {
-            $layoutTypeFld->requirements()->addOnChangerequirementUpdate($layoutTypeVar, 'eq', 'collection_primary_records', $reqDisplayItemCountFldFld);
+        $frm->addCheckBox(Labels::getLabel("FRM_APPLICABLE_FOR_WEB", $this->siteLangId), 'collection_for_web', 1, array(), true, 0);
+        $Web = new FormFieldRequirement('collection_for_web', Labels::getLabel('FRM_APPLICABLE_FOR_WEB', $this->siteLangId));
+        $Web->setRequired(false);
+        $reqWebFld = new FormFieldRequirement('collection_for_web', Labels::getLabel('FRM_APPLICABLE_FOR_WEB', $this->siteLangId));
+        $reqWebFld->setRequired(true);
+        
+        $frm->addCheckBox(Labels::getLabel("FRM_APPLICABLE_FOR_APP", $this->siteLangId), 'collection_for_app', 1, array(), true, 0);
+        $App = new FormFieldRequirement('collection_for_app', Labels::getLabel('FRM_APPLICABLE_FOR_APP', $this->siteLangId));
+        $App->setRequired(false);
+        $reqAppFld = new FormFieldRequirement('collection_for_app', Labels::getLabel('FRM_APPLICABLE_FOR_APP', $this->siteLangId));
+        $reqAppFld->setRequired(true);
+
+        $allCollectionLayouts = Collections::getLayoutTypeArr($this->siteLangId);
+        foreach ($allCollectionLayouts as $webApplayoutType => $webApplayoutTypeLbl) {
+            /* For Web and App only collections */
+            if (in_array($webApplayoutType, Collections::COLLECTIONS_FOR_APP_ONLY)) {
+                $layoutTypeFld->requirements()->addOnChangerequirementUpdate($webApplayoutType, 'eq', 'collection_for_app', $reqAppFld);
+                $layoutTypeFld->requirements()->addOnChangerequirementUpdate($webApplayoutType, 'eq', 'collection_for_web', $Web);
+            } else if (in_array($webApplayoutType, Collections::COLLECTIONS_FOR_WEB_ONLY)) {
+                $layoutTypeFld->requirements()->addOnChangerequirementUpdate($webApplayoutType, 'eq', 'collection_for_app', $App);
+                $layoutTypeFld->requirements()->addOnChangerequirementUpdate($webApplayoutType, 'eq', 'collection_for_web', $reqWebFld);
+            } else {
+                $layoutTypeFld->requirements()->addOnChangerequirementUpdate($webApplayoutType, 'eq', 'collection_for_app', $reqAppFld);
+                $layoutTypeFld->requirements()->addOnChangerequirementUpdate($webApplayoutType, 'eq', 'collection_for_web', $reqWebFld);
+            }
+
+            /* For Display Count */
+            if (in_array($webApplayoutType, Collections::COLLECTIONS_FOR_DISPLAY_COUNT)) {
+                $layoutTypeFld->requirements()->addOnChangerequirementUpdate($webApplayoutType, 'eq', 'collection_primary_records', $reqDisplayItemCountFldFld);
+            } else {
+                $layoutTypeFld->requirements()->addOnChangerequirementUpdate($webApplayoutType, 'eq', 'collection_primary_records', $displayItemCountFld);
+            }
         }
-
-        $nonDisplayCount = array_diff(array_keys(Collections::getTypeSpecificLayouts($this->siteLangId)[$type]), Collections::COLLECTIONS_FOR_DISPLAY_COUNT);
-        foreach ($nonDisplayCount as $layoutTypeVar) {
-            $layoutTypeFld->requirements()->addOnChangerequirementUpdate($layoutTypeVar, 'eq', 'collection_primary_records', $displayItemCountFld);
-        }
-
-
-        if (in_array($layoutType, Collections::COLLECTIONS_FOR_APP_ONLY)) {
-            $frm->addHiddenField('', 'collection_for_app', 1);
-        } else if (in_array($layoutType, Collections::COLLECTIONS_FOR_WEB_ONLY)) {
-            $frm->addHiddenField('', 'collection_for_web', 1);
-        } else {
-            $frm->addCheckBox(Labels::getLabel("FRM_APPLICABLE_FOR_WEB", $this->siteLangId), 'collection_for_web', 1, array(), true, 0);
-            $frm->addCheckBox(Labels::getLabel("FRM_APPLICABLE_FOR_APP", $this->siteLangId), 'collection_for_app', 1, array(), true, 0);
-        }
-
-        /* if (!in_array($layoutType, Collections::COLLECTIONS_FOR_APP_ONLY)) {
-            $frm->addCheckBox(Labels::getLabel("FRM_APPLICABLE_FOR_WEB", $this->siteLangId), 'collection_for_web', 1, array(), true, 0);
-        }
-
-        if (!in_array($layoutType, Collections::COLLECTIONS_FOR_WEB_ONLY)) {
-            $frm->addCheckBox(Labels::getLabel("FRM_APPLICABLE_FOR_APP", $this->siteLangId), 'collection_for_app', 1, array(), true, 0);
-        } */
-
+        
         if (in_array($layoutType, Collections::COLLECTIONS_FULL_WIDTH)) {
             $frm->addCheckBox(Labels::getLabel("FRM_FULL_WIDTH", $this->siteLangId), 'collection_full_width', 1, array(), true, 0);
         }
