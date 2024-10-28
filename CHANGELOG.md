@@ -181,3 +181,4 @@
     - Bug-088324 - << Branch 1 >> Shipping profile is mandatory to bind with service in case of service product through import
     - Bug-088186 - Product layout 2 does not shows complete data according to the layout view defined
     - Bug-088180 - Toggle selections are not working properly
+    - Bug-087450 - << RFQ >> The content is not right aligned on the RFQ invoice in Arabic.

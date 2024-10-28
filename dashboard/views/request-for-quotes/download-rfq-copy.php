@@ -91,15 +91,15 @@ $rfqQtyUnit = applicationConstants::getWeightUnitName($siteLangId, $rfqData['rfq
                 <table width="100%" border="0" cellpadding="0" cellspacing="0">
                     <tbody>
                         <tr>
-                            <td><strong><?php echo Labels::getLabel('LBL_RFQ_NO', $siteLangId); ?>:</strong> <?php echo $rfqData['rfq_number']; ?></td>
-                            <td><strong><?php echo Labels::getLabel('LBL_REQUESTED_ON', $siteLangId); ?>:</strong> <?php echo FatDate::format($rfqData['rfq_added_on']); ?><?php if (0 < strtotime($rfqData['rfq_delivery_date'])) { ?><br><strong><?php echo Labels::getLabel('LBL_EXPECTED_DELIVERY_DATE', $siteLangId); ?>:</strong> <?php echo FatDate::format($rfqData['rfq_delivery_date']); ?><?php } ?></td>
+                            <td style="text-align: <?php echo CommonHelper::getLayoutDirection() == 'rtl' ? 'right' : 'left'; ?>;"><strong><?php echo Labels::getLabel('LBL_RFQ_NO', $siteLangId); ?>:</strong> <?php echo $rfqData['rfq_number']; ?></td>
+                            <td style="text-align: <?php echo CommonHelper::getLayoutDirection() == 'rtl' ? 'right' : 'left'; ?>;"><strong><?php echo Labels::getLabel('LBL_REQUESTED_ON', $siteLangId); ?>:</strong> <?php echo FatDate::format($rfqData['rfq_added_on']); ?><?php if (0 < strtotime($rfqData['rfq_delivery_date'])) { ?><br><strong><?php echo Labels::getLabel('LBL_EXPECTED_DELIVERY_DATE', $siteLangId); ?>:</strong> <?php echo FatDate::format($rfqData['rfq_delivery_date']); ?><?php } ?></td>
                         </tr>
                     </tbody>
                 </table>
             </td>
         </tr>
         <tr>
-            <td>
+            <td style="text-align: <?php echo CommonHelper::getLayoutDirection() == 'rtl' ? 'right' : 'left'; ?>;">
                 <table width="100%" border="0" cellpadding="0" cellspacing="0">
                     <tbody>
                         <tr>
@@ -125,34 +125,34 @@ $rfqQtyUnit = applicationConstants::getWeightUnitName($siteLangId, $rfqData['rfq
             </tr>
         <?php } */ ?>
         <tr>
-            <td>
+            <td style="text-align: <?php echo CommonHelper::getLayoutDirection() == 'rtl' ? 'right' : 'left'; ?>;">
                 <table class="tbl-border" width="100%" border="0" cellpadding="10" cellspacing="0">
                     <thead>
                         <tr>
-                            <th width="<?php echo $isGlobal ? '50%' : '70%'; ?>" style="padding:10px; ;text-align: left; border-bottom:1px solid #ddd; background-color:#ddd; "><?php echo Labels::getLabel('LBL_ITEM', $siteLangId); ?></th>
-                            <th width="20%" style="padding:10px; ;text-align: left; border-bottom:1px solid #ddd; background-color:#ddd; "><?php echo Labels::getLabel('LBL_PRODUCT_TYPE', $siteLangId); ?></th>
+                            <th width="<?php echo $isGlobal ? '50%' : '70%'; ?>" style="padding:10px; border-bottom:1px solid #ddd; background-color:#ddd; text-align: <?php echo CommonHelper::getLayoutDirection() == 'rtl' ? 'right' : 'left'; ?>;"><?php echo Labels::getLabel('LBL_ITEM', $siteLangId); ?></th>
+                            <th width="20%" style="padding:10px; border-bottom:1px solid #ddd; background-color:#ddd; text-align: <?php echo CommonHelper::getLayoutDirection() == 'rtl' ? 'right' : 'left'; ?>;"><?php echo Labels::getLabel('LBL_PRODUCT_TYPE', $siteLangId); ?></th>
                             <?php if ($isGlobal) { ?>
-                                <th width="20%" style="padding:10px; ;text-align: left; border-bottom:1px solid #ddd; background-color:#ddd; "><?php echo Labels::getLabel('LBL_CATEGORY', $siteLangId); ?></th>
+                                <th width="20%" style="padding:10px; border-bottom:1px solid #ddd; background-color:#ddd; text-align: <?php echo CommonHelper::getLayoutDirection() == 'rtl' ? 'right' : 'left'; ?>;"><?php echo Labels::getLabel('LBL_CATEGORY', $siteLangId); ?></th>
                             <?php } ?>
-                            <th width="10%" style="padding:10px; ;text-align: left; border-bottom:1px solid #ddd; background-color:#ddd; "><?php echo Labels::getLabel('LBL_Qty', $siteLangId); ?></th>
+                            <th width="10%" style="padding:10px; border-bottom:1px solid #ddd; background-color:#ddd; text-align: <?php echo CommonHelper::getLayoutDirection() == 'rtl' ? 'right' : 'left'; ?>;"><?php echo Labels::getLabel('LBL_Qty', $siteLangId); ?></th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td style="padding:10px; ;text-align: left;"><?php echo $rfqData['rfq_title']; ?></td>
-                            <td style="padding:10px; ;text-align: left;"><?php echo $productTypeArr[$rfqData['rfq_product_type']]; ?></td>
+                            <td style="padding:10px;text-align: <?php echo CommonHelper::getLayoutDirection() == 'rtl' ? 'right' : 'left'; ?>;"><?php echo $rfqData['rfq_title']; ?></td>
+                            <td style="padding:10px;text-align: <?php echo CommonHelper::getLayoutDirection() == 'rtl' ? 'right' : 'left'; ?>;"><?php echo $productTypeArr[$rfqData['rfq_product_type']]; ?></td>
                             <?php if ($isGlobal) { ?>
-                                <td style="padding:10px; ;text-align: left;">
+                                <td style="padding:10px;text-align: <?php echo CommonHelper::getLayoutDirection() == 'rtl' ? 'right' : 'left'; ?>;">
                                     <?php echo !empty($rfqData['prodcat_name']) ? $rfqData['prodcat_name'] : Labels::getLabel('LBL_N/A', $siteLangId); ?>
                                 </td>
                             <?php } ?>
-                            <td style="padding:10px; ;text-align: left;"><?php echo $rfqData['rfq_quantity']  . ' ' . $rfqQtyUnit; ?></td>
+                            <td style="padding:10px;text-align: <?php echo CommonHelper::getLayoutDirection() == 'rtl' ? 'right' : 'left'; ?>;"><?php echo $rfqData['rfq_quantity']  . ' ' . $rfqQtyUnit; ?></td>
                         </tr>
                         <tr>
-                            <td style="padding:10px; ;text-align: left;font-weight:700;background-color: #ddd;" colspan="<?php echo ($isGlobal) ? 4 : 3; ?>"><?php echo Labels::getLabel('LBL_COMMENTS', $siteLangId) ?> </td>
+                            <td style="padding:10px;text-align: <?php echo CommonHelper::getLayoutDirection() == 'rtl' ? 'right' : 'left'; ?>;font-weight:700;background-color: #ddd;" colspan="<?php echo ($isGlobal) ? 4 : 3; ?>"><?php echo Labels::getLabel('LBL_COMMENTS', $siteLangId) ?> </td>
                         </tr>
                         <tr>
-                            <td style="padding:10px; ;text-align: left;" colspan="<?php echo ($isGlobal) ? 4 : 3; ?>"><?php echo $rfqData['rfq_description']; ?></td>
+                            <td style="padding:10px;text-align: <?php echo CommonHelper::getLayoutDirection() == 'rtl' ? 'right' : 'left'; ?>;" colspan="<?php echo ($isGlobal) ? 4 : 3; ?>"><?php echo $rfqData['rfq_description']; ?></td>
                         </tr>
                     </tbody>
                 </table>
@@ -174,10 +174,10 @@ $rfqQtyUnit = applicationConstants::getWeightUnitName($siteLangId, $rfqData['rfq
                         <table width="100%" border="0" cellpadding="0" cellspacing="0">
                             <tbody>
                                 <tr>
-                                    <td><strong><?php echo Labels::getLabel('LBL_SOLD_BY', $siteLangId); ?>:</strong> <?php echo $offer['shop_name']; ?></td>
-                                    <td><strong><?php echo Labels::getLabel('LBL_EMAIL', $siteLangId); ?>:</strong> <?php echo $offer['seller_email']; ?></td>
+                                    <td style="text-align: <?php echo CommonHelper::getLayoutDirection() == 'rtl' ? 'right' : 'left'; ?>;"><strong><?php echo Labels::getLabel('LBL_SOLD_BY', $siteLangId); ?>:</strong> <?php echo $offer['shop_name']; ?></td>
+                                    <td style="text-align: <?php echo CommonHelper::getLayoutDirection() == 'rtl' ? 'right' : 'left'; ?>;"><strong><?php echo Labels::getLabel('LBL_EMAIL', $siteLangId); ?>:</strong> <?php echo $offer['seller_email']; ?></td>
                                     <?php if (!empty($offer['seller_phone_dcode']) && !empty($offer['seller_phone'])) { ?>
-                                        <td>
+                                        <td style="text-align: <?php echo CommonHelper::getLayoutDirection() == 'rtl' ? 'right' : 'left'; ?>;">
                                             <strong><?php echo Labels::getLabel('LBL_PHONE', $siteLangId); ?>:</strong>
                                             <?php echo ValidateElement::formatDialCode($offer['seller_phone_dcode']) . $offer['seller_phone']; ?>
                                         </td>
@@ -188,24 +188,24 @@ $rfqQtyUnit = applicationConstants::getWeightUnitName($siteLangId, $rfqData['rfq
                     </td>
                 </tr>
                 <tr>
-                    <td>
+                    <td style="text-align: <?php echo CommonHelper::getLayoutDirection() == 'rtl' ? 'right' : 'left'; ?>;">
                         <table class="tbl-border" width="100%" border="0" cellpadding="10" cellspacing="0">
                             <thead>
                                 <tr>
-                                    <th style="padding:10px; ;text-align: left; border-bottom:1px solid #ddd; background-color:#ddd; "><?php echo Labels::getLabel('LBL_OFFER_QUANTITY', $siteLangId); ?></th>
+                                    <th style="padding:10px;text-align: <?php echo CommonHelper::getLayoutDirection() == 'rtl' ? 'right' : 'left'; ?>; border-bottom:1px solid #ddd; background-color:#ddd; "><?php echo Labels::getLabel('LBL_OFFER_QUANTITY', $siteLangId); ?></th>
                                     <?php if (0 < $offer['rlo_shipping_charges']) { ?>
-                                        <th style="padding:10px; ;text-align: left; border-bottom:1px solid #ddd; background-color:#ddd; "><?php echo Labels::getLabel('LBL_SHIPPING_RATE', $siteLangId); ?></th>
+                                        <th style="padding:10px;text-align: <?php echo CommonHelper::getLayoutDirection() == 'rtl' ? 'right' : 'left'; ?>; border-bottom:1px solid #ddd; background-color:#ddd; "><?php echo Labels::getLabel('LBL_SHIPPING_RATE', $siteLangId); ?></th>
                                     <?php } ?>
-                                    <th style="padding:10px; ;text-align: left; border-bottom:1px solid #ddd; background-color:#ddd; "><?php echo Labels::getLabel('LBL_OFFER_PRICE', $siteLangId); ?></th>
+                                    <th style="padding:10px;text-align: <?php echo CommonHelper::getLayoutDirection() == 'rtl' ? 'right' : 'left'; ?>; border-bottom:1px solid #ddd; background-color:#ddd; "><?php echo Labels::getLabel('LBL_OFFER_PRICE', $siteLangId); ?></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td style="padding:10px; ;text-align: left;"><?php echo $offer['offer_quantity']  . ' ' . $rfqQtyUnit; ?></td>
+                                    <td style="padding:10px;text-align: <?php echo CommonHelper::getLayoutDirection() == 'rtl' ? 'right' : 'left'; ?>;"><?php echo $offer['offer_quantity']  . ' ' . $rfqQtyUnit; ?></td>
                                     <?php if (0 < $offer['rlo_shipping_charges']) { ?>
-                                        <td style="padding:10px; ;text-align: left;"><?php echo CommonHelper::displayMoneyFormat($offer['rlo_shipping_charges']); ?></td>
+                                        <td style="padding:10px;text-align: <?php echo CommonHelper::getLayoutDirection() == 'rtl' ? 'right' : 'left'; ?>;"><?php echo CommonHelper::displayMoneyFormat($offer['rlo_shipping_charges']); ?></td>
                                     <?php } ?>
-                                    <td style="padding:10px; ;text-align: left;"><?php
+                                    <td style="padding:10px;text-align: <?php echo CommonHelper::getLayoutDirection() == 'rtl' ? 'right' : 'left'; ?>;"><?php
                                                                                     $str = Labels::getLabel('LBL_{PRICE}_{UNIT}', $siteLangId);
                                                                                     echo CommonHelper::replaceStringData($str, [
                                                                                         '{PRICE}' => CommonHelper::displayMoneyFormat($offer['offer_price']),
@@ -214,10 +214,10 @@ $rfqQtyUnit = applicationConstants::getWeightUnitName($siteLangId, $rfqData['rfq
                                 </tr>
                                 <?php if (!empty($offer['offer_comments'])) { ?>
                                     <tr>
-                                        <td style="padding:10px; ;text-align: left;font-weight:700;background-color: #ddd;" colspan="<?php echo (0 < $offer['rlo_shipping_charges']) ? 3 : 2; ?>"><?php echo Labels::getLabel('LBL_COMMENTS', $siteLangId) ?></td>
+                                        <td style="padding:10px;text-align: <?php echo CommonHelper::getLayoutDirection() == 'rtl' ? 'right' : 'left'; ?>;font-weight:700;background-color: #ddd;" colspan="<?php echo (0 < $offer['rlo_shipping_charges']) ? 3 : 2; ?>"><?php echo Labels::getLabel('LBL_COMMENTS', $siteLangId) ?></td>
                                     </tr>
                                     <tr>
-                                        <td style="padding:10px; ;text-align: left;" colspan="<?php echo (0 < $offer['rlo_shipping_charges']) ? 3 : 2; ?>"><?php echo $offer['offer_comments']; ?></td>
+                                        <td style="padding:10px;text-align: <?php echo CommonHelper::getLayoutDirection() == 'rtl' ? 'right' : 'left'; ?>;" colspan="<?php echo (0 < $offer['rlo_shipping_charges']) ? 3 : 2; ?>"><?php echo $offer['offer_comments']; ?></td>
                                     </tr>
                                 <?php } ?>
                             </tbody>
