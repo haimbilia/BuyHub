@@ -78,7 +78,7 @@ class Collections extends MyAppModel
     public const TYPE_HERO_SLIDES_LAYOUT1 = 25;
 
     public const LIMIT_PRODUCT_LAYOUT1 = 12;
-    public const LIMIT_PRODUCT_LAYOUT2 = 6;
+    public const LIMIT_PRODUCT_LAYOUT2 = 8;
     public const LIMIT_PRODUCT_LAYOUT3 = 3;
     public const LIMIT_PRODUCT_LAYOUT4 = 8;
     public const LIMIT_PRODUCT_LAYOUT6 = 10;

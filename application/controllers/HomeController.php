@@ -986,6 +986,8 @@ class HomeController extends MyAppController
                         $productCatSrchTempObj->setPageSize(4);
                     } else if (in_array($collection['collection_layout_type'], [Collections::TYPE_CATEGORY_LAYOUT7])) {
                         $productCatSrchTempObj->setPageSize(12);
+                    } else if (in_array($collection['collection_layout_type'], [Collections::TYPE_CATEGORY_LAYOUT12])) {
+                        $productCatSrchTempObj->setPageSize(6);
                     } else if (in_array($collection['collection_layout_type'], [Collections::TYPE_CATEGORY_LAYOUT9])) {
                         $productCatSrchTempObj->setPageSize(8);
                     }
@@ -1047,6 +1049,7 @@ class HomeController extends MyAppController
                                 }
                                 $collections[$ind]['categories'][$catData['prodcat_id']]['product'] = $product;
                             }
+
                             /* ] */
                             $counter++;
                         }
@@ -1209,7 +1212,7 @@ class HomeController extends MyAppController
                     }
 
                     $shopObj->doNotCalculateRecords();
-                    $shopObj->addMultipleFields(array('ctr.ctr_display_order', 'shop_id', 'shop_user_id', 'IFNULL(shop_name, shop_identifier) as shop_name', 'IFNULL(country_name, country_code) as country_name', 'IFNULL(state_name, state_identifier) as state_name', 'shop_updated_on','shop_avg_rating','shop_total_reviews'));
+                    $shopObj->addMultipleFields(array('ctr.ctr_display_order', 'shop_id', 'shop_user_id', 'IFNULL(shop_name, shop_identifier) as shop_name', 'IFNULL(country_name, country_code) as country_name', 'IFNULL(state_name, state_identifier) as state_name', 'shop_updated_on', 'shop_avg_rating', 'shop_total_reviews'));
                     $shopObj->addOrder('ctr.ctr_display_order', 'ASC');
                     $rs = $shopObj->getResultSet();
 
@@ -1233,7 +1236,7 @@ class HomeController extends MyAppController
                         } else {
                             if (in_array($collection['collection_layout_type'], [Collections::TYPE_SHOP_LAYOUT2, Collections::TYPE_SHOP_LAYOUT3])) {
                                 $prodObj = $this->getProductSearchObj($loggedUserId, ['shop_id' => $shopsData['shop_id']]);
-                                $prodObj->addCondition('shop_id', '=', $shopsData['shop_id']);                                
+                                $prodObj->addCondition('shop_id', '=', $shopsData['shop_id']);
                                 if (CommonHelper::demoUrl(true)) {
                                     $prodObj->addCondition('product_featured', '=', applicationConstants::YES);
                                 }
@@ -1824,8 +1827,10 @@ class HomeController extends MyAppController
         $data['newsletterEnabled'] = FatApp::getConfig('CONF_ENABLE_NEWSLETTER_SUBSCRIPTION', FatUtility::VAR_INT, 1);
 
         $data['app_session_id'] = isset($_SERVER['HTTP_X_APP_SESSION_ID']) && !empty($_SERVER['HTTP_X_APP_SESSION_ID']) ? $_SERVER['HTTP_X_APP_SESSION_ID'] : session_id();
+        $data['CONF_RFQ_MODULE_TYPE'] = FatApp::getConfig('CONF_RFQ_MODULE_TYPE', FatUtility::VAR_INT, 0);
+        $data['CONF_RFQ_MODULE'] = FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0);
+        $data['CONF_HIDE_PRICES'] = FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0);
 
-        $this->set('data', $data);
         $this->set('data', $data);
         $this->_template->render();
     }

@@ -1955,27 +1955,25 @@ class Importexport extends ImportexportCommon
                             break;
                         case 'product_ship_package_identifier':
                             $columnKey = 'product_ship_package';
-                            if (Product::PRODUCT_TYPE_DIGITAL == $prodType) {
-                                $colValue = '';
-                            } else {
+                            if (Product::PRODUCT_TYPE_PHYSICAL == $prodType) {
                                 if (!array_key_exists($colValue, $shippingPackages)) {
                                     $invalid = true;
                                 } else {
                                     $colValue = $shippingPackages[$colValue];
                                 }
+                            } else {
+                                $colValue = '';
                             }
                             break;
                         case 'shipping_profile_id':
                             $columnKey = 'shippro_shipprofile_id';
-                            if (!array_key_exists($colValue, $shippingProfiles)) {
+                            if (Product::PRODUCT_TYPE_PHYSICAL == $prodType && !array_key_exists($colValue, $shippingProfiles)) {
                                 $invalid = true;
                             }
                             break;
                         case 'shipping_profile_identifier':
                             $columnKey = 'shippro_shipprofile_id';
-                            if (Product::PRODUCT_TYPE_DIGITAL == $prodType) {
-                                $colValue = '';
-                            } else {
+                            if (Product::PRODUCT_TYPE_PHYSICAL == $prodType) {
                                 $shipBy = $userId;
                                 if (FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0)) {
                                     $shipBy = 0;
@@ -1986,6 +1984,8 @@ class Importexport extends ImportexportCommon
                                 } else {
                                     $colValue = isset($shippingProfiles[$colValue][$shipBy]) ? $shippingProfiles[$colValue][$shipBy] : 0;
                                 }
+                            } else {
+                                $colValue = '';
                             }
                             break;
                         case 'product_dimension_unit_identifier':
@@ -2003,9 +2003,7 @@ class Importexport extends ImportexportCommon
                             break;
                         case 'product_weight_unit_identifier':
                             $columnKey = 'product_weight_unit';
-                            if (Product::PRODUCT_TYPE_DIGITAL == $prodType) {
-                                $colValue = '';
-                            } else {
+                            if (Product::PRODUCT_TYPE_PHYSICAL == $prodType) {
                                 if (FatApp::getConfig('CONF_PRODUCT_WEIGHT_ENABLE', FatUtility::VAR_INT, 0) && $prodType == Product::PRODUCT_TYPE_PHYSICAL) {
                                     if (!array_key_exists($colValue, $weightUnitsArr)) {
                                         $invalid = true;
@@ -2015,6 +2013,8 @@ class Importexport extends ImportexportCommon
                                 } else {
                                     $colValue = '';
                                 }
+                            } else {
+                                $colValue = '';
                             }
                             break;
                         case 'country_code':

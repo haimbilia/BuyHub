@@ -1,5 +1,6 @@
+<?php $collection['collection_primary_records'] = $collection['collection_primary_records'] ?? 4;?>
 <div class="shop-layout-1"
-    data-view="<?php echo (0 < $collection['collection_primary_records']) ? $collection['collection_primary_records'] : 4; ?>">
+    data-view="<?php echo $collection['collection_primary_records'] ?>">
     <?php $i = 0;
     foreach ($collection['shops'] as $shop) {
         $uploadedTime = AttachedFile::setTimeParam($shop['shopData']['shop_updated_on']); ?>

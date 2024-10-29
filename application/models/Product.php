@@ -196,7 +196,7 @@ class Product extends MyAppModel
             $arr[ImportexportCommon::VALIDATE_NOT_NULL] = array_merge($arr[ImportexportCommon::VALIDATE_NOT_NULL], $physical);
         }
 
-        if (FatApp::getConfig('CONF_PRODUCT_MODEL_MANDATORY', FatUtility::VAR_INT, 0)) {
+        if (Product::PRODUCT_TYPE_SERVICE != $prodType && FatApp::getConfig('CONF_PRODUCT_MODEL_MANDATORY', FatUtility::VAR_INT, 0)) {
             $physical = array(
                 'product_model',
             );
