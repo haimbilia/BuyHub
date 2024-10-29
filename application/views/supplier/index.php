@@ -73,12 +73,14 @@ if (!empty($slogan)) {
                                 <h2><?php echo Labels::getLabel('LBL_Frequently_Asked_Questions', $siteLangId); ?></h2>
                             </div>
                         </header>
-                        <div class="faqsearch">
-                            <form name="frmSearchFaqs" method="post" onsubmit="searchFaqsListing(this); return(false);"
-                                class="form" action="javascript:void(0);">
-                                <input placeholder="<?php echo Labels::getLabel('FRM_SEARCH', $siteLangId); ?>"
-                                    class="faq-input no-focus" id="faqQuestionJs" type="search" name="question" value="">
-                            </form>
+                        <div class="section-body">
+                            <div class="faqsearch">
+                                <form name="frmSearchFaqs" method="post" onsubmit="searchFaqsListing(this); return(false);"
+                                    class="form" action="javascript:void(0);">
+                                    <input placeholder="<?php echo Labels::getLabel('FRM_SEARCH', $siteLangId); ?>"
+                                        class="faq-input no-focus" id="faqQuestionJs" type="search" name="question" value="">
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -106,16 +108,13 @@ if (!empty($slogan)) {
                     <div class="section-heading">
                         <h2><?php echo Labels::getLabel('LBL_Still_need_help?', $siteLangId) ?> </h2>
                     </div>
-
-                </header> <a href="<?php echo UrlHelper::generateUrl('custom', 'contact-us'); ?>"
+                </header>
+                <a href="<?php echo UrlHelper::generateUrl('custom', 'contact-us'); ?>"
                     class="btn btn-secondary"><?php echo Labels::getLabel('LBL_Contact_Customer_Care', $siteLangId) ?>
                 </a>
             </div>
         </div>
-
     </section>
-
-
 </div>
 <script>
     var faqsSearchStringLength = '<?php echo Faq::FAQS_SEARCH_STRING_LENGTH; ?>';
