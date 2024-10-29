@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$pSrchFrm->setFormTagAttribute('class', 'form custom-form');
+$pSrchFrm->setFormTagAttribute('class', 'form');
 $pSrchFrm->setFormTagAttribute('name', 'frmSiteSearchCustom');
 $pSrchFrm->setFormTagAttribute('id', 'frm_fat_id_frmSiteSearch_custom');
 $keywordFld = $pSrchFrm->getField('keyword');
@@ -13,7 +13,9 @@ $keywordFld->setFieldTagAttribute('onkeyup', 'animation(this)'); ?>
 <div class="container align-center">
     <div class="no-product">
         <div class="block-empty m-auto text-center">
-            <img class="block__img" width="200" height="200" src="<?php echo CONF_WEBROOT_URL; ?>images/retina/empty-cart.svg" alt="<?php echo Labels::getLabel('LBL_No_Product_found', $siteLangId); ?>">
+            <img class="block__img" width="200" height="200"
+                src="<?php echo CONF_WEBROOT_URL; ?>images/retina/empty-cart.svg"
+                alt="<?php echo Labels::getLabel('LBL_No_Product_found', $siteLangId); ?>">
             <h3><?php echo Labels::getLabel('LBL_WE_COULD_NOT_FIND_ANY_MATCHES!', $siteLangId); ?></h3>
             <h6><?php echo Labels::getLabel('LBL_Please_check_if_you_misspelt_something_or_try_searching_again_with_fewer_keywords.', $siteLangId); ?>
             </h6>
@@ -30,7 +32,7 @@ $keywordFld->setFieldTagAttribute('onkeyup', 'animation(this)'); ?>
             </div>
             <?php
             $top_searched_keywords = SearchItem::getTopSearchedKeywords();
-            if (count($top_searched_keywords) > 0) : ?>
+            if (count($top_searched_keywords) > 0): ?>
                 <div class="popular-searches my-5">
                     <h3 class=""><?php echo Labels::getLabel('L_Popular_Searches', $siteLangId) ?> </h3>
                     <ul class="browse-more">
@@ -41,7 +43,8 @@ $keywordFld->setFieldTagAttribute('onkeyup', 'animation(this)'); ?>
                                 echo "";
                             } ?>
                             <li>
-                                <a onclick="searchTags(this)" data-txt="<?php echo $record['searchitem_keyword']; ?>" href="javascript:void(0);"><?php echo $record['searchitem_keyword'] ?>
+                                <a onclick="searchTags(this)" data-txt="<?php echo $record['searchitem_keyword']; ?>"
+                                    href="javascript:void(0);"><?php echo $record['searchitem_keyword'] ?>
                                 </a>
                             </li>
                         <?php } ?>
