@@ -68,6 +68,7 @@
   &-item {
     border: $border;
     border-radius: $kart;
+    min-width: 0;
   }
   .section-head {
     padding: 1rem;
