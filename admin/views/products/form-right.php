@@ -357,7 +357,7 @@ if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0))
             <div class="card-head-label">
                 <h3 class="card-head-title">
                     <?php 
-                    if (Product::PRODUCT_TYPE_PHYSICAL == $productData['product_type']) {
+                    if (1 > $recordId || (isset($productData['product_type']) && Product::PRODUCT_TYPE_PHYSICAL == $productData['product_type'])) {
                         echo Labels::getLabel('NAV_TAX_AND_SHIPPING', $siteLangId); 
                     } else {
                         echo Labels::getLabel('NAV_TAX', $siteLangId); 
@@ -366,7 +366,7 @@ if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0))
                 </h3>
                 <span class="text-muted">
                     <?php 
-                    if (Product::PRODUCT_TYPE_PHYSICAL == $productData['product_type']) {
+                    if (1 > $recordId || (isset($productData['product_type']) && Product::PRODUCT_TYPE_PHYSICAL == $productData['product_type'])) {
                         echo Labels::getLabel('MSG_SETUP_TAX_AND_SHIPPING_INFORMATION_OF_THE_PRODUCT', $siteLangId); 
                     } else {
                         echo Labels::getLabel('MSG_SETUP_TAX_INFORMATION_OF_THE_PRODUCT', $siteLangId); 

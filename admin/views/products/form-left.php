@@ -88,7 +88,7 @@
                                     </svg>
                                 </i>
                                 <div class="">
-                                    <?php if (Product::PRODUCT_TYPE_PHYSICAL == $productData['product_type']) { ?>
+                                    <?php if (1 > $recordId || (isset($productData['product_type']) && Product::PRODUCT_TYPE_PHYSICAL == $productData['product_type'])) { ?>
                                         <h6 class="stock-nav-title"><?php echo Labels::getLabel('NAV_TAX_AND_SHIPPING', $siteLangId); ?></h6>
                                         <span class="stock-nav-desc"> <?php echo Labels::getLabel('MSG_SETUP_TAX_AND_SHIPPING_INFORMATION_OF_THE_PRODUCT', $siteLangId); ?></span>
                                     <?php } else { ?>
