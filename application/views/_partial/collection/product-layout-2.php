@@ -2,7 +2,7 @@
 if (isset($collection['products']) && count($collection['products']) > 0) { ?>
 <section class="section" data-section="section">
     <div class="container">
-        <div class="section-head">
+        <header class="section-head">
             <div class="section-heading">
                 <h2><?php echo ($collection['collection_name'] != '') ? $collection['collection_name'] : ''; ?></h2>
             </div> <?php if ($collection['totProducts'] > $collection['collection_primary_records']) { ?>
@@ -13,7 +13,7 @@ if (isset($collection['products']) && count($collection['products']) > 0) { ?>
                 </a>
             </div>
             <?php } ?>
-        </div>
+        </header>
         <div class="product-layout-2">
             <?php
                 $tRightRibbons = $collection['tRightRibbons'];
@@ -30,7 +30,6 @@ if (isset($collection['products']) && count($collection['products']) > 0) { ?>
                     include('product-layout-1-list.php');
                 } ?>
         </div>
-
     </div>
 </section>
 <?php }
