@@ -2,7 +2,7 @@
 <?php if (isset($collection['products']) && count($collection['products']) > 0) { ?>
 <section class="section" data-section="section">
     <div class="container">
-        <div class="section-head">
+        <header class="section-head">
             <div class="section-heading">
                 <h2><?php echo ($collection['collection_name'] != '') ? $collection['collection_name'] : ''; ?></h2>
             </div>
@@ -14,7 +14,7 @@
                 </a>
             </div>
             <?php } ?>
-        </div>
+        </header>
         <div class="product-layout-4"
             data-view="<?php echo (0 < $collection['collection_primary_records']) ? $collection['collection_primary_records'] : count($collection['products']); ?>">
             <?php

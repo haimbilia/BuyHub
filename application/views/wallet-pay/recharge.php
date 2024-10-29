@@ -11,11 +11,11 @@ foreach ($paymentMethods as $key => $val) {
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-8">
-                <div class="section-head  section-head-center">
+                <header class="section-head  section-head-center">
                     <div class="section-heading">
                         <h2><?php echo Labels::getLabel('LBL_ADD_MONEY_TO_WALLET', $siteLangId); ?></h2>
                     </div>
-                </div>
+                </header>
                 <?php if ($orderInfo['order_net_amount']) { ?>
                     <?php if ($gatewayCount > 0) { ?>
                         <div class="col-md-8">
@@ -99,7 +99,8 @@ foreach ($paymentMethods as $key => $val) {
                     $("#paypal-buttons").html("");
                 }
 
-                if (0 < paymentMethodSection.find('.paymentFormSection-js').length && paymentMethodSection.find('.paymentFormSection-js').hasClass('d-none')) {
+                if (0 < paymentMethodSection.find('.paymentFormSection-js').length && paymentMethodSection.find(
+                    '.paymentFormSection-js').hasClass('d-none')) {
                     paymentMethodSection.replaceWith(res.html);
                 } else {
                     paymentMethodSection.html(res.html);

@@ -2,14 +2,13 @@
 if (isset($collection['testimonials']) && count($collection['testimonials']) > 0) { ?>
     <section class="section bg-gray" data-section="section">
         <div class="container">
-            <div class="section-head section-head-center">
+            <header class="section-head section-head-center">
                 <div class="section-heading">
                     <h2>
                         <?php echo $collection['collection_name']; ?>
                     </h2>
                 </div>
-            </div>
-
+            </header>
             <div
                 class="<?php echo (1 < count($collection['testimonials'])) ? 'js-slider-testimonials' : ''; ?> slider-testimonials">
                 <?php foreach ($collection['testimonials'] as $testimonial) {
@@ -52,7 +51,7 @@ if (isset($collection['testimonials']) && count($collection['testimonials']) > 0
     </section>
     <?php if (1 < count($collection['testimonials'])) { ?>
         <script>
-            $(function() {
+            $(function () {
                 $(".js-slider-testimonials").not('.slick-initialized').slick({
                     rtl: ('rtl' == langLbl.layoutDirection),
                     slidesToShow: 1,

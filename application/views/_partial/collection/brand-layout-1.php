@@ -1,7 +1,7 @@
 <?php if (isset($collection['brands']) && count($collection['brands']) > 0) { ?>
 <section class="section" data-section="section">
     <div class="container">
-        <div class="section-head">
+        <header class="section-head">
             <?php echo ($collection['collection_name'] != '') ? ' <div class="section-heading"><h2>' . $collection['collection_name'] . '</h2></div>' : ''; ?>
             <?php if ($collection['totBrands'] > Collections::LIMIT_BRAND_LAYOUT1) { ?>
             <div class="section-action">
@@ -9,7 +9,7 @@
                     class="link-underline"><?php echo Labels::getLabel('LBL_VIEW_ALL', $siteLangId); ?></a>
             </div>
             <?php } ?>
-        </div>
+        </header>
         <div class="brand-layout-1"
             data-view="<?php echo (0 < $collection['collection_primary_records'] ? $collection['collection_primary_records'] : 1); ?>">
             <?php $i = 0;
@@ -35,8 +35,6 @@
             <?php $i++;
                 } ?>
         </div>
-
-
     </div>
 </section>
 <?php } ?>

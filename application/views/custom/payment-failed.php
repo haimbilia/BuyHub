@@ -8,11 +8,11 @@
                         <use xlink:href="<?php echo CONF_WEBROOT_FRONTEND; ?>images/retina/sprite.svg#payment-failed">
                         </use>
                     </svg>
-                    <div class="section-head  section-head-center mt-2">
+                    <header class="section-head  section-head-center mt-2">
                         <div class="section-heading">
                             <h2><?php echo Labels::getLabel('LBL_Payment_Failed', $siteLangId); ?></h2>
                         </div>
-                    </div>
+                    </header>
                     <p>
                         <?php echo CommonHelper::renderHtml($textMessage); ?>
                     </p>

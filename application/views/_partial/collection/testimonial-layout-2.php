@@ -1,7 +1,7 @@
 <?php if (isset($collection['testimonials']) && count($collection['testimonials']) > 0) { ?>
 <section class="section" data-collection="testimonials-categories">
     <div class="container">
-        <div class="section-head">
+        <header class="section-head">
             <div class="section-heading">
                 <h2><?php echo $collection['collection_name']; ?></h2>
             </div>
@@ -10,7 +10,7 @@
                     <?php echo Labels::getLabel('LBL_View_all', $siteLangId); ?>
                 </a>
             </div>
-        </div>
+        </header>
         <div class="section-body">
             <div class="testimonials-layout-2 js-carousel <?php echo (1 < count($collection['testimonials'])) ? '' : ''; ?>"
                 data-slides="<?php echo (0 < $collection['collection_primary_records'] ? $collection['collection_primary_records'] : 5) ?>,3,1,1"
