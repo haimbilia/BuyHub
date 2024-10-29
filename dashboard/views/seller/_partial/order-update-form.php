@@ -16,7 +16,7 @@ if ($canEdit && $displayForm && !$print) { ?>
         }
 
         $statusFld = $frm->getField('op_status_id');
-        $statusFld->setFieldTagAttribute('class', 'status-js fieldsVisibility-js');
+        $statusFld->setFieldTagAttribute('class', 'status-js fieldsVisibilityJs');
 
         $fld1 = $frm->getField('customer_notified');
         $fld1->setFieldTagAttribute('class', 'notifyCustomer-js');
@@ -24,7 +24,7 @@ if ($canEdit && $displayForm && !$print) { ?>
 
 
         if (null != $manualFld) {
-            $manualFld->setFieldTagAttribute('class', 'manualShippingJs fieldsVisibility-js');
+            $manualFld->setFieldTagAttribute('class', 'manualShippingJs fieldsVisibilityJs');
             $manualFld->developerTags['col'] = 4;
             HtmlHelper::configureSwitchForCheckbox($manualFld);
             $manualFld->developerTags['noCaptionTag'] = false;

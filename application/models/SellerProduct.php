@@ -355,7 +355,8 @@ class SellerProduct extends MyAppModel
                     'IFNULL(m.splprice_price, selprod_price) AS theprice',
                     'selprod_min_order_qty',
                     'selprod_cart_type',
-                    'product_updated_on'
+                    'product_updated_on',
+                    'selprod_hide_price'
                 );
             }
         } else {
@@ -804,7 +805,7 @@ class SellerProduct extends MyAppModel
                 $srch->addMultipleFields($criteria);
             }
         } else {
-            $srch->addMultipleFields(array('related_sellerproduct_id', 'selprod_id', 'IFNULL(product_identifier ,product_name) as product_name', 'IFNULL(selprod_title, IFNULL(product_name, product_identifier)) as selprod_title', 'product_identifier', 'selprod_price', 'product_updated_on', 'selprod_cart_type'));
+            $srch->addMultipleFields(array('related_sellerproduct_id', 'selprod_id', 'IFNULL(product_identifier ,product_name) as product_name', 'IFNULL(selprod_title, IFNULL(product_name, product_identifier)) as selprod_title', 'product_identifier', 'selprod_price', 'product_updated_on', 'selprod_cart_type', 'selprod_hide_price'));
         }
         return $srch;
     }
@@ -1686,5 +1687,14 @@ class SellerProduct extends MyAppModel
             self::CART_TYPE_CART_ONLY => Labels::getLabel('LBL_CART_ONLY', $siteLangId),
             self::CART_TYPE_RFQ_ONLY => Labels::getLabel('LBL_RFQ_ONLY', $siteLangId),
         ];
+    }
+
+    public static function isPriceHidden(int $selprodHidePrice)
+    {
+        if (0 < FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) {
+            return true;
+        }
+
+        return (0 < $selprodHidePrice);
     }
 }

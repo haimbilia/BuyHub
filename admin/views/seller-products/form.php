@@ -116,6 +116,11 @@ if (null != $fld) {
     $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 }
 
+$fld = $frm->getField('selprod_hide_price');
+if (null != $fld) {
+    HtmlHelper::configureSwitchForCheckbox($fld);
+}
+
 $fld = $frm->getField('selprod_subtract_stock');
 if (null != $fld) {
     HtmlHelper::configureSwitchForCheckbox($fld);

@@ -8,6 +8,11 @@ if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0))
     $fld->setFieldTagAttribute('onkeyup', "getUniqueSlugUrl(this,this.value,$selProdId)");
 }
 
+$fld = $frm->getField('selprod_hide_price');
+if (null != $fld) {
+    HtmlHelper::configureSwitchForCheckbox($fld);
+}
+
 ?>
 <div class="add-stock-column column-main">
     <div class="add-stock-column-head">
@@ -165,6 +170,7 @@ if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0))
                         <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_return_age', 6); ?>
                         <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_cancellation_age', 6); ?>
                         <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_cart_type', 6); ?>
+                        <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_hide_price', 6); ?>
                         <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_comments', 12); ?>
                     </div>
                 </div>

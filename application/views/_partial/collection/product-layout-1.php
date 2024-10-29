@@ -29,28 +29,29 @@
             $displayCount = (0 < $collection['collection_primary_records']) ? $collection['collection_primary_records'] : 4;
             $slidesCount = (Collections::TYPE_PRODUCT_LAYOUT6 == $collection['collection_layout_type']) ? '6,3,2,2' : min($displayCount, 6);
             ?>
-            <div class="product-layout-1 js-carousel" id="product-listing-<?php echo $collection['collection_id']; ?>"
-                data-slides="<?php echo $slidesCount; ?>" data-view="<?php echo $displayCount; ?>"
-                dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
-                <?php
-                $tRightRibbons = $collection['tRightRibbons'];
-                foreach ($collection['products'] as $product) {
-                    $selProdRibbons = [];
-                    if (array_key_exists($product['selprod_id'], $tRightRibbons)) {
-                        $selProdRibbons[] = $tRightRibbons[$product['selprod_id']];
-                    }
-                ?>
-                    <div class="js-carousel-item">
-                        <?php
-                        $displayProductNotAvailableLable = false;
-                        if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) {
-                            $displayProductNotAvailableLable = true;
+            <div class="section-body">
+                <div class="product-layout-1 js-carousel" id="product-listing-<?php echo $collection['collection_id']; ?>"
+                    data-slides="<?php echo $slidesCount; ?>" data-view="<?php echo $displayCount; ?>"
+                    dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
+                    <?php
+                    $tRightRibbons = $collection['tRightRibbons'];
+                    foreach ($collection['products'] as $product) {
+                        $selProdRibbons = [];
+                        if (array_key_exists($product['selprod_id'], $tRightRibbons)) {
+                            $selProdRibbons[] = $tRightRibbons[$product['selprod_id']];
                         }
-                        include('product-layout-1-list.php'); ?>
-                    </div>
-                <?php } ?>
+                    ?>
+                        <div class="js-carousel-item">
+                            <?php
+                            $displayProductNotAvailableLable = false;
+                            if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) {
+                                $displayProductNotAvailableLable = true;
+                            }
+                            include('product-layout-1-list.php'); ?>
+                        </div>
+                    <?php } ?>
+                </div>
             </div>
-
         </div>
     </section>
 <?php }

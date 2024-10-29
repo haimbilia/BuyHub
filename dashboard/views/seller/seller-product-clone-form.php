@@ -2,6 +2,7 @@
 
 HtmlHelper::formatFormFields($frm);
 $returnAgeFld = $frm->getField('selprod_return_age');
+$cancellationAgeFld = $frm->getField('selprod_cancellation_age');
 if (null != $returnAgeFld) {
     $returnAge = FatUtility::int($returnAgeFld->value);
     $hidden = '';
@@ -11,13 +12,17 @@ if (null != $returnAgeFld) {
     $returnAgeFld->setWrapperAttribute('class', 'use-shop-policy ' . $hidden);
 }
 
-$cancellationAgeFld = $frm->getField('selprod_cancellation_age');
 if (null != $returnAgeFld) {
     $hidden = '';
     if ('' === $cancellationAgeFld->value) {
         $hidden = 'hidden';
     }
     $cancellationAgeFld->setWrapperAttribute('class', 'use-shop-policy ' . $hidden);
+}
+
+$fld = $frm->getField('selprod_hide_price');
+if (null != $fld) {
+    HtmlHelper::configureSwitchForCheckbox($fld);
 }
 
 $fld = $frm->getField('use_shop_policy');

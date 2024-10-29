@@ -10,11 +10,13 @@
                             <h1><?php echo Labels::getLabel('LBL_Frequently_Asked_Questions', $siteLangId); ?></h1>
                         </div>
                     </header>
-                    <form name="frmSearchFaqs" method="post" onsubmit="searchFaqsListing(this); return(false);"
-                        class="form form-faqs">
-                        <input placeholder="<?php echo Labels::getLabel('FRM_SEARCH', $siteLangId); ?>"
-                            class="form-faqs-input no-focus" id="faqQuestionJs" type="search" name="question" value="">
-                    </form>
+                    <div class="section-body">
+                        <form name="frmSearchFaqs" method="post" onsubmit="searchFaqsListing(this); return(false);"
+                            class="form form-faqs">
+                            <input placeholder="<?php echo Labels::getLabel('FRM_SEARCH', $siteLangId); ?>"
+                                class="form-faqs-input no-focus" id="faqQuestionJs" type="search" name="question" value="">
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>

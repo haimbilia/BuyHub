@@ -19,7 +19,7 @@ foreach ($sellers as $key => $sellerDetail) {
     }
     ?>
     <li class="more-sellers-item <?php echo ($isActive ? 'is-active' : ''); ?>">
-        <?php if (1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) { ?>
+        <?php if (false === SellerProduct::isPriceHidden($sellerDetail['selprod_hide_price'])) { ?>
             <div class="sold-price"><?php echo CommonHelper::displayMoneyFormat($sellerDetail['theprice']); ?></div>
         <?php } ?>
         <div class="sold-by">
@@ -58,7 +58,7 @@ foreach ($sellers as $key => $sellerDetail) {
                 </div>
             </div>
         <?php }
-        if (false === $isActive && 1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0) && !RequestForQuote::isCartTypeRfqOnly($sellerDetail['shop_rfq_enabled'], $sellerDetail['selprod_cart_type'])) { ?>
+        if (false === $isActive && false === SellerProduct::isPriceHidden($sellerDetail['selprod_hide_price']) && !RequestForQuote::isCartTypeRfqOnly($sellerDetail['shop_rfq_enabled'], $sellerDetail['selprod_cart_type'])) { ?>
             <button class="btn btn-outline-black btn-sm btnAddToCart--js" data-id='<?php echo $sellerDetail['selprod_id']; ?>'
                 data-min-qty="<?php echo $sellerDetail['selprod_min_order_qty']; ?>" type="button"
                 data-cart-has-product="<?php echo 0 < $cartSellerId && $sellerDetail['selprod_user_id'] != $cartSellerId && 0 < FatApp::getConfig('CONF_SINGLE_SELLER_CART', FatUtility::VAR_INT, 0); ?>"><?php echo Labels::getLabel('BTN_ADD_TO_CART', $siteLangId); ?></button>

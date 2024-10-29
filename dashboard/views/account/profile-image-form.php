@@ -10,7 +10,7 @@ $imgFrm->setFormTagAttribute('action', UrlHelper::generateUrl('Account', 'upload
 
         $profileImg = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'user', array($userId, ImageDimension::VIEW_THUMB, true), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
         ?>
-        <img src="<?php echo $profileImg; ?>" alt="<?php echo Labels::getLabel('LBL_Profile_Image', $siteLangId); ?>">        
+        <img src="<?php echo $profileImg; ?>" alt="<?php echo Labels::getLabel('LBL_Profile_Image', $siteLangId); ?>">
     </div>
 </div>
 <div class="col-md-6">
@@ -24,7 +24,8 @@ $imgFrm->setFormTagAttribute('action', UrlHelper::generateUrl('Account', 'upload
         echo $imgFrm->getFieldHtml('action');
         ?>
         <?php if ($mode == 'Edit') { ?>
-            <a class="btn btn-brand btn-sm" href="javascript:void(0)" onclick="removeProfileImage()"><?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?></a>
+        <a class="btn btn-brand btn-sm" href="javascript:void(0)"
+            onclick="removeProfileImage()"><?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?></a>
         <?php } ?>
         </form>
         <?php echo $imgFrm->getExternalJS(); ?>
