@@ -126,7 +126,7 @@ class PluginSettingController extends LoggedUserController
         $frm = new Form('frm' . $keyName);
 
         $envoirment = Plugin::getEnvArr($langId);
-        $envFld = $frm->addSelectBox(Labels::getLabel('FRM_ENVOIRMENT', $langId), 'env', $envoirment, '', ['class' => 'fieldsVisibility-js'], '');
+        $envFld = $frm->addSelectBox(Labels::getLabel('FRM_ENVOIRMENT', $langId), 'env', $envoirment, '', ['class' => 'fieldsVisibilityJs'], '');
         $envFld->requirement->setRequired(true);
         foreach ($labelsArr as $colName => $colLabel) {
             $htmlAfterField = $fieldFn = "";

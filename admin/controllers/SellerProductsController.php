@@ -311,7 +311,7 @@ class SellerProductsController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
-    public function setUp()
+    public function setup()
     {
         $this->objPrivilege->canEditSellerProducts();
         $selProdId = $this->setupInventory();

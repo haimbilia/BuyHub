@@ -487,7 +487,7 @@ class CartController extends MyAppController
             $srch->joinProductToCategory();
             $srch->addCondition('pricetbl.selprod_id', '=', 'mysql_func_' . $productId, 'AND', true);
             $srch->addCondition('selprod_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
-            $srch->addMultipleFields(array('selprod_id', 'selprod_code', 'selprod_min_order_qty', 'selprod_cart_type', 'selprod_stock', 'COALESCE(product_name, product_identifier) as product_name', 'prodcat_name', 'brand_name', 'selprod_title', 'selprod_price', 'COALESCE(splprice_price, selprod_price) as theprice'));
+            $srch->addMultipleFields(array('selprod_id', 'selprod_code', 'selprod_min_order_qty', 'selprod_cart_type', 'selprod_hide_price', 'selprod_stock', 'COALESCE(product_name, product_identifier) as product_name', 'prodcat_name', 'brand_name', 'selprod_title', 'selprod_price', 'COALESCE(splprice_price, selprod_price) as theprice'));
             $srch->doNotCalculateRecords();
             $srch->setPageSize(1);
             $rs = $srch->getResultSet();

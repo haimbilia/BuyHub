@@ -94,6 +94,7 @@ trait SellerProducts
                 'selprod_stock',
                 'selprod_track_inventory',
                 'selprod_cart_type',
+                'selprod_hide_price',
                 'selprod_threshold_stock_level',
                 'selprod_product_id',
                 'selprod_active',
@@ -553,10 +554,13 @@ trait SellerProducts
 
         $post['selprod_subtract_stock'] = FatApp::getPostedData('selprod_subtract_stock', FatUtility::VAR_INT, 0);
         $post['selprod_track_inventory'] = FatApp::getPostedData('selprod_track_inventory', FatUtility::VAR_INT, 0);
-        $post['selprod_min_order_qty'] = FatApp::getPostedData('selprod_min_order_qty', FatUtility::VAR_INT, 1);
-        $post['selprod_stock'] = FatApp::getPostedData('selprod_stock', FatUtility::VAR_INT, 1);
-        $post['selprod_stock'] = ($post['selprod_stock'] > 0) ? $post['selprod_stock'] : 1;
-        $post['selprod_min_order_qty'] = ($post['selprod_min_order_qty'] > 0) ? $post['selprod_min_order_qty'] : 1;
+        $post['selprod_hide_price'] = (SellerProduct::CART_TYPE_RFQ_ONLY != $post['selprod_cart_type'] ? 0 : FatApp::getPostedData('selprod_hide_price', FatUtility::VAR_INT, 0));
+
+        $selprodStock = FatApp::getPostedData('selprod_stock', FatUtility::VAR_INT, 1);
+        $post['selprod_stock'] = (0 < $selprodStock) ? $selprodStock : 1;
+
+        $minOrderQty = FatApp::getPostedData('selprod_min_order_qty', FatUtility::VAR_INT, 1);
+        $post['selprod_min_order_qty'] = 0 < $minOrderQty ? $minOrderQty : 1;
 
         $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
 
@@ -2423,8 +2427,20 @@ trait SellerProducts
         if (0 < FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0) && 1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) {
             $shopRfqEnabled = Shop::getAttributesByUserId($this->userParentId, 'shop_rfq_enabled', false);
             if (0 < $shopRfqEnabled) {
-                $fld = $frm->addSelectBox(Labels::getLabel('FRM_CART_TYPE', $this->siteLangId), 'selprod_cart_type', SellerProduct::getCartType(), SellerProduct::CART_TYPE_BOTH, array(), '');
-                $fld->requirements()->setRequired();
+                $cartTypeFld = $frm->addSelectBox(Labels::getLabel('FRM_CART_TYPE', $this->siteLangId), 'selprod_cart_type', SellerProduct::getCartType(), SellerProduct::CART_TYPE_BOTH, array('class' => 'fieldsVisibilityJs onlyShowHideJs'), '');
+                $cartTypeFld->requirements()->setRequired();
+                $frm->addCheckBox(Labels::getLabel("FRM_HIDE_PRICE", $this->siteLangId), 'selprod_hide_price', 1, array(), false, 0);
+
+                $hidePriceReqFld = new FormFieldRequirement('selprod_hide_price', Labels::getLabel('FRM_HIDE_PRICE', $this->siteLangId));
+                $hidePriceReqFld->setRequired(true);
+                $hidePriceReqFld->setPositive();
+
+                $hidePriceUnReqFld = new FormFieldRequirement('selprod_hide_price', Labels::getLabel('FRM_HIDE_PRICE', $this->siteLangId));
+                $hidePriceUnReqFld->setRequired(false);
+                $hidePriceUnReqFld->setPositive();
+
+                $cartTypeFld->requirements()->addOnChangerequirementUpdate(SellerProduct::CART_TYPE_RFQ_ONLY, 'eq', 'selprod_hide_price', $hidePriceReqFld);
+                $cartTypeFld->requirements()->addOnChangerequirementUpdate(SellerProduct::CART_TYPE_RFQ_ONLY, 'ne', 'selprod_hide_price', $hidePriceUnReqFld);
             }
         }
 
@@ -2530,6 +2546,7 @@ trait SellerProducts
         $data_to_be_save['selprod_stock'] = (isset($post['selprod_stock']) && $post['selprod_stock'] > 0) ? $post['selprod_stock'] : 1;
         $data_to_be_save['selprod_available_from'] = $post['selprod_available_from'];
         $data_to_be_save['selprod_cart_type'] = $post['selprod_cart_type'] ?? 0;
+        $data_to_be_save['selprod_hide_price'] = (SellerProduct::CART_TYPE_RFQ_ONLY != $post['selprod_cart_type'] ? 0 : FatApp::getPostedData('selprod_hide_price', FatUtility::VAR_INT, 0));
 
         if (!empty($selProdAvailable)) {
             if (!$selProdAvailable['selprod_deleted']) {

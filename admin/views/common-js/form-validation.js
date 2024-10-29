@@ -563,6 +563,7 @@
             }
             if (true === fieldsVisibility) {
                 var elementRow = elementObj.closest('.form-group').parent();
+                console.log(elementRow);
                 if (false == arr[i].requirement.required) {
                     elementRow.hide();
                 } else {

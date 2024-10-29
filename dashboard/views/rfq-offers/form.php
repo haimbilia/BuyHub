@@ -46,12 +46,14 @@ if (null != $fld) {
     </h5>
 </div>
 <div class="modal-body form-edit">
-    <?php if(0 < $selProdPrice && $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] != 'B') {?>
-    <span class="badge badge-inline badge-info"><?php 
-        $selProdPrice = CommonHelper::displayMoneyFormat($selProdPrice);
-        $msg = commonHelper::replaceStringData(Labels::getLabel('LBL_SELLING_PRICE:_{selProdPrice}', $siteLangId), ['{selProdPrice}' => $selProdPrice]);
-        echo $msg;?></span>
-    <?php }?>
+    <?php if (0 < $selProdPrice && $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] != 'B') { ?>
+        <span class="badge badge-inline badge-info">
+            <?php
+            $selProdPrice = CommonHelper::displayMoneyFormat($selProdPrice);
+            echo commonHelper::replaceStringData(Labels::getLabel('LBL_SELLING_PRICE:_{selProdPrice}', $siteLangId), ['{selProdPrice}' => $selProdPrice]);
+            ?>
+        </span>
+    <?php } ?>
     <div class="form-edit-body loaderContainerJs">
         <?php echo $frm->getFormHtml(); ?>
     </div>
@@ -67,9 +69,9 @@ if (null != $fld) {
                 $(this).closest('form').find('[type="submit"]').focus();
             }
         });
-        
-        $(document).mousedown(function(){
-            if ($.datepicker.initialized && !$(".fldDateJs").datepicker( "widget" ).is(":visible")) {
+
+        $(document).mousedown(function() {
+            if ($.datepicker.initialized && !$(".fldDateJs").datepicker("widget").is(":visible")) {
                 $('.' + $.ykmodal.element).find('.submitBtnJs').focus();
             }
         });

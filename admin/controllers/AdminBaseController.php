@@ -705,13 +705,24 @@ $frm->addTextBox('ISBN Code','product_isbn'); */
             $fld->requirement->setRequired(true);
         }
 
-
-        if (0 < FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0) && 1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) {
-            $fld = $frm->addSelectBox(Labels::getLabel('FRM_CART_TYPE', $this->siteLangId), 'selprod_cart_type', SellerProduct::getCartType(), SellerProduct::CART_TYPE_BOTH, array(), '');
-            $fld->requirements()->setRequired();
-        }
-
         $frm->addDateField(Labels::getLabel('FRM_DATE_AVAILABLE', $this->siteLangId), 'selprod_available_from', '', array('readonly' => 'readonly', 'class' => 'field--calender'))->requirements()->setRequired();
+        
+        if (0 < FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0) && 1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) {
+            $cartTypeFld = $frm->addSelectBox(Labels::getLabel('FRM_CART_TYPE', $this->siteLangId), 'selprod_cart_type', SellerProduct::getCartType(), SellerProduct::CART_TYPE_BOTH, array('class' => 'fieldsVisibilityJs onlyShowHideJs'), '');
+            $cartTypeFld->requirements()->setRequired();
+            $frm->addCheckBox(Labels::getLabel("FRM_HIDE_PRICE", $this->siteLangId), 'selprod_hide_price', 1, array(), false, 0);
+
+            $hidePriceReqFld = new FormFieldRequirement('selprod_hide_price', Labels::getLabel('FRM_HIDE_PRICE', $this->siteLangId));
+            $hidePriceReqFld->setRequired(true);
+            $hidePriceReqFld->setPositive();
+
+            $hidePriceUnReqFld = new FormFieldRequirement('selprod_hide_price', Labels::getLabel('FRM_HIDE_PRICE', $this->siteLangId));
+            $hidePriceUnReqFld->setRequired(false);
+            $hidePriceUnReqFld->setPositive();
+
+            $cartTypeFld->requirements()->addOnChangerequirementUpdate(SellerProduct::CART_TYPE_RFQ_ONLY, 'eq', 'selprod_hide_price', $hidePriceReqFld);
+            $cartTypeFld->requirements()->addOnChangerequirementUpdate(SellerProduct::CART_TYPE_RFQ_ONLY, 'ne', 'selprod_hide_price', $hidePriceUnReqFld);
+        }
 
         if ($productData['product_type'] != Product::PRODUCT_TYPE_SERVICE) {
             $frm->addCheckBox(Labels::getLabel('FRM_SYSTEM_SHOULD_MAINTAIN_STOCK_LEVELS', $this->siteLangId), 'selprod_subtract_stock', applicationConstants::YES, array(), false, 0);
@@ -754,7 +765,7 @@ $frm->addTextBox('ISBN Code','product_isbn'); */
         $orderCancellationAgeUnReqFld = new FormFieldRequirement('selprod_cancellation_age', Labels::getLabel('FRM_PRODUCT_ORDER_CANCELLATION_PERIOD_(Days)', $this->siteLangId));
         $orderCancellationAgeUnReqFld->setRequired(false);
         $orderCancellationAgeUnReqFld->setPositive();
-        
+
         if ($productData['product_type'] != Product::PRODUCT_TYPE_SERVICE) {
             $useShopPolicy->requirements()->addOnChangerequirementUpdate(Shop::USE_SHOP_POLICY, 'eq', 'selprod_return_age', $orderReturnAgeUnReqFld);
             $useShopPolicy->requirements()->addOnChangerequirementUpdate(Shop::USE_SHOP_POLICY, 'ne', 'selprod_return_age', $orderReturnAgeReqFld);

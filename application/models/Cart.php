@@ -883,6 +883,7 @@ class Cart extends FatModel
             'selprod_track_inventory',
             'selprod_cart_type',
             'shop_rfq_enabled',
+            'selprod_hide_price'
         ));
 
         if ($siteLangId) {

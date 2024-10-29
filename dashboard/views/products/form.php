@@ -12,6 +12,11 @@ if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0))
     $fld->setFieldTagAttribute('onkeyup', "getUniqueSlugUrl(this,this.value,$selProdId)");
     $fld->htmlAfterField = "<span class='form-text text-muted'>" . UrlHelper::generateFullUrl('Products', 'View', array($selProdId), CONF_WEBROOT_FRONTEND) . '</span>';
 }
+
+$fld = $frm->getField('selprod_hide_price');
+if (null != $fld) {
+    HtmlHelper::configureSwitchForCheckbox($fld);
+}
 ?>
 <div class="content-wrapper content-space mainJs" <?php echo CommonHelper::getLayoutDirection() != $formLayout ? 'dir="' . $formLayout . '"' : ''; ?>>
     <?php
@@ -180,7 +185,7 @@ if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0))
                                         <?php
                                         $fld = $frm->getField('use_shop_policy');
                                         if (null != $fld) {
-                                            $fld->setFieldTagAttribute('class', "fieldsVisibility-js");
+                                            $fld->setFieldTagAttribute('class', "fieldsVisibilityJs");
                                             HtmlHelper::configureSwitchForCheckbox($fld);
                                             $fld->developerTags['noCaptionTag'] = true;
                                             echo '<div class="col-md-12"><div class="form-group"><div class="setting-block">' . $fld->getHtml() . '</div></div></div>';
@@ -189,6 +194,7 @@ if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0))
                                         <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_return_age', 6); ?>
                                         <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_cancellation_age', 6); ?>
                                         <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_cart_type', 6); ?>
+                                        <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_hide_price', 6); ?>
                                         <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_comments', 12); ?>
                                     </div>
                                 </div>

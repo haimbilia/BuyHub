@@ -522,7 +522,8 @@
         if (!str) return;
         var arr = JSON.parse(str);
         var v = el.val();
-        var fieldsVisibility = el.hasClass('fieldsVisibility-js');
+        var fieldsVisibility = el.hasClass('fieldsVisibilityJs');
+        var onlyShowHide = el.hasClass('onlyShowHideJs');
         if (el.attr('type') == 'checkbox' && !el.is(':checked')) {
             v = '';
         }
@@ -552,7 +553,9 @@
             if (!match) continue;
 
             var elementObj = $(el[0].form.elements[arr[i].fldname]);
-            elementObj.attr('data-fatreq', JSON.stringify(arr[i].requirement));
+            if (false == onlyShowHide) {
+                elementObj.attr('data-fatreq', JSON.stringify(arr[i].requirement));
+            }
             if (true === fieldsVisibility) {
                 var elementRow = elementObj.closest('.field-set').parent();
                 if (1 > elementRow.length) {

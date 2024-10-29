@@ -47,7 +47,7 @@
         </div>
     </div>
     <?php $selprod_condition = true;  ?>
-    <?php if (1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) { ?>
+    <?php if (false === SellerProduct::isPriceHidden($product['selprod_hide_price'])) { ?>
         <div class="products-foot">
             <?php require(CONF_THEME_PATH . '_partial/collection/product-price.php'); ?>
         </div>

@@ -526,7 +526,7 @@
         if (!str) return;
         var arr = JSON.parse(str);
         var v = el.val();
-        var fieldsVisibility = el.hasClass('fieldsVisibility-js');
+        var fieldsVisibility = el.hasClass('fieldsVisibilityJs');
         if (el.attr('type') == 'checkbox' && !el.is(':checked')) {
             v = '';
         }
