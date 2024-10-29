@@ -561,3 +561,5 @@ ON DUPLICATE KEY UPDATE stpl_name = VALUES(stpl_name), stpl_body = VALUES(stpl_b
 
 
 ALTER TABLE `tbl_collections`  ADD `collection_full_width` TINYINT(1) NOT NULL  AFTER `collection_for_app`;
+
+ALTER TABLE `tbl_content_pages`  ADD `cpage_hide_header_footer` TINYINT(1) NOT NULL  AFTER `cpage_layout`;
