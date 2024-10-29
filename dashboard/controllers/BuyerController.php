@@ -754,7 +754,8 @@ class BuyerController extends BuyerBaseController
                 'op_rounding_off',
                 'selprod_product_id',
                 'orderstatus_id',
-                'selprod_cart_type'
+                'selprod_cart_type',
+                'selprod_hide_price'
             )
         );
 
@@ -3123,7 +3124,7 @@ class BuyerController extends BuyerBaseController
                 'COALESCE(shop_state_l.state_name,state_identifier) as shop_state_name',
                 'COALESCE(shop_country_l.country_name,shop_country.country_code) as shop_country_name',
                 'selprod_condition',
-                'product_warranty_unit', 'selprod_cart_type'
+                'product_warranty_unit', 'selprod_cart_type', 'selprod_hide_price'
             )
         );
         $productRs = $prodSrch->getResultSet();

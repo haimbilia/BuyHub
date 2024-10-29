@@ -49,6 +49,11 @@ if (false === Plugin::isActive('EasyEcom') && $product_type != Product::PRODUCT_
 $fld = $frmSellerProduct->getField('use_shop_policy');
 HtmlHelper::configureSwitchForCheckbox($fld);
 
+$fld = $frmSellerProduct->getField('selprod_hide_price');
+if (null != $fld) {
+    HtmlHelper::configureSwitchForCheckbox($fld);
+}
+
 $submitBtnFld = $frmSellerProduct->getField('btn_submit');
 $submitBtnFld->setFieldTagAttribute('class', 'btn btn-brand');
 $submitBtnFld->developerTags['col'] = 12;
@@ -264,7 +269,9 @@ if ($fld != null) {
                         </div>
                     </div>
                 </div>
-                <?php if (null != $frmSellerProduct->getField('selprod_cart_type')) { ?>
+            </div>
+            <?php if (null != $frmSellerProduct->getField('selprod_cart_type')) { ?>
+                <div class="row">
                     <div class="col-md-6">
                         <div class="field-set">
                             <div class="caption-wraper"><label class="field_label"><?php echo $frmSellerProduct->getField('selprod_cart_type')->getCaption(); ?><span class="spn_must_field">*</span></label></div>
@@ -274,8 +281,15 @@ if ($fld != null) {
                             </div>
                         </div>
                     </div>
-                <?php } ?>
-            </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="setting-block">
+                                <?php echo $frmSellerProduct->getFieldHtml('selprod_hide_price'); ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php } ?>
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-text text-muted my-4">

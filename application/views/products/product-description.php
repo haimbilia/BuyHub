@@ -113,7 +113,7 @@
             $qtyFieldName =  $qtyField->getCaption();
             if (strtotime($product['selprod_available_from']) <= strtotime(FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d'))) { ?>
     <div class="options-block">
-        <?php if (1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) { ?>
+        <?php if (false === SellerProduct::isPriceHidden($product['selprod_hide_price'])) { ?>
         <div class="options-block-head">
             <h6 class="h6"><?php echo $qtyFieldName; ?></h6>
             <div class="quantity" data-stock="<?php echo $product['selprod_stock']; ?>">
@@ -148,7 +148,7 @@
 
                     if (
                         $fromDate <= $currentDate && 
-                        1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0) &&
+                        false === SellerProduct::isPriceHidden($product['selprod_hide_price']) &&
                         (
                             SellerProduct::CART_TYPE_RFQ_ONLY != $product['selprod_cart_type'] ||
                             applicationConstants::NO == $product['shop_rfq_enabled'] || 
@@ -174,13 +174,13 @@
                         RequestForQuote::isEnabled($product['shop_rfq_enabled'], $product['selprod_cart_type']) &&
                         (
                             SellerProduct::CART_TYPE_CART_ONLY != $product['selprod_cart_type'] ||
-                            0 < FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)
+                            SellerProduct::isPriceHidden($product['selprod_hide_price'])
                         )
                     ) { ?>
-        <button class="btn btn-outline-brand btn-block btn-rfq" name="requestForQuote" type="button"
-            onclick="requestForQuoteFn('<?php echo $product['selprod_id']; ?>');">
-            <?php echo Labels::getLabel('BTN_REQUEST_FOR_QUOTE'); ?>
-        </button>
+                        <button class="btn btn-outline-brand btn-block btn-rfq" name="requestForQuote" type="button"
+                            onclick="requestForQuoteFn('<?php echo $product['selprod_id']; ?>');">
+                            <?php echo Labels::getLabel('BTN_REQUEST_FOR_QUOTE'); ?>
+                        </button>
         <?php //}
                     } ?>
     </div>
@@ -302,7 +302,7 @@
                         <div class="product-profile-data">
                             <a class="title"
                                 href="<?php echo UrlHelper::generateUrl('products', 'view', array($usproduct['selprod_id'])) ?>"><?php echo $usproduct['selprod_title'] ?></a>
-                            <?php if (1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) { ?>
+                            <?php if (false === SellerProduct::isPriceHidden($usproduct['selprod_hide_price'])) { ?>
                             <div class="products-price">
                                 <?php echo CommonHelper::displayMoneyFormat($usproduct['theprice'], true, false, true, false, false, true); ?>
                             </div>
@@ -348,7 +348,7 @@
                             </div>
                         </div>
                     </div>
-                    <?php if (1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) { ?>
+                    <?php if (false === SellerProduct::isPriceHidden($usproduct['selprod_hide_price'])) { ?>
                     <label class="checkbox">
                         <input <?php echo ($usproduct['selprod_stock'] > 0) ? 'checked="checked"' : ''; ?>
                             type="checkbox" class="cancel <?php echo $uncheckBoxClass; ?>" name="check_addons"

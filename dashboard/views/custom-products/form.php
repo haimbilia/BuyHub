@@ -168,7 +168,7 @@ if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0))
                                         <?php
                                         $fld = $frm->getField('use_shop_policy');
                                         if (null != $fld) {
-                                            $fld->setFieldTagAttribute('class', "fieldsVisibility-js");
+                                            $fld->setFieldTagAttribute('class', "fieldsVisibilityJs");
                                             HtmlHelper::configureSwitchForCheckbox($fld);
                                             $fld->developerTags['noCaptionTag'] = true;
                                             echo '<div class="col-md-12"><div class="form-group"><div class="setting-block">' . $fld->getHtml() . '</div></div></div>';

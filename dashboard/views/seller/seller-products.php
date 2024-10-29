@@ -53,10 +53,14 @@ $tableClass = (0 < count($arrListing)) ? "table-justified" : ''; ?>
                     break;
                 case 'selprod_price':
                     $defaultCurrencyValue = '';
-                    if ($currency_id != $selectedCurrency) {
-                        $defaultCurrencyValue = '<br><span class="form-text text-muted" data-bs-toggle="tooltip" title="' . Labels::getLabel('LBL_SYSTEM_DEFAULT_CURRENCY.') . '">(' . CommonHelper::displayMoneyFormat($row[$key], true, true) . ')</span>';
+                    $price = '<span class="form-text text-muted"><i>' . Labels::getLabel('LBL_N/A', $siteLangId) . '</i></span>';
+                    if (1 > $row['selprod_hide_price']) {
+                        if ($currency_id != $selectedCurrency) {
+                            $defaultCurrencyValue = '<br><span class="form-text text-muted" data-bs-toggle="tooltip" title="' . Labels::getLabel('LBL_SYSTEM_DEFAULT_CURRENCY.') . '">(' . CommonHelper::displayMoneyFormat($row[$key], true, true) . ')</span>';
+                        }
+                        $price = '<span>' . CommonHelper::displayMoneyFormat($row[$key]) . '</span>' . $defaultCurrencyValue;
                     }
-                    $td->appendElement('plaintext', array(), '<span>'. CommonHelper::displayMoneyFormat($row[$key]) . '</span>' . $defaultCurrencyValue , true);
+                    $td->appendElement('plaintext', array(), $price, true);
                     break;
                 case 'selprod_stock':
                     $td->appendElement('plaintext', array(), $row[$key], true);
