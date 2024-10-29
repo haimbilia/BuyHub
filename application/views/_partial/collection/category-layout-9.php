@@ -10,7 +10,7 @@
             </div>
         </header> <?php */ ?>
         <div class="section-body">
-            <div class="catalog-carousal  industryCarousalJs" data-view="8">
+            <div class="catalog-carousal  industryCarousalJs" data-view="8,4,2,2">
                 <?php
                     foreach ($collection['categories'] as $category) {
                         $rootParentId = FatUtility::int(current(explode('_', $category['prodcat_code'])));
