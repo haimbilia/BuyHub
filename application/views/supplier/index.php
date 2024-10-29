@@ -26,7 +26,7 @@ if (!empty($slogan)) {
                 <div class="seller-slogan">
                     <div class="seller-slogan-txt">
                         <?php if (isset($slogan['epage_label'])) { ?>
-                            <h3><?php echo $slogan['epage_label']; ?></h3>
+                        <h3><?php echo $slogan['epage_label']; ?></h3>
                         <?php } ?>
 
                         <p><?php echo $pageContent; ?></p>
@@ -48,67 +48,67 @@ if (!empty($slogan)) {
         </div>
     </div>
     <?php if (!empty($block1)) { ?>
-        <section class="section" data-section="section">
-            <div class="container"><?php echo FatUtility::decodeHtmlEntities($block1['epage_content']); ?></div>
-        </section>
+    <section class="section" data-section="section">
+        <div class="container"><?php echo FatUtility::decodeHtmlEntities($block1['epage_content']); ?></div>
+    </section>
     <?php }
     if (!empty($block2)) { ?>
-        <section class="section bg-gray" data-section="section">
-            <div class="container"> <?php echo FatUtility::decodeHtmlEntities($block2['epage_content']); ?> </div>
-        </section>
+    <section class="section bg-gray" data-section="section">
+        <div class="container"> <?php echo FatUtility::decodeHtmlEntities($block2['epage_content']); ?> </div>
+    </section>
     <?php }
     if (!empty($block3)) { ?>
-        <section class="section" data-section="section">
-            <div class="container"> <?php echo FatUtility::decodeHtmlEntities($block3['epage_content']); ?> </div>
-        </section>
+    <section class="section" data-section="section">
+        <div class="container"> <?php echo FatUtility::decodeHtmlEntities($block3['epage_content']); ?> </div>
+    </section>
     <?php } ?>
 
     <?php if ($faqCount > 0) { ?>
-        <div class="divider"></div>
-        <section class="section" data-section="section">
-            <div class="container">
-                <div class="row align-items-center justify-content-center">
-                    <div class="col-lg-8">
-                        <div class="section-head section-head-center mb-0">
-                            <div class="section-heading">
-                                <h2><?php echo Labels::getLabel('LBL_Frequently_Asked_Questions', $siteLangId); ?></h2>
-                            </div>
+    <div class="divider"></div>
+    <section class="section" data-section="section">
+        <div class="container">
+            <div class="row align-items-center justify-content-center">
+                <div class="col-lg-8">
+                    <header class="section-head section-head-center mb-0">
+                        <div class="section-heading">
+                            <h2><?php echo Labels::getLabel('LBL_Frequently_Asked_Questions', $siteLangId); ?></h2>
                         </div>
-                        <div class="faqsearch">
-                            <form name="frmSearchFaqs" method="post" onsubmit="searchFaqsListing(this); return(false);"
-                                class="form" action="javascript:void(0);">
-                                <input placeholder="<?php echo Labels::getLabel('FRM_SEARCH', $siteLangId); ?>"
-                                    class="faq-input no-focus" id="faqQuestionJs" type="search" name="question" value="">
-                            </form>
-                        </div>
+                    </header>
+                    <div class="faqsearch">
+                        <form name="frmSearchFaqs" method="post" onsubmit="searchFaqsListing(this); return(false);"
+                            class="form" action="javascript:void(0);">
+                            <input placeholder="<?php echo Labels::getLabel('FRM_SEARCH', $siteLangId); ?>"
+                                class="faq-input no-focus" id="faqQuestionJs" type="search" name="question" value="">
+                        </form>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <section class="section pt-0">
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-lg-8 faqSectionJs position-relative">
-                        <?php if ($faqCount > 0) { ?>
-                            <div class="faq-filters mb-4" id="categoryPanel"></div>
-                        <?php } ?>
-                        <ul class="faqlist" id="listing"></ul>
-                    </div>
+    <section class="section pt-0">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 faqSectionJs position-relative">
+                    <?php if ($faqCount > 0) { ?>
+                    <div class="faq-filters mb-4" id="categoryPanel"></div>
+                    <?php } ?>
+                    <ul class="faqlist" id="listing"></ul>
                 </div>
             </div>
-        </section>
-        <div class="divider"></div>
+        </div>
+    </section>
+    <div class="divider"></div>
     <?php } ?>
     <section class="section" data-section="section">
         <div class="container">
             <div class="align-center">
-                <div class="section-head section-head-center">
+                <header class="section-head section-head-center">
                     <div class="section-heading">
                         <h2><?php echo Labels::getLabel('LBL_Still_need_help?', $siteLangId) ?> </h2>
                     </div>
 
-                </div> <a href="<?php echo UrlHelper::generateUrl('custom', 'contact-us'); ?>"
+                </header> <a href="<?php echo UrlHelper::generateUrl('custom', 'contact-us'); ?>"
                     class="btn btn-secondary"><?php echo Labels::getLabel('LBL_Contact_Customer_Care', $siteLangId) ?>
                 </a>
             </div>
@@ -119,7 +119,7 @@ if (!empty($slogan)) {
 
 </div>
 <script>
-    var faqsSearchStringLength = '<?php echo Faq::FAQS_SEARCH_STRING_LENGTH; ?>';
+var faqsSearchStringLength = '<?php echo Faq::FAQS_SEARCH_STRING_LENGTH; ?>';
 </script>
 <!-- End Document
 ================================================== -->

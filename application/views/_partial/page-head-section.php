@@ -4,7 +4,7 @@ $subHeadLabel = $subHeadLabel ?? '';
 ?>
 <div class="bg-brand-light py-4">
     <div class="container">
-        <div class="section-head section-head-center mb-0">
+        <header class="section-head section-head-center mb-0">
             <div class="section-heading">
                 <h1><?php echo $headLabel; ?></h1>
                 <?php if (!empty($subHeadLabel)) { ?>
@@ -16,7 +16,6 @@ $subHeadLabel = $subHeadLabel ?? '';
                     </div>
                 <?php } ?>
             </div>
-        </div>
-
+        </header>
     </div>
 </div>
