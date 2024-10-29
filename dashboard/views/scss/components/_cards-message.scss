@@ -1,0 +1,23 @@
+//
+.cards-message {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  padding: 0.75rem 1.25rem;
+  margin: auto;
+  color: var(--body-color);
+  height: 100%;
+
+  &-icon {
+    display: flex;
+    align-items: center;
+    padding: 1.25rem 0;
+    font-size: 2.5rem;
+  }
+
+  .alert-text {
+    align-self: center;
+  }
+}

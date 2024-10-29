@@ -1,86 +1,86 @@
 .modal {
-    &-content {
-        //border-radius: $common-radius;
-        border: none;
-        box-shadow: 0 2px 48px 0 rgba(0, 0, 0, 0.06);
-        .close {
-            font-weight: 400;
-        }
+  &-content {
+    //border-radius: $common-radius;
+    border: none;
+    box-shadow: 0 2px 48px 0 rgba(0, 0, 0, 0.06);
+    .close {
+      font-weight: 400;
     }
-    &-header {
-        .close {
-            margin: -1rem;
-            margin-#{$start-direction}: auto !important;
-        }
-        .btn-close {
-            margin-#{$start-direction}: auto !important;
-            margin-#{$end-direction}: 0 !important;
-        }
+  }
+  &-header {
+    .close {
+      margin: -1rem;
+      margin-#{$start-direction}: auto !important;
     }
-    &-title {
-        font-size: 1.2rem;
-        color: $txt-body;
-        display: flex;
-        flex-direction: column;
-        small {
-            font-size: 0.8rem;
-        }
+    .btn-close {
+      margin-#{$start-direction}: auto !important;
+      margin-#{$end-direction}: 0 !important;
     }
-    &-footer {
-        // justify-content: inherit;
+  }
+  &-title {
+    font-size: 1.2rem;
+    color: $txt-body;
+    display: flex;
+    flex-direction: column;
+    small {
+      font-size: 0.8rem;
     }
-    &.fixed-right {
-        padding-#{$end-direction}: 0 !important;
+  }
+  &-footer {
+    // justify-content: inherit;
+  }
+  &.fixed-right {
+    padding-#{$end-direction}: 0 !important;
 
-        &.fade .modal-dialog-vertical {
-            transform: translateX(100% * $transform-direction);
-        }
-        &.show .modal-dialog-vertical {
-            transform: translateX(0 * $transform-direction);
-        }
+    &.fade .modal-dialog-vertical {
+      transform: translateX(100% * $transform-direction);
     }
-    .modal-dialog-vertical {
-        height: 100%;
-        max-width: 500px;
-        margin: 0;
-        margin-#{$start-direction}: auto;
-        .modal-content {
-            border-radius: 0px;
-            height: inherit;
-            overflow-y: auto;
-            .modal-header {
-                padding: 1.5rem 2rem;
-            }
-        }
-        &-sm {
-            max-width: 250px;
-        }
-        &-md {
-            max-width: 750px;
-        }
-        &-lg {
-            max-width: 1000px;
-        }
+    &.show .modal-dialog-vertical {
+      transform: translateX(0 * $transform-direction);
     }
+  }
+  .modal-dialog-vertical {
+    height: 100%;
+    max-width: 500px;
+    margin: 0;
+    margin-#{$start-direction}: auto;
+    .modal-content {
+      border-radius: 0px;
+      height: inherit;
+      overflow-y: auto;
+      .modal-header {
+        padding: 1.5rem 2rem;
+      }
+    }
+    &-sm {
+      max-width: 250px;
+    }
+    &-md {
+      max-width: 750px;
+    }
+    &-lg {
+      max-width: 1000px;
+    }
+  }
 }
 
 button.close {
-    font-weight: 400;
-    font-size: 1.5rem;
+  font-weight: 400;
+  font-size: 1.5rem;
 }
 
 .dialogue {
-    .icn {
-        font-size: 5rem;
-        margin-bottom: 2rem;
-        &-warning {
-            color: $warning-color;
-        }
-        &-success {
-            color: $success-color;
-        }
-        &-danger {
-            color: $danger-color;
-        }
+  .icn {
+    font-size: 5rem;
+    margin-bottom: 2rem;
+    &-warning {
+      color: $warning-color;
     }
+    &-success {
+      color: $success-color;
+    }
+    &-danger {
+      color: $danger-color;
+    }
+  }
 }

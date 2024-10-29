@@ -11,7 +11,6 @@
 @import "layout/offcanvas-menu";
 
 //components
-
 @import "components/toaster";
 @import "components/searchbar";
 @import "components/alert";
@@ -26,16 +25,16 @@
 @import "components/breadcrumbs";
 // @import 'components/browser_ie';
 @import "components/form";
-@import "../../../application/views/scss/components/clipboard";
 @import "components/button";
+@import "components/link";
 // @import 'components/cart';
 // @import 'components/side-cart';
 // @import 'components/catalog-popup';
-@import "../../../application/views/scss/components/checkbox";
 @import "components/cms";
 @import "components/cookies";
 @import "components/data-not-found";
 @import "components/dropdown";
+@import "components/dropdown-toggle-custom";
 @import "components/featured-shop";
 // @import 'components/fetured-slider';
 // @import 'components/ftshops';
@@ -56,11 +55,22 @@
 @import "components/usercard";
 @import "components/modal";
 @import "components/offcanvas";
-@import "../../../application/views/scss/components/demo";
 @import "components/catalog-popup";
 @import "components/multi-list";
 @import "components/pagination";
-
+@import "components/form-edit";
+@import "components/card-commerce";
+@import "components/cards-message";
+@import "components/user-profile";
+@import "components/wishlist";
+@import "components/order-success";
+@import "components/coupon";
+@import "components/points-timeline";
+@import "components/dropzone";
+@import "components/iti";
+@import "components/select2-container";
+@import "components/shipping-zone";
+@import "components/profile-image";
 // @import 'components/preview';
 
 // @import 'components/pro-info';
@@ -84,7 +94,7 @@
 @import "components/progress-checkout";
 @import "components/list-group";
 // @import 'components/media-more';
-@import "../../../application/views/scss/components/bg";
+
 // @import 'components/location-permission';
 // @import 'components/quick-view';
 // @import 'components/quantity-input';
@@ -99,6 +109,10 @@
 @import "components/dropzone";
 @import "components/misc";
 @import "components/chat-room";
+@import "../../../application/views/scss/components/bg";
+@import "../../../application/views/scss/components/clipboard";
+@import "../../../application/views/scss/components/demo";
+@import "../../../application/views/scss/components/checkbox";
 @import "../../../application/views/scss/components/product-listing";
 @import "../../../application/views/scss/components/product-card";
 @import "../../../application/views/scss/components/cart-summary";

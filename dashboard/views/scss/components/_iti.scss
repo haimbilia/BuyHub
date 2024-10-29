@@ -1,0 +1,35 @@
+.iti {
+  //width: 100%;
+  //height: $input-height;
+  font-size: 0.8rem;
+
+  &__selected-flag {
+    background-color: $input-bg;
+    border-radius: $input-border-radius;
+    margin-#{$end-direction}: 10px !important;
+  }
+
+  &[dir="ltr"] {
+    .iti__flag-container {
+      right: auto !important;
+      left: 0 !important;
+    }
+
+    .iti__country-list {
+      left: 0;
+      text-align: left;
+    }
+  }
+
+  &[dir="rtl"] {
+    .iti__flag-container {
+      right: 0 !important;
+      left: auto !important;
+    }
+
+    .iti__country-list {
+      text-align: right;
+      right: 0;
+    }
+  }
+}
