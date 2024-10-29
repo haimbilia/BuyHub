@@ -155,7 +155,7 @@ class ContentPagesController extends ListingBaseController
         if (0 < $recordId) {
             $arrayFlds = array(
                 'cpage_id', 'cpage_identifier', 'cpage_content', 'IFNULL(cpage_title,cpage_identifier) as cpage_title', 'cpage_layout',
-                'cpage_image_content', 'cpage_image_title'
+                'cpage_image_content', 'cpage_image_title', 'cpage_hide_header_footer'
             );
             $data = ContentPage::getAttributesByLangId(CommonHelper::getDefaultFormLangId(), $recordId, $arrayFlds, applicationConstants::JOIN_RIGHT);
             if ($data === false) {
@@ -245,6 +245,7 @@ class ContentPagesController extends ListingBaseController
         $fld = $frm->addTextBox(Labels::getLabel('FRM_SEO_FRIENDLY_URL', $this->siteLangId), 'urlrewrite_custom');
         $fld->requirements()->setRequired();
         $frm->addSelectBox(Labels::getLabel('FRM_LAYOUT_TYPE', $this->siteLangId), 'cpage_layout', $this->getAvailableLayouts(), '', array('id' => 'cpage_layout'), Labels::getLabel('FRM_Select', $this->siteLangId))->requirements()->setRequired();
+        $frm->addCheckBox(Labels::getLabel("FRM_EXCLUDE_HEADER_&_FOOTER", $this->siteLangId), 'cpage_hide_header_footer', 1, array(), false, 0);
         return $frm;
     }
 
