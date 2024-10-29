@@ -62,14 +62,13 @@ if (!empty($slogan)) {
         <div class="container"> <?php echo FatUtility::decodeHtmlEntities($block3['epage_content']); ?> </div>
     </section>
     <?php } ?>
-
     <?php if ($faqCount > 0) { ?>
     <div class="divider"></div>
     <section class="section" data-section="section">
         <div class="container">
             <div class="row align-items-center justify-content-center">
                 <div class="col-lg-8">
-                    <header class="section-head section-head-center mb-0">
+                    <header class="section-head section-head-center">
                         <div class="section-heading">
                             <h2><?php echo Labels::getLabel('LBL_Frequently_Asked_Questions', $siteLangId); ?></h2>
                         </div>
