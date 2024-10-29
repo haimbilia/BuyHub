@@ -19,6 +19,7 @@ $("document").ready(function () {
         fcom.ajax(fcom.makeUrl("Account", "wishListSearch"), "", function (res) {
             fcom.removeLoader();
             $(dv).html(res);
+            $('#headerToolbar').html('');
         });
     };
 
