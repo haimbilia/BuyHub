@@ -50,7 +50,7 @@
                     $td->appendElement('plaintext', [], $txt, true);
                     break;
                 case 'breq_status':
-                    $class = (BadgeRequest::REQUEST_PENDING == $row[$key]) ? 'label-info' : ((BadgeRequest::REQUEST_APPROVED == $row[$key]) ? 'label-success' : 'label-danger');
+                    $class = (BadgeRequest::REQUEST_PENDING == $row[$key]) ? 'label-info' : ((BadgeRequest::REQUEST_APPROVED == $row[$key]) ? 'badge-success' : 'label-danger');
 
                     $td->appendElement('span', array('class' => 'badge-inline ' . $class), $statusArr[$row[$key]] . '<br>', true);
                     $td->appendElement('small', array('class' => 'ml-1'), (isset($row['breq_status_updated_on']) && $row['breq_status_updated_on'] != '0000-00-00 00:00:00') ? FatDate::Format($row['breq_status_updated_on']) : '', true);

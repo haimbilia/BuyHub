@@ -70,20 +70,20 @@ $input-border-focus: #000;
   }
 
   [dir="rtl"] & {
-   /*  padding-#{$end-direction}: 35px;
+    /*  padding-#{$end-direction}: 35px;
     padding-#{$start-direction}: 0.75rem; */
     background-position: calc(0% - -12px) center;
   }
   .content-wrapper[dir="rtl"] & {
     padding-#{$start-direction}: 35px;
-     padding-#{$end-direction}: 0.75rem;
-   }
-   .content-wrapper[dir="ltr"] & {
+    padding-#{$end-direction}: 0.75rem;
+  }
+  .content-wrapper[dir="ltr"] & {
     color: #000;
-     padding-#{$start-direction}: 35px;
-      padding-#{$end-direction}: 0.75rem;
-      background-position: calc(100% - 12px) center;
-    }
+    padding-#{$start-direction}: 35px;
+    padding-#{$end-direction}: 0.75rem;
+    background-position: calc(100% - 12px) center;
+  }
 }
 
 @mixin submit {
@@ -110,6 +110,7 @@ $input-border-focus: #000;
   .form-group {
     margin-bottom: 1.3rem;
   }
+
   &-label,
   .field_label,
   .label {
@@ -161,7 +162,7 @@ $input-border-focus: #000;
       }
 
       [dir="rtl"] & {
-       background-position: calc(100% - 13px) center;
+        background-position: calc(100% - 13px) center;
       }
     }
 
@@ -284,8 +285,8 @@ $input-border-focus: #000;
     }
   }
   &[dir="ltr"] {
-    select {   
-          background-position: calc(100% - 12px) center;
+    select {
+      background-position: calc(100% - 12px) center;
     }
   }
 }
