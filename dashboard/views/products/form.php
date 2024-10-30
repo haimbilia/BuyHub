@@ -94,7 +94,7 @@ if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0))
                             echo HtmlHelper::getFieldHtml($frm, 'product_model', 6);
                             $fld = $frm->getField('product_warranty');
                             if (null !== $fld) {
-                                ?>
+                            ?>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <?php
@@ -370,10 +370,22 @@ if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0))
                         data-bs-target="#stock-block4" aria-expanded="false" aria-controls="stock-block4">
                         <div class="card-head-label">
                             <h3 class="card-head-title">
-                                <?php echo Labels::getLabel('NAV_TAX_AND_SHIPPING', $siteLangId); ?>
+                                <?php
+                                if (1 > $recordId || (isset($productData['product_type']) && Product::PRODUCT_TYPE_PHYSICAL == $productData['product_type'])) {
+                                    echo Labels::getLabel('NAV_TAX_AND_SHIPPING', $siteLangId);
+                                } else {
+                                    echo Labels::getLabel('NAV_TAX', $siteLangId);
+                                }
+                                ?>
                             </h3>
                             <span class="text-muted">
-                                <?php echo Labels::getLabel('MSG_SETUP_TAX_AND_SHIPPING_INFORMATION_OF_THE_PRODUCT', $siteLangId); ?>
+                                <?php
+                                if (1 > $recordId || (isset($productData['product_type']) && Product::PRODUCT_TYPE_PHYSICAL == $productData['product_type'])) {
+                                    echo Labels::getLabel('MSG_SETUP_TAX_AND_SHIPPING_INFORMATION_OF_THE_PRODUCT', $siteLangId);
+                                } else {
+                                    echo Labels::getLabel('MSG_SETUP_TAX_INFORMATION_OF_THE_PRODUCT', $siteLangId);
+                                }
+                                ?>
                             </span>
                         </div>
                         <div class="card-toolbar"> <i class="dropdown-toggle-custom-arrow"></i></div>
@@ -545,7 +557,7 @@ if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0))
                     if (null != $fld) {
                         $fld->addFieldTagAttribute('class', 'form-tagify');
                         $fld->addFieldTagAttribute('id', 'product_tags');
-                        ?>
+                    ?>
                         <div class="card">
                             <div class="card-head">
                                 <div class="card-head-label">
@@ -593,7 +605,7 @@ if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0))
     var fulfilmentTypePickup = '<?php echo Shipping::FULFILMENT_PICKUP; ?>';
     var prodTypeDigital = '<?php echo Product::PRODUCT_TYPE_DIGITAL; ?>';
 
-    $(function () {
+    $(function() {
         $('body').addClass('isLoading');
         $('#addStock').prepend(fcom.getLoader());
         prodSpecifications();
@@ -615,7 +627,7 @@ if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0))
             langId
         });
 
-        $('#addProductfrm .optionsJs').each(function (index) {
+        $('#addProductfrm .optionsJs').each(function(index) {
             var selectedOptionData = [];
             if (index in productOptions) {
                 let optionName = productOptions[index]['option_name'];
@@ -639,7 +651,7 @@ if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0))
         });
 
 
-        $('#addProductfrm .optionValuesJs').each(function (index) {
+        $('#addProductfrm .optionValuesJs').each(function(index) {
             tagifyOptionValue("#" + $(this).attr('id'));
         });
         <?php if (0 < $recordId && $displayDigitalDownloadList) { ?>
@@ -647,12 +659,12 @@ if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0))
             getDigitalDownloads(<?php echo applicationConstants::DIGITAL_DOWNLOAD_LINK; ?>, <?php echo $recordId; ?>);
         <?php } ?>
         upcType();
-        document.getElementById('stock-block1').addEventListener('shown.bs.collapse', function () {
+        document.getElementById('stock-block1').addEventListener('shown.bs.collapse', function() {
             fixTableColumnWidth();
         })
 
     });
-    $(document).ready(function () {
+    $(document).ready(function() {
         $('#product_fulfillment_type').trigger('change');
         var attachmentWithInventory = $('.attachmentWithInventoryJs:checked').val();
         <?php if (FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) { ?>
@@ -665,7 +677,7 @@ if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0))
         }
     });
 
-    $(document).on('change', '.attachmentWithInventoryJs', function () {
+    $(document).on('change', '.attachmentWithInventoryJs', function() {
         if (prodTypeDigital == $('.productTypeJs').find(":selected").val()) {
             if (1 == $(this).val()) {
                 $('.digitalDownloadSectionJS').addClass('hidden');

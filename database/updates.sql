@@ -234,3 +234,5 @@ INSERT INTO `tbl_email_templates` (`etpl_code`, `etpl_lang_id`, `etpl_name`, `et
 ON DUPLICATE KEY UPDATE etpl_subject = VALUES(etpl_subject), etpl_body = VALUES(etpl_body), etpl_replacements = VALUES(etpl_replacements);
 
 -- ----------------------TV-10.1.0.20240926------------------------------------
+
+UPDATE tbl_shops INNER JOIN tbl_users ON user_id = shop_user_id SET shop_has_valid_subscription = 1 WHERE user_has_valid_subscription = 1;
