@@ -86,7 +86,7 @@ foreach ($arrListing as $sn => $row) {
                 $td->appendElement('plaintext', $tdAttr, '<a href="'.UrlHelper::generateUrl('SalesReport','index',array($row[$key])).'">'.HtmlHelper::formatDateTime($row[$key]).'</a>',true);
                 break;
             */
-
+            break;
             default:
                 $td->appendElement('plaintext', $tdAttr, $row[$key], true);
                 break;

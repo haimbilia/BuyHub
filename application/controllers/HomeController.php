@@ -841,9 +841,9 @@ class HomeController extends MyAppController
                         continue 2;
                     }
                     $productSrchTempObj->doNotCalculateRecords();
-                    $productSrchTempObj->addOrder('ctr.ctr_display_order', 'ASC');
+                    $productSrchTempObj->addOrder('ctr.ctr_display_order', 'ASC');                    
                     $rs = $productSrchTempObj->getResultSet();
-
+                    
                     $products = $db->fetchAll($rs, 'selprod_id');
                     $selProdIdsArr = array_keys($products);
                     $tRightRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $selProdIdsArr);
@@ -898,7 +898,7 @@ class HomeController extends MyAppController
                     if (false === MOBILE_APP_API_CALL) {
                         $productCatSrchTempObj->setPageSize($collection['collection_primary_records']);
                     }
-
+                   
                     $recordCount = $this->getRecordsCount(clone $productCatSrchTempObj);
                     if (empty($recordCount)) {
                         continue 2;
@@ -967,6 +967,7 @@ class HomeController extends MyAppController
                             $productShopSrchTempObj->addGroupBy('selprod_product_id');
                             $limit = ($collection['collection_layout_type'] == Collections::TYPE_CATEGORY_LAYOUT1) ? Collections::LIMIT_CATEGORY_LAYOUT1_PRODUCT : Collections::LIMIT_CATEGORY_LAYOUT4;
                             $productShopSrchTempObj->setPageSize($limit);
+                            
                             if (CommonHelper::demoUrl(true)) {
                                 $productShopSrchTempObj->addOrder('product_featured', 'DESC');
                             }
@@ -1094,7 +1095,7 @@ class HomeController extends MyAppController
                     $shopObj->joinTable('(' . $tempObj->getQuery() . ')', 'INNER JOIN', 'shop_id = ctr.ctr_record_id', 'ctr');
 
                     if (false === MOBILE_APP_API_CALL) {
-                        $shopObj->setPageSize($collection['collection_primary_records']);
+                        $shopObj->setPageSize($collection['collection_primary_records']);                        
                     }
 
                     $recordCount = $this->getRecordsCount(clone $shopObj);
@@ -1157,7 +1158,7 @@ class HomeController extends MyAppController
                     //$brandSearchTempObj->addCondition('brand_id', 'IN', array_keys($brandIds));
 
                     if (false === MOBILE_APP_API_CALL) {
-                        $brandSearchTempObj->setPageSize($collection['collection_primary_records']);
+                        $brandSearchTempObj->setPageSize($collection['collection_primary_records']);                        
                     }
 
                     $recordCount = $this->getRecordsCount(clone $brandSearchTempObj);
@@ -1214,7 +1215,7 @@ class HomeController extends MyAppController
                     $blogSearchTempObj->joinTable('(' . $tempObj->getQuery() . ')', 'INNER JOIN', 'post_id = ctr.ctr_record_id', 'ctr');
                     //$blogSearchTempObj->addCondition('post_id', 'IN', array_keys($blogPostIds));
                     if (false === MOBILE_APP_API_CALL) {
-                        $blogSearchTempObj->setPageSize($collection['collection_primary_records']);
+                        $blogSearchTempObj->setPageSize($collection['collection_primary_records']);                        
                     }
                     $blogSearchTempObj->addGroupBy('post_id');
                     $recordCount = $this->getRecordsCount(clone $blogSearchTempObj, true);
