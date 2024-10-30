@@ -93,8 +93,7 @@ class DataMigration
     }
 
     protected function sellerSideSync()
-    {
-
+    {        
         $srch = Plugin::getSearchObject(0, false, false);
         $srch->joinTable(
                 Plugin::DB_TBL_PLUGIN_TO_USER,
@@ -106,6 +105,7 @@ class DataMigration
         $srch->joinTable(User::DB_TBL_CRED, 'INNER JOIN', 'credential_user_id = seller_user.user_id and credential_active = ' . applicationConstants::ACTIVE . ' and credential_verified = ' . applicationConstants::YES, 'seller_user_cred');
         $srch->addOrder(Plugin::DB_TBL_PLUGIN_TO_USER_PREFIX . 'created_at', 'ASC');
         $srch->addFld('pu_user_id');
+        $srch->addCondition('pu_active','=',1);
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
         $rs = $srch->getResultSet();
@@ -126,11 +126,15 @@ class DataMigration
         $this->pluginObj->setRecordId($userId); /* to fetch setting by record id */
         if (false === $this->pluginObj) {
             $this->error = $error;
+            $sellerPluginObj = new SellerPlugin($pluginData['plugin_id'], $userId);
+            $sellerPluginObj->updateStatus(Plugin::INACTIVE);
             return false;
         }
 
         if (false === $this->pluginObj->init()) {
             $this->error = $this->pluginObj->getError();
+            $sellerPluginObj = new SellerPlugin($pluginData['plugin_id'], $userId);
+            $sellerPluginObj->updateStatus(Plugin::INACTIVE);
             return false;
         }
 

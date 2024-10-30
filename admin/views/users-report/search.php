@@ -67,6 +67,7 @@ foreach ($arrListing as $sn => $row) {
             case 'totQtys':
             case 'promotionCharged':
                 $td->appendElement('plaintext', $tdAttr, FatUtility::int($row[$key], FatUtility::VAR_INT, 0), true);
+                break;
             default:
                 $td->appendElement('plaintext', $tdAttr, $row[$key], true);
                 break;
