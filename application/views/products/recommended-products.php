@@ -62,21 +62,19 @@ if ($recommendedProducts) { ?>
                                     </div>
                                 </div>
                                 <div class="products-foot">
-                                    <div class="products-category">
-                                        <a
-                                            href="<?php echo UrlHelper::generateUrl('Category', 'View', array($rProduct['prodcat_id'])); ?>">
-                                            <?php echo CommonHelper::renderHtml($rProduct['prodcat_name'], true); ?>
-                                        </a>
-                                    </div>
-                                    <div class="products-title"><a
-                                            title="<?php echo CommonHelper::renderHtml($rProduct['selprod_title'], true); ?>"
-                                            href="<?php echo UrlHelper::generateUrl('Products', 'View', array($rProduct['selprod_id'])); ?>"><?php echo (mb_strlen($rProduct['selprod_title']) > 50) ? mb_substr(CommonHelper::renderHtml($rProduct['selprod_title'], true), 0, 50) . "..." : CommonHelper::renderHtml($rProduct['selprod_title'], true); ?>
-                                        </a></div>
+                                    <a class="products-category"
+                                        href="<?php echo UrlHelper::generateUrl('Category', 'View', array($rProduct['prodcat_id'])); ?>">
+                                        <?php echo CommonHelper::renderHtml($rProduct['prodcat_name'], true); ?>
+                                    </a>
+                                    <a class="products-title"
+                                        title="<?php echo CommonHelper::renderHtml($rProduct['selprod_title'], true); ?>"
+                                        href="<?php echo UrlHelper::generateUrl('Products', 'View', array($rProduct['selprod_id'])); ?>"><?php echo (mb_strlen($rProduct['selprod_title']) > 50) ? mb_substr(CommonHelper::renderHtml($rProduct['selprod_title'], true), 0, 50) . "..." : CommonHelper::renderHtml($rProduct['selprod_title'], true); ?>
+                                    </a>
                                     <?php $this->includeTemplate('_partial/collection-product-price.php', array('product' => $rProduct, 'siteLangId' => $siteLangId), false); ?>
                                 </div>
                             </div>
                         </div>
-                    <?php
+                        <?php
                     } ?>
                 </div>
             </div>

@@ -32,24 +32,23 @@ $doNotshowMessages = $doNotshowMessages ?? false;
 
     $uploadedTime = AttachedFile::setTimeParam($fromUserUpdatedOn);
     $userImageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'user', [$fromUserId, ImageDimension::VIEW_THUMB, true], CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-?>
+    ?>
 
     <div class="communication-content threadJs" data-thread-id="<?php echo $messageDetail['thread_id'] ?>">
         <div class="card card-stretch mb-0">
             <div class="card-head">
-                <div class="card-head-label">
-                    <div class="card-head-title d-flex align-items-center">
-                        <div class="user user-md user-circle">
-                            <img src="<?php echo $userImageUrl; ?>" alt="<?php echo $fromUserName; ?>">
-                        </div>
-                        <div class="message-user__detail">
-                            <h3><?php echo $fromUserName; ?></h3>
-                            <p>
-                                <b><?php echo Labels::getLabel('LBL_SUBJECT', $siteLangId); ?></b>:
-                                <?php echo $messageDetail['thread_subject']; ?>
-                            </p>
-                        </div>
+                <div class="profile">
+                    <div class="profile-img">
+                        <img src="<?php echo $userImageUrl; ?>" alt="<?php echo $fromUserName; ?>">
                     </div>
+                    <div class="profile-detail">
+                        <h6 class="h6"><?php echo $fromUserName; ?></h6>
+                        <p>
+                            <b><?php echo Labels::getLabel('LBL_SUBJECT', $siteLangId); ?></b>:
+                            <?php echo $messageDetail['thread_subject']; ?>
+                        </p>
+                    </div>
+
                 </div>
             </div>
             <div class="card-body p-0">
@@ -79,13 +78,12 @@ $doNotshowMessages = $doNotshowMessages ?? false;
                             ?>
                             <div class="message-wrap message-wrap--<?php echo $class; ?>">
                                 <div class="message-avtar">
-                                    <div class="user user-circle">
-                                        <?php
-                                        $rowUploadedTime = AttachedFile::setTimeParam($row['message_from_user_updated_on']);
-                                        $rowUserImageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'user', [$row['message_from_user_id'], ImageDimension::VIEW_THUMB, true], CONF_WEBROOT_FRONT_URL) . $rowUploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                                        ?>
-                                        <img src="<?php echo $rowUserImageUrl; ?>" alt="<?php echo $row['message_from_name']; ?>">
-                                    </div>
+                                    <?php
+                                    $rowUploadedTime = AttachedFile::setTimeParam($row['message_from_user_updated_on']);
+                                    $rowUserImageUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'user', [$row['message_from_user_id'], ImageDimension::VIEW_THUMB, true], CONF_WEBROOT_FRONT_URL) . $rowUploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                                    ?>
+                                    <img src="<?php echo $rowUserImageUrl; ?>" alt="<?php echo $row['message_from_name']; ?>">
+
                                 </div>
                                 <div class="message-detail">
                                     <div class="message">
@@ -94,7 +92,7 @@ $doNotshowMessages = $doNotshowMessages ?? false;
                                     <span class="time"><?php echo date('H:i', $msgTimeStamp); ?></span>
                                 </div>
                             </div>
-                    <?php }
+                        <?php }
                     } ?>
                 </div>
             </div>
@@ -116,7 +114,7 @@ $doNotshowMessages = $doNotshowMessages ?? false;
                     <?php echo $frm->getFieldHtml('message_thread_id'); ?>
 
                     <?php
-                    $fld =  $frm->getField('message_text');
+                    $fld = $frm->getField('message_text');
                     $fld->requirements()->setRequired(false);
 
                     echo $frm->getFieldHtml('message_text'); ?>
@@ -131,5 +129,5 @@ $doNotshowMessages = $doNotshowMessages ?? false;
                 </div>
             <?php } ?>
         </div>
-    </div>   
+    </div>
 <?php } ?>
