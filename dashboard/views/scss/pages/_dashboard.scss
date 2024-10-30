@@ -571,6 +571,8 @@
   }
 
   &-detail {
+    font-size: 0.8rem;
+    color: $txt-gray;
     .h6 {
       font-size: 0.85rem;
       margin: 0;
@@ -1885,7 +1887,6 @@ input.sp-input {
 }
 
 $shadow1: 0 0 3px 0 rgba(0, 0, 0, 0.2);
-
 .datatable {
   &_cell {
     overflow-wrap: break-word;
@@ -1928,7 +1929,7 @@ $shadow1: 0 0 3px 0 rgba(0, 0, 0, 0.2);
       position: sticky;
       left: 0;
       z-index: 2;
-      background-color: rgba(220, 220, 220, 0.5) !important;
+      background-color: rgba(220, 220, 220, 0.2) !important;
       backdrop-filter: blur(3px);
       overflow-wrap: break-word;
 

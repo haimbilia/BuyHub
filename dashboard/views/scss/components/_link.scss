@@ -1,5 +1,5 @@
 a.link {
-  color: $brand-color;
+  //color: $brand-color;
   position: relative;
   font-size: 0.875rem;
   white-space: nowrap;
@@ -17,7 +17,6 @@ a.link {
     background-size: 100% 1px;
   }
 }
-
 .link-arrow {
   color: $brand-color;
   position: relative;
@@ -27,7 +26,6 @@ a.link {
   transition: color 0.3s ease-in-out;
   display: flex;
   align-items: center;
-
   &:after {
     transition: all 0.5s ease;
     position: absolute;
@@ -58,13 +56,11 @@ a.link {
   align-items: center;
   color: $brand-color !important;
   font-weight: 500;
-
   .icn {
     width: 12px;
     height: 12px;
     display: block;
     margin-#{$end-direction}: 8px;
-
     .svg {
       width: 100%;
       height: 100%;
@@ -76,7 +72,6 @@ a.link {
 .link-dotted {
   text-decoration: dotted underline;
   text-underline-offset: 4px;
-
   &:hover {
     color: $brand-color;
   }
