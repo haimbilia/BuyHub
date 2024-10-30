@@ -340,11 +340,20 @@ class CollectionsController extends ListingBaseController
             $displayItemsCount = $defaultItemsCount;
         }
 
+        if (1 > $displayItemsCount) {
+            $range = Collections::displayRecordsCount($post['collection_layout_type']);
+            $displayItemsCount = min($range);
+        }
+
         $post['collection_identifier'] = $post['collection_name'];
         $post['collection_primary_records'] = $displayItemsCount;
 
         $post['collection_for_app'] = $post['collection_for_app'] ?? 0;
         $post['collection_for_web'] = $post['collection_for_web'] ?? 0;
+        if (0 == $post['collection_for_web'] && 0 == $post['collection_for_app']) {
+            $post['collection_for_web'] = 1;
+        }
+
         $post['collection_full_width'] = $post['collection_full_width'] ?? 0;
 
         if (1 > $recordId) {
@@ -377,6 +386,7 @@ class CollectionsController extends ListingBaseController
         }
 
         $this->set('msg', Labels::getLabel('MSG_SETUP_SUCCESSFUL', $this->siteLangId));
+        $this->set('langId', $this->siteLangId);
         $this->set('collectionId', $recordId);
         $this->set('collectionType', $post['collection_type']);
         $this->_template->render(false, false, 'json-success.php');
