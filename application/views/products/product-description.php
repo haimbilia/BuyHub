@@ -331,22 +331,6 @@
                             </div>
                             <?php } ?>
                         </div>
-                        <div class="quantity quantity-2" data-stock="<?php echo $usproduct['selprod_stock']; ?>">
-                            <button class="decrease decrease-js disabled" type="button">
-                                <svg class="svg" width="16" height="16">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
-                                    </use>
-                                </svg>
-                            </button>
-                            <div class="qty-input-wrapper" data-stock="<?php echo $usproduct['selprod_stock']; ?>">
-                                <input type="text" value="<?php echo $usproduct['selprod_min_order_qty']; ?>"
-                                    data-min-qty="<?php echo $usproduct['selprod_min_order_qty']; ?>"
-                                    data-page="product-view" placeholder="Qty"
-                                    class="qty-input cartQtyTextBox productQty-js"
-                                    data-lang="addons[<?php echo $usproduct['selprod_id'] ?>]"
-                                    name="addons[<?php echo $usproduct['selprod_id'] ?>]">
-                            </div>
-                        </div>
                     </div>
                     <?php if (false === SellerProduct::isPriceHidden($usproduct['selprod_hide_price'])) { ?>
                     <label class="checkbox">
