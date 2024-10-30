@@ -202,6 +202,7 @@ $header-height: 122px;
     }
   }
 
+  .btn-cta-outline,
   .btn-rfq {
     border-radius: 30px;
     padding: 5px 10px;
@@ -385,18 +386,5 @@ $quick-nav-gap: 1.5rem;
   }
   .section-banner + .section-banner {
     padding-top: $section-space;
-  }
-}
-
-.btn-cta-outline {
-  @include bg-secondary;
-  border-radius: 40px;
-  padding: 6px 1rem;
-  font-size: 0.8rem;
-  font-weight: 600;
-  &:hover,
-  &:focus {
-    color: currentColor;
-    text-decoration: none;
   }
 }
