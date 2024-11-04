@@ -117,6 +117,9 @@ class BannersController extends ListingBaseController
         $searchForm = $this->getSearchForm($fields);
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 :  FatUtility::int($data['page']);
         $post = $searchForm->getFormDataFromArray($data);
+
+        $post['banner_location_id'] = $recordId;
+
         $srch = new BannerSearch($this->siteLangId, false);
         $srch->joinLocations();
         $srch->joinPromotions($this->siteLangId, true);

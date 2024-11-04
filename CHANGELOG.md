@@ -185,3 +185,4 @@
     - Bug-087449 - UI issue on the product setup form
     - Bug-088469 - Collections >> The Image added previously is not visible when the admin tries to edit the category collection
     - Bug-088467 - Collections >> A fatal error occurs on the order details page
+    - Bug-088424 - Sorting filters are not working properly on the Banners listing page on the admin end
