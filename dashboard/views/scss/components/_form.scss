@@ -407,26 +407,26 @@ form.custom-form {
 }
 
 .input-group {
-  position: relative;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: stretch;
-  width: 100%;
   input,
-  .form-control {
+  .form-control,
+  .form-select,
+  .form-input {
     position: relative;
     flex: 1 1 auto;
     width: 1% !important;
     margin-bottom: 0;
-    border-top-#{$end-direction}-radius: $input-border-radius !important;
-    border-bottom-#{$end-direction}-radius: $input-border-radius !important;
     &:not(:first-child) {
-      //border-top-#{$start-direction}-radius:0;
-      //border-bottom-#{$start-direction}-radius: 0;
+      border-top-#{$end-direction}-radius: $input-border-radius !important;
+      border-bottom-#{$end-direction}-radius: $input-border-radius !important;
+      border-top-#{$start-direction}-radius: 0;
+      border-bottom-#{$start-direction}-radius: 0;
     }
+
     &:not(:last-child) {
-      //border-top-#{$end-direction}-radius: 0;
-      //border-bottom-#{$end-direction}-radius: 0;
+      border-top-#{$start-direction}-radius: $input-border-radius !important;
+      border-bottom-#{$start-direction}-radius: $input-border-radius !important;
+      border-top-#{$end-direction}-radius: 0;
+      border-bottom-#{$end-direction}-radius: 0;
     }
   }
   &--lg {
@@ -463,10 +463,10 @@ form.custom-form {
 }
 
 .form-floating {
-  &__group {
+  &-group {
     position: relative;
   }
-  &__label {
+  &-label {
     position: absolute;
     left: 1rem;
     top: 0;
@@ -479,7 +479,7 @@ form.custom-form {
     transition: transform 0.2s ease-in-out;
     pointer-events: none;
   }
-  &__field {
+  &-field {
     padding-top: 16px !important;
     width: 100%;
     height: 50px !important;
@@ -489,11 +489,11 @@ form.custom-form {
     &:focus {
       outline-color: $brand-color;
       border-color: $brand-color;
-      + .form-floating__label {
+      + .form-floating-label {
         transform: translateY(-6px) scale(0.8);
       }
     }
-    &.filled + .form-floating__label {
+    &.filled + .form-floating-label {
       opacity: 0.7;
       transform: translateY(-6px) scale(0.8);
     }
@@ -534,7 +534,6 @@ form.custom-form {
     }
   }
 }
-
 .form-inline {
   display: flex;
   .form-group {
