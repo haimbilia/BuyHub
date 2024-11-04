@@ -31,9 +31,8 @@ if (isset($collection['categories']) && count($collection['categories'])) { ?>
                         $j++;
                     ?>
                         <div class="tab-pane fade category-product-layout-1  <?php echo 1 == $j ? 'show active' : ''; ?>"
-                            id="tb-<?php echo $key . "-" . $collection['collection_id']; ?>"
-                            data-view="<?php echo (0 < $collection['collection_primary_records'] ? $collection['collection_primary_records'] : 4); ?>">
-                            <div class="product-listing">
+                            id="tb-<?php echo $key . "-" . $collection['collection_id']; ?>" >
+                            <div class="product-listing" data-view="<?php echo (0 < $collection['collection_primary_records'] ? $collection['collection_primary_records'] : 4); ?>">
                                 <?php
                                 $tRightRibbons = $category['tRightRibbons'];
 
