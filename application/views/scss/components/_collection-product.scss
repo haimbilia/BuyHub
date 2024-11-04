@@ -183,11 +183,12 @@
   .products {
     height: 100%;
     display: flex;
+    flex-direction: row;
     align-content: center;
+    gap: 0;
 
     &-body {
       flex: 0 0 50%;
-
       @include media-breakpoint-up(lg) {
         //flex: 1;
       }
