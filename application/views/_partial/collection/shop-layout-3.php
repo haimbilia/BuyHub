@@ -1,6 +1,6 @@
 <?php
 if (isset($collection['shops']) && count($collection['shops'])) {
-?>
+    ?>
     <section class="section" data-section="section">
         <div class="container">
             <header class="section-head">
@@ -15,7 +15,7 @@ if (isset($collection['shops']) && count($collection['shops'])) {
                         $productId = $shop['shopData']['product']['product_id'] ?? 0;
                         $selProdId = $shop['shopData']['product']['selprod_id'] ?? 0;
                         $prodcatName = $shop['shopData']['product']['prodcat_name'] ?? '';
-                    ?>
+                        ?>
                         <div class="recommended-layout-item">
                             <div class="recommended-layout-head">
                                 <div class="shop-profile">
@@ -38,15 +38,21 @@ if (isset($collection['shops']) && count($collection['shops'])) {
                                                     <use xlink:href="/images/retina/sprite.svg#star-yellow"></use>
                                                 </svg>
                                                 <span class="rate">
-                                                    <?php echo round($shop['shopData']['shop_avg_rating']); ?> <?php echo Labels::getLabel('LBL_OUT_OF'); ?> 5 - <a class="link-black-underline" href="/akshays-e-store-reviews"><?php echo $shop['shopData']['shop_total_reviews']; ?>
+                                                    <?php echo round($shop['shopData']['shop_avg_rating']); ?>
+                                                    <?php echo Labels::getLabel('LBL_OUT_OF'); ?> 5 - <a class="link-underline"
+                                                        href="/akshays-e-store-reviews"><?php echo $shop['shopData']['shop_total_reviews']; ?>
                                                         <?php echo Labels::getLabel('LBL_REVIEWS'); ?></a>
                                                 </span>
                                             </div>
                                         <?php } ?>
                                         <h3 class="title"><?php echo $shop['shopData']['shop_name']; ?></h3>
-                                        <p class="shop-address"> <?php echo $shop['shopData']['state_name']; ?> <?php echo ($shop['shopData']['country_name'] && $shop['shopData']['state_name']) ? ', ' : ''; ?> <?php echo $shop['shopData']['country_name']; ?></p>
+                                        <p class="shop-address"> <?php echo $shop['shopData']['state_name']; ?>
+                                            <?php echo ($shop['shopData']['country_name'] && $shop['shopData']['state_name']) ? ', ' : ''; ?>
+                                            <?php echo $shop['shopData']['country_name']; ?>
+                                        </p>
                                     </div>
-                                    <a class="link-underline link-more" href="<?php echo (!isset($shop['shopData']['promotion_id']) ? UrlHelper::generateUrl('shops', 'view', array($shop['shopData']['shop_id'])) : UrlHelper::generateUrl('shops', 'track', array($shop['shopData']['promotion_record_id'],))); ?>">
+                                    <a class="link-underline link-more"
+                                        href="<?php echo (!isset($shop['shopData']['promotion_id']) ? UrlHelper::generateUrl('shops', 'view', array($shop['shopData']['shop_id'])) : UrlHelper::generateUrl('shops', 'track', array($shop['shopData']['promotion_record_id'], ))); ?>">
                                         <?php echo Labels::getLabel('LBL_Shop_Now', $siteLangId); ?></a>
                                 </div>
                             </div>
@@ -67,7 +73,7 @@ if (isset($collection['shops']) && count($collection['shops'])) {
                                     ];
                                     $prodUrl = 0 < $selProdId ? UrlHelper::generateUrl('Products', 'View', array($selProdId)) : 'javascript:void(0);';
 
-                                ?>
+                                    ?>
                                     <div class="products-img">
                                         <a title="<?php echo $prodcatName; ?>" href="<?php echo $prodUrl; ?>">
                                             <?php $this->includeTemplate('_partial/picture-tag.php', $pictureAttr); ?>

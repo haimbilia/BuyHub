@@ -27,7 +27,7 @@
                 </svg>
                 <span class="rate">
                     <?php echo round($shopRating, 1), ' ', Labels::getLabel('Lbl_Out_of', $siteLangId), ' ', '5'; ?>
-                    - <a class="link-black-underline"
+                    - <a class="link-underline"
                         href="<?php echo UrlHelper::generateUrl('Reviews', 'shop', array($shop['shop_id'])); ?>"><?php echo $shopTotalReviews, ' ', Labels::getLabel('Lbl_Reviews', $siteLangId); ?></a>
                 </span>
             </div>

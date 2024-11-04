@@ -386,11 +386,15 @@
       margin-bottom: 1rem;
     }
   }
-
+  .big-title-main {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    font-weight: $font-weight-bold;
+  }
   .big-title {
     font-size: 0.9rem;
     margin-bottom: 1rem;
-    text-transform: uppercase;
     font-weight: $font-weight-bold;
   }
 }
