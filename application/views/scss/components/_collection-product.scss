@@ -145,7 +145,7 @@
 
     .products-foot {
       @include media-breakpoint-up(lg) {
-        padding: 20px;
+        padding: 0;
         width: calc(100% - 150px);
         text-align: #{$start-direction};
       }
