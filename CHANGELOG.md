@@ -186,3 +186,4 @@
     - Bug-088469 - Collections >> The Image added previously is not visible when the admin tries to edit the category collection
     - Bug-088467 - Collections >> A fatal error occurs on the order details page
     - Bug-088424 - Sorting filters are not working properly on the Banners listing page on the admin end
+    - Bug-088419 - Item counts on the collections listing page are not correct
