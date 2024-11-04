@@ -768,7 +768,7 @@ function initMap(lat = 40.72, lng = -73.96, elementId = "map") {
     return;
   }
   map = new google.maps.Map(document.getElementById(elementId), {
-    zoom: 12,
+    zoom: 8,
     center: latlng,
   });
   geocoder = new google.maps.Geocoder();
@@ -952,7 +952,7 @@ function initMutipleMapMarker(
     return;
   }
   map = new google.maps.Map(document.getElementById(elementId), {
-    zoom: 10,
+    zoom: 6,
     center: new google.maps.LatLng(centeredLat, centeredLng),
     mapTypeId: google.maps.MapTypeId.ROADMAP,
   });
