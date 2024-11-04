@@ -438,9 +438,7 @@ class CartController extends MyAppController
 
         $advanceEcommerce = FatApp::getConfig('CONF_ANALYTICS_ADVANCE_ECOMMERCE', FatUtility::VAR_INT, 0);
         $ga4 = FatApp::getConfig('CONF_GOOGLE_ANALYTICS_4', FatUtility::VAR_INT, 0);
-
         $loggedUserId = UserAuthentication::getLoggedUserId(true);
-        $cartObj = new Cart($loggedUserId, $this->siteLangId, $this->app_user['temp_user_id']);
 
         $cartItems = [];
         $shopRfqEnabledArr = [];
@@ -555,6 +553,7 @@ class CartController extends MyAppController
                 }
             }
             /* ] */
+            
 
             /* cannot add quantity more than stock of the product[ */
             $selprod_stock = $sellerProductRow['selprod_stock'] - Product::tempHoldStockCount($productId);
@@ -572,6 +571,9 @@ class CartController extends MyAppController
                 }
             }
             /* ] */
+
+            $cartObj = new Cart($loggedUserId, $this->siteLangId, $this->app_user['temp_user_id']);
+            
             if ($productAdd) {
                 $cObj = clone $cartObj;
                 $returnUserId = (true === MOBILE_APP_API_CALL) ? true : false;
