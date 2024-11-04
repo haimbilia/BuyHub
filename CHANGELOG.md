@@ -187,3 +187,4 @@
     - Bug-088467 - Collections >> A fatal error occurs on the order details page
     - Bug-088424 - Sorting filters are not working properly on the Banners listing page on the admin end
     - Bug-088419 - Item counts on the collections listing page are not correct
+    - Bug-088422 - Banners added by the admin are not visible on the product details page on the admin end

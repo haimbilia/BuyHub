@@ -14,7 +14,7 @@ if (!empty($image) && isset($image['afile_id']) && $image['afile_id'] != -1) {
                     $recordId,
                     $image['afile_lang_id'],
                     $image['afile_screen'],
-                    ImageDimension::VIEW_THUMB,
+                    ImageDimension::VIEW_SMALL,
                 ),
                 CONF_WEBROOT_FRONT_URL
             ) . $uploadedTime,

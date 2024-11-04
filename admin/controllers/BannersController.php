@@ -435,7 +435,7 @@ class BannersController extends ListingBaseController
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
         $langId = 0 == $langId ? $this->siteLangId : $langId;
-        $screen = FatApp::getPostedData('screen', FatUtility::VAR_INT, 0);
+        $screen = FatApp::getPostedData('screen', FatUtility::VAR_INT, applicationConstants::SCREEN_DESKTOP);
         $imageType = FatApp::getPostedData('imageType', FatUtility::VAR_STRING, ImageDimension::VIEW_THUMB);
         $bannerLocationId = FatUtility::int($bannerLocationId);
 
@@ -449,7 +449,7 @@ class BannersController extends ListingBaseController
         }
 
         if (!false == $bannerDetail) {
-            $bannerImgArr = AttachedFile::getAttachment(AttachedFile::FILETYPE_BANNER, $recordId, 0, $langId, false, $screen);
+            $bannerImgArr = AttachedFile::getAttachment(AttachedFile::FILETYPE_BANNER, $recordId, 0, $langId, true, $screen);
             $this->set('image', $bannerImgArr);
         }
 
