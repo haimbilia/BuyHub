@@ -117,6 +117,9 @@ class BannersController extends ListingBaseController
         $searchForm = $this->getSearchForm($fields);
         $page = (empty($data['page']) || $data['page'] <= 0) ? 1 :  FatUtility::int($data['page']);
         $post = $searchForm->getFormDataFromArray($data);
+
+        $post['banner_location_id'] = $recordId;
+
         $srch = new BannerSearch($this->siteLangId, false);
         $srch->joinLocations();
         $srch->joinPromotions($this->siteLangId, true);
@@ -432,7 +435,7 @@ class BannersController extends ListingBaseController
         $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
         $langId = FatApp::getPostedData('langId', FatUtility::VAR_INT, 0);
         $langId = 0 == $langId ? $this->siteLangId : $langId;
-        $screen = FatApp::getPostedData('screen', FatUtility::VAR_INT, 0);
+        $screen = FatApp::getPostedData('screen', FatUtility::VAR_INT, applicationConstants::SCREEN_DESKTOP);
         $imageType = FatApp::getPostedData('imageType', FatUtility::VAR_STRING, ImageDimension::VIEW_THUMB);
         $bannerLocationId = FatUtility::int($bannerLocationId);
 
@@ -446,7 +449,7 @@ class BannersController extends ListingBaseController
         }
 
         if (!false == $bannerDetail) {
-            $bannerImgArr = AttachedFile::getAttachment(AttachedFile::FILETYPE_BANNER, $recordId, 0, $langId, false, $screen);
+            $bannerImgArr = AttachedFile::getAttachment(AttachedFile::FILETYPE_BANNER, $recordId, 0, $langId, true, $screen);
             $this->set('image', $bannerImgArr);
         }
 

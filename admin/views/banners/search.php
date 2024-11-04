@@ -29,7 +29,10 @@ foreach ($arrListing as $sn => $row) {
             case 'banner_img':
                 $uploadedTime = AttachedFile::setTimeParam($row['banner_updated_on']);
                 $getBannerRatio = ImageDimension::getData(ImageDimension::TYPE_BANNER, ImageDimension::VIEW_MINI_THUMB);
-                $img = '<a href="' . UrlHelper::getCachedUrl(UrlHelper::generateFullUrl('Banner', 'BannerImage', array($row['banner_id'], $siteLangId, 0, ImageDimension::VIEW_HOME_PAGE_BANNER_TOP_LAYOUT), CONF_WEBROOT_FRONT_URL)) . '" data-featherlight="image"><img data-aspect-ratio = "' . $getBannerRatio[ImageDimension::VIEW_MINI_THUMB]['aspectRatio'] . '" width="' . $getBannerRatio['width'] . '" height="' . $getBannerRatio['height'] . '"  src="' . UrlHelper::generateFullUrl('Banner', 'BannerImage', array($row['banner_id'], $siteLangId, 0, ImageDimension::VIEW_MINI_THUMB), CONF_WEBROOT_FRONT_URL) . $uploadedTime . '" /></a>';
+                $link = UrlHelper::getCachedUrl(UrlHelper::generateFullUrl('Banner', 'BannerImage', array($row['banner_id'], $siteLangId, applicationConstants::SCREEN_DESKTOP, ImageDimension::VIEW_HOME_PAGE_BANNER_TOP_LAYOUT), CONF_WEBROOT_FRONT_URL));
+                $src = UrlHelper::generateFullUrl('Banner', 'BannerImage', array($row['banner_id'], $siteLangId, applicationConstants::SCREEN_DESKTOP, ImageDimension::VIEW_MINI_THUMB), CONF_WEBROOT_FRONT_URL) . $uploadedTime;
+
+                $img = '<a href="' . $link . '" data-featherlight="image"><img data-aspect-ratio = "' . $getBannerRatio[ImageDimension::VIEW_MINI_THUMB]['aspectRatio'] . '" width="' . $getBannerRatio['width'] . '" height="' . $getBannerRatio['height'] . '"  src="' . $src . '" /></a>';
                 $td->appendElement('plaintext', $tdAttr, $img, true);
                 break;
             case 'banner_target':

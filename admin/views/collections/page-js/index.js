@@ -130,9 +130,9 @@ $(document).on('change', '.prefDimensionsJs', function () {
                 fcom.closeProcessing();
                 fcom.removeLoader();
                 $.ykmodal(t.html, false, "modal-dialog-vertical-md");
+                loadImages(collection_id);
                 /* if (0 < $(".displayMediaOnlyJs:checked").val()) {
                     $('.mediaElementsJs').show();
-                    loadImages(collection_id);
                 } else {
                     $('.mediaElementsJs').hide();
                 } */
