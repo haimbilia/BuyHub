@@ -9,7 +9,7 @@
                             <h6 class="big-title">
                                 <?php echo Labels::getLabel('LBL_CONTENT_PAGES', $siteLangId); ?>
                             </h6>
-                            <div class="item">
+                            <div class="cg-main-item">
                                 <ul>
                                     <?php
                                     foreach ($contentPages as $contentId => $contentPageName) {
@@ -28,7 +28,7 @@
                             <h6 class="big-title">
                                 <?php echo Labels::getLabel('LBL_Categories', $siteLangId); ?>
                             </h6>
-                            <div class="item">
+                            <div class="cg-main-item">
                                 <?php $this->includeTemplate('_partial/custom/categories-list.php', array('categoriesArr' => $categoriesArr), false); ?>
                             </div>
                             <?php
@@ -37,7 +37,7 @@
                             <h6 class="big-title">
                                 <?php echo Labels::getLabel('LBL_Shops', $siteLangId); ?>
                             </h6>
-                            <div class="item ">
+                            <div class="cg-main-item">
                                 <ul>
                                     <?php foreach ($allShops as $shop) {
                                         ?>
@@ -57,7 +57,7 @@
                             <h6 class="big-title">
                                 <?php echo Labels::getLabel('LBL_Brands', $siteLangId); ?>
                             </h6>
-                            <div class="item ">
+                            <div class="cg-main-item">
                                 <ul>
                                     <?php foreach ($allBrands as $brands) {
                                         ?>
