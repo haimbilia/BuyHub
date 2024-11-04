@@ -184,3 +184,4 @@
     - Bug-087450 - << RFQ >> The content is not right aligned on the RFQ invoice in Arabic.
     - Bug-087449 - UI issue on the product setup form
     - Bug-088469 - Collections >> The Image added previously is not visible when the admin tries to edit the category collection
+    - Bug-088467 - Collections >> A fatal error occurs on the order details page
