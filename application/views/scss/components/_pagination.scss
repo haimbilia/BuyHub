@@ -35,17 +35,16 @@
       &:hover,
       &:focus,
       &:active {
-        background: $brand-color;
-        color: $brand-color-inverse;
-        border-color: $brand-color;
+        text-decoration: none;
+        @include bg-black;
+        border-color: #000;
       }
     }
 
     &.selected {
       a {
-        border-color: $brand-color;
-        background: $brand-color;
-        color: $brand-color-inverse;
+        @include bg-black;
+        border-color: #000;
       }
     }
 
@@ -67,7 +66,6 @@
           position: absolute;
           #{$start-direction}: calc(50% - 3px);
           top: calc(50% - 6px);
-
           transform: rotate(45deg);
         }
       }
@@ -83,7 +81,6 @@
           position: absolute;
           #{$start-direction}: calc(50% - 8px);
           top: calc(50% - 6px);
-
           transform: rotate(45deg);
         }
       }
