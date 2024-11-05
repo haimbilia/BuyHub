@@ -741,6 +741,7 @@ trait RfqOffersUtility
             'bu.user_name',
             'bu.user_phone_dcode',
             'bu.user_phone',
+            'bu.user_id',
             'buc.credential_email',
             'suc.credential_email as seller_email',
             'su.user_id as seller_user_id',

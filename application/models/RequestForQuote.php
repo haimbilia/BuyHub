@@ -180,6 +180,7 @@ class RequestForQuote extends MyAppModel
             $attr[] = 'user_name as shop_user_name';
             $attr[] = 'user_phone_dcode as seller_phone_dcode';
             $attr[] = 'user_phone as seller_phone';
+            $attr[] = 'user_id';
         }
 
         if ($joinShopTable) {
@@ -189,6 +190,7 @@ class RequestForQuote extends MyAppModel
             $attr[] = 'COALESCE(shop_name, shop_identifier) as shop_name';
             $attr[] = 'shop_phone_dcode';
             $attr[] = 'shop_phone';
+            $attr[] = 'shop_user_id';
         }
 
         $srch->addMultipleFields($attr);

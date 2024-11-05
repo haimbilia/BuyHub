@@ -264,6 +264,7 @@ class RequestForQuotesController extends ListingBaseController
             'buc.credential_email',
             'bu.user_phone_dcode',
             'bu.user_phone',
+            'bu.user_id',
             'rfqts_user_id as seller_id',
             'IFNULL(country_name, country_code) as country_name',
             'IFNULL(state_name, state_identifier) as state_name'
@@ -532,6 +533,7 @@ class RequestForQuotesController extends ListingBaseController
             'selprod_updated_on',
             'shop_name',
             'bu.user_name',
+            'bu.user_id',
             'buc.credential_username',
             'buc.credential_email',
             'bu.user_phone_dcode',

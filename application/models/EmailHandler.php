@@ -3359,6 +3359,7 @@ class EmailHandler extends FatModel
             '{qty}' => $data['rfq_quantity'] . ' ' . applicationConstants::getWeightUnitName($langId, $data['rfq_quantity_unit'], true),
         );
         $this->sendSms('NEW_RFQ', ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode')) . FatApp::getConfig('CONF_SITE_PHONE'), $vars, $langId);
+        
         return true;
     }
 
@@ -3392,15 +3393,17 @@ class EmailHandler extends FatModel
             }
         }
 
+        $qty = $data['rfq_quantity'] . ' ' . applicationConstants::getWeightUnitName($langId, $data['rfq_quantity_unit'], true);
         if (!empty($data['user_phone']) && !empty($data['user_phone_dcode'])) {
             $vars = array(
                 '{shop_user_name}' => $data['shop_user_name'],
                 '{rfq_title}' => $data['rfq_title'],
                 '{rfq_number}' => $data['rfq_number'],
-                '{qty}' => $data['rfq_quantity'] . ' ' . applicationConstants::getWeightUnitName($langId, $data['rfq_quantity_unit'], true),
+                '{qty}' => $qty,
             );
             $this->sendSms('NEW_RFQ_ASSIGNED', ValidateElement::formatDialCode($data['user_phone_dcode']) . $data['user_phone'], $vars, $langId);
         }
+
         return true;
     }
 
@@ -3427,16 +3430,29 @@ class EmailHandler extends FatModel
             }
         }
 
+        $qty = $data['rfq_quantity'] . ' ' . applicationConstants::getWeightUnitName($langId, $data['rfq_quantity_unit'], true);
         if (!empty($data['user_phone']) && !empty($data['user_phone_dcode'])) {
             $vars = array(
                 '{user_name}' => $data['user_name'],
                 '{rfq_title}' => $data['rfq_title'],
                 '{rfq_number}' => $data['rfq_number'],
-                '{qty}' => $data['rfq_quantity'] . ' ' . applicationConstants::getWeightUnitName($langId, $data['rfq_quantity_unit'], true),
+                '{qty}' => $qty,
                 '{approval_status}' => $approvalStatus,
             );
             $this->sendSms('RFQ_APPROVAL', ValidateElement::formatDialCode($data['user_phone_dcode']) . $data['user_phone'], $vars, $langId);
         }
+
+        $rData = ['{RFQ-NUMBER}' => $data['rfq_number'], '{APPROVAL-STATUS}' => $approvalStatus];
+        $appNotification = CommonHelper::replaceStringData(Labels::getLabel('MSG_RFQ_({RFQ-NUMBER})_HAS_BEEN_{APPROVAL-STATUS}', $langId), $rData);
+
+        $notificationObj = new Notifications();
+        $notificationDataArr = array(
+            'unotification_user_id' => $data["user_id"],
+            'unotification_body' => $appNotification,
+            'unotification_type' => 'RFQ_APPROVAL',
+            'unotification_data' => json_encode(array('rfq_title' => $data['rfq_title'], 'rfq_number' => $data['rfq_number'], 'qty' => $qty, 'approval_status' => $approvalStatus)),
+        );
+        $notificationObj->addNotification($notificationDataArr);
         return true;
     }
     public function sendNewRfqOfferNotification($langId, $data)
@@ -3470,20 +3486,32 @@ class EmailHandler extends FatModel
             );
             $this->sendSms('NEW_RFQ_OFFER', ValidateElement::formatDialCode($data['buyer_phone_dcode']) . $data['buyer_phone'], $vars, $langId);
         }
+
+        $rData = ['{RFQ-NUMBER}' => $data['rfq_number'], '{SHOP-NAME}' => $data['shop_name']];
+        $appNotification = CommonHelper::replaceStringData(Labels::getLabel('MSG_NEW_OFFER_RECEIVED_FROM_{SHOP-NAME}_ON_RFQ_({RFQ-NUMBER})', $langId), $rData);
+
+        $notificationObj = new Notifications();
+        $notificationDataArr = array(
+            'unotification_user_id' => $data["buyer_user_id"],
+            'unotification_body' => $appNotification,
+            'unotification_type' => 'NEW_RFQ_OFFER',
+            'unotification_data' => json_encode(array('rfq_number' => $data['rfq_number'], 'qty' => $data['offer_quantity'], 'offer_price' => CommonHelper::displayMoneyFormat($data['offer_price']))),
+        );
+        $notificationObj->addNotification($notificationDataArr);
         return true;
     }
 
     public function sendCounterRfqOfferNotification($langId, $data)
     {
-        $tpl = new FatTemplate('', '');
-        $tpl->set('data', $data);
-        $tpl->set('siteLangId', $langId);
+        $ftpl = new FatTemplate('', '');
+        $ftpl->set('data', $data);
+        $ftpl->set('siteLangId', $langId);
         if ($data['isSeller']) {
-            $offerTableFormat = $tpl->render(false, false, '_partial/emails/counter-rfq-offer-seller.php', true);
+            $offerTableFormat = $ftpl->render(false, false, '_partial/emails/counter-rfq-offer-seller.php', true);
             $tpl = 'COUNTER_RFQ_OFFER_SELLER';
             $phone = ValidateElement::formatDialCode($data['buyer_phone_dcode']) . $data['buyer_phone'];
         } else {
-            $offerTableFormat = $tpl->render(false, false, '_partial/emails/counter-rfq-offer-buyer.php', true);
+            $offerTableFormat = $ftpl->render(false, false, '_partial/emails/counter-rfq-offer-buyer.php', true);
             $tpl = 'COUNTER_RFQ_OFFER_BUYER';
             $phone = ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode')) . FatApp::getConfig('CONF_SITE_PHONE');
         }
@@ -3503,6 +3531,18 @@ class EmailHandler extends FatModel
                     return false;
                 }
             }
+
+            $rData = ['{RFQ-NUMBER}' => $data['rfq_number'], '{SHOP-NAME}' => $data['shop_name']];
+            $appNotification = CommonHelper::replaceStringData(Labels::getLabel('MSG_COUNTER_OFFER_RECEIVED_FROM_{SHOP-NAME}_ON_RFQ_({RFQ-NUMBER})', $langId), $rData);
+
+            $notificationObj = new Notifications();
+            $notificationDataArr = array(
+                'unotification_user_id' => $data["buyer_user_id"],
+                'unotification_body' => $appNotification,
+                'unotification_type' => $tpl,
+                'unotification_data' => json_encode(array('rfq_number' => $data['rfq_number'], 'qty' => $data['offer_quantity'], 'offer_price' => CommonHelper::displayMoneyFormat($data['offer_price']))),
+            );
+            $notificationObj->addNotification($notificationDataArr);
         } else {
             if (!empty($data['seller_email'])) {
                 if (!(new FatMailer($langId, $tpl))
@@ -3533,15 +3573,15 @@ class EmailHandler extends FatModel
 
     public function sendRfqOfferActionNotification($langId, $data, $acceptance = 0)
     {
-        $tpl = new FatTemplate('', '');
-        $tpl->set('data', $data);
-        $tpl->set('siteLangId', $langId);
+        $ftpl = new FatTemplate('', '');
+        $ftpl->set('data', $data);
+        $ftpl->set('siteLangId', $langId);
         if ($data['isSeller']) {
-            $offerTableFormat = $tpl->render(false, false, '_partial/emails/rfq-offer-action-seller.php', true);
+            $offerTableFormat = $ftpl->render(false, false, '_partial/emails/rfq-offer-action-seller.php', true);
             $tpl = 'RFQ_OFFER_ACTION_SELLER';
             $phone = ValidateElement::formatDialCode($data['user_phone_dcode']) . $data['user_phone'];
         } else {
-            $offerTableFormat = $tpl->render(false, false, '_partial/emails/rfq-offer-action-buyer.php', true);
+            $offerTableFormat = $ftpl->render(false, false, '_partial/emails/rfq-offer-action-buyer.php', true);
             $tpl = 'RFQ_OFFER_ACTION_BUYER';
             $phone = ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode')) . FatApp::getConfig('CONF_SITE_PHONE');
         }
@@ -3568,6 +3608,18 @@ class EmailHandler extends FatModel
                     return false;
                 }
             }
+
+            $rData = ['{RFQ-NUMBER}' => $data['rfq_number'], '{SHOP-NAME}' => $data['shop_name'], '{OFFER-STATUS}' => $offerStatusArr[$data['offer_status']]];
+            $appNotification = CommonHelper::replaceStringData(Labels::getLabel('MSG_YOUR_OFFER_HAS_BEEN_{OFFER-STATUS}_BY_{SHOP-NAME}_ON_RFQ_({RFQ-NUMBER})', $langId), $rData);
+
+            $notificationObj = new Notifications();
+            $notificationDataArr = array(
+                'unotification_user_id' => $data["user_id"],
+                'unotification_body' => $appNotification,
+                'unotification_type' => $tpl,
+                'unotification_data' => json_encode(array('rfq_number' => $data['rfq_number'], 'qty' => $data['offer_quantity'], 'offer_price' => CommonHelper::displayMoneyFormat($data['offer_price']), 'offer_status' => $offerStatusArr[$data['offer_status']])),
+            );
+            $notificationObj->addNotification($notificationDataArr);
         } else {
             if (!empty($data['seller_email'])) {
                 if (!(new FatMailer($langId, $tpl))
@@ -3643,15 +3695,27 @@ class EmailHandler extends FatModel
             }
         }
 
+        $qty = $data['rfq_quantity'] . ' ' . applicationConstants::getWeightUnitName($langId, $data['rfq_quantity_unit'], true);
         if (!empty($data['user_phone']) && !empty($data['user_phone_dcode'])) {
             $vars = array(
                 '{user_name}' => $data['user_name'],
                 '{rfq_title}' => $data['rfq_title'],
                 '{rfq_number}' => $data['rfq_number'],
-                '{qty}' => $data['rfq_quantity'] . ' ' . applicationConstants::getWeightUnitName($langId, $data['rfq_quantity_unit'], true),
+                '{qty}' => $qty,
             );
             $this->sendSms('RFQ_DELETION', ValidateElement::formatDialCode($data['user_phone_dcode']) . $data['user_phone'], $vars, $langId);
         }
+        $rData = ['{RFQ-NUMBER}' => $data['rfq_number']];
+        $appNotification = CommonHelper::replaceStringData(Labels::getLabel('MSG_YOUR_RFQ_({RFQ-NUMBER})_HAS_BEEN_DELETED', $langId), $rData);
+
+        $notificationObj = new Notifications();
+        $notificationDataArr = array(
+            'unotification_user_id' => $data["user_id"],
+            'unotification_body' => $appNotification,
+            'unotification_type' => 'RFQ_DELETION',
+            'unotification_data' => json_encode(array('rfq_title' => $data['rfq_title'], 'rfq_number' => $data['rfq_number'], 'qty' => $qty)),
+        );
+        $notificationObj->addNotification($notificationDataArr);
         return true;
     }
 

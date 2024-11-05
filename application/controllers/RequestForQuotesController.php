@@ -413,7 +413,7 @@ class RequestForQuotesController extends MyAppController
         }
 
         $user = new User(UserAuthentication::getLoggedUserId());
-        $userInfo = $user->getUserInfo(['user_name', 'credential_username', 'credential_email', 'user_phone', 'user_phone_dcode'], false, false, true);
+        $userInfo = $user->getUserInfo(['user_id', 'user_name', 'credential_username', 'credential_email', 'user_phone', 'user_phone_dcode'], false, false, true);
 
         $address = new Address($post['rfq_addr_id'], $this->siteLangId);
         $address = $address->getData(Address::TYPE_USER, UserAuthentication::getLoggedUserId());
