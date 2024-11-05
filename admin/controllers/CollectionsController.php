@@ -392,7 +392,6 @@ class CollectionsController extends ListingBaseController
         }
 
         $this->set('msg', Labels::getLabel('MSG_SETUP_SUCCESSFUL', $this->siteLangId));
-        $this->set('langId', $this->siteLangId);
         $this->set('collectionId', $recordId);
         $this->set('collectionType', $post['collection_type']);
         $this->_template->render(false, false, 'json-success.php');
