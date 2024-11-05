@@ -145,7 +145,7 @@
 
     .products-foot {
       @include media-breakpoint-up(lg) {
-        padding: 20px;
+        padding: 0;
         width: calc(100% - 150px);
         text-align: #{$start-direction};
       }
@@ -183,11 +183,12 @@
   .products {
     height: 100%;
     display: flex;
+    flex-direction: row;
     align-content: center;
+    gap: 0;
 
     &-body {
       flex: 0 0 50%;
-
       @include media-breakpoint-up(lg) {
         //flex: 1;
       }

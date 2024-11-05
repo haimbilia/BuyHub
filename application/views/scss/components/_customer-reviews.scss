@@ -41,10 +41,6 @@
     font-weight: $font-weight-normal;
   }
 
-  .svg {
-    fill: $secondary-color;
-  }
-
   .totals {
     font-weight: $font-weight-regular;
   }
@@ -154,7 +150,6 @@
 .rating-by-category {
   font-size: 12px;
   color: $txt-body;
-
   &-item {
     display: flex;
     align-items: center;
@@ -162,7 +157,6 @@
     color: $txt-body;
     margin: 1rem 0;
   }
-
   .label {
     font-weight: $font-weight-bold;
     margin: 0;
@@ -176,23 +170,18 @@
   }
 
   .out-of {
+    line-height: 1;
     margin-#{$start-direction}: 5px;
     white-space: nowrap;
     min-width: 40px;
     text-align: #{$end-direction};
-
     font-size: 0.8rem;
-  }
-
-  .svg {
-    fill: $star-color;
   }
 }
 
 .star-inline {
   display: inline-flex;
   align-items: center;
-
   &-item {
     margin: 0 2px;
   }
