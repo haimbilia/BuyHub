@@ -7,8 +7,11 @@ trait RecordOperations
 {
     protected function setLangData(object $classObj, array $langDataArr, $langId = 0)
     {
+        $systemDefaultLangId = FatUtility::int(FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
+        $dataLangId = (0 < $langId  ? $langId : CommonHelper::getDefaultFormLangId());
+
         $recordId = $classObj->getMainTableRecordId();
-        if (!$classObj->updateLangData((0 < $langId  ? $langId : CommonHelper::getDefaultFormLangId()), $langDataArr)) {
+        if (!$classObj->updateLangData($dataLangId, $langDataArr)) {
             LibHelper::exitWithError($classObj->getError(), true);
         }
 
@@ -27,6 +30,15 @@ trait RecordOperations
             $updateLangDataobj = new TranslateLangData($classObj::DB_TBL_LANG);
             if (false === $updateLangDataobj->updateTranslatedData($recordId, CommonHelper::getDefaultFormLangId())) {
                 LibHelper::exitWithError($updateLangDataobj->getError(), true);
+            }
+        } else if ($dataLangId != $systemDefaultLangId) {
+            if (!$classObj::getAttributesByLangId($systemDefaultLangId, $recordId)) {
+                $updateLangDataobj = new TranslateLangData($classObj::DB_TBL_LANG);
+                if (false === $updateLangDataobj->updateTranslatedData($recordId, $dataLangId, $systemDefaultLangId)) {
+                    if (!$classObj->updateLangData($systemDefaultLangId, $langDataArr)) {
+                        LibHelper::exitWithError($classObj->getError(), true);
+                    }
+                }
             }
         }
 
