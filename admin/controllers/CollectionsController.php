@@ -347,6 +347,10 @@ class CollectionsController extends ListingBaseController
             $displayItemsCount = min($range);
         }
 
+        if ($post['collection_type'] == Collections::COLLECTION_TYPE_BANNER && $post['collection_layout_type'] != Collections::TYPE_BANNER_LAYOUT2) {
+            $displayItemsCount = Collections::getBannersCount()[$post['collection_layout_type']];
+        }
+        
         $post['collection_identifier'] = $post['collection_name'];
         $post['collection_primary_records'] = $displayItemsCount;
 
@@ -912,13 +916,21 @@ class CollectionsController extends ListingBaseController
         if (!empty($bannerLocation)) {
             $blocationId = $bannerLocation['blocation_id'];
         }
+
+        if ($post['collection_layout_type'] == Collections::TYPE_BANNER_LAYOUT2) {
+            $displayItemsCount = $post['collection_primary_records'];
+        } else {
+            $displayItemsCount = Collections::getBannersCount()[$post['collection_layout_type']];
+        }
+
         $dataToSave = [
             'blocation_identifier' => $post['collection_name'],
             'blocation_collection_id' => $post['collection_id'],
-            'blocation_banner_count' => Collections::getBannersCount()[$post['collection_layout_type']],
+            'blocation_banner_count' => $displayItemsCount,
             'blocation_promotion_cost' => $post['blocation_promotion_cost'] ?? 0,
             'blocation_active' => applicationConstants::ACTIVE
         ];
+        
         $bannerLoc = new BannerLocation($blocationId);
         $bannerLoc->assignValues($dataToSave);
         if (!$bannerLoc->save()) {
