@@ -253,7 +253,7 @@ class StripePayController extends PaymentController
         }
 
         if ($this->error) {
-            $this->setErrorAndRedirect($this->error, FatUtility::isAjaxCall());
+            $this->setErrorAndRedirect(addslashes($this->error), FatUtility::isAjaxCall());
         }
     }
 
