@@ -27,7 +27,7 @@
                             <div class="testimonial-card-body">
                                 <p>
                                     <?php echo CommonHelper::truncateCharacters($testimonial['testimonial_text'], 250, '', '', true); ?>
-                                    <?php if (strlen($testimonial['testimonial_text']) > 150) {
+                                    <?php if (!empty($testimonial['testimonial_text']) && strlen($testimonial['testimonial_text']) > 150) {
                                         echo '...';
                                     } ?>
                                 </p>
