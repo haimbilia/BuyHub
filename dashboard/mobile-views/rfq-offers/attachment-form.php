@@ -18,6 +18,8 @@ foreach ($messagesData as $row) {
     ];
 }
 
+$data['page'] = $page ?? 1;
+$data['pageCount'] = $pageCount;
 $data['messages'] = $messages;
 
 if (empty($messages)) {

@@ -1170,8 +1170,9 @@ trait RfqOffersUtility
     public function loadMoreAttachments()
     {
         $primaryOfferId = FatApp::getPostedData('rom_primary_offer_id', FatUtility::VAR_INT, 0);
+        $onlyWithAttachments = FatApp::getPostedData('only_with_attachments', FatUtility::VAR_INT, 0);
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
-        $data = RfqOffers::getMessages($primaryOfferId, $page, hideForBuyer: $this->isBuyer);
+        $data = RfqOffers::getMessages($primaryOfferId, $page, hideForBuyer: $this->isBuyer, onlyWithAttachments: (0 < $onlyWithAttachments));
         if (!empty($data['data'])) {
             $msgIds = [];
             foreach ($data['data'] as $rom) {
@@ -1182,6 +1183,10 @@ trait RfqOffersUtility
         $this->set('primaryOfferId', $primaryOfferId);
         $this->set('page', $page);
         $this->set('pageCount', ($data['pageCount'] ?? 0));
+        if (MOBILE_APP_API_CALL) {
+            $this->set('messagesData', array_reverse($data['data']));
+            $this->_template->render(true, true, 'rfq-offers/attachment-form.php');
+        }
         $this->set('data', $data['data']);
         $this->set('html', $this->_template->render(false, false, 'rfq-offers/attachment-rows.php', true));
         $this->_template->render(false, false, 'json-success.php', false, false);
