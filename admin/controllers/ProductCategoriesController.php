@@ -300,7 +300,7 @@ class ProductCategoriesController extends ListingBaseController
         $frm->addHtml('', 'cat_icon', '');
         $frm->addHtml('', 'seperator', '');
 
-        if ($isParent) {
+        /* if ($isParent) { */
             $frm->addHTML('', 'heading_thumb', '');
             if (count($mediaLanguages) > 1) {
                 $frm->addSelectBox(Labels::getLabel('FRM_Language', $this->siteLangId), 'thumb_lang_id', $mediaLanguages, '', array(), '');
@@ -314,7 +314,7 @@ class ProductCategoriesController extends ListingBaseController
 
             $frm->addHtml('', 'cat_thumb', '');
             $frm->addHtml('', 'seperatorthumb', '');
-        }
+       /*  } */
 
         $frm->addHTML('', 'heading_banner', '');
         if (count($mediaLanguages) > 1) {

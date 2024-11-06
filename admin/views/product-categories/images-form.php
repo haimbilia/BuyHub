@@ -12,10 +12,10 @@ $iconLangFld->addFieldTagAttribute('class', 'catIconLanguageJs');
 $fld = $frm->getField('heading_icon');
 $fld->value = '<h3 class="h3">' . Labels::getLabel('LBL_ICON', $siteLangId) . '</h3>';
 
-if ($isParent) {
+/* if ($isParent) { */
     $fld = $frm->getField('heading_thumb');
     $fld->value = '<h3 class="h3">' . Labels::getLabel('LBL_THUMB', $siteLangId) . '</h3>';
-}
+/* } */
 
 $fld = $frm->getField('heading_banner');
 $fld->value = '<h3 class="h3">' . Labels::getLabel('LBL_BANNER', $siteLangId) . '</h3>';
@@ -29,27 +29,27 @@ $bannerFld = $frm->getField('cat_banner');
 $bannerFld->value = '<div id="banner-imageListingJs"></div>';
 $bannerFld->htmlAfterField = '<span class="form-text text-muted preferredDimensions-js">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), ' ' . $getProdCatBannerDimensions[ImageDimension::VIEW_DESKTOP]['width'] . ' x ' . $getProdCatBannerDimensions[ImageDimension::VIEW_DESKTOP]['height'] . '') . '</span>';
 
-if ($isParent) {
+/* if ($isParent) { */
     $thumbFld = $frm->getField('cat_thumb');
     $thumbFld->value = '<div id="thumb-imageListingJs"></div>';
     $thumbFld->htmlAfterField = '<span class="form-text text-muted preferredDimensions-js">' . sprintf(Labels::getLabel('LBL_Preferred_Dimensions_%s', $siteLangId), ' ' . $getProdCatthumbDimensions['width'] . ' x ' . $getProdCatthumbDimensions['height'] . '') . '</span>';
-}
+/* } */
 
 
 $fld = $frm->getField('seperator');
 $fld->value = '<div class="separator separator-dashed my-4"></div>';
 
-if ($isParent) {
+/* if ($isParent) { */
     $fld = $frm->getField('seperatorthumb');
     $fld->value = '<div class="separator separator-dashed my-4"></div>';
-}
+/* } */
 $bannerLangFld = $frm->getField('banner_lang_id');
 $bannerLangFld->addFieldTagAttribute('class', 'catBannerLanguageJs');
 
-if ($isParent) {
+/* if ($isParent) { */
     $thumbLangFld = $frm->getField('thumb_lang_id');
     $thumbLangFld->addFieldTagAttribute('class', 'thumbLanguageJs');
-}
+/* } */
 $screenFld = $frm->getField('slide_screen');
 $screenFld->addFieldTagAttribute('class', 'catPrefDimensionsJs');
 
