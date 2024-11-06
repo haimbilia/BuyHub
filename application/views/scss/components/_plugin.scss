@@ -3,7 +3,8 @@
 .pac-container {
   font-family: inherit;
   box-shadow: $shadow1;
-  z-index: 1060;
+  // z-index: 1060;
+  z-index: $zindex-popover;
   border: $border !important;
   border-radius: 4px;
 
