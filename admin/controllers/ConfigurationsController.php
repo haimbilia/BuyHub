@@ -1636,7 +1636,7 @@ class ConfigurationsController extends ListingBaseController
                     'CONF_DEFAULT_SITE_LANG',
                     Language::getAllNames(),
                     false,
-                    array('disabled' => 'disabled', 'title' => Labels::getLabel('ERR_YOU_CANNOT_CHANGE_SITE_DEFAULT_LANGUAGE_IN_BETWEEN', $langId), 'data-bs-toggle' => 'tooltip'),
+                    array('disabled' => 'disabled', 'title' => Labels::getLabel('ERR_YOU_CANNOT_CHANGE_SITE_DEFAULT_LANGUAGE', $langId), 'data-bs-toggle' => 'tooltip'),
                     ''
                 );
                 $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("FRM_CHANGING_DEFAULT_SITE_LANGUAGE,_MAKE_SURE_ALL_THE_INFORMATION_IS_UPDATED_WITH_THIS_LANGUAGE", $langId) . '</span>';
