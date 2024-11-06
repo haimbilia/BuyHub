@@ -1,7 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage');
 $shop_city = $shop['shop_city'];
-$shop_state = (strlen($shop['shop_city']) > 0) ? ', ' . $shop['shop_state_name'] : $shop['shop_state_name'];
-$shop_country = (strlen($shop_state) > 0) ? ', ' . $shop['shop_country_name'] : $shop['shop_country_name'];
+$shop_state = (strlen((string)$shop['shop_city']) > 0) ? ', ' . $shop['shop_state_name'] : $shop['shop_state_name'];
+$shop_country = (strlen((string)$shop_state) > 0) ? ', ' . $shop['shop_country_name'] : $shop['shop_country_name'];
 $shopLocation = $shop_city . $shop_state . $shop_country; ?>
 <div class="bg-brand-light py-4">
     <div class="container">

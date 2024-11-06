@@ -13,7 +13,7 @@ if (1 > $row['rom_buyer_access']) {
 } ?>
 <div class="messages-chat-item msg-<?php echo $position; ?> <?php echo 1 > $row['rom_buyer_access'] ? 'border-red' : ''; ?>" data-bs-toggle="tooltip" title="<?php echo $title; ?>">
     <div class="messages-chat-bubble">
-        <?php if (100 < strlen($msg)) {
+        <?php if (100 < strlen((string)$msg)) {
             $subStr = preg_replace('/\s+?(\S+)?$/', '', substr($msg, 0, 100));
         ?>
             <span class="lessContent<?php echo $row['rom_id']; ?>Js">

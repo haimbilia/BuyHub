@@ -100,13 +100,13 @@ $autoTableColumWidth = FatUtility::int(($autoTableColumWidth ?? 1)); ?>
                                                     <span class="value">
                                                         <strong><?php echo $rfqData['addr_name']; ?></strong>,
                                                         <?php echo $rfqData['addr_address1']; ?>,
-                                                        <?php echo (strlen($rfqData['addr_address2']) > 0) ? $rfqData['addr_address2'] . ',' : ''; ?>
-                                                        <?php echo (strlen($rfqData['addr_city']) > 0) ? $rfqData['addr_city'] . ',' : ''; ?>
-                                                        <?php echo (strlen($rfqData['state_name']) > 0) ? $rfqData['state_name'] . ',' : ''; ?>
-                                                        <?php echo (strlen($rfqData['country_name']) > 0) ? $rfqData['country_name'] . ',' : ''; ?>
-                                                        <?php echo (strlen($rfqData['addr_zip']) > 0) ? Labels::getLabel('LBL_Zip:', $siteLangId) . $rfqData['addr_zip'] . ',' : ''; ?>
-                                                        <?php $dcode = (strlen($rfqData['addr_phone_dcode']) > 0) ? ValidateElement::formatDialCode($rfqData['addr_phone_dcode']) : ''; ?>
-                                                        <?php echo (strlen($rfqData['addr_phone']) > 0) ? Labels::getLabel('LBL_Phone:', $siteLangId) . $dcode . $rfqData['addr_phone'] . ',' : ''; ?> </span>
+                                                        <?php echo (strlen((string)$rfqData['addr_address2']) > 0) ? $rfqData['addr_address2'] . ',' : ''; ?>
+                                                        <?php echo (strlen((string)$rfqData['addr_city']) > 0) ? $rfqData['addr_city'] . ',' : ''; ?>
+                                                        <?php echo (strlen((string)$rfqData['state_name']) > 0) ? $rfqData['state_name'] . ',' : ''; ?>
+                                                        <?php echo (strlen((string)$rfqData['country_name']) > 0) ? $rfqData['country_name'] . ',' : ''; ?>
+                                                        <?php echo (strlen((string)$rfqData['addr_zip']) > 0) ? Labels::getLabel('LBL_Zip:', $siteLangId) . $rfqData['addr_zip'] . ',' : ''; ?>
+                                                        <?php $dcode = (strlen((string)$rfqData['addr_phone_dcode']) > 0) ? ValidateElement::formatDialCode($rfqData['addr_phone_dcode']) : ''; ?>
+                                                        <?php echo (strlen((string)$rfqData['addr_phone']) > 0) ? Labels::getLabel('LBL_Phone:', $siteLangId) . $dcode . $rfqData['addr_phone'] . ',' : ''; ?> </span>
                                                 </li>
                                             <?php } ?>
                                             <?php if (!empty($rfqData['rfq_description'])) { ?>
@@ -114,7 +114,7 @@ $autoTableColumWidth = FatUtility::int(($autoTableColumWidth ?? 1)); ?>
                                                     <span class="lable"><?php echo Labels::getLabel('LBL_COMMENTS', $siteLangId); ?>:</span>
                                                     <span class="value">
                                                         <span class="lessContent<?php echo $rfqData['rfq_id']; ?>Js">
-                                                            <?php echo 500 < strlen($rfqData['rfq_description']) ? substr($rfqData['rfq_description'], 0, 500) . ' ... <button class="link-underline showMoreJs" data-row-id="' . $rfqData['rfq_id'] . '">' . Labels::getLabel('LBL_SHOW_MORE') . '</button>' : $rfqData['rfq_description']; ?>
+                                                            <?php echo 500 < strlen((string)$rfqData['rfq_description']) ? substr($rfqData['rfq_description'], 0, 500) . ' ... <button class="link-underline showMoreJs" data-row-id="' . $rfqData['rfq_id'] . '">' . Labels::getLabel('LBL_SHOW_MORE') . '</button>' : $rfqData['rfq_description']; ?>
 
                                                         </span>
                                                         <span class="moreContent<?php echo $rfqData['rfq_id']; ?>Js" style="display:none">

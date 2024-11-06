@@ -52,7 +52,7 @@ if ($reviewsList) { ?>
                 <p class='lessText'>
                     <?php echo CommonHelper::truncateCharacters($review['spreview_description'], 200, '', '', true); ?>
                 </p>
-                <?php if (strlen($review['spreview_description']) > 200) { ?>
+                <?php if (strlen((string)$review['spreview_description']) > 200) { ?>
                 <p class='moreText hidden'>
                     <?php echo nl2br($review['spreview_description']); ?>
                 </p>

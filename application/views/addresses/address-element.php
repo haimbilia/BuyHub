@@ -8,13 +8,13 @@
         <span class="btn-dropdown-content text-break btnDropdownContentJs">
             <strong><?php echo $defaultAddress['addr_name']; ?></strong> -
             <?php echo $defaultAddress['addr_address1']; ?>,
-            <?php echo (strlen($defaultAddress['addr_address2']) > 0) ? $defaultAddress['addr_address2'] . ',' : ''; ?>
-            <?php echo (strlen($defaultAddress['addr_city']) > 0) ? $defaultAddress['addr_city'] . ',' : ''; ?>
-            <?php echo (strlen($defaultAddress['state_name']) > 0) ? $defaultAddress['state_name'] . ',' : ''; ?>
-            <?php echo (strlen($defaultAddress['country_name']) > 0) ? $defaultAddress['country_name'] . ',' : ''; ?>
-            <?php echo (strlen($defaultAddress['addr_zip']) > 0) ? Labels::getLabel('LBL_Zip:', $siteLangId) . $defaultAddress['addr_zip'] . ',' : ''; ?>
-            <?php $dcode = (strlen($defaultAddress['addr_phone_dcode']) > 0) ? ValidateElement::formatDialCode($defaultAddress['addr_phone_dcode']) : ''; ?>
-            <?php echo (strlen($defaultAddress['addr_phone']) > 0) ? Labels::getLabel('LBL_Phone:', $siteLangId) . $dcode . $defaultAddress['addr_phone'] . ',' : ''; ?>
+            <?php echo (strlen((string)$defaultAddress['addr_address2']) > 0) ? $defaultAddress['addr_address2'] . ',' : ''; ?>
+            <?php echo (strlen((string)$defaultAddress['addr_city']) > 0) ? $defaultAddress['addr_city'] . ',' : ''; ?>
+            <?php echo (strlen((string)$defaultAddress['state_name']) > 0) ? $defaultAddress['state_name'] . ',' : ''; ?>
+            <?php echo (strlen((string)$defaultAddress['country_name']) > 0) ? $defaultAddress['country_name'] . ',' : ''; ?>
+            <?php echo (strlen((string)$defaultAddress['addr_zip']) > 0) ? Labels::getLabel('LBL_Zip:', $siteLangId) . $defaultAddress['addr_zip'] . ',' : ''; ?>
+            <?php $dcode = (strlen((string)$defaultAddress['addr_phone_dcode']) > 0) ? ValidateElement::formatDialCode($defaultAddress['addr_phone_dcode']) : ''; ?>
+            <?php echo (strlen((string)$defaultAddress['addr_phone']) > 0) ? Labels::getLabel('LBL_Phone:', $siteLangId) . $dcode . $defaultAddress['addr_phone'] . ',' : ''; ?>
         </span><i class="dropdown-toggle-custom-arrow"></i>
     </a>
     <ul class="dropdown-menu addressListingJs dropdown-menu-addresses" data-form="<?php echo $formId; ?>" aria-labelledby="dropdownMenuButton1">
@@ -24,13 +24,13 @@
                 <span class="dropdown-menu-option text-break addressItemContentJs">
                     <strong><?php echo $address['addr_name']; ?></strong> -
                     <?php echo $address['addr_address1']; ?>,
-                    <?php echo (strlen($address['addr_address2']) > 0) ? $address['addr_address2'] . ',' : ''; ?>
-                    <?php echo (strlen($address['addr_city']) > 0) ? $address['addr_city'] . ',' : ''; ?>
-                    <?php echo (strlen($address['state_name']) > 0) ? $address['state_name'] . ',' : ''; ?>
-                    <?php echo (strlen($address['country_name']) > 0) ? $address['country_name'] . ',' : ''; ?>
-                    <?php echo (strlen($address['addr_zip']) > 0) ? Labels::getLabel('LBL_Zip:', $siteLangId) . $address['addr_zip'] . ',' : ''; ?>
-                    <?php $dcode = (strlen($address['addr_phone_dcode']) > 0) ? ValidateElement::formatDialCode($address['addr_phone_dcode']) : ''; ?>
-                    <?php echo (strlen($address['addr_phone']) > 0) ? Labels::getLabel('LBL_Phone:', $siteLangId) . $dcode . $address['addr_phone'] . ',' : ''; ?>
+                    <?php echo (strlen((string)$address['addr_address2']) > 0) ? $address['addr_address2'] . ',' : ''; ?>
+                    <?php echo (strlen((string)$address['addr_city']) > 0) ? $address['addr_city'] . ',' : ''; ?>
+                    <?php echo (strlen((string)$address['state_name']) > 0) ? $address['state_name'] . ',' : ''; ?>
+                    <?php echo (strlen((string)$address['country_name']) > 0) ? $address['country_name'] . ',' : ''; ?>
+                    <?php echo (strlen((string)$address['addr_zip']) > 0) ? Labels::getLabel('LBL_Zip:', $siteLangId) . $address['addr_zip'] . ',' : ''; ?>
+                    <?php $dcode = (strlen((string)$address['addr_phone_dcode']) > 0) ? ValidateElement::formatDialCode($address['addr_phone_dcode']) : ''; ?>
+                    <?php echo (strlen((string)$address['addr_phone']) > 0) ? Labels::getLabel('LBL_Phone:', $siteLangId) . $dcode . $address['addr_phone'] . ',' : ''; ?>
                 </span>
             </span>
             </span>

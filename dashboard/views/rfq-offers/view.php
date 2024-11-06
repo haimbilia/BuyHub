@@ -54,7 +54,7 @@ $totalRecords = count($arrListing); ?>
                             <?php if (!empty($row['offer_comments'])) { ?>
                                 <p class="mt-3">
                                     <span class="lessContent<?php echo $row['offer_id']; ?>Js">
-                                        <?php echo 200 < strlen($row['offer_comments']) ? substr($row['offer_comments'], 0, 200) . ' ... <button class="link-underline showMoreJs" data-row-id="' . $row['offer_id'] . '">' . Labels::getLabel('LBL_SHOW_MORE') . '</button>' : $row['offer_comments']; ?>
+                                        <?php echo 200 < strlen((string)$row['offer_comments']) ? substr($row['offer_comments'], 0, 200) . ' ... <button class="link-underline showMoreJs" data-row-id="' . $row['offer_id'] . '">' . Labels::getLabel('LBL_SHOW_MORE') . '</button>' : $row['offer_comments']; ?>
                                     </span>
                                     <span class="moreContent<?php echo $row['offer_id']; ?>Js" style="display:none">
                                         <?php echo $row['offer_comments'] . ' <button class="link-underline showLessJs" data-row-id="' . $row['offer_id'] . '">' . Labels::getLabel('LBL_SHOW_LESS') . '</button>'; ?>

@@ -19,7 +19,7 @@ foreach ($arrListing as $sn => $row) {
             case 'pnotification_title':
                 $body = $row['pnotification_description'];
                 $htm =  '<strong>' . $row['pnotification_title'] . '</strong><br>';
-                $htm .= strlen($body) > 50 ? substr($body, 0, 50) . "..." : $body;
+                $htm .= strlen((string)$body) > 50 ? substr($body, 0, 50) . "..." : $body;
                 $htm = '<span title="' . $body . '" data-bs-toggle="tooltip" data-placement="top">' . $htm . '</span>';
                 $td->appendElement('plaintext', $tdAttr, $htm, true);
                 break;

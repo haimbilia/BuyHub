@@ -31,11 +31,11 @@ if (!empty($addresses)) {
                         <span class="tag"><?php echo $address['addr_title']; ?></span>
                         <p>
                             <?php echo $address['addr_address1'] . '<br>'; ?>
-                            <?php echo (strlen($address['addr_address2']) > 0) ? $address['addr_address2'] . '<br>' : ''; ?>
-                            <?php echo (strlen($address['addr_city']) > 0) ? $address['addr_city'] . ',' : ''; ?>
-                            <?php echo (strlen($address['state_name']) > 0) ? $address['state_name'] . '<br>' : ''; ?>
-                            <?php echo (strlen($address['country_name']) > 0) ? $address['country_name'] . '<br>' : ''; ?>
-                            <?php echo (strlen($address['addr_zip']) > 0) ? Labels::getLabel('LBL_Zip:', $siteLangId) . $address['addr_zip'] . '<br>' : ''; ?>
+                            <?php echo (strlen((string)$address['addr_address2']) > 0) ? $address['addr_address2'] . '<br>' : ''; ?>
+                            <?php echo (strlen((string)$address['addr_city']) > 0) ? $address['addr_city'] . ',' : ''; ?>
+                            <?php echo (strlen((string)$address['state_name']) > 0) ? $address['state_name'] . '<br>' : ''; ?>
+                            <?php echo (strlen((string)$address['country_name']) > 0) ? $address['country_name'] . '<br>' : ''; ?>
+                            <?php echo (strlen((string)$address['addr_zip']) > 0) ? Labels::getLabel('LBL_Zip:', $siteLangId) . $address['addr_zip'] . '<br>' : ''; ?>
                         </p>
                         <ul class="phone-list">
                             <li class="phone-list-item phone-txt">
@@ -44,7 +44,7 @@ if (!empty($addresses)) {
                                     </use>
                                 </svg>
                                 <?php
-                                $addrPhone = (strlen($address['addr_phone']) > 0) ? $address['addr_phone'] : '';
+                                $addrPhone = (strlen((string)$address['addr_phone']) > 0) ? $address['addr_phone'] : '';
                                 if (!empty($addrPhone) && array_key_exists('addr_phone_dcode', $address)) {
                                     $addrPhone = '<span class="default-ltr">' . ValidateElement::formatDialCode($address['addr_phone_dcode']) . $addrPhone . '</span>';
                                 }

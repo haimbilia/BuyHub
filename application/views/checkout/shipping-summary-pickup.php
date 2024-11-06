@@ -14,13 +14,13 @@
             <div class="review-block-body">
                 <address class="address">
                     <p><?php echo $addresses['addr_name'] . ', ' . $addresses['addr_address1']; ?>
-                        <?php if (strlen($addresses['addr_address2']) > 0) {
+                        <?php if (strlen((string)$addresses['addr_address2']) > 0) {
                             echo ", " . $addresses['addr_address2']; ?>
                         <?php } ?>
                     </p>
                     <p><?php echo $addresses['addr_city'] . ", " . $addresses['state_name'] . ", " . $addresses['country_name'] . ", " . $addresses['addr_zip']; ?>
                     </p>
-                    <?php if (strlen($addresses['addr_phone']) > 0) {
+                    <?php if (strlen((string)$addresses['addr_phone']) > 0) {
                         $addrPhone = ValidateElement::formatDialCode($addresses['addr_phone_dcode']) . $addresses['addr_phone'];
                     ?>
                         <ul class="phone-list">
@@ -99,14 +99,14 @@
                                 ?>
                                     <address class="address shop-address">
                                         <p><?php echo $address['addr_name'] . ', ' . $address['addr_address1']; ?>
-                                            <?php if (strlen($address['addr_address2']) > 0) {
+                                            <?php if (strlen((string)$address['addr_address2']) > 0) {
                                                 echo ", " . $address['addr_address2']; ?>
                                             <?php } ?>
                                         </p>
                                         <p><?php echo $address['addr_city'] . ", " . $address['state_name']; ?></p>
                                         <p><?php echo $address['country_name'] . ", " . $address['addr_zip']; ?></p>
                                         <ul class="phone-list">
-                                            <?php if (strlen($address['addr_phone']) > 0) {
+                                            <?php if (strlen((string)$address['addr_phone']) > 0) {
                                                 $addrPhone = ValidateElement::formatDialCode($address['addr_phone_dcode']) . $address['addr_phone'];
                                             ?>
                                                 <li class="phone-list-item phone-txt">

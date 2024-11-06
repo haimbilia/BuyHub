@@ -33,13 +33,13 @@ if (!empty($orderPickUpData)) {
                         <address class="address delivery-address">
                             <?php echo $address['oua_name']; ?>
                             <p><?php echo $address['oua_address1']; ?>
-                                <?php if (strlen($address['oua_address2']) > 0) {
+                                <?php if (strlen((string)$address['oua_address2']) > 0) {
                                     echo ", " . $address['oua_address2']; ?>
                                 <?php } ?>
                             </p>
                             <p><?php echo $address['oua_city'] . ", " . $address['oua_state']; ?></p>
                             <p><?php echo $address['oua_country'] . ", " . $address['oua_zip']; ?></p>
-                            <?php if (strlen($address['oua_phone']) > 0) { ?>
+                            <?php if (strlen((string)$address['oua_phone']) > 0) { ?>
                                 <ul class="phone-list">
                                     <li class="phone-list-item phone-txt">
                                         <svg class="svg" width="20" height="20">

@@ -60,7 +60,7 @@
                     $row[$key] = $row[$key] . (!empty($row['utxn_gateway_txn_id']) ? "" . Labels::getLabel('LBL_GATEWAY_TXN_ID', $siteLangId) . ": " . $row['utxn_gateway_txn_id'] : '');
                     $comments = Transactions::formatTransactionComments($row[$key]);
                     $commentsTxt = "<span class='lessText'>" . CommonHelper::truncateCharacters($comments, 150, '', '', true) . "</span>";
-                    if (strlen($comments) > 150) {
+                    if (strlen((string)$comments) > 150) {
                         $commentsTxt .= "<span class='moreText hidden'>";
                         $commentsTxt .= nl2br($comments) . "</span>";
                         $commentsTxt .= "</br><a class='readMore link--arrow btn-link' href='javascript:void(0);'>" . Labels::getLabel('Lbl_SHOW_MORE', $siteLangId) . "</a>";

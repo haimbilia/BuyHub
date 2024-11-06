@@ -43,7 +43,7 @@
                     <h6 class="prod-attached-files mt-4 h6"><?php echo Labels::getLabel('LBL_Attachments', $siteLangId); ?></h6>
                     <ul class="list-files">
                         <?php foreach ($product['preview_attachments'] as $keys => $attachment) {
-                            if (0 < strlen($attachment['preview'])) {
+                            if (0 < strlen((string)$attachment['preview'])) {
                                 $fileExt = pathinfo($attachment['preview'], PATHINFO_EXTENSION);
                                 $fileExt = strtolower($fileExt);
                                 $videoPath = AttachedFile::getProductPreviewVideoUrl($attachment['prev_afile_id']);
@@ -88,7 +88,7 @@
                                     </div>
                                 </li>
                         <?php
-                            } /* closed if (0 < strlen($attachment['preview']) */
+                            } /* closed if (0 < strlen((string)$attachment['preview']) */
                         } /* foreach Attachments */ ?>
                     </ul>
             <?php

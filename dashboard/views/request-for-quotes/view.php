@@ -57,7 +57,7 @@
                 <span class="label"><?php echo Labels::getLabel('LBL_COMMENT', $siteLangId); ?>:</span>
                 <span class="value">
                     <span class="lessContentJs">
-                        <?php echo 200 < strlen($rfqData['rfq_description']) ? substr($rfqData['rfq_description'], 0, 200) . ' ... <button class="link-underline showMoreJs">' . Labels::getLabel('LBL_SHOW_MORE') . '</button>' : $rfqData['rfq_description']; ?>
+                        <?php echo 200 < strlen((string)$rfqData['rfq_description']) ? substr($rfqData['rfq_description'], 0, 200) . ' ... <button class="link-underline showMoreJs">' . Labels::getLabel('LBL_SHOW_MORE') . '</button>' : $rfqData['rfq_description']; ?>
                     </span>
                     <span class="moreContentJs" style="display:none">
                         <?php echo $rfqData['rfq_description'] . ' <button class="link-underline showLessJs">' . Labels::getLabel('LBL_SHOW_LESS') . '</button>'; ?>

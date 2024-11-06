@@ -42,8 +42,8 @@ foreach ($arrListing as $sn => $row) {
                 break;
             case 'utxn_comments':
                 $body = $row[$key];
-                if (strlen($body) > 25) {
-                    $htm = strlen($body) > 25 ? substr($body, 0, 25) . "..." : $body;
+                if (strlen((string)$body) > 25) {
+                    $htm = strlen((string)$body) > 25 ? substr($body, 0, 25) . "..." : $body;
                     $td->appendElement('plaintext', $tdAttr, '<div class="txt-description">' . $htm . ' <button class="btn btn-view" data-bs-toggle="tooltip" data-placement="top"  data-bs-original-title="' . Labels::getLabel('LBL_VIEW_MORE', $siteLangId) . '" onclick="getDescription(' . $row['utxn_id'] . ')"><svg class="svg" width="10" height="10"><use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#more">
                     </use></svg> </button></div>', true);
                 } else {

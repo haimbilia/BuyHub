@@ -53,14 +53,14 @@ if ($noPaymentMethod && $rewardsCurrAmtCanBeUsed < $cartSummary['orderNetAmount'
                     <div class="review-block-body" role="cell">
                         <address class="address delivery-address">
                             <p><?php echo $billingAddressArr['addr_name'] . ', ' . $billingAddressArr['addr_address1']; ?>
-                                <?php if (strlen($billingAddressArr['addr_address2']) > 0) {
+                                <?php if (strlen((string)$billingAddressArr['addr_address2']) > 0) {
                                     echo ", " . $billingAddressArr['addr_address2']; ?>
                                 <?php } ?>
                             </p>
                             <p><?php echo $billingAddressArr['addr_city'] . ", " . $billingAddressArr['state_name'] . ", " . $billingAddressArr['country_name'] . ", " . $billingAddressArr['addr_zip']; ?>
                             </p>
 
-                            <?php if (strlen($billingAddressArr['addr_phone']) > 0) {
+                            <?php if (strlen((string)$billingAddressArr['addr_phone']) > 0) {
                                 $addrPhone = ValidateElement::formatDialCode($billingAddressArr['addr_phone_dcode']) . $billingAddressArr['addr_phone'];
                             ?>
                                 <ul class="phone-list">
