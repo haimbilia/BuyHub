@@ -672,6 +672,7 @@ class BuyerController extends BuyerBaseController
             'ocr'
         );
         $srch->joinSellerProducts();
+        $srch->joinShop();
 
         $srch->addCondition('order_user_id', '=', $user_id);
         $srch->joinPaymentMethod();
@@ -755,7 +756,7 @@ class BuyerController extends BuyerBaseController
                 'selprod_product_id',
                 'orderstatus_id',
                 'selprod_cart_type',
-                'selprod_hide_price'
+                'selprod_hide_price', 'shop_rfq_enabled'
             )
         );
 
@@ -3124,7 +3125,7 @@ class BuyerController extends BuyerBaseController
                 'COALESCE(shop_state_l.state_name,state_identifier) as shop_state_name',
                 'COALESCE(shop_country_l.country_name,shop_country.country_code) as shop_country_name',
                 'selprod_condition',
-                'product_warranty_unit', 'selprod_cart_type', 'selprod_hide_price'
+                'product_warranty_unit', 'selprod_cart_type', 'selprod_hide_price', 'shop_rfq_enabled'
             )
         );
         $productRs = $prodSrch->getResultSet();

@@ -1,4 +1,4 @@
-<?php if (false === SellerProduct::isPriceHidden($product['selprod_hide_price'])) { ?>
+<?php if (false === SellerProduct::isPriceHidden($product['selprod_hide_price'], $product['shop_rfq_enabled'])) { ?>
     <div class="products-price">
         <span class="products-price-new"> <?php echo CommonHelper::displayMoneyFormat($product['theprice']); ?></span>
         <?php if ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) { ?>

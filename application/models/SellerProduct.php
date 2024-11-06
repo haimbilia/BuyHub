@@ -311,6 +311,7 @@ class SellerProduct extends MyAppModel
         $srch->joinTable(Product::DB_TBL . '_lang', 'LEFT JOIN', 'lang.productlang_product_id = ' . static::DB_TBL_LANG_PREFIX . 'selprod_id AND productlang_lang_id = ' . $lang_id, 'lang');
 
         if (true === $forFrontend) {
+            $srch->joinTable(Shop::DB_TBL, 'INNER JOIN', 'selprod_user_id = shop.shop_user_id', 'shop');
             $srch->joinTable(Product::DB_TBL_PRODUCT_TO_CATEGORY, 'LEFT OUTER JOIN', 'ptc.ptc_product_id = product_id', 'ptc');
             $srch->joinTable(ProductCategory::DB_TBL, 'LEFT OUTER JOIN', 'c.prodcat_id = ptc.ptc_prodcat_id', 'c');
 
@@ -356,7 +357,8 @@ class SellerProduct extends MyAppModel
                     'selprod_min_order_qty',
                     'selprod_cart_type',
                     'product_updated_on',
-                    'selprod_hide_price'
+                    'selprod_hide_price',
+                    'shop_rfq_enabled'
                 );
             }
         } else {
@@ -797,7 +799,7 @@ class SellerProduct extends MyAppModel
         $srch->joinTable(static::DB_TBL . '_lang', 'LEFT JOIN', 'slang.' . static::DB_TBL_LANG_PREFIX . 'selprod_id = ' . static::DB_TBL_RELATED_PRODUCTS_PREFIX . 'recommend_sellerproduct_id AND ' . static::DB_TBL_LANG_PREFIX . 'lang_id = ' . $lang_id, 'slang');
         $srch->joinTable(Product::DB_TBL, 'LEFT JOIN', Product::DB_TBL_PREFIX . 'id = ' . static::DB_TBL_PREFIX . 'product_id');
         $srch->joinTable(Product::DB_TBL . '_lang', 'LEFT JOIN', 'lang.productlang_product_id = ' . static::DB_TBL_LANG_PREFIX . 'selprod_id AND productlang_lang_id = ' . $lang_id, 'lang');
-
+        $srch->joinTable(Shop::DB_TBL, 'INNER JOIN', 'selprod_user_id = shop.shop_user_id', 'shop');
         if (!empty($criteria)) {
             if (is_string($criteria)) {
                 $srch->addFld($criteria);
@@ -805,7 +807,7 @@ class SellerProduct extends MyAppModel
                 $srch->addMultipleFields($criteria);
             }
         } else {
-            $srch->addMultipleFields(array('related_sellerproduct_id', 'selprod_id', 'IFNULL(product_identifier ,product_name) as product_name', 'IFNULL(selprod_title, IFNULL(product_name, product_identifier)) as selprod_title', 'product_identifier', 'selprod_price', 'product_updated_on', 'selprod_cart_type', 'selprod_hide_price'));
+            $srch->addMultipleFields(array('related_sellerproduct_id', 'selprod_id', 'IFNULL(product_identifier ,product_name) as product_name', 'IFNULL(selprod_title, IFNULL(product_name, product_identifier)) as selprod_title', 'product_identifier', 'selprod_price', 'product_updated_on', 'selprod_cart_type', 'selprod_hide_price', 'shop_rfq_enabled'));
         }
         return $srch;
     }
@@ -1689,8 +1691,12 @@ class SellerProduct extends MyAppModel
         ];
     }
 
-    public static function isPriceHidden(int $selprodHidePrice)
+    public static function isPriceHidden(int $selprodHidePrice, int $shopRfqEnabled)
     {
+        if (1 > $shopRfqEnabled || 1 > FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0)) {
+            return false;
+        }
+        
         if (0 < FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) {
             return true;
         }

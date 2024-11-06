@@ -47,7 +47,7 @@
         </div>
     </div>
     <?php $selprod_condition = true;  ?>
-    <?php if (false === SellerProduct::isPriceHidden($product['selprod_hide_price'])) { ?>
+    <?php if (false === SellerProduct::isPriceHidden($product['selprod_hide_price'], $product['shop_rfq_enabled'])) { ?>
         <div class="products-foot">
             <?php require(CONF_THEME_PATH . '_partial/collection/product-price.php'); ?>
         </div>

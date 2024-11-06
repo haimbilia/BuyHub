@@ -69,7 +69,7 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !em
                                 <span class="location">
                                     <?php echo $moresellers['shop_state_name'] . "," . $moresellers['shop_country_name']; ?>
                                 </span>
-                                <?php if (false === SellerProduct::isPriceHidden($moresellers['selprod_hide_price'])) { ?>
+                                <?php if (false === SellerProduct::isPriceHidden($moresellers['selprod_hide_price'], $moresellers['shop_rfq_enabled'])) { ?>
                                 <span class="price">
                                     <?php echo CommonHelper::displayMoneyFormat($moresellers['theprice']);
                                             if ($moresellers['selprod_price'] > $moresellers['theprice']) { ?>
@@ -96,7 +96,7 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !em
                                 <?php if (true == $displayProductNotAvailableLable && array_key_exists('availableInLocation', $product) && 0 == $product['availableInLocation']) { ?>
                                 <span
                                     class="text-danger"><?php echo Labels::getLabel('LBL_NOT_AVAILABLE', $siteLangId); ?></span>
-                                <?php } else if (false === SellerProduct::isPriceHidden($moresellers['selprod_hide_price'])) {
+                                <?php } else if (false === SellerProduct::isPriceHidden($moresellers['selprod_hide_price'], $moresellers['shop_rfq_enabled'])) {
                                         if (date('Y-m-d', strtotime($moresellers['selprod_available_from'])) <= FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d')) { ?>
                                 <button class="btn btn-outline-black btn-sm btnAddToCart--js" type="button"
                                     data-id="<?php echo $moresellers['selprod_id']; ?>"

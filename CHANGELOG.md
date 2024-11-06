@@ -193,3 +193,4 @@
     - Bug-088543 - Multiple issue on the collections listing page on the admin end
     - Bug-088542 - Deprecation appears in testimonials layout 2
     - Bug-088559 - RFQ offer limit flow is not working properly.
+    - Bug-088558 - Flow conflicts due to hide price functionality on inventory level

@@ -34,7 +34,7 @@ if ($showAddToFavorite) {
 
                             </label>
                         </li>
-                        <?php if ($canEditOrder && false === SellerProduct::isPriceHidden($product['selprod_hide_price']) && SellerProduct::CART_TYPE_RFQ_ONLY != $product['selprod_cart_type']) { ?>
+                        <?php if ($canEditOrder && false === SellerProduct::isPriceHidden($product['selprod_hide_price'], $product['shop_rfq_enabled']) && SellerProduct::CART_TYPE_RFQ_ONLY != $product['selprod_cart_type']) { ?>
                             <li>
                                 <a onClick="addToCart( $(this), event , <?php echo $isWishList; ?>);" href="javascript:void(0)" class="" title="<?php echo Labels::getLabel('LBL_Move_to_cart', $siteLangId); ?>" data-id='<?php echo $product['selprod_id']; ?>'>
                                     <svg class="svg" width="18" height="18">

@@ -1188,7 +1188,7 @@ class ProductsController extends MyAppController
                 'selprod_id', 'selprod_user_id',  'selprod_code', 'selprod_stock', 'selprod_condition', 'selprod_price', 'COALESCE(selprod_title, product_name, product_identifier) as selprod_title',
                 'special_price_found', 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type',
                 'theprice', 'brand_id', 'COALESCE(brand_name, brand_identifier) as brand_name', 'brand_short_description',
-                'IF(selprod_stock > 0, 1, 0) AS in_stock', 'selprod_sold_count', 'selprod_return_policy', 'shop_id', 'selprod_cart_type', 'selprod_hide_price'
+                'IF(selprod_stock > 0, 1, 0) AS in_stock', 'selprod_sold_count', 'selprod_return_policy', 'shop_id', 'selprod_cart_type', 'selprod_hide_price', 'shop_rfq_enabled'
             )
         );
 
@@ -1288,7 +1288,7 @@ class ProductsController extends MyAppController
             array(
                 'product_id', 'COALESCE(product_name, product_identifier) as product_name', 'prodcat_id', 'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name', 'product_updated_on',
                 'selprod_id', 'selprod_condition', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'theprice',
-                'special_price_found', 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'selprod_sold_count', 'COALESCE(selprod_title, product_name, product_identifier) as selprod_title', 'selprod_price', 'shop_id', 'selprod_cart_type', 'selprod_hide_price'
+                'special_price_found', 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'selprod_sold_count', 'COALESCE(selprod_title, product_name, product_identifier) as selprod_title', 'selprod_price', 'shop_id', 'selprod_cart_type', 'selprod_hide_price', 'shop_rfq_enabled'
             )
         );
         $productRs = $prodSrch->getResultSet();
@@ -1323,7 +1323,7 @@ class ProductsController extends MyAppController
                 array(
                     'product_id', 'COALESCE(product_name, product_identifier) as product_name', 'prodcat_id', 'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name', 'product_updated_on', 'COALESCE(selprod_title,product_name, product_identifier) as selprod_title',
                     'selprod_id', 'selprod_condition', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'theprice',
-                    'special_price_found', 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'selprod_sold_count', 'selprod_price', 'selprod_stock', 'selprod_min_order_qty', 'selprod_cart_type', 'selprod_hide_price'
+                    'special_price_found', 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'selprod_sold_count', 'selprod_price', 'selprod_stock', 'selprod_min_order_qty', 'selprod_cart_type', 'selprod_hide_price', 'shop_rfq_enabled'
                 )
             );
 
@@ -1885,7 +1885,7 @@ class ProductsController extends MyAppController
                 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'splprice_start_date', 'splprice_end_date',
                 'brand_id', 'COALESCE(brand_name, brand_identifier) as brand_name', 'user_name', 'IF(selprod_stock > 0, 1, 0) AS in_stock',
                 'selprod_sold_count', 'selprod_return_policy', /*'maxprice', 'ifnull(sq_sprating.totReviews,0) totReviews','IF(ufp_id > 0, 1, 0) as isfavorite', */ 'selprod_min_order_qty',
-                'shop.shop_id', 'shop.shop_lat', 'shop.shop_lng', 'COALESCE(shop_name, shop_identifier) as shop_name', 'selprod_cart_type', 'selprod_hide_price'
+                'shop.shop_id', 'shop.shop_lat', 'shop.shop_lng', 'COALESCE(shop_name, shop_identifier) as shop_name', 'selprod_cart_type', 'selprod_hide_price', 'shop.shop_rfq_enabled'
             );
             $removeFlds = array_diff($flds, ['1']);
             $this->setRecordCount(clone $srch, $get['pageSize'], $get['page'], $get, true, $removeFlds);
@@ -1964,7 +1964,7 @@ class ProductsController extends MyAppController
             'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'splprice_start_date', 'splprice_end_date',
             'brand_id', 'COALESCE(brand_name, brand_identifier) as brand_name', 'user_name', 'IF(selprod_stock > 0, 1, 0) AS in_stock',
             'selprod_sold_count', 'selprod_return_policy', /*'maxprice', 'ifnull(sq_sprating.totReviews,0) totReviews','IF(ufp_id > 0, 1, 0) as isfavorite', */ 'selprod_min_order_qty',
-            'shop.shop_id', 'shop.shop_lat', 'shop.shop_lng', 'COALESCE(shop_name, shop_identifier) as shop_name', 'selprod_cart_type', 'selprod_hide_price'
+            'shop.shop_id', 'shop.shop_lat', 'shop.shop_lng', 'COALESCE(shop_name, shop_identifier) as shop_name', 'selprod_cart_type', 'selprod_hide_price', 'shop.shop_rfq_enabled'
         );
         $removeFlds = array_diff($flds, ['1']);
         $this->setRecordCount(clone $srch, $post['pageSize'], $post['page'], $post, true, $removeFlds);

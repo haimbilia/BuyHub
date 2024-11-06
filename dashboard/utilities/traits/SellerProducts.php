@@ -74,6 +74,7 @@ trait SellerProducts
         $userId = $this->userParentId;
 
         $srch = SellerProduct::searchSellerProducts($this->siteLangId, $userId, $keyword);
+        $srch->joinTable(Shop::DB_TBL, 'INNER JOIN', 'shop_user_id = selprod_user_id', 'shop');
 
         $pageSize = FatApp::getConfig('CONF_PAGE_SIZE');
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
@@ -101,7 +102,7 @@ trait SellerProducts
                 'selprod_available_from',
                 'IFNULL(product_name, product_identifier) as product_name',
                 'COALESCE(selprod_title, product_name, product_identifier) as selprod_title',
-                'product_updated_on'
+                'product_updated_on', 'shop_rfq_enabled'
             )
         );
         $srch->setPageNumber($page);
@@ -554,7 +555,7 @@ trait SellerProducts
 
         $post['selprod_subtract_stock'] = FatApp::getPostedData('selprod_subtract_stock', FatUtility::VAR_INT, 0);
         $post['selprod_track_inventory'] = FatApp::getPostedData('selprod_track_inventory', FatUtility::VAR_INT, 0);
-        $post['selprod_hide_price'] = (SellerProduct::CART_TYPE_RFQ_ONLY != $post['selprod_cart_type'] ? 0 : FatApp::getPostedData('selprod_hide_price', FatUtility::VAR_INT, 0));
+        $post['selprod_hide_price'] = (SellerProduct::CART_TYPE_RFQ_ONLY != FatApp::getPostedData('selprod_cart_type', FatUtility::VAR_INT, 0) ? 0 : FatApp::getPostedData('selprod_hide_price', FatUtility::VAR_INT, 0));
 
         $selprodStock = FatApp::getPostedData('selprod_stock', FatUtility::VAR_INT, 1);
         $post['selprod_stock'] = (0 < $selprodStock) ? $selprodStock : 1;

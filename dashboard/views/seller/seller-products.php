@@ -54,7 +54,7 @@ $tableClass = (0 < count($arrListing)) ? "table-justified" : ''; ?>
                 case 'selprod_price':
                     $defaultCurrencyValue = '';
                     $price = '<span class="form-text text-muted"><i>' . Labels::getLabel('LBL_N/A', $siteLangId) . '</i></span>';
-                    if (1 > $row['selprod_hide_price']) {
+                    if (false === SellerProduct::isPriceHidden($row['selprod_hide_price'], $row['shop_rfq_enabled'])) {
                         if ($currency_id != $selectedCurrency) {
                             $defaultCurrencyValue = '<br><span class="form-text text-muted" data-bs-toggle="tooltip" title="' . Labels::getLabel('LBL_SYSTEM_DEFAULT_CURRENCY.') . '">(' . CommonHelper::displayMoneyFormat($row[$key], true, true) . ')</span>';
                         }

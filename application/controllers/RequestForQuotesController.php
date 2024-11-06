@@ -117,7 +117,7 @@ class RequestForQuotesController extends MyAppController
                     $optionValueSrch->joinTable(OptionValue::DB_TBL . '_lang', 'LEFT OUTER JOIN', 'opval.optionvalue_id = opval_l.optionvaluelang_optionvalue_id AND opval_l.optionvaluelang_lang_id = ' . $this->siteLangId, 'opval_l');
                     $optionValueSrch->addCondition('product_id', '=', $selprodData['selprod_product_id']);
                     $optionValueSrch->addCondition('option_id', '=', $option['option_id']);
-                    $optionValueSrch->addMultipleFields(array('COALESCE(product_name, product_identifier) as product_name', 'selprod_id', 'selprod_user_id', 'selprod_code', 'option_id', 'COALESCE(optionvalue_name,optionvalue_identifier) as optionvalue_name ', 'theprice', 'optionvalue_id', 'optionvalue_color_code', 'selprod_cart_type', 'selprod_hide_price'));
+                    $optionValueSrch->addMultipleFields(array('COALESCE(product_name, product_identifier) as product_name', 'selprod_id', 'selprod_user_id', 'selprod_code', 'option_id', 'COALESCE(optionvalue_name,optionvalue_identifier) as optionvalue_name ', 'theprice', 'optionvalue_id', 'optionvalue_color_code', 'selprod_cart_type', 'selprod_hide_price', 'shop_rfq_enabled'));
                     $optionValueSrch->addGroupBy('optionvalue_id');
                     $optionValueSrch->addOrder('optionvalue_display_order');
                     $optionValueSrch->addCondition('selprod_cart_type', '!=', SellerProduct::CART_TYPE_CART_ONLY);  
@@ -197,7 +197,7 @@ class RequestForQuotesController extends MyAppController
         $prodSrch->doNotCalculateRecords();
 
         $prodSrch->addMultipleFields(
-            ['COALESCE(selprod_title, product_name, product_identifier) as selprod_title', 'selprod_product_id', 'selprod_updated_on', 'selprod_price', 'theprice', 'COALESCE(shop_name, shop_identifier) as shop_name', 'user_name as shop_user_name', 'shop_user_id', 'COALESCE(brand_name, brand_identifier) as brand_name', 'selprod_cart_type', 'selprod_user_id', 'selprod_hide_price']
+            ['COALESCE(selprod_title, product_name, product_identifier) as selprod_title', 'selprod_product_id', 'selprod_updated_on', 'selprod_price', 'theprice', 'COALESCE(shop_name, shop_identifier) as shop_name', 'user_name as shop_user_name', 'shop_user_id', 'COALESCE(brand_name, brand_identifier) as brand_name', 'selprod_cart_type', 'selprod_user_id', 'selprod_hide_price', 'shop_rfq_enabled']
         );
         $productRs = $prodSrch->getResultSet();
         return (array) FatApp::getDb()->fetch($productRs);
