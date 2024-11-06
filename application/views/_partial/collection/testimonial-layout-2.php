@@ -27,7 +27,7 @@
                             <div class="testimonial-card-body">
                                 <p>
                                     <?php echo CommonHelper::truncateCharacters($testimonial['testimonial_text'], 250, '', '', true); ?>
-                                    <?php if (!empty($testimonial['testimonial_text']) && strlen($testimonial['testimonial_text']) > 150) {
+                                    <?php if (!empty($testimonial['testimonial_text']) && strlen((string)$testimonial['testimonial_text']) > 150) {
                                         echo '...';
                                     } ?>
                                 </p>
@@ -46,7 +46,7 @@
         <script>
             var displaySize =
                 <?php echo 0 < $collection['collection_primary_records'] ? $collection['collection_primary_records'] : 4; ?>;
-            $(function () {
+            $(function() {
                 $(".sliderTestimonialsjs").not('.slick-initialized').slick({
                     rtl: ('rtl' == langLbl.layoutDirection),
                     draggable: true,
@@ -57,28 +57,28 @@
                     prevArrow: '<button class="slick-arrow slick-prev"><span></span> </button>',
                     nextArrow: '<button class="slick-arrow slick-next"><span></span> </button>',
                     responsive: [{
-                        breakpoint: 1199,
-                        settings: {
-                            slidesToShow: 4,
-                            slidesToScroll: 1,
+                            breakpoint: 1199,
+                            settings: {
+                                slidesToShow: 4,
+                                slidesToScroll: 1,
+                            }
+                        },
+                        {
+                            breakpoint: 1023,
+                            settings: {
+                                slidesToShow: 3,
+                                slidesToScroll: 2
+                            }
+                        },
+                        {
+                            breakpoint: 480,
+                            settings: {
+                                slidesToShow: 1,
+                                slidesToScroll: 1
+                            }
                         }
-                    },
-                    {
-                        breakpoint: 1023,
-                        settings: {
-                            slidesToShow: 3,
-                            slidesToScroll: 2
-                        }
-                    },
-                    {
-                        breakpoint: 480,
-                        settings: {
-                            slidesToShow: 1,
-                            slidesToScroll: 1
-                        }
-                    }
                     ]
-                }).on('setPosition', function (event, slick) {
+                }).on('setPosition', function(event, slick) {
                     slick.$slides.css('height', slick.$slideTrack.height() + 'px');
                 });
             });

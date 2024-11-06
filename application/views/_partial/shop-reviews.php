@@ -67,8 +67,8 @@ if (!empty($reviews)) {
                                                 if (true) {
                                                     //if (1 < $reviewId) {
                                                     $shop_city = $shop['shop_city'] ?? '';
-                                                    $shop_state = (strlen($shop_city) > 0) ? ', ' . $shop['shop_state_name'] : $shop['shop_state_name'];
-                                                    $shop_country = (strlen($shop_state) > 0) ? ', ' . $shop['shop_country_name'] : $shop['shop_country_name'];
+                                                    $shop_state = (strlen((string)$shop_city) > 0) ? ', ' . $shop['shop_state_name'] : $shop['shop_state_name'];
+                                                    $shop_country = (strlen((string)$shop_state) > 0) ? ', ' . $shop['shop_country_name'] : $shop['shop_country_name'];
                                                     $shopLocation = $shop_city . $shop_state . $shop_country;
                                                     ?>
 
