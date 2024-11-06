@@ -1128,11 +1128,8 @@ class Collections extends MyAppModel
 
     public static function displayRecordsCount(int $layoutType): array
     {
+        $range = [];
         switch ($layoutType) {
-            case self::TYPE_CATEGORY_LAYOUT7:
-            case self::TYPE_CATEGORY_LAYOUT9:
-                $range = [6, 7, 8, 12, 14, 16];
-                break;
             case self::TYPE_CATEGORY_LAYOUT8:
                 $range = range(4, 6);
                 break;
@@ -1142,9 +1139,6 @@ class Collections extends MyAppModel
             case self::TYPE_PRODUCT_LAYOUT1:
                 $range = range(4, 6);
                 break;
-                /* case self::TYPE_PRODUCT_LAYOUT3:
-                $range = [3, 5];
-                break; */
             case self::TYPE_TESTIMONIAL_LAYOUT2:
                 $range = range(4, 6);
                 break;
@@ -1153,9 +1147,6 @@ class Collections extends MyAppModel
                 break;
             case self::TYPE_BANNER_LAYOUT2:
                 $range = range(2, 3);
-                break;
-            default:
-                $range = range(3, 8);
                 break;
         }
         return $range;
