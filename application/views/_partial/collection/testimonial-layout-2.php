@@ -12,7 +12,7 @@
                 </div>
             </header>
             <div class="section-body">
-                <div class="testimonials-layout-2 <?php echo (1 < count($collection['testimonials'])) ? '' : ''; ?>"
+                <div class="testimonials-layout-2 <?php echo (1 < count($collection['testimonials'])) ? 'sliderTestimonialsjs' : ''; ?>"
                     data-slides="<?php echo (0 < $collection['collection_primary_records'] ? $collection['collection_primary_records'] : 5) ?>,3,1,1"
                     aria-label="carousel">
                     <?php foreach ($collection['testimonials'] as $testimonial) {
