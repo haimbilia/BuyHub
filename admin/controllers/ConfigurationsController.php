@@ -242,6 +242,8 @@ class ConfigurationsController extends ListingBaseController
             }
         }
 
+        unset($post['CONF_DEFAULT_SITE_LANG']); /* Restrict to update default site language. */
+
         if (!$record->update($post)) {
             LibHelper::exitWithError($record->getError(), true);
         }
@@ -1634,7 +1636,7 @@ class ConfigurationsController extends ListingBaseController
                     'CONF_DEFAULT_SITE_LANG',
                     Language::getAllNames(),
                     false,
-                    array(),
+                    array('disabled' => 'disabled', 'title' => Labels::getLabel('ERR_YOU_CANNOT_CHANGE_SITE_DEFAULT_LANGUAGE_IN_BETWEEN', $langId), 'data-bs-toggle' => 'tooltip'),
                     ''
                 );
                 $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("FRM_CHANGING_DEFAULT_SITE_LANGUAGE,_MAKE_SURE_ALL_THE_INFORMATION_IS_UPDATED_WITH_THIS_LANGUAGE", $langId) . '</span>';
