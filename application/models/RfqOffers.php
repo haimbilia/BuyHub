@@ -763,10 +763,10 @@ class RfqOffers extends MyAppModel
         if (1 > FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
             return true;
         }
-        $plan = OrderSubscription::getUserCurrentActivePlanDetails($langId, $sellerId, ['ossubs_from_date', 'ossubs_rfq_offers_allowed']);
+        $plan = OrderSubscription::getUserCurrentActivePlanDetails($langId, $sellerId, ['order_date_added', 'ossubs_rfq_offers_allowed']);
         $allowedLimit = (int) ($plan['ossubs_rfq_offers_allowed'] ?? 0);
 
-        $submittedOffersCount = self::getSubmittedOffersCount($sellerId, $plan['ossubs_from_date']);
+        $submittedOffersCount = self::getSubmittedOffersCount($sellerId, $plan['order_date_added']);
         return ($submittedOffersCount < $allowedLimit);
     }
 

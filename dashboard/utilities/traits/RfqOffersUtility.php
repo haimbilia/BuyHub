@@ -530,7 +530,7 @@ trait RfqOffersUtility
             }
 
             if (1 > $counterOfferId && 1 > $recordId) {
-                $data['rlo_added_on'] = date('Y-m-d');
+                $data['rlo_added_on'] = date('Y-m-d H:i:s');
             }
         } else {
             $data['rlo_buyer_offer_id'] = $rfq->getMainTableRecordId();

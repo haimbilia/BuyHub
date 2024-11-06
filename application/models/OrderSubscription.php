@@ -67,7 +67,7 @@ class OrderSubscription extends MyAppModel
 
     public static function getUserCurrentActivePlanDetails($langId = 0, $userId = 0, $flds = array(OrderSubscription::DB_TBL_PREFIX . 'id'))
     {
-        $srch = new  OrderSearch($langId);
+        $srch = new OrderSearch($langId);
         $srch->joinTableOrderSellerSubscription($langId);
         $srch->joinTableSubscriptionPlan();
         $srch->joinPackage($langId);

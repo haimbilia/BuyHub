@@ -192,3 +192,4 @@
     - Bug-088548 - Issue in Banner layout 2, the media added for Tab, and mobile is not visible on the front end
     - Bug-088543 - Multiple issue on the collections listing page on the admin end
     - Bug-088542 - Deprecation appears in testimonials layout 2
+    - Bug-088559 - RFQ offer limit flow is not working properly.

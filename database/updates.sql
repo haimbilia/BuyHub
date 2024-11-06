@@ -663,3 +663,9 @@ ON DUPLICATE KEY UPDATE etpl_subject = VALUES(etpl_subject), etpl_body = VALUES(
 UPDATE tbl_shops INNER JOIN tbl_users ON user_id = shop_user_id SET shop_has_valid_subscription = 1 WHERE user_has_valid_subscription = 1;
 ALTER TABLE `tbl_content_pages`  ADD `cpage_hide_header_footer` TINYINT(1) NOT NULL  AFTER `cpage_layout`;
 ALTER TABLE `tbl_seller_products`  ADD `selprod_hide_price` TINYINT(1) NOT NULL  AFTER `selprod_price`;
+
+ALTER TABLE `tbl_rfq_latest_offers` CHANGE `rlo_added_on` `rlo_added_on` DATETIME NOT NULL;
+
+UPDATE `tbl_rfq_latest_offers`
+INNER JOIN tbl_rfq_offers ON rlo_primary_offer_id = offer_id
+SET rlo_added_on = offer_added_on;

@@ -198,6 +198,7 @@ class DashboardBaseController extends FatController
                     'savePrefilledValues' => Labels::getLabel('LBL_SAVE_PREFILLED_VALUES_FIRST.', $this->siteLangId),
                     'total' => Labels::getLabel('LBL_TOTAL', $this->siteLangId),
                     'confirmDeleteAddress' => Labels::getLabel('LBL_ARE_YOU_SURE?_IT_CAN_AFFECT_YOUR_RFQ_ORDERS_IF_LINKED.', $this->siteLangId),
+                    'subscriptionRenew' => Labels::getLabel('LBL_ARE_YOU_SURE?_PLEASE_MAINTAIN_WALLET_BALANCE_TO_RENEW.', $this->siteLangId),
                 );
 
                 $languages = Language::getAllNames(false);

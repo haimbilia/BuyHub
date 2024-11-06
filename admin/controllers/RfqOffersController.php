@@ -498,7 +498,7 @@ class RfqOffersController extends ListingBaseController
             $data['rlo_selprod_id'] = $selprodId;
 
             if (1 > $recordId) {
-                $data['rlo_added_on'] = date('Y-m-d');
+                $data['rlo_added_on'] = date('Y-m-d H:i:s');
             }
         }
 

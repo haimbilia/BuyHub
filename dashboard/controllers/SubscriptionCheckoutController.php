@@ -602,6 +602,7 @@ class SubscriptionCheckoutController extends LoggedUserController
         $this->userPrivilege->canEditSubscription(UserAuthentication::getLoggedUserId());
         $this->_template->render(false, false);
     }
+
     public function renewSubscriptionOrder($ossubs_id = 0)
     {
         if (!$this->userPrivilege->canEditSubscription(UserAuthentication::getLoggedUserId(), true)) {
@@ -609,7 +610,7 @@ class SubscriptionCheckoutController extends LoggedUserController
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'subscriptions'));
         }
         $statusArr = Orders::getActiveSubscriptionStatusArr();
-        $endDate = date("Y-m-d");
+        // $endDate = date("Y-m-d");
         $srch = new OrderSubscriptionSearch();
         $srch->joinOrders();
         $srch->joinOrderUser();
@@ -618,7 +619,7 @@ class SubscriptionCheckoutController extends LoggedUserController
         $srch->addCondition('ossubs_id', '=', $ossubs_id);
         $srch->addCondition('ossubs_type', '=', SellerPackages::PAID_TYPE);
         $srch->addCondition('order_user_id', '=', $this->userParentId);
-        $srch->addCondition('ossubs_till_date', '<=', $endDate);
+        // $srch->addCondition('ossubs_till_date', '<=', $endDate);
         $srch->addCondition('ossubs_till_date', '!=', '0000-00-00');
         //$srch->addCondition('user_autorenew_subscription', '!=', 1);
         $srch->addMultipleFields(array('order_user_id', 'order_id', 'order_number', 'ossubs_id', 'ossubs_type', 'ossubs_price', 'ossubs_images_allowed', 'ossubs_products_allowed', 'ossubs_inventory_allowed', 'ossubs_rfq_offers_allowed', 'ossubs_plan_id', 'ossubs_interval', 'ossubs_frequency', 'ossubs_commission'));  

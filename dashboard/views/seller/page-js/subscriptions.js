@@ -55,4 +55,12 @@ $(document).ready(function () {
 		searchRecords(document.frmRecordSearch);
 	};
 
+	renewSubscription = function (ossubs_id) {
+		if (!confirm(langLbl.subscriptionRenew)) {
+			return false;
+		}
+		fcom.displayProcessing();
+		location.href = fcom.makeUrl('SubscriptionCheckout', 'renewSubscriptionOrder', [ossubs_id]);
+	};
+
 })();

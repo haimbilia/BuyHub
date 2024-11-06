@@ -70,7 +70,7 @@
                         $subcriptionPeriodArr = SellerPackagePlans::getSubscriptionPeriods($siteLangId);
                         $td->appendElement('plaintext', array(), (($order['ossubs_interval'] > 0) ? $order['ossubs_interval'] . ' ' : '') . $subcriptionPeriodArr[$order['ossubs_frequency']], true);
                     } else {
-                            if ($order['ossubs_from_date'] == 0 || $order['ossubs_till_date'] == 0) {
+                        if ($order['ossubs_from_date'] == 0 || $order['ossubs_till_date'] == 0) {
                             $subscritpionValidTill = Labels::getLabel('LBL_N/A', $siteLangId);
                         } else {
                             $subscritpionValidTill = FatDate::format($order['ossubs_from_date']) . " - " . FatDate::format($order['ossubs_till_date']);
@@ -88,18 +88,18 @@
                         'a',
                         array('href' => $orderDetailUrl, 'class' => '', 'title' => Labels::getLabel('LBL_View_Order', $siteLangId)),
                         '<i class="icn">
-                    <svg class="svg" width="18" height="18">
-                        <use
-                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#view">
-                        </use>
-                    </svg>
-                </i>',
+                            <svg class="svg" width="18" height="18">
+                                <use
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#view">
+                                </use>
+                            </svg>
+                        </i>',
                         true
                     );
 
-                    if ($canEdit && date("Y-m-d") >= $order['ossubs_till_date'] && $order['ossubs_status_id'] == FatApp::getConfig('CONF_DEFAULT_SUBSCRIPTION_PAID_ORDER_STATUS') && $order['ossubs_type'] == SellerPackages::PAID_TYPE) {
+                    if ($canEdit && /* date("Y-m-d") >= $order['ossubs_till_date'] && */ $order['ossubs_status_id'] == FatApp::getConfig('CONF_DEFAULT_SUBSCRIPTION_PAID_ORDER_STATUS') && $order['ossubs_type'] == SellerPackages::PAID_TYPE) {
                         $li = $ul->appendElement("li");
-                        $li->appendElement('a', array('href' => UrlHelper::generateUrl('SubscriptionCheckout', 'renewSubscriptionOrder', array($order['ossubs_id'])), 'class' => '', 'title' => Labels::getLabel('LBL_Renew_Subscription', $siteLangId)), '<svg class="svg" width="18" height="18">
+                        $li->appendElement('a', array('href' => 'javascript:void(0);', 'title' => Labels::getLabel('LBL_RENEW_SUBSCRIPTION', $siteLangId), 'onclick' => 'renewSubscription(' . $order['ossubs_id'] . ')'), '<svg class="svg" width="18" height="18">
                         <use
                             xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#counterclockwise">
                         </use>
