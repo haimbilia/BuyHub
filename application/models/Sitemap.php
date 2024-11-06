@@ -160,6 +160,9 @@ class Sitemap extends FatModel
             $brandSrch->doNotLimitRecords();
             $brandRs = $brandSrch->getResultSet();
             while ($row = FatApp::getDb()->fetch($brandRs)) {
+                if (empty($row['brand_id'])) {
+                    continue;
+                }
                 $imagesArr = [];
                 $imagesArr[] = AttachedFile::getAttachment(AttachedFile::FILETYPE_BRAND_LOGO, $row['brand_id'], 0, $language['language_id'], (count($this->siteMapLanguages) > 1) ? false : true);
                 $this->writeSitemapUrl(UrlHelper::generateFullUrl('brands', 'view', array($row['brand_id']), CONF_WEBROOT_FRONT_URL, null, false, false, true, $language['language_id']), $file, 'weekly', ['brand' => $imagesArr]);
