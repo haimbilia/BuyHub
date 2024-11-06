@@ -190,3 +190,4 @@
     - Bug-088422 - Banners added by the admin are not visible on the product details page on the admin end
     - Bug-088545 - Multiple banners list appears in the banner collection 1
     - Bug-088548 - Issue in Banner layout 2, the media added for Tab, and mobile is not visible on the front end
+    - Bug-088543 - Multiple issue on the collections listing page on the admin end

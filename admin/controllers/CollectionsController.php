@@ -354,7 +354,13 @@ class CollectionsController extends ListingBaseController
         $post['collection_identifier'] = $post['collection_name'];
         $post['collection_primary_records'] = $displayItemsCount;
 
-        $post['collection_for_app'] = $post['collection_for_app'] ?? 0;
+        $collectionForApp = ($post['collection_for_app'] ?? 0);
+        if (0 < $collectionForApp) {
+            $post['collection_for_app'] = in_array($post['collection_layout_type'], Collections::COLLECTIONS_FOR_WEB_ONLY) ? 0 : $collectionForApp;
+        } else {
+            $post['collection_for_app'] = $collectionForApp;
+        }
+
         $post['collection_for_web'] = $post['collection_for_web'] ?? 0;
         if (0 == $post['collection_for_web'] && 0 == $post['collection_for_app']) {
             $post['collection_for_web'] = 1;
