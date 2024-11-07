@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   display: grid;
-  grid-gap: 1.5rem;
+  // grid-gap: 1.5rem;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
 
   &-item {
@@ -16,10 +16,12 @@
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1rem;
+    @include btn-hover;
   }
 
   &-photo {
-    margin-#{$end-direction}: 1rem;
     border: $border;
     border-radius: $common-radius;
     display: block;
@@ -46,7 +48,6 @@
   border-top: $border;
   border-bottom: $border;
   border-color: lighten($border-color, 0.4);
-
   @include media-breakpoint-up(lg) {
     // display: grid;
     // grid-template-columns: repeat(2, 1fr);
@@ -85,7 +86,7 @@
   }
 
   &-list {
-    padding: 1rem;
+    // padding: 1rem;
     @include media-breakpoint-up(lg) {
       @include bg-blur-white;
       background-color: #fff;
@@ -95,7 +96,7 @@
       height: 100%;
       width: 100%;
       max-width: 400px;
-      padding: 1rem;
+      // padding: 1rem;
       //max-height: 574px;
       overflow: hidden;
       overflow-y: auto;
@@ -105,7 +106,15 @@
     .product-listing {
       display: flex;
       flex-direction: column;
-      gap: 1rem;
+      // gap: 1rem;
+    }
+    .product-listing-item {
+      padding: 1rem;
+      transition: all 0.3s ease;
+      @include btn-hover;
+      border-radius: $radius;
+      &:hover {
+      }
     }
     .products {
       flex-direction: row;
