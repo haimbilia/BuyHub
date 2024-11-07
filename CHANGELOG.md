@@ -197,3 +197,4 @@
     - Bug-088567 - Error occurs on the payment page when the advertiser tries to add money to the wallet
     - Bug-088568 - The listing UI is not proper when there is only single record bound with the Brand collection
     - Bug-088571 - UI issue in the brand layout 2 on the homepage
+    - Bug-088580 - UI issue in the category layout 7 on mobile devices
