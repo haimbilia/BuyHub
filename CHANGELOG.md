@@ -106,3 +106,4 @@
     - Bug-088170 - << Branch 1>> Deprecation appears on the special price listing page on the seller's end.
     - Bug-088324 - << Branch 1 >> Shipping profile is mandatory to bind with service in case of service product through import
     - Bug-088567 - Error occurs on the payment page when the advertiser tries to add money to the wallet
+    - Bug-088571 - UI issue in the brand layout 2 on the homepage
