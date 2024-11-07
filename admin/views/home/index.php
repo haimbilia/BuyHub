@@ -110,13 +110,14 @@ if (false === $canViewAdminDashboard) {
                             <ul class="list-stats list-stats-double">
                                 <li class="list-stats-item">
                                     <span
-                                        class="label"><?php echo Labels::getLabel('LBL_ADDED_TO_CART', $siteLangId); ?></span>
+                                        class="label"><?php echo Labels::getLabel('LBL_HOLDING_CART', $siteLangId); ?></span>
                                     <span class="value">
-                                        <?php echo $dashboardInfo['conversionStats']['added_to_cart']['%age']; ?>%</span>
+                                        <?php echo $dashboardInfo['conversionStats']['holding_cart']['%age']; ?>%</span>
                                 </li>
                                 <li class="list-stats-item">
-                                    <span
-                                        class="label"><?php echo Labels::getLabel('LBL_REACHED_CHECKOUT', $siteLangId); ?></span>
+                                    <span class="label">
+                                        <?php echo Labels::getLabel('LBL_REACHED_CHECKOUT', $siteLangId); ?> 
+                                    </span>
                                     <span class="value">
                                         <?php echo $dashboardInfo['conversionStats']['reached_checkout']['%age']; ?>%
                                     </span>

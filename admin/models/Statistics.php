@@ -753,22 +753,19 @@ class Statistics extends MyAppModel
 
     public function getAddedToCartCount()
     {
-        $sql = "Select COUNT(DISTINCT user_id) as cart_count from (SELECT usercart_user_id as user_id FROM `tbl_user_cart` group by usercart_user_id
-				UNION ALL
-				SELECT order_user_id as user_id FROM `tbl_orders` group by order_user_id) tbl ";
+        $sql = "SELECT COUNT(DISTINCT usercart_user_id) as cart_count 
+                FROM `tbl_user_cart`
+                WHERE usercart_details != '[]'";
         $rs = $this->db->query($sql);
-        return $result = $this->db->fetch($rs);
+        return $this->db->fetch($rs);
     }
 
     public function getUserOrderStatsCount($type = '')
     {
-        $plugInIds = self::getPluginIds(['cashondelivery', 'payatstore']);
+        $plugInIds = self::getPluginIds(['CashOnDelivery', 'PayAtStore', 'TransferBank']);
 
         $cancelAndRefundedStatusArr = (array) FatApp::getConfig("CONF_DEFAULT_CANCEL_ORDER_STATUS");
         $srch = new OrderProductSearch(0, true, false, false, false);
-        // $srch->joinPaymentMethod();
-        /* $srch = new SearchBase('tbl_order_products', 'torp');
-        $srch->joinTable('tbl_orders', 'LEFT JOIN', 'tord.order_id = torp.op_order_id', 'tord'); */
         switch (strtoupper($type)) {
             case 'CANCEL_AND_REFUNDED':
                 $srch->addStatusCondition($cancelAndRefundedStatusArr);
@@ -778,8 +775,6 @@ class Statistics extends MyAppModel
                 break;
             case 'PURCHASED':
                 $cnd = $srch->addCondition('order_payment_status', '=', 'mysql_func_' . Orders::ORDER_PAYMENT_PAID, 'AND', true);
-                /*  $cnd->attachCondition('plugin_code', '=', 'cashondelivery');
-                $cnd->attachCondition('plugin_code', '=', 'payatstore'); */
                 $cnd->attachCondition('o.order_pmethod_id', 'in', $plugInIds);
                 break;
         }
@@ -812,11 +807,11 @@ class Statistics extends MyAppModel
         $cartRes = $this->getAddedToCartCount();
         $addedToCartCount = $cartRes["cart_count"];
         $purchasedCount = $this->getUserOrderStatsCount('purchased');
-        $reachedToChecoutCount = $purchasedCount + $this->getUserOrderStatsCount('REACHED_CHECKOUT');
+        $reachedToChecoutCount = $this->getUserOrderStatsCount('REACHED_CHECKOUT');
         $cancelAndRefundedUserCount = $this->getUserOrderStatsCount('CANCEL_AND_REFUNDED');
 
-        $data['added_to_cart']['count'] = $addedToCartCount;
-        $data['added_to_cart']['%age'] = ($totalUser) ? round(($addedToCartCount * 100) / $totalUser, 2) : 0;
+        $data['holding_cart']['count'] = $addedToCartCount;
+        $data['holding_cart']['%age'] = ($totalUser) ? round(($addedToCartCount * 100) / $totalUser, 2) : 0;
 
         $data['reached_checkout']['count'] = $reachedToChecoutCount;
         $data['reached_checkout']['%age'] = ($totalUser) ? round(($reachedToChecoutCount * 100) / $totalUser, 2) : 0;
@@ -827,20 +822,13 @@ class Statistics extends MyAppModel
         $data['cancelled']['count'] = $cancelAndRefundedUserCount;
         $data['cancelled']['%age'] = ($totalUser) ? round((($cancelAndRefundedUserCount * 100) / $totalUser), 2) : 0;
 
-        /* $data = array(
-        'added_to_cart'=>array('count'=>$addedToCartCount,'%age' => ( $totalUser ) ? round(($addedToCartCount*100)/$totalUser,2)) : 0 ,
-        'reached_checkout'=>array('count'=>$reachedToChecoutCount,'%age'=>round(($reachedToChecoutCount*100)/$totalUser),2),
-        'purchased'=>array('count'=>$purchasedCount,'%age'=>round(($purchasedCount*100)/$totalUser),2),
-        'cancelled'=>array('count'=>$cancelAndRefundedUserCount,'%age'=>round(($cancelAndRefundedUserCount*100)/$totalUser),2),
-        ); */
         return $data;
     }
 
     public static function getPluginIds(array $paymentMethodCode = [])
     {
-
         if (empty($paymentMethodCode)) {
-            $paymentMethodCode = ['cashondelivery', 'payatstore'];
+            $paymentMethodCode = ['CashOnDelivery', 'PayAtStore'];
         }
 
         $plugInIds = Plugin::getIdsByCodeArr($paymentMethodCode, 'plugin_id');

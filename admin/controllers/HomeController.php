@@ -101,6 +101,7 @@ class HomeController extends ListingBaseController
             $conversionChatData = rtrim($conversionChatData, ',');
             $dashboardInfo['conversionChatData'] = $conversionChatData;
             $dashboardInfo['conversionStats'] = $conversionStats;
+
             /* ] */
 
             /* Statistics [*/
