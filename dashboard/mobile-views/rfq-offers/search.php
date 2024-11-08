@@ -9,6 +9,7 @@ $data = array(
     'statusArr' => $statusArr,
     'rfqStatusArr' => $rfqStatusArr,
     'approvalStatusArr' => $approvalStatusArr,
+    'rfq_title' => RequestForQuote::getAttributesById($rfqId, 'rfq_title'),
     'rfqStatus' => $rfqStatus,
     'rfqOffers' => array_values($arrListing),
     'pageCount' => $pageCount,
