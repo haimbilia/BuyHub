@@ -242,6 +242,7 @@ class RequestForQuotesController extends ListingBaseController
         CalculativeDataRecord::updateRfqCount();
 
         $attr = [
+            'rfq_id',
             'rfq_product_type',
             'rfq_title',
             'rfq_number',
@@ -515,6 +516,7 @@ class RequestForQuotesController extends ListingBaseController
         }
         CalculativeDataRecord::updateRfqCount();
         $attr = [
+            'rfq_id',
             'rfq_title',
             'rfq_number',
             'rfq_approved',

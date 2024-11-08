@@ -56,7 +56,7 @@ class Notifications extends MyAppModel
             }
 
             $siteName = FatApp::getConfig('CONF_WEBSITE_NAME_' . $this->commonLangId, FatUtility::VAR_STRING, 'Yo!Kart');
-            $message = array('title' => empty($siteName) ? $_SERVER['SERVER_NAME'] : $siteName, 'text' => $data['unotification_body'], 'type' => $data['unotification_type']);
+            $message = array('title' => empty($siteName) ? $_SERVER['SERVER_NAME'] : $siteName, 'text' => $data['unotification_body'], 'type' => $data['unotification_type'], 'record_id' => $data['record_id'] ?? '');
             foreach ($fcmDeviceIds as $pushNotificationApiToken) {
                 self::sendPushNotification($config, $pushNotificationApiToken['uauth_fcm_id'], $pushNotificationApiToken['uauth_device_os'], $message);
             }
@@ -83,7 +83,8 @@ class Notifications extends MyAppModel
             "title" => (string)($notiData['title'] ?? ''),
             "message" =>  (string)($notiData['text'] ?? ''),
             "type" => (string)($notiData['type'] ?? ''),
-            'image' => ($notiData['image'] ?? '')
+            'image' => ($notiData['image'] ?? ''),
+            'record_id' => ($notiData['record_id'] ?? '')
         ];
 
         $data = [

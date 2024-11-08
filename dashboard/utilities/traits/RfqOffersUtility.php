@@ -733,6 +733,7 @@ trait RfqOffersUtility
             'rfq_added_on',
             'rfq_quantity_unit',
             'rfq_visibility_type',
+            'offer_rfq_id',
             'offer_quantity',
             'offer_price',
             'offer_status',

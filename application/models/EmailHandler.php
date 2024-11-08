@@ -3359,7 +3359,7 @@ class EmailHandler extends FatModel
             '{qty}' => $data['rfq_quantity'] . ' ' . applicationConstants::getWeightUnitName($langId, $data['rfq_quantity_unit'], true),
         );
         $this->sendSms('NEW_RFQ', ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode')) . FatApp::getConfig('CONF_SITE_PHONE'), $vars, $langId);
-        
+
         return true;
     }
 
@@ -3447,6 +3447,7 @@ class EmailHandler extends FatModel
 
         $notificationObj = new Notifications();
         $notificationDataArr = array(
+            'record_id' => $data["rfq_id"],
             'unotification_user_id' => $data["user_id"],
             'unotification_body' => $appNotification,
             'unotification_type' => 'RFQ_APPROVAL',
@@ -3492,6 +3493,7 @@ class EmailHandler extends FatModel
 
         $notificationObj = new Notifications();
         $notificationDataArr = array(
+            'record_id' => $data["offer_rfq_id"],
             'unotification_user_id' => $data["buyer_user_id"],
             'unotification_body' => $appNotification,
             'unotification_type' => 'NEW_RFQ_OFFER',
@@ -3537,6 +3539,7 @@ class EmailHandler extends FatModel
 
             $notificationObj = new Notifications();
             $notificationDataArr = array(
+                'record_id' => $data["offer_rfq_id"],
                 'unotification_user_id' => $data["buyer_user_id"],
                 'unotification_body' => $appNotification,
                 'unotification_type' => $tpl,
@@ -3614,6 +3617,7 @@ class EmailHandler extends FatModel
 
             $notificationObj = new Notifications();
             $notificationDataArr = array(
+                'record_id' => $data["offer_rfq_id"],
                 'unotification_user_id' => $data["user_id"],
                 'unotification_body' => $appNotification,
                 'unotification_type' => $tpl,
@@ -3710,6 +3714,7 @@ class EmailHandler extends FatModel
 
         $notificationObj = new Notifications();
         $notificationDataArr = array(
+            'record_id' => $data["rfq_id"],
             'unotification_user_id' => $data["user_id"],
             'unotification_body' => $appNotification,
             'unotification_type' => 'RFQ_DELETION',
