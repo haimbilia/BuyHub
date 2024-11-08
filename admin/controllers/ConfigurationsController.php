@@ -242,7 +242,9 @@ class ConfigurationsController extends ListingBaseController
             }
         }
 
-        unset($post['CONF_DEFAULT_SITE_LANG']); /* Restrict to update default site language. */
+        if (false == CONF_DEVELOPMENT_MODE) {
+            unset($post['CONF_DEFAULT_SITE_LANG']); /* Restrict to update default site language. */
+        }
 
         if (!$record->update($post)) {
             LibHelper::exitWithError($record->getError(), true);
