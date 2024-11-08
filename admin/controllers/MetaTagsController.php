@@ -36,6 +36,52 @@ class MetaTagsController extends ListingBaseController
         LibHelper::exitWithSuccess($jsonData, true);
     }
 
+    private function getResults($metaType, $page, $sortBy, $sortOrder, $pageSize)
+    {
+        switch ($metaType) {
+            case MetaTag::META_GROUP_DEFAULT:
+                $srch = $this->renderTemplateForDefaultMetaTag();
+                break;
+            case MetaTag::META_GROUP_PRODUCT_DETAIL:
+                $srch = $this->renderTemplateForProductDetail();
+                break;
+            case MetaTag::META_GROUP_SHOP_DETAIL:
+                $srch = $this->renderTemplateForShopDetail();
+                break;
+            case MetaTag::META_GROUP_ADVANCED:
+                $srch = $this->renderTemplateForAdvanced();
+                break;
+            case MetaTag::META_GROUP_CMS_PAGE:
+                $srch = $this->renderTemplateForCMSPage();
+                break;
+            case MetaTag::META_GROUP_BRAND_DETAIL:
+                $srch = $this->renderTemplateForBrandDetail();
+                break;
+            case MetaTag::META_GROUP_CATEGORY_DETAIL:
+                $srch = $this->renderTemplateForCategoryDetail();
+                break;
+            case MetaTag::META_GROUP_BLOG_CATEGORY:
+                $srch = $this->renderTemplateForBlogCategory();
+                break;
+            case MetaTag::META_GROUP_BLOG_POST:
+                $srch = $this->renderTemplateForBlogPost();
+                break;
+            default:
+                $srch = $this->renderTemplateForMetaType();
+                break;
+        }
+
+        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->siteLangId))) {
+            $sortOrder = applicationConstants::SORT_ASC;
+        }
+        $this->setRecordCount(clone $srch, $pageSize, $page, $this->postedData, (MetaTag::META_GROUP_BLOG_POST == $metaType) ? true : false);
+        $srch->doNotCalculateRecords();
+        $srch->addOrder($sortBy, $sortOrder);
+        $srch->setPageNumber($page);
+        $srch->setPageSize($pageSize);
+        return FatApp::getDb()->fetchAll($srch->getResultSet());
+    }
+
     private function getListingData()
     {
         $db = FatApp::getDb();
@@ -73,48 +119,26 @@ class MetaTagsController extends ListingBaseController
         $this->controller = FatUtility::convertToType($this->tabsArr[$metaType]['controller'], FatUtility::VAR_STRING);
         $this->action = FatUtility::convertToType($this->tabsArr[$metaType]['action'], FatUtility::VAR_STRING);
 
-        switch ($metaType) {
-            case MetaTag::META_GROUP_DEFAULT:
-                $srch = $this->renderTemplateForDefaultMetaTag();
-                break;
-            case MetaTag::META_GROUP_PRODUCT_DETAIL:
-                $srch = $this->renderTemplateForProductDetail();
-                break;
-            case MetaTag::META_GROUP_SHOP_DETAIL:
-                $srch = $this->renderTemplateForShopDetail();
-                break;
-            case MetaTag::META_GROUP_ADVANCED:
-                $srch = $this->renderTemplateForAdvanced();
-                break;
-            case MetaTag::META_GROUP_CMS_PAGE:
-                $srch = $this->renderTemplateForCMSPage();
-                break;
-            case MetaTag::META_GROUP_BRAND_DETAIL:
-                $srch = $this->renderTemplateForBrandDetail();
-                break;
-            case MetaTag::META_GROUP_CATEGORY_DETAIL:
-                $srch = $this->renderTemplateForCategoryDetail();
-                break;
-            case MetaTag::META_GROUP_BLOG_CATEGORY:
-                $srch = $this->renderTemplateForBlogCategory();
-                break;
-            case MetaTag::META_GROUP_BLOG_POST:
-                $srch = $this->renderTemplateForBlogPost();
-                break;
-            default:
-                $srch = $this->renderTemplateForMetaType();
-                break;
+        $arrListing = $this->getResults($metaType, $page, $sortBy, $sortOrder, $pageSize);
+        
+        if (empty($arrListing)) {
+            switch ($metaType) {
+                case MetaTag::META_GROUP_DEFAULT:
+                    FatApp::getDb()->query("INSERT INTO tbl_meta_tags(meta_controller, meta_action, meta_record_id, meta_subrecord_id, meta_default, meta_advanced) VALUES ('', '', 0, 0, 1, 0)");
+                    break;
+                case MetaTag::META_GROUP_ALL_PRODUCTS:
+                    FatApp::getDb()->query("INSERT INTO tbl_meta_tags(meta_controller, meta_action, meta_record_id, meta_subrecord_id, meta_default, meta_advanced) VALUES ('Products', 'index', 0, 0, 1, 0)");
+                    break;
+                case MetaTag::META_GROUP_ALL_SHOPS:
+                    FatApp::getDb()->query("INSERT INTO tbl_meta_tags(meta_controller, meta_action, meta_record_id, meta_subrecord_id, meta_default, meta_advanced) VALUES ('Shops', 'index', 0, 0, 1, 0)");
+                    break;
+                case MetaTag::META_GROUP_ALL_BRANDS:
+                    FatApp::getDb()->query("INSERT INTO tbl_meta_tags(meta_controller, meta_action, meta_record_id, meta_subrecord_id, meta_default, meta_advanced) VALUES ('Brands', 'index', 0, 0, 1, 0)");
+                    break;
+            }
+            $arrListing = $this->getResults($metaType, $page, $sortBy, $sortOrder, $pageSize);
         }
-        MetaTag::META_GROUP_BLOG_POST;
-        if (!array_key_exists($sortOrder, applicationConstants::sortOrder($this->siteLangId))) {
-            $sortOrder = applicationConstants::SORT_ASC;
-        }
-        $this->setRecordCount(clone $srch, $pageSize, $page, $this->postedData,(MetaTag::META_GROUP_BLOG_POST==$metaType)?true:false);
-        $srch->doNotCalculateRecords(); 
-        $srch->addOrder($sortBy, $sortOrder);
-        $srch->setPageNumber($page);
-        $srch->setPageSize($pageSize); 
-        $arrListing = $db->fetchAll($srch->getResultSet());
+        
         $this->set("arrListing", $arrListing); 
         $searchForm->fill($this->postedData);
         $this->set('frmSearch', $searchForm); 
