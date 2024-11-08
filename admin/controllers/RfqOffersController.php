@@ -660,7 +660,7 @@ class RfqOffersController extends ListingBaseController
             LibHelper::exitWithError($rfq->getError(), true);
         }
 
-        $this->sendOfferActionNotification($recordId, $rfqId, RfqOffers::getSellerIdByOfferId($recordId));
+        $this->sendOfferActionNotification($recordId, $rfqId, RfqOffers::getSellerIdByOfferId($recordId), RfqOffers::SELLER_ACCEPTANCE);
 
         $db->commitTransaction();
         FatUtility::dieJsonSuccess(Labels::getLabel('LBL_SUCCESS'));
@@ -693,7 +693,7 @@ class RfqOffersController extends ListingBaseController
         FatUtility::dieJsonSuccess(Labels::getLabel('LBL_SUCCESS'));
     }
 
-    private function sendOfferActionNotification(int $recordId, int $rfqId, int $sellerId)
+    private function sendOfferActionNotification(int $recordId, int $rfqId, int $sellerId, int $acceptance = 0)
     {
         $srch = new RequestForQuoteSearch();
         $srch->joinOffers();
@@ -732,7 +732,7 @@ class RfqOffersController extends ListingBaseController
         $offerData['isSeller'] = true;
         $offerData['sellers'] = RequestForQuote::getSellersByRecordId($rfqId, true, true, $this->siteLangId);
         $emailHandler = new EmailHandler();
-        if (false === $emailHandler->sendRfqOfferActionNotification($this->siteLangId, $offerData, RfqOffers::SELLER_ACCEPTANCE)) {
+        if (false === $emailHandler->sendRfqOfferActionNotification($this->siteLangId, $offerData, $acceptance)) {
             $msg = $emailHandler->getError();
             $msg = empty($msg) ? Labels::getLabel('ERR_UNABLE_TO_NOTIFY._NOTIFICATION_LOGGED_TO_THE_SYSTEM.') : $msg;
             LibHelper::exitWithError($msg, true);

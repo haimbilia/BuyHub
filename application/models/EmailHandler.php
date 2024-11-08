@@ -3446,16 +3446,26 @@ class EmailHandler extends FatModel
         $appNotification = CommonHelper::replaceStringData(Labels::getLabel('MSG_RFQ_({RFQ-NUMBER})_HAS_BEEN_{APPROVAL-STATUS}', $langId), $rData);
 
         $notificationObj = new Notifications();
+
+        $customData = array(
+            'rfq_id' => $data["rfq_id"],
+            'rfq_title' => $data['rfq_title'],
+            'rfq_number' => $data['rfq_number'],
+            'qty' => $qty,
+            'approval_status' => $approvalStatus
+        );
+
         $notificationDataArr = array(
-            'record_id' => $data["rfq_id"],
             'unotification_user_id' => $data["user_id"],
             'unotification_body' => $appNotification,
             'unotification_type' => 'RFQ_APPROVAL',
-            'unotification_data' => json_encode(array('rfq_title' => $data['rfq_title'], 'rfq_number' => $data['rfq_number'], 'qty' => $qty, 'approval_status' => $approvalStatus)),
+            'unotification_data' => json_encode($customData),
+            'customData' => $customData,
         );
         $notificationObj->addNotification($notificationDataArr);
         return true;
     }
+
     public function sendNewRfqOfferNotification($langId, $data)
     {
         $tpl = new FatTemplate('', '');
@@ -3491,13 +3501,20 @@ class EmailHandler extends FatModel
         $rData = ['{RFQ-NUMBER}' => $data['rfq_number'], '{SHOP-NAME}' => $data['shop_name']];
         $appNotification = CommonHelper::replaceStringData(Labels::getLabel('MSG_NEW_OFFER_RECEIVED_FROM_{SHOP-NAME}_ON_RFQ_({RFQ-NUMBER})', $langId), $rData);
 
+        $customData = array(
+            'rfq_id' => $data['offer_rfq_id'],
+            'rfq_number' => $data['rfq_number'],
+            'qty' => $data['offer_quantity'],
+            'offer_price' => CommonHelper::displayMoneyFormat($data['offer_price'])
+        );
+
         $notificationObj = new Notifications();
         $notificationDataArr = array(
-            'record_id' => $data["offer_rfq_id"],
             'unotification_user_id' => $data["buyer_user_id"],
             'unotification_body' => $appNotification,
             'unotification_type' => 'NEW_RFQ_OFFER',
-            'unotification_data' => json_encode(array('rfq_number' => $data['rfq_number'], 'qty' => $data['offer_quantity'], 'offer_price' => CommonHelper::displayMoneyFormat($data['offer_price']))),
+            'unotification_data' => json_encode($customData),
+            'customData' => $customData,
         );
         $notificationObj->addNotification($notificationDataArr);
         return true;
@@ -3537,13 +3554,20 @@ class EmailHandler extends FatModel
             $rData = ['{RFQ-NUMBER}' => $data['rfq_number'], '{SHOP-NAME}' => $data['shop_name']];
             $appNotification = CommonHelper::replaceStringData(Labels::getLabel('MSG_COUNTER_OFFER_RECEIVED_FROM_{SHOP-NAME}_ON_RFQ_({RFQ-NUMBER})', $langId), $rData);
 
+            $customData = array(
+                'rfq_id' => $data['offer_rfq_id'],
+                'rfq_number' => $data['rfq_number'],
+                'qty' => $data['offer_quantity'],
+                'offer_price' => CommonHelper::displayMoneyFormat($data['offer_price'])
+            );
+
             $notificationObj = new Notifications();
             $notificationDataArr = array(
-                'record_id' => $data["offer_rfq_id"],
                 'unotification_user_id' => $data["buyer_user_id"],
                 'unotification_body' => $appNotification,
                 'unotification_type' => $tpl,
-                'unotification_data' => json_encode(array('rfq_number' => $data['rfq_number'], 'qty' => $data['offer_quantity'], 'offer_price' => CommonHelper::displayMoneyFormat($data['offer_price']))),
+                'unotification_data' => json_encode($customData),
+                'customData' => $customData,
             );
             $notificationObj->addNotification($notificationDataArr);
         } else {
@@ -3615,13 +3639,22 @@ class EmailHandler extends FatModel
             $rData = ['{RFQ-NUMBER}' => $data['rfq_number'], '{SHOP-NAME}' => $data['shop_name'], '{OFFER-STATUS}' => $offerStatusArr[$data['offer_status']]];
             $appNotification = CommonHelper::replaceStringData(Labels::getLabel('MSG_YOUR_OFFER_HAS_BEEN_{OFFER-STATUS}_BY_{SHOP-NAME}_ON_RFQ_({RFQ-NUMBER})', $langId), $rData);
 
+            $customData = array(
+                'rfq_id' => $data['offer_rfq_id'],
+                'rfq_number' => $data['rfq_number'],
+                'qty' => $data['offer_quantity'],
+                'offer_price' => CommonHelper::displayMoneyFormat($data['offer_price']),
+                'offer_status_id' => $data['offer_status'],
+                'offer_status' => $offerStatusArr[$data['offer_status']]
+            );
+
             $notificationObj = new Notifications();
             $notificationDataArr = array(
-                'record_id' => $data["offer_rfq_id"],
                 'unotification_user_id' => $data["user_id"],
                 'unotification_body' => $appNotification,
                 'unotification_type' => $tpl,
-                'unotification_data' => json_encode(array('rfq_number' => $data['rfq_number'], 'qty' => $data['offer_quantity'], 'offer_price' => CommonHelper::displayMoneyFormat($data['offer_price']), 'offer_status' => $offerStatusArr[$data['offer_status']])),
+                'unotification_data' => json_encode($customData),
+                'customData' => $customData,
             );
             $notificationObj->addNotification($notificationDataArr);
         } else {
@@ -3712,13 +3745,21 @@ class EmailHandler extends FatModel
         $rData = ['{RFQ-NUMBER}' => $data['rfq_number']];
         $appNotification = CommonHelper::replaceStringData(Labels::getLabel('MSG_YOUR_RFQ_({RFQ-NUMBER})_HAS_BEEN_DELETED', $langId), $rData);
 
+        $customData = array(
+            'rfq_id' => $data['rfq_id'],
+            'rfq_title' => $data['rfq_title'],
+            'rfq_number' => $data['rfq_number'],
+            'qty' => $qty
+        );
+
         $notificationObj = new Notifications();
         $notificationDataArr = array(
             'record_id' => $data["rfq_id"],
             'unotification_user_id' => $data["user_id"],
             'unotification_body' => $appNotification,
             'unotification_type' => 'RFQ_DELETION',
-            'unotification_data' => json_encode(array('rfq_title' => $data['rfq_title'], 'rfq_number' => $data['rfq_number'], 'qty' => $qty)),
+            'unotification_data' => json_encode($customData),
+            'customData' => $customData,
         );
         $notificationObj->addNotification($notificationDataArr);
         return true;
