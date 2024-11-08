@@ -198,3 +198,4 @@
     - Bug-088568 - The listing UI is not proper when there is only single record bound with the Brand collection
     - Bug-088571 - UI issue in the brand layout 2 on the homepage
     - Bug-088580 - UI issue in the category layout 7 on mobile devices
+    - Bug-088605 - Testimonial content and media added by the admin are not visible on the front end

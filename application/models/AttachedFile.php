@@ -278,7 +278,6 @@ class AttachedFile extends MyAppModel
         $tmpSrch->doNotCalculateRecords();
 
         if ($size > 0) {
-            //$srch->setPageSize($size);
             $tmpSrch->setPageSize($size);
         }
 

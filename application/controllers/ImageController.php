@@ -827,8 +827,9 @@ class ImageController extends FatController
                 $file_row = $res;
             }
         } else {
-            $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_TESTIMONIAL_IMAGE, $recordId, 0, 0, $displayUniversalImage);
+            $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_TESTIMONIAL_IMAGE, $recordId, 0, -1, $displayUniversalImage);
         }
+        
         $image_name = (isset($file_row['afile_physical_path']) && 0 < $file_row['afile_id']) ? $file_row['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_TESTIMONIAL, $sizeType);
