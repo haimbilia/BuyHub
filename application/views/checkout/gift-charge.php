@@ -143,11 +143,7 @@ if ($noPaymentMethod && $rewardsCurrAmtCanBeUsed < $orderData['order_net_amount'
                                                         $i++;
                                                     } ?>
                                                     <li class="payments-nav-item">
-                                                        <a class="payments-nav-link" aria-selected="true"
-                                                            href="<?php echo UrlHelper::generateUrl('Checkout', 'PaymentTab', array($orderId, $pmethodId)); ?>"
-                                                            data-paymentmethod="<?php echo $pmethodCode; ?>" data-bs-toggle="collapse"
-                                                            data-bs-target="#<?php echo $pmethodCode; ?>-section" aria-expanded="true"
-                                                            aria-controls="<?php echo $pmethodCode; ?>-section" data-order-type="<?php echo $orderData['order_type']; ?>">
+                                                        <a class="payments-nav-link" aria-selected="true" href="<?php echo UrlHelper::generateUrl('Checkout', 'PaymentTab', array($orderId, $pmethodId)); ?>" data-paymentmethod="<?php echo $pmethodCode; ?>" data-bs-toggle="collapse" data-bs-target="#<?php echo $pmethodCode; ?>-section" aria-expanded="true" aria-controls="<?php echo $pmethodCode; ?>-section" data-order-type="<?php echo $orderData['order_type'];?>">
                                                             <?php echo $pmethodName; ?>
                                                         </a>
 
@@ -227,7 +223,7 @@ if ($noPaymentMethod && $rewardsCurrAmtCanBeUsed < $orderData['order_net_amount'
                 var paymentMethod = tabObj.data('paymentmethod');
                 var paymentMethodSection = $('.' + paymentMethod + '-js');
                 paymentMethodSection.prepend(fcom.getLoader());
-                fcom.ajax(tabObj.attr('href'), '', function(res) {
+                fcom.ajax(tabObj.attr('href'), 'order_type=' + tabObj.data('orderType'), function(res) {
                     if ('undefined' != res.status && 0 == res.status) {
                         paymentMethodSection.html(res.msg);
                         fcom.displayErrorMessage(res.msg);

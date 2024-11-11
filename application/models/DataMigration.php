@@ -126,6 +126,7 @@ class DataMigration
         $this->pluginObj->setRecordId($userId); /* to fetch setting by record id */
         if (false === $this->pluginObj) {
             $this->error = $error;
+            SystemLog::system($this->error, 'Data migration plugin issue.');
             $sellerPluginObj = new SellerPlugin($pluginData['plugin_id'], $userId);
             $sellerPluginObj->updateStatus(Plugin::INACTIVE);
             return false;
@@ -133,6 +134,7 @@ class DataMigration
 
         if (false === $this->pluginObj->init()) {
             $this->error = $this->pluginObj->getError();
+            SystemLog::system($this->error, 'Data migration issue.');
             $sellerPluginObj = new SellerPlugin($pluginData['plugin_id'], $userId);
             $sellerPluginObj->updateStatus(Plugin::INACTIVE);
             return false;

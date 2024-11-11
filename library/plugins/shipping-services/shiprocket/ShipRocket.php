@@ -483,6 +483,9 @@ class ShipRocket extends ShippingServicesBase
             $sellingPrice =  $this->orderDetail['op_unit_price'];
         }
 
+        $weightUnitArray = applicationConstants::getWeightUnitsArr($this->langId, true);
+        $productWeightInOunce = Shipping::convertWeightInOunce($this->orderDetail['op_product_weight'], $weightUnitArray[$this->orderDetail['op_product_weight_unit']]);
+
         $requestParam = [
             'order_id' => $this->orderDetail['op_invoice_number'],
             'order_date' => date('Y-m-d H:i', $orderTimestamp),
@@ -528,7 +531,7 @@ class ShipRocket extends ShippingServicesBase
             'length' => $this->convertToCm($this->orderDetail['op_product_length'], $this->orderDetail['op_product_dimension_unit']),
             'breadth' => $this->convertToCm($this->orderDetail['op_product_width'], $this->orderDetail['op_product_dimension_unit']),
             'height' => $this->convertToCm($this->orderDetail['op_product_height'], $this->orderDetail['op_product_dimension_unit']),
-            'weight' => $this->convertToKg($this->orderDetail['op_product_weight'])
+            'weight' => $this->convertToKg($productWeightInOunce)
         ];
 
 
@@ -545,7 +548,7 @@ class ShipRocket extends ShippingServicesBase
         $requestParam = [
             'shipmentIdsArr' => [$orderShipment['shipment_id']],
             'courierId' => $this->orderDetail['opshipping_service_code'],
-            'weight' => $this->convertToKg($this->orderDetail['op_product_weight']),
+            'weight' => $this->convertToKg($productWeightInOunce),
         ];
 
         if (false === $this->doRequest(self::REQUEST_ASSIGN_AWB, $requestParam)) {
