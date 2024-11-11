@@ -199,3 +199,4 @@
     - Bug-088571 - UI issue in the brand layout 2 on the homepage
     - Bug-088580 - UI issue in the category layout 7 on mobile devices
     - Bug-088605 - Testimonial content and media added by the admin are not visible on the front end
+    - Bug-088639 - The user does not get auto-verified even if email verifications are off
