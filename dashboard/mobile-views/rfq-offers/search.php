@@ -5,6 +5,8 @@ foreach ($arrListing as &$value) {
     $value['counter_offer_price_lbl'] = CommonHelper::displayMoneyFormat($value['counter_offer_price']);
     $value['offer_price'] = CommonHelper::displayMoneyFormat($value['offer_price'], false, false, false);
     $value['counter_offer_price'] = CommonHelper::displayMoneyFormat($value['counter_offer_price'], false, false, false);
+    $value['rlo_shipping_charges'] = CommonHelper::displayMoneyFormat($value['rlo_shipping_charges'], false, false, false);
+    $value['rlo_shipping_charges_lbl'] = CommonHelper::displayMoneyFormat($value['rlo_shipping_charges']);
     $value['isBought'] = RfqOffers::isBought($value['rlo_accepted_offer_id']) ? 1 : 0;
 }
 
