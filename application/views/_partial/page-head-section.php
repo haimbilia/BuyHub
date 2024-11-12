@@ -6,9 +6,9 @@ $subHeadLabel = $subHeadLabel ?? '';
     <div class="container">
         <header class="section-head section-head-center">
             <div class="section-heading">
-                <h1><?php echo $headLabel; ?></h1>
+                <h1><?php echo html_entity_decode($headLabel, ENT_QUOTES, 'UTF-8'); ?></h1>
                 <?php if (!empty($subHeadLabel)) { ?>
-                    <p><?php echo $subHeadLabel; ?></p>
+                    <p><?php echo html_entity_decode($subHeadLabel, ENT_QUOTES, 'UTF-8'); ?></p>
                 <?php } ?>
                 <?php if ($includeBreadcrumb) { ?>
                     <div class="breadcrumb breadcrumb-center">
