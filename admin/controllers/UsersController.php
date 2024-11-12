@@ -256,7 +256,7 @@ class UsersController extends ListingBaseController
         }
         /* [ new user    */
         if (1 > $recordId) {
-            if (!$userObj->setLoginCredentials($post['credential_username'], $post['credential_email'], null, applicationConstants::ACTIVE)) {
+            if (!$userObj->setLoginCredentials($post['credential_username'], $post['credential_email'], null, applicationConstants::ACTIVE, $post['user_verify'])) {
                 $db->rollbackTransaction();
                 return false;
             }
