@@ -1693,12 +1693,16 @@ class SellerProduct extends MyAppModel
 
     public static function isPriceHidden(int $selprodHidePrice, int $shopRfqEnabled)
     {
-        if (1 > $shopRfqEnabled || 1 > FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0)) {
+        if (1 > FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0)) {
             return false;
         }
-        
+
         if (0 < FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) {
             return true;
+        }
+
+        if (1 > $shopRfqEnabled) {
+            return false;
         }
 
         return (0 < $selprodHidePrice);
