@@ -2117,6 +2117,7 @@ trait SellerProducts
         $srch->addOrder('product_name');
         $srch->addCondition('product_deleted', '=', applicationConstants::NO);
         $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
+        $srch->addCondition('selprod_cart_type', '!=', SellerProduct::CART_TYPE_RFQ_ONLY);
         if (isset($post['volumeDiscount']) && $post['volumeDiscount']) {
             $srch->addCondition(Product::DB_TBL_PREFIX . 'type', '!=', Product::PRODUCT_TYPE_SERVICE);
         }
