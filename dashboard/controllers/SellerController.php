@@ -1352,9 +1352,13 @@ class SellerController extends SellerBaseController
         if (!$this->isShopActive($this->userParentId)) {
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'shop'));
         }
-        if (!UserPrivilege::isUserHasValidSubsription($this->userParentId)) {
-            Message::addErrorMessage(Labels::getLabel("MSG_Please_buy_subscription", $this->siteLangId));
+        if (1 > FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0) && !UserPrivilege::isUserHasValidSubsription($this->userParentId)) {
+            Message::addErrorMessage(Labels::getLabel("MSG_PLEASE_BUY_SUBSCRIPTION", $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'Packages'));
+        }
+
+        if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+            $this->set("statusButtons", true);
         }
 
         $frmSearchCatalogProduct = $this->getCatalogProductSearchForm($type);
@@ -1368,6 +1372,75 @@ class SellerController extends SellerBaseController
         $this->_template->addCss(array('css/select2.min.css'));
 
         $this->_template->render(true, true);
+    }
+
+    public function toggleBulkStatusesForCatalogs()
+    {
+        $this->userPrivilege->canEditProducts(UserAuthentication::getLoggedUserId());
+        $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
+        $recordsArr = FatUtility::int(FatApp::getPostedData('record_ids'));
+        if (empty($recordsArr) || -1 == $status) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
+        foreach ($recordsArr as $recordId) {
+            if (1 > $recordId) {
+                continue;
+            }
+            $this->changeCatalogStatus($recordId, $status);
+        }
+        Product::updateMinPrices();
+        $this->set('msg', Labels::getLabel('MSG_STATUS_UPDATED', $this->siteLangId));
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
+    public function updateCatalogStatus()
+    {
+        $this->userPrivilege->canEditProducts(UserAuthentication::getLoggedUserId());
+
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        if (0 == $recordId) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
+        }
+        $status = FatApp::getPostedData('status', FatUtility::VAR_INT, 0);
+        if (!in_array($status, [applicationConstants::ACTIVE, applicationConstants::INACTIVE])) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
+        $this->changeCatalogStatus($recordId, $status);
+        $this->set('msg', Labels::getLabel('MSG_STATUS_UPDATED', $this->siteLangId));
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
+    public function changeCatalogStatus(int $recordId, int $status)
+    {
+        $status = FatUtility::int($status);
+        $recordId = FatUtility::int($recordId);
+        if (1 > $recordId || -1 == $status) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
+        $productName = current(Product::getAttributesByLangId($this->siteLangId, $recordId, ['COALESCE(product_name, product_identifier) as product_name'], applicationConstants::JOIN_INNER));
+        $oldProductData = Product::getAttributesById($recordId, ['product_seller_id', 'product_active']);
+        if ($this->userParentId != $oldProductData['product_seller_id']) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
+        if (
+            0 < $status &&
+            $oldProductData['product_active'] != $status &&
+            0 < $oldProductData['product_seller_id'] &&
+            FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0) &&
+            Product::getActiveCount($oldProductData['product_seller_id']) >= SellerPackages::getAllowedLimit($oldProductData['product_seller_id'], $this->siteLangId, 'ossubs_products_allowed')
+        ) {
+            LibHelper::exitWithError(CommonHelper::replaceStringData(Labels::getLabel('ERR_UNABLE_TO_CHANGE_STATUS_FOR_"{PRODUCT-NAME}"._AS_SELLER_SUBSCRIPTION_PACKAGE_LIMIT_CROSSED.', $this->siteLangId), ['{PRODUCT-NAME}' => $productName]), true);
+        }
+
+        $product = new Product($recordId);
+        if (!$product->changeStatus($status)) {
+            LibHelper::exitWithError($this->modelObj->getError(), true);
+        }
+        CalculativeDataRecord::updateSelprodRequestCount();
     }
 
     public function productTags()
