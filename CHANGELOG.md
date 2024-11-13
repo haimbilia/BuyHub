@@ -202,3 +202,4 @@
     - Bug-088639 - The user does not get auto-verified even if email verifications are off
     - Bug-088651 - Issue in the content in the categories collection
     - Bug-088675 - Warning appears when the seller clicks on the save button while adding new product
+    - Bug-088667 - Error when the seller tries to downgrade or purchase the subscription package
