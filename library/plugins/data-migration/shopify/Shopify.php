@@ -521,7 +521,7 @@ class Shopify extends DataMigrationBase
                 'product_type' => $product_type,
                 'brand_name' => '',
                 'category_name' => $product->product_type ?? '',
-                'product_min_selling_price' => 0,
+                'product_min_selling_price' => 0.01,
                 'product_approved' => 1,
                 'product_active' => ($isSingleVendor ? ($product->status == 'active' ? 1 : 0) : $product->active),
                 'product_fulfillment_type' => '',

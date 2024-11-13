@@ -95,4 +95,15 @@ $(document).ready(function () {
             fcom.removeLoader();
         });
     };
+    markVerified = function (userId) {
+        if (!confirm(langLbl.areYouSure)) {
+            return;
+        }
+        fcom.displayProcessing();
+        fcom.updateWithAjax(fcom.makeUrl(controllerName, 'markVerified'), { userId: userId }, function (t) {
+            fcom.displaySuccessMessage(t.msg);
+            fcom.removeLoader();
+            reloadList();
+        });
+    };
 })();
