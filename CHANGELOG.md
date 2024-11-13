@@ -201,3 +201,4 @@
     - Bug-088605 - Testimonial content and media added by the admin are not visible on the front end
     - Bug-088639 - The user does not get auto-verified even if email verifications are off
     - Bug-088651 - Issue in the content in the categories collection
+    - Bug-088675 - Warning appears when the seller clicks on the save button while adding new product

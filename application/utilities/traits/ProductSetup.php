@@ -201,8 +201,9 @@ trait ProductSetup
         $return = ($type == 'REQUESTED_CATALOG_PRODUCT');
         $postedData = FatApp::getPostedData();
         $productId = FatApp::getPostedData('selprod_product_id', Fatutility::VAR_INT, $prodId);
+        $cartType = FatApp::getPostedData('selprod_cart_type', Fatutility::VAR_INT, 0);
         
-        $postedData['selprod_hide_price'] = (SellerProduct::CART_TYPE_RFQ_ONLY != $postedData['selprod_cart_type'] ? 0 : FatApp::getPostedData('selprod_hide_price', FatUtility::VAR_INT, 0));
+        $postedData['selprod_hide_price'] = (SellerProduct::CART_TYPE_RFQ_ONLY != $cartType ? 0 : FatApp::getPostedData('selprod_hide_price', FatUtility::VAR_INT, 0));
 
         if (0 < $prodId || $return) {
             $productSellerId = $postedData['product_seller_id'] ?? $this->userParentId ?? 0;
