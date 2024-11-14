@@ -378,6 +378,11 @@ class ProductSearch extends SearchBase
             $joinSpecialPrice = false;
         }
 
+        $excludeProdForRfqOnly = false;
+        if (array_key_exists('excludeProdForRfqOnly', $criteria) && $criteria['excludeProdForRfqOnly'] == true) {
+            $excludeProdForRfqOnly = true;
+        }
+
         if ($joinSpecialPrice == true) {
             $now = FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d');
             if ('' == $splPriceForDate) {
@@ -408,6 +413,10 @@ class ProductSearch extends SearchBase
             );
 
             $srch->addCondition('s.splprice_selprod_id', 'IS', 'mysql_func_NULL', 'AND', true);
+            if ($excludeProdForRfqOnly) {
+                $srch->addCondition('selprod_cart_type', '!=', SellerProduct::CART_TYPE_RFQ_ONLY, 'AND', true);
+                $srch->addCondition('selprod_hide_price', '!=', applicationConstants::YES, 'AND', true);
+            }
             if ($isProductActive == true) {
                 $srch->addCondition('selprod_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
             }
@@ -417,7 +426,8 @@ class ProductSearch extends SearchBase
             }
 
             $fields1 = array(
-                'sprods.*', 'm.*',
+                'sprods.*',
+                'm.*',
                 'if(m.splprice_selprod_id IS NULL,0,1) AS special_price_found',
                 'COALESCE(m.splprice_price, selprod_price) AS theprice'
             );
@@ -451,7 +461,12 @@ class ProductSearch extends SearchBase
             if (isset($criteria['prodIds']) && 0 < count($criteria['prodIds'])) {
                 $joinCondition = ' and sprods.selprod_product_id IN (' . implode(",", $criteria['prodIds']) . ')';
             }
-            
+
+            if ($excludeProdForRfqOnly) {
+                $this->addCondition('sprods.selprod_cart_type', '!=', SellerProduct::CART_TYPE_RFQ_ONLY, 'AND', true);
+                $this->addCondition('sprods.selprod_hide_price', '!=', applicationConstants::YES, 'AND', true);
+            }
+
             $this->joinTable(SellerProduct::DB_TBL, 'INNER JOIN', 'p.product_id = sprods.selprod_product_id ' . $joinCondition . ' and selprod_active = ' . applicationConstants::ACTIVE . ' and selprod_deleted = ' . applicationConstants::NO, 'sprods');
             if ($this->langId) {
                 $this->joinTable(SellerProduct::DB_TBL_LANG, 'LEFT OUTER JOIN', 'sprods.selprod_id = sprods_l.selprodlang_selprod_id AND sprods_l.selprodlang_lang_id = ' . $this->langId, 'sprods_l');
@@ -885,7 +900,7 @@ class ProductSearch extends SearchBase
         if (!empty($category) && true == $joinWithRelationTableInstead) {
             $this->joinTable(ProductCategory::DB_TBL_PROD_CAT_RELATIONS, 'INNER JOIN', 'pcr.pcr_prodcat_id = c.prodcat_id', 'pcr');
         }
-        
+
         $categoryArr = [];
         if (is_numeric($category)) {
             $category_id = FatUtility::int($category);
