@@ -204,3 +204,4 @@
     - Bug-088675 - Warning appears when the seller clicks on the save button while adding new product
     - Bug-088667 - Error when the seller tries to downgrade or purchase the subscription package
     - Bug-088727 - Multiple issues in the hide price on the inventory form
+    - Bug-088753 - Email template is not proper
