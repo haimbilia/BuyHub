@@ -206,3 +206,4 @@
     - Bug-088727 - Multiple issues in the hide price on the inventory form
     - Bug-088753 - Email template is not proper
     - Bug-088726 - Add to cart button is appearing in case of RFQ only
+    - Bug-088716 - The seller's name is visible in the RFQ form seller's suggestion listing even if the seller disables the RFQ at the shop level

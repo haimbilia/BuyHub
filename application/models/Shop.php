@@ -39,6 +39,8 @@ class Shop extends MyAppModel
     private $active = null;
     private $data = null;
 
+    private static $sellerListingForRfq = false;
+
     /**
      * __construct
      *
@@ -516,6 +518,10 @@ class Shop extends MyAppModel
         return 0;
     }
 
+    public static function setSellerListingForRfq(bool $flag = false) {
+        self::$sellerListingForRfq = $flag;
+    }
+
     public static function getSellersAutocomplete(int $langId, bool $favouriteOnly = false, int $userId = 0, bool $noLimit = false)
     {
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
@@ -554,6 +560,10 @@ class Shop extends MyAppModel
 
         if ($favouriteOnly) {
             $srch->joinTable(Shop::DB_TBL_SHOP_FAVORITE, 'INNER JOIN', 's.shop_id = ufs.ufs_shop_id AND ufs.ufs_user_id = ' . $userId, 'ufs');
+        }
+
+        if (self::$sellerListingForRfq) {
+            $srch->addCondition('shop_rfq_enabled', '=', applicationConstants::YES);
         }
 
         $flds = [

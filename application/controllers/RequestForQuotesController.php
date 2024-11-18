@@ -668,6 +668,7 @@ class RequestForQuotesController extends MyAppController
     {
         $isFavourite = FatApp::getPostedData('rfq_seller_linking_type', FatUtility::VAR_INT, RequestForQuote::SELLER_LINKING_OPEN);
         $isFavourite = (RequestForQuote::SELLER_LINKING_FAVOURITE == $isFavourite);
+        Shop::setSellerListingForRfq(true);
         $json = Shop::getSellersAutocomplete($this->siteLangId, $isFavourite, $this->loggedUserId);
         if (MOBILE_APP_API_CALL) {
             $this->set('data', ['pageCount' => $json['pageCount'], 'sellers' => $json['results'] ?? []]);
