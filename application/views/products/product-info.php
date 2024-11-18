@@ -2,7 +2,9 @@
 <?php if (!empty($product['brand_name'])) { ?>
     <a class="brand-title" href="<?php echo UrlHelper::generateUrl('Brands', 'view', [$product['brand_id']]); ?>"><?php echo $product['brand_name']; ?></a>
 <?php } ?>
-<h1 class="product-title"> <?php echo $product['selprod_title']; ?> </h1>
+<h1 class="product-title">
+    <?php echo !empty($product['selprod_title']) ? $product['selprod_title'] : $product['product_identifier']; ?>
+</h1>
 <?php
 $productCondArr = Product::getConditionArr($siteLangId);
 unset($productCondArr[Product::CONDITION_NEW]);

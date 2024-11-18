@@ -702,9 +702,8 @@ class ProductsController extends MyAppController
             $isProductShippedBySeller = Product::isProductShippedBySeller($product['product_id'], $product['product_seller_id'], $product['selprod_user_id']);
             if ($isProductShippedBySeller) {
                 $walletBalance = User::getUserBalance($product['selprod_user_id']);
-                if ($product['selprod_cod_enabled']) {
-                    $codEnabled = true;
-                }
+                
+                $codEnabled = (0 < $product['product_cod_enabled'] ? $product['selprod_cod_enabled'] : 0);
                 $codMinWalletBalance = -1;
                 $shop_cod_min_wallet_balance = Shop::getAttributesByUserId($product['selprod_user_id'], 'shop_cod_min_wallet_balance');
                 if ($shop_cod_min_wallet_balance > -1) {

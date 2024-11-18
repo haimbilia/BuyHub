@@ -284,6 +284,7 @@ trait SellerProducts
                 $customUrl = explode("/", $urlRow['urlrewrite_custom']);
                 $sellerProductRow['selprod_url_keyword'] = $customUrl[0];
             }
+            $sellerProductRow['selprod_cod_enabled'] = (0 < $productRow['product_cod_enabled'] ? $sellerProductRow['selprod_cod_enabled'] : 0);
         } else {
             $sellerProductRow['selprod_available_from'] = date('Y-m-d');
             $sellerProductRow['selprod_cod_enabled'] = $productRow['product_cod_enabled'];
