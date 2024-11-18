@@ -155,18 +155,18 @@ $this->includeTemplate('_partial/productsSearchForm.php', array('frmProductSearc
                                 </button>
                             </li>
                             <?php if ($vtype == "map") { ?>
-                            <li class="page-sort-item">
-                                <button class="btn btn-outline-black btn-icon btn-filters" type="button"
-                                    data-bs-toggle="offcanvas" data-bs-target="#filters-right">
-                                    <?php echo Labels::getLabel('LBL_ALL_FILTERS', $siteLangId); ?>
-                                    <svg class="svg" width="18" height="18">
-                                        <use
-                                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#filter">
-                                        </use>
-                                    </svg>
-                                    <span class="dot-count" id="mapFilterJs"></span>
-                                </button>
-                            </li>
+                                <li class="page-sort-item">
+                                    <button class="btn btn-outline-black btn-icon btn-filters" type="button"
+                                        data-bs-toggle="offcanvas" data-bs-target="#filters-right">
+                                        <?php echo Labels::getLabel('LBL_ALL_FILTERS', $siteLangId); ?>
+                                        <svg class="svg" width="18" height="18">
+                                            <use
+                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#filter">
+                                            </use>
+                                        </svg>
+                                        <span class="dot-count" id="mapFilterJs"></span>
+                                    </button>
+                                </li>
                             <?php }
                             } ?>
                         </ul>

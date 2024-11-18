@@ -209,3 +209,4 @@
     - Bug-088716 - The seller's name is visible in the RFQ form seller's suggestion listing even if the seller disables the RFQ at the shop level
     - Bug-088767 - RFQ >> COD is available on the front end even if it is disabled from the product setup form
     - Bug-088768 - The volume discount and buy-together products should not appear on the product details page when the Hide Price setting is enabled
+    - Bug-088770 - The price filter option should not appear on the search listing page in case the hide price is enabled
