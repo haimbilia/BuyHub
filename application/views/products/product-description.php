@@ -248,7 +248,8 @@
     <?php } ?>
 
     <?php
-    if (isset($volumeDiscountRows) && !empty($volumeDiscountRows) && 0 < $currentStock) { ?>
+    $hidePrice = (SellerProduct::isPriceHidden($product['selprod_hide_price'], $product['shop_rfq_enabled']) || RequestForQuote::isCartTypeRfqOnly($product['shop_rfq_enabled'], $product['selprod_cart_type']));
+    if (isset($volumeDiscountRows) && !empty($volumeDiscountRows) && 0 < $currentStock && false == $hidePrice) { ?>
         <div class="side-blocks wholesale-slider">
             <h5 class="h5"><?php echo Labels::getLabel('LBL_WHOLESALE_PRICE_(PIECE)') ?></h5>
             <div class="side-blocks-body">
@@ -276,7 +277,7 @@
     <?php }  ?>
 
     <!-- Upsell Products -->
-    <?php if (count($upsellProducts) > 0) { ?>
+    <?php if (count($upsellProducts) > 0 && false == $hidePrice) { ?>
         <div class="side-blocks product-add-ons">
             <h5 class="h5"> <?php echo Labels::getLabel('LBL_Product_Add-ons', $siteLangId); ?></h5>
             <div class="side-blocks-body">
