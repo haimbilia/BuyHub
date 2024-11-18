@@ -416,7 +416,8 @@ class ProductsController extends ListingBaseController
                     }
 
                     $user_shop_name = User::getUserShopName($sellerProductRow['selprod_user_id'], $this->siteLangId);
-                    $sellerProductRow['selprod_user_shop_name'] = $user_shop_name['user_name'] . ' - ' . $user_shop_name['shop_name'];
+                    
+                    $sellerProductRow['selprod_user_shop_name'] = is_array($user_shop_name) ? $user_shop_name['user_name'] . ' - ' . $user_shop_name['shop_name'] : FatApp::getConfig("CONF_WEBSITE_NAME_" . $this->siteLangId);
 
                     $returnAge = isset($sellerProductRow['selprod_return_age']) ? FatUtility::int($sellerProductRow['selprod_return_age']) : '';
                     $cancellationAge = isset($sellerProductRow['selprod_cancellation_age']) ? FatUtility::int($sellerProductRow['selprod_cancellation_age']) : '';

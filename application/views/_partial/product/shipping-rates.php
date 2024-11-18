@@ -35,7 +35,7 @@
     <?php if ($codEnabled && Product::PRODUCT_TYPE_PHYSICAL == $product['product_type']) { ?>
         <?php $lbl = Labels::getLabel('LBL_Cash_on_delivery_is_available', $siteLangId); ?>
         <li title="<?php echo $lbl; ?>">
-            <?php echo Labels::getLabel('LBL_Cash_on_delivery_is_available', $siteLangId); ?>
+            <?php echo $lbl; ?>
             <i class="fa fa-info-circle" data-toggle="tooltip" data-placement="right" data-container="body" title="<?php echo Labels::getLabel('MSG_CASH_ON_DELIVERY_AVAILABLE._CHOOSE_FROM_PAYMENT_OPTIONS', $siteLangId); ?>">
             </i>
         </li>

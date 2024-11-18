@@ -537,6 +537,10 @@ class MyAppController extends FatController
             'discounted' => Labels::getLabel('LBL_Most_discounted', $this->siteLangId),
         );
 
+        if (0 < FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) {
+            unset($sortByArr['price_asc'], $sortByArr['price_desc']);
+        }
+
         /* if (0 < FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) {
             $sortByArr['rating_desc'] = Labels::getLabel('LBL_Sort_by_Rating', $this->siteLangId);
         } */

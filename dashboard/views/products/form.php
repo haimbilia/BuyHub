@@ -17,6 +17,11 @@ $fld = $frm->getField('selprod_hide_price');
 if (null != $fld) {
     HtmlHelper::configureSwitchForCheckbox($fld);
 }
+
+$fld = $frm->getField('selprod_cart_type');
+if (null != $fld) {
+    $fld->setFieldTagAttribute('class', "cartTypeJs");
+}
 ?>
 <div class="content-wrapper content-space mainJs" <?php echo CommonHelper::getLayoutDirection() != $formLayout ? 'dir="' . $formLayout . '"' : ''; ?>>
     <?php
@@ -194,7 +199,11 @@ if (null != $fld) {
                                         <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_return_age', 6); ?>
                                         <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_cancellation_age', 6); ?>
                                         <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_cart_type', 6); ?>
-                                        <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_hide_price', 6); ?>
+                                        <?php
+                                        $fld = $frm->getField('selprod_hide_price');
+                                        if (null != $fld) {
+                                            echo '<div class="col-md-6 selprodHidePriceBlockJs" style="display:none;"><div class="form-group mb-0 mt-3"><div class="setting-block">' . $fld->getHtml() . '</div></div></div>';
+                                        } ?>
                                         <?php echo HtmlHelper::getFieldHtml($frm, 'selprod_comments', 12); ?>
                                     </div>
                                 </div>

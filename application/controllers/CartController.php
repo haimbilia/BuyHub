@@ -619,7 +619,7 @@ class CartController extends MyAppController
             $this->set('msg', Labels::getLabel("MSG_ADDED_TO_CART", $this->siteLangId));
         }
 
-        $this->set('total', $cartObj->countProducts());
+        $this->set('total', (isset($cartObj) ? $cartObj->countProducts() : 0));
     }
 
     public function remove()

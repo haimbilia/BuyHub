@@ -203,3 +203,10 @@
     - Bug-088651 - Issue in the content in the categories collection
     - Bug-088675 - Warning appears when the seller clicks on the save button while adding new product
     - Bug-088667 - Error when the seller tries to downgrade or purchase the subscription package
+    - Bug-088727 - Multiple issues in the hide price on the inventory form
+    - Bug-088753 - Email template is not proper
+    - Bug-088726 - Add to cart button is appearing in case of RFQ only
+    - Bug-088716 - The seller's name is visible in the RFQ form seller's suggestion listing even if the seller disables the RFQ at the shop level
+    - Bug-088767 - RFQ >> COD is available on the front end even if it is disabled from the product setup form
+    - Bug-088768 - The volume discount and buy-together products should not appear on the product details page when the Hide Price setting is enabled
+    - Bug-088770 - The price filter option should not appear on the search listing page in case the hide price is enabled
