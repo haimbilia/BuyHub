@@ -11,7 +11,7 @@ foreach ($sellers as $key => $sellerDetail) {
                 <?php echo Labels::getLabel('LBL_VIEW_ALL', $siteLangId); ?>
             </a>
         </li>
-        <?php break;
+    <?php break;
     }
     $shopTotalReviews = $sellerDetail['shopTotalReviews'] ?? $shopTotalReviews;
     if (1 == $count && !array_key_exists('isActive', $sellerDetail)) {
@@ -43,7 +43,7 @@ foreach ($sellers as $key => $sellerDetail) {
         $this->includeTemplate('_partial/badge-ui.php', ['badgesArr' => $badgesArr, 'siteLangId' => $siteLangId], false);
         if ($shopTotalReviews > 0 && FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) {
             $shop_rating = SelProdRating::getSellerRating($sellerDetail['selprod_user_id'], true);
-            ?>
+        ?>
             <div class="shop-wrap">
                 <div class="product-ratings">
                     <svg class="svg svg-star" width="14" height="14">
@@ -57,12 +57,18 @@ foreach ($sellers as $key => $sellerDetail) {
                     </a>
                 </div>
             </div>
+            <?php }
+        if (false === $isActive) {
+            if (false === SellerProduct::isPriceHidden($sellerDetail['selprod_hide_price'], $sellerDetail['shop_rfq_enabled']) && !RequestForQuote::isCartTypeRfqOnly($sellerDetail['shop_rfq_enabled'], $sellerDetail['selprod_cart_type'])) { ?>
+                <button class="btn btn-outline-black btn-sm btnAddToCart--js" data-id='<?php echo $sellerDetail['selprod_id']; ?>'
+                    data-min-qty="<?php echo $sellerDetail['selprod_min_order_qty']; ?>" type="button"
+                    data-cart-has-product="<?php echo 0 < $cartSellerId && $sellerDetail['selprod_user_id'] != $cartSellerId && 0 < FatApp::getConfig('CONF_SINGLE_SELLER_CART', FatUtility::VAR_INT, 0); ?>"><?php echo Labels::getLabel('BTN_ADD_TO_CART', $siteLangId); ?></button>
+            <?php } else { ?>
+                <button class="btn btn-outline-black btn-sm btn-rfq" name="requestForQuote" type="button" onclick="requestForQuoteFn('<?php echo $sellerDetail['selprod_id']; ?>');">
+                    <?php echo Labels::getLabel('BTN_REQUEST_FOR_QUOTE'); ?>
+                </button>
         <?php }
-        if (false === $isActive && false === SellerProduct::isPriceHidden($sellerDetail['selprod_hide_price'], $sellerDetail['shop_rfq_enabled']) && !RequestForQuote::isCartTypeRfqOnly($sellerDetail['shop_rfq_enabled'], $sellerDetail['selprod_cart_type'])) { ?>
-            <button class="btn btn-outline-black btn-sm btnAddToCart--js" data-id='<?php echo $sellerDetail['selprod_id']; ?>'
-                data-min-qty="<?php echo $sellerDetail['selprod_min_order_qty']; ?>" type="button"
-                data-cart-has-product="<?php echo 0 < $cartSellerId && $sellerDetail['selprod_user_id'] != $cartSellerId && 0 < FatApp::getConfig('CONF_SINGLE_SELLER_CART', FatUtility::VAR_INT, 0); ?>"><?php echo Labels::getLabel('BTN_ADD_TO_CART', $siteLangId); ?></button>
-        <?php } ?>
+        } ?>
     </li>
-    <?php $count++;
+<?php $count++;
 }

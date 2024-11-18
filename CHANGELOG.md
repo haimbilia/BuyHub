@@ -205,3 +205,4 @@
     - Bug-088667 - Error when the seller tries to downgrade or purchase the subscription package
     - Bug-088727 - Multiple issues in the hide price on the inventory form
     - Bug-088753 - Email template is not proper
+    - Bug-088726 - Add to cart button is appearing in case of RFQ only
