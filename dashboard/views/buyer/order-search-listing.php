@@ -156,7 +156,7 @@
                         );
                     }
                     
-                    if (SellerProduct::CART_TYPE_RFQ_ONLY != $order['selprod_cart_type'] && false == SellerProduct::isPriceHidden($order['selprod_hide_price'], $order['shop_rfq_enabled'])) {
+                    if (SellerProduct::CART_TYPE_RFQ_ONLY != $order['selprod_cart_type'] && (is_null($order['selprod_hide_price']) || false == SellerProduct::isPriceHidden($order['selprod_hide_price'], $order['shop_rfq_enabled']))) {
                         $li = $ul->appendElement("li");
                         $li->appendElement(
                             'a',
