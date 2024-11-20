@@ -591,7 +591,8 @@ class ProductSearch extends SearchBase
                         $shopSearch->addCondition(Shop::tblFld('active'), '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
                         $shopSearch->addCondition(Shop::tblFld('user_valid'), '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
                         $shopSearch->addFld('*');
-                        $shopSearch->addFld('( 6371 * acos( cos( radians(' . $this->geoAddress['ykGeoLat'] . ') ) * cos( radians( shop.`shop_lat` ) ) * cos( radians( shop.`shop_lng` ) - radians(' . $this->geoAddress['ykGeoLng'] . ') ) + sin( radians(' . $this->geoAddress['ykGeoLat'] . ') ) * sin( radians( shop.`shop_lat` ) ) ) ) AS distance');
+                        /*  $shopSearch->addFld('( 6371 * acos( cos( radians(' . $this->geoAddress['ykGeoLat'] . ') ) * cos( radians( shop.`shop_lat` ) ) * cos( radians( shop.`shop_lng` ) - radians(' . $this->geoAddress['ykGeoLng'] . ') ) + sin( radians(' . $this->geoAddress['ykGeoLat'] . ') ) * sin( radians( shop.`shop_lat` ) ) ) ) AS distance'); */
+                        $shopSearch->addFld('(ST_Distance_Sphere(point(' . $this->geoAddress['ykGeoLng'] . ', ' . $this->geoAddress['ykGeoLat'] . '), point(shop.`shop_lng`, shop.`shop_lat`)) / 1000) AS distance');
                         $shopSearch->addHaving('distance', '<=', FatApp::getConfig('CONF_RADIUS_DISTANCE_IN_MILES', FatUtility::VAR_INT, 10));
                         if (false == $this->locationBasedInnerJoin) {
                             $shopSubQuery = $shopSearch->getQuery();
