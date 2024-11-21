@@ -210,3 +210,4 @@
     - Bug-088767 - RFQ >> COD is available on the front end even if it is disabled from the product setup form
     - Bug-088768 - The volume discount and buy-together products should not appear on the product details page when the Hide Price setting is enabled
     - Bug-088770 - The price filter option should not appear on the search listing page in case the hide price is enabled
+    - Bug-088843 - Offer should stay as Rejected when user edits the offer without making any changes

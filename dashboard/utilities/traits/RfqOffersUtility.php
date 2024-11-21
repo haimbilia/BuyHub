@@ -458,7 +458,6 @@ trait RfqOffersUtility
         $post['offer_user_type'] = $this->isSeller ? User::USER_TYPE_SELLER : User::USER_TYPE_BUYER;
         $post['offer_negotiable'] = $negotiable;
 
-
         $rfqOfferData = RfqOffers::getAttributesById($recordId, ['offer_status', 'offer_price', 'offer_quantity', 'offer_counter_offer_id']);
         $changeInOffer = (!empty($rfqOfferData) && ($post['offer_quantity'] != $rfqOfferData['offer_quantity'] || $post['offer_price'] != $rfqOfferData['offer_price']));
 
@@ -471,7 +470,7 @@ trait RfqOffersUtility
             $shippingcharges = FatApp::getPostedData('rlo_shipping_charges', FatUtility::VAR_FLOAT, 0);
 
             $post['offer_status'] = $rfqOfferData['offer_status'];
-            if ($changeInOffer || $oldShippingCharges != $shippingcharges) {
+            if ($changeInOffer || ($oldShippingCharges != $shippingcharges && $this->isSeller)) {
                 $post['offer_status'] = RfqOffers::STATUS_OPEN;
             }
         }
