@@ -119,7 +119,10 @@ trait RfqOffersUtility
 
 
             $hasAnySellerAcceptance = RfqOffers::hasAnySellerAcceptance($rfqId, $this->userParentId);
-            if ((RequestForQuote::VISIBILITY_TYPE_OPEN == $rfqInfo['rfq_visibility_type'] && $hasAnySellerAcceptance) || ($isOpenOffered && empty($linkedSelprodId)) || (empty($linkedSelprodId) && RequestForQuote::STATUS_ACCEPTED == $rfqData['rfq_status'] && RfqOffers::hasAnyBuyerAcceptedOffer($this->userParentId, $rfqId))) {
+            $globalCanChangeInventory = (RequestForQuote::VISIBILITY_TYPE_OPEN == $rfqInfo['rfq_visibility_type'] && $hasAnySellerAcceptance);
+            $closedCanChangeInventory = (RequestForQuote::VISIBILITY_TYPE_CLOSED == $rfqInfo['rfq_visibility_type'] && empty($rfqData['rfq_selprod_id']));
+
+            if ($globalCanChangeInventory || $closedCanChangeInventory || ($isOpenOffered && empty($linkedSelprodId)) || (empty($linkedSelprodId) && RequestForQuote::STATUS_ACCEPTED == $rfqData['rfq_status'] && RfqOffers::hasAnyBuyerAcceptedOffer($this->userParentId, $rfqId))) {
                 $title = Labels::getLabel('LBL_INVENTORY_NOT_LINKED_WITH_THIS_RFQ!!', $this->siteLangId);
                 $label = Labels::getLabel('BTN_LINK_INVENTORY', $this->siteLangId);
                 if ($linkedSelprodId > 0) {
