@@ -1054,7 +1054,7 @@ trait RfqOffersUtility
                     $rates = $shippedByItemArr[$shipLevel]['rates'] ?? [];
                     switch ($shipLevel) {
                         case Shipping::LEVEL_PRODUCT:
-                            $rates = $rates[$selprodId];
+                            $rates = $rates[$selprodId] ?? [];
                             break;
                     }
                     foreach ($rates as $key => $shippingcharge) {
