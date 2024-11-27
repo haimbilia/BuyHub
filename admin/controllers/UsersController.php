@@ -186,6 +186,20 @@ class UsersController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
+    public function markVerified()
+    {
+        $this->objPrivilege->canEditUsers();
+        $recordId = FatApp::getPostedData('userId', FatUtility::VAR_INT, 0);
+
+        $where = array('smt' => 'credential_user_id = ?', 'vals' => [$recordId]);
+        if (!FatApp::getDb()->updateFromArray(User::DB_TBL_CRED, ['credential_verified' => applicationConstants::YES], $where)) {
+            LibHelper::exitWithError(FatApp::getDb()->getError(), true);
+        }
+
+        $this->set('msg', $this->str_update_record);
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
     public function setup()
     {
         $this->objPrivilege->canEditUsers();
@@ -256,7 +270,7 @@ class UsersController extends ListingBaseController
         }
         /* [ new user    */
         if (1 > $recordId) {
-            if (!$userObj->setLoginCredentials($post['credential_username'], $post['credential_email'], null, applicationConstants::ACTIVE)) {
+            if (!$userObj->setLoginCredentials($post['credential_username'], $post['credential_email'], null, applicationConstants::ACTIVE, $post['user_verify'])) {
                 $db->rollbackTransaction();
                 return false;
             }
@@ -406,11 +420,25 @@ class UsersController extends ListingBaseController
     {
         $this->objPrivilege->canEditUsers();
         $userObj = new User($recordId);
-        $user = $userObj->getUserInfo(array('credential_username', 'if(credential_password != "", credential_password, credential_password_old) as credential_password', 'user_preferred_dashboard'), false, false);
+        $user = $userObj->getUserInfo(array('user_name', 'credential_username', 'if(credential_password != "", credential_password, credential_password_old) as credential_password', 'user_preferred_dashboard', 'credential_verified', 'credential_active'), false, false);
         if (!$user) {
             Message::addErrorMessage($this->str_invalid_request);
             FatApp::redirectUser(UrlHelper::generateUrl('Users'));
         }
+
+        if (!$user['credential_verified'] || !$user['credential_active']) {
+            if (!$user['credential_active'] && !$user['credential_verified']) {
+                $lbl = Labels::getLabel('LBL_PLEASE_MARK_{USER-NAME}_AS_ACTIVE_AND_VERIFIED_TO_LOGIN.', $this->siteLangId);
+            } else if (!$user['credential_active']) {
+                $lbl = Labels::getLabel('LBL_PLEASE_MARK_{USER-NAME}_AS_ACTIVE_TO_LOGIN.', $this->siteLangId);
+            } else if (!$user['credential_verified']) {
+                $lbl = Labels::getLabel('LBL_PLEASE_MARK_{USER-NAME}_AS_VERIFIED_TO_LOGIN.', $this->siteLangId);
+            }
+
+            Message::addErrorMessage(CommonHelper::replaceStringData($lbl, ['{USER-NAME}' => $user['user_name']]));
+            FatApp::redirectUser(UrlHelper::generateUrl('Users'));
+        }
+
         $userAuthObj = new UserAuthentication();
         if (!$userAuthObj->login($user['credential_username'], $user['credential_password'], $_SERVER['REMOTE_ADDR'], false, true) === true) {
             Message::addErrorMessage($userAuthObj->getError());

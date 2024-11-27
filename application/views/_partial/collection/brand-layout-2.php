@@ -18,7 +18,7 @@
                     $selProdId = $brand['product']['selprod_id'] ?? 0;
                     $prodcatName = $brand['product']['prodcat_name'] ?? '';
                     $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_PRODUCT_IMAGE, $productId);
-
+                    $productUrl = UrlHelper::generateUrl('Products', 'View', array($selProdId));
 
                     $pictureAttr = [
                         'webpImageUrl' => [ImageDimension::VIEW_DESKTOP => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($productId, (isset($prodImgSize) && isset($i) && ($i == 1)) ? $prodImgSize : "WEBP" . ImageDimension::VIEW_CLAYOUT2, $selProdId, 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp')],
@@ -28,19 +28,23 @@
                         'alt' => (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $prodcatName,
                         'siteLangId' => $siteLangId,
                     ];
-                    ?>
-                    <a href="<?php echo UrlHelper::generateUrl('brands', 'View', array($brand['brand_id'])); ?>" class="brand">
-                        <div class="brand-thumb">
-                            <?php $this->includeTemplate('_partial/picture-tag.php', $pictureAttr); ?>
-                        </div>
-                        <div class="brand-logo">
-                            <img loading='lazy' data-ratio="<?php echo $ratio; ?>"
-                                src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'brand', array($brand['brand_id'], $siteLangId, ImageDimension::VIEW_MOBILE)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>"
-                                alt="<?php echo (!empty($fileData['afile_attribute_alt'])) ? $fileData['afile_attribute_alt'] : $brand['brand_name']; ?>"
-                                title="<?php echo (!empty($fileData['afile_attribute_alt'])) ? $fileData['afile_attribute_alt'] : $brand['brand_name']; ?>">
-                        </div>
-                    </a>
-                    <?php $i++;
+                ?>
+                    <div class="brand">
+                        <a href="<?php echo $productUrl; ?>">
+                            <div class="brand-thumb">
+                                <?php $this->includeTemplate('_partial/picture-tag.php', $pictureAttr); ?>
+                            </div>
+                        </a>
+                        <a href="<?php echo UrlHelper::generateUrl('brands', 'View', array($brand['brand_id'])); ?>">
+                            <div class="brand-logo">
+                                <img loading='lazy' data-ratio="<?php echo $ratio; ?>"
+                                    src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'brand', array($brand['brand_id'], $siteLangId, ImageDimension::VIEW_MOBILE)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>"
+                                    alt="<?php echo (!empty($fileData['afile_attribute_alt'])) ? $fileData['afile_attribute_alt'] : $brand['brand_name']; ?>"
+                                    title="<?php echo (!empty($fileData['afile_attribute_alt'])) ? $fileData['afile_attribute_alt'] : $brand['brand_name']; ?>">
+                            </div>
+                        </a>
+                    </div>
+                <?php $i++;
                 } ?>
             </div>
             <?php if ($collection['totBrands'] > Collections::LIMIT_BRAND_LAYOUT1) { ?>
