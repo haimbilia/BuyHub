@@ -586,7 +586,7 @@ trait SellerProducts
             $keywordSlug = $keywordSlug . '-' . $shopData['shop_name'];
             $post['selprod_url_keyword'] = strtolower(CommonHelper::createSlug($keywordSlug));
         }
-
+        $post['selprod_active'] = FatApp::getPostedData('selprod_active', FatUtility::VAR_INT, 0);
         $data_to_be_save = $post;
         $sellerProdObj = new SellerProduct($selprod_id);
         $sellerProdObj->assignValues($data_to_be_save);

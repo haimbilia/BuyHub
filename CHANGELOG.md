@@ -212,3 +212,4 @@
     - Bug-088770 - The price filter option should not appear on the search listing page in case the hide price is enabled
     - Bug-088843 - Offer should stay as Rejected when user edits the offer without making any changes
     - Bug-088834 - Change inventory functionality is not there in case of Assigned RFQ's
+    - Bug-088940 - task-8872- Publish inventory logic not working properly
