@@ -191,7 +191,7 @@ trait SellerCollections
         /* url data[ */
 
         $langs = Language::getAllNames();
-        if (1 == count($langs) && !$this->isCollectionLinkFormFilled($scollection_id)) {             
+        if (1 == count($langs) && !$this->isCollectionLinkFormFilled($record->getMainTableRecordId())) {             
             $this->set('openCollectionLinkForm', true);
         }
 
