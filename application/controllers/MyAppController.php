@@ -948,8 +948,7 @@ class MyAppController extends FatController
             $data =  [
                 'status' => '-2',
                 'responseCode' => LibHelper::RC_OK,
-                'msg' => $msg,
-                'data' => []
+                'msg' => $msg
             ];
             CommonHelper::jsonEncodeUnicode($data, true);
         }
