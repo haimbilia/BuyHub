@@ -359,7 +359,7 @@ class BlogController extends MyAppController
             $this->_template->addJs(array('js/masonry.pkgd.js'));
             $this->_template->addJs(array('js/slick.min.js'));
         }
-        $this->_template->render(true, (!CommonHelper::isAppUser()));
+        $this->_template->render( true, (!CommonHelper::isAppUser()));
     }
 
     public function setupPostComment()

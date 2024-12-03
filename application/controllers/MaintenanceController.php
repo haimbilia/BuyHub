@@ -8,6 +8,9 @@ class MaintenanceController extends MyAppController
             FatApp::redirectUser(UrlHelper::generateUrl('Home'));
         }
         $this->set('maintenanceText', FatApp::getConfig("CONF_MAINTENANCE_TEXT_" . $this->siteLangId, FatUtility::VAR_STRING, ''));
-        $this->_template->render();
+        if (CommonHelper::isAppUser()) {
+            $this->set('exculdeMainHeaderDiv', true);
+        }
+        $this->_template->render(true, !(CommonHelper::isAppUser()));
     }
 }
