@@ -400,7 +400,7 @@ class PatchUpdateController extends ListingBaseController
                 'tbl_products', 'tbl_products_browsing_history', 'tbl_products_lang', 'tbl_products_shipped_by_seller', 'tbl_products_shipping', 'tbl_products_temp_ids',
                 'tbl_promotion_item_charges', 'tbl_promotions', 'tbl_promotions_charges', 'tbl_promotions_clicks', 'tbl_promotions_lang', 'tbl_promotions_logs', 'tbl_promotions_old',
                 'tbl_question_banks', 'tbl_question_banks_lang', 'tbl_question_to_answers', 'tbl_questionnaire_feedback', 'tbl_questionnaires', 'tbl_questionnaires_lang',
-                'tbl_questionnaires_to_question', 'tbl_questions', 'tbl_questions_lang', 'tbl_recommendation_activity_browsing', 'tbl_related_products', 'tbl_rewards_on_purchase',, 'tbl_rfq', 'tbl_rfq_to_sellers', 'tbl_rfq_offers', 'tbl_rfq_latest_offers', 'tbl_rfq_offer_messages', 
+                'tbl_questionnaires_to_question', 'tbl_questions', 'tbl_questions_lang', 'tbl_recommendation_activity_browsing', 'tbl_related_products', 'tbl_rewards_on_purchase', 'tbl_rfq', 'tbl_rfq_to_sellers', 'tbl_rfq_offers', 'tbl_rfq_latest_offers', 'tbl_rfq_offer_messages', 
                 'tbl_search_items', 'tbl_seller_brand_requests', 'tbl_seller_brand_requests_lang', 'tbl_seller_catalog_requests', 'tbl_seller_packages', 'tbl_seller_packages_lang',
                 'tbl_seller_packages_plan', 'tbl_seller_product_options', 'tbl_seller_product_policies', 'tbl_seller_product_rating', 'tbl_seller_product_reviews',
                 'tbl_seller_product_reviews_abuse', 'tbl_seller_product_reviews_helpful', 'tbl_seller_products', 'tbl_seller_products_lang', 'tbl_seller_products_temp_ids',
