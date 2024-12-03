@@ -32,7 +32,7 @@ class MyAppController extends FatController
 
         if (0 < FatApp::getPostedData('appUser', FatUtility::VAR_INT, 0)) {
             CommonHelper::setAppUser();
-        }
+        } 
 
         $this->set('siteLangId', $this->siteLangId);
 
