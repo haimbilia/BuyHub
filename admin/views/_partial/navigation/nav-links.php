@@ -376,7 +376,7 @@ $collapseClass = ($quickSearch ? 'collapsed' : 'collapse');
                             </a>
                         </li>
                     <?php } ?>
-                    <?php if ($objPrivilege->canViewOrders(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                    <?php if ($objPrivilege->canViewOrders(AdminAuthentication::getLoggedAdminId(), true) && (false == Plugin::isSplitPaymentEnabled($siteLangId))) { ?>
                         <li class="nav_item navItemJs">
                             <a class="nav_link navLinkJs dropdown-toggle-custom" data-selector='["GiftCardOrders"]' href="<?php echo UrlHelper::generateUrl('GiftCardOrders'); ?>">
                                 <span class="nav_icon">
