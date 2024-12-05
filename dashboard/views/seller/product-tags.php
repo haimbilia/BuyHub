@@ -24,7 +24,11 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                             <div class="row justify-content-end m-4">
                                 <div class="col-auto">
                                     <select class="form-control form-select" onchange="langForm(this)" name="lang_id">
-                                        <?php foreach ($languages as $langId => $langName) {
+                                        <?php echo "<option value='$siteLangId'>$languages[$siteLangId]</option>";
+                                        foreach ($languages as $langId => $langName) {
+                                            if($siteLangId == $langId) {
+                                                continue;
+                                            }
                                             echo "<option value='$langId'>$langName</option>";
                                         }
                                         ?>

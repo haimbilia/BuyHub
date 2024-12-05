@@ -51,7 +51,7 @@ $(document).ready(function () {
 
 		if (tag_id == undefined || tag_id == '') {
 			var tag_name = e.detail.tag.title;
-			var lang_id = $('#tagLangId').val() || 0;
+			var lang_id = $('input[name=lang_id]').val() || 0;
 			var data = { tag_name, lang_id };
 			fcom.updateWithAjax(fcom.makeUrl('Seller', 'tagSetup'), data, function (t) {
 				fcom.updateWithAjax(fcom.makeUrl('Seller', 'updateProductTag'), 'product_id=' + product_id + '&tag_id=' + t.tagId, function (t3) {
