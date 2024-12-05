@@ -477,7 +477,7 @@ class ReviewsController extends MyAppController
             CommonHelper::redirectUserReferer();
         }
         $opId = $orderProduct['op_id'];
-        FatApp::redirectUser(UrlHelper::generateUrl('Buyer', 'orderFeedback', array($opId), CONF_WEBROOT_DASHBOARD));
+        FatApp::redirectUser(UrlHelper::generateUrl('Buyer', 'orderFeedback', array($opId), CONF_WEBROOT_DASHBOARD, null, false, false, false));
     }
 
     public function reviewAbuse($reviewId)
