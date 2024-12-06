@@ -37,7 +37,7 @@ trait RfqOffersUtility
                 CommonHelper::redirectUserReferer();
             }
 
-            if (!$this->userPrivilege->canEditRfqOffers($this->userParentId, true)) {
+            if (!$this->userPrivilege->canEditRfqOffers($this->userId, true)) {
                 LibHelper::exitWithError(Labels::getLabel('ERR_UNAUTHORIZED_ACCESS'), false, true);
                 CommonHelper::redirectUserReferer();
             }
@@ -235,7 +235,7 @@ trait RfqOffersUtility
         if ($this->isSeller) {
             /*  $srch->joinSellers('INNER', $this->userId);
             $srch->addCondition('rfqts_user_id', '=', $this->userId); */
-            $srch->addCondition('ro.offer_user_id', '=', $this->userId);
+            $srch->addCondition('ro.offer_user_id', '=', $this->userParentId);
         }
 
         $srch->joinOfferPostedByUser();
@@ -333,7 +333,7 @@ trait RfqOffersUtility
             'rfqts_user_id as seller_id',
             'rfqts_selprod_id'
         ];
-        $rfqDataArr = $rfq->get($this->siteLangId, $attr, 'LEFT', UserAuthentication::getLoggedUserId());
+        $rfqDataArr = $rfq->get($this->siteLangId, $attr, 'LEFT', $this->userParentId);
         $selProdPrice = 0;
         if (!empty($rfqDataArr) && !empty($rfqDataArr['rfqts_selprod_id'])) {
             $selProdPrice = SellerProduct::getAttributesById($rfqDataArr['rfqts_selprod_id'], 'selprod_price');
@@ -406,6 +406,7 @@ trait RfqOffersUtility
     {
         $frm = $this->getForm();
         $post = $frm->getFormDataFromArray(FatApp::getPostedData());
+        $this->userPrivilege->canEditRfqOffers($this->userId);
         if (false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
@@ -440,14 +441,14 @@ trait RfqOffersUtility
         $selprodId = 0;
         if (1 > $counterOfferId && $this->isSeller) {
             if (0 < $rfqData['rfq_selprod_id'] && 0 < $rfqData['rfq_product_id']) {
-                $selprodId = RequestForQuote::getSellerProductId($post['offer_rfq_id'], UserAuthentication::getLoggedUserId());
+                $selprodId = RequestForQuote::getSellerProductId($post['offer_rfq_id'], $this->userParentId);
                 if (1 > $selprodId) {
                     LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_LINK_YOUR_INVENTORY_FIRST.', $this->siteLangId));
                 }
             }
 
             $qty = FatApp::getPostedData('offer_quantity', FatUtility::VAR_INT, 0);
-            if (1 > $recordId && false == RfqOffers::validateOfferRequest($post['offer_rfq_id'], $qty, UserAuthentication::getLoggedUserId())) {
+            if (1 > $recordId && false == RfqOffers::validateOfferRequest($post['offer_rfq_id'], $qty, $this->userParentId)) {
                 LibHelper::exitWithError(Labels::getLabel('ERR_DUPLICATE_OFFER._YOU_CANNOT_PLACE_OFFER_WITH_THIS_QTY.', $this->siteLangId));
             }
         }
@@ -457,7 +458,7 @@ trait RfqOffersUtility
             $negotiable = 1;
         }
 
-        $post['offer_user_id'] = UserAuthentication::getLoggedUserId();
+        $post['offer_user_id'] = $this->userParentId;
         $post['offer_user_type'] = $this->isSeller ? User::USER_TYPE_SELLER : User::USER_TYPE_BUYER;
         $post['offer_negotiable'] = $negotiable;
 
@@ -1111,7 +1112,7 @@ trait RfqOffersUtility
         $srch->addMultipleFields($dbFlds);
 
         if ($this->isSeller) {
-            $srch->addCondition('rfqts_user_id', '=', $this->userId);
+            $srch->addCondition('rfqts_user_id', '=', $this->userParentId);
         } else {
             $srch->addCondition('rfq_user_id', '=', $this->userId);
         }

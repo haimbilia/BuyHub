@@ -213,3 +213,5 @@
     - Bug-088843 - Offer should stay as Rejected when user edits the offer without making any changes
     - Bug-088834 - Change inventory functionality is not there in case of Assigned RFQ's
     - Bug-088940 - task-8872- Publish inventory logic not working properly
+    - Bug-089174 - RFQ permissions are not available for seller sub-users.
+    - Bug-089024 - Fatal error occur on the front end when the product ordered in rfq is deleted.

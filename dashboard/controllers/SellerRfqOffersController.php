@@ -84,7 +84,7 @@ class SellerRfqOffersController extends SellerBaseController
             $cnd->attachCondition('product_identifier', 'LIKE', '%' . $post['keyword'] . '%');
         }
 
-        $srch->addCondition('selprod_user_id', '=', $this->userId);
+        $srch->addCondition('selprod_user_id', '=', $this->userParentId);
         $srch->addOrder('selprod_active', 'DESC');
         $srch->addCondition('product_type', '=', $rfqData['rfq_product_type']);
         $srch->addCondition('product_approved', '=', applicationConstants::YES);
