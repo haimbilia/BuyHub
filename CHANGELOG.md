@@ -108,3 +108,8 @@
     - Bug-088567 - Error occurs on the payment page when the advertiser tries to add money to the wallet
     - Bug-088571 - UI issue in the brand layout 2 on the homepage
     - Bug-088639 - The user does not get auto-verified even if email verifications are off
+    - bug-089147 - Multiple issues with the pickup address setup form.
+    - bug-088936 - Collections: The data is not being saved in the content editor when using Arabic.
+    - bug-089018 - Issue on the brand listing pagein RTL
+    - bug-089133 - A warning appears on the inventory listing page on the seller's end
+    - bug-089138 - The product tags added by the seller for any product in Arabic are not saved
