@@ -113,3 +113,4 @@
     - bug-089018 - Issue on the brand listing pagein RTL
     - bug-089133 - A warning appears on the inventory listing page on the seller's end
     - bug-089138 - The product tags added by the seller for any product in Arabic are not saved
+    - bug-088968 - The listing is not sorted in Brands filters on the search listing page.
