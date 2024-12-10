@@ -1709,68 +1709,13 @@ END,   special_price_found ) as special_price_found'
             $sortBy = $criteria['sortBy'];
         }
 
-        /*$sortOrder = 'asc';
-        if (array_key_exists('sortOrder', $criteria)) {
-            $sortOrder = $criteria['sortOrder'];
-        }
-
-        if (!empty($sortBy)) {
-            $sortByArr = explode("_", $sortBy);
-            $sortBy = isset($sortByArr[0]) ? $sortByArr[0] : $sortBy;
-            $sortOrder = isset($sortByArr[1]) ? $sortByArr[1] : $sortOrder;
-
-            if (!in_array($sortOrder, array('asc', 'desc'))) {
-                $sortOrder = 'asc';
-            }
-
-            if (!in_array($sortBy, array('keyword', 'price', 'popularity', 'rating', 'discounted'))) {
-                $sortOrder = 'keyword_relevancy';
-            }
-
-            switch ($sortBy) {
-                case 'keyword':
-                    if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, '')) && FatApp::getConfig('CONF_PRODUCT_GEO_LOCATION', FatUtility::VAR_INT, 0) != applicationConstants::BASED_ON_CURRENT_LOCATION) {
-                        $srch->addOrder('availableInLocation', 'DESC');
-                    }
-                    $srch->addOrder('keyword_relevancy', 'DESC');
-                    break;
-                case 'price':
-                    $srch->addOrder('theprice', $sortOrder);
-                    break;
-                case 'popularity':
-                    if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, '')) && FatApp::getConfig('CONF_PRODUCT_GEO_LOCATION', FatUtility::VAR_INT, 0) != applicationConstants::BASED_ON_CURRENT_LOCATION) {
-                        $srch->addOrder('availableInLocation', 'DESC');
-                    }
-                    $srch->addOrder('selprod_sold_count', $sortOrder);
-                    break;
-                case 'discounted':
-                    $srch->addFld('ROUND(((selprod_price - theprice)*100)/selprod_price) as discountedValue');
-                    $srch->addOrder('discountedValue', 'DESC');
-                    break;
-                case 'rating':
-                    $srch->addOrder('prod_rating', $sortOrder);
-                    break;
-                default:
-                    $srch->addOrder('keyword_relevancy', 'DESC');
-                    break;
-            }
-        } */
-
         $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
         // $srch->addCondition('selprod_available_from', '>=', FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d'));
 
-        $useGroupBy = true;
-        if (isset($criteria['includeOrderByWithGroupBy']) && $criteria['includeOrderByWithGroupBy'] == 'true') {
-            $useGroupBy = false;
-            $srch->doNotLimitRecords();
-        }
-
-        if ($useGroupBy) {
-            $srch->addGroupBy('product_id');
-            if (!empty($keyword)) {
-                $srch->addGroupBy('keywordmatched');
-                // $srch->addOrder('keywordmatched', 'desc');
-            }
+        $srch->addGroupBy('product_id');
+        if (!empty($keyword)) {
+            $srch->addGroupBy('keywordmatched');
+            // $srch->addOrder('keywordmatched', 'desc');
         }
 
         return $srch;
@@ -1844,19 +1789,7 @@ END,   special_price_found ) as special_price_found'
         if (array_key_exists('keyword', $get) && !empty($get['keyword'])) {
             $srch->addOrder('keywordmatched', 'desc');
         }
-        $srch->addOrder('selprod_updated_on', 'DESC');
-
-        if (isset($get['includeOrderByWithGroupBy']) && $get['includeOrderByWithGroupBy'] == 'true') {
-            $tempSrch = new searchBase('(' . $srch->getQuery() . ')', 'tmp');
-            $tempSrch->doNotCalculateRecords();
-            $tempSrch->addGroupBy('product_id');
-            if (!empty($keyword)) {
-                $tempSrch->addGroupBy('keywordmatched');
-                // $srch->addOrder('keywordmatched', 'desc');
-            }
-            $srch = $tempSrch;
-        }
-
+        $srch->addOrder('selprod_id', 'DESC');
         return $srch;
     }
 

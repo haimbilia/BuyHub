@@ -151,9 +151,7 @@ class BrandsController extends MyAppController
         );
         $removeFlds = array_diff($flds, ['1']);
         $this->setRecordCount(clone $srch, $get['pageSize'], $get['page'], $get, true, $removeFlds);
-
-        $get['includeOrderByWithGroupBy'] = true;
-        $srch = Product::getListingObj($get, $this->siteLangId, $userId);
+       
         Product::setOrderOnListingObj($srch, $get);
 
         $srch->setPageNumber($page);
