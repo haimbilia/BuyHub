@@ -43,16 +43,16 @@
                             <td>
                                 <?php
                                 if (1 < count($op['taxOptions'])) {
-                                    echo CommonHelper::displayMoneyFormat($taxCost, true, true);
-                                    echo "<br/>";
+                                    echo '<div class="tax">';
+                                    echo '<span class="tax-option">' . Labels::getLabel('LBL_PRODUCT_TOTAL_TAX', $siteLangId) . '</span><span class="tax-value">' . CommonHelper::displayMoneyFormat($taxCost, true, true) . '</span>';
+                                    echo "</div>";
                                 }
 
                                 $strCount = 1;
                                 foreach ($op['taxOptions'] as $taxStr) {
-                                    echo $taxStr['name'] . " - " . CommonHelper::displayMoneyFormat($taxStr['value'], true, true);
-                                    if ($strCount != count($op['taxOptions'])) {
-                                        echo "<br/>";
-                                    }
+                                    echo '<div class="tax">';
+                                    echo '<span class="tax-option">' . $taxStr['name'] . '</span><span class="tax-value">' . CommonHelper::displayMoneyFormat($taxStr['value'], true, true).'</span>';
+                                    echo '</div>';
                                     $strCount++;
                                 } ?>
                             </td>

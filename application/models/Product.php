@@ -588,8 +588,10 @@ class Product extends MyAppModel
                 static::DB_PRODUCT_TO_SHIP_PREFIX . 'duration',
                 static::DB_PRODUCT_TO_SHIP_PREFIX . 'charges',
                 static::DB_PRODUCT_TO_SHIP_PREFIX . 'additional_charges',
-                'IFNULL(' . Countries::DB_TBL_PREFIX . 'name', '\'' . Labels::getLabel('LBL_EVERYWHERE_ELSE', $lang_id) . '\') as country_name',
-                'ifNull(' . ShippingCompanies::DB_TBL_PREFIX . 'name', ShippingCompanies::DB_TBL_PREFIX . 'identifier) as ' . ShippingCompanies::DB_TBL_PREFIX . 'name',
+                'IFNULL(' . Countries::DB_TBL_PREFIX . 'name',
+                '\'' . Labels::getLabel('LBL_EVERYWHERE_ELSE', $lang_id) . '\') as country_name',
+                'ifNull(' . ShippingCompanies::DB_TBL_PREFIX . 'name',
+                ShippingCompanies::DB_TBL_PREFIX . 'identifier) as ' . ShippingCompanies::DB_TBL_PREFIX . 'name',
                 ShippingCompanies::DB_TBL_PREFIX . 'id',
                 ShippingCompanies::DB_TBL_LANG_PREFIX . 'scompany_id',
                 ShippingDurations::DB_TBL_PREFIX . 'name',
@@ -1188,7 +1190,7 @@ class Product extends MyAppModel
         if (0 < FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0)) {
             return false;
         }
-        
+
         $productId = FatUtility::int($productId);
         $selProdSellerId = FatUtility::int($selProdSellerId);
         if ($productAddedBySellerId && $productAddedBySellerId == $selProdSellerId) {
@@ -1522,12 +1524,36 @@ class Product extends MyAppModel
         /*substring_index(group_concat(IFNULL(prodcat_name, prodcat_identifier) ORDER BY IFNULL(prodcat_name, prodcat_identifier) ASC SEPARATOR "," ) , ",", 1) as prodcat_name*/
         $srch->addMultipleFields(
             array(
-                'prodcat_code', 'product_id', 'prodcat_id', 'COALESCE(product_name, product_identifier) as product_name', 'product_model',  'product_updated_on', 'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name',
-                'selprod_id', 'selprod_user_id',  'selprod_code', 'selprod_stock', 'selprod_condition', 'selprod_price', 'COALESCE(selprod_title  ,COALESCE(product_name, product_identifier)) as selprod_title',
-                'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'splprice_start_date', 'splprice_end_date',
-                'brand_id', 'COALESCE(brand_name, brand_identifier) as brand_name', 'user_name', 'IF(selprod_stock > 0, 1, 0) AS in_stock',
-                'selprod_sold_count', 'selprod_return_policy', /*'maxprice', 'ifnull(sq_sprating.totReviews,0) totReviews','IF(ufp_id > 0, 1, 0) as isfavorite', */ 'selprod_min_order_qty',
-                'shop.shop_id', 'shop.shop_lat', 'shop.shop_lng', 'COALESCE(shop_name, shop_identifier) as shop_name'
+                'prodcat_code',
+                'product_id',
+                'prodcat_id',
+                'COALESCE(product_name, product_identifier) as product_name',
+                'product_model',
+                'product_updated_on',
+                'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name',
+                'selprod_id',
+                'selprod_user_id',
+                'selprod_code',
+                'selprod_stock',
+                'selprod_condition',
+                'selprod_price',
+                'COALESCE(selprod_title  ,COALESCE(product_name, product_identifier)) as selprod_title',
+                'splprice_display_list_price',
+                'splprice_display_dis_val',
+                'splprice_display_dis_type',
+                'splprice_start_date',
+                'splprice_end_date',
+                'brand_id',
+                'COALESCE(brand_name, brand_identifier) as brand_name',
+                'user_name',
+                'IF(selprod_stock > 0, 1, 0) AS in_stock',
+                'selprod_sold_count',
+                'selprod_return_policy', /*'maxprice', 'ifnull(sq_sprating.totReviews,0) totReviews','IF(ufp_id > 0, 1, 0) as isfavorite', */
+                'selprod_min_order_qty',
+                'shop.shop_id',
+                'shop.shop_lat',
+                'shop.shop_lng',
+                'COALESCE(shop_name, shop_identifier) as shop_name'
             )
         );
 
@@ -1683,53 +1709,6 @@ END,   special_price_found ) as special_price_found'
             $sortBy = $criteria['sortBy'];
         }
 
-        /*$sortOrder = 'asc';
-        if (array_key_exists('sortOrder', $criteria)) {
-            $sortOrder = $criteria['sortOrder'];
-        }
-
-        if (!empty($sortBy)) {
-            $sortByArr = explode("_", $sortBy);
-            $sortBy = isset($sortByArr[0]) ? $sortByArr[0] : $sortBy;
-            $sortOrder = isset($sortByArr[1]) ? $sortByArr[1] : $sortOrder;
-
-            if (!in_array($sortOrder, array('asc', 'desc'))) {
-                $sortOrder = 'asc';
-            }
-
-            if (!in_array($sortBy, array('keyword', 'price', 'popularity', 'rating', 'discounted'))) {
-                $sortOrder = 'keyword_relevancy';
-            }
-
-            switch ($sortBy) {
-                case 'keyword':
-                    if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, '')) && FatApp::getConfig('CONF_PRODUCT_GEO_LOCATION', FatUtility::VAR_INT, 0) != applicationConstants::BASED_ON_CURRENT_LOCATION) {
-                        $srch->addOrder('availableInLocation', 'DESC');
-                    }
-                    $srch->addOrder('keyword_relevancy', 'DESC');
-                    break;
-                case 'price':
-                    $srch->addOrder('theprice', $sortOrder);
-                    break;
-                case 'popularity':
-                    if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, '')) && FatApp::getConfig('CONF_PRODUCT_GEO_LOCATION', FatUtility::VAR_INT, 0) != applicationConstants::BASED_ON_CURRENT_LOCATION) {
-                        $srch->addOrder('availableInLocation', 'DESC');
-                    }
-                    $srch->addOrder('selprod_sold_count', $sortOrder);
-                    break;
-                case 'discounted':
-                    $srch->addFld('ROUND(((selprod_price - theprice)*100)/selprod_price) as discountedValue');
-                    $srch->addOrder('discountedValue', 'DESC');
-                    break;
-                case 'rating':
-                    $srch->addOrder('prod_rating', $sortOrder);
-                    break;
-                default:
-                    $srch->addOrder('keyword_relevancy', 'DESC');
-                    break;
-            }
-        } */
-
         $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
         // $srch->addCondition('selprod_available_from', '>=', FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d'));
 
@@ -1745,6 +1724,12 @@ END,   special_price_found ) as special_price_found'
     public static function setOrderOnListingObj(&$srch, &$get = [])
     {
         $srch->doNotCalculateRecords();
+
+        $keyword = '';
+        if (array_key_exists('keyword', $get)) {
+            $keyword = $get['keyword'];
+        }
+
         $sortBy = 'popularity';
         if (array_key_exists('keyword', $get) && !empty($get['keyword'])) {
             $sortBy = 'keyword_relevancy';
@@ -1804,7 +1789,7 @@ END,   special_price_found ) as special_price_found'
         if (array_key_exists('keyword', $get) && !empty($get['keyword'])) {
             $srch->addOrder('keywordmatched', 'desc');
         }
-        $srch->addOrder('selprod_updated_on', 'DESC');
+        $srch->addOrder('selprod_id', 'DESC');
         return $srch;
     }
 
@@ -2217,9 +2202,29 @@ END,   special_price_found ) as special_price_found'
         /*$moreSellerSrch->addMultipleFields(array( 'selprod_id', 'selprod_user_id', 'selprod_price', 'special_price_found', 'theprice', 'shop_id', 'shop_name' ,'IF(selprod_stock > 0, 1, 0) AS in_stock'));*/
         $moreSellerSrch->addMultipleFields(
             array(
-                'selprod_id', 'selprod_user_id', 'selprod_price', 'special_price_found', 'theprice', 'shop_id', 'shop_name', 'shop_user_id', 'product_seller_id',
-                'product_id', 'shop_country_l.country_name as shop_country_name', 'shop_state_l.state_name as shop_state_name', 'shop_city', 'selprod_cod_enabled',
-                'product_cod_enabled', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'selprod_min_order_qty', 'selprod_available_from', 'shop_lat', 'shop_lng', 'product_updated_on', 'selprod_title', 'selprod_code'
+                'selprod_id',
+                'selprod_user_id',
+                'selprod_price',
+                'special_price_found',
+                'theprice',
+                'shop_id',
+                'shop_name',
+                'shop_user_id',
+                'product_seller_id',
+                'product_id',
+                'shop_country_l.country_name as shop_country_name',
+                'shop_state_l.state_name as shop_state_name',
+                'shop_city',
+                'selprod_cod_enabled',
+                'product_cod_enabled',
+                'IF(selprod_stock > 0, 1, 0) AS in_stock',
+                'selprod_min_order_qty',
+                'selprod_available_from',
+                'shop_lat',
+                'shop_lng',
+                'product_updated_on',
+                'selprod_title',
+                'selprod_code'
             )
         );
         $moreSellerSrch->addHaving('in_stock', '>', 0);
