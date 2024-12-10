@@ -107,6 +107,9 @@ class CategoryController extends MyAppController
             'shop.shop_id', 'shop.shop_lat', 'shop.shop_lng', 'COALESCE(shop_name, shop_identifier) as shop_name'
         );
         $this->setRecordCount(clone $srch, $get['pageSize'], $get['page'], $get, true, $flds);
+        
+        $get['includeOrderByWithGroupBy'] = true;
+        $srch = Product::getListingObj($get, $this->siteLangId, $userId);        
         Product::setOrderOnListingObj($srch, $get);
         $srch->setPageNumber($page);
         if ($pageSize) {
