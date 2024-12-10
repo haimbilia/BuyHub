@@ -168,50 +168,11 @@
                 </g>
             </g>
         </symbol>
-        <symbol id="category-layout-1"  viewBox="0 0 140 70" >
-            <g  transform="translate(-4712 -372)">
-                <path id="Path_61" data-name="Path 61" d="M4,0H136a4,4,0,0,1,4,4V66a4,4,0,0,1-4,4H4a4,4,0,0,1-4-4V4A4,4,0,0,1,4,0Z" transform="translate(4712 372)" fill="#fff"/>
-                <g id="Group_366" data-name="Group 366" transform="translate(0 -2)">
-                    <g id="Group_239" data-name="Group 239" transform="translate(-269 27)">
-                        <g id="Group_237" data-name="Group 237" transform="translate(-15 -7)">
-                            <rect id="Rectangle_207" data-name="Rectangle 207" width="24" height="2" transform="translate(5012 410)" fill="#d4d4d4"/>
-                            <rect id="Rectangle_208" data-name="Rectangle 208" width="12" height="2" transform="translate(5018 414)" fill="#707070"/>
-                        </g>
-                        <g id="Group_238" data-name="Group 238">
-                            <rect id="Rectangle_209" data-name="Rectangle 209" width="34" height="34" transform="translate(4992 365)" fill="#e8e8e8"/>
-                            <path id="Icon_metro-image" data-name="Icon metro-image" d="M13.819,4.606h0v9H3.321v-9h10.5Zm0-.75H3.321a.752.752,0,0,0-.75.75v9a.752.752,0,0,0,.75.75h10.5a.752.752,0,0,0,.75-.75v-9A.752.752,0,0,0,13.821,3.856Zm-1.5,2.625A1.125,1.125,0,1,1,11.2,5.356,1.125,1.125,0,0,1,12.321,6.481Zm.75,6.375h-9v-1.5L6.7,6.856l3,3.75h.75l2.625-2.25Z" transform="translate(5000.429 373.144)" fill="#a5a5a5"/>
-                        </g>
-                    </g>
-                    <g id="Group_242" data-name="Group 242" transform="translate(-227 27)">
-                        <g id="Group_240" data-name="Group 240" transform="translate(-15 -7)">
-                            <rect id="Rectangle_210" data-name="Rectangle 210" width="24" height="2" transform="translate(5012 410)" fill="#d4d4d4"/>
-                            <rect id="Rectangle_211" data-name="Rectangle 211" width="12" height="2" transform="translate(5018 414)" fill="#707070"/>
-                        </g>
-                        <g id="Group_241" data-name="Group 241">
-                            <rect id="Rectangle_212" data-name="Rectangle 212" width="34" height="34" transform="translate(4992 365)" fill="#e8e8e8"/>
-                            <path id="Icon_metro-image-2" data-name="Icon metro-image" d="M13.819,4.606h0v9H3.321v-9h10.5Zm0-.75H3.321a.752.752,0,0,0-.75.75v9a.752.752,0,0,0,.75.75h10.5a.752.752,0,0,0,.75-.75v-9A.752.752,0,0,0,13.821,3.856Zm-1.5,2.625A1.125,1.125,0,1,1,11.2,5.356,1.125,1.125,0,0,1,12.321,6.481Zm.75,6.375h-9v-1.5L6.7,6.856l3,3.75h.75l2.625-2.25Z" transform="translate(5000.429 373.144)" fill="#a5a5a5"/>
-                        </g>
-                    </g>
-                    <g id="Group_245" data-name="Group 245" transform="translate(-185 27)">
-                        <g id="Group_243" data-name="Group 243" transform="translate(-15 -7)">
-                            <rect id="Rectangle_213" data-name="Rectangle 213" width="24" height="2" transform="translate(5012 410)" fill="#d4d4d4"/>
-                            <rect id="Rectangle_214" data-name="Rectangle 214" width="12" height="2" transform="translate(5018 414)" fill="#707070"/>
-                        </g>
-                        <g id="Group_244" data-name="Group 244">
-                            <rect id="Rectangle_215" data-name="Rectangle 215" width="34" height="34" transform="translate(4992 365)" fill="#e8e8e8"/>
-                            <path id="Icon_metro-image-3" data-name="Icon metro-image" d="M13.819,4.606h0v9H3.321v-9h10.5Zm0-.75H3.321a.752.752,0,0,0-.75.75v9a.752.752,0,0,0,.75.75h10.5a.752.752,0,0,0,.75-.75v-9A.752.752,0,0,0,13.821,3.856Zm-1.5,2.625A1.125,1.125,0,1,1,11.2,5.356,1.125,1.125,0,0,1,12.321,6.481Zm.75,6.375h-9v-1.5L6.7,6.856l3,3.75h.75l2.625-2.25Z" transform="translate(5000.429 373.144)" fill="#a5a5a5"/>
-                        </g>
-                    </g>
-                    <g id="Group_365" data-name="Group 365">
-                        <rect id="Rectangle_365" data-name="Rectangle 365" width="56" height="2" transform="translate(4785 386)" fill="#d4d4d4"/>
-                        <rect id="Rectangle_370" data-name="Rectangle 370" width="12" height="2" transform="translate(4785 386)" fill="#707070"/>
-                        <rect id="Rectangle_366" data-name="Rectangle 366" width="12" height="2" transform="translate(4785 382)" fill="#707070"/>
-                        <rect id="Rectangle_367" data-name="Rectangle 367" width="12" height="2" transform="translate(4800 382)" fill="#d4d4d4"/>
-                        <rect id="Rectangle_368" data-name="Rectangle 368" width="12" height="2" transform="translate(4814 382)" fill="#d4d4d4"/>
-                        <rect id="Rectangle_369" data-name="Rectangle 369" width="12" height="2" transform="translate(4829 382)" fill="#d4d4d4"/>
-                    </g>
-                </g>
-            </g>
+        <symbol id="category-layout-1" viewBox="0 0 140 70">
+        <path id="b" d="M4,0h132c2.21,0,4,1.79,4,4v62c0,2.21-1.79,4-4,4H4c-2.21,0-4-1.79-4-4V4C0,1.79,1.79,0,4,0Z" fill="#fff"/>
+        <g id="c"><g id="d"><g id="e"><rect id="f" x="16" y="56" width="24" height="2" fill="#d4d4d4"/><rect id="g" x="22" y="60" width="12" height="2" fill="#707070"/></g><g id="h"><rect id="i" x="11" y="18" width="34" height="34" fill="#e8e8e8"/><path id="j" d="M33.25,30.75h0v9h-10.5v-9h10.5,0ZM33.25,30h-10.5c-.41,0-.75.34-.75.75v9c0,.41.34.75.75.75h10.5c.41,0,.75-.34.75-.75v-9c0-.41-.34-.75-.75-.75h0ZM31.75,32.63c0,.62-.5,1.12-1.13,1.12-.62,0-1.12-.5-1.12-1.13s.5-1.12,1.13-1.12c0,0,0,0,0,0,.62,0,1.12.51,1.12,1.12h0ZM32.5,39h-9v-1.5l2.63-4.5,3,3.75h.75l2.62-2.25v4.5Z" fill="#a5a5a5"/></g></g>
+        <g id="k"><g id="l"><rect id="m" x="58" y="56" width="24" height="2" fill="#d4d4d4"/><rect id="n" x="64" y="60" width="12" height="2" fill="#707070"/></g><g id="o"><rect id="p" x="53" y="18" width="34" height="34" fill="#e8e8e8"/><path id="q" d="M75.25,30.75h0v9h-10.5v-9h10.5,0ZM75.25,30h-10.5c-.41,0-.75.34-.75.75v9c0,.41.34.75.75.75h10.5c.41,0,.75-.34.75-.75v-9c0-.41-.34-.75-.75-.75h0ZM73.75,32.63c0,.62-.5,1.12-1.13,1.12-.62,0-1.12-.5-1.12-1.13s.5-1.12,1.13-1.12c0,0,0,0,0,0,.62,0,1.12.51,1.12,1.12h0ZM74.5,39h-9v-1.5l2.63-4.5,3,3.75h.75l2.62-2.25v4.5Z" fill="#a5a5a5"/></g></g><g id="r"><g id="s"><rect id="t" x="100" y="56" width="24" height="2" fill="#d4d4d4"/><rect id="u" x="106" y="60" width="12" height="2" fill="#707070"/></g>
+        <g id="v"><rect id="w" x="95" y="18" width="34" height="34" fill="#e8e8e8"/><path id="x" d="M117.25,30.75h0v9h-10.5v-9h10.5,0ZM117.25,30h-10.5c-.41,0-.75.34-.75.75v9c0,.41.34.75.75.75h10.5c.41,0,.75-.34.75-.75v-9c0-.41-.34-.75-.75-.75h0ZM115.75,32.63c0,.62-.5,1.12-1.13,1.12-.62,0-1.12-.5-1.12-1.13s.5-1.12,1.13-1.12c0,0,0,0,0,0,.62,0,1.12.51,1.12,1.12h0ZM116.5,39h-9v-1.5l2.63-4.5,3,3.75h.75l2.62-2.25v4.5Z" fill="#a5a5a5"/></g></g><g id="y"><rect id="z" x="88.03" y="12" width="40.97" height="2" fill="#d4d4d4"/><rect id="aa" x="88.03" y="12" width="12" height="2" fill="#707070"/><rect id="ab" x="88.03" y="7.61" width="12" height="2" fill="#707070"/><rect id="ac" x="103.03" y="7.61" width="12" height="2" fill="#d4d4d4"/><rect id="ad" x="117.03" y="7.61" width="12" height="2" fill="#d4d4d4"/></g></g>
         </symbol>
         <symbol id="category-layout-2"  viewBox="0 0 140 70" >
             <g  transform="translate(-4714 -442)">
