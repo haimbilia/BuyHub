@@ -215,3 +215,10 @@
     - Bug-088940 - task-8872- Publish inventory logic not working properly
     - Bug-089174 - RFQ permissions are not available for seller sub-users.
     - Bug-089024 - Fatal error occur on the front end when the product ordered in rfq is deleted.
+    - Bug-088639 - The user does not get auto-verified even if email verifications are off
+    - bug-089147 - Multiple issues with the pickup address setup form.
+    - bug-088936 - Collections: The data is not being saved in the content editor when using Arabic.
+    - bug-089018 - Issue on the brand listing pagein RTL
+    - bug-089133 - A warning appears on the inventory listing page on the seller's end
+    - bug-089138 - The product tags added by the seller for any product in Arabic are not saved
+    - bug-088968 - The listing is not sorted in Brands filters on the search listing page.

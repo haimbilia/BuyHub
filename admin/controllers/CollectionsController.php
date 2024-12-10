@@ -497,6 +497,9 @@ class CollectionsController extends ListingBaseController
         $langId = FatUtility::int($langId);
         $langId = 1 > $langId ? $this->siteLangId : $langId;
 
+        if($recordId > 0 && $type == 0){
+            $type = Collections::getAttributesById($recordId,'collection_type');
+        }
         $frm = new Form('frmCollectionLang');
         $frm->addHiddenField('', 'collection_type');
         $frm->addHiddenField('', 'collection_id', $recordId);

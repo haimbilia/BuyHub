@@ -67,12 +67,14 @@ $this->includeTemplate('_partial/pagination.php', $pagingArr, false);
 <?php if (count($arrListing) > 0) { ?>
     <script>
         var productsArr = [<?php echo '"' . implode('","', $productsArr) . '"' ?>];
+        var langId = <?php echo $langId; ?>;
         $("document").ready(function() {
             getTagsAutoComplete = function(e) {
                 var keyword = e.detail.value;
                 var list = [];
                 fcom.ajax(fcom.makeUrl('Seller', 'tagsAutoComplete'), {
-                    keyword: keyword
+                    keyword: keyword,
+                    langId: langId
                 }, function(t) {
                     var ans = $.parseJSON(t);
                     for (i = 0; i < ans.length; i++) {

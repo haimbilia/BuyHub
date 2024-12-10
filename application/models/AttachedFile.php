@@ -357,7 +357,7 @@ class AttachedFile extends MyAppModel
         /* ] */
         $path = $path . $date_wise_path;
 
-        $saveName = time() . '-' . preg_replace('/[^a-zA-Z0-9]/', '', $name);
+        $saveName = time() . '-' . preg_replace('/[^a-zA-Z0-9.]/', '', $name);
         if (strpos(CONF_UPLOADS_PATH, 's3://') !== false) {
             $fileExt = pathinfo($name, PATHINFO_EXTENSION);
             $fileExt = strtolower($fileExt);
@@ -380,7 +380,11 @@ class AttachedFile extends MyAppModel
         }
 
         if (strpos(CONF_UPLOADS_PATH, 's3://') !== false) {
-            $saveName = preg_replace('/[^a-zA-Z0-9-]/', '', $saveName);
+            if (isset($fileExt) && $fileExt == 'zip') {
+                $saveName = preg_replace('/[^a-zA-Z0-9-]/', '', $saveName);
+            }else{
+                $saveName = preg_replace('/[^a-zA-Z0-9-.]/', '', $saveName);
+            }
         }
         $fileLoc = $date_wise_path . $saveName;
 
@@ -554,11 +558,24 @@ class AttachedFile extends MyAppModel
             }
         }
 
-        static::setLastModified($imagePath);
-        static::setContentType($imagePath, 'image/webp');
+        /*In S3 bucket for some large files PHP functions like getImageSize gives some error. So handled the same accordingly */
+        if (strpos(CONF_UPLOADS_PATH, 's3://') !== false) {
+            static::setLastModified($imagePath);
+            static::setContentType($imagePath, 'image/webp');
+            $readFileFromCache = FatCache::get($imagePath, CONF_IMG_CACHE_TIME, '.jpg');
+            if (!$readFileFromCache) {
+                $fileContent = file_get_contents($imagePath);
+                FatCache::set($imagePath, $fileContent, '.jpg');
+            }
+            $imagePath = CONF_INSTALLATION_PATH . 'public' . UrlHelper::getCachedUrl($imagePath, CONF_IMG_CACHE_TIME, '.jpg');
+        } else {
+            static::setLastModified($imagePath);
+            static::setContentType($imagePath, 'image/webp');
+        }
 
         $w = FatUtility::int($w);
         $h = FatUtility::int($h);
+
         list($width, $height) = getimagesize($imagePath);
         $ratio_orig = $width / $height;
 
@@ -790,7 +807,15 @@ class AttachedFile extends MyAppModel
         if (substr($imagePath, strlen($imagePath) - 3, strlen($imagePath)) == "svg") {
             header("Content-type: image/svg+xml");
         } else {
-            header("content-type: image/jpeg");
+            if (empty($fileMimeType)) {
+                $fileMimeType = mime_content_type($imagePath);
+            }
+
+            if ($fileMimeType != '') {
+                header("content-type: " . $fileMimeType);
+            } else {
+                header("content-type: image/jpeg");
+            }
         }
     }
 
@@ -856,8 +881,20 @@ class AttachedFile extends MyAppModel
             }
         }
 
-        static::setLastModified($imagePath);
-        static::setContentType($imagePath, 'image/webp');
+        /*In S3 bucket for some large files PHP functions like getImageSize gives some error. So handled the same accordingly */
+        if (strpos(CONF_UPLOADS_PATH, 's3://') !== false) {
+            static::setLastModified($imagePath);
+            static::setContentType($imagePath, 'image/webp');
+            $readFileFromCache = FatCache::get($imagePath, CONF_IMG_CACHE_TIME, '.jpg');
+            if (!$readFileFromCache) {
+                $fileContent = file_get_contents($imagePath);
+                FatCache::set($imagePath, $fileContent, '.jpg');
+            }
+            $imagePath = CONF_INSTALLATION_PATH . 'public' . UrlHelper::getCachedUrl($imagePath, CONF_IMG_CACHE_TIME, '.jpg');
+        } else {
+            static::setLastModified($imagePath);
+            static::setContentType($imagePath, 'image/webp');
+        }
 
         list($width, $height) = getimagesize($imagePath);
 
