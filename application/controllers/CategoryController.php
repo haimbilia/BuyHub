@@ -115,7 +115,7 @@ class CategoryController extends MyAppController
         if ($pageSize) {
             $srch->setPageSize($pageSize);
         }
-
+        
         $products = FatApp::getDb()->fetchAll($srch->getResultSet());
 
         $selProdIdsArr = array_column($products, 'selprod_id');

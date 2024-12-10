@@ -1553,10 +1553,7 @@ class Product extends MyAppModel
                 'shop.shop_id',
                 'shop.shop_lat',
                 'shop.shop_lng',
-                'COALESCE(shop_name, shop_identifier) as shop_name',
-                'selprod_cart_type',
-                'selprod_hide_price',
-                'shop.shop_rfq_enabled'
+                'COALESCE(shop_name, shop_identifier) as shop_name'
             )
         );
 
@@ -1712,6 +1709,53 @@ END,   special_price_found ) as special_price_found'
             $sortBy = $criteria['sortBy'];
         }
 
+        /*$sortOrder = 'asc';
+        if (array_key_exists('sortOrder', $criteria)) {
+            $sortOrder = $criteria['sortOrder'];
+        }
+
+        if (!empty($sortBy)) {
+            $sortByArr = explode("_", $sortBy);
+            $sortBy = isset($sortByArr[0]) ? $sortByArr[0] : $sortBy;
+            $sortOrder = isset($sortByArr[1]) ? $sortByArr[1] : $sortOrder;
+
+            if (!in_array($sortOrder, array('asc', 'desc'))) {
+                $sortOrder = 'asc';
+            }
+
+            if (!in_array($sortBy, array('keyword', 'price', 'popularity', 'rating', 'discounted'))) {
+                $sortOrder = 'keyword_relevancy';
+            }
+
+            switch ($sortBy) {
+                case 'keyword':
+                    if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, '')) && FatApp::getConfig('CONF_PRODUCT_GEO_LOCATION', FatUtility::VAR_INT, 0) != applicationConstants::BASED_ON_CURRENT_LOCATION) {
+                        $srch->addOrder('availableInLocation', 'DESC');
+                    }
+                    $srch->addOrder('keyword_relevancy', 'DESC');
+                    break;
+                case 'price':
+                    $srch->addOrder('theprice', $sortOrder);
+                    break;
+                case 'popularity':
+                    if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, '')) && FatApp::getConfig('CONF_PRODUCT_GEO_LOCATION', FatUtility::VAR_INT, 0) != applicationConstants::BASED_ON_CURRENT_LOCATION) {
+                        $srch->addOrder('availableInLocation', 'DESC');
+                    }
+                    $srch->addOrder('selprod_sold_count', $sortOrder);
+                    break;
+                case 'discounted':
+                    $srch->addFld('ROUND(((selprod_price - theprice)*100)/selprod_price) as discountedValue');
+                    $srch->addOrder('discountedValue', 'DESC');
+                    break;
+                case 'rating':
+                    $srch->addOrder('prod_rating', $sortOrder);
+                    break;
+                default:
+                    $srch->addOrder('keyword_relevancy', 'DESC');
+                    break;
+            }
+        } */
+
         $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
         // $srch->addCondition('selprod_available_from', '>=', FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d'));
 
@@ -1810,8 +1854,9 @@ END,   special_price_found ) as special_price_found'
                 $tempSrch->addGroupBy('keywordmatched');
                 // $srch->addOrder('keywordmatched', 'desc');
             }
-            return $tempSrch;
+            $srch = $tempSrch;
         }
+
         return $srch;
     }
 
@@ -2237,7 +2282,6 @@ END,   special_price_found ) as special_price_found'
                 'shop_country_l.country_name as shop_country_name',
                 'shop_state_l.state_name as shop_state_name',
                 'shop_city',
-                'shop_rfq_enabled',
                 'selprod_cod_enabled',
                 'product_cod_enabled',
                 'IF(selprod_stock > 0, 1, 0) AS in_stock',
@@ -2247,9 +2291,7 @@ END,   special_price_found ) as special_price_found'
                 'shop_lng',
                 'product_updated_on',
                 'selprod_title',
-                'selprod_code',
-                'selprod_cart_type',
-                'selprod_hide_price'
+                'selprod_code'
             )
         );
         $moreSellerSrch->addHaving('in_stock', '>', 0);
