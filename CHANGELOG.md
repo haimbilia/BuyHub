@@ -229,3 +229,5 @@
     - bug-089141 - auto Scrolling functionality does not works in Mobile view for seo meta tags.
     - bug-088885 - Categories linked with the collection are not visible on the front end. 
     - bug-089013 - The savings icon is not visible on the Order details page on the buyer's end.
+    - bug-088958 - Records linked with the category layout 7 are not visible on the front end in Arabic.
+    - bug-088963 - Category layout 9 records are visible on mobile devices in Arabic.

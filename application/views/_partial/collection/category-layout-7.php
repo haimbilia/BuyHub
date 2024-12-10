@@ -52,6 +52,7 @@
         <script>
             var displaySize = 8;
             $('.industryCarousalJs').not('.slick-initialized').slick({
+                rtl: ('rtl' == langLbl.layoutDirection),
                 draggable: true,
                 slidesToShow: displaySize,
                 slidesToScroll: 1,

@@ -49,6 +49,7 @@
         </div>
         <script>
             $('.industryCarousalJs').not('.slick-initialized').slick({
+                rtl: ('rtl' == langLbl.layoutDirection),
                 draggable: true,
                 slidesToShow: 8,
                 slidesToScroll: 1,
