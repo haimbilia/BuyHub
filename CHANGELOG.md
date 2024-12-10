@@ -216,3 +216,4 @@
     - Bug-089174 - RFQ permissions are not available for seller sub-users.
     - Bug-089024 - Fatal error occur on the front end when the product ordered in rfq is deleted.
     - Bug-089351 - it shows PHp error in email template.
+    - Bug-089345 - Product type should appear as auto selected according to the RFq requirement.

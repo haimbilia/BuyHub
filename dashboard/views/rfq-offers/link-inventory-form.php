@@ -14,7 +14,7 @@ $icon = '<svg class="svg" width="18" height="18">
             </use>
         </svg>';
 $lbl = Labels::getLabel('LBL_NOT_FOUND?', $siteLangId);
-$productFormUrl = UrlHelper::generateUrl('products', 'form');
+$productFormUrl = UrlHelper::generateUrl('products', 'form', [0, $productType]);
 if (0 < $productId) {
     $productFormUrl = UrlHelper::generateUrl('Seller', 'sellerProductForm', [$productId]);
 }
