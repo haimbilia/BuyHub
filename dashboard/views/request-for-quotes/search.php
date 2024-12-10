@@ -82,7 +82,7 @@
                         );
 
                         if ($row['rfq_approved'] == RequestForQuote::APPROVED) {
-                            if ($isBuyer || RequestForQuote::isAssignedToSeller($row['rfq_id'], $userParentId)) {
+                            if ($isBuyer || (RequestForQuote::isAssignedToSeller($row['rfq_id'], $userParentId) && $canEdit)) {
                                 $action = RequestForQuote::VISIBILITY_TYPE_OPEN == $visibilityType ? 'globalListing' : 'listing';
                                 $li = $ul->appendElement("li", ['class' => 'actions-item']);
                                 $li->appendElement(
@@ -101,7 +101,7 @@
                                 </svg>',
                                     true
                                 );
-                            } else if ($isSeller && in_array($row['rfq_status'], [RequestForQuote::STATUS_OPEN, RequestForQuote::STATUS_OFFERED])) {
+                            } else if ($isSeller && in_array($row['rfq_status'], [RequestForQuote::STATUS_OPEN, RequestForQuote::STATUS_OFFERED]) && $canEdit) {
                                 $li = $ul->appendElement("li", ['class' => 'actions-item']);
                                 $li->appendElement(
                                     'a',

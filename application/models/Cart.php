@@ -1131,9 +1131,11 @@ class Cart extends FatModel
         }
 
         $selProdData = SellerProduct::getAttributesById($selProdId, ['selprod_cart_type', 'selprod_user_id']);
-        $shopRfqEnabled = Shop::getAttributesByUserId($selProdData['selprod_user_id'], 'shop_rfq_enabled');
-        if (RequestForQuote::isCartTypeRfqOnly($shopRfqEnabled, $selProdData['selprod_cart_type']) && isset($this->SYSTEM_ARR['rfqOnlyCount'])) {
-            $this->SYSTEM_ARR['rfqOnlyCount'] -= 1;
+        if(!empty($selProdData)){
+            $shopRfqEnabled = Shop::getAttributesByUserId($selProdData['selprod_user_id'], 'shop_rfq_enabled');
+            if (RequestForQuote::isCartTypeRfqOnly($shopRfqEnabled, $selProdData['selprod_cart_type']) && isset($this->SYSTEM_ARR['rfqOnlyCount'])) {
+                $this->SYSTEM_ARR['rfqOnlyCount'] -= 1;
+            }
         }
 
         unset($this->products[$key]);

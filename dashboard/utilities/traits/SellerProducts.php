@@ -98,6 +98,7 @@ trait SellerProducts
                 'selprod_hide_price',
                 'selprod_threshold_stock_level',
                 'selprod_product_id',
+                'product_identifier',
                 'selprod_active',
                 'selprod_available_from',
                 'IFNULL(product_name, product_identifier) as product_name',

@@ -135,7 +135,7 @@ trait RequestForQuotesUtility
                 $srch->addFld('rfqts_user_id');
                 $srch->addCondition('rfqts_user_id', '=', $this->userParentId);
             }
-            $srch->addCondition('rfq_added_on', '>=', $this->userInfo['user_regdate']);
+            $srch->addCondition('rfq_added_on', '>=', $userRegDate);
         } else {
             $srch->addCondition('rfq_user_id', '=', $this->userParentId);
         }
@@ -183,6 +183,7 @@ trait RequestForQuotesUtility
         $this->set("approvalStatusArr", RequestForQuote::getApprovalStatusArr($this->siteLangId));
         $this->set("statusArr", RequestForQuote::getStatusArr($this->siteLangId));
         $this->set("isBuyer", $this->isBuyer);
+        $this->set('canEdit', $this->userPrivilege->canEditRfqOffers(UserAuthentication::getLoggedUserId(), true));
         $this->set("isSeller", $this->isSeller);
         $this->set("userParentId", $this->userParentId);
         if (MOBILE_APP_API_CALL) {
@@ -220,11 +221,12 @@ trait RequestForQuotesUtility
 
         $srch->addCondition('rfq_id', '=', $recordId);
         if ($this->isSeller) {
+            $userRegDate = User::getAttributesById($this->userParentId, 'user_regdate');
             if (RequestForQuote::VISIBILITY_TYPE_CLOSED == $visibilityType) {
                 $srch->joinSellers('INNER');
                 $srch->addCondition('rfqts_user_id', '=', $this->userParentId);
             }
-            $srch->addCondition('rfq_added_on', '>=', $this->userInfo['user_regdate']);
+            $srch->addCondition('rfq_added_on', '>=', $userRegDate);
         } else {
             $srch->addCondition('rfq_user_id', '=', $this->userParentId);
         }

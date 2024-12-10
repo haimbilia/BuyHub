@@ -145,6 +145,7 @@ class UserPrivilege
             static::SECTION_BADGES => Labels::getLabel('LBL_BADGES', $langId),
             static::SECTION_BADGE_LINKS => Labels::getLabel('LBL_BADGE_LINKS', $langId),
             static::SECTION_REQUEST_FOR_QUOTE => Labels::getLabel('LBL_REQUEST_FOR_QUOTE', $langId),
+            static::SECTION_RFQ_OFFERS => Labels::getLabel('LBL_REQUEST_FOR_QUOTE', $langId),
         );
         return $arr;
     }
@@ -177,6 +178,7 @@ class UserPrivilege
                 static::SECTION_SALES => Labels::getLabel('LBL_Sales', $langId),
                 static::SECTION_CANCELLATION_REQUESTS => Labels::getLabel('LBL_Cancellation_Requests', $langId),
                 static::SECTION_RETURN_REQUESTS => Labels::getLabel('LBL_Return_Requests', $langId),
+                static::SECTION_RFQ_OFFERS => Labels::getLabel('LBL_REQUEST_FOR_QUOTE', $langId),
             ),
             static::MODULE_SHIPPING =>
             array(

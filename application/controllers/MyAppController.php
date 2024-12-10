@@ -32,7 +32,7 @@ class MyAppController extends FatController
 
         if (0 < FatApp::getPostedData('appUser', FatUtility::VAR_INT, 0)) {
             CommonHelper::setAppUser();
-        }
+        } 
 
         $this->set('siteLangId', $this->siteLangId);
 
@@ -877,9 +877,9 @@ class MyAppController extends FatController
                 }
 
                 $userInfo = $uObj->getUserInfo(array('user_name', 'user_id', 'user_phone_dcode', 'user_phone', 'credential_email', 'credential_active', 'credential_verified'), false, false, true);
-                if(!empty($userInfo) && $userInfo['credential_active'] == applicationConstants::INACTIVE){
+                if (!empty($userInfo) && $userInfo['credential_active'] == applicationConstants::INACTIVE) {
                     LibHelper::dieJsonError(Labels::getLabel('ERR_USER_NOT_ACTIVE', $this->siteLangId));
-                } elseif(!empty($userInfo) && $userInfo['credential_verified'] == applicationConstants::NO) {
+                } elseif (!empty($userInfo) && $userInfo['credential_verified'] == applicationConstants::NO) {
                     LibHelper::dieJsonError(Labels::getLabel('ERR_USER_NOT_VERIFIED', $this->siteLangId));
                 }
                 $data = array_merge(['token' => $token], $userInfo);
@@ -943,7 +943,17 @@ class MyAppController extends FatController
             return true;
         }
 
-        LibHelper::exitWithError(Labels::getLabel('ERR_SITE_UNDER_MAINTENANCE', CommonHelper::getLangId()), false, true);
+        $msg = Labels::getLabel('ERR_SITE_UNDER_MAINTENANCE', CommonHelper::getLangId());
+        if (true === MOBILE_APP_API_CALL) {
+            $data =  [
+                'status' => '-2',
+                'responseCode' => LibHelper::RC_OK,
+                'msg' => $msg
+            ];
+            CommonHelper::jsonEncodeUnicode($data, true);
+        }
+
+        LibHelper::exitWithError($msg, false, true);
         FatApp::redirectUser(UrlHelper::generateUrl('maintenance'));
     }
 
