@@ -237,6 +237,7 @@ $slotTypeFld->setFieldTagAttribute('class', 'availabilityType-js');
                 var toVal = $(this).val();
                 if (toVal != '' && toVal <= toTime) {
                     $(this).addClass('d-none');
+                    $(this).prop('disabled', true);
                 }
             });
         }
@@ -266,6 +267,7 @@ $slotTypeFld->setFieldTagAttribute('class', 'availabilityType-js');
             var nextFrmElement = nextRowElement + " .js-slot-from-" + day;
             if (0 < $(nextFrmElement).length) {
                 $(nextFrmElement + " option").removeClass('d-none');
+                $(nextFrmElement + " option").prop('disabled', false);
                 var nxtFrmSelectedVal = $(nextFrmElement + ' option:selected').val();
                 if (nxtFrmSelectedVal <= toTime) {
                     $(".js-slot-from-" + day).each(function() {
@@ -277,6 +279,7 @@ $slotTypeFld->setFieldTagAttribute('class', 'availabilityType-js');
                                 var optVal = $(this).val();
                                 if (optVal != '' && optVal <= toTime) {
                                     $(this).addClass('d-none');
+                                    $(this).prop('disabled', true);
                                 }
                             });
                         }
@@ -286,6 +289,7 @@ $slotTypeFld->setFieldTagAttribute('class', 'availabilityType-js');
                     var nxtFrmVal = $(this).val();
                     if (nxtFrmVal != '' && nxtFrmVal <= toTime) {
                         $(this).addClass('d-none');
+                        $(this).prop('disabled', true);
                     }
                 });
             }
@@ -304,10 +308,13 @@ $slotTypeFld->setFieldTagAttribute('class', 'availabilityType-js');
             }
 
             $(toElement + " option").removeClass('d-none');
+            $(toElement + " option").prop('disabled', false);
+            
             $(toElement + " option").each(function() {
                 var toVal = $(this).val();
                 if (toVal != '' && toVal <= fromTime) {
                     $(this).addClass('d-none');
+                    $(this).prop('disabled', true);
                 }
             });
             var toTimeLastOpt = $(toElement + " option:last").val();

@@ -6,6 +6,7 @@ $firstCharacter = '';
 $brandHtml = '';
 $mySelection = array();
 $count = 0;
+$rangeArr = [];
 foreach ($brandsArr as $brand) {
     if (in_array($brand['brand_id'], $brandsCheckedArr)) {
         $mySelection[$brand['brand_id']] = $brand;
@@ -13,7 +14,7 @@ foreach ($brandsArr as $brand) {
     }
     //$totalProducts = array_key_exists('totalProducts', $brand) ? $brand['totalProducts'] : 0;
 
-    $str = substr(strtolower($brand['brand_name']), 0, 1);
+    $str = mb_substr(strtolower($brand['brand_name']), 0, 1);
     if (is_numeric($str)) {
         $str = '0-9';
     }
@@ -25,8 +26,8 @@ foreach ($brandsArr as $brand) {
     }
 
 
-    $charArr[$str] = strtoupper($str);
-    $brandHtml .= ' <li class="brandList-js b-' . $str . '" data-caption=' . substr(strtolower($brand['brand_name']), 0, 1) . '>
+    $charArr[$str] =   $rangeArr[] = strtoupper($str);
+    $brandHtml .= ' <li class="brandList-js b-' . $str . '" data-caption=' . mb_substr(strtolower($brand['brand_name']), 0, 1) . '>
                 <label class="checkbox brand" ><input name="brands" value="' . $brand['brand_id'] . '" data-id="brand_' . $brand['brand_id'] . '" data-title="' . $brand['brand_name'] . '" type="checkbox" ><span class="lb-txt">' . $brand['brand_name'] . '</span></label>
             </li>';
     $brandHtml .=    $closingTag;
@@ -42,7 +43,8 @@ foreach ($brandsArr as $brand) {
             <input type="text" placeholder="<?php echo Labels::getLabel('LBL_SEARCH_BRAND'); ?>" class="form-control filter-directory_search_input omni-search" onKeyup="autoKeywordSearch(this.value)">
             <ul class="filter-directory_indices bfilter-js">
                 <?php
-                foreach (range('A', 'Z') as $char) {
+                $rangeArr = array_unique($rangeArr);
+                foreach ($rangeArr as $char) {
                     $disabled = '';
                     if (!in_array($char, $charArr)) {
                         $disabled = 'class="filter-directory_disabled"';

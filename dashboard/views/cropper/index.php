@@ -17,7 +17,7 @@ $footer = '
 <div class="rotator-actions mediaCropButtonsJs" id="actions">
     
         <ul class="actions">
-            <li>
+            <li> 
                 <a href="javascript:void(0)" class="actions-link docs-tooltip"  data-method="rotate" data-option="-90" data-bs-toggle="tooltip"  title="' . Labels::getLabel('LBL_Rotate_Left', $siteLangId) . '">
                     <span class="fa fa-undo-alt"></span>
                 </a>
