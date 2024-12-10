@@ -588,8 +588,10 @@ class Product extends MyAppModel
                 static::DB_PRODUCT_TO_SHIP_PREFIX . 'duration',
                 static::DB_PRODUCT_TO_SHIP_PREFIX . 'charges',
                 static::DB_PRODUCT_TO_SHIP_PREFIX . 'additional_charges',
-                'IFNULL(' . Countries::DB_TBL_PREFIX . 'name', '\'' . Labels::getLabel('LBL_EVERYWHERE_ELSE', $lang_id) . '\') as country_name',
-                'ifNull(' . ShippingCompanies::DB_TBL_PREFIX . 'name', ShippingCompanies::DB_TBL_PREFIX . 'identifier) as ' . ShippingCompanies::DB_TBL_PREFIX . 'name',
+                'IFNULL(' . Countries::DB_TBL_PREFIX . 'name',
+                '\'' . Labels::getLabel('LBL_EVERYWHERE_ELSE', $lang_id) . '\') as country_name',
+                'ifNull(' . ShippingCompanies::DB_TBL_PREFIX . 'name',
+                ShippingCompanies::DB_TBL_PREFIX . 'identifier) as ' . ShippingCompanies::DB_TBL_PREFIX . 'name',
                 ShippingCompanies::DB_TBL_PREFIX . 'id',
                 ShippingCompanies::DB_TBL_LANG_PREFIX . 'scompany_id',
                 ShippingDurations::DB_TBL_PREFIX . 'name',
@@ -1188,7 +1190,7 @@ class Product extends MyAppModel
         if (0 < FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0)) {
             return false;
         }
-        
+
         $productId = FatUtility::int($productId);
         $selProdSellerId = FatUtility::int($selProdSellerId);
         if ($productAddedBySellerId && $productAddedBySellerId == $selProdSellerId) {
@@ -1683,53 +1685,6 @@ END,   special_price_found ) as special_price_found'
             $sortBy = $criteria['sortBy'];
         }
 
-        /*$sortOrder = 'asc';
-        if (array_key_exists('sortOrder', $criteria)) {
-            $sortOrder = $criteria['sortOrder'];
-        }
-
-        if (!empty($sortBy)) {
-            $sortByArr = explode("_", $sortBy);
-            $sortBy = isset($sortByArr[0]) ? $sortByArr[0] : $sortBy;
-            $sortOrder = isset($sortByArr[1]) ? $sortByArr[1] : $sortOrder;
-
-            if (!in_array($sortOrder, array('asc', 'desc'))) {
-                $sortOrder = 'asc';
-            }
-
-            if (!in_array($sortBy, array('keyword', 'price', 'popularity', 'rating', 'discounted'))) {
-                $sortOrder = 'keyword_relevancy';
-            }
-
-            switch ($sortBy) {
-                case 'keyword':
-                    if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, '')) && FatApp::getConfig('CONF_PRODUCT_GEO_LOCATION', FatUtility::VAR_INT, 0) != applicationConstants::BASED_ON_CURRENT_LOCATION) {
-                        $srch->addOrder('availableInLocation', 'DESC');
-                    }
-                    $srch->addOrder('keyword_relevancy', 'DESC');
-                    break;
-                case 'price':
-                    $srch->addOrder('theprice', $sortOrder);
-                    break;
-                case 'popularity':
-                    if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, '')) && FatApp::getConfig('CONF_PRODUCT_GEO_LOCATION', FatUtility::VAR_INT, 0) != applicationConstants::BASED_ON_CURRENT_LOCATION) {
-                        $srch->addOrder('availableInLocation', 'DESC');
-                    }
-                    $srch->addOrder('selprod_sold_count', $sortOrder);
-                    break;
-                case 'discounted':
-                    $srch->addFld('ROUND(((selprod_price - theprice)*100)/selprod_price) as discountedValue');
-                    $srch->addOrder('discountedValue', 'DESC');
-                    break;
-                case 'rating':
-                    $srch->addOrder('prod_rating', $sortOrder);
-                    break;
-                default:
-                    $srch->addOrder('keyword_relevancy', 'DESC');
-                    break;
-            }
-        } */
-
         $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
         // $srch->addCondition('selprod_available_from', '>=', FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d'));
 
@@ -1745,6 +1700,12 @@ END,   special_price_found ) as special_price_found'
     public static function setOrderOnListingObj(&$srch, &$get = [])
     {
         $srch->doNotCalculateRecords();
+
+        $keyword = '';
+        if (array_key_exists('keyword', $get)) {
+            $keyword = $get['keyword'];
+        }
+
         $sortBy = 'popularity';
         if (array_key_exists('keyword', $get) && !empty($get['keyword'])) {
             $sortBy = 'keyword_relevancy';
@@ -1804,7 +1765,7 @@ END,   special_price_found ) as special_price_found'
         if (array_key_exists('keyword', $get) && !empty($get['keyword'])) {
             $srch->addOrder('keywordmatched', 'desc');
         }
-        $srch->addOrder('selprod_updated_on', 'DESC');
+        $srch->addOrder('selprod_id', 'DESC');
         return $srch;
     }
 

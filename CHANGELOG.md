@@ -224,3 +224,8 @@
     - bug-088968 - The listing is not sorted in Brands filters on the search listing page.
     - Bug-089351 - it shows PHp error in email template.
     - Bug-089345 - Product type should appear as auto selected according to the RFq requirement.
+    - bug-089337 - The banners tab appears disabled when the user tries to add the new banner collection.
+    - bug-089359 - <<RFQ>> The requests listings are not loaded when the without option variant setting is enabled.
+    - bug-089141 - auto Scrolling functionality does not works in Mobile view for seo meta tags.
+    - bug-088885 - Categories linked with the collection are not visible on the front end. 
+    - bug-089013 - The savings icon is not visible on the Order details page on the buyer's end.

@@ -1967,6 +1967,7 @@ class ProductsController extends MyAppController
         );
         $removeFlds = array_diff($flds, ['1']);
         $this->setRecordCount(clone $srch, $post['pageSize'], $post['page'], $post, true, $removeFlds);
+        
         Product::setOrderOnListingObj($srch, $post);
 
         $srch->setPageNumber($page);

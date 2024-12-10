@@ -107,12 +107,13 @@ class CategoryController extends MyAppController
             'shop.shop_id', 'shop.shop_lat', 'shop.shop_lng', 'COALESCE(shop_name, shop_identifier) as shop_name', 'selprod_cart_type', 'selprod_hide_price', 'shop.shop_rfq_enabled'
         );
         $this->setRecordCount(clone $srch, $get['pageSize'], $get['page'], $get, true, $flds);
+          
         Product::setOrderOnListingObj($srch, $get);
         $srch->setPageNumber($page);
         if ($pageSize) {
             $srch->setPageSize($pageSize);
         }
-
+        
         $products = FatApp::getDb()->fetchAll($srch->getResultSet());
 
         $selProdIdsArr = array_column($products, 'selprod_id');

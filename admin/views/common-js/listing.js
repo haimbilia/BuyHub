@@ -434,6 +434,10 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
                 editLangData(t.recordId, t.langId, 0, extraLangTabClass);
             } else if ("openMediaForm" in t) {
                 mediaForm(t.recordId);
+            } else if("banners" in t){
+                banners(t.recordId);
+            } else if ("recordForm" in t) {
+                recordForm(t.recordId, frm.collection_type.value);
             } else if ('' != callback) {
                 window[callback](t.recordId);
             } else {
