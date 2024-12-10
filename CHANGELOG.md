@@ -215,3 +215,4 @@
     - Bug-088940 - task-8872- Publish inventory logic not working properly
     - Bug-089174 - RFQ permissions are not available for seller sub-users.
     - Bug-089024 - Fatal error occur on the front end when the product ordered in rfq is deleted.
+    - Bug-089351 - it shows PHp error in email template.
