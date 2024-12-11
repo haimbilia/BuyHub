@@ -28,7 +28,7 @@ if (null != $btn) {
                         </div> <?php if ($canEdit) { ?>
                             <div class="btn-group">
                                 <?php if ($canEscalateRequest) { ?>
-                                    <a class="btn btn-outline-gray btn-sm" onclick="javascript: return confirm('<?php echo Labels::getLabel('MSG_Do_you_want_to_proceed?', $siteLangId); ?>')" href="<?php echo UrlHelper::generateUrl('Account', 'EscalateOrderReturnRequest', array($request['orrequest_id'])); ?>"><?php echo str_replace("{websitename}", FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId), Labels::getLabel('LBL_Escalate_to_{websitename}', $siteLangId)); ?></a>
+                                    <a class="btn btn-outline-gray btn-sm" onclick="javascript: return confirm('<?php echo Labels::getLabel('MSG_Do_you_want_to_proceed?', $siteLangId); ?>')" href="<?php echo UrlHelper::generateUrl('Account', 'EscalateOrderReturnRequest', array($request['orrequest_id'])); ?>"><?php echo CommonHelper::replaceStringData(Labels::getLabel('LBL_Escalate_to_{websitename}', $siteLangId), ["{websitename}" => FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId)] ); ?></a>
                                 <?php } ?>
                                 <?php if ($canApproveReturnRequest) { ?>
                                     <a class="btn btn-outline-gray btn-sm" onclick="javascript: return confirm('<?php echo Labels::getLabel('MSG_Do_you_want_to_proceed?', $siteLangId); ?>')" href="<?php echo UrlHelper::generateUrl('Seller', 'approveOrderReturnRequest', array($request['orrequest_id'])); ?>"><?php echo Labels::getLabel('LBL_Approve_Refund', $siteLangId); ?></a>

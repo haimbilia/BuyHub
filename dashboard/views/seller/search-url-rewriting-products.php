@@ -50,7 +50,7 @@
                     $td->appendElement(
                         'a',
                         array(
-                            'href' => 'javascript:void(0)', 'class' => '',
+                            'href' => '#dvForm', 'class' => '',
                             'title' => 'Links', "onclick" => $editUrls
                         ),
                         $productName,

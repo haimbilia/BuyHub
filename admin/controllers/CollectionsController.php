@@ -343,10 +343,13 @@ class CollectionsController extends ListingBaseController
 
         if ($post['collection_type'] == Collections::COLLECTION_TYPE_BANNER) {
             $this->saveBannerLocation($post);
+            $this->set('banners', 1);
+        } else if (!in_array($post['collection_type'], Collections::COLLECTION_WITHOUT_RECORDS)) {
+            $this->set('recordForm', 1);
         }
 
         $this->set('msg', Labels::getLabel('MSG_SETUP_SUCCESSFUL', $this->siteLangId));
-        $this->set('collectionId', $recordId);
+        $this->set('recordId', $recordId);
         $this->set('collectionType', $post['collection_type']);
         $this->_template->render(false, false, 'json-success.php');
     }
@@ -426,9 +429,6 @@ class CollectionsController extends ListingBaseController
         $langId = FatUtility::int($langId);
         $langId = 1 > $langId ? $this->siteLangId : $langId;
 
-        if($recordId > 0 && $type == 0){
-            $type = Collections::getAttributesById($recordId,'collection_type');
-        }
         $frm = new Form('frmCollectionLang');
         $frm->addHiddenField('', 'collection_type');
         $frm->addHiddenField('', 'collection_id', $recordId);

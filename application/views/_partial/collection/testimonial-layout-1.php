@@ -25,7 +25,7 @@ if (isset($collection['testimonials']) && count($collection['testimonials']) > 0
                                 <div class="slider-testimonials-text">
                                     <p>
                                         <?php echo CommonHelper::truncateCharacters($testimonial['testimonial_text'], 250, '', '', true); ?>
-                                        <?php if (strlen($testimonial['testimonial_text']) > 150) {
+                                        <?php if (isset($testimonial['testimonial_text']) && strlen($testimonial['testimonial_text']) > 150) {
                                             echo '...';
                                         } ?>
 
