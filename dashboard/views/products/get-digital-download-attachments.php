@@ -6,21 +6,21 @@ $arr_flds = array(
     'listSerial' => Labels::getLabel('LBL_#', $siteLangId),
     'mainfile' => Labels::getLabel('LBL_DD_FILE', $siteLangId),
     'preview' => Labels::getLabel('LBL_DD_PREVIEW', $siteLangId),
-    'action'  =>  Labels::getLabel('LBL_ACTION_BUTTONS', $siteLangId)
+    'action' => Labels::getLabel('LBL_ACTION_BUTTONS', $siteLangId)
 );
 
 if ($canDo) {
     unset($arr_flds['listSerial']);
-}else{
-    unset($arr_flds['action']);  
+} else {
+    unset($arr_flds['action']);
 }
 
-$tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table '. (isset($arr_flds['action']) ? 'table-justified': '')));
+$tbl = new HtmlElement('table', array('width' => '100%', 'class' => 'table ' . (isset($arr_flds['action']) ? 'table-justified' : '')));
 $th = $tbl->appendElement('thead')->appendElement('tr', array('class' => 'hide--mobile'));
 foreach ($arr_flds as $key => $val) {
     $tdAttr = ('action' == $key || 'listSerial' == $key) ? ['width' => '20%'] : ['width' => '40%'];
-    if('action' == $key){
-        $tdAttr['class'] =  'align-right';
+    if ('action' == $key) {
+        $tdAttr['class'] = 'align-right';
     }
     $e = $th->appendElement('th', $tdAttr, $val);
 }
@@ -63,7 +63,8 @@ foreach ($attachments as $sn => $row) {
                             "a",
                             array(
                                 'title' => Labels::getLabel('LBL_DELETE', $siteLangId),
-                                'onclick' => 'deleteDigitalFile(' . $row['afile_id'] . ', ' . $row['afile_record_id'] . ')', 'href' => 'javascript:void(0);'
+                                'onclick' => 'deleteDigitalFile(' . $row['afile_id'] . ', ' . $row['afile_record_id'] . ')',
+                                'href' => 'javascript:void(0);'
                             ),
                             '<svg class="svg" width="18" height="18">
                                 <use
@@ -83,7 +84,7 @@ foreach ($attachments as $sn => $row) {
                 $dvElem = $td->appendElement('div', array('class' => 'actions-downloads'));
                 $ul = new HtmlElement("ul", array("class" => "actions"));
                 if (0 < $row['prev_afile_id']) {
-                    $dvElem->appendElement('div', array('class' => 'text-break'), $row[$key], true);
+                    $dvElem->appendElement('div', array('class' => 'text-breakxx'), $row[$key], true);
 
                     $li = $ul->appendElement('li', ['data-bs-toggle' => 'tooltip', 'data-placement' => 'top']);
                     $li->appendElement(
@@ -117,7 +118,7 @@ foreach ($attachments as $sn => $row) {
                         );
                     }
                 } else {
-                    $dvElem->appendElement('div', array('class' => 'text-break'),  Labels::getLabel('LBL_NA', $siteLangId), true);
+                    $dvElem->appendElement('div', array('class' => 'text-breakxx'), Labels::getLabel('LBL_NA', $siteLangId), true);
                     if ($canDo) {
                         $li = $ul->appendElement('li', ['data-bs-toggle' => 'tooltip', 'data-placement' => 'top']);
                         $li->appendElement(
@@ -125,7 +126,7 @@ foreach ($attachments as $sn => $row) {
                             array(
                                 'title' => Labels::getLabel('LBL_ADD', $siteLangId),
                                 'href' => 'javascript:void(0);',
-                                'onclick' => 'attachDigitalPreviewFile(\'' . $row['pddr_options_code'] . '\', ' . $row['afile_lang_id'] . ', ' . $row['pddr_id'] . ', ' .  $row['afile_id'] . '); return false;',
+                                'onclick' => 'attachDigitalPreviewFile(\'' . $row['pddr_options_code'] . '\', ' . $row['afile_lang_id'] . ', ' . $row['pddr_id'] . ', ' . $row['afile_id'] . '); return false;',
                                 'href' => 'javascript:void(0);'
                             ),
                             '<svg class="svg" width="18" height="18">
@@ -192,8 +193,8 @@ foreach ($attachments as $sn => $row) {
         ?>
         <div class="js-scrollable table-wrap table-responsive">
             <?php
-        echo $tbl->getHtml();
-        ?>
+            echo $tbl->getHtml();
+            ?>
         </div>
         <?php
     }

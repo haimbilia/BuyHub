@@ -327,6 +327,7 @@ mark,
     animation:
         dropdown-menu-fade-in 0.3s ease 1,
         dropdown-menu-move-up 0.3s ease-out 1;
+
     .ui-menu-item {
         border-bottom: $border;
 
@@ -1405,12 +1406,10 @@ mark,
 }
 
 .skeleton {
-    background: linear-gradient(
-            to right,
+    background: linear-gradient(to right,
             rgba(255, 255, 255, 0),
             rgba(255, 255, 255, 0.5) 50%,
-            rgba(255, 255, 255, 0) 80%
-        ),
+            rgba(255, 255, 255, 0) 80%),
         lightgray;
     border-radius: 2px;
     height: 20px;
@@ -1762,4 +1761,26 @@ mark,
 [dir="rtl"] .default-ltr {
     direction: ltr;
     display: inline-flex;
+}
+
+//Taxes
+.taxes {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 1rem;
+
+    &+& {
+        margin-top: 0.5rem;
+    }
+
+    &-options {
+        font-size: 0.8rem;
+        font-weight: 400;
+    }
+
+    &-value {
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
 }

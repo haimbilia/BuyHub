@@ -2,7 +2,7 @@
 $allAccessfrm->setFormTagAttribute('class', 'form');
 $allAccessfrm->developerTags['fld_default_col'] = 8;
 $submitFld = $allAccessfrm->getField('btn_submit');
-$submitFld->setFieldTagAttribute('class', "btn btn-brand btn-wide");
+$submitFld->setFieldTagAttribute('class', "btn btn-brand");
 $submitFld->developerTags['col'] = 4;
 ?>
 

@@ -219,6 +219,7 @@ $sharing-height: 50px;
 
     &.active,
     &:hover {
+
       // @include bg-brand;
       .svg {
         fill: $brand-color;
@@ -331,9 +332,11 @@ $sharing-height: 50px;
       border-bottom: none;
     }
   }
+
   .product-profile {
     gap: 0.5rem;
   }
+
   .title {
     font-size: 0.875rem;
     font-weight: $font-weight-bold;
@@ -346,7 +349,9 @@ $sharing-height: 50px;
     color: $txt-body;
     font-weight: $font-weight-normal;
   }
+
   $checkbox-size: 1.5rem;
+
   .checkbox {
     input {
       height: $checkbox-size !important;
@@ -391,6 +396,7 @@ $sharing-height: 50px;
     }
 
     &:not(.collapsed) {
+
       //color: $secondary-color;
       .plus {
         transform: rotate(227deg);
@@ -405,7 +411,14 @@ $sharing-height: 50px;
 }
 
 .specification-group {
-  margin: 3rem 0;
+
+  &+& {
+    margin: 3rem 0;
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
 
   h6 {
     margin-bottom: 0;
@@ -418,9 +431,7 @@ $sharing-height: 50px;
     color: $txt-gray;
   }
 
-  & + & {
-    margin: 3rem 0;
-  }
+
 }
 
 .list-specification {
@@ -455,8 +466,7 @@ $sharing-height: 50px;
       text-align: #{$start-direction};
     }
 
-    .value {
-    }
+    .value {}
   }
 }
 
@@ -600,8 +610,8 @@ $sharing-height: 50px;
   border: $border;
   border-radius: $common-radius;
 
-  > ul {
-    > li {
+  >ul {
+    >li {
       border-bottom: $border;
       padding-bottom: 10px;
       margin-bottom: 10px;
@@ -641,7 +651,7 @@ $sharing-height: 50px;
     }
   }
 
-  > li {
+  >li {
     border-bottom: $border;
     padding: 1rem 1.5rem;
 
@@ -754,7 +764,7 @@ $sharing-height: 50px;
     }
   }
 
-  > a {
+  >a {
     border-radius: $radius2;
     padding: 5px 14px;
     font-weight: $font-weight-bold;

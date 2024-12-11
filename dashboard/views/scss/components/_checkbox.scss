@@ -9,6 +9,7 @@ $checkbox-focus-shadow: inset 0px 1px 2px -1px rgba(0, 0, 0, 0.08),
   inset 0px 1px 10px 0px rgba(0, 0, 0, 0.08);
 $checkbox-active-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.04),
   0px 4px 5px 0px rgba(0, 0, 0, 0.04), 0px 1px 10px 0px rgba(0, 0, 0, 0.04);
+$switch-radius: 20px;
 
 .checkbox {
   margin: 0;
@@ -143,7 +144,10 @@ $checkbox-active-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.04),
   cursor: pointer;
 
   input {
+    appearance: none;
+
     &:empty {
+      appearance: none;
       overflow: hidden;
       position: absolute;
       display: inline-block;
@@ -255,15 +259,15 @@ $checkbox-active-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.04),
         margin: 2px 0;
         height: 20px;
         width: 40px;
-        border-radius: 16px;
+        border-radius: $switch-radius;
 
         &:before {
           width: 38px;
-          border-radius: 16px;
+          border-radius: $switch-radius;
         }
 
         &:after {
-          border-radius: 16px;
+          border-radius: $switch-radius;
           height: 16px;
           width: 16px;
           line-height: 16px;
