@@ -132,7 +132,6 @@ class DashboardBaseController extends FatController
                     'lengthOf' => Labels::getLabel('VLBL_Length_of', $this->siteLangId),
                     'valueOf' => Labels::getLabel('VLBL_Value_of', $this->siteLangId),
                     'mustBeBetween' => Labels::getLabel('VLBL_must_be_between', $this->siteLangId),
-                    'mustBeBetween' => Labels::getLabel('VLBL_must_be_between', $this->siteLangId),
                     'and' => Labels::getLabel('VLBL_and', $this->siteLangId),
                     'pleaseSelect' => Labels::getLabel('VLBL_Please_select', $this->siteLangId),
                     'to' => Labels::getLabel('VLBL_to', $this->siteLangId),
@@ -191,7 +190,6 @@ class DashboardBaseController extends FatController
                     'close' => Labels::getLabel('LBL_CLOSE', $this->siteLangId),
                     'copiedText' => Labels::getLabel('LBL_COPIED_TEXT', $this->siteLangId),
                     'areYouSure' => Labels::getLabel('LBL_ARE_YOU_SURE?', $this->siteLangId),
-                    'copied' => Labels::getLabel('LBL_COPIED', $this->siteLangId),
                     'notANumber' => Labels::getLabel('LBL_NOT_A_NUMBER', $this->siteLangId),
                     'off' => Labels::getLabel('LBL_OFF', $this->siteLangId),
                     'controllerNameRequired' => Labels::getLabel('MSG_CONTROLLER_NAME_MUST_BE_DECLARED', $this->siteLangId),
@@ -199,6 +197,7 @@ class DashboardBaseController extends FatController
                     'maxLengthValidator' => CommonHelper::replaceStringData(Labels::getLabel('FRM_USED_{charsTyped}_of_{charsTotal}_CHAR', $this->siteLangId), ["{charsTyped}" => "%charsTyped%", "{charsTotal}" => "%charsTotal%"]), /* Used By Maxlength bootstrap validator. */
                     'fieldNotFound' => Labels::getLabel('LBL_{field}_NOT_FOUND', $this->siteLangId),
                     'savePrefilledValues' => Labels::getLabel('LBL_SAVE_PREFILLED_VALUES_FIRST.', $this->siteLangId),
+                    'remove' => Labels::getLabel('LBL_REMOVE', $this->siteLangId),
                 );
 
                 $languages = Language::getAllNames(false);

@@ -362,8 +362,11 @@ trait BadgeRequestSetup
      */
     public function unlinkRecord(int $badgeReqId, int $record_id = 0)
     {
-        if (1 > $badgeReqId || 1 > $record_id) {
-            FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
+        if (1 > $badgeReqId) {
+            if(1 > $record_id) {
+                FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
+            } 
+            FatUtility::dieJsonSuccess(Labels::getLabel('MSG_SUCCESS', $this->siteLangId));
         }
         $smt = 'badgelink_breq_id = ?';
         $vals = [$badgeReqId];
