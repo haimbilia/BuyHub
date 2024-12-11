@@ -25,6 +25,10 @@
     min-width: 0px;
     flex-direction: column;
     font-size: 0.85rem;
+    gap: 1rem;
+    width: auto;
+    align-items: flex-start;
+    position: relative;
 
     .title {
       color: $txt-body;

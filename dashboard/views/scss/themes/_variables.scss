@@ -1,3 +1,5 @@
+// Variables
+
 //default colors
 $dark-color: #888;
 $blue: var(--brand-color);
@@ -103,6 +105,9 @@ $hero-ratio: 10/3.33 !default;
 $video-ratio: 16/9 !default;
 $avatar-ratio: 1/1 !default;
 
+
+// Mixins
+
 //Bg brand
 @mixin bg-brand {
   background-color: $brand-color;
@@ -118,14 +123,17 @@ $avatar-ratio: 1/1 !default;
   background-color: $secondary-color;
   color: $secondary-color-inverse;
 }
+
 @mixin bg-third {
   background-color: $third-color;
   color: $third-color-inverse;
 }
+
 @mixin bg-white {
   background-color: #fff;
   color: #000;
 }
+
 @mixin bg-black {
   background-color: #000;
   color: #fff;
@@ -158,13 +166,16 @@ $avatar-ratio: 1/1 !default;
 //Responsive ratio
 @mixin responsive-ratio($x, $y, $pseudo: false) {
   $padding: unquote(($y / $x) * 100 + "%");
+
   @if $pseudo {
     &:before {
       @include pseudo($pos: relative);
       width: 100%;
       padding-top: $padding;
     }
-  } @else {
+  }
+
+  @else {
     padding-top: $padding;
   }
 }
@@ -193,26 +204,20 @@ $avatar-ratio: 1/1 !default;
   animation: placeholderShimmer 2s linear;
   animation-iteration-count: infinite;
   background-color: #fff;
-  background-image: -webkit-gradient(
-    linear,
-    left top,
-    right top,
-    from(rgba(0, 0, 0, 0.08)),
-    color-stop(15%, rgba(0, 0, 0, 0.15)),
-    color-stop(30%, rgba(0, 0, 0, 0.08))
-  );
-  background-image: -webkit-linear-gradient(
-    left,
-    rgba(0, 0, 0, 0.08) 0,
-    rgba(0, 0, 0, 0.15) 15%,
-    rgba(0, 0, 0, 0.08) 30%
-  );
-  background-image: linear-gradient(
-    to right,
-    rgba(0, 0, 0, 0.08) 0,
-    rgba(0, 0, 0, 0.15) 15%,
-    rgba(0, 0, 0, 0.08) 30%
-  );
+  background-image: -webkit-gradient(linear,
+      left top,
+      right top,
+      from(rgba(0, 0, 0, 0.08)),
+      color-stop(15%, rgba(0, 0, 0, 0.15)),
+      color-stop(30%, rgba(0, 0, 0, 0.08)));
+  background-image: -webkit-linear-gradient(left,
+      rgba(0, 0, 0, 0.08) 0,
+      rgba(0, 0, 0, 0.15) 15%,
+      rgba(0, 0, 0, 0.08) 30%);
+  background-image: linear-gradient(to right,
+      rgba(0, 0, 0, 0.08) 0,
+      rgba(0, 0, 0, 0.15) 15%,
+      rgba(0, 0, 0, 0.08) 30%);
   background-size: 1200px 100%;
 }
 
@@ -220,6 +225,7 @@ $avatar-ratio: 1/1 !default;
   0% {
     background-position: -1200px 0;
   }
+
   100% {
     background-position: 1200px 0;
   }
@@ -229,6 +235,7 @@ $avatar-ratio: 1/1 !default;
   0% {
     background-position: -1200px 0;
   }
+
   100% {
     background-position: 1200px 0;
   }
@@ -245,12 +252,14 @@ $avatar-ratio: 1/1 !default;
   text-decoration: none;
   background-size: 0% 1px;
   border: none;
+
   &:is(:hover, :focus, :active) {
     color: currentColor;
     text-decoration: none !important;
     background-size: 100% 1px;
   }
 }
+
 @mixin btn-hover {
   background-color: transparent;
   position: relative;
@@ -272,8 +281,10 @@ $avatar-ratio: 1/1 !default;
     transform: scale(0.75);
     backface-visibility: hidden;
   }
+
   &:is(:hover, :focus, :active, .active) {
-    color: currentColor;
+    color: $txt-white;
+
     &::after {
       opacity: 1;
       transform: scale(1);

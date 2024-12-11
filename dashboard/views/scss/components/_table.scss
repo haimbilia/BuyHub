@@ -1,10 +1,12 @@
 .listing-tbl {
   overflow-x: auto;
 }
+
 .table-wrap {
   overflow: hidden !important;
   overflow-x: auto !important;
 }
+
 .table {
   font-size: 100%;
   background-color: #fff;
@@ -101,6 +103,7 @@
         text-align: #{$end-direction};
       }
     }
+
     tr {
       td:last-child {
         text-align: #{$end-direction};
@@ -139,6 +142,7 @@
         &:first-child {
           padding-#{$start-direction}: 25px;
         }
+
         &:last-child {
           padding-#{$end-direction}: 25px;
         }
@@ -246,6 +250,7 @@
     th {
       font-weight: 600;
     }
+
     th,
     td {
       vertical-align: middle;
@@ -262,6 +267,7 @@
     }
   }
 }
+
 .table-processing {
   background-color: rgba(255, 255, 255, 0.55);
   position: absolute;

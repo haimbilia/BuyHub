@@ -16,7 +16,6 @@ $black: rgba(0, 0, 0, 1);
 $brand-color: var(--brand-color);
 $brand-color-inverse: var(--brand-color-inverse);
 $bg-brand-light: rgba(var(--brand-color-alpha), 0.1);
-
 $bg-brand-100: rgba(var(--brand-color-alpha), 0.1);
 $bg-brand-200: rgba(var(--brand-color-alpha), 0.2);
 $bg-brand-300: rgba(var(--brand-color-alpha), 0.3);
@@ -44,6 +43,7 @@ $txt-body: rgba(0, 0, 0, 0.97);
 $txt-gray: rgba(0, 0, 0, 0.77);
 $text-muted: #888888;
 $text-secondary: #696969;
+$txt-white: #fff;
 
 //Font weight
 $font-weight-light: 300;
@@ -181,7 +181,7 @@ $avatar-ratio: 1/1;
   backdrop-filter: blur(10px);
 }
 
-//display
+//Display
 @mixin display($flex, $center, $space-between, $gap) {
   display: $flex;
   align-items: $center;
@@ -237,7 +237,9 @@ $avatar-ratio: 1/1;
       width: 100%;
       padding-top: $padding;
     }
-  } @else {
+  }
+
+  @else {
     padding-top: $padding;
   }
 }
@@ -308,6 +310,7 @@ $avatar-ratio: 1/1;
   text-decoration: none;
   background-size: 0% 1px;
   border: none;
+
   &:is(:hover, :focus, :active) {
     color: currentColor;
     text-decoration: none !important;
@@ -337,6 +340,7 @@ $avatar-ratio: 1/1;
     transform: scale(0.75);
     backface-visibility: hidden;
   }
+
   &:is(:hover, :focus, :active, .active) {
     &::after {
       opacity: 1;
@@ -359,4 +363,10 @@ $avatar-ratio: 1/1;
   font-size: 1rem;
   width: 40px;
   height: 40px;
+}
+
+@mixin transition {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
 }

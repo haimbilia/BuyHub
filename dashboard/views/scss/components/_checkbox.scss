@@ -1,10 +1,6 @@
-$checkbox-bg: #1770ca;
-$checkbox-bg-light: #1770ca;
-$checkbox-bg-inverse: $brand-color-inverse;
 $checkbox-size: 14px;
 $checkbox-font-size: 0.9rem;
 $checkbox-radius: 3px;
-$switch-radius: 30px;
 $checkbox-line-height: 1.5;
 $checkbox-hover-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.04),
   0px 4px 5px 0px rgba(0, 0, 0, 0.04), 0px 1px 10px 0px rgba(0, 0, 0, 0.04);
@@ -13,6 +9,7 @@ $checkbox-focus-shadow: inset 0px 1px 2px -1px rgba(0, 0, 0, 0.08),
   inset 0px 1px 10px 0px rgba(0, 0, 0, 0.08);
 $checkbox-active-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.04),
   0px 4px 5px 0px rgba(0, 0, 0, 0.04), 0px 1px 10px 0px rgba(0, 0, 0, 0.04);
+$switch-radius: 20px;
 
 .checkbox {
   margin: 0;
@@ -43,6 +40,7 @@ $checkbox-active-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.04),
     transition: all 0.15s ease-out 0s;
     border: solid 1px darken($border-color, 10);
     border-radius: $checkbox-radius;
+
     cursor: pointer;
     display: inline-block;
     padding: 0 !important;
@@ -56,6 +54,7 @@ $checkbox-active-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.04),
     width: var(--size);
     height: var(--size);
     margin-top: 0;
+
     &[type="checkbox"] {
       border-radius: $checkbox-radius;
     }
@@ -68,7 +67,7 @@ $checkbox-active-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.04),
     &:hover {
       border-width: 2px;
       //border-color: darken($border-color, 30);
-      border-color: $checkbox-bg;
+      border-color: $form-bg;
       text-decoration: none !important;
       box-shadow: $checkbox-hover-shadow;
     }
@@ -83,9 +82,10 @@ $checkbox-active-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.04),
     }
 
     &:checked {
-      background-color: $checkbox-bg;
-      color: $checkbox-bg-inverse;
-      border-color: $checkbox-bg;
+      background-color: $form-bg;
+      color: $form-bg;
+      border-color: $form-bg;
+
       &:before {
         height: 10px;
         width: 6px;
@@ -95,8 +95,8 @@ $checkbox-active-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.04),
         font-size: 1rem;
         text-align: center;
         line-height: 1rem;
-        border-right: 2px solid currentColor;
-        border-bottom: 2px solid currentColor;
+        border-right: 2px solid #fff;
+        border-bottom: 2px solid #fff;
         transform: rotate(45deg);
         left: 50%;
         top: 50%;
@@ -113,9 +113,11 @@ $checkbox-active-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.04),
       }
     }
   }
+
   .label-txt {
     line-height: 1.5;
   }
+
   .link {
     font-size: inherit;
   }
@@ -123,6 +125,7 @@ $checkbox-active-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.04),
 
 .radio {
   @extend .checkbox;
+
   input {
     border-radius: 50% !important;
 
@@ -141,7 +144,10 @@ $checkbox-active-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.04),
   cursor: pointer;
 
   input {
+    appearance: none;
+
     &:empty {
+      appearance: none;
       overflow: hidden;
       position: absolute;
       display: inline-block;
@@ -199,7 +205,7 @@ $checkbox-active-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.04),
       }
 
       &:before {
-        background-color: $checkbox-bg;
+        background-color: $form-bg;
       }
     }
 
@@ -289,10 +295,11 @@ $checkbox-active-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.04),
   flex-flow: row wrap;
   gap: 1rem;
 
-  &:hover {
-    background-color: $checkbox-bg-light;
-    color: #fff;
-    border-color: currentColor;
+  &-item {}
+
+  .column {
+    gap: 0.6rem;
+    flex-flow: column;
   }
 }
 

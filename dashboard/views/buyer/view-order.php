@@ -8,13 +8,13 @@ $selProdTotalSpecialPrice = 0;
 if (true == $primaryOrder) {
     $canReturnRefund = (in_array($childOrderDetail["op_status_id"], (array) Orders::getBuyerAllowedOrderReturnStatuses($childOrderDetail['op_product_type'])));
     if ($childOrderDetail['op_product_type'] == Product::PRODUCT_TYPE_DIGITAL) {
-        $canCancelOrder = (in_array($childOrderDetail["op_status_id"], (array) Orders::getBuyerAllowedOrderCancellationStatuses(true)));       
+        $canCancelOrder = (in_array($childOrderDetail["op_status_id"], (array) Orders::getBuyerAllowedOrderCancellationStatuses(true)));
     } else {
-        $canCancelOrder = (in_array($childOrderDetail["op_status_id"], (array) Orders::getBuyerAllowedOrderCancellationStatuses()));        
+        $canCancelOrder = (in_array($childOrderDetail["op_status_id"], (array) Orders::getBuyerAllowedOrderCancellationStatuses()));
         $datediff = time() - strtotime($childOrderDetail['order_date_added']);
         $daysSpent = $datediff / (60 * 60 * 24);
         $returnAge = $childOrderDetail['op_selprod_return_age'];
-        $canReturnRefund =  $canReturnRefund && $returnAge > $daysSpent;
+        $canReturnRefund = $canReturnRefund && $returnAge > $daysSpent;
         $canCancelOrder = $canCancelOrder && $childOrderDetail['op_selprod_cancellation_age'] > $daysSpent;
     }
 
@@ -112,13 +112,13 @@ if (!$print) {
 </div>
 
 <script>
-    $(document).ready(function() {
-        setTimeout(function() {
+    $(document).ready(function () {
+        setTimeout(function () {
             $('.printBtn-js').fadeIn();
         }, 500);
-        $(document).on('click', '.printBtn-js', function() {
+        $(document).on('click', '.printBtn-js', function () {
             $('.printFrame-js').show();
-            setTimeout(function() {
+            setTimeout(function () {
                 frames['frame'].print();
                 $('.printFrame-js').hide();
             }, 500);
@@ -126,7 +126,7 @@ if (!$print) {
     });
 
     function increaseDownloadedCount(linkId, opId) {
-        fcom.ajax(fcom.makeUrl('buyer', 'downloadDigitalProductFromLink', [linkId, opId]), '', function(t) {
+        fcom.ajax(fcom.makeUrl('buyer', 'downloadDigitalProductFromLink', [linkId, opId]), '', function (t) {
             var ans = $.parseJSON(t);
             if (ans.status == 0) {
                 fcom.displayErrorMessage(ans.msg);
@@ -137,9 +137,9 @@ if (!$print) {
         });
     }
 
-    trackOrder = function(trackingNumber, courier, orderNumber) {
+    trackOrder = function (trackingNumber, courier, orderNumber) {
         fcom.displayProcessing();
-        fcom.ajax(fcom.makeUrl('Buyer', 'orderTrackingInfo', [trackingNumber, courier, orderNumber]), '', function(res) {
+        fcom.ajax(fcom.makeUrl('Buyer', 'orderTrackingInfo', [trackingNumber, courier, orderNumber]), '', function (res) {
             $.ykmsg.close();
             $.ykmodal(res);
         });
