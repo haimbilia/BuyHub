@@ -6,6 +6,8 @@ class AdminAuthentication extends FatModel
     public const ADMIN_REMEMBER_ME_COOKIE_NAME = 'yokartAdmin_remember_me';
     public static $_instance;
 
+    public $siteLangId = 0;
+
     public function __construct()
     {
         $this->siteLangId = CommonHelper::getLangId();

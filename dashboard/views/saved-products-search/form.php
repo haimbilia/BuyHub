@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$frm->setFormTagAttribute('class', 'form custom-form setupSaveProductSearch-Js');
+$frm->setFormTagAttribute('class', 'form form-apply setupSaveProductSearch-Js');
 $frm->developerTags['colClassPrefix'] = 'col-lg-12 col-sm-';
 $frm->developerTags['fld_default_col'] = 12;
 $frm->setFormTagAttribute('onsubmit', 'setupSaveProductSearch(this,event); return(false);');
@@ -11,6 +11,7 @@ $btn->addFieldTagAttribute('class', "btn btn-brand");
 <div class="modal-header">
     <h5 class="modal-title"><?php echo Labels::getLabel('LBL_Save_Search', $siteLangId); ?></h5>
 </div>
+
 <div class="modal-body form-edit">
     <div class="form-edit-body loaderContainerJs">
         <?php
