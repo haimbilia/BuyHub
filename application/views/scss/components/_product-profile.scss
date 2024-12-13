@@ -1,189 +1,188 @@
 .product-profile {
-  display: flex;
-  flex: 1;
-  gap: 0.8rem;
-  width: auto;
-  align-items: flex-start;
-  position: relative;
-  &-thumbnail {
-    position: relative;
-    img {
-      min-width: 30px;
-      max-width: 80px;
-      border-radius: $common-radius;
-      //border: $border;
-      border: none;
-
-      @include media-breakpoint-down(sm) {
-        max-width: 50px;
-      }
-    }
-  }
-  &-data {
     display: flex;
     flex: 1;
-    min-width: 0px;
-    flex-direction: column;
-    font-size: 0.85rem;
-    gap: 1rem;
+    gap: 0.8rem;
     width: auto;
     align-items: flex-start;
     position: relative;
 
-    .title {
-      color: $txt-body;
-      font-weight: $font-weight-normal;
-      //font-size: 0.88rem;
-      margin-bottom: 10px;
-      // white-space: nowrap;
-      // overflow: hidden;
-      // text-overflow: ellipsis;
+    &-thumbnail {
+        margin: 0;
+        position: relative;
+
+        img {
+            min-width: 30px;
+            max-width: 80px;
+            border-radius: $common-radius;
+            //border: $border;
+            border: none;
+            //width: 100%;
+
+            @include media-breakpoint-down(sm) {
+                max-width: 50px;
+            }
+        }
     }
 
-    .products-price {
-      margin-bottom: 1rem;
+    &-data {
+        display: flex;
+        flex: 1;
+        min-width: 0px;
+        flex-direction: column;
+        font-size: 0.85rem;
+        gap: 0.2rem;
+        width: auto;
+        align-items: flex-start;
+        position: relative;
+
+        .title {
+            color: $txt-body;
+            font-weight: $font-weight-normal;
+            //font-size: 0.88rem;
+            margin-bottom: 10px;
+            // white-space: nowrap;
+            // overflow: hidden;
+            // text-overflow: ellipsis;
+        }
+
+        .products-price {
+            margin-bottom: 1rem;
+        }
+
+        .options {
+            font-size: 0.75rem;
+            color: $txt-gray;
+        }
     }
 
-    .options {
-      font-size: 0.75rem;
-      color: $txt-gray;
-    }
-  }
-
-  .mw-350 {
-    min-width: 350px;
-  }
-
-  &-btn {
-    margin-top: 5px;
-    font-size: 0.8rem;
-  }
-
-  &__pic {
-    background-color: $bg-placeholder;
-    aspect-ratio: 1/1;
-    flex: 0 0 50px;
-    max-width: 50px;
-    width: 50px;
-    border: $border;
-    border-radius: $common-radius;
-    margin: 0;
-    //margin-#{$end-direction}: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-
-    img {
+    .mw-350 {
+        min-width: 350px;
     }
 
-    &-seller {
-      flex: 0 0 100px;
-      max-width: 100px;
-      padding: 16px;
-    }
-  }
-
-  &-free-size {
-    flex: auto;
-    max-width: none;
-  }
-
-  &__description {
-    font-size: 0.8rem;
-    // min-width: min-content;
-    min-width: 150px;
-
-    p {
-      margin: 3px 0;
-    }
-  }
-
-  &__title {
-    color: $txt-body;
-    margin: 0 0 4px 0;
-    font-weight: $font-weight-bold;
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-    word-break: break-all;
-    word-break: break-word;
-    hyphens: auto;
-
-    // white-space: nowrap;
-    // overflow: hidden;
-    // text-overflow: ellipsis;
-    a {
-      opacity: 1;
-      color: inherit;
-      font-weight: inherit;
-
-      &:hover {
-        text-decoration: underline;
-      }
-    }
-  }
-
-  &__sub_title {
-    display: block;
-    opacity: 0.8;
-  }
-
-  &__brand {
-  }
-
-  &__location {
-    margin-bottom: 5px;
-
-    .svg {
-      width: 14px;
-      height: 14px;
-    }
-  }
-
-  &__category {
-    opacity: 0.8;
-  }
-
-  &__specification {
-    color: lighten($txt-body, 20%);
-  }
-
-  &__sold_by {
-  }
-
-  &__shipping {
-  }
-
-  &__sold_by {
-  }
-
-  &__shipping {
-  }
-
-  &__date {
-    display: block;
-    opacity: 0.6;
-  }
-
-  &__price {
-    font-weight: $font-weight-bold;
-
-    &_old {
-      color: $txt-gray;
-      font-weight: $font-weight-regular;
+    &-btn {
+        margin-top: 5px;
+        font-size: 0.8rem;
     }
 
-    &_off {
-      font-weight: $font-weight-regular;
+    &__pic {
+        background-color: $bg-placeholder;
+        aspect-ratio: 1/1;
+        flex: 0 0 50px;
+        max-width: 50px;
+        width: 50px;
+        border: $border;
+        border-radius: $common-radius;
+        margin: 0;
+        //margin-#{$end-direction}: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+
+        img {}
+
+        &-seller {
+            flex: 0 0 100px;
+            max-width: 100px;
+            padding: 16px;
+        }
     }
-  }
 
-  &__price_off {
-    color: $primary-color;
-  }
+    &-free-size {
+        flex: auto;
+        max-width: none;
+    }
 
-  .btn-close {
-    position: absolute;
-    #{$end-direction}: 0;
-  }
+    &__description {
+        font-size: 0.8rem;
+        // min-width: min-content;
+        min-width: 150px;
+
+        p {
+            margin: 3px 0;
+        }
+    }
+
+    &__title {
+        color: $txt-body;
+        margin: 0 0 4px 0;
+        font-weight: $font-weight-bold;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+        word-break: break-word;
+        hyphens: auto;
+
+        // white-space: nowrap;
+        // overflow: hidden;
+        // text-overflow: ellipsis;
+        a {
+            opacity: 1;
+            color: inherit;
+            font-weight: inherit;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+
+    &__sub_title {
+        display: block;
+        opacity: 0.8;
+    }
+
+    &__brand {}
+
+    &__location {
+        margin-bottom: 5px;
+
+        .svg {
+            width: 14px;
+            height: 14px;
+        }
+    }
+
+    &__category {
+        opacity: 0.8;
+    }
+
+    &__specification {
+        color: lighten($txt-body, 20%);
+    }
+
+    &__sold_by {}
+
+    &__shipping {}
+
+    &__sold_by {}
+
+    &__shipping {}
+
+    &__date {
+        display: block;
+        opacity: 0.6;
+    }
+
+    &__price {
+        font-weight: $font-weight-bold;
+
+        &_old {
+            color: $txt-gray;
+            font-weight: $font-weight-regular;
+        }
+
+        &_off {
+            font-weight: $font-weight-regular;
+        }
+    }
+
+    &__price_off {
+        color: $primary-color;
+    }
+
+    .btn-close {
+        position: absolute;
+        #{$end-direction}: 0;
+    }
 }

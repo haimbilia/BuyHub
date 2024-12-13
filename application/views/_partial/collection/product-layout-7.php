@@ -15,11 +15,13 @@
                     <?php } ?>
                     <div class="slider-controls">
                         <button class="btn btn-prev slick-arrow" type="button"
-                            data-href="#product-listing-<?php echo $collection['collection_id']; ?>" aria-label="#product-listing-<?php echo $collection['collection_id']; ?>">
+                            data-href="#product-listing-<?php echo $collection['collection_id']; ?>"
+                            aria-label="#product-listing-<?php echo $collection['collection_id']; ?>">
                             <span></span>
                         </button>
                         <button class="btn btn-next slick-arrow" type="button"
-                            data-href="#product-listing-<?php echo $collection['collection_id']; ?>" aria-label="#product-listing-<?php echo $collection['collection_id']; ?>">
+                            data-href="#product-listing-<?php echo $collection['collection_id']; ?>"
+                            aria-label="#product-listing-<?php echo $collection['collection_id']; ?>">
                             <span></span>
                         </button>
                     </div>
@@ -27,11 +29,12 @@
             </header>
             <?php
             $displayCount = (0 < $collection['collection_primary_records']) ? $collection['collection_primary_records'] : 4;
-            $slidesCount = (Collections::TYPE_PRODUCT_LAYOUT6 == $collection['collection_layout_type']) ? '7,3,2,2' : min($displayCount, 7);
+            $slidesCount = (Collections::TYPE_PRODUCT_LAYOUT6 == $collection['collection_layout_type']) ? '7,5,3,2,2' : min($displayCount, 7);
             ?>
             <div class="section-body">
-                <div class="product-layout-5 js-carousel" id="product-listing-<?php echo $collection['collection_id']; ?>"
-                    data-slides="<?php echo $slidesCount; ?>" data-view="<?php echo $displayCount; ?>"
+                <div class="js-carousel product-layout-5" id="product-listing-<?php echo $collection['collection_id']; ?>"
+                    data-slides="7,5,3,2,2" data-custom="#product-listing-<?php echo $collection['collection_id']; ?>"
+                    data-view="<?php echo $displayCount; ?>" data-arrows="true" data-slickdots="false"
                     dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
                     <?php
                     $tRightRibbons = $collection['tRightRibbons'];
@@ -40,7 +43,7 @@
                         if (array_key_exists($product['selprod_id'], $tRightRibbons)) {
                             $selProdRibbons[] = $tRightRibbons[$product['selprod_id']];
                         }
-                    ?>
+                        ?>
                         <div class="js-carousel-item">
                             <?php
                             $displayProductNotAvailableLable = false;

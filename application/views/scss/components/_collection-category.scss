@@ -1,459 +1,505 @@
 .category-layout {
-  display: flex;
-  flex-direction: column;
-  gap: $gap;
-
-  @include media-breakpoint-up(xl) {
-    flex-direction: row;
-  }
-  &-banner {
-    @include media-breakpoint-up(xl) {
-      max-width: 278px;
-      flex: 0 0 278px;
-    }
-  }
-  &-grid {
-    flex: 1;
-    grid-column-gap: 1px;
-    grid-row-gap: 1px;
-    background-color: $border-color;
-
-    display: grid;
-    border: $border;
-    border-radius: $kart;
-    overflow: hidden;
-    @include media-breakpoint-up(xl) {
-      grid-template-rows: auto auto;
-      grid-template-columns: 1fr 1fr 1fr;
-      grid-auto-columns: 1fr;
-    }
-  }
-  &-item {
-    background-color: #fff;
-    padding: $gap;
-    // border: $border;
-  }
-  &-head {
-    font-size: 1rem;
-    color: $txt-body;
-    margin-bottom: 0.5rem;
-  }
-  &-body {
-    display: flex;
-    justify-content: space-between;
-    gap: 1rem;
-    flex-direction: row;
-  }
-  &-links {
-    flex: 1;
-    a {
-      font-size: 0.8rem;
-      color: $txt-gray;
-      &:hover {
-        color: $txt-body;
-      }
-    }
-  }
-  &-product {
-    max-width: 128px;
-  }
-}
-.category-layout-1 {
-  display: grid;
-  gap: $gap;
-  grid-template-columns: auto;
-  @include media-breakpoint-up(xl) {
-    grid-template-columns: repeat(4, 1fr);
-  }
-  &-item {
-    border: $border;
-    border-radius: $kart;
-    min-width: 0;
-  }
-  .section-head {
-    padding: 1rem;
-    margin: 0;
-    border-bottom: $border;
-    h2 {
-      font-size: 1.2rem;
-    }
-  }
-  .product-item {
-    padding: 1rem;
-    border-bottom: $border;
-    display: flex;
-    min-width: 0;
-    flex-direction: row;
-    gap: $gap;
-    &:last-child {
-      border-bottom: none;
-    }
-    .products-body {
-      max-width: 102px;
-    }
-    .products-foot {
-      padding: 0;
-    }
-  }
-  &-head {
-  }
-  &-body {
-  }
-  &-foot {
-  }
-}
-.category-layout-2 {
-  display: grid;
-  grid-gap: 1rem;
-  grid-auto-flow: column;
-  overflow-x: scroll;
-
-  @include media-breakpoint-up(xl) {
-    grid-gap: $gap;
-    &[data-view="4"] {
-      grid-template-columns: repeat(4, 1fr);
-    }
-    &[data-view="5"] {
-      grid-template-columns: repeat(5, 1fr);
-    }
-  }
-
-  .category {
-    font-size: 0.8rem;
-    background: $bg-white;
-    border-radius: $common-radius;
-    color: $txt-body;
     display: flex;
     flex-direction: column;
-    min-width: 200px;
+    gap: $gap;
 
-    &-head {
-      @include placeholder;
-      //background-color: $bg-placeholder;
-      aspect-ratio: 4/1;
-      width: 100%;
-
-      img {
-        object-fit: cover;
-        width: 100%;
-        height: 100%;
-      }
-    }
-
-    &-body {
-      background-color: $bg-gray;
-      flex: 1;
-      padding: 2rem;
-    }
-
-    &-list {
-      &-item {
-        margin: 0.2rem 0;
-
-        a {
-          color: $txt-gray;
-          text-decoration: underline;
-          padding: 0.8rem 0;
-        }
-      }
-
-      &-head {
-        font-weight: $font-weight-normal;
-        font-size: 1.2rem;
-        margin-bottom: 1rem;
-      }
-    }
-
-    .cat-img {
-      display: block;
-      margin: 0 0 1rem;
-      padding: 0 0 25%;
-      position: relative;
-      width: 100%;
-
-      img {
-        max-width: 100%;
-        bottom: 0;
-        #{$start-direction}: 0;
-        margin: auto;
-        position: absolute;
-        #{$end-direction}: 0;
-        top: 0;
-        transition: all 0.5s linear;
-
-        transform: scale3d(1, 1, 1);
-      }
-    }
-
-    .cat-tittle {
-      color: $txt-body;
-      font-weight: $font-weight-bold;
-      font-size: 1em;
-      padding: 0 1.5rem;
-      text-decoration: none;
-    }
-
-    .cat-list {
-      padding: 0 1.5rem;
-
-      li {
-        display: block;
-        margin: 10px 0;
-        color: $txt-gray;
-        font-size: 0.9em;
-      }
-    }
-
-    a {
-      &:hover {
-        color: $brand-color;
-      }
-    }
-  }
-}
-.category-layout-3 {
-  display: grid;
-  grid-gap: 1px;
-  grid-template-columns: repeat(auto-fill, minmax(311px, 1fr));
-
-  @include media-breakpoint-up(xl) {
-    grid-gap: 3rem;
-    grid-template-columns: repeat(auto-fill, minmax(490px, 1fr));
-  }
-
-  .category {
-    display: flex;
-    background-color: $bg-gray;
-    border-radius: $kart;
     @include media-breakpoint-up(xl) {
-      flex-flow: row wrap;
+        flex-direction: row;
     }
 
-    &:nth-child(even) {
-      flex-direction: row-reverse;
+    &-banner {
+        @include media-breakpoint-up(xl) {
+            max-width: 278px;
+            flex: 0 0 278px;
+        }
+    }
+
+    &-grid {
+        flex: 1;
+        grid-column-gap: 1px;
+        grid-row-gap: 1px;
+        background-color: $border-color;
+
+        display: grid;
+        border: $border;
+        border-radius: $kart;
+        overflow: hidden;
+
+        @include media-breakpoint-up(xl) {
+            grid-template-rows: auto auto;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-auto-columns: 1fr;
+        }
+    }
+
+    &-item {
+        background-color: #fff;
+        padding: $gap;
+        min-width: 0;
+        // border: $border;
     }
 
     &-head {
-      flex: 0 0 50%;
-      max-width: 50%;
-      aspect-ratio: 1/1;
-      display: flex;
-
-      @include media-breakpoint-down(sm) {
-        // flex: 1;
-        // flex: 0 0 50%;
-        // max-width: 50%;
-        gap: 1px;
-      }
-
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
+        font-size: 1rem;
+        color: $txt-body;
+        margin-bottom: 0.5rem;
     }
 
     &-body {
-      flex: 1;
-      padding: 2rem;
-
-      @include media-breakpoint-up(lg) {
-        padding: 3rem 4rem;
-      }
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        flex-direction: row;
     }
 
-    &-list {
-      font-size: 0.8rem;
-
-      &-item {
-        margin: 0.2rem 0;
+    &-links {
+        @include truncate(100%);
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
 
         a {
-          text-decoration: underline;
-          padding: 0.8rem 0;
-        }
-      }
+            @include truncate(100%);
+            font-size: 0.8rem;
+            color: $txt-gray;
+            display: block;
 
-      &-head {
-        font-weight: $font-weight-normal;
-        font-size: 1rem;
-        margin-bottom: 1rem;
-      }
+            &:hover {
+                color: $txt-body;
+            }
+        }
     }
-  }
+
+    &-product {
+        max-width: 128px;
+    }
 }
-.category-layout-4 {
-  display: grid;
-  gap: $gap;
-  grid-template-columns: auto;
-  @include media-breakpoint-up(xl) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  &-item {
-    background-color: #fff;
-    border-radius: $kart;
-    border: 1px solid #ebebeb;
-    padding: $gap;
-    // border: $border;
-  }
-  &-head {
-    font-size: 1rem;
-    color: $txt-body;
-    margin-bottom: 1rem;
-  }
-  &-body {
+
+.category-layout-1 {
     display: grid;
     gap: $gap;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: auto;
+
     @include media-breakpoint-up(xl) {
-      grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(4, 1fr);
     }
-  }
+
+    &-item {
+        border: $border;
+        border-radius: $kart;
+        min-width: 0;
+    }
+
+    .section-head {
+        padding: 1rem;
+        margin: 0;
+        border-bottom: $border;
+
+        h2 {
+            font-size: 1.2rem;
+        }
+    }
+
+    .product-item {
+        padding: 1rem;
+        border-bottom: $border;
+        display: flex;
+        min-width: 0;
+        flex-direction: row;
+        gap: $gap;
+
+        &:last-child {
+            border-bottom: none;
+        }
+
+        .products-body {
+            max-width: 102px;
+        }
+
+        .products-foot {
+            padding: 0;
+        }
+    }
+
+    &-head {}
+
+    &-body {}
+
+    &-foot {}
 }
+
+.category-layout-2 {
+    display: grid;
+    grid-gap: 1rem;
+    grid-auto-flow: column;
+    overflow-x: scroll;
+
+    @include media-breakpoint-up(xl) {
+        grid-gap: $gap;
+
+        &[data-view="4"] {
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        &[data-view="5"] {
+            grid-template-columns: repeat(5, 1fr);
+        }
+    }
+
+    .category {
+        font-size: 0.8rem;
+        background: $bg-white;
+        border-radius: $common-radius;
+        color: $txt-body;
+        display: flex;
+        flex-direction: column;
+        min-width: 200px;
+
+        &-head {
+            @include placeholder;
+            //background-color: $bg-placeholder;
+            aspect-ratio: 4/1;
+            width: 100%;
+
+            img {
+                object-fit: cover;
+                width: 100%;
+                height: 100%;
+            }
+        }
+
+        &-body {
+            background-color: $bg-gray;
+            flex: 1;
+            padding: 2rem;
+        }
+
+        &-list {
+            &-item {
+                margin: 0.2rem 0;
+
+                a {
+                    color: $txt-gray;
+                    text-decoration: underline;
+                    padding: 0.8rem 0;
+                }
+            }
+
+            &-head {
+                font-weight: $font-weight-normal;
+                font-size: 1.2rem;
+                margin-bottom: 1rem;
+            }
+        }
+
+        .cat-img {
+            display: block;
+            margin: 0 0 1rem;
+            padding: 0 0 25%;
+            position: relative;
+            width: 100%;
+
+            img {
+                max-width: 100%;
+                bottom: 0;
+                #{$start-direction}: 0;
+                margin: auto;
+                position: absolute;
+                #{$end-direction}: 0;
+                top: 0;
+                transition: all 0.5s linear;
+
+                transform: scale3d(1, 1, 1);
+            }
+        }
+
+        .cat-tittle {
+            color: $txt-body;
+            font-weight: $font-weight-bold;
+            font-size: 1em;
+            padding: 0 1.5rem;
+            text-decoration: none;
+        }
+
+        .cat-list {
+            padding: 0 1.5rem;
+
+            li {
+                display: block;
+                margin: 10px 0;
+                color: $txt-gray;
+                font-size: 0.9em;
+            }
+        }
+
+        a {
+            &:hover {
+                color: $brand-color;
+            }
+        }
+    }
+}
+
+.category-layout-3 {
+    display: grid;
+    grid-gap: 1px;
+    grid-template-columns: repeat(auto-fill, minmax(311px, 1fr));
+
+    @include media-breakpoint-up(xl) {
+        grid-gap: 3rem;
+        grid-template-columns: repeat(auto-fill, minmax(490px, 1fr));
+    }
+
+    .category {
+        display: flex;
+        background-color: $bg-gray;
+        border-radius: $kart;
+
+        @include media-breakpoint-up(xl) {
+            flex-flow: row wrap;
+        }
+
+        &:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        &-head {
+            flex: 0 0 50%;
+            max-width: 50%;
+            aspect-ratio: 1/1;
+            display: flex;
+
+            @include media-breakpoint-down(sm) {
+                // flex: 1;
+                // flex: 0 0 50%;
+                // max-width: 50%;
+                gap: 1px;
+            }
+
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+        }
+
+        &-body {
+            flex: 1;
+            padding: 2rem;
+
+            @include media-breakpoint-up(lg) {
+                padding: 3rem 4rem;
+            }
+        }
+
+        &-list {
+            font-size: 0.8rem;
+
+            &-item {
+                margin: 0.2rem 0;
+
+                a {
+                    text-decoration: underline;
+                    padding: 0.8rem 0;
+                }
+            }
+
+            &-head {
+                font-weight: $font-weight-normal;
+                font-size: 1rem;
+                margin-bottom: 1rem;
+            }
+        }
+    }
+}
+
+.category-layout-4 {
+    display: grid;
+    gap: $gap;
+    grid-template-columns: auto;
+
+    @include media-breakpoint-up(xl) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    &-item {
+        background-color: #fff;
+        border-radius: $kart;
+        border: 1px solid #ebebeb;
+        padding: $gap;
+        // border: $border;
+    }
+
+    &-head {
+        font-size: 1rem;
+        color: $txt-body;
+        margin-bottom: 1rem;
+    }
+
+    &-body {
+        display: grid;
+        gap: $gap;
+        grid-template-columns: repeat(4, 1fr);
+
+        @include media-breakpoint-up(xl) {
+            grid-template-columns: repeat(4, 1fr);
+        }
+    }
+}
+
 .category-layout-page {
-  grid-template-columns: repeat(1, 1fr);
-  overflow: visible;
-  grid-auto-flow: row;
+    grid-template-columns: repeat(1, 1fr);
+    overflow: visible;
+    grid-auto-flow: row;
 
-  @include media-breakpoint-up(md) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  @include media-breakpoint-up(lg) {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
-.page-category {
-  padding: 0;
-  position: relative;
-  z-index: 1;
-  background: $gray-light;
-
-  &__content {
-    padding: 15px;
-    border: 1px solid #ddd;
-    color: #333;
-    border-top: none;
-    background: #fff;
-
-    p {
-      font-size: 0.9em;
+    @include media-breakpoint-up(md) {
+        grid-template-columns: repeat(2, 1fr);
     }
-  }
+
+    @include media-breakpoint-up(lg) {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+.page-category {
+    padding: 0;
+    position: relative;
+    z-index: 1;
+    background: $gray-light;
+
+    &__content {
+        padding: 15px;
+        border: 1px solid #ddd;
+        color: #333;
+        border-top: none;
+        background: #fff;
+
+        p {
+            font-size: 0.9em;
+        }
+    }
 }
 
 .cg-main {
-  color: $txt-body;
-  ul {
-    display: flex;
-    flex-wrap: wrap;
+    color: $txt-body;
 
-    @include media-breakpoint-down(md) {
-      flex-direction: column;
+    ul {
+        display: flex;
+        flex-wrap: wrap;
+
+        @include media-breakpoint-down(md) {
+            flex-direction: column;
+        }
+
+        li {
+            flex: 0 0 25%;
+            max-width: 25%;
+
+            @include media-breakpoint-down(md) {
+                flex: auto;
+                max-width: none;
+            }
+
+            a {
+                padding: 0.5rem 0;
+                font-size: 0.8rem;
+            }
+        }
     }
 
-    li {
-      flex: 0 0 25%;
-      max-width: 25%;
+    &-item {
+        @include bg-gray;
+        border-radius: $radius;
+        margin-bottom: 2rem;
+        padding: 1.5rem;
+        //border-bottom: $border;
+        display: block;
 
-      @include media-breakpoint-down(md) {
-        flex: auto;
-        max-width: none;
-      }
+        &:last-child {
+            margin: 0;
+            border-bottom: none;
+        }
 
-      a {
-        padding: 0.5rem 0;
-        font-size: 0.8rem;
-      }
-    }
-  }
-
-  &-item {
-    @include bg-gray;
-    border-radius: $radius;
-    margin-bottom: 2rem;
-    padding: 1.5rem;
-    //border-bottom: $border;
-    display: block;
-
-    &:last-child {
-      margin: 0;
-      border-bottom: none;
+        h5 {
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+        }
     }
 
-    h5 {
-      font-size: 0.85rem;
-      margin-bottom: 1rem;
+    .big-title-main {
+        font-size: 1rem;
+        margin-bottom: 1rem;
+        text-transform: uppercase;
+        font-weight: $font-weight-bold;
     }
-  }
-  .big-title-main {
-    font-size: 1rem;
-    margin-bottom: 1rem;
-    text-transform: uppercase;
-    font-weight: $font-weight-bold;
-  }
-  .big-title {
-    font-size: 0.9rem;
-    margin-bottom: 1rem;
-    font-weight: $font-weight-bold;
-  }
+
+    .big-title {
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+        font-weight: $font-weight-bold;
+    }
 }
 
 .categories-thumb {
-  overflow: hidden;
+    overflow: hidden;
 
-  a {
-    display: block;
-    padding: 0;
-    margin: 0;
-  }
-
-  .aspect-ratio {
-    aspect-ratio: 4/1;
-    position: relative;
-    margin-left: auto;
-    margin-right: auto;
-
-    .categories-thumb-bg {
-      position: absolute;
-      top: 0px;
-      left: 0px;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.2);
-      background-size: cover;
-      background-position: center center;
-      transition: all 1s ease-out 0s;
-
-      &:after {
-        content: "";
-        position: absolute;
-        top: 0px;
-        left: 0px;
-        width: 100%;
-        height: 100%;
-        opacity: 0.5;
-        background-color: rgba(0, 0, 0, 0.4);
-        transition: all 1s ease-out 0s;
-      }
+    a {
+        display: block;
+        padding: 0;
+        margin: 0;
     }
-  }
 
-  &-heading {
-    padding: 1rem;
-    padding-bottom: 0;
-    margin: 0;
-  }
+    .aspect-ratio {
+        aspect-ratio: 4/1;
+        position: relative;
+        margin-left: auto;
+        margin-right: auto;
+
+        .categories-thumb-bg {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.2);
+            background-size: cover;
+            background-position: center center;
+            transition: all 1s ease-out 0s;
+
+            &:after {
+                content: "";
+                position: absolute;
+                top: 0px;
+                left: 0px;
+                width: 100%;
+                height: 100%;
+                opacity: 0.5;
+                background-color: rgba(0, 0, 0, 0.4);
+                transition: all 1s ease-out 0s;
+            }
+        }
+    }
+
+    &-heading {
+        padding: 1rem;
+        padding-bottom: 0;
+        margin: 0;
+    }
 }
 
 .industry-carousal {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-  margin-bottom: 0 !important;
-  padding: 0 4rem;
-  .slick-list {
-    /*  overflow: hidden;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 0 !important;
+
+    @include media-breakpoint-up(md) {
+        padding: 0 4rem;
+    }
+
+    .slick-list {
+        /*  overflow: hidden;
     mask: linear-gradient(
       90deg,
       transparent,
@@ -461,162 +507,179 @@
       white 80%,
       transparent
     ); */
-  }
-
-  .slick-arrow {
-    @include bg-white;
-    box-shadow: 0px 3px 10px #00000029;
-    border: 1px solid #e4e4e4;
-    border-radius: 50%;
-    width: 3rem;
-    min-width: 3rem;
-    height: 3rem;
-    aspect-ratio: 1 / 1;
-    transition: all 0.2s ease-in-out;
-    position: absolute;
-    z-index: 1;
-    text-indent: -999999px;
-    font-size: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    &:before {
-      content: "";
-      display: inline-block;
-      border-#{$end-direction}: 2px solid currentColor;
-      border-bottom: 2px solid currentColor;
-      width: 12px;
-      height: 12px;
     }
 
-    &.slick-prev {
-      #{$start-direction}: 0;
+    .slick-dots {
+        bottom: -15px;
 
-      @include media-breakpoint-up(xl) {
-        // #{$start-direction}: -10px;
-      }
-
-      &:before {
-        transform: rotate(136deg * $transform-direction);
-        margin-right: -7px;
-      }
+        @include media-breakpoint-up(lg) {
+            display: none;
+        }
     }
 
-    &.slick-next {
-      #{$end-direction}: 0;
+    .slick-arrow {
+        display: none;
+        @include bg-white;
+        box-shadow: 0px 3px 10px #00000029;
+        border: 1px solid #e4e4e4;
+        border-radius: 50%;
+        width: 3rem;
+        min-width: 3rem;
+        height: 3rem;
+        aspect-ratio: 1 / 1;
+        transition: all 0.2s ease-in-out;
+        position: absolute;
+        z-index: 1;
+        text-indent: -999999px;
+        font-size: 0;
+        align-items: center;
+        justify-content: center;
 
-      @include media-breakpoint-up(xl) {
-        // #{$end-direction}: -10px;
-      }
+        @include media-breakpoint-up(md) {
+            display: flex;
+        }
 
-      &:before {
-        margin-left: -7px;
-        transform: rotate(-45deg * $transform-direction);
-      }
+        &:before {
+            content: "";
+            display: inline-block;
+            border-#{$end-direction}: 2px solid currentColor;
+            border-bottom: 2px solid currentColor;
+            width: 12px;
+            height: 12px;
+        }
+
+        &.slick-prev {
+            #{$start-direction}: 0;
+
+            @include media-breakpoint-up(xl) {
+                // #{$start-direction}: -10px;
+            }
+
+            &:before {
+                transform: rotate(136deg * $transform-direction);
+                margin-right: -7px;
+            }
+        }
+
+        &.slick-next {
+            #{$end-direction}: 0;
+
+            @include media-breakpoint-up(xl) {
+                // #{$end-direction}: -10px;
+            }
+
+            &:before {
+                margin-left: -7px;
+                transform: rotate(-45deg * $transform-direction);
+            }
+        }
+
+        &:hover {
+            @include bg-black;
+        }
     }
-    &:hover {
-      @include bg-black;
-    }
-  }
 
-  &-item {
-    display: block;
-  }
-
-  &-link {
-    background-color: #fff;
-    border: solid 1px rgba(0, 0, 0, 0.2);
-    padding: 1rem;
-    margin: 1rem auto;
-    width: 5rem;
-    height: 5rem;
-    aspect-ratio: 1/1;
-    border-radius: 100%;
-    box-shadow: none;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    @include media-breakpoint-up(xl) {
-      width: 8.75rem;
-      height: 8.75rem;
+    &-item {
+        display: block;
+        padding: 0 0.5rem;
     }
 
-    &::before,
-    &::after {
-      content: "";
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      border-radius: 100%;
+    &-link {
+        background-color: #fff;
+        border: solid 1px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+        padding: 2rem;
+        margin: 1rem auto;
+        // width: 5rem;
+        // height: 5rem;
+        width: 100%;
+        height: 100%;
+        aspect-ratio: 1/1;
+        border-radius: 50%;
+        box-shadow: none;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &::before,
+        &::after {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            border-radius: 100%;
+        }
+
+        &:before {
+            border: 2px solid transparent;
+        }
+
+        &::after {
+            border: 0 solid transparent;
+        }
+
+        &:hover {
+            color: currentColor;
+            text-decoration: none;
+
+            &::before {
+                border-top-color: $brand-color;
+                border-right-color: $brand-color;
+                border-bottom-color: $brand-color;
+                transition: border-top-color 0.15s linear,
+                    border-right-color 0.15s linear 0.1s,
+                    border-bottom-color 0.15s linear 0.2s;
+            }
+
+            &::after {
+                border-top: 2px solid$brand-color;
+                border-left-width: 2px;
+                border-right-width: 2px;
+                transform: rotate(270deg);
+                transition: transform 0.4s linear 0s, border-left-width 0s linear 0.35s,
+                    -webkit-transform 0.4s linear 0s;
+            }
+        }
     }
 
-    &:before {
-      border: 2px solid transparent;
+    &-icon {
+        aspect-ratio: 1/1;
+        max-width: 50px;
+        // width: 3rem;
+        // height: 3rem;
     }
 
-    &::after {
-      border: 0 solid transparent;
+    &-block {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        text-align: center;
     }
 
-    &:hover {
-      color: currentColor;
-      text-decoration: none;
+    &-name {
+        text-decoration: none;
+        font-size: 0.85rem;
+        display: none;
 
-      &::before {
-        border-top-color: $brand-color;
-        border-right-color: $brand-color;
-        border-bottom-color: $brand-color;
-        transition: border-top-color 0.15s linear,
-          border-right-color 0.15s linear 0.1s,
-          border-bottom-color 0.15s linear 0.2s;
-      }
-
-      &::after {
-        border-top: 2px solid$brand-color;
-        border-left-width: 2px;
-        border-right-width: 2px;
-        transform: rotate(270deg);
-        transition: transform 0.4s linear 0s, border-left-width 0s linear 0.35s,
-          -webkit-transform 0.4s linear 0s;
-      }
+        @include media-breakpoint-up(xl) {
+            display: block;
+        }
     }
-  }
-
-  &-icon {
-    width: 3rem;
-    height: 3rem;
-  }
-
-  &-block {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    text-align: center;
-  }
-
-  &-name {
-    text-decoration: none;
-    font-size: 0.85rem;
-    display: none;
-    @include media-breakpoint-up(xl) {
-      display: block;
-    }
-  }
 }
 
 .catalog-carousal {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-  margin-bottom: 0 !important;
-  .slick-list {
-    /* overflow: hidden;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 0 !important;
+
+    .slick-list {
+        /* overflow: hidden;
     mask: linear-gradient(
       90deg,
       transparent,
@@ -624,107 +687,108 @@
       white 80%,
       transparent
     ); */
-  }
-
-  .slick-arrow {
-    @include bg-white;
-    box-shadow: 0px 3px 10px #00000029;
-    border: 1px solid #e4e4e4;
-    border-radius: 50%;
-    width: 3rem;
-    min-width: 3rem;
-    height: 3rem;
-    aspect-ratio: 1 / 1;
-    transition: all 0.2s ease-in-out;
-    position: absolute;
-    z-index: 1;
-    text-indent: -999999px;
-    font-size: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    &:before {
-      content: "";
-      display: inline-block;
-      border-#{$end-direction}: 2px solid currentColor;
-      border-bottom: 2px solid currentColor;
-      width: 12px;
-      height: 12px;
     }
 
-    &.slick-prev {
-      #{$start-direction}: 0;
+    .slick-arrow {
+        @include bg-white;
+        box-shadow: 0px 3px 10px #00000029;
+        border: 1px solid #e4e4e4;
+        border-radius: 50%;
+        width: 3rem;
+        min-width: 3rem;
+        height: 3rem;
+        aspect-ratio: 1 / 1;
+        transition: all 0.2s ease-in-out;
+        position: absolute;
+        z-index: 1;
+        text-indent: -999999px;
+        font-size: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
-      @include media-breakpoint-up(xl) {
-        // #{$start-direction}: -10px;
-      }
+        &:before {
+            content: "";
+            display: inline-block;
+            border-#{$end-direction}: 2px solid currentColor;
+            border-bottom: 2px solid currentColor;
+            width: 12px;
+            height: 12px;
+        }
 
-      &:before {
-        transform: rotate(136deg * $transform-direction);
-        margin-right: -7px;
-      }
+        &.slick-prev {
+            #{$start-direction}: 0;
+
+            @include media-breakpoint-up(xl) {
+                // #{$start-direction}: -10px;
+            }
+
+            &:before {
+                transform: rotate(136deg * $transform-direction);
+                margin-right: -7px;
+            }
+        }
+
+        &.slick-next {
+            #{$end-direction}: 0;
+
+            @include media-breakpoint-up(xl) {
+                // #{$end-direction}: -10px;
+            }
+
+            &:before {
+                margin-left: -7px;
+                transform: rotate(-45deg * $transform-direction);
+            }
+        }
     }
 
-    &.slick-next {
-      #{$end-direction}: 0;
-
-      @include media-breakpoint-up(xl) {
-        // #{$end-direction}: -10px;
-      }
-
-      &:before {
-        margin-left: -7px;
-        transform: rotate(-45deg * $transform-direction);
-      }
+    &-item {
+        display: block;
     }
-  }
 
-  &-item {
-    display: block;
-  }
-
-  &-link {
-    padding: 0;
-    margin: 1rem auto;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  &-icon {
-    background-color: #fff;
-    border: solid 1px rgba(0, 0, 0, 0.1);
-    box-shadow: none;
-    aspect-ratio: 1/1;
-    border-radius: 100%;
-    // width: 5rem;
-    // height: 5rem;
-    // @include media-breakpoint-up(xl) {
-    //   width: 8.75rem;
-    //   height: 8.75rem;
-    // }
-  }
-
-  &-block {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    text-align: center;
-    min-width: 0;
-  }
-
-  &-name {
-    @include truncate(100%);
-    text-decoration: none;
-    font-size: 0.85rem;
-    font-weight: 600;
-    display: none;
-    @include media-breakpoint-up(xl) {
-      display: block;
+    &-link {
+        padding: 0;
+        margin: 1rem auto;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
-  }
+
+    &-icon {
+        background-color: #fff;
+        border: solid 1px rgba(0, 0, 0, 0.1);
+        box-shadow: none;
+        aspect-ratio: 1/1;
+        border-radius: 100%;
+        // width: 5rem;
+        // height: 5rem;
+        // @include media-breakpoint-up(xl) {
+        //   width: 8.75rem;
+        //   height: 8.75rem;
+        // }
+    }
+
+    &-block {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        text-align: center;
+        min-width: 0;
+    }
+
+    &-name {
+        @include truncate(100%);
+        text-decoration: none;
+        font-size: 0.85rem;
+        font-weight: 600;
+        display: none;
+
+        @include media-breakpoint-up(xl) {
+            display: block;
+        }
+    }
 }

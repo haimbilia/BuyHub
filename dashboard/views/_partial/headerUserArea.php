@@ -58,7 +58,7 @@ if ($layoutType == applicationConstants::SCREEN_DESKTOP) { ?>
                 <a class="dropdown-menu-link" target="_blank"
                     href="<?php echo UrlHelper::generateUrl('', '', [], CONF_WEBROOT_FRONTEND); ?>"> <svg class="svg"
                         width="14" height="14">
-                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#home"></use>
+                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#icn-home"></use>
                     </svg>
                     <?php echo Labels::getLabel("NAV_HOME", $siteLangId); ?>
                 </a>
@@ -68,7 +68,7 @@ if ($layoutType == applicationConstants::SCREEN_DESKTOP) { ?>
                         title="<?php echo Labels::getLabel('NAV_SHOP', $siteLangId); ?>" target="_blank"
                         href="<?php echo UrlHelper::generateUrl('Shops', 'view', array($shop_id), CONF_WEBROOT_FRONTEND); ?>">
                         <svg class="svg" width="14" height="14">
-                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#manage-shop">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#icn-shop">
                             </use>
                         </svg><?php echo Labels::getLabel("NAV_SHOP", $siteLangId); ?>
                     </a> </li>
@@ -86,11 +86,14 @@ if ($layoutType == applicationConstants::SCREEN_DESKTOP) { ?>
                     </svg><?php echo Labels::getLabel('NAV_UPDATE_CREDENTIALS', $siteLangId); ?></a> </li>
 
             <li class="divider"></li>
-            <li class="dropdown-menu-item"><a class="dropdown-menu-link"
+            <li class="dropdown-menu-item">
+                <a class="btn logout-btn"
                     href="<?php echo UrlHelper::generateUrl('GuestUser', 'logout', [], CONF_WEBROOT_FRONTEND, null, false, false, true, $siteLangId); ?>">
                     <svg class="svg" width="14" height="14">
                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#icn-logout"></use>
-                    </svg><?php echo Labels::getLabel('NAV_LOGOUT', $siteLangId); ?></a> </li>
+                    </svg>
+                    <?php echo Labels::getLabel('NAV_LOGOUT', $siteLangId); ?></a>
+            </li>
 
         </div>
     </div>

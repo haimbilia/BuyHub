@@ -11,17 +11,21 @@
   border-radius: $common-radius;
   #{$start-direction}: 0;
   text-align: #{$start-direction};
+
   &-anim {
     animation: dropdown-menu-fade-in 0.3s ease 1,
       dropdown-menu-move-up 0.3s ease-out 1;
   }
+
   &-right {
     #{$end-direction}: 0;
     #{$start-direction}: auto;
   }
+
   &-item {
     border: none;
   }
+
   &-link {
     display: flex;
     align-items: center;
@@ -29,6 +33,11 @@
     padding: 10px 1rem;
     color: inherit;
     @include btn-hover;
+
+    &:hover {
+      color: currentColor;
+    }
+
     .svg {
       width: 14px;
       min-width: 14px;
@@ -41,6 +50,7 @@
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -50,6 +60,7 @@
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -59,6 +70,7 @@
   from {
     margin-top: -10px;
   }
+
   to {
     margin-top: 0;
   }
@@ -68,6 +80,7 @@
   from {
     margin-top: -10px;
   }
+
   to {
     margin-top: 0;
   }
@@ -77,6 +90,7 @@
   from {
     margin-top: 10px;
   }
+
   to {
     margin-top: 0;
   }
@@ -86,6 +100,7 @@
   from {
     margin-top: 10px;
   }
+
   to {
     margin-top: 0;
   }
@@ -100,6 +115,7 @@
 
       transform: rotate(-90deg);
     }
+
     &[aria-expanded="true"] {
       &:after {
         transform: rotate(0deg);
@@ -110,6 +126,7 @@
   &:hover {
     box-shadow: none;
   }
+
   &:focus {
     box-shadow: none;
   }

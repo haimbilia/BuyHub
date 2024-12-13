@@ -3,9 +3,13 @@
 <div class="interactive-stores">
     <div class="interactive-stores-map">
         <div class="map-loader ccis-loading">
-            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="50px" height="50px" viewBox="0 0 50 50" style="enable-background:new 0 0 50 50;" xml:space="preserve">
-                <path fill="#fff" d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z">
-                    <animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite">
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
+                y="0px" width="50px" height="50px" viewBox="0 0 50 50" style="enable-background:new 0 0 50 50;"
+                xml:space="preserve">
+                <path fill="#fff"
+                    d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z">
+                    <animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25"
+                        to="360 25 25" dur="0.6s" repeatCount="indefinite">
                     </animateTransform>
                 </path>
             </svg>
@@ -14,7 +18,7 @@
         </div>
     </div>
     <div class="interactive-stores-list">
-        <?php       
+        <?php
         $this->includeTemplate('products/products-list.php', $productsData, false); ?>
     </div>
 </div>
@@ -63,21 +67,21 @@ foreach ($moreSellersProductsArr as $product) {
 
 foreach ($productsByShop as &$marker) {
     $contentString = '<div class="seller-card">
-                <div class="seller_logo">
-                    <img src="' . UrlHelper::generateFullUrl('image', 'shopLogo', [$product['shop_id'], $siteLangId, ImageDimension::VIEW_SMALL]) . '" '. HtmlHelper::getImgDimParm(ImageDimension::TYPE_SHOP_LOGO, ImageDimension::VIEW_SMALL).'>
+                <div class="seller-card-thumbnail">
+                    <img class="seller-card-img" src="' . UrlHelper::generateFullUrl('image', 'shopLogo', [$product['shop_id'], $siteLangId, ImageDimension::VIEW_SMALL]) . '" ' . HtmlHelper::getImgDimParm(ImageDimension::TYPE_SHOP_LOGO, ImageDimension::VIEW_SMALL) . '>
                 </div>
-                <div class="seller_detail">
-                <div class="seller_title">' . $marker['shop_name'] . '</div>                
+                <div class="seller-card-data">
+                <div class="seller-card-title">' . $marker['shop_name'] . '</div>                
                 </div> 
             </div>
             <ul class="gmap-list">';
     foreach ($marker['products'] as $product) {
         $amount = CommonHelper::displayMoneyFormat($product['theprice']);
-        $contentString .= '<li>
+        $contentString .= '<li  class="gmap-list-item">
             <figure class="product-profile">
-            <div class="product-profile-thumbnail"><img class="product-img" src="' . $product['img'] . '" alt="' . $product['name'] . '" '.HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_THUMB).'></div>
-            <div class="product-profile-data"><div class="title"><a href="' . $product['url'] . '">' . $product['name'] . '</a></div>
-                <div class="price">' . $amount . '</div>
+            <div class="product-profile-thumbnail"><img class="product-img" width="36" height="auto" src="' . $product['img'] . '" alt="' . $product['name'] . '" ' . HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_THUMB) . '></div>
+            <div class="product-profile-data"><div class="title"><a href="' . $product['url'] . '" title="' . $product['name'] . '">' . $product['name'] . '</a><div class="price">' . $amount . '</div></div>
+                
             </div>
             </figure>
             </li>';
@@ -90,7 +94,7 @@ foreach ($productsByShop as &$marker) {
 <script>
     var markers = <?php echo json_encode($productsByShop); ?>;
     var realtedMarkers = <?php echo json_encode($productsBySelProdCode); ?>;
-    $(function() {
+    $(function () {
         if (typeof map == 'undefined') {
             initMutipleMapMarker(markers, 'productMapJs', getCookie('_ykGeoLat'), getCookie('_ykGeoLng'),
                 dragCallback);
@@ -108,7 +112,7 @@ foreach ($productsByShop as &$marker) {
         let relMarkers = realtedMarkers[selprodCode];
 
         if (relMarkers.length) {
-            $.each(relMarkers, function(index, marker) {
+            $.each(relMarkers, function (index, marker) {
                 relMarkers[index]['isDefault'] = (marker.selprod_id == selprod_id ? 1 : 0);
             });
         }

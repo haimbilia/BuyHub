@@ -1,16 +1,17 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
 <?php if (isset($collection['categories']) && count($collection['categories'])) {
     $displayIcon = (Collections::TYPE_CATEGORY_LAYOUT7 == $collection['collection_layout_type']) ? true : false;
-?>
+    ?>
     <section class="section" data-collection="collection-categories">
         <div class="container">
             <div class="section-body">
-                <div class="industry-carousal industryCarousalJs" data-view="8,4,2,2">
+                <div class="js-carousel industry-carousal" data-slides="8,6,4,4,4" data-arrows="true" data-slickdots="true"
+                    dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
                     <?php
                     foreach ($collection['categories'] as $category) {
                         $rootParentId = FatUtility::int(current(explode('_', $category['prodcat_code'])));
                         $rootParentId = (1 > $rootParentId) ? $category['prodcat_id'] : $rootParentId;
-                    ?>
+                        ?>
                         <div class="industry-carousal-item catalog-carousal-item">
                             <?php
                             $imageType = ($displayIcon == true) ? AttachedFile::FILETYPE_CATEGORY_ICON : AttachedFile::FILETYPE_CATEGORY_IMAGE;
@@ -41,13 +42,13 @@
                 </div>
             </div>
             <?php /*if (count($collection['categories']) > Collections::LIMIT_CATEGORY_LAYOUT3) { ?>
-        <div class="section-foot">
-            <a href="<?php echo UrlHelper::generateUrl('Collections', 'View', array($collection['collection_id'])); ?>"
-                class="link-underline">
-                <?php echo Labels::getLabel('LBL_VIEW_ALL', $siteLangId); ?>
-            </a>
-        </div>
-        <?php } */ ?>
+       <div class="section-foot">
+           <a href="<?php echo UrlHelper::generateUrl('Collections', 'View', array($collection['collection_id'])); ?>"
+               class="link-underline">
+               <?php echo Labels::getLabel('LBL_VIEW_ALL', $siteLangId); ?>
+           </a>
+       </div>
+       <?php } */ ?>
         </div>
         <script>
             var displaySize = 8;
@@ -60,23 +61,23 @@
                 prevArrow: '<button class="slick-arrow slick-prev"><span></span> </button>',
                 nextArrow: '<button class="slick-arrow slick-next"><span></span> </button>',
                 responsive: [{
-                        breakpoint: 1180,
-                        settings: {
-                            slidesToShow: displaySize,
-                        }
-                    },
-                    {
-                        breakpoint: 769,
-                        settings: {
-                            slidesToShow: 5,
-                        }
-                    },
-                    {
-                        breakpoint: 480,
-                        settings: {
-                            slidesToShow: 3,
-                        }
+                    breakpoint: 1180,
+                    settings: {
+                        slidesToShow: displaySize,
                     }
+                },
+                {
+                    breakpoint: 769,
+                    settings: {
+                        slidesToShow: 5,
+                    }
+                },
+                {
+                    breakpoint: 480,
+                    settings: {
+                        slidesToShow: 3,
+                    }
+                }
                 ]
             })
         </script>

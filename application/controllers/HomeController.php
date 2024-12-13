@@ -547,7 +547,8 @@ class HomeController extends MyAppController
                 if (false == $isDefaultLangId) {
                     $redirectUrl .= strtolower($langCodeArr[$langId]) . '/';
                 }
-                $redirectUrl .= ltrim($pathname, '/');;
+                $redirectUrl .= ltrim($pathname, '/');
+                ;
             }
         } else {
             if (empty($redirectUrl)) {
@@ -916,6 +917,11 @@ class HomeController extends MyAppController
 
                     if (false === MOBILE_APP_API_CALL) {
                         $pageSize = $collection['collection_primary_records'] ?? 4;
+                        if ($collection['collection_type'] == Collections::TYPE_PRODUCT_LAYOUT1) {
+                            $pageSize = 10;
+                        }
+
+
                         $productSrchTempObj->setPageSize((0 < $pageSize ? $pageSize : 4));
                     }
 
@@ -924,9 +930,9 @@ class HomeController extends MyAppController
                         continue 2;
                     }
                     $productSrchTempObj->doNotCalculateRecords();
-                    $productSrchTempObj->addOrder('ctr.ctr_display_order', 'ASC');                    
+                    $productSrchTempObj->addOrder('ctr.ctr_display_order', 'ASC');
                     $rs = $productSrchTempObj->getResultSet();
-                    
+
                     $products = $db->fetchAll($rs, 'selprod_id');
                     $selProdIdsArr = array_keys($products);
                     $tRightRibbons = Badge::getRibbons($this->siteLangId, Badge::RIBB_POS_TRIGHT, $selProdIdsArr);
@@ -991,7 +997,7 @@ class HomeController extends MyAppController
                     } else if (in_array($collection['collection_layout_type'], [Collections::TYPE_CATEGORY_LAYOUT9])) {
                         $productCatSrchTempObj->setPageSize(8);
                     }
-                   
+
                     $recordCount = $this->getRecordsCount(clone $productCatSrchTempObj);
                     if (empty($recordCount)) {
                         continue 2;
@@ -1072,7 +1078,7 @@ class HomeController extends MyAppController
                             }
 
                             $productShopSrchTempObj->setPageSize($limit);
-                            
+
                             if (CommonHelper::demoUrl(true)) {
                                 $productShopSrchTempObj->addOrder('product_featured', 'DESC');
                             }
@@ -1330,7 +1336,7 @@ class HomeController extends MyAppController
                     $blogSearchTempObj->joinTable('(' . $tempObj->getQuery() . ')', 'INNER JOIN', 'post_id = ctr.ctr_record_id', 'ctr');
                     //$blogSearchTempObj->addCondition('post_id', 'IN', array_keys($blogPostIds));
                     if (false === MOBILE_APP_API_CALL) {
-                        $blogSearchTempObj->setPageSize($collection['collection_primary_records']);                        
+                        $blogSearchTempObj->setPageSize($collection['collection_primary_records']);
                     }
                     $blogSearchTempObj->addGroupBy('post_id');
                     $recordCount = $this->getRecordsCount(clone $blogSearchTempObj, true);

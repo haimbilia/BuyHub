@@ -4,16 +4,34 @@
     grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
 }
 
+//.seller-card
 .seller-card {
-    border: $border;
-    border-radius: 2px;
     text-align: center;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
 
-    &:hover {
-        //border-color: $brand-color;
+    &-thumbnail {
+        background-color: transparent;
+        box-shadow: $shadow;
+        border-radius: 50%;
+        overflow: hidden;
+        flex: 0 0 40px;
+        max-width: 40px;
     }
+
+    &-img {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    &-data {
+        font-weight: 0.85rem;
+        font-weight: 600;
+    }
+
+    &-title {}
 
     &-head {
         padding: 2rem;
@@ -44,7 +62,6 @@
 
         .payment-mode {
             font-size: 0.8rem;
-
             color: $txt-gray;
         }
     }
@@ -69,6 +86,18 @@
         align-items: center;
         justify-content: center;
         padding: 1rem;
+    }
+
+
+
+    .seller_detail {
+        flex: 1;
+    }
+
+    .seller_title {
+        font-weight: $font-weight-normal;
+        margin: 0.5rem;
+        font-size: 0.95rem;
     }
 }
 

@@ -10,6 +10,7 @@ $sidebar-width: 280px;
   display: flex;
   flex-direction: column;
   background-color: $bg-body;
+
   // background-color: $bg-white;
   // box-shadow: $shadow-theme;
   //border-#{$end-direction}: $border;
@@ -19,8 +20,10 @@ $sidebar-width: 280px;
     z-index: 1022;
     border: none;
   }
+
   &-sticky {
     width: 100%;
+
     @include media-breakpoint-up(lg) {
       position: sticky;
       top: 0;
@@ -28,6 +31,7 @@ $sidebar-width: 280px;
       height: auto;
     }
   }
+
   &-head {
     display: flex;
     // justify-content: flex-end;
@@ -41,11 +45,13 @@ $sidebar-width: 280px;
     //z-index: 1;
     //background: #fff;
     width: 100%;
+
     .logo-dashboard {
       transition: all 0.3s ease-in-out;
       // position: absolute;
       // #{$start-direction}: 24px;
       opacity: 1;
+
       img {
         max-width: 100px;
         max-height: 70px;
@@ -60,6 +66,7 @@ $sidebar-width: 280px;
     overflow-y: auto;
     width: 100% !important;
   }
+
   &-foot {
     // position: sticky;
     // bottom: 0;
@@ -74,6 +81,7 @@ $sidebar-width: 280px;
     border: 1px solid transparent;
     cursor: pointer;
     margin-#{$end-direction}: 20px;
+
     //width: 2.5rem;
     & [class*="bar-"] {
       display: block;
@@ -84,31 +92,38 @@ $sidebar-width: 280px;
       height: 1px;
       width: 24px;
       margin-bottom: 5px;
+
       &:nth-child(2) {
         width: 18px;
       }
+
       &:last-child {
         margin-bottom: 0;
         width: 12px;
       }
     }
+
     &.is-opened {
       & [class*="bar-"] {
         background: #000;
       }
+
       .bar-top {
         transform: rotate(45deg);
         transform-origin: 15% 15%;
       }
+
       .bar-mid {
         opacity: 0;
       }
+
       .bar-bot {
         transform: rotate(-45deg);
         transform-origin: 15% 95%;
         width: 24px;
       }
     }
+
     &:focus {
       outline-width: 0;
     }
@@ -128,20 +143,24 @@ $sidebar-width: 280px;
   color: $txt-gray;
   fill: currentColor;
   font-size: 0.85rem;
+
   &-item {
     overflow: hidden;
     transition: all 0.3s ease-in-out;
     color: $txt-body;
     margin-bottom: 1.5rem;
+
     &:last-child {
       margin-bottom: 0;
     }
+
     &.is-active {
       background: $bg-brand-light;
       color: $brand-color;
       fill: $brand-color;
     }
   }
+
   &-btn {
     color: currentColor;
     background-color: transparent;
@@ -155,15 +174,18 @@ $sidebar-width: 280px;
     margin-bottom: 0.5rem;
     padding: 0;
   }
+
   &-icon {
     display: flex;
     align-items: center;
     justify-content: center;
+
     .svg {
       width: 16px;
       height: 16px;
     }
   }
+
   &-head {
     margin-#{$start-direction}: 10px;
     font-weight: 500;
@@ -171,16 +193,21 @@ $sidebar-width: 280px;
     font-size: inherit;
     transition: all 0.3s ease-in-out;
   }
+
   .dropdown-toggle-custom-arrow {
     //#{$end-direction}: 25px;
   }
+
   .menu-sub {
     padding: 0;
     margin: 0;
+
     &-item {
       display: flex;
       position: relative;
       color: $txt-gray;
+      margin: 1px 0;
+
       &:after {
         //content: "";
         width: 5px;
@@ -193,6 +220,7 @@ $sidebar-width: 280px;
         border-radius: 50%;
       }
     }
+
     &-link {
       flex: 0 0 100%;
       padding: 0.5rem 0;
@@ -201,14 +229,18 @@ $sidebar-width: 280px;
       padding-#{$end-direction}: 15px;
       @include btn-hover;
       border-radius: 50px;
+
       &.active {
+
         font-weight: 500;
       }
     }
+
     &-title {
       display: flex;
     }
   }
+
   .msg-count {
     margin-#{$start-direction}: auto;
     background-color: $brand-color;
@@ -224,6 +256,7 @@ $sidebar-width: 280px;
     font-weight: 300;
     font-size: 9px;
   }
+
   .divider {
     margin: 0px 0;
   }

@@ -21,7 +21,8 @@ if ($recommendedProducts) { ?>
                 </div>
             </header>
             <div class="section-body">
-                <div class="js-carousel recommended-products" id="product-listing-rp" data-slides="4,4,3,2"
+                <div class="js-carousel recommended-products" id="product-listing-rp" data-slides="5,4,3,2,2"
+                    data-arrows="true" data-slickdots="false" data-custom="#product-listing-rp"
                     dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
                     <?php
                     $tRightRibbons = $recommendedProductsRibbons['tRightRibbons'];

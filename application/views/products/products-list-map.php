@@ -27,12 +27,15 @@ if ($products) { ?>
                             'shop_id' => $product['shop_id'],
                         ];
                         $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_PRODUCT_IMAGE, $product['product_id']);
-                    ?>
+                        ?>
 
                         <li data-shopId="<?php echo $product['shop_id']; ?>">
                             <a class="store" href="<?php echo $productUrl; ?>">
                                 <div class="store__img">
-                                    <img loading='lazy' <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_THUMB);?> src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_THUMB, $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $product['prodcat_name']; ?>" title="<?php echo (!empty($fileRow['afile_attribute_title'])) ? $fileRow['afile_attribute_title'] : $product['prodcat_name']; ?>">
+                                    <img loading='lazy' <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_THUMB); ?>
+                                        src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_THUMB, $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>"
+                                        alt="<?php echo (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $product['prodcat_name']; ?>"
+                                        title="<?php echo (!empty($fileRow['afile_attribute_title'])) ? $fileRow['afile_attribute_title'] : $product['prodcat_name']; ?>">
                                 </div>
                                 <div class="store__detail">
                                     <h6><?php echo (mb_strlen($product['selprod_title']) > 50) ? mb_substr($product['selprod_title'], 0, 50) . "..." : $product['selprod_title']; ?>
@@ -46,7 +49,8 @@ if ($products) { ?>
 
                                 </div>
                             </a>
-                            <a href="javascript:void(0);" class="link" onclick="viewMoreSeller('<?php echo $product['selprod_code']; ?>','<?php echo $product['selprod_id']; ?>')"><?php echo Labels::getLabel('LBL_MORE_SELLERS', $siteLangId); ?></a>
+                            <a href="javascript:void(0);" class="link"
+                                onclick="viewMoreSeller('<?php echo $product['selprod_code']; ?>','<?php echo $product['selprod_id']; ?>')"><?php echo Labels::getLabel('LBL_MORE_SELLERS', $siteLangId); ?></a>
 
                         </li>
                     <?php } ?>
@@ -54,7 +58,7 @@ if ($products) { ?>
             </div>
         </div>
     </div>
-<?php
+    <?php
     $searchFunction = 'goToProductListingSearchPage';
     if (isset($pagingFunc)) {
         $searchFunction = $pagingFunc;
@@ -87,27 +91,27 @@ foreach ($moreSellersProductsArr as $product) {
                             </div>
                         </li>
                     </ul>',
-        'amount' =>  CommonHelper::displayMoneyFormat($product['theprice']),
+        'amount' => CommonHelper::displayMoneyFormat($product['theprice']),
     ];
 }
 
 foreach ($productsByShop as &$marker) {
     $contentString = '<div class="seller-card">
-                        <div class="seller_logo">
-                            <img src="' . UrlHelper::generateFullUrl('image', 'shopLogo', [$product['shop_id'], $siteLangId, ImageDimension::VIEW_SMALL]) . '" '.HtmlHelper::getImgDimParm(ImageDimension::TYPE_SHOP_LOGO, ImageDimension::VIEW_SMALL).'>
+                        <div class="seller-card-thumbnail">
+                            <img class="seller-card-img" src="' . UrlHelper::generateFullUrl('image', 'shopLogo', [$product['shop_id'], $siteLangId, ImageDimension::VIEW_SMALL]) . '" ' . HtmlHelper::getImgDimParm(ImageDimension::TYPE_SHOP_LOGO, ImageDimension::VIEW_SMALL) . '>
                         </div>
-                        <div class="seller_detail">
-                        <div class="seller_title">' . $marker['shop_name'] . '</div>                
+                        <div class="seller-card-data">
+                        <div class="seller-card-title">' . $marker['shop_name'] . '</div>                
                         </div> 
                     </div>
             <ul class="gmap-list">';
     foreach ($marker['products'] as $product) {
         $amount = CommonHelper::displayMoneyFormat($product['theprice']);
-        $contentString .= '<li>
+        $contentString .= '<li class="gmap-list-item">
                                 <figure class="product-profile">
-                                    <div class="product-profile-thumbnail"><img class="product-img" src="' . $product['img'] . '" alt="' . $product['name'] . '"></div>
-                                    <div class="product-profile-data"><div class="title"><a href="' . $product['url'] . '">' . $product['name'] . '</a></div>
-                                        <div class="price">' . $amount . '</div>
+                                    <div class="product-profile-thumbnail"><img class="product-img" width="36" height="auto" src="' . $product['img'] . '" alt="' . $product['name'] . '"></div>
+                                    <div class="product-profile-data"><div class="title"><a href="' . $product['url'] . '" title="' . $product['name'] . '">' . $product['name'] . '</a>  <div class="price">' . $amount . '</div></div>
+                                       
                                     </div>
                                 </figure>
                             </li>';
@@ -120,7 +124,7 @@ foreach ($productsByShop as &$marker) {
 <script>
     var markers = <?php echo json_encode($productsByShop); ?>;
     var realtedMarkers = <?php echo json_encode($productsBySelProdCode); ?>;
-    $(function() {
+    $(function () {
         if (typeof map == 'undefined') {
             initMutipleMapMarker(markers, 'productMap--js', getCookie('_ykGeoLat'), getCookie('_ykGeoLng'),
                 dragCallback);
@@ -138,7 +142,7 @@ foreach ($productsByShop as &$marker) {
         let relMarkers = realtedMarkers[selprodCode];
 
         if (relMarkers.length) {
-            $.each(relMarkers, function(index, marker) {
+            $.each(relMarkers, function (index, marker) {
                 relMarkers[index]['isDefault'] = (marker.selprod_id == selprod_id ? 1 : 0);
             });
         }

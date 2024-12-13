@@ -1,16 +1,21 @@
 .js-carousel {
-  //display: block;
-  grid-auto-flow: column;
-  margin-bottom: 0 !important;
-  margin-inline: -$gap/2;
-  @include media-breakpoint-up(lg) {
-  }
-  &-item {
-    padding-inline: $gap/2;
+    //display: block;
+    grid-auto-flow: column;
+    margin-bottom: 0 !important;
+    margin-inline: -$gap/2;
+
     @include media-breakpoint-up(lg) {
+        display: flex;
     }
-  }
-  .slick-track {
-    margin: 0;
-  }
+
+    &-item {
+        min-width: 0;
+        padding-inline: $gap/2;
+
+        @include media-breakpoint-up(lg) {}
+    }
+
+    .slick-track {
+        margin: 0;
+    }
 }
