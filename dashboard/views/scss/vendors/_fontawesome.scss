@@ -82,7 +82,7 @@
     padding-left: 0;
 }
 
-.fa-ul > li {
+.fa-ul>li {
     position: relative;
 }
 
@@ -136,37 +136,37 @@
 
 @-webkit-keyframes fa-spin {
     0% {
-        
+
         transform: rotate(0deg);
     }
 
     100% {
-        
+
         transform: rotate(360deg);
     }
 }
 
 @keyframes fa-spin {
     0% {
-        
+
         transform: rotate(0deg);
     }
 
     100% {
-        
+
         transform: rotate(360deg);
     }
 }
 
 .fa-rotate-90 {
     -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=1)";
-    
+
     transform: rotate(90deg);
 }
 
 .fa-rotate-180 {
     -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=2)";
-    
+
     transform: rotate(180deg);
 }
 

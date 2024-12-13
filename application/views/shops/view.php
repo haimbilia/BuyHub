@@ -14,7 +14,7 @@
                     <div class="section-heading">
                         <h2><?php echo Labels::getLabel('LBL_SHOP_COLLECTIONS'); ?></h2>
                     </div>
-                    <div class="section-action">
+                    <div ss="section-action">
                         <div class="slider-controls">
                             <button class="btn btn-prev" type="button" data-href="#shop-collection-listing"
                                 aria-label="Previous"> <span></span>
@@ -26,7 +26,9 @@
                     </div>
                 </header>
                 <div class="section-body">
-                    <div class="js-carousel shop-slider" id="shop-collection-listing" data-slides="3,3,2,2">
+                    <div class="js-carousel shop-slider" id="shop-collection-listing" data-slides="3,3,2,2,2"
+                        data-arrows="true" data-slickdots="false" data-custom="#shop-collection-listing"
+                        dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
                         <?php foreach ($collectionData as $collection) { ?>
                             <div class="js-carousel-item">
                                 <div class="shop-slider-item">

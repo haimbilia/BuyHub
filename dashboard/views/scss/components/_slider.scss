@@ -6,6 +6,7 @@
     right: 0;
     margin: 0 auto;
     text-align: center;
+
     li {
         vertical-align: middle;
         display: inline-block;
@@ -15,13 +16,14 @@
         border-radius: $radius1;
         cursor: pointer;
         background: rgba(255, 255, 255, 0.5);
-
         transition: all 0.5s ease-in-out;
+
         button {
             background: none;
             border: none;
             text-indent: -9999999px;
         }
+
         &.slick-active {
             background: $brand-color;
             width: 30px;

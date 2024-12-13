@@ -38,12 +38,12 @@ if (null != $arguments) {
     $callBackJsFunc = $callBackJsFunc . '(xxpagexx);';
 }
 
-$pagination .=     FatUtility::getPageString(
+$pagination .= FatUtility::getPageString(
     '<li class="pagination-item"><a href="javascript:void(0);" onclick="' . $callBackJsFunc . '">xxpagexx</a></li>',
     $pageCount,
     $pageNumber,
     ' <li class="pagination-item selected"><a href="javascript:void(0);">xxpagexx</a></li>',
-    ' <li class="pagination-item"><a href="javascript:void(0);">...</a></li> ',
+    ' <li class="pagination-item dotted"><a href="javascript:void(0);">...</a></li> ',
     $linksToDisp,
     ' <li class="pagination-item rewind"><a href="javascript:void(0);" onclick="' . $callBackJsFunc . '"><svg class="svg" width="20" height="20">
     <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#double-arrow-left">

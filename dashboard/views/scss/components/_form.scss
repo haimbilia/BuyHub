@@ -88,6 +88,7 @@ $form-bg-inverse: #fff;
     padding-#{$start-direction}: 35px;
     padding-#{$end-direction}: 0.75rem;
   }
+
   .content-wrapper[dir="ltr"] & {
     color: #000;
     padding-#{$start-direction}: 35px;
@@ -538,6 +539,7 @@ form.custom-form {
   &-group {
     position: relative;
   }
+
   &-label {
     position: absolute;
     left: 1rem;
@@ -551,6 +553,7 @@ form.custom-form {
     transition: transform 0.2s ease-in-out;
     pointer-events: none;
   }
+
   &-field {
     padding-top: 16px !important;
     width: 100%;
@@ -562,11 +565,13 @@ form.custom-form {
     &:focus {
       outline-color: $brand-color;
       border-color: $brand-color;
-      + .form-floating-label {
+
+      +.form-floating-label {
         transform: translateY(-6px) scale(0.8);
       }
     }
-    &.filled + .form-floating-label {
+
+    &.filled+.form-floating-label {
       opacity: 0.7;
       transform: translateY(-6px) scale(0.8);
     }
@@ -612,6 +617,7 @@ form.custom-form {
     }
   }
 }
+
 .form-inline {
   display: flex;
 

@@ -1,6 +1,6 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
-$this->includeTemplate('_partial/dashboardNavigation.php');  ?>
+$this->includeTemplate('_partial/dashboardNavigation.php'); ?>
 
 <input type='hidden' name='adsBatchId' value="<?php echo $adsBatchId; ?>">
 <div class="content-wrapper content-space">
@@ -8,7 +8,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php');  ?>
     $batchName = AdsBatch::getAttributesById($adsBatchId, 'adsbatch_name');
     $str = Labels::getLabel('LBL_ADD_PRODUCTS_TO_{BATCH}', $siteLangId);
     $data = [
-        'headingLabel' =>  CommonHelper::replaceStringData($str, ['{BATCH}' => $batchName]),
+        'headingLabel' => CommonHelper::replaceStringData($str, ['{BATCH}' => $batchName]),
         'siteLangId' => $siteLangId,
         'headingBackButton' => true,
     ];
@@ -40,7 +40,7 @@ $this->includeTemplate('_partial/dashboardNavigation.php');  ?>
                                 'label' => '<svg class="svg btn-icon-start" width="18" height="18">
                                             <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#delete">
                                             </use>
-                                        </svg><span>' . Labels::getLabel('LBL_UNLINK', $siteLangId) . '</span>'
+                                        </svg><span class="btn-txt">' . Labels::getLabel('LBL_UNLINK', $siteLangId) . '</span>'
                             ]
                         ];
                         $frmSearch->addFormTagAttribute('onsubmit', 'searchProducts(this); return false;');

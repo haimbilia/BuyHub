@@ -1,14 +1,17 @@
 .section-banner {
   padding: 0;
 }
+
 .banner-wrappers {
   .banner-ppc {
     border-radius: $common-radius;
     overflow: hidden;
+
     .advertise__block {
       margin-bottom: 2rem;
       display: block;
     }
+
     img {
       margin: 0 auto;
       display: inline-block;
@@ -19,15 +22,19 @@
 .poster-layout {
   display: grid;
   grid-gap: $gap;
+
   @include media-breakpoint-down(sm) {
     //display: block;
   }
+
   &[data-view="2"] {
     grid-template-columns: repeat(2, 1fr);
   }
+
   &[data-view="3"] {
     grid-template-columns: repeat(3, 1fr);
   }
+
   .poster {
     background: $bg-placeholder;
     border-radius: $kart;
@@ -35,6 +42,7 @@
     aspect-ratio: 4/3;
     position: relative;
     overflow: hidden;
+
     &:before {
       position: absolute;
       top: 0;
@@ -44,31 +52,31 @@
       content: "";
       width: 50%;
       height: 100%;
-      background: -webkit-linear-gradient(
-        left,
-        rgba(255, 255, 255, 0) 0%,
-        rgba(255, 255, 255, 0.3) 100%
-      );
-      background: linear-gradient(
-        to right,
-        rgba(255, 255, 255, 0) 0%,
-        rgba(255, 255, 255, 0.3) 100%
-      );
+      background: -webkit-linear-gradient(left,
+          rgba(255, 255, 255, 0) 0%,
+          rgba(255, 255, 255, 0.3) 100%);
+      background: linear-gradient(to right,
+          rgba(255, 255, 255, 0) 0%,
+          rgba(255, 255, 255, 0.3) 100%);
       transform: skewX(-25deg);
     }
+
     &:hover::before {
       animation: shine 0.75s;
     }
+
     @-webkit-keyframes shine {
       100% {
         left: 125%;
       }
     }
+
     @keyframes shine {
       100% {
         left: 125%;
       }
     }
+
     img {
       object-fit: cover;
       height: 100%;
@@ -79,17 +87,20 @@
 
 .poster-layout-1 {
   padding: 0;
+
   .poster {
     background: $bg-placeholder;
     border-radius: $kart;
     text-align: center;
     aspect-ratio: 3/1;
     overflow: hidden;
+
     img {
       width: 100%;
     }
   }
 }
+
 .poster-layout-2 {
   display: grid;
   grid-gap: $gap;
@@ -106,6 +117,7 @@
     aspect-ratio: 2/1;
     position: relative;
     overflow: hidden;
+
     &:before {
       position: absolute;
       top: 0;
@@ -115,31 +127,31 @@
       content: "";
       width: 50%;
       height: 100%;
-      background: -webkit-linear-gradient(
-        left,
-        rgba(255, 255, 255, 0) 0%,
-        rgba(255, 255, 255, 0.3) 100%
-      );
-      background: linear-gradient(
-        to right,
-        rgba(255, 255, 255, 0) 0%,
-        rgba(255, 255, 255, 0.3) 100%
-      );
+      background: -webkit-linear-gradient(left,
+          rgba(255, 255, 255, 0) 0%,
+          rgba(255, 255, 255, 0.3) 100%);
+      background: linear-gradient(to right,
+          rgba(255, 255, 255, 0) 0%,
+          rgba(255, 255, 255, 0.3) 100%);
       transform: skewX(-25deg);
     }
+
     &:hover::before {
       animation: shine 0.75s;
     }
+
     @-webkit-keyframes shine {
       100% {
         left: 125%;
       }
     }
+
     @keyframes shine {
       100% {
         left: 125%;
       }
     }
+
     img {
       object-fit: cover;
       height: 100%;

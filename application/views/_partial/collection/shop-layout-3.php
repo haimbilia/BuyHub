@@ -51,9 +51,6 @@ if (isset($collection['shops']) && count($collection['shops'])) {
                                             <?php echo $shop['shopData']['country_name']; ?>
                                         </p>
                                     </div>
-                                    <a class="link-underline link-more"
-                                        href="<?php echo (!isset($shop['shopData']['promotion_id']) ? UrlHelper::generateUrl('shops', 'view', array($shop['shopData']['shop_id'])) : UrlHelper::generateUrl('shops', 'track', array($shop['shopData']['promotion_record_id'], ))); ?>">
-                                        <?php echo Labels::getLabel('LBL_Shop_Now', $siteLangId); ?></a>
                                 </div>
                             </div>
                             <div class="recommended-layout-body">
