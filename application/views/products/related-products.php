@@ -8,7 +8,7 @@ if ($relatedProductsRs) { ?>
                     </h2>
                 </div>
                 <div class="section-action">
-                    <div class="slider-controls">
+                    <div class="slider-controls relatedprod">
                         <button class="btn btn-prev" type="button" data-href="#product-listing-rep"> <span class=""></span>
                         </button>
                         <button class="btn btn-next" type="button" data-href="#product-listing-rep"> <span class=""></span>
@@ -18,7 +18,7 @@ if ($relatedProductsRs) { ?>
             </header>
             <div class="section-body">
                 <div class="js-carousel related-products" id="product-listing-rep" data-slides="5,4,3,2,2"
-                    data-arrows="true" data-slickdots="false" data-custom="#product-listing-rep"
+                    data-arrows="true" data-slickdots="false" data-arrowcontainer="relatedprod" data-dotscontainer="" data-customarrow="true"
                     dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
                     <?php
                     $tRightRibbons = $relatedProductsRibbons['tRightRibbons'];

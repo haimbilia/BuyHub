@@ -12,17 +12,19 @@ if ($recommendedProducts) { ?>
                     <h2><?php echo Labels::getLabel('LBL_Recommended_Products', $siteLangId); ?></h2>
                 </div>
                 <div class="section-action">
-                    <div class="slider-controls">
-                        <button class="btn btn-prev" type="button" data-href="#product-listing-rp"> <span class=""></span>
+                <div class="slider-controls recommendedprod">
+                        <button class="btn btn-prev slick-arrow arrow-prev" type="button">
+                            <span></span>
                         </button>
-                        <button class="btn btn-next" type="button" data-href="#product-listing-rp"> <span class=""></span>
+                        <button class="btn btn-next slick-arrow arrow-next" type="button">
+                            <span></span>
                         </button>
                     </div>
                 </div>
             </header>
-            <div class="section-body">
+            <div class="section-body">            
                 <div class="js-carousel recommended-products" id="product-listing-rp" data-slides="5,4,3,2,2"
-                    data-arrows="true" data-slickdots="false" data-custom="#product-listing-rp"
+                    data-arrows="true" data-arrowcontainer="recommendedprod" data-slickdots="false" data-custom="#product-listing-rp" data-dotscontainer="" data-customarrow="true"
                     dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
                     <?php
                     $tRightRibbons = $recommendedProductsRibbons['tRightRibbons'];
@@ -75,10 +77,11 @@ if ($recommendedProducts) { ?>
                                 </div>
                             </div>
                         </div>
+                        
                         <?php
                     } ?>
                 </div>
             </div>
         </div>
     </section>
-<?php }
+<?php } ?>

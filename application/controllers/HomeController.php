@@ -547,8 +547,7 @@ class HomeController extends MyAppController
                 if (false == $isDefaultLangId) {
                     $redirectUrl .= strtolower($langCodeArr[$langId]) . '/';
                 }
-                $redirectUrl .= ltrim($pathname, '/');
-                ;
+                $redirectUrl .= ltrim($pathname, '/');;
             }
         } else {
             if (empty($redirectUrl)) {
@@ -979,23 +978,20 @@ class HomeController extends MyAppController
                     $productCatSrchTempObj->joinTable('(' . $tempObj->getQuery() . ')', 'INNER JOIN', 'prodcat_id = ctr.ctr_record_id', 'ctr');
 
                     $productCatSrchTempObj->addCondition('prodcat_deleted', '=', applicationConstants::NO);
+                    $basedOnItemCountArr = Collections::displayRecordsCount($collection['collection_layout_type']);
+                    if (!empty($basedOnItemCountArr)) {
+                        $pageSize =  $collection['collection_primary_records'];
+                    } else {
+                        $pageSize = Collections::getLayoutLimit($collection['collection_layout_type']);
+                    }
 
                     if (false === MOBILE_APP_API_CALL) {
                         if (!in_array($collection['collection_layout_type'], [Collections::TYPE_CATEGORY_LAYOUT7, Collections::TYPE_CATEGORY_LAYOUT9, Collections::TYPE_CATEGORY_LAYOUT11, Collections::TYPE_CATEGORY_LAYOUT12])) {
-                            $productCatSrchTempObj->setPageSize($collection['collection_primary_records']);
+                            $productCatSrchTempObj->setPageSize(($pageSize > 0) ? $pageSize : 5);
                         }
                     }
 
-                    if ($collection['collection_layout_type'] == Collections::TYPE_CATEGORY_LAYOUT11) {
-                        $productCatSrchTempObj->setPageSize(4);
-                    } else if (in_array($collection['collection_layout_type'], [Collections::TYPE_CATEGORY_LAYOUT7])) {
-                        $productCatSrchTempObj->setPageSize(12);
-                    } else if (in_array($collection['collection_layout_type'], [Collections::TYPE_CATEGORY_LAYOUT12])) {
-                        $productCatSrchTempObj->setPageSize(6);
-                    } else if (in_array($collection['collection_layout_type'], [Collections::TYPE_CATEGORY_LAYOUT9])) {
-                        $productCatSrchTempObj->setPageSize(8);
-                    }
-
+                    $productCatSrchTempObj->setPageSize(($pageSize > 0) ? $pageSize : 5);
                     $recordCount = $this->getRecordsCount(clone $productCatSrchTempObj);
                     if (empty($recordCount)) {
                         continue 2;
@@ -1066,16 +1062,13 @@ class HomeController extends MyAppController
                             //$productShopSrchTempObj->addOrder('in_stock', 'DESC');
                             $productShopSrchTempObj->addGroupBy('selprod_product_id');
 
-                            $limit = Collections::LIMIT_CATEGORY_LAYOUT4;
-                            if (in_array($collection['collection_layout_type'], [Collections::TYPE_CATEGORY_LAYOUT10, Collections::TYPE_CATEGORY_LAYOUT1])) {
-                                $limit = Collections::LIMIT_CATEGORY_LAYOUT1_PRODUCT;
-                            } else if ($collection['collection_layout_type'] == Collections::TYPE_CATEGORY_LAYOUT11) {
-                                $limit = Collections::LIMIT_CATEGORY_LAYOUT6;
-                            } else if ($collection['collection_layout_type'] == Collections::TYPE_CATEGORY_LAYOUT8) {
-                                $limit = $collection['collection_primary_records'];
+                            $basedOnItemCountArr = Collections::displayRecordsCount($collection['collection_layout_type']);
+                            if (!empty($basedOnItemCountArr)) {
+                                $limit =  $collection['collection_primary_records'];
+                            } else {
+                                $limit = Collections::getLayoutLimit($collection['collection_layout_type']);
                             }
-
-                            $productShopSrchTempObj->setPageSize($limit);
+                            $productShopSrchTempObj->setPageSize($limit ?? 4);
 
                             if (CommonHelper::demoUrl(true)) {
                                 $productShopSrchTempObj->addOrder('product_featured', 'DESC');
