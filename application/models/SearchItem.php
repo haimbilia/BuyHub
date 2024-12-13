@@ -2,6 +2,7 @@
 
 class SearchItem extends MyAppModel
 {
+    protected $db = '';
     public function __construct()
     {
         $this->db = FatApp::getDb();

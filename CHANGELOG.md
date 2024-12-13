@@ -231,3 +231,4 @@
     - bug-089013 - The savings icon is not visible on the Order details page on the buyer's end.
     - bug-088958 - Records linked with the category layout 7 are not visible on the front end in Arabic.
     - bug-088963 - Category layout 9 records are visible on mobile devices in Arabic.
+    - Bug-089339 - An invalid request error occurs when the seller clicks the remove icon for any product on the badge request popup.
