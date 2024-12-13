@@ -50,10 +50,10 @@ $fld = $frmSellerProduct->getField('use_shop_policy');
 HtmlHelper::configureSwitchForCheckbox($fld);
 
 $fld = $frmSellerProduct->getField('selprod_hide_price');
-if (null != $fld) {
-    HtmlHelper::configureSwitchForCheckbox($fld);
+if (null !== $fld) {
+    $fld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
+    $fld->developerTags['cbHtmlAfterCheckbox'] = '';
 }
-
 $submitBtnFld = $frmSellerProduct->getField('btn_submit');
 $submitBtnFld->setFieldTagAttribute('class', 'btn btn-brand');
 $submitBtnFld->developerTags['col'] = 12;
@@ -62,8 +62,9 @@ $cancelBtnFld = $frmSellerProduct->getField('btn_cancel');
 $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-gray js-cancel-inventory');
 
 $fld = $frmSellerProduct->getField('selprod_active');
-if ($fld != null) {
-    HtmlHelper::configureSwitchForCheckbox($fld);
+if (null !== $fld) {
+    $fld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
+    $fld->developerTags['cbHtmlAfterCheckbox'] = '';
 }
 ?>
 <div class="row">
@@ -263,9 +264,11 @@ if ($fld != null) {
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="form-group">
-                        <div class="setting-block">
-                            <?php echo $frmSellerProduct->getFieldHtml('selprod_active'); ?>
+                    <div class="field-set ">
+                        <div class="caption-wraper"><label class="field_label"></label></div>
+                        <div class="field-wraper">
+                            <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_active'); ?>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -282,9 +285,11 @@ if ($fld != null) {
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="form-group">
-                            <div class="setting-block">
-                                <?php echo $frmSellerProduct->getFieldHtml('selprod_hide_price'); ?>
+                        <div class="field-set">
+                            <div class="caption-wraper"><label class="field_label"></label></div>
+                            <div class="field-wraper">
+                                <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_hide_price'); ?>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -24,6 +24,10 @@ class SellerRfqOffersController extends SellerBaseController
             LibHelper::exitWithError(Labels::getLabel('ERR_ACTION_RESTRICTED!_THIS_OFFER_HAS_BEEN_ACCEPTED/REJECTED.'), true);
         }
 
+        $rfqInfo = RequestForQuote::getAttributesById($rfqId, ['rfq_approved', 'rfq_selprod_id', 'rfq_product_id', 'rfq_visibility_type', 'rfq_status']);
+        if (RequestForQuote::STATUS_CLOSED == $rfqInfo['rfq_status'] && false == RequestForQuote::hasAcceptedOffers($rfqId)) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_THIS_RFQ_HAS_BEEN_CLOSED_BY_THE_BUYER', $this->siteLangId), true);
+        }
         $this->markAsDeleted($offerId);
 
         $updateArray = array('rlo_deleted' => applicationConstants::YES);

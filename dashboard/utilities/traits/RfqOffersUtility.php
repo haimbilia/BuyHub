@@ -49,11 +49,11 @@ trait RfqOffersUtility
             LibHelper::exitWithError(Labels::getLabel('ERR_RFQ_IS_NOT_APPROVED_YET', $this->siteLangId), false, true);
             CommonHelper::redirectUserReferer();
         }
-
+        /* 
         if (RequestForQuote::STATUS_CLOSED == $rfqInfo['rfq_status'] && false == RequestForQuote::hasAcceptedOffers($rfqId)) {
             LibHelper::exitWithError(Labels::getLabel('ERR_THIS_RFQ_HAS_BEEN_CLOSED_BY_THE_BUYER', $this->siteLangId), false, true);
             CommonHelper::redirectUserReferer();
-        }
+        } */
 
         $srch = new RequestForQuoteSearch();
         if ($this->isSeller) {
@@ -692,6 +692,11 @@ trait RfqOffersUtility
             LibHelper::exitWithError($msg, true);
         }
 
+        $rfqInfo = RequestForQuote::getAttributesById($rfqId, ['rfq_approved', 'rfq_selprod_id', 'rfq_product_id', 'rfq_visibility_type', 'rfq_status']);
+        if (RequestForQuote::STATUS_CLOSED == $rfqInfo['rfq_status'] && false == RequestForQuote::hasAcceptedOffers($rfqId)) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_THIS_RFQ_HAS_BEEN_CLOSED_BY_THE_BUYER', $this->siteLangId), true);
+        }
+
         if ($status == $offerData['rlo_status']) {
             $statusArr = RfqOffers::getStatusArr($this->siteLangId);
             $msg = CommonHelper::replaceStringData(Labels::getLabel('LBL_THIS_OFFER_HAS_BEEN_ALREADY_{STATUS}', $this->siteLangId), [
@@ -835,6 +840,7 @@ trait RfqOffersUtility
         if (false == $rfq->updateLatestOffer($data)) {
             LibHelper::exitWithError($rfq->getError(), true);
         }
+        
         $srch = new SearchBase(RfqOffers::DB_RFQ_LATEST_OFFER);
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
@@ -1220,6 +1226,12 @@ trait RfqOffersUtility
         $primaryOfferId = FatApp::getPostedData('rom_primary_offer_id', FatUtility::VAR_INT, 0);
         if (1 > $primaryOfferId) {
             LibHelper::exitWithError($this->str_invalid_request_id, true);
+        }
+
+        $rfqId = RfqOffers::getAttributesById($primaryOfferId, 'offer_rfq_id');
+        $rfqInfo = RequestForQuote::getAttributesById($rfqId, ['rfq_approved', 'rfq_selprod_id', 'rfq_product_id', 'rfq_visibility_type', 'rfq_status']);
+        if (RequestForQuote::STATUS_CLOSED == $rfqInfo['rfq_status'] && false == RequestForQuote::hasAcceptedOffers($rfqId)) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_THIS_RFQ_HAS_BEEN_CLOSED_BY_THE_BUYER', $this->siteLangId), true);
         }
 
         $frm = RfqOffers::getAttachmentForm();
