@@ -264,7 +264,8 @@ if (null !== $fld) {
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="field-set d-flex align-items-center">
+                    <div class="field-set ">
+                        <div class="caption-wraper"><label class="field_label"></label></div>
                         <div class="field-wraper">
                             <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_active'); ?>
                             </div>
@@ -284,7 +285,8 @@ if (null !== $fld) {
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="field-set d-flex align-items-center">
+                        <div class="field-set">
+                            <div class="caption-wraper"><label class="field_label"></label></div>
                             <div class="field-wraper">
                                 <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_hide_price'); ?>
                                 </div>
