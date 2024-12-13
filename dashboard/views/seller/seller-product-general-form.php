@@ -57,6 +57,9 @@ $submitBtnFld->developerTags['col'] = 12;
 $cancelBtnFld = $frmSellerProduct->getField('btn_cancel');
 $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-gray js-cancel-inventory');
 
+$fld = $frmSellerProduct->getField('selprod_active');
+$fld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
+$fld->developerTags['cbHtmlAfterCheckbox'] = '';
 ?>
 <div class="row">
     <div class="col-md-12">
@@ -169,258 +172,256 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-gray js-cancel-inv
             <?php } ?>
             <div class="row">
                 <div class="col-md-6">
-                    <div class="field-set">
-                        <div class="caption-wraper"><label class="field_label"><?php echo $frmSellerProduct->getField('selprod_active')->getCaption(); ?></label>
-                        </div>
+                    <div class="field-set d-flex align-items-center">
                         <div class="field-wraper">
                             <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_active'); ?>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="field-set">
-                        <div class="caption-wraper"><label class="field_label"><?php echo $frmSellerProduct->getField('selprod_available_from')->getCaption(); ?><span class="spn_must_field">*</span></label></div>
-                        <div class="field-wraper">
-                            <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_available_from'); ?>
-                            </div>
+            </div>
+            <div class="col-md-6">
+                <div class="field-set">
+                    <div class="caption-wraper"><label class="field_label"><?php echo $frmSellerProduct->getField('selprod_available_from')->getCaption(); ?><span class="spn_must_field">*</span></label></div>
+                    <div class="field-wraper">
+                        <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_available_from'); ?>
                         </div>
                     </div>
                 </div>
             </div>
-            <?php if (in_array($product_type, [Product::PRODUCT_TYPE_PHYSICAL, Product::PRODUCT_TYPE_SERVICE])) { ?>
-                <div class="row">
-                    <?php if ($product_type == Product::PRODUCT_TYPE_PHYSICAL) { ?>
-                        <div class="col-md-6">
-                            <div class="field-set">
-                                <div class="caption-wraper"><label class="field_label"><?php echo $frmSellerProduct->getField('selprod_condition')->getCaption(); ?><span class="spn_must_field">*</span></label></div>
-                                <div class="field-wraper">
-                                    <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_condition'); ?>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    <?php } ?>
-                    <div class="col-md-<?php echo ($product_type == Product::PRODUCT_TYPE_PHYSICAL) ? 6 : 12; ?>">
-                        <div class="field-set">
-                            <div class="caption-wraper"><label class="field_label"></label></div>
-                            <div class="field-wraper">
-                                <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('use_shop_policy'); ?>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row use-shop-policy <?php echo $hidden; ?>">
-                    <?php if ($product_type == Product::PRODUCT_TYPE_PHYSICAL) { ?>
-                        <div class="col-md-6">
-                            <div class="field-set">
-                                <div class="caption-wraper"><label class="field_label"><?php echo $frmSellerProduct->getField('selprod_return_age')->getCaption(); ?></label>
-                                </div>
-                                <div class="field-wraper">
-                                    <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_return_age'); ?>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    <?php } ?>
+        </div>
+        <?php if (in_array($product_type, [Product::PRODUCT_TYPE_PHYSICAL, Product::PRODUCT_TYPE_SERVICE])) { ?>
+            <div class="row">
+                <?php if ($product_type == Product::PRODUCT_TYPE_PHYSICAL) { ?>
                     <div class="col-md-6">
                         <div class="field-set">
-                            <div class="caption-wraper"><label class="field_label"><?php echo $frmSellerProduct->getField('selprod_cancellation_age')->getCaption(); ?></label>
-                            </div>
+                            <div class="caption-wraper"><label class="field_label"><?php echo $frmSellerProduct->getField('selprod_condition')->getCaption(); ?><span class="spn_must_field">*</span></label></div>
                             <div class="field-wraper">
-                                <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_cancellation_age'); ?>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            <?php } ?>
-            <div class="row">
-                <?php if ($product_type != Product::PRODUCT_TYPE_SERVICE) { ?>
-                    <div class="selprod_cod_enabled_fld col-md-6">
-                        <div class="field-set">
-                            <div class="caption-wraper"><label class="field_label"><?php echo $frmSellerProduct->getField('selprod_cod_enabled')->getCaption(); ?></label>
-                            </div>
-                            <div class="field-wraper">
-                                <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_cod_enabled'); ?>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                <?php }
-                if ($product_type == Product::PRODUCT_TYPE_PHYSICAL && !empty($shipBySeller)) { ?>
-                    <div class="selprod_fulfillment_type_fld col-md-6">
-                        <div class="field-set">
-                            <div class="caption-wraper"><label class="field_label"><?php echo $frmSellerProduct->getField('selprod_fulfillment_type')->getCaption(); ?></label>
-                            </div>
-                            <div class="field-wraper">
-                                <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_fulfillment_type'); ?>
+                                <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_condition'); ?>
                                 </div>
                             </div>
                         </div>
                     </div>
                 <?php } ?>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="form-text text-muted my-4">
-                        <?php
-                        $defaultCurrencyValue = '<span class="form-text text-muted" data-bs-toggle="tooltip" title="' . Labels::getLabel('LBL_SYSTEM_DEFAULT_CURRENCY.') . '">(' . CommonHelper::displayMoneyFormat($productMinSellingPrice, true, true) . ')</span>';
-                        $errorMsg = Labels::getLabel('MSG_SELLING_PRICE_CANNOT_BE_LESS_THEN_MINIMUM_SELLING_PRICE_{MINIMUM-SELLING-PRICE}.');
-                        echo CommonHelper::replaceStringData($errorMsg, ['{MINIMUM-SELLING-PRICE}' => CommonHelper::displayMoneyFormat($productMinSellingPrice) . $defaultCurrencyValue]);
-                        ?>
-                    </div>
-                    <div class="js-scrollable table-wrap table-responsive">
-                        <table id="optionsTable-js" class="table table-justified">
-                            <thead>
-                                <tr>
-                                    <?php if (($selprod_id == 0 && !empty($availableOptions)) || !empty($optionValues)) { ?>
-                                        <th style="min-width:100px;"><?php echo Labels::getLabel('LBL_Variant/Option', $siteLangId); ?>
-                                        </th>
-                                    <?php } ?>
-                                    <th style="min-width:100px;"><?php echo Labels::getLabel('LBL_Cost_Price', $siteLangId); ?>
-                                    </th>
-                                    <?php $selPriceTitle = (FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0)) ? Labels::getLabel('LBL_This_price_is_including_the_tax_rates.', $siteLangId) : Labels::getLabel('LBL_This_price_is_excluding_the_tax_rates.', $siteLangId);
-                                    $selPriceTitle .= ' ' . Labels::getLabel('LBL_Min_Selling_price', $siteLangId) . ' ' . CommonHelper::displayMoneyFormat($productMinSellingPrice, true, true);
-                                    ?>
-                                    <th style="min-width:100px;"><?php echo Labels::getLabel('LBL_Selling_Price', $siteLangId); ?>
-                                        <i class="fa fa-info-circle" data-bs-toggle="tooltip" data-placement="right" title="<?php echo $selPriceTitle; ?>"></i>
-                                    </th>
-                                    <?php if ($product_type != Product::PRODUCT_TYPE_SERVICE) { ?>
-                                        <th style="min-width:100px;">
-                                            <?php echo Labels::getLabel('LBL_Quantity', $siteLangId); ?>
-                                            <i class="fa fa-info-circle" data-bs-toggle="tooltip" data-placement="right" title="<?php echo CommonHelper::replaceStringData(Labels::getLabel('LBL_MAX_QUANTITY_CAN_BE_SET_UPTO_{MAX-RANGE}.'), ['{MAX-RANGE}' => SellerProduct::MAX_RANGE_OF_AVAILBLE_QTY]); ?>"></i>
-                                        </th>
-
-                                        <th style="min-width:100px;"><?php echo Labels::getLabel('LBL_SKU', $siteLangId); ?>
-                                            <i class="fa fa-info-circle" data-bs-toggle="tooltip" data-placement="right" title="<?php echo Labels::getLabel('LBL_Stock_Keeping_Unit', $siteLangId) ?>"></i>
-                                        </th>
-                                    <?php } ?>
-                                    <?php if (!empty($availableOptions) && $selprod_id == 0) { ?>
-                                        <th style="min-width:100px;">
-                                            <?php echo Labels::getLabel('LBL_ACTION', $siteLangId); ?>
-                                        </th>
-                                    <?php } ?>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php if ($selprod_id == 0 && !empty($availableOptions)) {
-                                    $i = $j = 0; ?>
-                                    <?php foreach ($availableOptions as $optionKey => $optionValue) {
-                                        if (SellerProduct::UPDATE_OPTIONS_COUNT < $i) {
-                                            $j++;
-                                            $i = 0;
-                                        } ?>
-                                        <tr>
-                                            <td><?php echo str_replace("_", " | ", $optionValue); ?>
-                                            </td>
-                                            <td class="optionFld-js"><?php echo $frmSellerProduct->getFieldHtml('varients[' . $j . '][selprod_cost' . $optionKey . ']'); ?>
-                                            </td>
-                                            <td class="optionFld-js"><?php echo $frmSellerProduct->getFieldHtml('varients[' . $j . '][selprod_price' . $optionKey . ']'); ?>
-                                            </td>
-                                            <?php if ($product_type != Product::PRODUCT_TYPE_SERVICE) { ?>
-                                                <td class="optionFld-js"><?php echo $frmSellerProduct->getFieldHtml('varients[' . $j . '][selprod_stock' . $optionKey . ']'); ?>
-                                                </td>
-
-                                                <td class="optionFld-js fldSku"><?php echo $frmSellerProduct->getFieldHtml('varients[' . $j . '][selprod_sku' . $optionKey . ']'); ?>
-                                                </td>
-                                            <?php } ?>
-                                            <td>
-                                                <button disabled="disabled" onclick="copyRowData(this)" type="button" class="js-copy-btn btn btn-secondary btn-elevate btn-icon" title="<?php echo Labels::getLabel('LBL_Copy_to_clipboard', $siteLangId) ?>">
-                                                    <i class="fas fa-paste"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    <?php
-                                        $i++;
-                                    } ?>
-                                <?php
-                                } else { ?>
-                                    <tr>
-                                        <?php if (!empty($optionValues)) { ?>
-                                            <td><?php echo implode(' | ', $optionValues); ?>
-                                            </td>
-                                        <?php } ?>
-                                        <td><?php echo $frmSellerProduct->getFieldHtml('selprod_cost'); ?>
-                                        </td>
-                                        <td><?php echo $frmSellerProduct->getFieldHtml('selprod_price'); ?>
-                                        </td>
-                                        <?php if ($product_type != Product::PRODUCT_TYPE_SERVICE) { ?>
-                                            <td><?php echo $frmSellerProduct->getFieldHtml('selprod_stock'); ?>
-                                            </td>
-
-                                            <td><?php echo $frmSellerProduct->getFieldHtml('selprod_sku'); ?>
-                                            </td>
-                                        <?php } ?>
-                                    </tr>
-                                <?php } ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            <div class="row mt-4">
-                <div class="col-md-12">
+                <div class="col-md-<?php echo ($product_type == Product::PRODUCT_TYPE_PHYSICAL) ? 6 : 12; ?>">
                     <div class="field-set">
-                        <div class="caption-wraper"><label class="field_label">
-                                <?php echo $frmSellerProduct->getField('selprod_comments' . $siteDefaultLangId)->getCaption(); ?></label>
-                        </div>
+                        <div class="caption-wraper"><label class="field_label"></label></div>
                         <div class="field-wraper">
-                            <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_comments' . $siteDefaultLangId); ?>
+                            <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('use_shop_policy'); ?>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <?php
-            $languages = Language::getAllNames();
-            unset($languages[$siteDefaultLangId]);
-            $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
-            if (!empty($translatorSubscriptionKey) && count($languages) > 0) { ?>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="field-set mb-0">
-                            <div class="caption-wraper"></div>
+            <div class="row use-shop-policy <?php echo $hidden; ?>">
+                <?php if ($product_type == Product::PRODUCT_TYPE_PHYSICAL) { ?>
+                    <div class="col-md-6">
+                        <div class="field-set">
+                            <div class="caption-wraper"><label class="field_label"><?php echo $frmSellerProduct->getField('selprod_return_age')->getCaption(); ?></label>
+                            </div>
                             <div class="field-wraper">
-                                <div class="field_cover">
-                                    <?php echo $frmSellerProduct->getFieldHtml('auto_update_other_langs_data'); ?>
+                                <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_return_age'); ?>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                <?php } ?>
+                <div class="col-md-6">
+                    <div class="field-set">
+                        <div class="caption-wraper"><label class="field_label"><?php echo $frmSellerProduct->getField('selprod_cancellation_age')->getCaption(); ?></label>
+                        </div>
+                        <div class="field-wraper">
+                            <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_cancellation_age'); ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php } ?>
+        <div class="row">
+            <?php if ($product_type != Product::PRODUCT_TYPE_SERVICE) { ?>
+                <div class="selprod_cod_enabled_fld col-md-6">
+                    <div class="field-set">
+                        <div class="caption-wraper"><label class="field_label"><?php echo $frmSellerProduct->getField('selprod_cod_enabled')->getCaption(); ?></label>
+                        </div>
+                        <div class="field-wraper">
+                            <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_cod_enabled'); ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php }
+            if ($product_type == Product::PRODUCT_TYPE_PHYSICAL && !empty($shipBySeller)) { ?>
+                <div class="selprod_fulfillment_type_fld col-md-6">
+                    <div class="field-set">
+                        <div class="caption-wraper"><label class="field_label"><?php echo $frmSellerProduct->getField('selprod_fulfillment_type')->getCaption(); ?></label>
+                        </div>
+                        <div class="field-wraper">
+                            <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_fulfillment_type'); ?>
                             </div>
                         </div>
                     </div>
                 </div>
             <?php } ?>
-            <?php if (count($languages) > 0) { ?>
-                <div class="row">
-                    <div class="col-md-12">
-                        <?php foreach ($languages as $langId => $langName) {
-                            $layout = Language::getLayoutDirection($langId); ?>
-                            <div class="accordion mt-4" id="specification-accordion">
-                                <h6 class="dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#collapseOne<?php echo $langId; ?>" aria-expanded="true" aria-controls="collapseOne<?php echo $langId; ?>" onclick="translateData(this, '<?php echo $siteDefaultLangId; ?>', '<?php echo $langId; ?>')">
-                                    <?php echo Labels::getLabel('LBL_Inventory_Data_for', $siteLangId) ?>
-                                    <?php echo $langName; ?>
-                                </h6>
-                                <div id="collapseOne<?php echo $langId; ?>" class="collapse collapse-js-<?php echo $langId; ?>" aria-labelledby="headingOne" data-parent="#specification-accordion">
-                                    <div class="p-4 mb-4 bg-gray rounded" dir="<?php echo $layout; ?>">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="field-set">
-                                                    <div class="caption-wraper"><label class="field_label"><?php echo $frmSellerProduct->getField('selprod_title' . $langId)->getCaption(); ?></label>
-                                                    </div>
-                                                    <div class="field-wraper">
-                                                        <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_title' . $langId); ?>
-                                                        </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-text text-muted my-4">
+                    <?php
+                    $defaultCurrencyValue = '<span class="form-text text-muted" data-bs-toggle="tooltip" title="' . Labels::getLabel('LBL_SYSTEM_DEFAULT_CURRENCY.') . '">(' . CommonHelper::displayMoneyFormat($productMinSellingPrice, true, true) . ')</span>';
+                    $errorMsg = Labels::getLabel('MSG_SELLING_PRICE_CANNOT_BE_LESS_THEN_MINIMUM_SELLING_PRICE_{MINIMUM-SELLING-PRICE}.');
+                    echo CommonHelper::replaceStringData($errorMsg, ['{MINIMUM-SELLING-PRICE}' => CommonHelper::displayMoneyFormat($productMinSellingPrice) . $defaultCurrencyValue]);
+                    ?>
+                </div>
+                <div class="js-scrollable table-wrap table-responsive">
+                    <table id="optionsTable-js" class="table table-justified">
+                        <thead>
+                            <tr>
+                                <?php if (($selprod_id == 0 && !empty($availableOptions)) || !empty($optionValues)) { ?>
+                                    <th style="min-width:100px;"><?php echo Labels::getLabel('LBL_Variant/Option', $siteLangId); ?>
+                                    </th>
+                                <?php } ?>
+                                <th style="min-width:100px;"><?php echo Labels::getLabel('LBL_Cost_Price', $siteLangId); ?>
+                                </th>
+                                <?php $selPriceTitle = (FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0)) ? Labels::getLabel('LBL_This_price_is_including_the_tax_rates.', $siteLangId) : Labels::getLabel('LBL_This_price_is_excluding_the_tax_rates.', $siteLangId);
+                                $selPriceTitle .= ' ' . Labels::getLabel('LBL_Min_Selling_price', $siteLangId) . ' ' . CommonHelper::displayMoneyFormat($productMinSellingPrice, true, true);
+                                ?>
+                                <th style="min-width:100px;"><?php echo Labels::getLabel('LBL_Selling_Price', $siteLangId); ?>
+                                    <i class="fa fa-info-circle" data-bs-toggle="tooltip" data-placement="right" title="<?php echo $selPriceTitle; ?>"></i>
+                                </th>
+                                <?php if ($product_type != Product::PRODUCT_TYPE_SERVICE) { ?>
+                                    <th style="min-width:100px;">
+                                        <?php echo Labels::getLabel('LBL_Quantity', $siteLangId); ?>
+                                        <i class="fa fa-info-circle" data-bs-toggle="tooltip" data-placement="right" title="<?php echo CommonHelper::replaceStringData(Labels::getLabel('LBL_MAX_QUANTITY_CAN_BE_SET_UPTO_{MAX-RANGE}.'), ['{MAX-RANGE}' => SellerProduct::MAX_RANGE_OF_AVAILBLE_QTY]); ?>"></i>
+                                    </th>
+
+                                    <th style="min-width:100px;"><?php echo Labels::getLabel('LBL_SKU', $siteLangId); ?>
+                                        <i class="fa fa-info-circle" data-bs-toggle="tooltip" data-placement="right" title="<?php echo Labels::getLabel('LBL_Stock_Keeping_Unit', $siteLangId) ?>"></i>
+                                    </th>
+                                <?php } ?>
+                                <?php if (!empty($availableOptions) && $selprod_id == 0) { ?>
+                                    <th style="min-width:100px;">
+                                        <?php echo Labels::getLabel('LBL_ACTION', $siteLangId); ?>
+                                    </th>
+                                <?php } ?>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php if ($selprod_id == 0 && !empty($availableOptions)) {
+                                $i = $j = 0; ?>
+                                <?php foreach ($availableOptions as $optionKey => $optionValue) {
+                                    if (SellerProduct::UPDATE_OPTIONS_COUNT < $i) {
+                                        $j++;
+                                        $i = 0;
+                                    } ?>
+                                    <tr>
+                                        <td><?php echo str_replace("_", " | ", $optionValue); ?>
+                                        </td>
+                                        <td class="optionFld-js"><?php echo $frmSellerProduct->getFieldHtml('varients[' . $j . '][selprod_cost' . $optionKey . ']'); ?>
+                                        </td>
+                                        <td class="optionFld-js"><?php echo $frmSellerProduct->getFieldHtml('varients[' . $j . '][selprod_price' . $optionKey . ']'); ?>
+                                        </td>
+                                        <?php if ($product_type != Product::PRODUCT_TYPE_SERVICE) { ?>
+                                            <td class="optionFld-js"><?php echo $frmSellerProduct->getFieldHtml('varients[' . $j . '][selprod_stock' . $optionKey . ']'); ?>
+                                            </td>
+
+                                            <td class="optionFld-js fldSku"><?php echo $frmSellerProduct->getFieldHtml('varients[' . $j . '][selprod_sku' . $optionKey . ']'); ?>
+                                            </td>
+                                        <?php } ?>
+                                        <td>
+                                            <button disabled="disabled" onclick="copyRowData(this)" type="button" class="js-copy-btn btn btn-secondary btn-elevate btn-icon" title="<?php echo Labels::getLabel('LBL_Copy_to_clipboard', $siteLangId) ?>">
+                                                <i class="fas fa-paste"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                <?php
+                                    $i++;
+                                } ?>
+                            <?php
+                            } else { ?>
+                                <tr>
+                                    <?php if (!empty($optionValues)) { ?>
+                                        <td><?php echo implode(' | ', $optionValues); ?>
+                                        </td>
+                                    <?php } ?>
+                                    <td><?php echo $frmSellerProduct->getFieldHtml('selprod_cost'); ?>
+                                    </td>
+                                    <td><?php echo $frmSellerProduct->getFieldHtml('selprod_price'); ?>
+                                    </td>
+                                    <?php if ($product_type != Product::PRODUCT_TYPE_SERVICE) { ?>
+                                        <td><?php echo $frmSellerProduct->getFieldHtml('selprod_stock'); ?>
+                                        </td>
+
+                                        <td><?php echo $frmSellerProduct->getFieldHtml('selprod_sku'); ?>
+                                        </td>
+                                    <?php } ?>
+                                </tr>
+                            <?php } ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="field-set">
+                    <div class="caption-wraper"><label class="field_label">
+                            <?php echo $frmSellerProduct->getField('selprod_comments' . $siteDefaultLangId)->getCaption(); ?></label>
+                    </div>
+                    <div class="field-wraper">
+                        <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_comments' . $siteDefaultLangId); ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php
+        $languages = Language::getAllNames();
+        unset($languages[$siteDefaultLangId]);
+        $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
+        if (!empty($translatorSubscriptionKey) && count($languages) > 0) { ?>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="field-set mb-0">
+                        <div class="caption-wraper"></div>
+                        <div class="field-wraper">
+                            <div class="field_cover">
+                                <?php echo $frmSellerProduct->getFieldHtml('auto_update_other_langs_data'); ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php } ?>
+        <?php if (count($languages) > 0) { ?>
+            <div class="row">
+                <div class="col-md-12">
+                    <?php foreach ($languages as $langId => $langName) {
+                        $layout = Language::getLayoutDirection($langId); ?>
+                        <div class="accordion mt-4" id="specification-accordion">
+                            <h6 class="dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#collapseOne<?php echo $langId; ?>" aria-expanded="true" aria-controls="collapseOne<?php echo $langId; ?>" onclick="translateData(this, '<?php echo $siteDefaultLangId; ?>', '<?php echo $langId; ?>')">
+                                <?php echo Labels::getLabel('LBL_Inventory_Data_for', $siteLangId) ?>
+                                <?php echo $langName; ?>
+                            </h6>
+                            <div id="collapseOne<?php echo $langId; ?>" class="collapse collapse-js-<?php echo $langId; ?>" aria-labelledby="headingOne" data-parent="#specification-accordion">
+                                <div class="p-4 mb-4 bg-gray rounded" dir="<?php echo $layout; ?>">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="field-set">
+                                                <div class="caption-wraper"><label class="field_label"><?php echo $frmSellerProduct->getField('selprod_title' . $langId)->getCaption(); ?></label>
+                                                </div>
+                                                <div class="field-wraper">
+                                                    <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_title' . $langId); ?>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-12">
-                                                <div class="field-set">
-                                                    <div class="caption-wraper"><label class="field_label"><?php echo $frmSellerProduct->getField('selprod_comments' . $langId)->getCaption(); ?></label>
-                                                    </div>
-                                                    <div class="field-wraper">
-                                                        <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_comments' . $langId); ?>
-                                                        </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="field-set">
+                                                <div class="caption-wraper"><label class="field_label"><?php echo $frmSellerProduct->getField('selprod_comments' . $langId)->getCaption(); ?></label>
+                                                </div>
+                                                <div class="field-wraper">
+                                                    <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_comments' . $langId); ?>
                                                     </div>
                                                 </div>
                                             </div>
@@ -428,41 +429,42 @@ $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-gray js-cancel-inv
                                     </div>
                                 </div>
                             </div>
-                        <?php
-                        } ?>
-                    </div>
-                </div>
-            <?php } ?>
-            <div class="row">
-                <div class="col-6">
-                    <div class="field-set">
-                        <div class="caption-wraper"><label class="field_label"></label></div>
-                        <div class="field-wraper">
-                            <div class="field_cover">
-                                <?php echo $frmSellerProduct->getFieldHtml('btn_cancel'); ?>
-                            </div>
                         </div>
-                    </div>
+                    <?php
+                    } ?>
                 </div>
-                <div class="col-6 text-right">
-                    <div class="field-set">
-                        <div class="caption-wraper"><label class="field_label"></label></div>
-                        <div class="field-wraper">
-                            <div class="field_cover">
-                                <?php echo $frmSellerProduct->getFieldHtml('btn_submit'); ?>
-                            </div>
+            </div>
+        <?php } ?>
+        <div class="row">
+            <div class="col-6">
+                <div class="field-set">
+                    <div class="caption-wraper"><label class="field_label"></label></div>
+                    <div class="field-wraper">
+                        <div class="field_cover">
+                            <?php echo $frmSellerProduct->getFieldHtml('btn_cancel'); ?>
                         </div>
                     </div>
                 </div>
             </div>
-            <?php echo $frmSellerProduct->getFieldHtml('selprod_product_id');
-            echo $frmSellerProduct->getFieldHtml('selprod_urlrewrite_id');
-            echo $frmSellerProduct->getFieldHtml('selprod_id');
-            ?>
-            </form>
-            <?php echo $frmSellerProduct->getExternalJS(); ?>
+            <div class="col-6 text-right">
+                <div class="field-set">
+                    <div class="caption-wraper"><label class="field_label"></label></div>
+                    <div class="field-wraper">
+                        <div class="field_cover">
+                            <?php echo $frmSellerProduct->getFieldHtml('btn_submit'); ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+        <?php echo $frmSellerProduct->getFieldHtml('selprod_product_id');
+        echo $frmSellerProduct->getFieldHtml('selprod_urlrewrite_id');
+        echo $frmSellerProduct->getFieldHtml('selprod_id');
+        ?>
+        </form>
+        <?php echo $frmSellerProduct->getExternalJS(); ?>
     </div>
+</div>
 </div>
 <?php echo FatUtility::createHiddenFormFromData(array('product_id' => $product_id), array('name' => 'frmSearchSellerProducts')); ?>
 <script type="text/javascript">
