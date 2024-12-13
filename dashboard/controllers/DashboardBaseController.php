@@ -199,6 +199,7 @@ class DashboardBaseController extends FatController
                     'total' => Labels::getLabel('LBL_TOTAL', $this->siteLangId),
                     'confirmDeleteAddress' => Labels::getLabel('LBL_ARE_YOU_SURE?_IT_CAN_AFFECT_YOUR_RFQ_ORDERS_IF_LINKED.', $this->siteLangId),
                     'subscriptionRenew' => Labels::getLabel('LBL_ARE_YOU_SURE?_PLEASE_MAINTAIN_WALLET_BALANCE_TO_RENEW.', $this->siteLangId),
+                    'remove' => Labels::getLabel('LBL_REMOVE', $this->siteLangId),
                 );
 
                 $languages = Language::getAllNames(false);

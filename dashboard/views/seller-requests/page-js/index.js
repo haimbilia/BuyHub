@@ -651,7 +651,9 @@ $(document).on('change', '.badgeLinkCondtionJs [name="breq_record_type"]', funct
         updateRecordIds(removeRecordId);
         var badgeReqId = $('input[name="breq_id"]').val();
         fcom.updateWithAjax(fcom.makeUrl('SellerRequests', 'unlinkRecord', [badgeReqId, removeRecordId]), '', function (t) {
-            reloadRecordsList(badgeReqId);
+            if(0 < badgeReqId) {
+                reloadRecordsList(badgeReqId);
+            }
         });
     }
 
