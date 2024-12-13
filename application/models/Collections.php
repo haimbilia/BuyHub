@@ -90,7 +90,7 @@ class Collections extends MyAppModel
     public const LIMIT_CATEGORY_LAYOUT4 = 4;
     public const LIMIT_CATEGORY_LAYOUT5 = 5;
     public const LIMIT_CATEGORY_LAYOUT6 = 4;
-    public const LIMIT_CATEGORY_LAYOUT7 = 20;
+    public const LIMIT_CATEGORY_LAYOUT7 = 15;
     public const LIMIT_SHOP_LAYOUT1 = 4;
     public const LIMIT_SHOP_LAYOUT2 = 3;
     public const LIMIT_BRAND_LAYOUT1 = 5;
@@ -138,7 +138,7 @@ class Collections extends MyAppModel
     ];
 
     public const COLLECTIONS_FOR_APP_ONLY = [
-            // self::TYPE_BANNER_LAYOUT3,
+        // self::TYPE_BANNER_LAYOUT3,
         self::TYPE_PENDING_REVIEWS1,
         self::TYPE_CATEGORY_LAYOUT5,
         self::TYPE_CATEGORY_LAYOUT6,
@@ -310,7 +310,7 @@ class Collections extends MyAppModel
             self::TYPE_BANNER_LAYOUT2 => Labels::getLabel('LBL_BANNER_LAYOUT2', $langId),
             self::TYPE_BANNER_LAYOUT4 => Labels::getLabel('LBL_BANNER_LAYOUT4', $langId),
             self::TYPE_BANNER_LAYOUT5 => Labels::getLabel('LBL_BANNER_LAYOUT5', $langId),
-                // self::TYPE_BANNER_LAYOUT3 => Labels::getLabel('LBL_MOBILE_BANNER_LAYOUT', $langId),
+            // self::TYPE_BANNER_LAYOUT3 => Labels::getLabel('LBL_MOBILE_BANNER_LAYOUT', $langId),
             self::TYPE_FAQ_LAYOUT1 => Labels::getLabel('LBL_FAQ_LAYOUT1', $langId),
             self::TYPE_TESTIMONIAL_LAYOUT1 => Labels::getLabel('LBL_TESTIMONIAL_LAYOUT1', $langId),
             self::TYPE_TESTIMONIAL_LAYOUT2 => Labels::getLabel('LBL_TESTIMONIAL_LAYOUT2', $langId),
@@ -389,7 +389,7 @@ class Collections extends MyAppModel
             self::COLLECTION_TYPE_FAQ => [
                 self::TYPE_FAQ_LAYOUT1 => Labels::getLabel('LBL_FAQ', $langId),
             ],
-                /* self::COLLECTION_TYPE_FAQ_CATEGORY => [
+            /* self::COLLECTION_TYPE_FAQ_CATEGORY => [
                             self::TYPE_FAQ_CATEGORY_LAYOUT1 => Labels::getLabel('LBL_FAQ_CATEGORY', $langId),
                         ], 
                         self::COLLECTION_TYPE_REVIEWS => [
@@ -508,9 +508,9 @@ class Collections extends MyAppModel
             self::TYPE_BANNER_LAYOUT2 => 'Banner-Layout-2.png',
             self::TYPE_BANNER_LAYOUT4 => 'Banner-Layout-4.png',
             self::TYPE_BANNER_LAYOUT5 => 'Banner-Layout-5.png',
-                // self::TYPE_BANNER_LAYOUT3 => 'Banner-Layout-2.png',
+            // self::TYPE_BANNER_LAYOUT3 => 'Banner-Layout-2.png',
             self::TYPE_FAQ_LAYOUT1 => 'Faq-Layout-1.png',
-                // self::TYPE_FAQ_CATEGORY_LAYOUT1 => 'Faq-Layout-1.png',
+            // self::TYPE_FAQ_CATEGORY_LAYOUT1 => 'Faq-Layout-1.png',
             self::TYPE_TESTIMONIAL_LAYOUT1 => 'Testimonial-layout-1.png',
             self::TYPE_TESTIMONIAL_LAYOUT2 => 'Testimonial-layout-2.png',
             self::TYPE_CONTENT_BLOCK_LAYOUT1 => 'Content-Block-layout-1.png',
@@ -1104,7 +1104,7 @@ class Collections extends MyAppModel
             self::TYPE_BANNER_LAYOUT2 => 'banner-layout-2',
             self::TYPE_BANNER_LAYOUT4 => 'banner-layout-4',
             self::TYPE_BANNER_LAYOUT5 => 'banner-layout-5',
-                // self::TYPE_BANNER_LAYOUT3 => 'banner-layout-3',
+            // self::TYPE_BANNER_LAYOUT3 => 'banner-layout-3',
             self::TYPE_FAQ_LAYOUT1 => 'faq-layout-1',
             self::TYPE_TESTIMONIAL_LAYOUT1 => 'testimonial-layout-1',
             self::TYPE_TESTIMONIAL_LAYOUT2 => 'testimonial-layout-2',
@@ -1130,7 +1130,7 @@ class Collections extends MyAppModel
         $range = [];
         switch ($layoutType) {
             case self::TYPE_CATEGORY_LAYOUT8:
-                $range = range(4, 6);
+                $range = [4, 6];
                 break;
             case self::TYPE_SHOP_LAYOUT1:
                 $range = [4, 5, 6];
@@ -1192,7 +1192,6 @@ class Collections extends MyAppModel
                 $limit = self::LIMIT_CATEGORY_LAYOUT4;
                 break;
             case self::TYPE_CATEGORY_LAYOUT5:
-            case self::TYPE_CATEGORY_LAYOUT10:
                 $limit = self::LIMIT_CATEGORY_LAYOUT5;
                 break;
             case self::TYPE_CATEGORY_LAYOUT6:
@@ -1201,6 +1200,13 @@ class Collections extends MyAppModel
                 break;
             case self::TYPE_CATEGORY_LAYOUT7:
                 $limit = self::LIMIT_CATEGORY_LAYOUT7;
+                break;
+            case self::TYPE_CATEGORY_LAYOUT10:
+            case self::TYPE_CATEGORY_LAYOUT11:
+                $limit = 4;
+                break;
+            case self::TYPE_CATEGORY_LAYOUT12:
+                $limit = 6;
                 break;
             case self::TYPE_SHOP_LAYOUT1:
                 $limit = self::LIMIT_SHOP_LAYOUT1;

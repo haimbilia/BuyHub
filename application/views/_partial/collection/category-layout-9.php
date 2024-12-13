@@ -5,14 +5,13 @@
     <section class="section" data-collection="collection-categories">
         <div class="container">
             <div class="section-body">
-                <div class="js-carousel catalog-carousal" data-slides="8,6,4,3,3" data-arrows="true" data-slickdots="false"
-                    dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
+                <div class="catalog-carousal">
                     <?php
                     foreach ($collection['categories'] as $category) {
                         $rootParentId = FatUtility::int(current(explode('_', $category['prodcat_code'])));
                         $rootParentId = (1 > $rootParentId) ? $category['prodcat_id'] : $rootParentId;
                         ?>
-                        <div class="js-carousel-item catalog-carousal-item">
+                        <div class="catalog-carousal-item">
                             <?php
                             $image = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_THUMB, $category['prodcat_id']);
                             if (!empty($image) && $image['afile_id'] <= 0) {
