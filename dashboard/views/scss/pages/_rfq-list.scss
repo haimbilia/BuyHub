@@ -62,8 +62,9 @@ $space: 1.5rem;
 
 .offers-card {
 	//box-shadow: $card-shadow;
-	background-color:$bg-gray;
+	background-color: $bg-gray;
 	border-radius: $card-radius;
+
 	// border: $border;
 	&+& {
 		margin-top: 1.5rem;
@@ -212,7 +213,7 @@ $space: 1.5rem;
 
 	&-body {
 		flex: 1;
-		gap: 10px;
+		gap: 0.5rem;
 		display: flex;
 		flex-flow: row wrap;
 	}
@@ -261,7 +262,7 @@ $space: 1.5rem;
 	&-head {
 		display: flex;
 		flex-direction: column;
-		// gap: 10px;
+		// gap: 0.5rem;
 		list-style: none;
 		flex: 1;
 		min-width: 100%;
@@ -291,7 +292,7 @@ $space: 1.5rem;
 
 	&-actions {
 		margin-top: 1rem;
-		gap: 10px;
+		gap: 0.5rem;
 		display: flex;
 	}
 

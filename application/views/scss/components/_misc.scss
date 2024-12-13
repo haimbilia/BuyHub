@@ -55,8 +55,7 @@ h2,
 h3,
 h4,
 h5,
-h6 {
-}
+h6 {}
 
 p {
   margin: 0;
@@ -184,7 +183,7 @@ mark,
 .list-inline {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 0.5rem;
 }
 
 .focused-div {
@@ -203,6 +202,7 @@ mark,
   margin: auto;
   color: var(--body-color);
   height: 100%;
+
   .cards-message-icon {
     display: flex;
     align-items: center;
@@ -300,6 +300,7 @@ mark,
   }
 
   &--white {
+
     &:before,
     &:after {
       background-color: #fff;
@@ -326,7 +327,8 @@ mark,
   align-items: center;
   justify-content: center;
   flex-flow: row wrap;
-  gap: 10px;
+  gap: 0.5rem;
+
   li {
     a {
       @include bg-gray;
@@ -336,6 +338,7 @@ mark,
       font-size: 0.75rem;
       font-weight: $font-weight-bold;
       display: block;
+
       &:hover,
       &:focus,
       &:active {
@@ -399,9 +402,11 @@ mark,
     display: flex;
     align-items: center;
     justify-content: center;
+
     @include media-breakpoint-up(lg) {
       //border: $border-black;
     }
+
     &-prev span {
       display: inline-block;
       border-#{$end-direction}: 2px solid currentColor;
@@ -426,8 +431,8 @@ mark,
       background-color: #000;
       color: #fff;
       box-shadow: none;
-      span {
-      }
+
+      span {}
     }
   }
 }
@@ -462,12 +467,10 @@ mark,
 }
 
 .skeleton {
-  background: linear-gradient(
-      to right,
+  background: linear-gradient(to right,
       rgba(255, 255, 255, 0),
       rgba(255, 255, 255, 0.5) 50%,
-      rgba(255, 255, 255, 0) 80%
-    ),
+      rgba(255, 255, 255, 0) 80%),
     lightgray;
   border-radius: 2px;
   height: 10px;
@@ -483,12 +486,10 @@ mark,
     top: 0;
     height: 100%;
     width: 150px;
-    background: linear-gradient(
-      to right,
-      transparent 0%,
-      #e8e8e8 50%,
-      transparent 100%
-    );
+    background: linear-gradient(to right,
+        transparent 0%,
+        #e8e8e8 50%,
+        transparent 100%);
     animation: load 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
   }
 }
@@ -518,7 +519,7 @@ mark,
 .badges-list {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 0.5rem;
   margin-top: 5px;
 
   &-img {
@@ -541,7 +542,7 @@ mark,
   .btn-dropdown {
     border-radius: $input-border-radius;
     width: 100%;
-    gap: 10px;
+    gap: 0.5rem;
     padding-#{$start-direction}: 1rem;
   }
 

@@ -553,7 +553,7 @@ $blog-header-height: 58px;
   font-size: 0.875rem;
   text-transform: uppercase;
   flex-flow: row wrap;
-  gap: 10px;
+  gap: 0.5rem;
 
   span {
     border-#{$end-direction}: $border;
@@ -586,7 +586,7 @@ $blog-header-height: 58px;
     width: 40px;
     height: 40px;
 
-    > img {
+    >img {
       width: inherit;
       height: inherit;
       border-radius: 50%;
@@ -1012,8 +1012,8 @@ $blog-header-height: 58px;
 }
 
 .content-data {
-  > ul {
-    > li {
+  >ul {
+    >li {
       border-bottom: $border;
       margin-bottom: 1rem;
       padding-bottom: 1rem;

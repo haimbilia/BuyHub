@@ -31,7 +31,7 @@
     font-size: 1.2rem;
     color: $txt-body;
     display: flex;
-    gap: 10px;
+    gap: 0.5rem;
     align-items: center;
 
     //flex-direction: column;
@@ -120,11 +120,13 @@ button.close {
     }
   }
 }
+
 .btn-close-start {
   position: absolute;
   top: 1rem;
   #{$start-direction}: 1rem;
 }
+
 .btn-close-end {
   position: absolute;
   top: 1rem;
@@ -136,6 +138,7 @@ button.close {
     font-size: 1.25rem;
     font-weight: $font-weight-bold;
   }
+
   .desc {
     font-size: 0.85rem;
     font-weight: $font-weight-normal;

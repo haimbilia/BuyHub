@@ -29,7 +29,7 @@ $btn-active-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2),
   border-width: 1px;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 0.5rem;
   font-weight: $btn-font-weight;
 
   &:hover {
@@ -330,7 +330,7 @@ $btn-active-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2),
   flex-flow: column wrap;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 0.5rem;
 
   &-item {
     flex: 1;

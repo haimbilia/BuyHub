@@ -237,7 +237,7 @@ $sharing-height: 50px;
     flex: 1;
     display: flex;
     justify-content: center;
-    //grid-gap: 10px;
+    //grid-gap: 0.5rem;
     border: $border;
     border-radius: $common-radius;
     background-color: transparent;
@@ -330,7 +330,7 @@ $sharing-height: 50px;
     padding: 1rem 1.5rem;
     border-bottom: $border;
     display: flex;
-    gap: 8px;
+    gap: 0.5rem;
     justify-content: space-between;
     position: relative;
 

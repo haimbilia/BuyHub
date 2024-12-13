@@ -150,7 +150,7 @@ class CollectionsController extends ListingBaseController
         }
 
         $this->setRecordCount(clone $srch, $pageSize, $page, $post);
-        
+
         $srch->addMultipleFields(array('c.*', 'COALESCE(c_l.collection_name, c.collection_identifier) as collection_name'));
         $srch->setPageNumber($page);
         $srch->setPageSize($pageSize);
@@ -258,74 +258,6 @@ class CollectionsController extends ListingBaseController
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
 
-    private function getLayoutLimit($collection_layout_type)
-    {
-        $limit = 0;
-        switch ($collection_layout_type) {
-            case Collections::TYPE_PRODUCT_LAYOUT1:
-                $limit = Collections::LIMIT_PRODUCT_LAYOUT1;
-                break;
-            case Collections::TYPE_PRODUCT_LAYOUT2:
-                $limit = Collections::LIMIT_PRODUCT_LAYOUT2;
-                break;
-            case Collections::TYPE_PRODUCT_LAYOUT3:
-                $limit = Collections::LIMIT_PRODUCT_LAYOUT3;
-                break;
-            case Collections::TYPE_PRODUCT_LAYOUT4:
-                $limit = Collections::LIMIT_PRODUCT_LAYOUT4;
-                break;
-            case Collections::TYPE_PRODUCT_LAYOUT6:
-                $limit = Collections::LIMIT_PRODUCT_LAYOUT6;
-                break;
-            case Collections::TYPE_PRODUCT_LAYOUT7:
-                $limit = Collections::LIMIT_PRODUCT_LAYOUT7;
-                break;
-            case Collections::TYPE_CATEGORY_LAYOUT1:
-                $limit = Collections::LIMIT_CATEGORY_LAYOUT1;
-                break;
-            case Collections::TYPE_CATEGORY_LAYOUT2:
-                $limit = Collections::LIMIT_CATEGORY_LAYOUT2;
-                break;
-            case Collections::TYPE_CATEGORY_LAYOUT3:
-                $limit = Collections::LIMIT_CATEGORY_LAYOUT3;
-                break;
-            case Collections::TYPE_CATEGORY_LAYOUT4:
-                $limit = Collections::LIMIT_CATEGORY_LAYOUT4;
-                break;
-            case Collections::TYPE_CATEGORY_LAYOUT5:
-            case Collections::TYPE_CATEGORY_LAYOUT10:
-                $limit = Collections::LIMIT_CATEGORY_LAYOUT5;
-                break;
-            case Collections::TYPE_CATEGORY_LAYOUT6:
-            case Collections::TYPE_CATEGORY_LAYOUT9:
-                $limit = Collections::LIMIT_CATEGORY_LAYOUT6;
-                break;
-            case Collections::TYPE_CATEGORY_LAYOUT7:
-            case Collections::TYPE_CATEGORY_LAYOUT9:
-                $limit = Collections::LIMIT_CATEGORY_LAYOUT7;
-                break;
-            case Collections::TYPE_SHOP_LAYOUT1:
-                $limit = Collections::LIMIT_SHOP_LAYOUT1;
-                break;
-            case Collections::TYPE_SHOP_LAYOUT2:
-                $limit = Collections::LIMIT_SHOP_LAYOUT2;
-                break;
-            case Collections::TYPE_BRAND_LAYOUT1:
-                $limit = Collections::LIMIT_BRAND_LAYOUT1;
-                break;
-            case Collections::TYPE_BRAND_LAYOUT2:
-                $limit = Collections::LIMIT_BRAND_LAYOUT2;
-                break;
-            case Collections::TYPE_BRAND_LAYOUT3:
-                $limit = Collections::LIMIT_BRAND_LAYOUT3;
-                break;
-            case Collections::TYPE_BLOG_LAYOUT1:
-                $limit = Collections::LIMIT_BLOG_LAYOUT1;
-                break;
-        }
-        return $limit;
-    }
-
     public function setup()
     {
         $this->objPrivilege->canEditCollections();
@@ -335,9 +267,9 @@ class CollectionsController extends ListingBaseController
         if (false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
-        
+
         $recordId = $post['collection_id'];
-        $defaultItemsCount = $this->getLayoutLimit($post['collection_layout_type']);
+        $defaultItemsCount = Collections::getLayoutLimit($post['collection_layout_type']);
         $displayItemsCount = FatApp::getPostedData('collection_primary_records', FatUtility::VAR_INT, $defaultItemsCount);
         if (!in_array($post['collection_layout_type'], Collections::COLLECTIONS_FOR_DISPLAY_COUNT)) {
             $displayItemsCount = $defaultItemsCount;
@@ -351,7 +283,7 @@ class CollectionsController extends ListingBaseController
         if ($post['collection_type'] == Collections::COLLECTION_TYPE_BANNER && $post['collection_layout_type'] != Collections::TYPE_BANNER_LAYOUT2) {
             $displayItemsCount = Collections::getBannersCount()[$post['collection_layout_type']];
         }
-        
+
         $post['collection_identifier'] = $post['collection_name'];
         $post['collection_primary_records'] = $displayItemsCount;
 
@@ -440,7 +372,7 @@ class CollectionsController extends ListingBaseController
             $frm->addCheckBox(Labels::getLabel("FRM_APPLICABLE_FOR_WEB", $this->siteLangId), 'collection_for_web', 1, array(), true, 0);
             $frm->addCheckBox(Labels::getLabel("FRM_APPLICABLE_FOR_APP", $this->siteLangId), 'collection_for_app', 1, array(), true, 0);
         }
-        
+
         if (in_array($layoutType, Collections::COLLECTIONS_FULL_WIDTH)) {
             $frm->addCheckBox(Labels::getLabel("FRM_FULL_WIDTH", $this->siteLangId), 'collection_full_width', 1, array(), true, 0);
         }
@@ -910,7 +842,7 @@ class CollectionsController extends ListingBaseController
             'blocation_promotion_cost' => $post['blocation_promotion_cost'] ?? 0,
             'blocation_active' => applicationConstants::ACTIVE
         ];
-        
+
         $bannerLoc = new BannerLocation($blocationId);
         $bannerLoc->assignValues($dataToSave);
         if (!$bannerLoc->save()) {

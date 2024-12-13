@@ -4,12 +4,13 @@
   flex-direction: column;
   height: 100%;
 
-  &-head {
-  }
+  &-head {}
+
   &-body {
     padding: 1.5rem 2rem;
     flex: 1;
   }
+
   &-foot {
     padding: 1.5rem 2rem;
     position: sticky;
@@ -22,13 +23,16 @@
     gap: 0.5rem;
     align-items: stretch;
   }
+
   &-item {
     width: fit-content;
     max-width: 90%;
-    & + & {
+
+    &+& {
       margin-top: 1.5rem;
     }
   }
+
   &-bubble {
     word-break: break-word;
     font-size: 0.85rem;
@@ -37,6 +41,7 @@
     padding: 1.5rem;
     // border: $border;
     border-radius: 30px;
+
     .border-red & {
       background-color: lighten($danger-color, 30) !important;
       border: $border;
@@ -48,26 +53,32 @@
   .msg {
     &-left {
       margin-#{$end-direction}: auto;
+
       .messages-chat-bubble {
         background-color: darken($bg-gray, 05);
         border-bottom-left-radius: 0;
       }
+
       .bubble-foot {
         justify-content: flex-start;
       }
     }
+
     &-right {
       margin-#{$start-direction}: auto;
+
       .messages-chat-bubble {
         color: #fff;
         background-color: darken($bg-gray, 40);
         border-bottom-right-radius: 0;
       }
+
       .bubble-foot {
         justify-content: flex-end;
       }
     }
   }
+
   .bubble-foot {
     padding: 0.5rem 0;
     display: flex;
@@ -88,6 +99,7 @@
     width: fit-content;
     margin: 1rem auto;
   }
+
   .dots {
     background-color: transparent;
     border: none;
@@ -97,6 +109,7 @@
     line-height: 0.5;
     padding: 0 5px;
   }
+
   .btn-attachments,
   .btn-send,
   .btn-access {
@@ -116,21 +129,26 @@
       border: none;
       outline: none;
     }
+
     &.active {
       @include bg-brand;
     }
   }
+
   .btn-send {
     @include bg-brand;
+
     &[disabled] {
       pointer-events: none;
       opacity: 0.5;
       //background-color: #ddd;
     }
+
     &:is(:hover, :focus, :active) {
       @include bg-brand;
     }
   }
+
   .hidden-input {
     position: absolute;
     z-index: 1;
@@ -139,10 +157,12 @@
     width: 100%;
     height: 100%;
     cursor: pointer;
+
     &:hover {
       cursor: pointer;
     }
   }
+
   .chat-textarea {
     font-size: 0.8rem;
     padding: 0 1rem;
@@ -153,12 +173,14 @@
     border: none;
     border-radius: 5px;
     flex: 1;
+
     &:is(:hover, :focus, :active) {
       background-color: darken($bg-gray, 05);
       border: none;
       outline: none;
     }
   }
+
   .btn-load-more {
     display: inherit;
     border-radius: 40px !important;
@@ -175,15 +197,18 @@
     padding: 0.5rem 0;
     color: currentColor;
     display: inline-flex;
-    gap: 8px;
+    gap: 0.5rem;
     align-items: center;
     flex-flow: row wrap;
+
     &:hover {
       color: $brand-color;
     }
   }
+
   &-thumb {
     aspect-ratio: 1/1;
+
     img {
       width: 80px;
       height: 80px;
@@ -191,6 +216,7 @@
       object-fit: cover;
     }
   }
+
   &-file-name {
     font-size: 0.8rem;
     color: currentColor;
@@ -209,6 +235,7 @@
     width: 32px;
     height: 32px;
     min-width: 32px;
+
     &:hover {
       background-color: rgba(255, 255, 255, 0.9);
     }

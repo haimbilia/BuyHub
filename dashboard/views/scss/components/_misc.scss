@@ -156,7 +156,7 @@ mark,
 .list-inline {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 0.5rem;
 }
 
 .focused-div {
@@ -525,7 +525,7 @@ mark,
 .actions-downloads {
   position: relative;
   display: inline-flex;
-  gap: 10px;
+  gap: 0.5rem;
   align-items: center;
   padding-#{$end-direction}: 80px;
 

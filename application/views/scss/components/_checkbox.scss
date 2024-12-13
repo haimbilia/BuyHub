@@ -21,7 +21,7 @@ $checkbox-active-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.04),
     line-height: $checkbox-line-height;
     cursor: pointer;
     display: flex;
-    gap: 8px;
+    gap: 0.5rem;
 
     a {
         color: $txt-brand;
@@ -141,7 +141,7 @@ $checkbox-active-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.04),
 .switch {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 0.5rem;
     font-size: 0.85rem;
     cursor: pointer;
 

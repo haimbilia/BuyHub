@@ -916,11 +916,9 @@ class HomeController extends MyAppController
                     $productSrchTempObj->addGroupBy('selprod_id');
 
                     if (false === MOBILE_APP_API_CALL) {
-                        $pageSize = $collection['collection_primary_records'] ?? 4;
-                        if ($collection['collection_type'] == Collections::TYPE_PRODUCT_LAYOUT1) {
-                            $pageSize = 10;
-                        }
-
+                        //$pageSize = $collection['collection_primary_records'] ?? 4;
+                        $pageSize = Collections::getLayoutLimit($collection['collection_layout_type']);
+                        $pageSize = $pageSize ?? 4;
 
                         $productSrchTempObj->setPageSize((0 < $pageSize ? $pageSize : 4));
                     }
