@@ -6,6 +6,7 @@ trait PluginHelper
     public $settings = [];
     public $langId = 0;
     public $keyName;
+    public $pluginSetting;
     protected $recordId = 0;
 
     /**
