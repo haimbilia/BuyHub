@@ -31,7 +31,7 @@
                 <div class="js-carousel product-layout-5" id="product-listing-<?php echo $collection['collection_id']; ?>"
                     data-slides="7,5,3,2,2" data-custom="#product-listing-<?php echo $collection['collection_id']; ?>"
                     data-view="<?php echo $displayCount; ?>" data-arrows="true" data-slickdots="false"
-                    dir="<?php echo CommonHelper::getLayoutDirection(); ?>" data-arrowcontainer="<?php echo $collection['collection_id']; ?>" data-docontainer="" data-customarrow="false">
+                    data-arrowcontainer="<?php echo $collection['collection_id']; ?>" data-dotscontainer="" data-customarrow="true" dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
                     <?php
                     $tRightRibbons = $collection['tRightRibbons'];
                     foreach ($collection['products'] as $product) {

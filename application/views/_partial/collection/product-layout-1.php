@@ -13,13 +13,11 @@
                             <?php echo Labels::getLabel('LBL_VIEW_ALL', $siteLangId); ?>
                         </a>
                     <?php } ?>
-                    <div class="slider-controls product-listing-<?php echo $collection['collection_id']; ?>">
-                        <button class="btn btn-prev arrow-prev" type="button"
-                            data-href="#product-listing-<?php echo $collection['collection_id']; ?>" aria-label="Previous">
+                    <div class="slider-controls <?php echo $collection['collection_id']; ?>">
+                        <button class="btn btn-prev slick-arrow arrow-prev" type="button">
                             <span></span>
                         </button>
-                        <button class="btn btn-next arrow-next" type="button"
-                            data-href="#product-listing-<?php echo $collection['collection_id']; ?>" aria-label="Next">
+                        <button class="btn btn-next slick-arrow arrow-next" type="button">
                             <span></span>
                         </button>
                     </div>
@@ -29,12 +27,13 @@
             $displayCount = (0 < $collection['collection_primary_records']) ? $collection['collection_primary_records'] : 4;
             $slidesCount = (Collections::TYPE_PRODUCT_LAYOUT6 == $collection['collection_layout_type']) ? '6,3,3,2,2' : min($displayCount, 6) . ',3,2,2';
             ?>
+           
             <div class="section-body">
                 <div class="js-carousel product-layout-1" id="product-listing-<?php echo $collection['collection_id']; ?>"
-                    data-slides="<?php echo $slidesCount; ?>" data-view="<?php echo $displayCount; ?>" data-arrows="false"
-                    data-slickdots="false" data-slickdots="true" data-dots="false" data-customarrow="true"
-                    data-arrowcontainer="product-listing-<?php echo $collection['collection_id']; ?>"
-                    data-dotscontainer="dotscontainer" dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
+                    data-slides="<?php echo $slidesCount; ?>" data-view="<?php echo $displayCount; ?>" data-arrows="true"
+                    data-slickdots="false" data-customarrow="true"
+                    data-arrowcontainer="<?php echo $collection['collection_id']; ?>"
+                    data-dotscontainer="" dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
                     <?php
                     $tRightRibbons = $collection['tRightRibbons'];
                     foreach ($collection['products'] as $product) {
