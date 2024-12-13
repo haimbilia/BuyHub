@@ -38,6 +38,7 @@ $clipboard-size: 40px;
     padding: 0;
     color: $txt-gray;
     font-weight: $font-weight-bold;
+    text-align: initial;
 
     &:focus {
       outline: none;
