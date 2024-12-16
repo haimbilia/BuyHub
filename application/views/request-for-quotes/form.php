@@ -23,7 +23,7 @@ $fld->htmlAfterField = '<a class="btn btn-attachment attachmentJs" >
                                 <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite.svg#attachment">
                                 </use>
                             </svg>' . Labels::getLabel('LBL_Add_ATTACHMENT') . '
-                        </a><div class="text-break rfqFileNameJs"></div>';
+                        </a><ul class="uploaded-list rfqFileNameJs"></ul>';
 $fld->developerTags['col'] = 12;
 
 $fld = $frm->getField('rfq_addr_id');
@@ -99,7 +99,7 @@ if (null != $fld) {
     <div class="request-quote">
         <?php if (!$isUserLogged) { ?>
         <div class="request-quote-head">
-            <div class="row">
+            <div class="row g-2">
                 <div class="col-lg-4">
                     <div class="form-group">
                         <label class="label">
@@ -128,8 +128,16 @@ if (null != $fld) {
                     </div>
                 </div>
             </div>
-            <div class="form-text text-muted mt-0">
-                <?php echo Labels::getLabel('LBL_PROCEED_WITH_GUEST_INFORMATION_TO_PLACE_RFQ'); ?>
+            <div class="alert alert-solid-success alert-bold" role="alert">
+                <div class="alert-icon">
+                    <svg class="svg " width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"
+                        role="img" aria-label="Warning:">
+                        <path
+                            d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+                    </svg>
+                </div>
+                <div class="alert-text">
+                    <?php echo Labels::getLabel('LBL_PROCEED_WITH_GUEST_INFORMATION_TO_PLACE_RFQ'); ?> </div>
             </div>
         </div>
         <?php
@@ -317,6 +325,9 @@ if (null != $fld) {
             <div class="row">
                 <div class="col-12">
                     <div class="form-group">
+                        <label class="field_label">
+                            <?php echo Labels::getLabel('LBL_COMMENTS'); ?><span class="spn_must_field">*</span>
+                        </label>
                         <?php echo $frm->getFieldHtml('rfq_description'); ?>
                     </div>
                 </div>

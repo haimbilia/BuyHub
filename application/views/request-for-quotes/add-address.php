@@ -15,6 +15,9 @@ $countryFld->setFieldTagAttribute('onchange', 'getCountryStates(this.value, 0 ,\
 $stateFld = $addressFrm->getField('addr_state_id');
 $stateFld->setFieldTagAttribute('id', 'addr_state_id');
 
+$fld = $addressFrm->getField('addr_phone');
+$fld->developerTags['colWidthValues'] = [null, '12', null, null];
+
 $fld = $addressFrm->getField('btn_submit');
 $addressFrm->removeField($fld);
 
@@ -35,7 +38,7 @@ $includeBackBtn = $includeBackBtn ?? true;
     <?php require_once(CONF_THEME_PATH . '_partial/sidebar/form-edit-foot.php'); ?>
 </div>
 <script>
-    $(document).ready(function() {
-        getCountryStates($("#addr_country_id").val(), 0, '#addr_state_id');
-    });
+$(document).ready(function() {
+    getCountryStates($("#addr_country_id").val(), 0, '#addr_state_id');
+});
 </script>

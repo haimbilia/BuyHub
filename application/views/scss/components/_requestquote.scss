@@ -6,7 +6,7 @@ $space: 1rem;
 
 	//font-family: $font-Noto;
 	&-head {
-		padding: 1rem $space;
+		padding: #{$padding};
 		border-bottom: $border;
 
 		@include media-breakpoint-down(md) {
@@ -15,7 +15,9 @@ $space: 1rem;
 	}
 
 	&-body {
-		padding: 1rem $space;
+		//padding: 1rem $space;
+		padding: #{$padding};
+
 
 		@include media-breakpoint-down(md) {
 			padding: 1rem;
@@ -45,13 +47,14 @@ $space: 1rem;
 		display: flex;
 		align-items: center;
 		flex-flow: row nowrap;
-		margin-bottom: 2rem;gap: 1rem;
+		margin-bottom: 2rem;
+		gap: 1rem;
 
 		@include media-breakpoint-down(xl) {
 			flex-wrap: wrap;
 		}
 
-		
+
 
 		.label {
 			font-size: 1rem;

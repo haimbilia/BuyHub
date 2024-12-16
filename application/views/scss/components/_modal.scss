@@ -1,3 +1,5 @@
+$padding: 1rem 2rem;
+
 .modal {
   &-backdrop {
     opacity: 1 !important;
@@ -16,6 +18,8 @@
   }
 
   &-header {
+    padding: $padding;
+
     .close {
       margin: -1rem;
       margin-#{$start-direction}: auto !important;
@@ -25,6 +29,10 @@
       margin-#{$start-direction}: auto !important;
       margin-#{$end-direction}: 0 !important;
     }
+  }
+
+  &-body {
+    padding: $padding;
   }
 
   &-title {
@@ -41,6 +49,7 @@
   }
 
   &-footer {
+    padding: $padding;
     //justify-content: inherit;
   }
 
@@ -72,7 +81,7 @@
       overflow-y: auto;
 
       .modal-header {
-        padding: 1.5rem 2rem;
+        padding: $padding;
       }
     }
 
@@ -119,6 +128,13 @@ button.close {
       color: $danger-color;
     }
   }
+}
+
+.btn-close {
+  background-color: $bg-gray;
+  background-size: 12px;
+  border-radius: 50%;
+
 }
 
 .btn-close-start {
