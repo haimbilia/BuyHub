@@ -165,7 +165,7 @@
                             title="<?php echo Labels::getLabel('MSG_COPY_TO_CLIPBOARD', $siteLangId); ?>">
                             <svg class="svg" width="18" height="18">
                                 <use
-                                    xlink:href="' <?php echo  CONF_WEBROOT_FRONTEND; ?>'images/retina/sprite.svg#copy-to-all">
+                                    xlink:href="<?php echo  CONF_WEBROOT_FRONTEND; ?>images/retina/sprite.svg#copy-to-all">
                                 </use>
                             </svg>
                         </button>

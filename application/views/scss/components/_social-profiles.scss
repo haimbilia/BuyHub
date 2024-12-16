@@ -6,6 +6,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+
     li {
         margin: 0 5px;
     }
@@ -25,6 +26,7 @@
     grid-gap: 1rem;
     padding: 1.5rem;
     grid-template-columns: 1fr 1fr;
+
     li {
         font-size: 0.8rem;
         display: block;
@@ -33,6 +35,7 @@
         margin: 0;
         border-radius: 40px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+
         a {
             color: #fff;
             cursor: pointer;
@@ -44,15 +47,19 @@
                 height: 1.5rem;
             }
         }
+
         &.social-facebook {
             background: #3b5998;
         }
+
         &.social-twitter {
             background: #1da1f2;
         }
+
         &.social-pintrest {
             background: #c8232c;
         }
+
         &.social-email {
             background: #9b9a9a;
         }
