@@ -8,7 +8,7 @@ e.g. 1200 = 1(destroy)
      576 = 0(Run Slick slider)
 */
 
-$(document).ready(function () {
+function loadSlickSlider() {
   var _carousel = $(".js-carousel");
   _carousel.each(function (index) {
     var _this = $(this),
@@ -101,6 +101,10 @@ $(document).ready(function () {
 
     _this.slick(optionsArr);
   });
+}
+
+$(document).ready(function () {
+  loadSlickSlider();
 });
 
 /* End of Common Carousel */

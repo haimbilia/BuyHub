@@ -12,7 +12,7 @@ if ($recommendedProducts) { ?>
                     <h2><?php echo Labels::getLabel('LBL_Recommended_Products', $siteLangId); ?></h2>
                 </div>
                 <div class="section-action">
-                <div class="slider-controls recommendedprod">
+                    <div class="slider-controls recommendedprod">
                         <button class="btn btn-prev slick-arrow arrow-prev" type="button">
                             <span></span>
                         </button>
@@ -22,7 +22,7 @@ if ($recommendedProducts) { ?>
                     </div>
                 </div>
             </header>
-            <div class="section-body">            
+            <div class="section-body">
                 <div class="js-carousel recommended-products" id="product-listing-rp" data-slides="5,4,3,2,2"
                     data-arrows="true" data-arrowcontainer="recommendedprod" data-slickdots="false" data-custom="#product-listing-rp" data-dotscontainer="" data-customarrow="true"
                     dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
@@ -77,11 +77,16 @@ if ($recommendedProducts) { ?>
                                 </div>
                             </div>
                         </div>
-                        
-                        <?php
+
+                    <?php
                     } ?>
                 </div>
             </div>
         </div>
     </section>
 <?php } ?>
+<script>
+    $(document).ready(function() { console.log('hello');        
+        loadSlickSlider();
+    });
+</script>

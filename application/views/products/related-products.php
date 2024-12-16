@@ -66,10 +66,15 @@ if ($relatedProductsRs) { ?>
                             </div>
                         </div>
                         <!--/product tile-->
-                        <?php
+                    <?php
                     } ?>
                 </div>
             </div>
         </div>
     </section>
-<?php }
+<?php } ?>
+<script>
+    $(document).ready(function() { console.log('hello');        
+        loadSlickSlider();
+    });
+</script>

@@ -26,7 +26,7 @@ if ($recentViewedProducts) { ?>
             <div class="section-body">            
                 <div class="js-carousel recently-viewed-products" id="product-listing-rvp" data-slides="5,4,3,2,2"
                     data-arrows="true" data-slickdots="false" data-custom="#product-listing-rvp" data-dots="false"
-                    data-customarrow="false" data-arrowcontainer="recentlyviewed" data-dotscontainer=""
+                    data-customarrow="true" data-arrowcontainer="recentlyviewed" data-dotscontainer=""
                     dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
                     <?php
                     $tRightRibbons = isset($recentlyViewedRibbons['tRightRibbons']) ? $recentlyViewedRibbons['tRightRibbons'] : [];
@@ -92,4 +92,9 @@ if ($recentViewedProducts) { ?>
         </div>
     </section>
     <?php
-}
+} ?>
+<script>
+    $(document).ready(function() { console.log('hello');        
+        loadSlickSlider();
+    });
+</script>
