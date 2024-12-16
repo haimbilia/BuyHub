@@ -61,8 +61,16 @@ class ShopsController extends MyAppController
 
 
         $flds = [
-            's.shop_id', 'shop_user_id', 'shop_ltemplate_id', 'shop_created_on', 'IFNULL(shop_name, shop_identifier) as shop_name', 'shop_description',
-            'shop_country_l.country_name as country_name', 'shop_state_l.state_name as state_name', 'shop_city', 'shop_updated_on'
+            's.shop_id',
+            'shop_user_id',
+            'shop_ltemplate_id',
+            'shop_created_on',
+            'IFNULL(shop_name, shop_identifier) as shop_name',
+            'shop_description',
+            'shop_country_l.country_name as country_name',
+            'shop_state_l.state_name as state_name',
+            'shop_city',
+            'shop_updated_on'
         ];
         $srch->addMultipleFields($flds);
 
@@ -100,9 +108,26 @@ class ShopsController extends MyAppController
         $productSrchObj->addCondition('selprod_deleted', '=', applicationConstants::NO);
         $productSrchObj->addMultipleFields(
             array(
-                'product_id', 'selprod_id', 'IFNULL(product_name, product_identifier) as product_name', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'product_updated_on',
-                'special_price_found', 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type',
-                'theprice', 'selprod_price', 'selprod_stock', 'selprod_condition', 'prodcat_id', 'IFNULL(prodcat_name, prodcat_identifier) as prodcat_name', 'selprod_sold_count', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'selprod_cart_type', 'selprod_hide_price', 'shop_rfq_enabled'
+                'product_id',
+                'selprod_id',
+                'IFNULL(product_name, product_identifier) as product_name',
+                'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title',
+                'product_updated_on',
+                'special_price_found',
+                'splprice_display_list_price',
+                'splprice_display_dis_val',
+                'splprice_display_dis_type',
+                'theprice',
+                'selprod_price',
+                'selprod_stock',
+                'selprod_condition',
+                'prodcat_id',
+                'IFNULL(prodcat_name, prodcat_identifier) as prodcat_name',
+                'selprod_sold_count',
+                'IF(selprod_stock > 0, 1, 0) AS in_stock',
+                'selprod_cart_type',
+                'selprod_hide_price',
+                'shop_rfq_enabled'
             )
         );
         foreach ($allShops as $val) {
@@ -260,7 +285,7 @@ class ShopsController extends MyAppController
 
         if (false === MOBILE_APP_API_CALL) {
             $this->includeProductPageJsCss();
-            $this->_template->addJs(array('js/slick.min.js', 'js/shop-nav.js', 'js/jquery.colourbrightness.min.js'));
+            $this->_template->addJs(array('js/slick.min.js', 'js/shop-nav.js', 'js/jquery.colourbrightness.min.js', 'js/slick-carousels.js'));
         }
 
         $this->set('showBanner', true);
@@ -317,9 +342,20 @@ class ShopsController extends MyAppController
 
         $srch->addMultipleFields(
             array(
-                'shop_id', 'tu.user_name', 'tu.user_regdate', 'shop_user_id', 'shop_ltemplate_id', 'shop_created_on', 'shop_name', 'shop_description',
-                'shop_country_l.country_name as shop_country_name', 'shop_state_l.state_name as shop_state_name', 'shop_city',
-                'IFNULL(ufs.ufs_id, 0) as is_favorite', 'u_cred.credential_username as shop_owner_username', 'u.user_name as shop_owner_name',
+                'shop_id',
+                'tu.user_name',
+                'tu.user_regdate',
+                'shop_user_id',
+                'shop_ltemplate_id',
+                'shop_created_on',
+                'shop_name',
+                'shop_description',
+                'shop_country_l.country_name as shop_country_name',
+                'shop_state_l.state_name as shop_state_name',
+                'shop_city',
+                'IFNULL(ufs.ufs_id, 0) as is_favorite',
+                'u_cred.credential_username as shop_owner_username',
+                'u.user_name as shop_owner_name',
             )
         );
         $srch->addCondition('shop_id', '=', $shop_id);
@@ -467,10 +503,9 @@ class ShopsController extends MyAppController
         $this->set('data', $data);
 
         $this->includeProductPageJsCss();
-        $this->_template->addJs('js/slick.min.js');
 
-        $this->_template->addJs('js/shop-nav.js');
-        $this->_template->addJs('js/jquery.colourbrightness.min.js');
+        $this->includeProductPageJsCss();
+        $this->_template->addJs(array('js/slick.min.js', 'js/shop-nav.js', 'js/jquery.colourbrightness.min.js', 'js/slick-carousels.js'));
         $this->_template->render(true, true, 'shops/view.php');
     }
 
@@ -807,7 +842,7 @@ class ShopsController extends MyAppController
         $this->set('redirectUri', UrlHelper::generateUrl('Shops', 'View', [$shop_id]));
         $this->_template->render(false, false, 'json-success.php');
     }
-    
+
     public function policies($shop_id)
     {
         $shop = $this->getShopInfo($shop_id);
@@ -884,9 +919,23 @@ class ShopsController extends MyAppController
         $srch->joinSellerSubscription();
         $srch->addMultipleFields(
             array(
-                'shop_id', 'shop_user_id', 'shop_ltemplate_id', 'shop_created_on', 'shop_name', 'shop_description',
-                'shop_payment_policy', 'shop_delivery_policy', 'shop_refund_policy', 'shop_additional_info', 'shop_seller_info',
-                'shop_country_l.country_name as shop_country_name', 'shop_state_l.state_name as shop_state_name', 'shop_city', 'u.user_name as shop_owner_name', 'u.user_regdate', 'u_cred.credential_username as shop_owner_username'
+                'shop_id',
+                'shop_user_id',
+                'shop_ltemplate_id',
+                'shop_created_on',
+                'shop_name',
+                'shop_description',
+                'shop_payment_policy',
+                'shop_delivery_policy',
+                'shop_refund_policy',
+                'shop_additional_info',
+                'shop_seller_info',
+                'shop_country_l.country_name as shop_country_name',
+                'shop_state_l.state_name as shop_state_name',
+                'shop_city',
+                'u.user_name as shop_owner_name',
+                'u.user_regdate',
+                'u_cred.credential_username as shop_owner_username'
             )
         );
 
@@ -1026,8 +1075,17 @@ class ShopsController extends MyAppController
 
             $srch->addMultipleFields(
                 array(
-                    'shop_id', 'tu.user_name', 'tu.user_regdate', 'shop_user_id', 'shop_ltemplate_id', 'shop_created_on', 'IFNULL(shop_name, shop_identifier) as shop_name', 'shop_description',
-                    'shop_country_l.country_name as shop_country_name', 'shop_state_l.state_name as shop_state_name', 'shop_city',
+                    'shop_id',
+                    'tu.user_name',
+                    'tu.user_regdate',
+                    'shop_user_id',
+                    'shop_ltemplate_id',
+                    'shop_created_on',
+                    'IFNULL(shop_name, shop_identifier) as shop_name',
+                    'shop_description',
+                    'shop_country_l.country_name as shop_country_name',
+                    'shop_state_l.state_name as shop_state_name',
+                    'shop_city',
                     'IFNULL(ufs.ufs_id, 0) as is_favorite'
                 )
             );
@@ -1065,16 +1123,43 @@ class ShopsController extends MyAppController
 
         $srch = Product::getListingObj($get, $this->siteLangId, $userId);
         $flds = array(
-            'prodcat_code', 'product_id', 'prodcat_id', 'COALESCE(product_name, product_identifier) as product_name', 'product_model',  'product_updated_on', 'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name',
-            'selprod_id', 'selprod_user_id',  'selprod_code', 'selprod_stock', 'selprod_condition', 'selprod_price', 'COALESCE(selprod_title  ,COALESCE(product_name, product_identifier)) as selprod_title',
-            'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'splprice_start_date', 'splprice_end_date',
-            'brand_id', 'COALESCE(brand_name, brand_identifier) as brand_name', 'user_name', 'IF(selprod_stock > 0, 1, 0) AS in_stock',
-            'selprod_sold_count', 'selprod_return_policy', /*'maxprice', 'ifnull(sq_sprating.totReviews,0) totReviews','IF(ufp_id > 0, 1, 0) as isfavorite', */ 'selprod_min_order_qty',
-            'shop.shop_id', 'shop.shop_lat', 'shop.shop_lng', 'COALESCE(shop_name, shop_identifier) as shop_name', 'selprod_cart_type', 'selprod_hide_price', 'shop_rfq_enabled'
+            'prodcat_code',
+            'product_id',
+            'prodcat_id',
+            'COALESCE(product_name, product_identifier) as product_name',
+            'product_model',
+            'product_updated_on',
+            'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name',
+            'selprod_id',
+            'selprod_user_id',
+            'selprod_code',
+            'selprod_stock',
+            'selprod_condition',
+            'selprod_price',
+            'COALESCE(selprod_title  ,COALESCE(product_name, product_identifier)) as selprod_title',
+            'splprice_display_list_price',
+            'splprice_display_dis_val',
+            'splprice_display_dis_type',
+            'splprice_start_date',
+            'splprice_end_date',
+            'brand_id',
+            'COALESCE(brand_name, brand_identifier) as brand_name',
+            'user_name',
+            'IF(selprod_stock > 0, 1, 0) AS in_stock',
+            'selprod_sold_count',
+            'selprod_return_policy', /*'maxprice', 'ifnull(sq_sprating.totReviews,0) totReviews','IF(ufp_id > 0, 1, 0) as isfavorite', */
+            'selprod_min_order_qty',
+            'shop.shop_id',
+            'shop.shop_lat',
+            'shop.shop_lng',
+            'COALESCE(shop_name, shop_identifier) as shop_name',
+            'selprod_cart_type',
+            'selprod_hide_price',
+            'shop_rfq_enabled'
         );
         $removeFlds = array_diff($flds, ['1']);
         $this->setRecordCount(clone $srch, $get['pageSize'], $get['page'], $get, true, $removeFlds);
-        
+
         Product::setOrderOnListingObj($srch, $get);
 
         $srch->setPageNumber($page);

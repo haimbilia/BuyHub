@@ -94,7 +94,7 @@ if ($recentViewedProducts) { ?>
     <?php
 } ?>
 <script>
-    $(document).ready(function() { console.log('hello');        
+    $(document).ready(function() {        
         loadSlickSlider();
     });
 </script>
