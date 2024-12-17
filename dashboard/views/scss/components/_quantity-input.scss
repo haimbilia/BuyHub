@@ -1,11 +1,12 @@
 .quantity {
-  background: #fff;
+  background-color: #fff;
   border: $border;
   height: 38px;
   display: flex;
   align-items: center;
   max-width: 130px;
   border-radius: $radius3;
+
   span {
     display: flex;
     align-items: center;
@@ -17,9 +18,11 @@
     height: 100%;
     font-size: 0.7rem;
     color: $txt-gray;
+
     &:hover {
       color: $txt-body;
     }
+
     .icn {
       .svg {
         width: 11px;
@@ -27,6 +30,7 @@
       }
     }
   }
+
   input {
     border: none;
     text-align: center;
@@ -36,10 +40,12 @@
     font-size: 0.85rem;
     min-width: 35px;
   }
+
   &-2 {
     max-width: 90px;
     height: 24px;
     border: none;
+
     span {
       width: 24px;
       flex: 0 0 24px;

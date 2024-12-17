@@ -22,12 +22,12 @@ $userParentId = $userParentId ?? 0;
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-7">
-                    <div class="section__head">
+                    <header class="section-head">
                         <h4><?php echo Labels::getLabel('LBL_Why_are_you_reporting_this_shop_as_spam', $siteLangId); ?>
                         </h4>
-                    </div>
+                    </header>
                     <div class="">
-                        <div class="bg-gray rounded p-5"> <?php echo $frm->getFormHtml(); ?> </div>
+                        <div class="border p-3"> <?php echo $frm->getFormHtml(); ?> </div>
                     </div>
 
                 </div>

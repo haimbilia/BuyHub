@@ -325,7 +325,7 @@
 }
 
 .white--bg {
-    background: #fff;
+    background-color: #fff;
 }
 
 .right-panel {
@@ -335,20 +335,6 @@
 .right_panel_head_right {
     float: right;
     text-align: right;
-}
-
-.sort-by li {
-    display: inline-block;
-}
-
-.sort-by li.sort {
-    color: #555555;
-    font-weight: $font-weight-regular;
-    margin: 0;
-}
-
-.sort-by select {
-    height: 30px;
 }
 
 .listing-products--list {
@@ -409,7 +395,7 @@
     text-transform: uppercase;
     transition: all 0.15s ease;
     user-select: none;
-    background: #fff;
+    background-color: #fff;
     display: flex;
     align-items: center;
     justify-content: center;

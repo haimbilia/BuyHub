@@ -539,7 +539,7 @@ $sharing-height: 50px;
   align-items: center;
 
   .owner_logo {
-    background: #fff;
+    background-color: #fff;
     border-radius: 50%;
     overflow: hidden;
     width: 70px;
@@ -633,7 +633,7 @@ $sharing-height: 50px;
 }
 
 .reviews-list {
-  background: #fff;
+  background-color: #fff;
   border-radius: $common-radius;
   border: $border;
 
@@ -774,7 +774,7 @@ $sharing-height: 50px;
     color: #fff !important;
     text-transform: uppercase;
     white-space: nowrap;
-    background: #000;
+    background-color: #000;
     display: flex;
     align-items: center;
 

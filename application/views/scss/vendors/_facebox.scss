@@ -172,7 +172,7 @@
     position: absolute;
     top: 0;
     content: "";
-    background: #000;
+    background-color: #000;
 }
 
 #facebox .close:after {
@@ -183,7 +183,7 @@
     margin: -1px 0 0 0;
     position: absolute;
     content: "";
-    background: #000;
+    background-color: #000;
 }
 
 #facebox .close.close--white {}

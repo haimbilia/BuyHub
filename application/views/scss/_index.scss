@@ -308,7 +308,7 @@
             border-radius: 50%;
             border: 3px solid transparent;
             cursor: pointer;
-            background: #464646;
+            background-color: #464646;
             transition: all 0.5s ease-in-out;
 
             button {
@@ -318,7 +318,7 @@
             }
 
             &.slick-active {
-                background: #fff;
+                background-color: #fff;
                 border-color: var(--brand-color);
             }
         }

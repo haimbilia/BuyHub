@@ -42,8 +42,7 @@
   color: #fff;
   /*font-size: 0;*/
   line-height: normal;
-  background: url(../images/icon--attention.svg) no-repeat 15px 15px
-    $danger-color;
+  background: url(../images/icon--attention.svg) no-repeat 15px 15px $danger-color;
   background-size: 30px;
 }
 
@@ -171,7 +170,7 @@
   position: absolute;
   top: 2px;
   content: "";
-  background: #fff;
+  background-color: #fff;
 }
 
 .system_message .closeMsg:after {
@@ -182,7 +181,7 @@
   margin: -2px 0 0 0;
   position: absolute;
   content: "";
-  background: #fff;
+  background-color: #fff;
 }
 
 .alert--process:before {
@@ -223,6 +222,7 @@
 }
 
 @media (max-width: 767px) {
+
   #mbsmessage,
   .system_message {
     #{$start-direction}: 10px;

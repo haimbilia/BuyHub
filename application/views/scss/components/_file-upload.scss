@@ -66,7 +66,7 @@
         border-radius: $common-radius;
         padding: 5px;
         position: relative;
-        background: #fff;
+        background-color: #fff;
     }
 
     .uploaded-file__thumb {
@@ -88,7 +88,7 @@
 
     .close-layer {
         box-shadow: $shadow1;
-        background: #fff;
+        background-color: #fff;
         border-radius: 50%;
         right: -10px;
         top: -10px;

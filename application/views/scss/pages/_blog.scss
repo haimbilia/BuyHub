@@ -46,7 +46,7 @@ $blog-header-height: 58px;
     opacity: 0;
     overflow-y: auto;
     visibility: hidden;
-    background: #fff;
+    background-color: #fff;
     box-shadow: $shadow1;
     transition: all 0.5s ease;
 
@@ -639,7 +639,7 @@ $blog-header-height: 58px;
   input {
     &[type="text"] {
       flex: 1;
-      background: #fff;
+      background-color: #fff;
       height: 3.5rem;
       width: 100%;
       line-height: 1.2;
@@ -656,7 +656,7 @@ $blog-header-height: 58px;
 
     &[type="submit"] {
       font-size: 1em;
-      background: #000;
+      background-color: #000;
       height: 3.5rem;
       width: 100%;
       max-width: 136px;

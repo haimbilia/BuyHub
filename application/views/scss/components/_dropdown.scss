@@ -9,7 +9,7 @@
   z-index: 10;
   #{$start-direction}: 0;
   top: 110%;
-  background: #fff;
+  background-color: #fff;
   box-shadow: 0 0px 10px 0 rgba(0, 0, 0, 0.2);
   position: absolute;
   transform: scaleY(0);
@@ -86,7 +86,7 @@
   width: 60px;
   height: 60px;
   border-radius: 100%;
-  background: #fff;
+  background-color: #fff;
   padding: 2px;
 }
 

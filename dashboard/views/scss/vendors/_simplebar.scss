@@ -4,13 +4,13 @@
     flex-direction: column;
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
-    -webkit-box-pack:flex-start;
-    -ms-flex-pack:flex-start;
+    -webkit-box-pack: flex-start;
+    -ms-flex-pack: flex-start;
     justify-content: flex-start;
-    -ms-flex-line-pack:flex-start;
+    -ms-flex-line-pack: flex-start;
     align-content: flex-start;
-    -webkit-box-align:flex-start;
-    -ms-flex-align:flex-start;
+    -webkit-box-align: flex-start;
+    -ms-flex-align: flex-start;
     align-items: flex-start;
     width: inherit;
     /*height: inherit;*/
@@ -145,7 +145,7 @@
 .simplebar-scrollbar:before {
     position: absolute;
     content: "";
-    background: #000;
+    background-color: #000;
     border-radius: 7px;
     left: 0;
     right: 0;

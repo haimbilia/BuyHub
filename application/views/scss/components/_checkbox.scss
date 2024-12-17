@@ -301,12 +301,15 @@ $checkbox-active-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.04),
     }
 }
 
-//checkbox-group-list
+//Checkbox-group-list
 .checkbox-group {
     border: $border;
-    border-width: 3px;
-    border-radius: $radius * 4;
-    padding: 0.4rem;
+    border-width: 2px;
+    border-radius: $radius;
+    padding: 1.5rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
 
     &:hover {
         cursor: pointer;
@@ -316,7 +319,7 @@ $checkbox-active-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.04),
         font-size: 0.8rem;
         font-weight: 600;
         position: relative;
-        padding-left: 1.4rem;
+        padding-#{$start-direction}: 1.6rem;
 
         &::after {
             position: absolute;
@@ -327,8 +330,8 @@ $checkbox-active-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.04),
             border: $border;
             border-width: 2px;
             border-radius: 50%;
-            top: 50%;
-            transform: translateY(-50%);
+            top: 0;
+
             transition: border 0.2s ease;
         }
     }
@@ -340,6 +343,10 @@ $checkbox-active-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.04),
         .img-fluid {
             border-radius: $radius * 2;
         }
+    }
+
+    &-data {
+        // padding: 1.5rem;
     }
 }
 
@@ -369,6 +376,6 @@ $checkbox-active-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.04),
 
     .checkbox-group-item {
         width: 100%;
-        max-width: 160px;
+        // max-width: 160px;
     }
 }
