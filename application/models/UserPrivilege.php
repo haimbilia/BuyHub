@@ -58,9 +58,7 @@ class UserPrivilege
     private static $instance = null;
     private $loadedPermissions = array();
 
-    private function __construct()
-    {
-    }
+    private function __construct() {}
 
     public static function getInstance()
     {
@@ -178,7 +176,8 @@ class UserPrivilege
                 static::SECTION_SALES => Labels::getLabel('LBL_Sales', $langId),
                 static::SECTION_CANCELLATION_REQUESTS => Labels::getLabel('LBL_Cancellation_Requests', $langId),
                 static::SECTION_RETURN_REQUESTS => Labels::getLabel('LBL_Return_Requests', $langId),
-                static::SECTION_RFQ_OFFERS => Labels::getLabel('LBL_REQUEST_FOR_QUOTE', $langId),
+                static::SECTION_REQUEST_FOR_QUOTE => Labels::getLabel('LBL_REQUEST_FOR_QUOTE', $langId),
+                static::SECTION_RFQ_OFFERS => Labels::getLabel('LBL_RFQ_OFFERS', $langId),
             ),
             static::MODULE_SHIPPING =>
             array(

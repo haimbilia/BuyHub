@@ -183,7 +183,7 @@ trait RequestForQuotesUtility
         $this->set("approvalStatusArr", RequestForQuote::getApprovalStatusArr($this->siteLangId));
         $this->set("statusArr", RequestForQuote::getStatusArr($this->siteLangId));
         $this->set("isBuyer", $this->isBuyer);
-        $this->set('canEdit', $this->userPrivilege->canEditRfqOffers(UserAuthentication::getLoggedUserId(), true));
+        $this->set('canEdit', $this->userPrivilege->canEditRfqOffers($this->userId, true));
         $this->set("isSeller", $this->isSeller);
         $this->set("userParentId", $this->userParentId);
         if (MOBILE_APP_API_CALL) {
