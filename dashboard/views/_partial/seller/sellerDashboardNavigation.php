@@ -142,7 +142,8 @@ $plugin = new Plugin();
         $userPrivilege->canViewSales(UserAuthentication::getLoggedUserId(), true) ||
         $userPrivilege->canViewCancellationRequests(UserAuthentication::getLoggedUserId(), true) ||
         $userPrivilege->canViewReturnRequests(UserAuthentication::getLoggedUserId(), true) ||
-        $userPrivilege->canViewRfqOffers(UserAuthentication::getLoggedUserId(), true)
+        $userPrivilege->canViewRequestForQuote(UserAuthentication::getLoggedUserId(), true)
+
     ) { ?>
         <li class="dashboard-menu-item dropdownJs">
             <button class="dashboard-menu-btn menuLinkJs dropdown-toggle-custom collapsed" type="button" <?php if (false === $quickSearch) { ?>data-bs-toggle="collapse" data-bs-target="#nav-sales" aria-expanded="true" aria-controls="collapseOne" <?php } ?> title="">
@@ -183,7 +184,7 @@ $plugin = new Plugin();
                     </li>
                 <?php } ?>
 
-                <?php if ($userPrivilege->canViewRfqOffers(UserAuthentication::getLoggedUserId(), true)) { ?>
+                <?php if ($userPrivilege->canViewRequestForQuote(UserAuthentication::getLoggedUserId(), true)) { ?>
                     <li class="menu-sub-item navItemJs">
                         <a class="menu-sub-link navLinkJs <?php echo (false === $quickSearch && ($controller == 'sellerrequestforquotes' || $controller == 'sellerrfqoffers') && ($action == 'index' || $action == 'listing') && $action != 'global') ? 'active' : ''; ?>" title="<?php echo Labels::getLabel('NAV_REQUEST_FOR_QUOTES', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('SellerRequestForQuotes'); ?>">
                             <span class="menu-sub-title navTextJs"><?php echo Labels::getLabel("NAV_REQUEST_FOR_QUOTES", $siteLangId); ?></span>

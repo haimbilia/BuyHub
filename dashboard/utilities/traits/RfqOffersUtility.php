@@ -840,7 +840,7 @@ trait RfqOffersUtility
         if (false == $rfq->updateLatestOffer($data)) {
             LibHelper::exitWithError($rfq->getError(), true);
         }
-        
+
         $srch = new SearchBase(RfqOffers::DB_RFQ_LATEST_OFFER);
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
@@ -1101,7 +1101,12 @@ trait RfqOffersUtility
 
     public function viewRfq(int $recordId)
     {
-        if (1 > $recordId) {
+        $canView = true;
+        if ($this->isSeller) {
+            $canView = $this->userPrivilege->canViewRequestForQuote($this->userId, true);
+        }
+
+        if (1 > $recordId || false == $canView) {
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
 

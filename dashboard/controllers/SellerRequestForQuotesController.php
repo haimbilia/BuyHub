@@ -6,9 +6,8 @@ class SellerRequestForQuotesController extends SellerBaseController
     public function __construct($action)
     {
         parent::__construct($action);
-        $this->isSeller = true;
-
-        $this->userPrivilege->canViewRfqOffers($this->userId);
+        $this->isSeller = true;        
+        $this->userPrivilege->canViewRequestForQuote($this->userId);
     }
 
     public function global()
