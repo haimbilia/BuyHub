@@ -1061,6 +1061,7 @@ class RfqOffersController extends ListingBaseController
 
     public function getBreadcrumbNodes($action)
     {
+        $pageData = PageLanguageData::getAttributesByKey($this->pageKey, $this->siteLangId);
         switch ($action) {
             case 'listing':
                 $this->nodes = [
@@ -1068,7 +1069,7 @@ class RfqOffersController extends ListingBaseController
                         'title' => Labels::getLabel("LBL_REQUEST_FOR_QUOTES"),
                         'href' => UrlHelper::generateUrl('RequestForQuotes')
                     ],
-                    ['title' => Labels::getLabel('LBL_OFFERS', $this->siteLangId)]
+                    ['title' => $pageData['plang_title'] ?? Labels::getLabel('LBL_OFFERS', $this->siteLangId)]
                 ];
         }
         return $this->nodes;
