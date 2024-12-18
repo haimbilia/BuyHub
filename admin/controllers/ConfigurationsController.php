@@ -542,6 +542,9 @@ class ConfigurationsController extends ListingBaseController
                 $fld = $frm->addCheckBox(Labels::getLabel("FRM_ENABLE_RFQ_MODULE", $langId), 'CONF_RFQ_MODULE', 1, array(), false, 0);
                 HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel('FRM_ENABLING_THIS,_BUYER_CAN_REQUEST_FOR_QUOTATION', $langId));
 
+                $fld = $frm->addCheckBox(Labels::getLabel("FRM_ENABLE_GLOBAL_RFQ_MODULE", $langId), 'CONF_GLOBAL_RFQ_MODULE', 1, array(), false, 0);
+                HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel('FRM_ENABLING_THIS,_BUYER_CAN_REQUEST_GLOBALLY_FOR_QUOTATION', $langId));
+
                 $fld = $frm->addCheckBox(Labels::getLabel("FRM_HIDE_PRODUCT_PRICES", $langId), 'CONF_HIDE_PRICES', 1, array(), false, 0);
                 HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel('FRM_ENABLING_THIS,_PRODUCT_PRICE_WILL_NOT_DISPLAY', $langId));
 

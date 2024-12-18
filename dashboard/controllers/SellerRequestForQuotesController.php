@@ -6,18 +6,27 @@ class SellerRequestForQuotesController extends SellerBaseController
     public function __construct($action)
     {
         parent::__construct($action);
-        $this->isSeller = true;        
+        $this->isSeller = true;
         $this->userPrivilege->canViewRequestForQuote($this->userId);
     }
 
     public function global()
     {
+        if (1 > FatApp::getConfig('CONF_GLOBAL_RFQ_MODULE', FatUtility::VAR_INT, 0)) {
+            $msg = Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId);
+            LibHelper::exitWithError($msg, false, true);
+            FatApp::redirectUser(UrlHelper::generateUrl('account'));
+        }
+
         $this->set('funcName', __FUNCTION__);
         $this->index();
     }
 
     public function assignToMe(int $rfqId)
     {
+        if (1 > FatApp::getConfig('CONF_GLOBAL_RFQ_MODULE', FatUtility::VAR_INT, 0)) {
+            LibHelper::exitWithError($this->str_invalid_Action, true);
+        }
         $this->userPrivilege->canEditRequestForQuote($this->userId);
 
         if (!UserPrivilege::isUserHasValidSubsription($this->userParentId)) {

@@ -184,17 +184,19 @@ $plugin = new Plugin();
                     </li>
                 <?php } ?>
 
-                <?php if ($userPrivilege->canViewRequestForQuote(UserAuthentication::getLoggedUserId(), true)) { ?>
+                <?php if ($userPrivilege->canViewRequestForQuote(UserAuthentication::getLoggedUserId(), true) && 0 < FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0)) { ?>
                     <li class="menu-sub-item navItemJs">
                         <a class="menu-sub-link navLinkJs <?php echo (false === $quickSearch && ($controller == 'sellerrequestforquotes' || $controller == 'sellerrfqoffers') && ($action == 'index' || $action == 'listing') && $action != 'global') ? 'active' : ''; ?>" title="<?php echo Labels::getLabel('NAV_REQUEST_FOR_QUOTES', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('SellerRequestForQuotes'); ?>">
                             <span class="menu-sub-title navTextJs"><?php echo Labels::getLabel("NAV_REQUEST_FOR_QUOTES", $siteLangId); ?></span>
                         </a>
                     </li>
-                    <li class="menu-sub-item navItemJs">
-                        <a class="menu-sub-link navLinkJs <?php echo (false === $quickSearch && (($controller == 'sellerrequestforquotes' || $controller == 'sellerrfqoffers') && ($action ==  'global' || $action == 'globallisting'))) ? 'active' : ''; ?>" title="<?php echo Labels::getLabel('NAV_GLOBAL_REQUEST_FOR_QUOTES', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('SellerRequestForQuotes', 'global'); ?>">
-                            <span class="menu-sub-title navTextJs"><?php echo Labels::getLabel("NAV_GLOBAL_REQUEST_FOR_QUOTES", $siteLangId); ?></span>
-                        </a>
-                    </li>
+                    <?php if (0 < FatApp::getConfig('CONF_GLOBAL_RFQ_MODULE', FatUtility::VAR_INT, 0)) { ?>
+                        <li class="menu-sub-item navItemJs">
+                            <a class="menu-sub-link navLinkJs <?php echo (false === $quickSearch && (($controller == 'sellerrequestforquotes' || $controller == 'sellerrfqoffers') && ($action == 'global' || $action == 'globallisting'))) ? 'active' : ''; ?>" title="<?php echo Labels::getLabel('NAV_GLOBAL_REQUEST_FOR_QUOTES', $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('SellerRequestForQuotes', 'global'); ?>">
+                                <span class="menu-sub-title navTextJs"><?php echo Labels::getLabel("NAV_GLOBAL_REQUEST_FOR_QUOTES", $siteLangId); ?></span>
+                            </a>
+                        </li>
+                    <?php } ?>
                 <?php } ?>
             </ul>
         </li>
