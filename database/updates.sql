@@ -837,3 +837,25 @@ INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption
 ("APP_FILE", 1, 'File', 2),
 ("APP_CANCEL", 1, 'Cancel', 2)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+-- -----------089531 - The page language data is missing for "Request for Quotes" section. --------------------- --
+
+INSERT INTO `tbl_pages_language_data`(
+    `plang_key`,
+    `plang_lang_id`,
+    `plang_title`
+)
+VALUES
+('MANAGE_REQUEST_FOR_QUOTE','-1','Request For Quote'),
+('MANAGE_RFQ_OFFERS','-1','Offers')
+ON DUPLICATE KEY UPDATE plang_key = VALUES(plang_key), plang_lang_id = VALUES(plang_lang_id), plang_title = VALUES(plang_title);
+
+-- -------------------------- 089479 - Ui disruption in email template for order status change. ------------- --
+
+UPDATE
+    `tbl_email_templates`
+SET
+    `etpl_body` = '<table id=\"body\" width=\"100%\"> \r\n <tbody> \r\n <tr> \r\n <td style=\"padding: 30px 10px 50px; text-align: center\"> \r\n <h1 style=\"font-size: 40px; letter-spacing: -0.4px; margin: 0 0 30px 0; font-weight: 700; color: #212529\"> Order Item Status\r\n </h1> \r\n <p style=\"font-size: 16px; line-height: 1.5; letter-spacing: -0.32px; color: #212529; margin: 0 0 10px 0\"> Hello {user_full_name},\r\n </p> \r\n \r\n <p style=\"opacity: 0.6; font-size: 14px; letter-spacing: -0.28px; color: #212529; line-height: 1.71; margin: 0 0 20px 0\"> Your order item status has been changed to {new_order_status} for your Order Invoice Number {invoice_number} on&nbsp;<a href=\"{website_url}\">{website_name}</a>.</p> \r\n <p style=\"opacity: 0.6; font-size: 14px; letter-spacing: -0.28px; color: #212529; line-height: 1.71; margin: 0 0 20px 0\"> {order_items_table_format}\r\n </p> \r\n \r\n <p style=\"opacity: 0.6; font-size: 14px; letter-spacing: -0.28px; color: #212529; line-height: 1.71; margin: 0 0 20px 0\"> {shipment_information}\r\n </p> \r\n <p style=\"opacity: 0.6; font-size: 14px; letter-spacing: -0.28px; color: #212529; line-height: 1.71; margin: 0 0 20px 0\"> {order_admin_comments}\r\n </p> \r\n <p style=\"opacity: 0.6; font-size: 14px; letter-spacing: -0.28px; color: #212529; line-height: 1.71; margin: 0 0 20px 0\"> If you require any assistance in using our site, or have any feedback or suggestions, please email us at\r\n {CONTACT-EMAIL}\r\n </p> \r\n \r\n \r\n <p style=\"font-size: 14px; line-height: 1.71; letter-spacing: -0.28px; color: #212529; margin: 0\"> Thank\r\n You<br />\r\n Team {website_name}\r\n </p> </td> \r\n </tr> \r\n </tbody>\r\n</table>'
+WHERE
+    `tbl_email_templates`.`etpl_code` = 'child_order_status_change' AND `tbl_email_templates`.`etpl_lang_id` = 1
+    ON DUPLICATE KEY UPDATE etpl_body = VALUES(etpl_body);

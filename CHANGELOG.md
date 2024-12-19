@@ -232,3 +232,5 @@
     - bug-088958 - Records linked with the category layout 7 are not visible on the front end in Arabic.
     - bug-088963 - Category layout 9 records are visible on mobile devices in Arabic.
     - Bug-089339 - An invalid request error occurs when the seller clicks the remove icon for any product on the badge request popup.
+    - bug-089531 - The page language data is missing for "Request for Quotes" section.
+    - bug-089479 - Ui disruption in email template for order status change.
