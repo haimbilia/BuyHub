@@ -458,7 +458,7 @@ class OrdersController extends ListingBaseController
             LibHelper::exitWithError($db->getError(), true);
         }
 
-        $orderObj = new Orders($orderDetail['order_id']);
+       /*  $orderObj = new Orders($orderDetail['order_id']);
         $addresses = $orderObj->getOrderAddresses($orderDetail['order_id']);
         $orderDetail['billingAddress'] = $addresses[Orders::BILLING_ADDRESS_TYPE];
         $orderDetail['shippingAddress'] = (!empty($addresses[Orders::SHIPPING_ADDRESS_TYPE])) ? $addresses[Orders::SHIPPING_ADDRESS_TYPE] : $addresses[Orders::BILLING_ADDRESS_TYPE];
@@ -471,7 +471,7 @@ class OrdersController extends ListingBaseController
         $shopSrch->doNotCalculateRecords();
         $shopSrch->setPageSize(1);
         $rs = $shopSrch->getResultSet();
-        $orderDetail['shopDetail'] = FatApp::getDb()->fetch($rs);
+        $orderDetail['shopDetail'] = FatApp::getDb()->fetch($rs); */
 
         $srch = new SearchBase(OrderProduct::DB_TBL_OP_TO_SHIPPING_USERS, 'optosu');
         $srch->doNotCalculateRecords();
