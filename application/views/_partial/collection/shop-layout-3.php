@@ -26,10 +26,9 @@ if (isset($collection['shops']) && count($collection['shops'])) {
                                             'jpgImageUrl' => [ImageDimension::VIEW_DESKTOP => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'shopLogo', array($shop['shopData']['shop_id'], $siteLangId, ImageDimension::VIEW_THUMB, 0, false), CONF_WEBROOT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg')],
                                             'alt' => $shop['shopData']['shop_name'],
                                             'imageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'shopLogo', array($shop['shopData']['shop_id'], $siteLangId, ImageDimension::VIEW_THUMB, 0, false), CONF_WEBROOT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
-                                            'siteLangId' => $siteLangId,
-                                        ];
-
-                                        $this->includeTemplate('_partial/picture-tag.php', $pictureAttr); ?>
+                                            'siteLangId' => $siteLangId
+                                        ]; ?>
+                                        <a href="<?php echo UrlHelper::generateUrl('Shops', 'view', [$shop['shopData']['shop_id']]);?>"><?php $this->includeTemplate('_partial/picture-tag.php', $pictureAttr); ?></a>                                        
                                     </div>
                                     <div class="shop-profile-data">
                                         <?php if (round($shop['shopData']['shop_avg_rating']) > 0) { ?>
