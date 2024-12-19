@@ -385,12 +385,32 @@ $(document).on('change', 'input[name="CONF_HIDE_PRICES"]', function () {
     }
 });
 
+$(document).on('change', 'input[name="CONF_GLOBAL_RFQ_MODULE"]', function () {
+    if (this.checked) {
+        if (!$('input[name="CONF_RFQ_MODULE"]').is(":checked")) {
+            $(this).prop('checked', false);
+            alert(langLbl.enableRfqModule);
+            return false;
+        }
+    }
+});
+
 $(document).on('change', 'input[name="CONF_RFQ_MODULE"]', function () {
     if (false == this.checked) {
         if ($('input[name="CONF_HIDE_PRICES"]').is(":checked")) {
             $(this).prop('checked', true);
             alert(langLbl.disableHidePriceSettings);
             return false;
+        }
+    }
+    if (false == this.checked) {
+        if ($('input[name="CONF_GLOBAL_RFQ_MODULE"]').is(":checked")) {
+            if (!confirm(langLbl.confirmDisableRfq)) {
+                $(this).prop('checked', true);
+                return false;
+            } 
+            $(this).prop('checked', false);
+            $('input[name="CONF_GLOBAL_RFQ_MODULE"]').prop('checked', false);
         }
     }
 });

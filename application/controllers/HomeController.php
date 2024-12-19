@@ -1826,6 +1826,7 @@ class HomeController extends MyAppController
 
         $data['app_session_id'] = isset($_SERVER['HTTP_X_APP_SESSION_ID']) && !empty($_SERVER['HTTP_X_APP_SESSION_ID']) ? $_SERVER['HTTP_X_APP_SESSION_ID'] : session_id();
         $data['CONF_RFQ_MODULE_TYPE'] = FatApp::getConfig('CONF_RFQ_MODULE_TYPE', FatUtility::VAR_INT, 0);
+        $data['CONF_GLOBAL_RFQ_MODULE'] = FatApp::getConfig('CONF_GLOBAL_RFQ_MODULE', FatUtility::VAR_INT, 0);
         $data['CONF_RFQ_MODULE'] = FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0);
         $data['CONF_HIDE_PRICES'] = FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0);
 

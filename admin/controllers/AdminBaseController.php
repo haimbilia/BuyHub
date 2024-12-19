@@ -196,6 +196,7 @@ class AdminBaseController extends FatController
                     'total' => Labels::getLabel('LBL_TOTAL', $this->siteLangId),
                     'enableRfqModule' => Labels::getLabel('LBL_PLEASE_ENABLE_RFQ_MODULE_FIRST.', $this->siteLangId),
                     'disableHidePriceSettings' => Labels::getLabel('LBL_PLEASE_DISABLE_HIDE_PRICE_SETTING_FIRST.', $this->siteLangId),
+                    'confirmDisableRfq' => Labels::getLabel('LBL_ARE_YOU_SURE?_GLOBAL_RFQ_MODULE_WILL_BE_DISABLED', $this->siteLangId),
                 );
                 foreach ($languages as $val) {
                     if (empty($val)) {
