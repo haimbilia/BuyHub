@@ -5,4 +5,5 @@ $data = [
 ];
 if (empty($options)) {
     $status = applicationConstants::OFF;
+    $msg = Labels::getLabel('LBL_SHIPPING_CHARGES_WERE_NOT_DECLARED.');
 }

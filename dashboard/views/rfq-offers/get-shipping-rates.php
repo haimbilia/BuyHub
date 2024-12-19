@@ -16,7 +16,7 @@
                 </li>
         <?php }
         } else {
-            echo Labels::getLabel('LBL_SHIPPING_CHARGED_WERE_NOT_DECLARED.');
+            echo Labels::getLabel('LBL_SHIPPING_CHARGES_WERE_NOT_DECLARED.');
         } ?>
     </ul>
 </div>

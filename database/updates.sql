@@ -862,3 +862,5 @@ WHERE
 INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES 
 ('LBL_ARE_YOU_SURE?_GLOBAL_RFQ_MODULE_WILL_BE_DISABLED', 1, 'Are you sure you want to turn it OFF? Global RFQ feature will be functional only if Main RFQ feature is ON!', 1)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+DELETE FROM tbl_language_labels WHERE `label_key` = 'LBL_SHIPPING_CHARGED_WERE_NOT_DECLARED.';
