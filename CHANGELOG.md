@@ -235,3 +235,4 @@
     - bug-089531 - The page language data is missing for "Request for Quotes" section.
     - bug-089479 - Ui disruption in email template for order status change.
     - bug-087647 - Inconsistency issue on the inventory and product setup form.
+    - Bug-089509 - Proper info does not appear when user clicks on shipping rates.
