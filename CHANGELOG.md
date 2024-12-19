@@ -120,3 +120,5 @@
     - bug-088885 - Categories linked with the collection are not visible on the front end. 
     - bug-089013 - The savings icon is not visible on the Order details page on the buyer's end.
     - Bug-089339 - An invalid request error occurs when the seller clicks the remove icon for any product on the badge request popup.
+    - Bug-089450 - Favourite functionality is not working properly in apps.
+    - Bug-089415 - Notification not proper and also not direct the user anywhere.
