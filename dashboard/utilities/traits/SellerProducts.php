@@ -314,7 +314,7 @@ trait SellerProducts
                 }
             }
         } else {
-            $sellerProductRow['selprod_title' . FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1)] = $productRow['product_name'];
+            $sellerProductRow['selprod_title' . $this->siteLangId] = $productRow['product_name'];
         }
 
         $frmSellerProduct->fill($sellerProductRow);
@@ -565,7 +565,8 @@ trait SellerProducts
         $minOrderQty = FatApp::getPostedData('selprod_min_order_qty', FatUtility::VAR_INT, 1);
         $post['selprod_min_order_qty'] = 0 < $minOrderQty ? $minOrderQty : 1;
 
-        $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
+        // $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
+        $siteDefaultLangId = $this->siteLangId;
 
         $keywordSlug = '';
         $productId = SellerProduct::getAttributesById($selprod_id, 'selprod_product_id', false);

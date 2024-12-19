@@ -1,5 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
-$str = '<table cellspacing="0" cellpadding="0" border="0" width="100%" style="border:1px solid #ddd; border-collapse:collapse; table-layout:fixed;">
+$str = '<table cellspacing="0" cellpadding="0" border="0" width="100%" style="border:1px solid #ddd; border-collapse:collapse;">
     <tr>
     <td width="25%" style="padding:5px;background:#eee;font-size:13px;border:1px solid #ddd; color:#333; font-weight:bold;">' . Labels::getLabel('LBL_Product', $siteLangId) . '</td>
     <td style="padding:5px;background:#eee;font-size:13px; border:1px solid #ddd;color:#333; font-weight:bold;">' . Labels::getLabel('L_Qty', $siteLangId) . '</td>
