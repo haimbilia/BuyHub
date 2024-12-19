@@ -5,7 +5,7 @@ if ($headerNavigation || $isMegaMenuEnabled) {
 
     if (count($headerNavigation)) {
         $noOfCharAllowedInNav = 80;
-        $rightNavCharCount = 5;
+        $rightNavCharCount = 8;
         if (!UserAuthentication::isUserLogged()) {
             $rightNavCharCount = $rightNavCharCount + mb_strlen(html_entity_decode(Labels::getLabel('LBL_Sign_In', $siteLangId), ENT_QUOTES, 'UTF-8'));
         } else {
