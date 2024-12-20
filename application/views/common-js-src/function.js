@@ -692,7 +692,7 @@ function googleAddressAutocomplete(
 ) {
     if (1 > $("#" + elementId).length) {
         /* var msg = (langLbl.fieldNotFound).replace('{field}', elementId + ' Field');
-		fcom.displayErrorMessage(msg); */
+        fcom.displayErrorMessage(msg); */
         return false;
     }
     var fieldElement = document.getElementById(elementId);
@@ -867,7 +867,7 @@ function geocodeSetData(results) {
         var address_components = results[0].address_components;
         var data = {};
         /* data['lat'] = pos.lat();
-		data['lng'] = pos.lng(); */
+        data['lng'] = pos.lng(); */
         data["formatted_address"] = results[0].formatted_address;
         if (0 < address_components.length) {
             var addressComponents = address_components;
@@ -954,10 +954,10 @@ function initMutipleMapMarker(
     dragendCallback
 ) {
     /*  
-	 * centeredLat and centeredLng - map center point
-	 * markers object sample
-	 markers = [{ lat: 11,lng: 11,content:'<div>Bondi Beach</div>' }];
-	 */
+     * centeredLat and centeredLng - map center point
+     * markers object sample
+     markers = [{ lat: 11,lng: 11,content:'<div>Bondi Beach</div>' }];
+     */
 
     if (centeredLat == "" || centeredLng == "") {
         centeredLat = 0;
@@ -1101,7 +1101,7 @@ function createMarkers(markers) {
                 map: map,
                 //title: marker['title'],
                 icon: fcom.makeUrl() + "images/pin.png",
-                refId: index,
+                refId: index
             });
 
             google.maps.event.addListener(
@@ -1112,6 +1112,15 @@ function createMarkers(markers) {
                         infowindow.close();
                         infowindow.setContent(marker["content"]);
                         infowindow.open(map, newMarker);
+
+                        // Add a title after the InfoWindow DOM is ready
+                        google.maps.event.addListener(infowindow, "domready", function () {
+                            // Select the target element inside the InfoWindow
+                            const infoWindowElement = document.querySelector(".gm-style-iw-ch");
+                            if (infoWindowElement && typeof marker['title'] != 'undefined') {
+                                infoWindowElement.innerHTML = marker['title'];
+                            }
+                        });
                     };
                 })(newMarker, index)
             );
@@ -1395,8 +1404,8 @@ function saveMultipleRfq(frm) {
 }
 function addAddress(selprodId = 0) {
     /*  if (1 > selprodId) {
-		 $('#sideQuoteJs').modal('hide');
-	 } */
+         $('#sideQuoteJs').modal('hide');
+     } */
     $.ykmodal.element = "modalAddressJS";
     $.ykmodal(fcom.getLoader(), false);
     fcom.ajax(
