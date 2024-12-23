@@ -865,4 +865,3 @@ INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 
 DELETE FROM tbl_language_labels WHERE `label_key` = 'LBL_SHIPPING_CHARGED_WERE_NOT_DECLARED.';
-DELETE FROM tbl_language_labels WHERE `label_key` = 'MSG_ORDER_#{ORDER-ID}_TXN._HAS_BEEN_{STATUS}';
