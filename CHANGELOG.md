@@ -236,3 +236,4 @@
     - bug-089479 - Ui disruption in email template for order status change.
     - bug-087647 - Inconsistency issue on the inventory and product setup form.
     - Bug-089509 - Proper info does not appear when user clicks on shipping rates.
+    - bug-089600 - Missing guiding/information text with "Product level for RFQ submission" setting under the Admin Dashboard > Settings > System Configuration > Request for quote (RFQ).

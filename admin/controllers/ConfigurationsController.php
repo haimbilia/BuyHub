@@ -549,7 +549,8 @@ class ConfigurationsController extends ListingBaseController
                 HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel('FRM_ENABLING_THIS,_PRODUCT_PRICE_WILL_NOT_DISPLAY', $langId));
 
                 $typeArr = RequestForQuote::getTypeArr($langId);
-                $frm->addSelectBox(Labels::getLabel('FRM_RFQ_MODULE_TYPE', $langId), 'CONF_RFQ_MODULE_TYPE', $typeArr, '', array(), '');
+                $fld = $frm->addSelectBox(Labels::getLabel('FRM_RFQ_MODULE_TYPE', $langId), 'CONF_RFQ_MODULE_TYPE', $typeArr, '', array(), '');
+                $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('FRM_TEXT_FOR_RFQ_MODULE_TYPE_1.', $langId) . '</span>';
 
                 $fld = $frm->addCheckBox(
                     Labels::getLabel("FRM_ENABLE_ADMIN_APPROVAL_ON_NEW_RFQ", $langId),
