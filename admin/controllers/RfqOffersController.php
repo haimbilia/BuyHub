@@ -469,6 +469,13 @@ class RfqOffersController extends ListingBaseController
             $primaryOfferId = $rfq->getMainTableRecordId();
             $rloStatus = RfqOffers::STATUS_OPEN;
         } else {
+            $cntrRfq = new RfqOffers($counterOfferId);
+            if (false == $cntrRfq->add([
+                'offer_status' => RfqOffers::STATUS_COUNTERED
+            ])) {
+                $db->rollbackTransaction();
+                LibHelper::exitWithError($cntrRfq->getError(), true);
+            }
             /* updating RFQ status */
             $updateArray = array('rfq_status' => RequestForQuote::STATUS_OFFERED);
             $whr = array('smt' => 'rfq_id = ?', 'vals' => array($post['offer_rfq_id']));

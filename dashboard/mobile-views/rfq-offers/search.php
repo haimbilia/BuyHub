@@ -8,6 +8,7 @@ foreach ($arrListing as &$value) {
     $value['rlo_shipping_charges'] = CommonHelper::displayMoneyFormat($value['rlo_shipping_charges'], false, false, false);
     $value['rlo_shipping_charges_lbl'] = CommonHelper::displayMoneyFormat($value['rlo_shipping_charges']);
     $value['isBought'] = RfqOffers::isBought($value['rlo_accepted_offer_id']) ? 1 : 0;
+    $value['unreadCount'] = RfqOffers::unreadMessagesForBuyer($value['rfq_user_id'], $value['rlo_primary_offer_id']);
 }
 
 $data = array(
