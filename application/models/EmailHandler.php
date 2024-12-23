@@ -3890,7 +3890,7 @@ class EmailHandler extends FatModel
         }
 
         /* Send Notification To Buyer about Bank Transfer transaction status.  */
-        $msg = Labels::getLabel('MSG_ORDER_#{ORDER-ID}_TXN._HAS_BEEN_{STATUS}', $langId);
+        $msg = Labels::getLabel('MSG_ORDER_#{ORDER_ID}_TXN._HAS_BEEN_{STATUS}', $langId);
         $msg = CommonHelper::replaceStringData($msg, $vars);
         $notificationObj = new Notifications();
         $notificationDataArr = array(
