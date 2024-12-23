@@ -5,7 +5,7 @@ if ($selprod_id > 0 || empty($productOptions)) {
 } else {
     $frmSellerProduct->setFormTagAttribute('onsubmit', 'setUpMultipleSellerProducts(this); return(false);');
 }
-$siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
+
 $frmSellerProduct->setFormTagAttribute('class', 'form form--horizontal inventoryForm-js layout--' . Language::getLayoutDirection($siteLangId));
 $frmSellerProduct->setFormTagAttribute('dir', Language::getLayoutDirection($siteLangId));
 
@@ -74,9 +74,9 @@ if (null !== $fld) {
             <div class="row">
                 <div class="col-md-<?php echo ($urlFld) ? 6 : 12; ?>">
                     <div class="field-set">
-                        <div class="caption-wraper"><label class="field_label"><?php echo $frmSellerProduct->getField('selprod_title' . $siteDefaultLangId)->getCaption(); ?><span class="spn_must_field">*</span></label></div>
+                        <div class="caption-wraper"><label class="field_label"><?php echo $frmSellerProduct->getField('selprod_title' . $siteLangId)->getCaption(); ?><span class="spn_must_field">*</span></label></div>
                         <div class="field-wraper">
-                            <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_title' . $siteDefaultLangId); ?>
+                            <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_title' . $siteLangId); ?>
                             </div>
                         </div>
                     </div>
@@ -397,10 +397,10 @@ if (null !== $fld) {
                 <div class="col-md-12">
                     <div class="field-set">
                         <div class="caption-wraper"><label class="field_label">
-                                <?php echo $frmSellerProduct->getField('selprod_comments' . $siteDefaultLangId)->getCaption(); ?></label>
+                                <?php echo $frmSellerProduct->getField('selprod_comments' . $siteLangId)->getCaption(); ?></label>
                         </div>
                         <div class="field-wraper">
-                            <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_comments' . $siteDefaultLangId); ?>
+                            <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_comments' . $siteLangId); ?>
                             </div>
                         </div>
                     </div>
@@ -408,7 +408,7 @@ if (null !== $fld) {
             </div>
             <?php
             $languages = Language::getAllNames();
-            unset($languages[$siteDefaultLangId]);
+            unset($languages[$siteLangId]);
             $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
             if (!empty($translatorSubscriptionKey) && count($languages) > 0) { ?>
                 <div class="row">
@@ -430,7 +430,7 @@ if (null !== $fld) {
                         <?php foreach ($languages as $langId => $langName) {
                             $layout = Language::getLayoutDirection($langId); ?>
                             <div class="accordion mt-4" id="specification-accordion">
-                                <h6 class="dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#collapseOne<?php echo $langId; ?>" aria-expanded="true" aria-controls="collapseOne<?php echo $langId; ?>" onclick="translateData(this, '<?php echo $siteDefaultLangId; ?>', '<?php echo $langId; ?>')">
+                                <h6 class="dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#collapseOne<?php echo $langId; ?>" aria-expanded="true" aria-controls="collapseOne<?php echo $langId; ?>" onclick="translateData(this, '<?php echo $siteLangId; ?>', '<?php echo $langId; ?>')">
                                     <?php echo Labels::getLabel('LBL_Inventory_Data_for', $siteLangId) ?>
                                     <?php echo $langName; ?>
                                 </h6>

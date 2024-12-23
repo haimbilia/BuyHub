@@ -2224,7 +2224,7 @@ class AccountController extends LoggedUserController
         $srch->addMultipleFields(['selprod_id']);
         $srch->addCondition('selprod_id', '=', 'mysql_func_' . $selprodId, 'AND', true);
         $srch->joinProductToCategory();
-        $srch->joinShops();
+        // $srch->joinShops();
         $srch->joinSellerSubscription();
         $srch->addSubscriptionValidCondition();
         $srch->addCondition('selprod_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
