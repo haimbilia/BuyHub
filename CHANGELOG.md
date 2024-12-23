@@ -237,3 +237,6 @@
     - bug-087647 - Inconsistency issue on the inventory and product setup form.
     - Bug-089509 - Proper info does not appear when user clicks on shipping rates.
     - bug-089600 - Missing guiding/information text with "Product level for RFQ submission" setting under the Admin Dashboard > Settings > System Configuration > Request for quote (RFQ).
+    - Bug-089339 - An invalid request error occurs when the seller clicks the remove icon for any product on the badge request popup.
+    - Bug-089450 - Favourite functionality is not working properly in apps.
+    - Bug-089415 - Notification not proper and also not direct the user anywhere.
