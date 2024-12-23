@@ -19,7 +19,12 @@
     </div>
     <div class="interactive-stores-list">
         <?php
-        $this->includeTemplate('products/products-list.php', $productsData, false); ?>
+        if ($viewType == 'popup') {
+            //$this->includeTemplate('products/products-map-list-left.php', $productsData, false);
+        } else {
+            $this->includeTemplate('products/products-list.php', $productsData, false);
+        }
+        ?>
     </div>
 </div>
 <?php
@@ -94,7 +99,7 @@ foreach ($productsByShop as &$marker) {
 <script>
     var markers = <?php echo json_encode($productsByShop); ?>;
     var realtedMarkers = <?php echo json_encode($productsBySelProdCode); ?>;
-    $(function () {
+    $(function() {
         if (typeof map == 'undefined') {
             initMutipleMapMarker(markers, 'productMapJs', getCookie('_ykGeoLat'), getCookie('_ykGeoLng'),
                 dragCallback);
@@ -112,7 +117,7 @@ foreach ($productsByShop as &$marker) {
         let relMarkers = realtedMarkers[selprodCode];
 
         if (relMarkers.length) {
-            $.each(relMarkers, function (index, marker) {
+            $.each(relMarkers, function(index, marker) {
                 relMarkers[index]['isDefault'] = (marker.selprod_id == selprod_id ? 1 : 0);
             });
         }

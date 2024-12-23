@@ -243,15 +243,19 @@ $(document).on('mouseover mouseout', '.productsListItemsJs', function (e) {
 
 
 toogleMapView = function () {
-    let vtype = 'map';
-    $(document.body).prepend(fcom.getPageLoader());
-    fcom.displayProcessing();
-    if ($("form[name=frmProductSearch] input[name=vtype]").val() != vtype) {
-        $("form[name=frmProductSearch] input[name=vtype]").val(vtype);
-    } else {
-        $("form[name=frmProductSearch] input[name=vtype]").val('');
-    }
-    window.location.href = getSearchQueryUrl(true);
+     let vtype = 'map';
+     $(document.body).prepend(fcom.getPageLoader());
+     fcom.displayProcessing();
+     if ($("form[name=frmProductSearch] input[name=vtype]").val() != vtype) {
+         $("form[name=frmProductSearch] input[name=vtype]").val(vtype);
+     } else {
+         $("form[name=frmProductSearch] input[name=vtype]").val('');
+     }
+    // window.location.href = getSearchQueryUrl(true);
+    var data = 'viewType=popup';
+    fcom.ajax(getSearchQueryUrl(true), data, function (ans) {
+        $.facebox(ans, 'modal-xl');
+    });
 }
 
 /* function updateQueryStringParameter(uri, key, value) {
