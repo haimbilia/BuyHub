@@ -44,6 +44,8 @@ class SubscriptionCartController extends DashboardBaseController
 
     public function add()
     {
+        $user_id = UserAuthentication::getLoggedUserId(true);
+        $user_id = User::getUserParentId($user_id);
         $post = FatApp::getPostedData();
         if (false == $post) {
             Message::addErrorMessage(Labels::getLabel('LBL_INVALID_REQUEST', $this->siteLangId));
@@ -75,12 +77,12 @@ class SubscriptionCartController extends DashboardBaseController
         }
         $spplan_id = FatUtility::int($sellerPlanRow['spplan_id']);
         /* Subscription Downgrade And Upgrade Check check[ */
-        if (!UserPrivilege::canSellerUpgradeOrDowngradePlan(UserAuthentication::getLoggedUserId(), $spplan_id, $this->siteLangId)) {
+        if (!UserPrivilege::canSellerUpgradeOrDowngradePlan($user_id, $spplan_id, $this->siteLangId)) {
             FatUtility::dieWithError(Message::getHtml());
         }
         /* ] */
 
-        $subsObj = new SubscriptionCart();
+        $subsObj = new SubscriptionCart($user_id);
 
         $subsObj->add($spplan_id);
         $subsObj->adjustPreviousPlan($this->siteLangId);

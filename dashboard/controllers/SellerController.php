@@ -4106,7 +4106,7 @@ class SellerController extends SellerBaseController
         $obj = new Extrapage();
         $pageData = $obj->getContentByPageType(Extrapage::SUBSCRIPTION_PAGE_BLOCK, $this->siteLangId);
         $this->set('pageData', $pageData);
-
+        $this->set('canEdit', $this->userPrivilege->canEditSubscription(UserAuthentication::getLoggedUserId(), true));
         $this->set('includeFreeSubscription', $includeFreeSubscription);
         $this->set('currentPlanData', $currentPlanData);
         $this->set('currentActivePlanId', $currentActivePlanId);

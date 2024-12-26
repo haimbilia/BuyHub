@@ -241,3 +241,5 @@
     - Bug-089339 - An invalid request error occurs when the seller clicks the remove icon for any product on the badge request popup.
     - Bug-089450 - Favourite functionality is not working properly in apps.
     - Bug-089415 - Notification not proper and also not direct the user anywhere.
+    - Bug-089671 - Issue while disabling RFQ,Global RFQ from admin.
+    - Bug-089589 - Sub user is also able to rebew the subscription plan.

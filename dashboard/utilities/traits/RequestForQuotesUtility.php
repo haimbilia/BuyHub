@@ -25,7 +25,7 @@ trait RequestForQuotesUtility
         $funcName = $this->get('funcName') ?? __FUNCTION__;
         $placementType = (__FUNCTION__ == $funcName ? RequestForQuote::VISIBILITY_TYPE_CLOSED : RequestForQuote::VISIBILITY_TYPE_OPEN);
         $frm = $this->getSearchForm();
-        if ($this->isSeller) {
+        if ($this->isSeller || (1 > FatApp::getConfig('CONF_GLOBAL_RFQ_MODULE', FatUtility::VAR_INT, 0))) {
             $frm->fill(['rfq_visibility_type' => $placementType]);
         }
         $this->set('frmSearch', $frm);
@@ -46,7 +46,7 @@ trait RequestForQuotesUtility
         $frm = new Form('frmRecordSearch');
         $frm->addHiddenField('', 'page');
         $frm->addHiddenField('', 'pageSize');
-        if ($this->isSeller) {
+        if ($this->isSeller || (1 > FatApp::getConfig('CONF_GLOBAL_RFQ_MODULE', FatUtility::VAR_INT, 0))) {
             $frm->addHiddenField('', 'rfq_visibility_type');
         } else {
             $frm->addSelectBox(Labels::getLabel('FRM_RFQ_VISIBILITY_TYPE', $this->siteLangId), 'rfq_visibility_type', RequestForQuote::getVisibilityTypeArr($this->siteLangId));

@@ -27,7 +27,6 @@ class UserPrivilege
     public const SECTION_UPLOAD_BULK_IMAGES = 25;
     public const SECTION_PROMOTIONS = 26;
     public const SECTION_PROMOTION_CHARGES = 27;
-    public const SECTION_SUBSCRIPTION = 28;
     public const SECTION_SHIPPING_PROFILE = 28;
     public const SECTION_SHIPPING_PACKAGES = 29;
     public const SECTION_SELLER_REQUESTS = 30;
@@ -40,6 +39,7 @@ class UserPrivilege
     public const SECTION_MARKETPLACE_CHANNEL = 37;
     public const SECTION_REQUEST_FOR_QUOTE = 38;
     public const SECTION_RFQ_OFFERS = 39;
+    public const SECTION_SUBSCRIPTION = 40;
 
     public const MODULE_SHOP = 1;
     public const MODULE_ORDERS = 2;
@@ -133,7 +133,7 @@ class UserPrivilege
             static::SECTION_INVENTORY_REPORT => Labels::getLabel('LBL_Inventory_Report', $langId),
             static::SECTION_UPLOAD_BULK_IMAGES => Labels::getLabel('LBL_Upload_Bulk_Images', $langId),
             static::SECTION_PROMOTIONS => Labels::getLabel('LBL_Promotions', $langId),
-            // static::SECTION_SUBSCRIPTION => Labels::getLabel('LBL_Subscription', $langId),
+            static::SECTION_SUBSCRIPTION => Labels::getLabel('LBL_Subscription', $langId),
             static::SECTION_SHIPPING_PROFILE => Labels::getLabel('LBL_Shipping_Profiles', $langId),
             static::SECTION_SHIPPING_PACKAGES => Labels::getLabel('LBL_Shipping_Packages', $langId),
             static::SECTION_ADVERTISEMENT_FEED => Labels::getLabel('LBL_Advertisement_Feed', $langId),
@@ -203,7 +203,7 @@ class UserPrivilege
             static::MODULE_ACCOUNT =>
             array(
                 static::SECTION_MESSAGES => Labels::getLabel('LBL_Messages', $langId),
-                // static::SECTION_SUBSCRIPTION => Labels::getLabel('LBL_Seller_Subscription', $langId),
+                static::SECTION_SUBSCRIPTION => Labels::getLabel('LBL_Seller_Subscription', $langId),
             ),
             static::MODULE_IMPORT_EXPORT =>
             array(
@@ -814,8 +814,7 @@ class UserPrivilege
 
     public function canViewSubscription($sellerId = 0, $returnResult = false)
     {
-        return true;
-        // return $this->checkPermission($sellerId, static::SECTION_SUBSCRIPTION, static::PRIVILEGE_READ, $returnResult);
+        return $this->checkPermission($sellerId, static::SECTION_SUBSCRIPTION, static::PRIVILEGE_READ, $returnResult);
     }
     public function canViewGiftCardOrders($sellerId = 0, $returnResult = false)
     {
@@ -824,8 +823,7 @@ class UserPrivilege
     }
     public function canEditSubscription($sellerId = 0, $returnResult = false)
     {
-        return true;
-        // return $this->checkPermission($sellerId, static::SECTION_SUBSCRIPTION, static::PRIVILEGE_WRITE, $returnResult);
+        return $this->checkPermission($sellerId, static::SECTION_SUBSCRIPTION, static::PRIVILEGE_WRITE, $returnResult);
     }
 
     public function canViewCredits($sellerId = 0, $returnResult = false)

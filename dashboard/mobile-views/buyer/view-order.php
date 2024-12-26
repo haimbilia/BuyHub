@@ -5,6 +5,11 @@ $orderDetail['billingAddress'] = !empty($orderDetail['billingAddress']) ? $order
 $orderDetail['shippingAddress'] = !empty($orderDetail['shippingAddress']) ? $orderDetail['shippingAddress'] : (object)array();
 $orderDetail['order_net_amount'] = !empty($orderDetail['order_net_amount']) ? $orderDetail['order_net_amount'] : 0;
 $orderDetail['pickupAddress'] =  isset($orderDetail['pickupAddress']) && !empty($orderDetail['pickupAddress']) ? $orderDetail['pickupAddress'] : (object)array();
+$transferBank = (isset($orderDetail['plugin_code']) && 'TransferBank' == $orderDetail['plugin_code']);
+if (true == $transferBank) {
+    $pluginSettingsObj = new PluginSetting(0, 'TransferBank');
+    $orderDetail['TransferBank'] = $pluginSettingsObj->get($siteLangId);
+}
 
 if (!empty($orderDetail['charges'])) {
     $charges = array();

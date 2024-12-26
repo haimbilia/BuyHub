@@ -39,6 +39,7 @@ class WalletPayController extends MyAppController
         }
 
         $user_id = UserAuthentication::getLoggedUserId();
+        $user_id = User::getUserParentId($user_id);
 
         $orderObj = new Orders();
         $srch = Orders::getSearchObject();

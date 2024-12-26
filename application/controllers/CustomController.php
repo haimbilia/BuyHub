@@ -500,11 +500,13 @@ class CustomController extends MyAppController
 
         $showOrderDetails = UserAuthentication::isGuestUserLogged()  || UserAuthentication::isUserLogged();
 
+        $user_id = UserAuthentication::getLoggedUserId(true);
+        $user_id = User::getUserParentId($user_id);
         $orderId = $orderInfo['order_id'];
 
         $user = [];
         if ($orderInfo['order_user_id'] > 0) {
-            if (0 < UserAuthentication::getLoggedUserId(true) && $orderInfo['order_user_id'] != UserAuthentication::getLoggedUserId(true)) {
+            if (0 < UserAuthentication::getLoggedUserId(true) && $orderInfo['order_user_id'] != $user_id) {
                 $message = Labels::getLabel("ERR_INVALID_ORDER", $this->siteLangId);
                 if (true === MOBILE_APP_API_CALL) {
                     LibHelper::dieJsonError($message);

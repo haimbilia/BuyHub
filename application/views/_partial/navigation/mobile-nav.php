@@ -1,4 +1,8 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
+<div class="offcanvas-header">
+    <h5 class="offcanvas-title"><?php echo Labels::getLabel('LBL_SHOP_BY_CATEGORY', $siteLangId);?></h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="close"></button>
+</div>
 <ul class="grouping grouping-level grouping-level-1 sidebarNavLinksJs" id="sidebarNavLinks">
     <?php if (isset($headerNavigation) && count($headerNavigation)) {
         foreach ($headerNavigation as $nav) {
