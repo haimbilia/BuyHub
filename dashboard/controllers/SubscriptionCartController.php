@@ -44,8 +44,7 @@ class SubscriptionCartController extends DashboardBaseController
 
     public function add()
     {
-        $user_id = UserAuthentication::getLoggedUserId(true);
-        $user_id = User::getUserParentId($user_id);
+        $user_id = User::getUserParentId(UserAuthentication::getLoggedUserId(true));
         $post = FatApp::getPostedData();
         if (false == $post) {
             Message::addErrorMessage(Labels::getLabel('LBL_INVALID_REQUEST', $this->siteLangId));

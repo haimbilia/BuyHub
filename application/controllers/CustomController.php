@@ -500,8 +500,7 @@ class CustomController extends MyAppController
 
         $showOrderDetails = UserAuthentication::isGuestUserLogged()  || UserAuthentication::isUserLogged();
 
-        $user_id = UserAuthentication::getLoggedUserId(true);
-        $user_id = User::getUserParentId($user_id);
+        $user_id = User::getUserParentId(UserAuthentication::getLoggedUserId(true));
         $orderId = $orderInfo['order_id'];
 
         $user = [];
