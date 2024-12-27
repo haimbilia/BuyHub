@@ -2199,7 +2199,9 @@ class AccountController extends LoggedUserController
         $totalProductsToShow = 4;
         if ($shops) {
             foreach ($shops as &$shop) {
+                $uploadedTime = AttachedFile::setTimeParam($shop['shop_updated_on']);
                 $shop['shopRating'] = SelProdRating::getSellerRating($shop['shop_user_id'], true);
+                $shop['shop_logo'] = UrlHelper::generateFullUrl('image', 'shopLogo', [$shop['shop_id'], $this->siteLangId, ImageDimension::VIEW_SMALL], CONF_WEBROOT_FRONTEND) . $uploadedTime;
             }
         }
         $this->set('page', $page);
