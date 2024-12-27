@@ -26,7 +26,7 @@ class SubscriptionCart extends FatModel
             if ($user_id > 0) {
                 $this->scart_user_id = $user_id;
             } else {
-                $this->scart_user_id = UserAuthentication::getLoggedUserId();
+                $this->scart_user_id = User::getUserParentId(UserAuthentication::getLoggedUserId(true));
             }
         }
 
@@ -70,8 +70,9 @@ class SubscriptionCart extends FatModel
 
     public static function getSubscriptionCartData()
     {
+        $user_id = User::getUserParentId(UserAuthentication::getLoggedUserId(true));
         $srch = new SearchBase('tbl_user_cart');
-        $srch->addCondition('usercart_user_id', '=', UserAuthentication::getLoggedUserId());
+        $srch->addCondition('usercart_user_id', '=', $user_id);
         $srch->addCondition('usercart_type', '=', 'mysql_func_' . Cart::TYPE_SUBSCRIPTION, 'AND', true);
         $srch->doNotCalculateRecords();
         $rs = $srch->getResultSet();
@@ -102,11 +103,11 @@ class SubscriptionCart extends FatModel
     public function adjustPreviousPlan($langId)
     {
         $adjustedAmount = 0;
-        $userId = UserAuthentication::getLoggedUserId();
+        $userId = User::getUserParentId(UserAuthentication::getLoggedUserId(true));
         if (FatApp::getConfig('CONF_ENABLE_ADJUST_AMOUNT_CHANGE_PLAN')) {
             $currentActivePlanDetails = OrderSubscription::getUserCurrentActivePlanDetails(
                 $langId,
-                UserAuthentication::getLoggedUserId(),
+                $userId,
                 array(
                     OrderSubscription::DB_TBL_PREFIX . 'plan_id',
                     OrderSubscription::DB_TBL_PREFIX . 'till_date',

@@ -243,3 +243,4 @@
     - Bug-089415 - Notification not proper and also not direct the user anywhere.
     - Bug-089671 - Issue while disabling RFQ,Global RFQ from admin.
     - Bug-089589 - Sub user is also able to rebew the subscription plan.
+    - Bug-089773 - Sub user is not abel to purchase the Subscription plan.

@@ -38,8 +38,7 @@ class WalletPayController extends MyAppController
             CommonHelper::redirectUserReferer();
         }
 
-        $user_id = UserAuthentication::getLoggedUserId();
-        $user_id = User::getUserParentId($user_id);
+        $user_id = User::getUserParentId(UserAuthentication::getLoggedUserId(true));
 
         $orderObj = new Orders();
         $srch = Orders::getSearchObject();
