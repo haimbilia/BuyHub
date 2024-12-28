@@ -1,5 +1,6 @@
 .geo-location {
   display: none;
+
   @include media-breakpoint-up(lg) {
     display: block;
     position: relative;
@@ -71,7 +72,6 @@
   &_input {
     background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iY3VycmVudENvbG9yIj48cGF0aCBkPSJNMTIgMjAuODk5NUwxNi45NDk3IDE1Ljk0OTdDMTkuNjgzNCAxMy4yMTYxIDE5LjY4MzQgOC43ODM5MiAxNi45NDk3IDYuMDUwMjVDMTQuMjE2MSAzLjMxNjU4IDkuNzgzOTIgMy4zMTY1OCA3LjA1MDI1IDYuMDUwMjVDNC4zMTY1OCA4Ljc4MzkyIDQuMzE2NTggMTMuMjE2MSA3LjA1MDI1IDE1Ljk0OTdMMTIgMjAuODk5NVpNMTIgMjMuNzI3OUw1LjYzNjA0IDE3LjM2NEMyLjEyMTMyIDEzLjg0OTIgMi4xMjEzMiA4LjE1MDc2IDUuNjM2MDQgNC42MzYwNEM5LjE1MDc2IDEuMTIxMzIgMTQuODQ5MiAxLjEyMTMyIDE4LjM2NCA0LjYzNjA0QzIxLjg3ODcgOC4xNTA3NiAyMS44Nzg3IDEzLjg0OTIgMTguMzY0IDE3LjM2NEwxMiAyMy43Mjc5Wk0xMiAxM0MxMy4xMDQ2IDEzIDE0IDEyLjEwNDYgMTQgMTFDMTQgOS44OTU0MyAxMy4xMDQ2IDkgMTIgOUMxMC44OTU0IDkgMTAgOS44OTU0MyAxMCAxMUMxMCAxMi4xMDQ2IDEwLjg5NTQgMTMgMTIgMTNaTTEyIDE1QzkuNzkwODYgMTUgOCAxMy4yMDkxIDggMTFDOCA4Ljc5MDg2IDkuNzkwODYgNyAxMiA3QzE0LjIwOTEgNyAxNiA4Ljc5MDg2IDE2IDExQzE2IDEzLjIwOTEgMTQuMjA5MSAxNSAxMiAxNVoiPjwvcGF0aD48L3N2Zz4=);
     border: $input-border-style $input-border-width $input-border-color;
-
     // background-color: transparent;
     background-repeat: no-repeat;
     background-position: 13px center;
@@ -89,9 +89,11 @@
     margin-bottom: 0;
     background-size: 16px;
     padding-#{$start-direction}: 40px;
+
     [dir="rtl"] & {
       background-position: calc(100% - 13px) center;
     }
+
     &:hover,
     &:focus {
       border-color: #000;
@@ -105,6 +107,7 @@
     margin: 1.5rem;
   }
 }
+
 .geo-location-mobile {
   .button-geo-location {
     margin-bottom: 1.5rem;

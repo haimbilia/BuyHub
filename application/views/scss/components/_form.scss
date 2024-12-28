@@ -73,6 +73,17 @@ $form-bg-inverse: #fff;
         }
     }
 
+    .main[dir="rtl"] & {
+        padding-#{$start-direction}: 30px;
+        padding-#{$end-direction}: 1rem;
+    }
+
+    .main[dir="ltr"] & {
+        background-position: calc(100% - 12px) center;
+        padding-#{$start-direction}: 30px;
+        padding-#{$end-direction}: 1rem;
+    }
+
     [dir="rtl"] & {
         //padding-#{$start-direction}: 35px;
         background-position: calc(0% - -12px) center;

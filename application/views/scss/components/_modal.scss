@@ -131,7 +131,7 @@ button.close {
 }
 
 .btn-close {
-  background-color: $bg-gray;
+  background-color: darken($bg-gray, 10);
   background-size: 12px;
   border-radius: 50%;
 
