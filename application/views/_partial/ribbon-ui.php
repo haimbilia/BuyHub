@@ -16,18 +16,18 @@ if (is_array($ribbRow) && !empty($ribbRow)) {
 
     switch ($type) {
         case Badge::SHAPE_RECTANGLE:
-            $ribbon = '<div class="badges-wrap"><div class="badge badges-' . $type . ' ' . $class . '" style="background:' . $color . '; color:' . $textColor . '" title="' . $title . '">' . $text . '</div></div>';
+            $ribbon = '<div class="badge badges-' . $type . ' ' . $class . '" style="background:' . $color . '; color:' . $textColor . '" title="' . $title . '">' . $text . '</div>';
             break;
         case Badge::SHAPE_STRIP:
         case Badge::SHAPE_STAR:
         case Badge::SHAPE_TRIANGLE:
         case Badge::SHAPE_CIRCLE:
-            $ribbon = '<div class="badges-wrap"><div class="badge badges-' . $type . ' ' . $class . '" title="' . $title . '">
+            $ribbon = '<div class="badge badges-' . $type . ' ' . $class . '" title="' . $title . '">
                         <svg class="svg" style="fill:' . $color . '">
                             <use xlink:href="' . CONF_WEBROOT_FRONT_URL . 'images/retina/badges/sprite.svg#badges-' . $type . '"></use>
                         </svg>
                         <span class="text" style="color:' . $textColor . '">' . $text . '</span>
-                    </div></div>';
+                    </div>';
             break;
     }
 }

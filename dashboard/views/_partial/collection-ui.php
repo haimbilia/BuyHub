@@ -20,13 +20,15 @@ if (!isset($isOutOfMinOrderQty)) {
 }
 
 if ($showAddToFavorite) {
-    /* Get Ribbon */
-    if ((!isset($includeRibbon) || true === $includeRibbon) && !empty($selProdRibbons)) {
-        foreach ($selProdRibbons as $ribbRow) {
-            $this->includeTemplate('_partial/ribbon-ui.php', ['ribbRow' => $ribbRow], false);
-        }
-    }
-?>
+    /* Get Ribbon */?>
+    <div class="badges-wrap">
+        <?php $this->includeTemplate('_partial/product-type-ribbon.php', ['productType' => $product['product_type'], 'siteLangId' => $siteLangId], false);
+        if ((!isset($includeRibbon) || true === $includeRibbon) && !empty($selProdRibbons)) {
+            foreach ($selProdRibbons as $ribbRow) {
+                $this->includeTemplate('_partial/ribbon-ui.php', ['ribbRow' => $ribbRow], false);
+            }
+        } ?>
+    </div>
     <?php if (true ==  $showActionBtns) { ?>
         <ul class="actions actions-wishlist">
             <?php if ($product['in_stock'] &&  time() >= strtotime($product['selprod_available_from']) && 0 == $isOutOfMinOrderQty) { ?>

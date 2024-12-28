@@ -15,13 +15,16 @@ if (!isset($showAddToFavorite)) {
 $canEditOrder = $canEditOrder ?? true;
 
 if ($showAddToFavorite) {
-    /* Get Ribbon */
-    if ((!isset($includeRibbon) || true === $includeRibbon) && !empty($selProdRibbons)) {
-        foreach ($selProdRibbons as $ribbRow) {
-            $this->includeTemplate('_partial/ribbon-ui.php', ['ribbRow' => $ribbRow], false);
+    /* Get Ribbon */?>
+    <div class="badges-wrap">
+        <?php $this->includeTemplate('_partial/product-type-ribbon.php', ['productType' => $product['product_type'], 'siteLangId' => $siteLangId], false);
+        if ((!isset($includeRibbon) || true === $includeRibbon) && !empty($selProdRibbons)) {
+            foreach ($selProdRibbons as $ribbRow) {
+                $this->includeTemplate('_partial/ribbon-ui.php', ['ribbRow' => $ribbRow], false);
+            }
         }
-    }
-    ?>
+        ?>
+    </div>
 
 <div class="favourite-wrapper">
     <?php if (true == $showActionBtns) { ?>

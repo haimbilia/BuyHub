@@ -38,12 +38,14 @@ if ($recommendedProducts) { ?>
                         <div class="js-carousel-item">
                             <div class="products">
                                 <div class="products-body">
-                                    <?php
-                                    if (!empty($selProdRibbons)) {
-                                        foreach ($selProdRibbons as $ribbRow) {
-                                            $this->includeTemplate('_partial/ribbon-ui.php', ['ribbRow' => $ribbRow], false);
-                                        }
-                                    } ?>
+                                    <div class="badges-wrap">
+                                        <?php $this->includeTemplate('_partial/product-type-ribbon.php', ['productType' => $rProduct['product_type'], 'siteLangId' => $siteLangId], false);
+                                        if (!empty($selProdRibbons)) {
+                                            foreach ($selProdRibbons as $ribbRow) {
+                                                $this->includeTemplate('_partial/ribbon-ui.php', ['ribbRow' => $ribbRow], false);
+                                            }
+                                        } ?>
+                                    </div>
                                     <?php $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']); ?>
                                     <div class="products-img">
                                         <a title="<?php echo CommonHelper::renderHtml($rProduct['selprod_title'], true); ?>"
