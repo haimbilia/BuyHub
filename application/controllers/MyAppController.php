@@ -568,6 +568,7 @@ class MyAppController extends FatController
         $frm->addSubmitButton('', 'btnProductSrchSubmit', '');
         $frm->addHiddenField('', 'pageRecordCount');
         $frm->addHiddenField('', 'vtype');
+        $frm->addHiddenField('', 'viewType');
         return $frm;
     }
 

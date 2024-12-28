@@ -111,9 +111,18 @@ $(function () {
     $(document).on('change', 'select[name=pageSizeSelect]', function () {
         var selectedVal = $(this).val();
         $('#pageSize').val(selectedVal);
+        $("form[name=frmProductSearch] input[name=viewType]").val('');
         removePageSideFromLink();
         removePaginationFromLink();
-        reloadProductListing();
+        reloadProductListing(document.frmProductSearch);
+    });
+    $(document).on('change', 'select[name=pageSizeSelectMap]', function () {
+        var selectedVal = $(this).val();
+        $('#pageSize').val(selectedVal);
+        $("form[name=frmProductSearch] input[name=viewType]").val('popupProduct');
+        removePageSideFromLink();
+        removePaginationFromLink();
+        reloadProductListingMap(document.frmProductSearch);
     });
 
     $(document).on('change', 'select[name=sortBy]', function () {
@@ -244,7 +253,6 @@ $(document).on('mouseover mouseout', '.productsListItemsJs', function (e) {
 
 toogleMapView = function () {
      let vtype = 'map';
-     $(document.body).prepend(fcom.getPageLoader());
      fcom.displayProcessing();
      if ($("form[name=frmProductSearch] input[name=vtype]").val() != vtype) {
          $("form[name=frmProductSearch] input[name=vtype]").val(vtype);
@@ -255,7 +263,9 @@ toogleMapView = function () {
     var data = 'viewType=popup';
     fcom.ajax(getSearchQueryUrl(true), data, function (ans) {
         $.facebox(ans, 'modal-xl');
+        fcom.displaySuccessMessage();
     });
+    $("form[name=frmProductSearch] input[name=vtype]").val('');
 }
 
 /* function updateQueryStringParameter(uri, key, value) {
@@ -497,7 +507,7 @@ function getSearchQueryUrl(includeBaseUrl) {
     }
 
     var vtype = $("form[name=frmProductSearch] input[name=vtype]").val();
-    url = url + setQueryParamSeperator(url) + 'vtype' + valueSeperator + vtype;
+    // url = url + setQueryParamSeperator(url) + 'vtype' + valueSeperator + vtype;
 
     var pageRecordCount = $("form[name=frmProductSearch] input[name=pageRecordCount]").val();
     url = url + setQueryParamSeperator(url) + 'pagerecordcount' + valueSeperator + pageRecordCount;
@@ -616,6 +626,37 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
         fcom.ajax(currUrl, data, function (res) {
             fcom.removeLoader();
             $('#productsList').replaceWith(res);
+            var frm = document.frmProductSearchPaging;
+            var recordCount = parseInt($(frm.recordDisplayCount).val());
+            $("form[name=frmProductSearch] input[name=pageRecordCount]").val($(document.frmProductSearchPaging.pageRecordCount).val());
+            $('#total_records').html(recordCount);
+            if (1 > recordCount) {
+                $('.saveSearch-js').hide();
+            } else {
+                $('.saveSearch-js').show();
+            }
+        });
+        window.history.pushState('', '', currUrl);
+        /* window.location.href = getSearchQueryUrl(true); */
+    };
+
+    reloadProductListingMap = function (frm, page) {
+        if (typeof page == 'undefined') {
+            page = 0;
+        }
+
+        $('#productsListMap').html(fcom.getLoader());
+        if (0 < page) {
+            addPaginationInlink(page);
+        } else {
+            getSetSelectedOptionsUrl(frm);
+        }
+        var data = fcom.frmData(frm);
+        var currUrl = getSearchQueryUrl(true);
+
+        fcom.ajax(currUrl, data, function (res) {
+            fcom.removeLoader();
+            $('#productsListMap').replaceWith(res);
             var frm = document.frmProductSearchPaging;
             var recordCount = parseInt($(frm.recordDisplayCount).val());
             $("form[name=frmProductSearch] input[name=pageRecordCount]").val($(document.frmProductSearchPaging.pageRecordCount).val());
@@ -787,6 +828,8 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
         if (typeof page == undefined || page == null) {
             page = 1;
         }
+        $("form[name=frmProductSearch] input[name=viewType]").val('');
+        $('#pageSize').val($('#pageSizeSelect').val());
         reloadProductListing(document.frmProductSearch, page);
         $('html, body').animate({ scrollTop: $("#productsList").offset().top }, 'slow');
 
@@ -799,6 +842,31 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
         var url = getSearchQueryUrl(true);
         window.location.href = url + setQueryParamSeperator(url) + 'page-' + page;
         /* $('html, body').animate({ scrollTop: 0 }, 'slow'); */
+    };
+
+    saveProductSearch = function () {
+        if (isUserLogged() == 0) {
+            loginPopUpBox();
+            return false;
+        }
+        $.facebox(function () {
+            fcom.ajax(fcom.makeUrl('SavedProductsSearch', 'form', [], siteConstants.webroot_dashboard), '', function (ans) {
+                $.facebox(ans);
+                if (ans.status) {
+                    $.facebox.close();
+                }
+            });
+        });
+        return false;
+    };
+
+    goToProductListingSearchPageMap = function (page) {
+        if (typeof page == undefined || page == null) {
+            page = 1;
+        }
+        $("form[name=frmProductSearch] input[name=viewType]").val('popupProduct');
+        reloadProductListingMap(document.frmProductSearch, page);
+        $('html, body').animate({ scrollTop: $("#productsListMap").offset().top }, 'slow');
     };
 
     saveProductSearch = function () {
