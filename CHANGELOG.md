@@ -244,3 +244,4 @@
     - Bug-089671 - Issue while disabling RFQ,Global RFQ from admin.
     - Bug-089589 - Sub user is also able to rebew the subscription plan.
     - Bug-089773 - Sub user is not abel to purchase the Subscription plan.
+    - Bug-087557 - There should be a tag for product type in case of service and Digital.
