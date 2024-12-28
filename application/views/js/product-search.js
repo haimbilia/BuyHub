@@ -123,20 +123,18 @@ $(function () {
 
     $(document).on("change", "select[name=pageSizeSelect]", function () {
         var selectedVal = $(this).val();
-<<<<<<< HEAD
         $("#pageSize").val(selectedVal);
-=======
-        $('#pageSize').val(selectedVal);
-        $("form[name=frmProductSearch] input[name=viewType]").val('');
->>>>>>> 681832c5426387e9494eb077f8a42d38ad0f9265
+        $("form[name=frmProductSearch] input[name=viewType]").val("");
         removePageSideFromLink();
         removePaginationFromLink();
         reloadProductListing(document.frmProductSearch);
     });
-    $(document).on('change', 'select[name=pageSizeSelectMap]', function () {
+    $(document).on("change", "select[name=pageSizeSelectMap]", function () {
         var selectedVal = $(this).val();
-        $('#pageSize').val(selectedVal);
-        $("form[name=frmProductSearch] input[name=viewType]").val('popupProduct');
+        $("#pageSize").val(selectedVal);
+        $("form[name=frmProductSearch] input[name=viewType]").val(
+            "popupProduct"
+        );
         removePageSideFromLink();
         removePaginationFromLink();
         reloadProductListingMap(document.frmProductSearch);
@@ -274,21 +272,21 @@ $(document).on("mouseover mouseout", ".productsListItemsJs", function (e) {
 });
 
 toogleMapView = function () {
-     let vtype = 'map';
-     fcom.displayProcessing();
-     if ($("form[name=frmProductSearch] input[name=vtype]").val() != vtype) {
-         $("form[name=frmProductSearch] input[name=vtype]").val(vtype);
-     } else {
-         $("form[name=frmProductSearch] input[name=vtype]").val('');
-     }
+    let vtype = "map";
+    fcom.displayProcessing();
+    if ($("form[name=frmProductSearch] input[name=vtype]").val() != vtype) {
+        $("form[name=frmProductSearch] input[name=vtype]").val(vtype);
+    } else {
+        $("form[name=frmProductSearch] input[name=vtype]").val("");
+    }
     // window.location.href = getSearchQueryUrl(true);
     var data = "viewType=popup";
     fcom.ajax(getSearchQueryUrl(true), data, function (ans) {
-        $.facebox(ans, 'modal-xl');
+        $.facebox(ans, "modal-fullscreen modal-map");
         fcom.displaySuccessMessage();
     });
-    $("form[name=frmProductSearch] input[name=vtype]").val('');
-}
+    $("form[name=frmProductSearch] input[name=vtype]").val("");
+};
 
 /* function updateQueryStringParameter(uri, key, value) {
   var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
@@ -591,8 +589,15 @@ function getSearchQueryUrl(includeBaseUrl) {
     var vtype = $("form[name=frmProductSearch] input[name=vtype]").val();
     // url = url + setQueryParamSeperator(url) + 'vtype' + valueSeperator + vtype;
 
-    var pageRecordCount = $("form[name=frmProductSearch] input[name=pageRecordCount]").val();
-    url = url + setQueryParamSeperator(url) + 'pagerecordcount' + valueSeperator + pageRecordCount;
+    var pageRecordCount = $(
+        "form[name=frmProductSearch] input[name=pageRecordCount]"
+    ).val();
+    url =
+        url +
+        setQueryParamSeperator(url) +
+        "pagerecordcount" +
+        valueSeperator +
+        pageRecordCount;
 
     /* var page = parseInt($("input[name=page]").val());
     if(page > 1){
@@ -742,11 +747,11 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
     };
 
     reloadProductListingMap = function (frm, page) {
-        if (typeof page == 'undefined') {
+        if (typeof page == "undefined") {
             page = 0;
         }
 
-        $('#productsListMap').html(fcom.getLoader());
+        $("#productsListMap").html(fcom.getLoader());
         if (0 < page) {
             addPaginationInlink(page);
         } else {
@@ -757,18 +762,20 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
 
         fcom.ajax(currUrl, data, function (res) {
             fcom.removeLoader();
-            $('#productsListMap').replaceWith(res);
+            $("#productsListMap").replaceWith(res);
             var frm = document.frmProductSearchPaging;
             var recordCount = parseInt($(frm.recordDisplayCount).val());
-            $("form[name=frmProductSearch] input[name=pageRecordCount]").val($(document.frmProductSearchPaging.pageRecordCount).val());
-            $('#total_records').html(recordCount);
+            $("form[name=frmProductSearch] input[name=pageRecordCount]").val(
+                $(document.frmProductSearchPaging.pageRecordCount).val()
+            );
+            $("#total_records").html(recordCount);
             if (1 > recordCount) {
-                $('.saveSearch-js').hide();
+                $(".saveSearch-js").hide();
             } else {
-                $('.saveSearch-js').show();
+                $(".saveSearch-js").show();
             }
         });
-        window.history.pushState('', '', currUrl);
+        window.history.pushState("", "", currUrl);
         /* window.location.href = getSearchQueryUrl(true); */
     };
 
@@ -949,8 +956,8 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
         if (typeof page == undefined || page == null) {
             page = 1;
         }
-        $("form[name=frmProductSearch] input[name=viewType]").val('');
-        $('#pageSize').val($('#pageSizeSelect').val());
+        $("form[name=frmProductSearch] input[name=viewType]").val("");
+        $("#pageSize").val($("#pageSizeSelect").val());
         reloadProductListing(document.frmProductSearch, page);
         $("html, body").animate(
             { scrollTop: $("#productsList").offset().top },
@@ -997,9 +1004,14 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
         if (typeof page == undefined || page == null) {
             page = 1;
         }
-        $("form[name=frmProductSearch] input[name=viewType]").val('popupProduct');
+        $("form[name=frmProductSearch] input[name=viewType]").val(
+            "popupProduct"
+        );
         reloadProductListingMap(document.frmProductSearch, page);
-        $('html, body').animate({ scrollTop: $("#productsListMap").offset().top }, 'slow');
+        $("html, body").animate(
+            { scrollTop: $("#productsListMap").offset().top },
+            "slow"
+        );
     };
 
     saveProductSearch = function () {
@@ -1008,12 +1020,21 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
             return false;
         }
         $.facebox(function () {
-            fcom.ajax(fcom.makeUrl('SavedProductsSearch', 'form', [], siteConstants.webroot_dashboard), '', function (ans) {
-                $.facebox(ans);
-                if (ans.status) {
-                    $.facebox.close();
+            fcom.ajax(
+                fcom.makeUrl(
+                    "SavedProductsSearch",
+                    "form",
+                    [],
+                    siteConstants.webroot_dashboard
+                ),
+                "",
+                function (ans) {
+                    $.facebox(ans);
+                    if (ans.status) {
+                        $.facebox.close();
+                    }
                 }
-            });
+            );
         });
         return false;
     };
