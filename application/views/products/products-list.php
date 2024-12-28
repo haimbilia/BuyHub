@@ -75,7 +75,7 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !em
                         </div>
                         <div class="products-foot">
                             <a class="products-category"
-                                href="<?php echo UrlHelper::generateUrl('Category', 'View', array($product['prodcat_id'])); ?>"><?php echo CommonHelper::renderHtml($product['prodcat_name'], true); ?>
+                                href="<?php echo UrlHelper::generateUrl('Category', 'View', array($product['prodcat_id'])); ?>" title="<?php echo CommonHelper::renderHtml($product['prodcat_name'], true); ?>"><?php echo CommonHelper::renderHtml($product['prodcat_name'], true); ?>
                             </a>
                             <a class="products-title"
                                 title="<?php echo CommonHelper::renderHtml($product['selprod_title'], true); ?>"

@@ -10,7 +10,7 @@ $caption = $link['prodcat_name'];
 
 <li class="grouping-item groupingItemJs">
     <span class="grouping-section groupingSectionJs">
-        <a class="grouping-title level-1 groupingLinkJs" href="<?php echo $href; ?>"><?php echo $caption; ?></a>
+        <a class="grouping-title level-1 groupingLinkJs" href="<?php echo $href; ?>" title="<?php echo $caption; ?>"><?php echo $caption; ?></a>
         <?php if (0 < count($link['children'])) { ?>
             <button class="grouping-arrow dropdown-toggle-custom collapseBtnJs collapsed" type="button"
                 data-bs-toggle="collapse"

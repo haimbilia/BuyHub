@@ -3802,7 +3802,6 @@ class SellerController extends SellerBaseController
 
         if (
             0 < FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0) &&
-            RequestForQuote::TYPE_INDIVIDUAL == FatApp::getConfig('CONF_RFQ_MODULE_TYPE', FatUtility::VAR_INT, 0) &&
             applicationConstants::NO == FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)
         ) {
             $fld = $frm->addCheckBox(Labels::getLabel("FRM_ENABLE_RFQ_MODULE", $this->siteLangId), 'shop_rfq_enabled', 1, array(), false, 0);

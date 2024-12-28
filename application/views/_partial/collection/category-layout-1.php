@@ -13,7 +13,7 @@ if (isset($collection['categories']) && count($collection['categories'])) { ?>
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link <?php echo 1 == $x ? 'active' : ''; ?>" data-bs-toggle="tab"
                                     data-bs-target="#tb-<?php echo $key . "-" . $collection['collection_id']; ?>" role="tab"
-                                    aria-controls="tabpanel-<?php echo $key . "-" . $collection['collection_id']; ?>">
+                                    aria-controls="tabpanel-<?php echo $key . "-" . $collection['collection_id']; ?>" title="<?php echo $category['catData']['prodcat_name']; ?>">
                                     <?php echo $category['catData']['prodcat_name']; ?>
                                 </button>
                             </li>

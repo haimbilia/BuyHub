@@ -54,7 +54,7 @@ if ($relatedProductsRs) { ?>
                                 <div class="products-foot">
 
                                     <a class="products-category"
-                                        href="<?php echo UrlHelper::generateUrl('Category', 'View', array($rProduct['prodcat_id'])); ?>"><?php echo $rProduct['prodcat_name']; ?>
+                                        href="<?php echo UrlHelper::generateUrl('Category', 'View', array($rProduct['prodcat_id'])); ?>" title="<?php echo $rProduct['prodcat_name']; ?>"><?php echo $rProduct['prodcat_name']; ?>
                                     </a>
 
 

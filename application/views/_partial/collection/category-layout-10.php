@@ -7,7 +7,7 @@ if (isset($collection['categories']) && count($collection['categories'])) { ?>
                     <?php foreach ($collection['categories'] as $key => $category) { ?>
                         <div class="category-layout-1-item">
                             <header class="section-head">
-                                <div class="section-heading">
+                                <div class="section-heading" title="<?php echo $category['catData']['prodcat_name'] ?? ''; ?>">
                                     <h2><?php echo $category['catData']['prodcat_name'] ?? ''; ?></h2>
                                 </div>
                                 <div class="section-action">

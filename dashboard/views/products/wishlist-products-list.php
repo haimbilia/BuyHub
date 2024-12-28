@@ -64,7 +64,7 @@ $vtype = $postedData['vtype'] ?? false;
                         <div class="products-foot">
 
                             <a class="products-category"
-                                href="<?php echo UrlHelper::generateUrl('Category', 'View', array($product['prodcat_id']), CONF_WEBROOT_FRONTEND); ?>"><?php echo html_entity_decode($product['prodcat_name'], ENT_QUOTES, 'UTF-8'); ?>
+                                href="<?php echo UrlHelper::generateUrl('Category', 'View', array($product['prodcat_id']), CONF_WEBROOT_FRONTEND); ?>" title="<?php echo html_entity_decode($product['prodcat_name'], ENT_QUOTES, 'UTF-8'); ?>"><?php echo html_entity_decode($product['prodcat_name'], ENT_QUOTES, 'UTF-8'); ?>
                             </a>
 
                             <a class="products-title" title="<?php echo $product['selprod_title']; ?>"

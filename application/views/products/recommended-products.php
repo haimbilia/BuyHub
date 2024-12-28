@@ -68,7 +68,7 @@ if ($recommendedProducts) { ?>
                                 </div>
                                 <div class="products-foot">
                                     <a class="products-category"
-                                        href="<?php echo UrlHelper::generateUrl('Category', 'View', array($rProduct['prodcat_id'])); ?>">
+                                        href="<?php echo UrlHelper::generateUrl('Category', 'View', array($rProduct['prodcat_id'])); ?>" title="<?php echo CommonHelper::renderHtml($rProduct['prodcat_name'], true); ?>">
                                         <?php echo CommonHelper::renderHtml($rProduct['prodcat_name'], true); ?>
                                     </a>
                                     <a class="products-title"
