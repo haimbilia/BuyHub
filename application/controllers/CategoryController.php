@@ -170,7 +170,7 @@ class CategoryController extends MyAppController
             'pageSizeArr' => FilterHelper::getPageSizeArr($this->siteLangId)
         );
 
-        if (FatUtility::isAjaxCall() && $viewType != 'popup') {
+        if (FatUtility::isAjaxCall() && $viewType != 'popupProduct' && $viewType != 'popup') {
             $this->set('products', $products);
             /* $this->set('page', $page);           
             $this->set('pageCount', $srch->pages());
@@ -184,12 +184,27 @@ class CategoryController extends MyAppController
             exit;
         }
 
-        $this->set('data', $data);
-        $this->set('viewType', $viewType);
-        if ($viewType == 'popup') {
-            $this->_template->render(false, false);
+        if (FatUtility::isAjaxCall() && $viewType == 'popupProduct') {
+            $this->set('products', $products);
+            $this->set('postedData', $get);
+            $this->set('siteLangId', $this->siteLangId);
+            $this->set('pageSizeArr', $data['pageSizeArr']);
+            $this->set('tRightRibbons', $tRightRibbons);
+            echo $this->_template->render(false, false, 'products/products-map-list-left.php', true);
             exit;
         }
+        $this->set('data', $data);
+        $this->set('viewType', $viewType);
+        if (FatUtility::isAjaxCall() && $viewType == 'popup') {
+            $this->set('products', $products);
+            $this->set('postedData', $get);
+            $this->set('siteLangId', $this->siteLangId);
+            $this->set('pageSizeArr', $data['pageSizeArr']);
+            $this->set('tRightRibbons', $tRightRibbons);
+            $this->_template->render(false, false, 'products/listing-map-page.php');
+            exit;
+        }
+
 
         if (false === MOBILE_APP_API_CALL) {
             $this->includeProductPageJsCss();
