@@ -43,6 +43,8 @@
         font-size: 1rem;
         color: $txt-body;
         margin-bottom: 0.5rem;
+        @include truncate(100%);
+        display: block;
     }
 
     &-body {
@@ -666,6 +668,7 @@
         justify-content: center;
         flex-direction: column;
         text-align: center;
+        max-width: 100%;
     }
 
     &-name {
@@ -675,6 +678,13 @@
 
         @include media-breakpoint-up(xl) {
             display: block;
+            max-width: 100%;
+
+        }
+
+        >span {
+            display: block;
+            @include truncate(100%);
         }
     }
 }
