@@ -22,6 +22,17 @@
         $this->includeTemplate('products/products-map-list-left.php', $productsData, false);
         ?>
     </div>
+
+    <button type="button" class="btn-list" data-bs-dismiss="modal" aria-label="Close">
+        <svg class="svg" width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+            fill="currentColor">
+            <path
+                d="M8 4H21V6H8V4ZM3 3.5H6V6.5H3V3.5ZM3 10.5H6V13.5H3V10.5ZM3 17.5H6V20.5H3V17.5ZM8 11H21V13H8V11ZM8 18H21V20H8V18Z">
+            </path>
+        </svg>
+        <span class="btn-txt">List View</span>
+
+    </button>
 </div>
 <?php
 $productsByShop = [];
@@ -95,7 +106,7 @@ foreach ($productsByShop as &$marker) {
 <script>
     var markers = <?php echo json_encode($productsByShop); ?>;
     var realtedMarkers = <?php echo json_encode($productsBySelProdCode); ?>;
-    $(function() {
+    $(function () {
         initMutipleMapMarker(markers, 'productMapJs', getCookie('_ykGeoLat'), getCookie('_ykGeoLng'),
             dragCallback);
 
@@ -108,7 +119,7 @@ foreach ($productsByShop as &$marker) {
         let relMarkers = realtedMarkers[selprodCode];
 
         if (relMarkers.length) {
-            $.each(relMarkers, function(index, marker) {
+            $.each(relMarkers, function (index, marker) {
                 relMarkers[index]['isDefault'] = (marker.selprod_id == selprod_id ? 1 : 0);
             });
         }

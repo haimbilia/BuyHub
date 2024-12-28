@@ -41,13 +41,56 @@
 	}
 }
 
+.modal-map {
+	@include media-breakpoint-up(lg) {
+		padding: 2rem;
+	}
+
+	.modal-header {
+		display: none !important;
+	}
+
+	.modal-body {
+		padding: 0;
+	}
+
+	.modal-content {
+		@include media-breakpoint-up(lg) {
+			border-radius: 10px;
+		}
+	}
+
+
+}
+
+.btn-list {
+	background-color: #000;
+	border: none;
+	box-shadow: none;
+	outline: solid 8px rgba(0, 0, 0, 0.2);
+	color: #fff;
+	border-radius: 60px;
+	padding: 10px 20px;
+	font-size: 0.85rem;
+	display: flex;
+	gap: 8px;
+	align-items: center;
+	position: absolute;
+	z-index: 1;
+	bottom: 2rem;
+	#{$start-direction}: 50%;
+	transform: translateX(-50%);
+	margin: 0 auto;
+}
+
 //.interactive-stores
 .interactive-stores {
+	height: 100%;
 	position: relative;
 	padding: 0;
-	border-top: $border;
-	border-bottom: $border;
-	border-color: lighten($border-color, 0.4);
+	// border-top: $border;
+	// border-bottom: $border;
+	// border-color: lighten($border-color, 0.4);
 
 	@include media-breakpoint-up(lg) {
 		// display: grid;
@@ -57,7 +100,13 @@
 	&-map {
 		order: 2;
 		position: relative;
-		aspect-ratio: 16/9;
+		//aspect-ratio: 16/9;
+		height: 100%;
+		overflow: hidden;
+
+		@include media-breakpoint-up(lg) {
+			border-radius: 10px;
+		}
 
 		.canvas-map {
 			position: absolute;
@@ -88,21 +137,26 @@
 	}
 
 	&-list {
-
+		display: none;
 		// padding: 1rem;
+
 		@include media-breakpoint-up(lg) {
 			@include bg-blur-white;
 			background-color: #fff;
+			border-radius: 10px;
 			position: absolute;
-			top: 0;
-			bottom: 0;
-			height: 100%;
+			top: 2rem;
+			#{$start-direction}: 2rem;
+			bottom: 2rem;
+			//height: 100%;
 			width: 100%;
 			max-width: 400px;
 			// padding: 1rem;
 			//max-height: 574px;
 			overflow: hidden;
 			overflow-y: auto;
+			outline: solid 8px rgba(0, 0, 0, 0.2);
+			display: block;
 			// aspect-ratio: 4/3;
 		}
 
@@ -130,15 +184,23 @@
 		}
 
 		.collection-pager {
-			background-color: transparent;
-			padding: 0;
-			margin-top: 1rem;
+			position: sticky;
+			bottom: 0;
+			background-color: #fff;
+			padding: 1rem;
+			margin-top: 0;
+			//margin-top: 1rem;
 		}
 
 		.pagination li a {
 			width: 2rem;
 			height: 2rem;
 			line-height: 2rem;
+
+			.svg {
+				width: 14px;
+				height: 14px;
+			}
 		}
 
 		.sorting-select {
