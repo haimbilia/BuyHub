@@ -239,12 +239,6 @@ class RequestForQuotesController extends MyAppController
             if(!empty($selprodData) && empty($selprodData['selprod_title'])){
                 $selprodData['selprod_title'] = Product::getAttributesById($selprodData['selprod_product_id'],'product_identifier');
             }
-            
-            if ($post['rfq_quantity'] < $selprodData['selprod_min_order_qty']) {
-                $msg = Labels::getLabel('ERR_REQUIRED_QUANTITY_SHOULD_BE_GREATER_THAN_EQUAL_TO_{QTY}', $this->siteLangId);
-                $msg = CommonHelper::replaceStringData($msg, ['{QTY}' => $selprodData['selprod_min_order_qty']]);
-                LibHelper::exitWithError($msg, true);
-            }
 
             $shopRfqEnabled = Shop::getAttributesByUserId($selprodData['selprod_user_id'], 'shop_rfq_enabled');
             if (!RequestForQuote::isEnabled($shopRfqEnabled, $selprodData['selprod_cart_type'])) {

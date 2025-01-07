@@ -3249,7 +3249,7 @@ class EmailHandler extends FatModel
      * @param  mixed $d
      * @return bool
      */
-    public function sendTransferBankNotification($langId, $d)
+    public function sendTransferBankNotification($langId, $d, $isBuyerDash)
     {
         $tpl = 'ADMIN_ORDER_PAYMENT_TRANSFERRED_TO_BANK';
         $vars = array(
@@ -3268,7 +3268,7 @@ class EmailHandler extends FatModel
         $this->sendSms($tpl, ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode')) . FatApp::getConfig('CONF_SITE_PHONE'), $vars, $langId);
 
         /* Send Success Notification To Buyer With Bank Transfer Order Placed.  */
-        $msg = Labels::getLabel('MSG_ORDER_#{ORDER-ID}_PLACED_USING_BANK_TRANFER_PAYMENT_METHOD', $langId);
+        $msg = Labels::getLabel('MSG_ORDER_#{ORDER-ID}_PAYMENT_TRANSFERRED_TO_BANK', $langId);
         $msg = CommonHelper::replaceStringData($msg, ['{ORDER-ID}' => $d['order_number']]);
         $notificationObj = new Notifications();
         $notificationDataArr = array(
@@ -3280,6 +3280,19 @@ class EmailHandler extends FatModel
         if (!$notificationObj->addNotification($notificationDataArr)) {
             $this->error = $notificationObj->getError();
             return false;
+        }
+
+        if(!$isBuyerDash) {
+            $notificationDataArr = array(
+                'unotification_user_id' => $d["order_user_id"],
+                'unotification_body' => CommonHelper::replaceStringData(Labels::getLabel('MSG_YOUR_ORDER_{ORDERID}_HAVE_BEEN_PLACE', $langId), array('{ORDERID}' => $d['order_number'])),
+                'unotification_type' => 'BUYER_ORDER',
+                'unotification_data' => json_encode(array('orderId' => $d['order_id'])),
+            );
+            if (!$notificationObj->addNotification($notificationDataArr)) {
+                $this->error = $notificationObj->getError();
+                return false;
+            }
         }
         /* Send Success Notification To Buyer With Bank Transfer Order Placed.  */
 
