@@ -170,12 +170,12 @@ class ShopsController extends MyAppController
             $this->_template->render();
         }
 
-        if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) {
-            $json['html'] = $this->_template->render(false, false, 'shops/search-map-view.php', true, false);
-        } else {
+        // if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) {
+        //     $json['html'] = $this->_template->render(false, false, 'shops/search-map-view.php', true, false);
+        // } else {
             $json['html'] = $this->_template->render(false, false, 'shops/search.php', true, false);
             $json['loadMoreBtnHtml'] = $this->_template->render(false, false, '_partial/load-more-btn.php', true, false);
-        }
+        // }
         FatUtility::dieJsonSuccess($json);
     }
 
@@ -202,7 +202,7 @@ class ShopsController extends MyAppController
             $get = FatApp::getParameters();
             $get = array_filter(Product::convertArrToSrchFiltersAssocArr($get));
         }
-
+        $viewType = FatApp::getPostedData('viewType', FatUtility::VAR_STRING, '');
         if (array_key_exists('currency', $get)) {
             $get['currency_id'] = $get['currency'];
         }
@@ -231,12 +231,13 @@ class ShopsController extends MyAppController
                 'canonicalUrl' => UrlHelper::generateFullUrl('Shops', 'view', array($shop_id)),
                 'productSearchPageType' => SavedSearchProduct::PAGE_SHOP,
                 'recordId' => $shop_id,
+                'viewType' => $viewType,
                 'bannerListigUrl' => UrlHelper::generateFullUrl('Banner', 'categories'),
                 'pageSizeArr' => FilterHelper::getPageSizeArr($this->siteLangId),
             );
             $data = array_merge($data, $arr);
 
-            if (FatUtility::isAjaxCall()) {
+            if (FatUtility::isAjaxCall() && $viewType != 'popupProduct' && $viewType != 'popup') {
                 $this->set('products', $data['products']);
                 $this->set('page', $data['page']);
                 $this->set('pageCount', $data['pageCount']);
@@ -249,6 +250,26 @@ class ShopsController extends MyAppController
                 echo $this->_template->render(false, false, 'products/products-list.php', true);
                 exit;
             }
+            if (FatUtility::isAjaxCall() && $viewType == 'popupProduct') {
+                $this->set('products', $data['products']);
+                $this->set('postedData', $get);
+                $this->set('siteLangId', $this->siteLangId);
+                $this->set('pageSizeArr', $data['pageSizeArr']);
+                $this->set('tRightRibbons', $data['tRightRibbons']);
+                echo $this->_template->render(false, false, 'products/products-map-list-left.php', true);
+                exit;
+            }
+
+            if (FatUtility::isAjaxCall() && $viewType == 'popup') {
+                $this->set('products', $data['products']);
+                $this->set('postedData', $get);
+                $this->set('siteLangId', $this->siteLangId);
+                $this->set('pageSizeArr', $data['pageSizeArr']);
+                $this->set('tRightRibbons', $data['tRightRibbons']);
+                $this->_template->render(false, false, 'products/listing-map-page.php');
+                exit;
+            }
+    
 
             $this->includeProductPageJsCss();
             $this->_template->addJs(['js/slick.min.js', 'js/shop-nav.js', 'js/jquery.colourbrightness.min.js', 'js/slick-carousels.js']);

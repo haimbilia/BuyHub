@@ -54,16 +54,16 @@ $(function () {
             if ($("#" + id).length == 0) {
                 $("ul.brandFilter-js").prepend(
                     '<li><label class="checkbox brand" id="brand_' +
-                        val +
-                        '"><input name="brands" data-id="brand_' +
-                        val +
-                        '" value="' +
-                        val +
-                        '" data-title="' +
-                        title +
-                        '" type="checkbox" checked="true"><i class="input-helper">' +
-                        title +
-                        "</i><label></li>"
+                    val +
+                    '"><input name="brands" data-id="brand_' +
+                    val +
+                    '" value="' +
+                    val +
+                    '" data-title="' +
+                    title +
+                    '" type="checkbox" checked="true"><i class="input-helper">' +
+                    title +
+                    "</i><label></li>"
                 );
             }
 
@@ -366,14 +366,14 @@ function addFilter(id, obj) {
     if (!$(".selectedFiltersJs").find("a").hasClass(id)) {
         $(".selectedFiltersJs").prepend(
             "<span class='chip'>" +
-                $filterVal +
-                " <a href='javascript:void(0);' data-yk='" +
-                id +
-                "' class='remove btn-close text-reset " +
-                id +
-                "' " +
-                click +
-                "></a></span>"
+            $filterVal +
+            " <a href='javascript:void(0);' data-yk='" +
+            id +
+            "' class='remove btn-close text-reset " +
+            id +
+            "' " +
+            click +
+            "></a></span>"
         );
     }
     showSelectedFilters();
@@ -642,14 +642,14 @@ function addPricefilter(reloadPage) {
     if (!$(".selectedFiltersJs").find("a").hasClass("price")) {
         $(".selectedFiltersJs").prepend(
             "<span class='chip'> " +
-                currencySymbolLeft +
-                $("input[name=priceFilterMinValue]").val() +
-                currencySymbolRight +
-                " - " +
-                currencySymbolLeft +
-                $("input[name=priceFilterMaxValue]").val() +
-                currencySymbolRight +
-                " <a href='javascript:void(0);' data-yk='price' class='remove price btn-close text-reset' onclick='removePriceFilter(this)'> </a></span>"
+            currencySymbolLeft +
+            $("input[name=priceFilterMinValue]").val() +
+            currencySymbolRight +
+            " - " +
+            currencySymbolLeft +
+            $("input[name=priceFilterMaxValue]").val() +
+            currencySymbolRight +
+            " <a href='javascript:void(0);' data-yk='price' class='remove price btn-close text-reset' onclick='removePriceFilter(this)'> </a></span>"
         );
     }
     searchArr["price_min_range"] = $("input[name=priceFilterMinValue]").val();
@@ -1106,8 +1106,11 @@ function updatePriceFilter(minPrice, maxPrice, addPriceFilter) {
                     clearTimeout(dragTimeOutEvent);
                 }
                 dragTimeOutEvent = setTimeout(function () {
-                    reloadProductListing(document.frmProductSearch);
-                    loadProductListingfilters(document.frmProductSearch);
+                    $("form[name=frmProductSearch] input[name=viewType]").val(
+                        "popupProduct"
+                    );
+                    reloadProductListingMap(document.frmProductSearch);
+                    // loadProductListingfilters(document.frmProductSearch);
                 }, 1200);
             }
         );

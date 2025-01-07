@@ -29,7 +29,7 @@ class ProductsController extends MyAppController
     private function productsData($method, $validateBrand = false, $post = [])
     {
         $get = (!empty($post)) ? $post : Product::convertArrToSrchFiltersAssocArr(FatApp::getParameters());
-
+        $viewType = FatApp::getPostedData('viewType', FatUtility::VAR_STRING, '');
         $postBrands = [];
         if (MOBILE_APP_API_CALL) {
             $postBrands = FatApp::getPostedData('brand', FatUtility::VAR_STRING, '[]');
@@ -78,6 +78,7 @@ class ProductsController extends MyAppController
         switch ($method) {
             case 'index':
                 $arr = array(
+                    'viewType' => $viewType,
                     'pageTitle' => Labels::getLabel('MSG_All_PRODUCTS', $this->siteLangId),
                     'canonicalUrl' => UrlHelper::generateFullUrl('Products', 'index'),
                     'productSearchPageType' => SavedSearchProduct::PAGE_PRODUCT_INDEX,
@@ -86,6 +87,7 @@ class ProductsController extends MyAppController
                 break;
             case 'search':
                 $arr = array(
+                    'viewType' => $viewType,
                     'pageTitle' => Labels::getLabel('MSG_SEARCH_RESULTS_FOR', $this->siteLangId),
                     'canonicalUrl' => UrlHelper::generateFullUrl('Products', 'search'),
                     'productSearchPageType' => SavedSearchProduct::PAGE_PRODUCT,
@@ -95,6 +97,7 @@ class ProductsController extends MyAppController
                 break;
             case 'featured':
                 $arr = array(
+                    'viewType' => $viewType,
                     'pageTitle' => Labels::getLabel('MSG_FEATURED_PRODUCTS', $this->siteLangId),
                     'canonicalUrl' => UrlHelper::generateFullUrl('Products', 'featured'),
                     'productSearchPageType' => SavedSearchProduct::PAGE_FEATURED_PRODUCT,
@@ -148,7 +151,7 @@ class ProductsController extends MyAppController
             $et->sendRequest();
         }
 
-        if (FatUtility::isAjaxCall()) {
+        if (FatUtility::isAjaxCall()&& $viewType != 'popupProduct' && $viewType != 'popup') {
             $this->set('products', $data['products']);
             $this->set('tRightRibbons', $tRightRibbons);
             /*$this->set('moreSellersProductsArr', $data['moreSellersProductsArr']);*/
@@ -160,6 +163,24 @@ class ProductsController extends MyAppController
             $this->set('pageSize', $data['pageSize']);
             $this->set('pageSizeArr', $data['pageSizeArr']);
             echo $this->_template->render(false, false, 'products/products-list.php', true);
+            exit;
+        }
+        if (FatUtility::isAjaxCall() && $viewType == 'popupProduct') {
+            $this->set('products', $data['products']);
+            $this->set('postedData', $get);
+            $this->set('siteLangId', $this->siteLangId);
+            $this->set('pageSizeArr', $data['pageSizeArr']);
+            $this->set('tRightRibbons', $tRightRibbons);
+            echo $this->_template->render(false, false, 'products/products-map-list-left.php', true);
+            exit;
+        }
+        if (FatUtility::isAjaxCall() && $viewType == 'popup') {
+            $this->set('products', $data['products']);
+            $this->set('postedData', $get);
+            $this->set('siteLangId', $this->siteLangId);
+            $this->set('pageSizeArr', $data['pageSizeArr']);
+            $this->set('tRightRibbons', $tRightRibbons);
+            $this->_template->render(false, false, 'products/listing-map-page.php');
             exit;
         }
         $data['tRightRibbons'] = $tRightRibbons;

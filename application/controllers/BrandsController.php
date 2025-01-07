@@ -106,6 +106,7 @@ class BrandsController extends MyAppController
         $get['brand_id'] = $brandId;
         $get['brand'] = array($brandId); /*For filters*/
         $get['vtype']  = $get['vtype'] ?? 'grid';
+        $viewType = FatApp::getPostedData('viewType', FatUtility::VAR_STRING, '');
         if (!FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, '')) && $get['vtype'] == 'map') {
             $get['vtype'] = 'grid';
         }
@@ -173,6 +174,7 @@ class BrandsController extends MyAppController
             'pageCount' => $this->pageData['pageCount'],
             'recordCount' => $this->pageData['recordCount'],
             'postedData' => $get,
+            'viewType' => $viewType,
             'pageTitle' => $brand['brand_name'],
             'canonicalUrl' => UrlHelper::generateFullUrl('Brands', 'view', array($brandId)),
             'productSearchPageType' => SavedSearchProduct::PAGE_BRAND,
@@ -183,7 +185,7 @@ class BrandsController extends MyAppController
             'pageSizeArr' => FilterHelper::getPageSizeArr($this->siteLangId)
         );
 
-        if (FatUtility::isAjaxCall()) {
+        if (FatUtility::isAjaxCall() && $viewType != 'popup') {
             $this->set('products', $products);
             /* $this->set('moreSellersProductsArr', $data['moreSellersProductsArr']);*/
             $this->set('siteLangId', $this->siteLangId);
@@ -192,8 +194,18 @@ class BrandsController extends MyAppController
             echo $this->_template->render(false, false, 'products/products-list.php', true);
             exit;
         }
-
+        
         $this->set('data', $data);
+        if (FatUtility::isAjaxCall() && $viewType == 'popup') {
+            $this->set('products', $products);
+            $this->set('postedData', $get);
+            $this->set('viewType', $viewType);
+            $this->set('siteLangId', $this->siteLangId);
+            $this->set('pageSizeArr', $data['pageSizeArr']);
+            $this->_template->render(false, false, 'products/listing-map-page.php');
+            exit;
+        }
+
         $this->includeProductPageJsCss();
         $this->_template->addJs('js/slick.min.js');
         $this->_template->render();
