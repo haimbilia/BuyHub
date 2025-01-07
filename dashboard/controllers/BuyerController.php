@@ -2985,7 +2985,7 @@ class BuyerController extends BuyerBaseController
             FatUtility::dieJsonError($msg);
         }
 
-        if (!$orderPaymentObj->addOrderPayment($post["opayment_method"], $post['opayment_gateway_txn_id'], $post["opayment_amount"], $post["opayment_comments"], '', false, 0, Orders::ORDER_PAYMENT_PENDING)) {
+        if (!$orderPaymentObj->addOrderPayment($post["opayment_method"], $post['opayment_gateway_txn_id'], $post["opayment_amount"], $post["opayment_comments"], '', false, 0, Orders::ORDER_PAYMENT_PENDING, true)) {
             FatUtility::dieJsonError($orderPaymentObj->getError());
         }
 
