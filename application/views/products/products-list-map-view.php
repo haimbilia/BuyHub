@@ -14,7 +14,7 @@
         </div>
     </div>
     <div class="interactive-stores-list">
-        <?php       
+        <?php
         $this->includeTemplate('products/products-list.php', $productsData, false); ?>
     </div>
 </div>
@@ -61,10 +61,10 @@ foreach ($moreSellersProductsArr as $product) {
 }
 */
 
-foreach ($productsByShop as &$marker) {
+foreach ($productsByShop as $shopId => &$marker) {
     $contentString = '<div class="seller-card">
                 <div class="seller_logo">
-                    <img src="' . UrlHelper::generateFullUrl('image', 'shopLogo', [$product['shop_id'], $siteLangId, ImageDimension::VIEW_SMALL]) . '" '. HtmlHelper::getImgDimParm(ImageDimension::TYPE_SHOP_LOGO, ImageDimension::VIEW_SMALL).'>
+                    <img src="' . UrlHelper::generateFullUrl('image', 'shopLogo', [$shopId, $siteLangId, ImageDimension::VIEW_SMALL]) . '" ' . HtmlHelper::getImgDimParm(ImageDimension::TYPE_SHOP_LOGO, ImageDimension::VIEW_SMALL) . '>
                 </div>
                 <div class="seller_detail">
                 <div class="seller_title">' . $marker['shop_name'] . '</div>                
@@ -75,7 +75,7 @@ foreach ($productsByShop as &$marker) {
         $amount = CommonHelper::displayMoneyFormat($product['theprice']);
         $contentString .= '<li>
             <figure class="product-profile">
-            <div class="product-profile-thumbnail"><img class="product-img" src="' . $product['img'] . '" alt="' . $product['name'] . '" '.HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_THUMB).'></div>
+            <div class="product-profile-thumbnail"><img class="product-img" src="' . $product['img'] . '" alt="' . $product['name'] . '" ' . HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_THUMB) . '></div>
             <div class="product-profile-data"><div class="title"><a href="' . $product['url'] . '">' . $product['name'] . '</a></div>
                 <div class="price">' . $amount . '</div>
             </div>
