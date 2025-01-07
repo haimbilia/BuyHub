@@ -1,7 +1,7 @@
 <div class="products-foot">
     <?php if (!isset($collection) || Collections::TYPE_PRODUCT_LAYOUT6 != $collection['collection_layout_type']) { ?>
         <a class="products-category"
-            href="<?php echo UrlHelper::generateUrl('Category', 'View', array($product['prodcat_id'])); ?>"><?php echo $product['prodcat_name']; ?>
+            href="<?php echo UrlHelper::generateUrl('Category', 'View', array($product['prodcat_id'])); ?>" title="<?php echo $product['prodcat_name']; ?>"><?php echo $product['prodcat_name']; ?>
         </a>
     <?php } ?>
     <a class="products-title" title="<?php echo $product['selprod_title']; ?>"

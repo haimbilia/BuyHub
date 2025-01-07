@@ -4,8 +4,8 @@ $space: 25px;
     overflow: hidden;
     overflow-y: auto;
     height: 100%;
-    padding: $space;
-    max-width: 330px;
+    //  padding: $space;
+    max-width: 430px;
 }
 
 //grouping
@@ -114,6 +114,8 @@ $space: 25px;
         flex: 1;
         padding: 1rem $space;
         padding-#{$end-direction}: 0;
+        display: block;
+        @include truncate(100%);
 
         &:is(:hover, :focus, :active) {
             text-decoration: none;

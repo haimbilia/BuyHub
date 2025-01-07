@@ -39,12 +39,14 @@ if ($recentViewedProducts) { ?>
                         <div class="js-carousel-item">
                             <div class="products">
                                 <div class="products-body">
-                                    <?php
-                                    if (!empty($selProdRibbons)) {
-                                        foreach ($selProdRibbons as $ribbRow) {
-                                            $this->includeTemplate('_partial/ribbon-ui.php', ['ribbRow' => $ribbRow], false);
-                                        }
-                                    } ?>
+                                    <div class="badges-wrap">
+                                        <?php $this->includeTemplate('_partial/product-type-ribbon.php', ['productType' => $rProduct['product_type'], 'siteLangId' => $siteLangId], false);
+                                        if (!empty($selProdRibbons)) {
+                                            foreach ($selProdRibbons as $ribbRow) {
+                                                $this->includeTemplate('_partial/ribbon-ui.php', ['ribbRow' => $ribbRow], false);
+                                            }
+                                        } ?>
+                                    </div>
                                     <?php if (true == $displayProductNotAvailableLable && array_key_exists('availableInLocation', $rProduct) && 0 == $rProduct['availableInLocation']) { ?>
                                         <div class="not-available">
                                             <svg class="svg">
@@ -76,7 +78,7 @@ if ($recentViewedProducts) { ?>
                                 </div>
                                 <div class="products-foot">
                                     <a class="products-category"
-                                        href="<?php echo UrlHelper::generateUrl('Category', 'View', array($rProduct['prodcat_id'])); ?>"><?php echo CommonHelper::renderHtml($rProduct['prodcat_name'], true); ?>
+                                        href="<?php echo UrlHelper::generateUrl('Category', 'View', array($rProduct['prodcat_id'])); ?>" title="<?php echo CommonHelper::renderHtml($rProduct['prodcat_name'], true); ?>"><?php echo CommonHelper::renderHtml($rProduct['prodcat_name'], true); ?>
                                     </a>
                                     <a class="products-title"
                                         title="<?php echo CommonHelper::renderHtml($rProduct['selprod_title'], true); ?>"

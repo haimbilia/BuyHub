@@ -11,7 +11,7 @@ if (isset($collection['categories']) && count($collection['categories'])) { ?>
                 <div class="category-layout-4">
                     <?php foreach ($collection['categories'] as $key => $category) { ?>
                         <div class="category-layout-4-item">
-                            <h3 class="category-layout-4-head"><?php echo $category['catData']['prodcat_name'] ?? ''; ?></h3>
+                            <h3 class="category-layout-4-head" title="<?php echo $category['catData']['prodcat_name'] ?? ''; ?>"><?php echo $category['catData']['prodcat_name'] ?? ''; ?></h3>
                             <div class="category-layout-4-body">
                                 <?php
                                 $tRightRibbons = $category['tRightRibbons'];

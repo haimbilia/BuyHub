@@ -127,7 +127,8 @@ class ShopsController extends MyAppController
                 'IF(selprod_stock > 0, 1, 0) AS in_stock',
                 'selprod_cart_type',
                 'selprod_hide_price',
-                'shop_rfq_enabled'
+                'shop_rfq_enabled',
+                'product_type'
             )
         );
         foreach ($allShops as $val) {

@@ -1208,7 +1208,7 @@ class ProductsController extends MyAppController
                 'selprod_id', 'selprod_user_id',  'selprod_code', 'selprod_stock', 'selprod_condition', 'selprod_price', 'COALESCE(selprod_title, product_name, product_identifier) as selprod_title',
                 'special_price_found', 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type',
                 'theprice', 'brand_id', 'COALESCE(brand_name, brand_identifier) as brand_name', 'brand_short_description',
-                'IF(selprod_stock > 0, 1, 0) AS in_stock', 'selprod_sold_count', 'selprod_return_policy', 'shop_id', 'selprod_cart_type', 'selprod_hide_price', 'shop_rfq_enabled'
+                'IF(selprod_stock > 0, 1, 0) AS in_stock', 'selprod_sold_count', 'selprod_return_policy', 'shop_id', 'selprod_cart_type', 'selprod_hide_price', 'shop_rfq_enabled', 'product_type'
             )
         );
 
@@ -1308,7 +1308,7 @@ class ProductsController extends MyAppController
             array(
                 'product_id', 'COALESCE(product_name, product_identifier) as product_name', 'prodcat_id', 'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name', 'product_updated_on',
                 'selprod_id', 'selprod_condition', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'theprice',
-                'special_price_found', 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'selprod_sold_count', 'COALESCE(selprod_title, product_name, product_identifier) as selprod_title', 'selprod_price', 'shop_id', 'selprod_cart_type', 'selprod_hide_price', 'shop_rfq_enabled'
+                'special_price_found', 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'selprod_sold_count', 'COALESCE(selprod_title, product_name, product_identifier) as selprod_title', 'selprod_price', 'shop_id', 'selprod_cart_type', 'selprod_hide_price', 'shop_rfq_enabled', 'product_type'
             )
         );
         $productRs = $prodSrch->getResultSet();
@@ -1343,7 +1343,7 @@ class ProductsController extends MyAppController
                 array(
                     'product_id', 'COALESCE(product_name, product_identifier) as product_name', 'prodcat_id', 'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name', 'product_updated_on', 'COALESCE(selprod_title,product_name, product_identifier) as selprod_title',
                     'selprod_id', 'selprod_condition', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'theprice',
-                    'special_price_found', 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'selprod_sold_count', 'selprod_price', 'selprod_stock', 'selprod_min_order_qty', 'selprod_cart_type', 'selprod_hide_price', 'shop_rfq_enabled'
+                    'special_price_found', 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'selprod_sold_count', 'selprod_price', 'selprod_stock', 'selprod_min_order_qty', 'selprod_cart_type', 'selprod_hide_price', 'shop_rfq_enabled', 'product_type'
                 )
             );
 

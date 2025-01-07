@@ -236,7 +236,13 @@
     - bug-089479 - Ui disruption in email template for order status change.
     - bug-087647 - Inconsistency issue on the inventory and product setup form.
     - Bug-089509 - Proper info does not appear when user clicks on shipping rates.
+    - Bug-089356 - Users did't get notified about the messages or attachment bound with RFQ offer.
     - bug-089600 - Missing guiding/information text with "Product level for RFQ submission" setting under the Admin Dashboard > Settings > System Configuration > Request for quote (RFQ).
     - Bug-089339 - An invalid request error occurs when the seller clicks the remove icon for any product on the badge request popup.
     - Bug-089450 - Favourite functionality is not working properly in apps.
     - Bug-089415 - Notification not proper and also not direct the user anywhere.
+    - Bug-089671 - Issue while disabling RFQ,Global RFQ from admin.
+    - Bug-089589 - Sub user is also able to rebew the subscription plan.
+    - Bug-089773 - Sub user is not abel to purchase the Subscription plan.
+    - Bug-087557 - There should be a tag for product type in case of service and Digital.
+    - Bug-089142 - Enable shop does not appear on the shop level and creates a conflict in flow.

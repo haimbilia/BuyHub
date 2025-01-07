@@ -13,7 +13,7 @@ if (isset($collection['categories']) && count($collection['categories'])) { ?>
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link <?php echo 1 == $x ? 'active' : ''; ?>" data-bs-toggle="tab"
                                     data-bs-target="#tb-<?php echo $key . "-" . $collection['collection_id']; ?>" role="tab"
-                                    aria-controls="tabpanel-<?php echo $key . "-" . $collection['collection_id']; ?>">
+                                    aria-controls="tabpanel-<?php echo $key . "-" . $collection['collection_id']; ?>" title="<?php echo $category['catData']['prodcat_name']; ?>">
                                     <?php echo $category['catData']['prodcat_name']; ?>
                                 </button>
                             </li>
@@ -53,12 +53,14 @@ if (isset($collection['categories']) && count($collection['categories'])) { ?>
                                                         <?php echo Labels::getLabel('LBL_SOLD_OUT', $siteLangId); ?>
                                                     </div>
                                                 <?php } ?>
-                                                <?php
-                                                if (!empty($selProdRibbons)) {
-                                                    foreach ($selProdRibbons as $ribbRow) {
-                                                        $this->includeTemplate('_partial/ribbon-ui.php', ['ribbRow' => $ribbRow], false);
-                                                    }
-                                                } ?>
+                                                <div class="badges-wrap">
+                                                    <?php $this->includeTemplate('_partial/product-type-ribbon.php', ['productType' => $product['product_type'], 'siteLangId' => $siteLangId], false);
+                                                    if (!empty($selProdRibbons)) {
+                                                        foreach ($selProdRibbons as $ribbRow) {
+                                                            $this->includeTemplate('_partial/ribbon-ui.php', ['ribbRow' => $ribbRow], false);
+                                                        }
+                                                    } ?>
+                                                </div>
                                                 <?php if (true == $displayProductNotAvailableLable && array_key_exists('availableInLocation', $product) && 0 == $product['availableInLocation']) { ?>
                                                     <div class="not-available">
                                                         <svg class="svg">

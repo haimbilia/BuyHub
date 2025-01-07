@@ -13,7 +13,7 @@ $totalPackages = count($packagesArr);
             </div>
         <?php
         }
-        if (1 > $currentActivePlanId && $parentUserId != UserAuthentication::getLoggedUserId()) {
+        if (1 > $currentActivePlanId && !$canEdit) {
             echo HtmlHelper::getErrorMessageHtml(Labels::getLabel('ERR_PARENT_MERCHANT_MUST_NEED_TO_BUY_A_VALID_SUBSCRIPTION.', $siteLangId));
         }
 
@@ -71,14 +71,14 @@ $totalPackages = count($packagesArr);
                                 </ul>
                             </div>
                         </div>
-                        <?php if (UserAuthentication::getLoggedUserId(true) == $parentUserId) { ?>
+                        <?php if ($canEdit) { ?>
                             <div class="packages-box-foot">
                                 <p>
                                     <?php
                                     echo CommonHelper::replaceStringData(Labels::getLabel('LBL_SELECT_YOUR_{PACKAGE-NAME}_PRICE', $siteLangId), ['{PACKAGE-NAME}' => $package['spackage_name']]);
                                     ?>
                                 </p>
-                                <?php $disabled = ($parentUserId != UserAuthentication::getLoggedUserId(true)) ? 'disabled=disabled' : ''; ?>
+                                <?php $disabled = (!$canEdit) ? 'disabled=disabled' : ''; ?>
                                 <select name="packages" class="form-select packagesJS" <?php echo $disabled; ?>>
                                     <?php foreach ($package['plans'] as $plan) {
                                         $isActive = ($currentActivePlanId == $plan[SellerPackagePlans::DB_TBL_PREFIX . 'id']) ? 'selected=selected' : '';

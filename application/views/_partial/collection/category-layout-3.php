@@ -37,7 +37,7 @@
                                 <ul class="category-list">
                                     <li class="category-list-item category-list-head">
                                         <a
-                                            href="<?php echo UrlHelper::generateUrl('Category', 'View', array($category['prodcat_id'])); ?>">
+                                            href="<?php echo UrlHelper::generateUrl('Category', 'View', array($category['prodcat_id'])); ?>" title="<?php echo $category['prodcat_name']; ?>">
                                             <?php echo $category['prodcat_name']; ?>
                                         </a>
                                     </li>
@@ -45,7 +45,7 @@
                                     foreach ($category['subCategories'] as $subCat) { ?>
                                         <li class="category-list-item">
                                             <a
-                                                href="<?php echo UrlHelper::generateUrl('Category', 'View', array($subCat['prodcat_id'])); ?>">
+                                                href="<?php echo UrlHelper::generateUrl('Category', 'View', array($subCat['prodcat_id'])); ?>" title="<?php echo $subCat['prodcat_name']; ?>">
                                                 <?php echo $subCat['prodcat_name']; ?></a>
                                         </li>
                                     <?php $i++;

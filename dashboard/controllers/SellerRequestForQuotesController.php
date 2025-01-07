@@ -8,6 +8,11 @@ class SellerRequestForQuotesController extends SellerBaseController
         parent::__construct($action);
         $this->isSeller = true;
         $this->userPrivilege->canViewRequestForQuote($this->userId);
+        if(1 > FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0)){
+            $msg = Labels::getLabel('ERR_INVALID_ACCESS', $this->siteLangId);
+            LibHelper::exitWithError($msg, false, true);
+            FatApp::redirectUser(UrlHelper::generateUrl('account'));
+        }
     }
 
     public function global()

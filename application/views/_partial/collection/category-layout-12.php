@@ -32,14 +32,14 @@ if (isset($collection['categories']) && count($collection['categories'])) { ?>
                     <div class="category-layout-grid">
                         <?php foreach ($collection['categories'] as $category) { ?>
                             <div class="category-layout-item">
-                                <h3 class="category-layout-head"><?php echo $category['prodcat_name']; ?></h3>
+                                <h3 class="category-layout-head" title="<?php echo $category['prodcat_name']; ?>"><?php echo $category['prodcat_name']; ?></h3>
                                 <div class="category-layout-body">
                                     <ul class="category-layout-links">
                                         <?php $i = 1;
                                         foreach ($category['subCategories'] as $subCat) { ?>
                                             <li>
                                                 <a
-                                                    href="<?php echo UrlHelper::generateUrl('Category', 'View', array($subCat['prodcat_id'])); ?>">
+                                                    href="<?php echo UrlHelper::generateUrl('Category', 'View', array($subCat['prodcat_id'])); ?>" title="<?php echo $subCat['prodcat_name']; ?>">
                                                     <?php echo $subCat['prodcat_name']; ?></a>
                                             </li>
                                         <?php $i++;

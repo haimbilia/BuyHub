@@ -96,6 +96,10 @@ $padding: 1rem 2rem;
     &-lg {
       max-width: 1000px;
     }
+
+    &-full {
+      max-width: 100%;
+    }
   }
 }
 
@@ -131,7 +135,7 @@ button.close {
 }
 
 .btn-close {
-  background-color: $bg-gray;
+  background-color: darken($bg-gray, 10);
   background-size: 12px;
   border-radius: 50%;
 

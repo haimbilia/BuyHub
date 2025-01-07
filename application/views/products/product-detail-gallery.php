@@ -6,13 +6,14 @@
     $data['productImagesArr'] = $productImagesArr;
     $data['imageGallery'] = true; ?>
     <div class="product-gallery" id="detail">
-        <?php
+    <div class="badges-wrap">
+        <?php $this->includeTemplate('_partial/product-type-ribbon.php', ['productType' => $product['product_type'], 'siteLangId' => $siteLangId], false);
         if (!empty($selProdRibbons)) {
             foreach ($selProdRibbons as $ribbRow) {
                 $this->includeTemplate('_partial/ribbon-ui.php', ['ribbRow' => $ribbRow], false);
             }
-        }
-        ?>
+        } ?>
+    </div>
         <div class="product-images demo-gallery">
             <div class="main-img-slider" dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
                 <?php if ($productImagesArr) {
