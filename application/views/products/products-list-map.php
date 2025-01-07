@@ -32,7 +32,7 @@ if ($products) { ?>
                         <li data-shopId="<?php echo $product['shop_id']; ?>">
                             <a class="store" href="<?php echo $productUrl; ?>">
                                 <div class="store__img">
-                                    <img loading='lazy' <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_THUMB);?> src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_THUMB, $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $product['prodcat_name']; ?>" title="<?php echo (!empty($fileRow['afile_attribute_title'])) ? $fileRow['afile_attribute_title'] : $product['prodcat_name']; ?>">
+                                    <img loading='lazy' <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_PRODUCTS, ImageDimension::VIEW_THUMB); ?> src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_THUMB, $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $product['prodcat_name']; ?>" title="<?php echo (!empty($fileRow['afile_attribute_title'])) ? $fileRow['afile_attribute_title'] : $product['prodcat_name']; ?>">
                                 </div>
                                 <div class="store__detail">
                                     <h6><?php echo (mb_strlen($product['selprod_title']) > 50) ? mb_substr($product['selprod_title'], 0, 50) . "..." : $product['selprod_title']; ?>
@@ -91,10 +91,10 @@ foreach ($moreSellersProductsArr as $product) {
     ];
 }
 
-foreach ($productsByShop as &$marker) {
+foreach ($productsByShop as $shopId => &$marker) {
     $contentString = '<div class="seller-card">
                         <div class="seller_logo">
-                            <img src="' . UrlHelper::generateFullUrl('image', 'shopLogo', [$product['shop_id'], $siteLangId, ImageDimension::VIEW_SMALL]) . '" '.HtmlHelper::getImgDimParm(ImageDimension::TYPE_SHOP_LOGO, ImageDimension::VIEW_SMALL).'>
+                            <img src="' . UrlHelper::generateFullUrl('image', 'shopLogo', [$shopId, $siteLangId, ImageDimension::VIEW_SMALL]) . '" ' . HtmlHelper::getImgDimParm(ImageDimension::TYPE_SHOP_LOGO, ImageDimension::VIEW_SMALL) . '>
                         </div>
                         <div class="seller_detail">
                         <div class="seller_title">' . $marker['shop_name'] . '</div>                
