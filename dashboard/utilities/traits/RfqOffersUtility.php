@@ -107,13 +107,13 @@ trait RfqOffersUtility
                     'attr' => [
                         'class' => 'btn-brand btn-icon',
                         'onclick' => 'addNew(' . $rfqId . ')',
-                        'title' => Labels::getLabel('LBL_NEW_OFFER', $this->siteLangId)
+                        'title' => Labels::getLabel('LBL_OFFER', $this->siteLangId)
                     ],
                     'icon' => "<svg class='svg btn-icon-start' width='18' height='18'>
                             <use xlink:href='" . CONF_WEBROOT_URL . "images/retina/sprite-actions.svg#add'>
                             </use>
                         </svg>",
-                    'label' => Labels::getLabel('LBL_OFFER', $this->siteLangId)
+                    'label' => Labels::getLabel('LBL_NEW_OFFER', $this->siteLangId)
                 ];
             }
 

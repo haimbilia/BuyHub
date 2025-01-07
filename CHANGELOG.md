@@ -246,3 +246,4 @@
     - Bug-089773 - Sub user is not abel to purchase the Subscription plan.
     - Bug-087557 - There should be a tag for product type in case of service and Digital.
     - Bug-089142 - Enable shop does not appear on the shop level and creates a conflict in flow.
+    - Bug-089896 - Lable not maneged properly.
