@@ -70,7 +70,7 @@ class TransferBankPayController extends PaymentController
             $cartObj->updateUserCart();
             if (1 < count(array_filter($post))) {
                 if (!$orderPaymentObj->addOrderPayment($post["opayment_method"], $post['opayment_gateway_txn_id'], $post["opayment_amount"], $post["opayment_comments"], '', false, 0, Orders::ORDER_PAYMENT_PENDING)) {
-                    FatUtility::dieJsonError($orderPaymentObj->getError());
+                    FatUtility::dieJsonError($orderPaymentObj->getError(), $post['isBuyerDashboard']);
                 }
             } else {
                 $comment = Labels::getLabel('MSG_PAYMENT_INSTRUCTIONS', $this->siteLangId) . "\n\n";
