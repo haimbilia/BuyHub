@@ -18,8 +18,18 @@ class DashboardBaseController extends FatController
         $this->action = $action;
 
         if ('updateUserCookies' != $action && FatApp::getConfig("CONF_MAINTENANCE", FatUtility::VAR_INT, 0) && (get_class($this) != "MaintenanceController") && (get_class($this) != ' Home' && $action != 'setLanguage')) {
-            if (true === MOBILE_APP_API_CALL || FatUtility::isAjaxCall()) {
-                FatUtility::dieJsonError(Labels::getLabel('ERR_SITE_UNDER_MAINTENANCE', CommonHelper::getLangId()));
+            $msg = Labels::getLabel('ERR_SITE_UNDER_MAINTENANCE', CommonHelper::getLangId());
+            if (true === MOBILE_APP_API_CALL) {
+                $data =  [
+                    'status' => '-2',
+                    'responseCode' => LibHelper::RC_OK,
+                    'msg' => $msg
+                ];
+                CommonHelper::jsonEncodeUnicode($data, true);
+            }
+
+            if (FatUtility::isAjaxCall()) {
+                FatUtility::dieJsonError($msg);
             }
             FatApp::redirectUser(UrlHelper::generateUrl('maintenance', '', [], CONF_WEBROOT_FRONTEND));
         }
@@ -891,7 +901,7 @@ class DashboardBaseController extends FatController
                 }
                 break;
         }
-        
+
         $get = FatApp::getQueryStringData();
         if (empty($get) || !array_key_exists('ttk', $get)) {
             return;
