@@ -3268,7 +3268,7 @@ class EmailHandler extends FatModel
         $this->sendSms($tpl, ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode')) . FatApp::getConfig('CONF_SITE_PHONE'), $vars, $langId);
 
         /* Send Success Notification To Buyer With Bank Transfer Order Placed.  */
-        $msg = Labels::getLabel('MSG_ORDER_#{ORDER-ID}_PAYMENT_TRANSFERRED_TO_BANK', $langId);
+        $msg = Labels::getLabel('MSG_ORDER_#{ORDER-ID}_BANK_TRANSFER_TRANSACTION_DETAIL_HAVE_BEEN_ADDED', $langId);
         $msg = CommonHelper::replaceStringData($msg, ['{ORDER-ID}' => $d['order_number']]);
         $notificationObj = new Notifications();
         $notificationDataArr = array(
@@ -3283,6 +3283,7 @@ class EmailHandler extends FatModel
         }
 
         if(!$isBuyerDash) {
+            $notificationObj = new Notifications();
             $notificationDataArr = array(
                 'unotification_user_id' => $d["order_user_id"],
                 'unotification_body' => CommonHelper::replaceStringData(Labels::getLabel('MSG_YOUR_ORDER_{ORDERID}_HAVE_BEEN_PLACE', $langId), array('{ORDERID}' => $d['order_number'])),
