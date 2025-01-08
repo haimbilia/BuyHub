@@ -975,9 +975,13 @@ function initMutipleMapMarker(
         return;
     }
     map = new google.maps.Map(document.getElementById(elementId), {
-        zoom: 6,
+        zoom: 4,
         center: new google.maps.LatLng(centeredLat, centeredLng),
         mapTypeId: google.maps.MapTypeId.ROADMAP,
+        mapTypeControlOptions: {
+            style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+            position: google.maps.ControlPosition.TOP_RIGHT // Change position here
+        }
     });
 
     new google.maps.Marker({
@@ -1117,8 +1121,8 @@ function createMarkers(markers) {
                         google.maps.event.addListener(infowindow, "domready", function () {
                             // Select the target element inside the InfoWindow
                             const infoWindowElement = document.querySelector(".gm-style-iw-ch");
-                            if (infoWindowElement && typeof marker['title'] != 'undefined') {
-                                infoWindowElement.innerHTML = marker['title'];
+                            if (infoWindowElement && typeof langLbl.shopInfo != 'undefined') {
+                                infoWindowElement.innerHTML = langLbl.shopInfo;
                             }
                         });
                     };

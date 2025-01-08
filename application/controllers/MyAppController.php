@@ -172,6 +172,7 @@ class MyAppController extends FatController
                     'dialCodeFieldNotFound' => Labels::getLabel('LBL_DIAL_CODE_FIELD_NOT_FOUND', $this->siteLangId),
                     'searchAsIMoveTheMap' => Labels::getLabel('MSG_SEARCH_AS_I_MOVE_THE_MAP', $this->siteLangId),
                     'currentSearchLocation' => Labels::getLabel('LBL_CURRENT_SEARCH_LOCATION', $this->siteLangId),
+                    'shopInfo' => Labels::getLabel('LBL_SHOP_INFO', $this->siteLangId),
                     'cacheTimeStamp' => UrlHelper::getCacheTimestamp($this->siteLangId),
                     'close' => Labels::getLabel('LBL_CLOSE', $this->siteLangId),
                     'copiedText' => Labels::getLabel('LBL_COPIED_TEXT', $this->siteLangId),
