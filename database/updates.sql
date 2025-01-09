@@ -865,3 +865,7 @@ INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
 
 DELETE FROM tbl_language_labels WHERE `label_key` = 'LBL_SHIPPING_CHARGED_WERE_NOT_DECLARED.';
+INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption`, `label_type`) VALUES
+("LBL_DIGITAL_TAG", 1, "DIGITAL", 1),
+("LBL_DIGITAL_PRODUCT_TOOLTIP", 1, "Digital product", 1)
+ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
