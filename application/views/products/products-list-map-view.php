@@ -66,7 +66,7 @@ foreach ($moreSellersProductsArr as $product) {
 */
 
 foreach ($productsByShop as $shopId => &$marker) {
-    $contentString = '<div class="seller-card">
+    $contentString = '<div class="seller-card seller-card-map">
                 <div class="seller-card-thumbnail">
                     <img class="seller-card-img" src="' . UrlHelper::generateFullUrl('image', 'shopLogo', [$shopId, $siteLangId, ImageDimension::VIEW_SMALL]) . '" ' . HtmlHelper::getImgDimParm(ImageDimension::TYPE_SHOP_LOGO, ImageDimension::VIEW_SMALL) . '>
                 </div>

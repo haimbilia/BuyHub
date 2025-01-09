@@ -8,9 +8,13 @@
 .seller-card {
     text-align: center;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     gap: 0.5rem;
     align-items: center;
+
+    &-map {
+        flex-direction: row;
+    }
 
     &-thumbnail {
         background-color: transparent;
