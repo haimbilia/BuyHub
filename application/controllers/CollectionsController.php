@@ -108,7 +108,7 @@ class CollectionsController extends MyAppController
             array(
                 'product_id', 'selprod_id', 'IFNULL(product_name, product_identifier) as product_name', 'COALESCE(selprod_title, product_name, product_identifier) as selprod_title',
                 'special_price_found', 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type',
-                'theprice', 'selprod_price', 'selprod_stock', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'selprod_condition', 'prodcat_id', 'IFNULL(prodcat_name, prodcat_identifier) as prodcat_name', 'selprod_sold_count', 'product_updated_on', 'shop_id', 'selprod_min_order_qty', 'selprod_cart_type', 'selprod_hide_price', 'shop_rfq_enabled'
+                'theprice', 'selprod_price', 'selprod_stock', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'selprod_condition', 'prodcat_id', 'IFNULL(prodcat_name, prodcat_identifier) as prodcat_name', 'selprod_sold_count', 'product_updated_on', 'shop_id', 'selprod_min_order_qty', 'selprod_cart_type', 'selprod_hide_price', 'shop_rfq_enabled','product_type'
             )
         );
 
