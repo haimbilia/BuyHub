@@ -170,13 +170,15 @@ class ShopsController extends MyAppController
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }
-
-        // if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) {
-        //     $json['html'] = $this->_template->render(false, false, 'shops/search-map-view.php', true, false);
-        // } else {
+        if (isset($data['viewType']) && $data['viewType']=='popup' ) {
+            $json['html'] = $this->_template->render(false, false, 'shops/search-map-view.php', true, false);
+        } elseif (isset($data['viewType']) && $data['viewType']=='popupShops' ) {
+            $json['html'] = $this->_template->render(false, false, 'shops/search-list-map-view.php', true, false);
+        }
+        else {
             $json['html'] = $this->_template->render(false, false, 'shops/search.php', true, false);
             $json['loadMoreBtnHtml'] = $this->_template->render(false, false, '_partial/load-more-btn.php', true, false);
-        // }
+        }
         FatUtility::dieJsonSuccess($json);
     }
 
