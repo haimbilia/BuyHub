@@ -54,28 +54,6 @@ foreach ($products as $product) {
     ];
 }
 
-/*
-foreach ($moreSellersProductsArr as $product) {
-    $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']);
-    $productUrl = !isset($product['promotion_id']) ? UrlHelper::generateFullUrl('Products', 'View', array($product['selprod_id'])) : UrlHelper::generateFullUrl('Products', 'track', array($product['promotion_record_id']));
-    $img = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], ImageDimension::VIEW_THUMB, $product['selprod_id'], 0, $siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-    $productsBySelProdCode[$product['selprod_code']][] = [
-        'lat' => $product['shop_lat'],
-        'lng' => $product['shop_lng'],
-        'shop_id' => $product['shop_id'],
-        'selprod_id' => $product['selprod_id'],
-        'content' => '<ul class="gmap-list">
-                <li>
-                    <div class="product-profile">
-                        <div class="product-profile-thumbnail"><img class="product-img" src="' . $img . '" alt=""></div>
-                        <div class="product-profile-data"><div class="title"><a href="' . $productUrl . '"><strong>' . ((mb_strlen($product['selprod_title']) > 30) ? mb_substr($product['selprod_title'], 0, 50) . "..." : $product['selprod_title']) . '</strong></a></div></div>
-                    </div>
-                </li>
-            </ul>',
-        'amount' =>  CommonHelper::displayMoneyFormat($product['theprice']),
-    ];
-}
-*/
 
 foreach ($productsByShop as $shopId => &$marker) {
     $contentString = '<div class="seller-card seller-card-map">
