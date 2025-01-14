@@ -140,6 +140,9 @@ class ShipStationShipping extends ShippingServicesBase
         }
 
         $address = $this->getShopAddress($sellerId);
+        if(empty($address['shop_name']) || empty($address['line1']) || empty($address['city']) || empty($address['state']) || empty($address['postalCode']) || empty($address['countryCode']) || empty($address['phone'])) {
+            return false;
+        }
         $this->setAddress((string) $address['shop_name'], (string) $address['line1'], (string) $address['line2'], (string) $address['city'], (string) $address['state'], (string) $address['postalCode'], (string) $address['countryCode'], (string) $address['phone']);
         $requestData = [
             'warehouseName' => $address['shop_name'],
