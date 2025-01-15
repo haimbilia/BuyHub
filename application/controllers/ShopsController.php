@@ -32,7 +32,10 @@ class ShopsController extends MyAppController
         $db = FatApp::getDb();
         $data = FatApp::getPostedData();
         $page = (empty($data['page']) || FatUtility::int($data['page']) <= 0) ? 1 : FatUtility::int($data['page']);
-        $pageSize = applicationConstants::getFrontEndPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
+        $pageSize = FatApp::getPostedData('pageSize', FatUtility::VAR_INT);
+        if (!in_array($pageSize, FilterHelper::getPageSizeValues())) {
+            $pageSize = FatApp::getConfig('CONF_ITEMS_PER_PAGE_CATALOG', FatUtility::VAR_INT, 10);
+        }
 
         $searchForm = $this->getShopSearchForm($this->siteLangId);
         $post = $searchForm->getFormDataFromArray($data);

@@ -78,6 +78,17 @@ $(function () {
 		//reloadListing();
 	};
 
+	$(document).on("change", "select[name=pageSizeSelectMap]", function () {
+        var selectedVal = $(this).val();
+        $("form[name=frmSearchShopsPagingMap] input[name=viewType]").val(
+            "popupShops"
+        );
+        $("form[name=frmSearchShopsPagingMap] input[name=pageSize]").val(
+            selectedVal
+        );
+        goToShopSearchPage();
+    });
+
 	dragCallback = function (dragendMap) {
 		canSetCookie = true;
 		codeLatLng(dragendMap.getCenter().lat(), dragendMap.getCenter().lng(), function (data) {
