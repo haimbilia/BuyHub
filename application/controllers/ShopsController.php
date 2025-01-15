@@ -156,6 +156,7 @@ class ShopsController extends MyAppController
         $this->set('allShops', $allShops);
         $this->set('totalProdCountToDisplay', $totalProdCountToDisplay);
         $this->set('postedData', $post);
+        $this->set('pageSizeArr', FilterHelper::getPageSizeArr($this->siteLangId));
 
         $startRecord = ($page - 1) * $pageSize + 1;
         $endRecord = $pageSize;

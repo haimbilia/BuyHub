@@ -20,10 +20,10 @@ $markers = [];
             </div>
         </div>
     </div>
-    <div class="interactive-stores-list " id="mapShops--js">
+    <ul class="interactive-stores-list stores" id="mapShops--js">
         <?php
         include(CONF_THEME_PATH . 'shops/search-list-map-view.php'); ?>
-    </div>
+    </ul>
 <script>
     $(function() {
         initMutipleMapMarker(markers, 'shopMap--js', getCookie('_ykGeoLat'), getCookie('_ykGeoLng'), dragCallback);

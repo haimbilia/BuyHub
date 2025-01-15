@@ -48,18 +48,35 @@ if ($allShops) {
             </a>
         </li>
     <?php } ?>
-    </ul>
 <?php } else {
     $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId), false);
-} 
-    $postedData['page'] = (isset($page)) ? $page : 1;
-    $postedData['recordDisplayCount'] = $recordCount;
-    $postedData['viewType'] = 'popupShops';
-    echo FatUtility::createHiddenFormFromData($postedData, array('name' => 'frmSearchShopsPagingMap', 'id' => 'frmSearchShopsPagingMap'));
-    $pagingArr = array('pageCount' => $pageCount, 'page' => $postedData['page'], 'recordCount' => $recordCount, 'callBackJsFunc' => 'goToShopSearchPage');
-    $itemsPerPage = FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10);
-    $this->includeTemplate('_partial/pagination.php', $pagingArr, false);
-    ?>
+}
+$postedData['page'] = (isset($page)) ? $page : 1;
+$postedData['recordDisplayCount'] = $recordCount;
+$postedData['viewType'] = 'popupShops';
+echo FatUtility::createHiddenFormFromData($postedData, array('name' => 'frmSearchShopsPagingMap', 'id' => 'frmSearchShopsPagingMap'));
+$pagingArr = array('pageCount' => $pageCount, 'page' => $postedData['page'], 'recordCount' => $recordCount, 'callBackJsFunc' => 'goToShopSearchPage');
+$itemsPerPage = FatApp::getConfig('CONF_PAGE_SIZE', FatUtility::VAR_INT, 10); ?>
+<?php
+if ($pageSize < $recordCount) { ?>
+    <div class="collection-pager">
+        <?php
+        $this->includeTemplate('_partial/pagination.php', $pagingArr, false);
+        if (!isset($removePageSize)) { ?>
+            <select name="pageSizeSelectMap" id="pageSizeSelectMap" class="custom-select sorting-select">
+                <?php foreach ($pageSizeArr as $key => $val) { ?>
+                    <option value="<?php echo $key; ?>" <?php echo ($key == $pageSize) ? 'selected' : ''; ?>>
+                        <?php echo $val; ?>
+                    </option>
+                <?php
+                    if ($recordCount < $key) {
+                        break;
+                    }
+                } ?>
+            </select>
+    </div>
+<?php }
+    } ?>
 <script>
     var markers = <?php echo json_encode($markers); ?>;
 </script>
