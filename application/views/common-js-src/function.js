@@ -629,6 +629,48 @@ function setGeoAddress(data) {
     return address;
 }
 
+function setDefaultGeoAddress(data) {
+    var address = "";
+    setCookie("_ykGeoLat", data.lat);
+    setCookie("_ykdGeoLat", data.lat);
+    setCookie("_ykGeoLng", data.lng);
+    setCookie("_ykdGeoLng", data.lng);
+
+    if ("undefined" != typeof data.postal_code) {
+        setCookie("_ykGeoZip", data.postal_code);
+        setCookie("_ykdGeoZip", data.postal_code);
+        address += data.postal_code + ", ";
+    }
+
+    if ("undefined" != typeof data.city) {
+        address += data.city + ", ";
+    }
+
+    if ("undefined" != typeof data.state) {
+        setCookie("_ykGeoStateCode", data.state_code);
+        setCookie("_ykdGeoStateCode", data.state_code);
+        address += data.state + ", ";
+    }
+
+    if ("undefined" != typeof data.country) {
+        setCookie("_ykGeoCountryCode", data.country_code);
+        setCookie("_ykdGeoCountryCode", data.country_code);
+        address += data.country + ", ";
+    }
+    address = address.replace(/,\s*$/, "");
+
+    var formatedAddr =
+        "undefined" == typeof data.formatted_address
+            ? ""
+            : data.formatted_address;
+    address = "" == address ? formatedAddr : address;
+
+    setCookie("_ykGeoAddress", address);
+    setCookie("_ykdGeoAddress", address);
+
+    return address;
+}
+
 function getGeoAddress(data) {
     address = setGeoAddress(data);
     $(document).trigger("close.facebox");
@@ -742,7 +784,7 @@ function googleAddressAutocomplete(
                     data["city"] = value;
                 }
             }
-            address = setGeoAddress(data);
+            address = setDefaultGeoAddress(data);
             if ("" == address) {
                 var msg = langLbl.fieldNotFound.replace("{field}", field);
                 fcom.displayErrorMessage(msg);
@@ -826,6 +868,17 @@ function initMap(lat = 40.72, lng = -73.96, elementId = "map") {
             geocodeAddress(geocoder, map, infowindow, { address: country });
         });
 }
+
+$(document).on('hide.bs.modal', '.modal', function () {
+    if ($(this).find('.modal-map').length > 0) {
+        setCookie("_ykGeoLat", getCookie('_ykdGeoLat'));
+        setCookie("_ykGeoLng", getCookie('_ykdGeoLng'));
+        setCookie("_ykGeoZip", getCookie('_ykdGeoZip'));
+        setCookie("_ykGeoStateCode", getCookie('_ykdGeoStateCode'));
+        setCookie("_ykGeoCountryCode", getCookie('_ykdGeoCountryCode'));
+        setCookie("_ykGeoAddress", getCookie('_ykdGeoAddress'));
+    }
+});
 
 function geocodeAddress(geocoder, resultsMap, infowindow, address) {
     geocoder.geocode(address, function (results, status) {

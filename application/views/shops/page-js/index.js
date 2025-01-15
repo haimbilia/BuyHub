@@ -93,7 +93,6 @@ $(function () {
 		fcom.displayProcessing();
 		var data = "viewType=popup";
 		fcom.updateWithAjax(fcom.makeUrl('Shops', 'search'), data, function (ans) {
-			console.log(ans);
 			$.facebox(ans.html, "modal-fullscreen modal-map");
 			fcom.displaySuccessMessage();
 		});
