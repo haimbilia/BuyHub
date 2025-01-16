@@ -1,32 +1,31 @@
 .bg-newsletter {
+  @include bg-black;
+  background-image: none !important;
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
+  border-bottom: solid 1px rgba(255, 255, 255, 0.1);
 }
 
 .newsletter {
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(8px);
-  border-radius: $radius;
-  max-width: 500px;
-  padding: 2rem;
-
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 auto;
+  gap: 2rem;
   @include media-breakpoint-up(lg) {
+    flex-direction: row;
     //margin: 4rem;
-    padding: 4rem;
   }
 
-  display: flex;
-  flex-direction: column;
-
   &-head {
-    margin-bottom: 1.5rem;
-
     h3 {
-      margin-bottom: 1rem;
+      font-size: 1.3rem;
+      margin-bottom: 0;
+      padding: 0;
       font-weight: $font-weight-bold;
     }
-
     h6 {
       font-size: 0.8rem;
       font-weight: $font-weight-regular;
@@ -35,33 +34,41 @@
   }
 
   &-form {
+    @include bg-white;
+    border-radius: 50px;
+    flex: 1;
     display: flex;
     align-items: center;
-    border-bottom: solid 2px #000;
+    width: 100%;
+    max-width: 600px;
+    padding: 0.5rem;
 
     &-input {
       flex: 1;
       background: none;
       border: none;
-      height: 2.5rem;
+      height: auto;
       width: 100%;
       line-height: 1.2;
       font-size: 0.8em;
-      padding: 5px 0;
+      padding: 5px 10px;
       margin: 0;
       color: $txt-body;
       vertical-align: top;
     }
 
     &-submit {
-      height: 2.5rem;
-      width: 2.5rem;
-      background: transparent;
-      color: #000;
+      @include bg-brand;
+      border-radius: 20px;
+      padding: 4px 10px;
+      font-size: 0.85rem;
       border: none;
+      &:hover {
+        @include bg-black;
+      }
 
       [dir="rtl"] & {
-        transform: rotateY(-180deg);
+        // transform: rotateY(-180deg);
       }
     }
   }

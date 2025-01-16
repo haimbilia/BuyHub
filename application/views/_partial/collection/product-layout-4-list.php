@@ -5,12 +5,14 @@
                 <?php echo Labels::getLabel('LBL_SOLD_OUT', $siteLangId); ?>
             </div>
         <?php  } ?>
-        <?php
-        if (!empty($selProdRibbons)) {
-            foreach ($selProdRibbons as $ribbRow) {
-                $this->includeTemplate('_partial/ribbon-ui.php', ['ribbRow' => $ribbRow], false);
-            }
-        } ?>
+        <div class="badges-wrap">
+            <?php $this->includeTemplate('_partial/product-type-ribbon.php', ['productType' => $product['product_type'], 'siteLangId' => $siteLangId], false);
+            if (!empty($selProdRibbons)) {
+                foreach ($selProdRibbons as $ribbRow) {
+                    $this->includeTemplate('_partial/ribbon-ui.php', ['ribbRow' => $ribbRow], false);
+                }
+            } ?>
+        </div>
         <?php if (true == $displayProductNotAvailableLable && array_key_exists('availableInLocation', $product) && 0 == $product['availableInLocation']) { ?>
             <div class="not-available">
                 <svg class="svg">
@@ -47,12 +49,9 @@
         </div>
     </div>
     <?php $selprod_condition = true;  ?>
-    <div class="products-foot">
-        <div class="products-price">
-            <span class="products-price-new"><?php echo trim(CommonHelper::displayMoneyFormat($product['theprice'], true, false, true, false, false, true)); ?></span>
-            <?php if ($product['selprod_price'] > $product['theprice']) { ?>
-                <del class="products-price-old"><?php echo trim(CommonHelper::displayMoneyFormat($product['selprod_price'], true, false, true, false, false, true)); ?></del>
-            <?php } ?>
+    <?php if (false === SellerProduct::isPriceHidden($product['selprod_hide_price'], $product['shop_rfq_enabled'])) { ?>
+        <div class="products-foot">
+            <?php require(CONF_THEME_PATH . '_partial/collection/product-price.php'); ?>
         </div>
-    </div>
+    <?php } ?>
 </div>

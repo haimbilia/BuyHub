@@ -1,0 +1,42 @@
+//.dropdown-toggle-custom
+.dropdown-toggle-custom {
+  text-align: #{$start-direction};
+  cursor: pointer;
+  position: relative;
+  padding-#{$end-direction}: 2rem;
+
+  &-arrow {
+    position: absolute;
+    transform: translate(-6px * $transform-direction, 0);
+    top: calc(50% - 4px);
+    #{$end-direction}: 0;
+
+    &:after,
+    &:before {
+      content: "";
+      position: absolute;
+      background-color: currentColor;
+      width: 1px;
+      height: 9px;
+      transition: all 0.25s ease-in-out;
+    }
+
+    &:before {
+      transform: translate(-3px, 0) rotate(-45deg);
+    }
+
+    &:after {
+      transform: translate(3px, 0) rotate(45deg);
+    }
+
+    [aria-expanded="true"] & {
+      &:before {
+        transform: translate(-3px, 0) rotate(45deg);
+      }
+
+      &:after {
+        transform: translate(3px, 0) rotate(-45deg);
+      }
+    }
+  }
+}

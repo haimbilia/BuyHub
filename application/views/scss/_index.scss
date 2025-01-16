@@ -25,6 +25,7 @@
 @import "components/form";
 @import "components/checkbox";
 @import "components/button";
+@import "components/link";
 @import "components/side-cart";
 //@import "components/catalog-popup";
 @import "components/section";
@@ -44,6 +45,9 @@
 //@import "components/multi-list";
 //@import "components/pagination";
 @import "components/product-card";
+@import "components/product-listing";
+@import "components/shop-profile";
+@import "components/product-prices";
 @import "components/pro-info";
 @import "components/slider";
 @import "components/social-profiles";
@@ -75,6 +79,7 @@
 @import "components/cart-summary";
 @import "components/list-cart";
 @import "components/product-profile";
+@import "components/collection-cms";
 @import "components/collection-product";
 @import "components/collection-shop";
 @import "components/collection-category";
@@ -85,6 +90,7 @@
 @import "components/collection-incentives";
 @import "components/collection-newsletter";
 @import "components/collection-blog";
+@import "components/collection-rfq";
 //@import "components/ion.rangeSlider";
 //@import "components/ion.rangeSlider.skinHTML5";
 //@import "components/jquery.datetimepicker";
@@ -93,6 +99,10 @@
 @import "components/alert";
 @import "components/misc";
 @import "components/system-messages";
+@import "components/requestquote";
+@import "components/select2";
+@import "components/dropdown-toggle-custom";
+@import "components/plugin";
 //
 //@import "vendors/animate";
 //@import "vendors/fontawesome";
@@ -108,18 +118,17 @@
 //@import "vendors/tagify";
 @import "vendors/intlTelInput.min";
 //@import "vendors/nouislider.min";
-
+@import "vendors/select2/core";
 //
 
 @import "pages/offline";
 // @import "pages/index";
 @import "pages/collections";
 @import "pages/login";
-//@import "pages/listing";
+@import "pages/listing";
 //@import "pages/detail";
 @import "pages/cart";
 //@import "pages/checkout";
-
 //@import "pages/blog";
 //@import "pages/payment";
 //@import "pages/contact";
@@ -131,15 +140,81 @@
 //@import "pages/order-completed";
 //
 
+.hero-banners {
+    display: grid;
+    grid-template-columns: 68% 1fr;
+    gap: 6px;
+
+    @include media-breakpoint-up(lg) {
+        gap: $gap;
+    }
+
+    .banners {
+        background-color: $bg-placeholder;
+        border: none;
+        border-radius: $kart;
+        aspect-ratio: 10/3.33;
+        width: 100%;
+        overflow: hidden;
+
+        &:first-of-type {
+            grid-row-start: 1;
+            grid-row-end: 3;
+        }
+
+        img {
+            height: 100%;
+            width: 100%;
+        }
+    }
+}
+
+.hero-banners-1 {
+    display: grid;
+    grid-template-columns: 68% 1fr;
+    gap: 6px;
+
+    @include media-breakpoint-up(lg) {
+        gap: $gap;
+    }
+
+    .banners {
+        background-color: $bg-placeholder;
+        border: none;
+        border-radius: $kart;
+        aspect-ratio: 10/4;
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+
+        &:first-of-type {
+            grid-row-start: 1;
+            grid-row-end: 3;
+        }
+
+        img {
+            object-fit: cover;
+            // height: 100%;
+            width: 100%;
+        }
+    }
+}
+
 .hero-slider {
     position: relative;
-    margin: 0 auto !important;
+    margin: 0 auto;
     text-align: center;
     background-color: $bg-gray;
     overflow: hidden;
+    margin-bottom: 0 !important;
 
     @include media-breakpoint-up(lg) {
         aspect-ratio: 10/3.33;
+    }
+
+    &-fixed {
+        border-radius: $kart;
+        margin-top: $section-space;
     }
 
     .slider-track {
@@ -184,7 +259,7 @@
         z-index: 5;
         top: 50%;
         transform: translateY(-50%);
-        background: #858835;
+        background-color: transparent;
         border-radius: 50%;
         width: 75px;
         height: 76px;
@@ -233,7 +308,7 @@
             border-radius: 50%;
             border: 3px solid transparent;
             cursor: pointer;
-            background: #464646;
+            background-color: #464646;
             transition: all 0.5s ease-in-out;
 
             button {
@@ -243,7 +318,7 @@
             }
 
             &.slick-active {
-                background: #fff;
+                background-color: #fff;
                 border-color: var(--brand-color);
             }
         }

@@ -122,7 +122,7 @@ $(document).on('change', '#digitalFrmLangId,#digitalFrmdownloadType,#digitalFrmO
     }
 
     clearSearch = function () {
-        $('input[name="badge_id"], input[name="ribbon_id"], select[name="badge_name"], select[name="ribbon_name"]').val('').trigger('change');
+        $('input[name="badge_id"], input[name="ribbon_id"], select[name="badge_name"], select[name="ribbon_name"], input[name="product_id"]').val('').trigger('change');
         document.frmRecordSearch.reset();
         searchCatalogProducts(document.frmRecordSearch);
     };
@@ -408,6 +408,120 @@ $(document).on('change', '#digitalFrmLangId,#digitalFrmdownloadType,#digitalFrmO
                 fcom.displaySuccessMessage(t.msg);
                 searchCatalogProducts(document.frmRecordSearch);
             }
+        );
+    };
+
+    productMissingInfo = function (selProdId) {
+        fcom.updateWithAjax(fcom.makeUrl('Seller', 'productMissingInfo'), { recordId: selProdId }, function (t) {
+            fcom.closeProcessing();
+            $.ykmodal(t.html);
+            fcom.removeLoader();
+
+        });
+    }
+
+    selectAll = function (element) {
+        var obj = $(element);
+        if (1 > $(".listingRecordJs .selectItemJs:not(:disabled)").length) {
+            obj.prop("disabled", "disabled");
+            obj.prop("checked", false);
+            return false;
+        } else {
+            obj.removeAttr("disabled");
+        }
+
+        $(".listingRecordJs .selectItemJs").each(function () {
+            var tr = $(this).closest('tr');
+            if (obj.prop("checked") == false) {
+                $(this).prop("checked", false);
+                tr.removeClass('selected');
+            } else if (!$(this).hasClass('disabled')) {
+                $(this).prop("checked", true);
+                tr.addClass('selected');
+            }
+        });
+
+        showActionsBtns();
+    };
+
+    showActionsBtns = function () {
+        if (typeof $(".selectItemJs:checked").val() === "undefined") {
+            $(".formActionBtn-js").addClass("btn-outline-gray disabled").removeClass("btn-outline-brand selected");
+        } else {
+            $(".formActionBtn-js").removeClass("btn-outline-gray disabled").addClass("btn-outline-brand selected");
+        }
+    };
+
+    toggleBulkStatues = function (status, confirmMsg = "") {
+        var element = "form.actionButtonsJs";
+        if (1 > $(element).length) {
+            fcom.displayErrorMessage(langLbl.actionButtonsClass);
+            return false;
+        }
+
+        if ('' != confirmMsg && !confirm(confirmMsg)) {
+            return false;
+        }
+
+        $(element).attr("action", fcom.makeUrl(controllerName, "toggleBulkStatusesForCatalogs"));
+        $(element + " input[name='status']").val(status);
+        $(element).submit();
+    };
+
+    formAction = function (frm) {
+        if (typeof $(".selectItemJs:checked").val() === "undefined") {
+            fcom.displayErrorMessage(langLbl.atleastOneRecord);
+            return false;
+        }
+
+        if (0 < $('.listingTableJs').length) {
+            $('.listingTableJs').prepend(fcom.getLoader());
+        }
+
+        data = fcom.frmData(frm);
+
+        fcom.updateWithAjax(frm.action, data, function (t) {
+            fcom.displaySuccessMessage(t.msg);
+            fcom.removeLoader();
+            $(".selectAllJs").prop("checked", false);
+            searchCatalogProducts(document.frmRecordSearch);
+            showActionsBtns();
+            $(".toolbarBtnJs").addClass("btn-outline-gray disabled").removeClass("btn-outline-brand selected");
+        });
+    };
+
+    updateStatus = function (e, obj, recordId, status) {
+        if (false === checkControllerName()) {
+            return false;
+        }
+        fcom.displayProcessing();
+        e.stopPropagation();
+
+        var oldStatus = $(obj).attr("data-old-status");
+        $('.listingTableJs').prepend(fcom.getLoader());
+
+        if (1 > recordId) {
+            $(obj).prop("checked", 1 == oldStatus);
+            fcom.displayErrorMessage(langLbl.invalidRequest);
+            fcom.removeLoader();
+            return false;
+        }
+
+        data = "recordId=" + recordId + "&status=" + status;
+        fcom.ajax(fcom.makeUrl(controllerName, "updateCatalogStatus"), data,
+            function (ans) {
+                fcom.removeLoader();
+                fcom.closeProcessing();
+                $(obj).prop("checked", 1 == status);
+                if (ans.status == 1) {
+                    fcom.displaySuccessMessage(ans.msg);
+                    $(obj).attr({ onclick: "updateStatus(event, this, " + recordId + ", " + oldStatus + "')", "data-old-status": status });                    
+                } else {
+                    $(obj).prop("checked", 1 == oldStatus);
+                    fcom.displayErrorMessage(ans.msg);
+                }
+                fcom.removeLoader();
+            }, { 'fOutMode': 'json' }
         );
     };
 })();

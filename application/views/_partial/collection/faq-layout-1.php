@@ -6,62 +6,63 @@
     } ?>
     <section class="section" data-section="section">
         <div class="container">
-            <div class="section-head section-head-center">
+            <header class="section-head section-head-center">
                 <div class="section-heading">
                     <h2>
                         <?php echo $collection['collection_name']; ?>
                     </h2>
                 </div>
-            </div>
-            <div class="faq-layout-1">
-                <ul class="nav nav-tabs nav-tabs-center" role="tablist">
-                    <?php $count = 0;
-                    foreach ($faqCategories as $faqCatId => $faqCat) {
-                        if ($count < Collections::LIMIT_FAQ_LAYOUT1) {
-                            ?>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link <?php echo 0 == $count ? 'active' : ''; ?>" data-bs-toggle="tab"
-                                    data-bs-target="#faq<?php echo $faqCatId . $collection['collection_id']; ?>" type="button"
-                                    role="tab" aria-selected="true">
-                                    <?php echo $faqCat['faqcat_name']; ?></button>
-                            </li>
-                            <?php
-                        }
+            </header>
+            <div class="section-body">
+                <div class="faq-layout-1">
+                    <ul class="nav nav-tabs nav-tabs-center" role="tablist">
+                        <?php $count = 0;
+                        foreach ($faqCategories as $faqCatId => $faqCat) {
+                            if ($count < Collections::LIMIT_FAQ_LAYOUT1) {
                         ?>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link <?php echo 0 == $count ? 'active' : ''; ?>" data-bs-toggle="tab"
+                                        data-bs-target="#faq<?php echo $faqCatId . $collection['collection_id']; ?>" type="button"
+                                        role="tab" aria-selected="true">
+                                        <?php echo $faqCat['faqcat_name']; ?></button>
+                                </li>
+                            <?php
+                            }
+                            ?>
 
                         <?php $count++;
-                    } ?>
-                </ul>
-                <div class="tab-content">
-                    <?php $x = 0;
-                    foreach ($faqCategories as $faqCatId => $faqCat) {
-                        $x++; ?>
-                        <div class="tab-pane fade <?php echo 1 == $x ? 'show active' : ''; ?>"
-                            id="faq<?php echo $faqCatId . $collection['collection_id']; ?>">
-                            <ul class="faq-list" id="faqCollapseParent<?php echo $faqCatId . $collection['collection_id']; ?>">
-                                <?php
-                                $i = 0;
-                                foreach ($faqCat['faqs'] as $faqId => $faq) { ?>
-                                    <li class="faq-list-item">
-                                        <button class="faq-list-link collapsed" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#faqCollapse<?php echo $faqId; ?>"
-                                            aria-expanded="<?php echo ($i == 0 ? 'true' : 'false'); ?>">
-                                            <?php echo $faq['faq_title']; ?>
-                                        </button>
-                                        <div class="collapse <?php echo ($i == 0 ? 'show' : ''); ?>"
-                                            id="faqCollapse<?php echo $faqId; ?>"
-                                            data-parent="#faqCollapseParent<?php echo $faqCatId . $collection['collection_id']; ?>">
-                                            <p class="faq_data"><?php echo FatUtility::decodeHtmlEntities($faq['faq_content']); ?>
-                                            </p>
-                                        </div>
-                                    </li>
+                        } ?>
+                    </ul>
+                    <div class="tab-content">
+                        <?php $x = 0;
+                        foreach ($faqCategories as $faqCatId => $faqCat) {
+                            $x++; ?>
+                            <div class="tab-pane fade <?php echo 1 == $x ? 'show active' : ''; ?>"
+                                id="faq<?php echo $faqCatId . $collection['collection_id']; ?>">
+                                <ul class="faq-list" id="faqCollapseParent<?php echo $faqCatId . $collection['collection_id']; ?>">
+                                    <?php
+                                    $i = 0;
+                                    foreach ($faqCat['faqs'] as $faqId => $faq) { ?>
+                                        <li class="faq-list-item">
+                                            <button class="faq-list-link collapsed" type="button" data-bs-toggle="collapse"
+                                                data-bs-target="#faqCollapse<?php echo $faqId; ?>"
+                                                aria-expanded="<?php echo ($i == 0 ? 'true' : 'false'); ?>">
+                                                <?php echo $faq['faq_title']; ?>
+                                            </button>
+                                            <div class="collapse <?php echo ($i == 0 ? 'show' : ''); ?>"
+                                                id="faqCollapse<?php echo $faqId; ?>"
+                                                data-parent="#faqCollapseParent<?php echo $faqCatId . $collection['collection_id']; ?>">
+                                                <p class="faq_data"><?php echo FatUtility::decodeHtmlEntities($faq['faq_content']); ?>
+                                                </p>
+                                            </div>
+                                        </li>
                                     <?php $i++;
-                                } ?>
-                            </ul>
-                        </div>
+                                    } ?>
+                                </ul>
+                            </div>
 
-                    <?php }
-                    if (count($faqCategories) > Collections::LIMIT_FAQ_LAYOUT1) { ?>
+                        <?php }
+                        if (count($faqCategories) > Collections::LIMIT_FAQ_LAYOUT1) { ?>
                     </div>
                     <div class="section-foot">
                         <a class="link-underline"
@@ -69,7 +70,8 @@
                         </a>
                     </div>
                 </div>
-            <?php } ?>
+            </div>
+        <?php } ?>
         </div>
     </section>
 <?php } ?>

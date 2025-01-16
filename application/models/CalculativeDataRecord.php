@@ -79,6 +79,9 @@ class CalculativeDataRecord
             case CalculativeData::KEY_SELLER_PRODUCT:
                 $value = self::updateSelprodRequestCount();
                 break;
+            case CalculativeData::KEY_RFQ:
+                $value = self::updateRfqCount();
+                break;
             default:
                 trigger_error('Invalid Key', E_USER_ERROR);
                 break;
@@ -313,6 +316,23 @@ class CalculativeDataRecord
         $selProdReqResult = FatApp::getDb()->fetch($srch->getResultset());
         $count = is_array($selProdReqResult) && isset($selProdReqResult['countOfRec']) ? $selProdReqResult['countOfRec'] : 0;
         CalculativeData::updateValue(CalculativeData::KEY_SELLER_PRODUCT, $count);
+        return $count;
+    }
+
+    /**
+     * updateRfqCount -  Rfq requests
+     *
+     * @return int
+     */
+    public static function updateRfqCount(): int
+    {
+        $srch = new RequestForQuoteSearch();
+        $srch->addCondition('rfq_approved', '=', applicationConstants::NO);
+        $srch->addMultipleFields(array('count(1) as countOfRec'));
+        $srch->doNotCalculateRecords();
+        $rfqResult = FatApp::getDb()->fetch($srch->getResultset());
+        $count = is_array($rfqResult) && isset($rfqResult['countOfRec']) ? $rfqResult['countOfRec'] : 0;
+        CalculativeData::updateValue(CalculativeData::KEY_RFQ, $count);
         return $count;
     }
 }

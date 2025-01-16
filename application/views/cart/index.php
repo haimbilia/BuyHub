@@ -12,9 +12,7 @@
                                     <ul class="shiporpickup" id="js-shiporpickup">
                                         <li class="shiporpickup-item" onclick="listCartProducts(<?php echo Shipping::FULFILMENT_SHIP; ?>)">
                                             <label class="control-label radio is-active shippingLblJs">
-                                                <input class="control-input" type="radio" id="shipping" name="fulfillment_type" value="<?php echo Shipping::FULFILMENT_SHIP; ?>" <?php if ($pickUpProductsCount == 0) {
-                                                                                                                                                                                        echo "checked='true'";
-                                                                                                                                                                                    } ?>>
+                                                <input class="control-input" type="radio" id="shipping" name="fulfillment_type" value="<?php echo Shipping::FULFILMENT_SHIP; ?>" <?php echo ($pickUpProductsCount == 0) ? "checked='true'" : ''; ?>>
                                                 <svg class="svg" width="18" height="18">
                                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#shipping">
                                                     </use>
@@ -23,9 +21,7 @@
                                         </li>
                                         <li class="shiporpickup-item" onclick="listCartProducts(<?php echo Shipping::FULFILMENT_PICKUP; ?>)">
                                             <label class="control-label radio pickupLblJs">
-                                                <input class="control-input" type="radio" id="pickup" name="fulfillment_type" value="<?php echo Shipping::FULFILMENT_PICKUP; ?>" <?php if ($shipProductsCount == 0) {
-                                                                                                                                                                                        echo "checked='true'";
-                                                                                                                                                                                    } ?>>
+                                                <input class="control-input" type="radio" id="pickup" name="fulfillment_type" value="<?php echo Shipping::FULFILMENT_PICKUP; ?>" <?php echo $shipProductsCount == 0 ? "checked='true'" : ''; ?>>
                                                 <svg class="svg" width="18" height="18">
                                                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#store">
                                                     </use>

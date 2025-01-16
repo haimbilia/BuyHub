@@ -52,7 +52,7 @@
     }
 
     &.is-focus {
-      & > a {
+      &>a {
         color: $brand-color;
       }
 
@@ -137,7 +137,7 @@
   z-index: 1;
 
   span {
-    background: #000;
+    background-color: #000;
     border-radius: 3px;
     display: block;
     margin-bottom: 5px;
@@ -320,7 +320,7 @@
 
         &:before,
         &:after {
-          background: #000;
+          background-color: #000;
           content: "";
           height: 2px;
           #{$start-direction}: 14px;

@@ -1,0 +1,114 @@
+//Shipping Zone
+.list-shipping {
+  .list-group-item {
+    padding: 1rem;
+  }
+
+  .shipping-states {
+    display: flex;
+
+    .box-icon {
+      border-radius: $radius3;
+      background-color: $bg-gray;
+      padding: 5px 7px;
+      margin-#{$end-direction}: 8px;
+    }
+
+    .detail {
+      h6 {
+        margin: 0;
+        font-size: 0.85rem;
+      }
+
+      p {
+        font-size: 0.75rem;
+      }
+    }
+  }
+
+  .table-rates {
+    td {
+      padding: 0.6rem;
+    }
+  }
+}
+
+.list-country-zone {
+  li {
+    margin: 5px 0;
+    padding: 5px 0;
+    border-bottom: $border-light;
+    font-size: 0.8rem;
+
+    &:last-child {
+      padding-bottom: 0;
+      border-bottom: 0;
+      margin-bottom: 0;
+    }
+
+    ul {
+      font-size: 0.75rem;
+      margin-#{$start-direction}: 1rem;
+      color: $txt-gray;
+    }
+  }
+
+  .checkbox {
+    font-size: inherit;
+  }
+}
+
+.list-zones {
+  &-search {
+    top: 0;
+    margin-bottom: 2rem;
+  }
+
+  &-head {
+    display: flex;
+    //background-color: $bg-gray;
+    margin: 0;
+    padding: 1rem 0;
+    font-weight: 500;
+    position: relative;
+    //border: $border;
+    border-radius: $common-radius;
+
+    &-arrow {
+      display: block;
+      width: 1rem;
+      height: 1rem;
+      margin-#{$start-direction}: auto;
+      position: relative;
+    }
+  }
+
+  .list-states {
+    background: $bg-gray;
+    //padding: 1.5rem;
+    border-radius: $common-radius;
+    padding-#{$start-direction}: 2rem;
+    list-style: none;
+
+    &-item {
+      // display: flex;
+      // align-items: center;
+      //padding: 0.5rem 0;
+      &:last-child {
+        padding-bottom: 0;
+      }
+    }
+  }
+
+  .out-of-state {
+    position: relative;
+    background-color: transparent;
+    border: none;
+    margin-#{$start-direction}: auto;
+    margin-#{$end-direction}: 1rem;
+    padding-#{$end-direction}: 2.2rem;
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+}

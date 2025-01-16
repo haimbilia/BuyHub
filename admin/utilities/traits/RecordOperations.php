@@ -7,9 +7,34 @@ trait RecordOperations
 {
     protected function setLangData(object $classObj, array $langDataArr, $langId = 0)
     {
+        $systemDefaultLangId = FatUtility::int(FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1));
+        $dataLangId = (0 < $langId  ? $langId : CommonHelper::getDefaultFormLangId());
+
         $recordId = $classObj->getMainTableRecordId();
-        if (!$classObj->updateLangData((0 < $langId  ? $langId : CommonHelper::getDefaultFormLangId()), $langDataArr)) {
+        if (!$classObj->updateLangData($dataLangId, $langDataArr)) {
             LibHelper::exitWithError($classObj->getError(), true);
+        }
+
+        $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
+        if (0 < $autoUpdateOtherLangsData) {
+            $updateLangDataobj = new TranslateLangData($classObj::DB_TBL_LANG);
+            if (false === $updateLangDataobj->updateTranslatedData($recordId, CommonHelper::getDefaultFormLangId())) {
+                if ($dataLangId != $systemDefaultLangId) {
+                    if (!$classObj->updateLangData($systemDefaultLangId, $langDataArr)) {
+                        LibHelper::exitWithError($classObj->getError(), true);
+                    }
+                }
+                LibHelper::exitWithError($updateLangDataobj->getError(), true);
+            }
+        } else if ($dataLangId != $systemDefaultLangId) {
+            if (!$classObj::getAttributesByLangId($systemDefaultLangId, $recordId)) {
+                $updateLangDataobj = new TranslateLangData($classObj::DB_TBL_LANG);
+                if (false === $updateLangDataobj->updateTranslatedData($recordId, $dataLangId, $systemDefaultLangId)) {
+                    if (!$classObj->updateLangData($systemDefaultLangId, $langDataArr)) {
+                        LibHelper::exitWithError($classObj->getError(), true);
+                    }
+                }
+            }
         }
 
         $languages = Language::getDropDownList(CommonHelper::getDefaultFormLangId());
@@ -19,14 +44,6 @@ trait RecordOperations
                     $this->newTabLangId = $languageId;
                     break;
                 }
-            }
-        }
-
-        $autoUpdateOtherLangsData = FatApp::getPostedData('auto_update_other_langs_data', FatUtility::VAR_INT, 0);
-        if (0 < $autoUpdateOtherLangsData) {
-            $updateLangDataobj = new TranslateLangData($classObj::DB_TBL_LANG);
-            if (false === $updateLangDataobj->updateTranslatedData($recordId, CommonHelper::getDefaultFormLangId())) {
-                LibHelper::exitWithError($updateLangDataobj->getError(), true);
             }
         }
 

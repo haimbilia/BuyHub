@@ -17,6 +17,7 @@ class CalculativeData extends MyAppModel
     public const KEY_USER_GDPR = 11;
     public const KEY_BADGE = 12;
     public const KEY_SELLER_PRODUCT = 13;
+    public const KEY_RFQ = 14;
 
     public const KEY_ADMIN_SALES_STATS = 15;
     public const KEY_ADMIN_EARNINGS_STATS = 16;
@@ -94,7 +95,8 @@ class CalculativeData extends MyAppModel
             self::KEY_THRESHOLD_LEVEL_PRODUCTS => Labels::getLabel('LBL_THRESHOLD_LEVEL_PRODUCTS', $langId),
             self::KEY_USER_GDPR => Labels::getLabel('LBL_USER_GDPR', $langId),
             self::KEY_BADGE => Labels::getLabel('LBL_BADGE', $langId),
-            self::KEY_SELLER_PRODUCT => Labels::getLabel('LBL_SELLER_PRODUCT', $langId)
+            self::KEY_SELLER_PRODUCT => Labels::getLabel('LBL_SELLER_PRODUCT', $langId),
+            self::KEY_RFQ => Labels::getLabel('LBL_RFQ', $langId),
         ];
 
         CacheHelper::create('CalculativeDataKeys' . $langId, serialize($keyArr), CacheHelper::TYPE_LABELS);
@@ -122,7 +124,8 @@ class CalculativeData extends MyAppModel
                 self::KEY_THRESHOLD_LEVEL_PRODUCTS,
                 self::KEY_USER_GDPR,
                 self::KEY_BADGE,
-                self::KEY_SELLER_PRODUCT
+                self::KEY_SELLER_PRODUCT,
+                self::KEY_RFQ
             ],
             self::TYPE_ADMIN_SALES_STATS => [
                 self::KEY_ADMIN_SALES_STATS,

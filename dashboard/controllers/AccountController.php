@@ -312,16 +312,18 @@ class AccountController extends LoggedUserController
             FatUtility::dieJsonError($message);
         }
 
-        if (empty($data['credential_password'])) {
-            $currentEncPassword = UserAuthentication::encryptPassword($post['current_password'], true);
-            if ($currentEncPassword !== $data['credential_password_old']) {
-                $message = Labels::getLabel('MSG_YOUR_CURRENT_PASSWORD_MIS_MATCHED', $this->siteLangId);
-                FatUtility::dieJsonError($message);
-            }
-        } else {
-            if (false == password_verify($post['current_password'], $data['credential_password'])) {
-                $message = Labels::getLabel('MSG_YOUR_CURRENT_PASSWORD_MIS_MATCHED', $this->siteLangId);
-                FatUtility::dieJsonError($message);
+        if (false == UserAuthentication::isGuestUserLogged()) {
+            if (empty($data['credential_password'])) {
+                $currentEncPassword = UserAuthentication::encryptPassword($post['current_password'], true);
+                if ($currentEncPassword !== $data['credential_password_old']) {
+                    $message = Labels::getLabel('MSG_YOUR_CURRENT_PASSWORD_MIS_MATCHED', $this->siteLangId);
+                    FatUtility::dieJsonError($message);
+                }
+            } else {
+                if (false == password_verify($post['current_password'], $data['credential_password'])) {
+                    $message = Labels::getLabel('MSG_YOUR_CURRENT_PASSWORD_MIS_MATCHED', $this->siteLangId);
+                    FatUtility::dieJsonError($message);
+                }
             }
         }
 
@@ -330,7 +332,20 @@ class AccountController extends LoggedUserController
             FatUtility::dieJsonError($message);
         }
 
-        $this->set('msg', Labels::getLabel('MSG_Password_changed_successfully', $this->siteLangId));
+
+        if (UserAuthentication::isGuestUserLogged()) {
+            $userObj = new User($this->userId);
+            $srch = $userObj->getUserSearchObj('uc.credential_active');
+            $data = FatApp::getDb()->fetch($srch->getResultSet());
+            $lbl = Labels::getLabel('MSG_PASSWORD_CHANGED_SUCCESSFULLY', $this->siteLangId);
+            if (0 == $data['credential_active']) {
+                $lbl = Labels::getLabel('MSG_PASSWORD_UPDATED_SUCCESSFULLY._BUT_ACCOUNT_YET_TO_BE_VERIFIED_BY_THE_SITE_ADMIN.', $this->siteLangId);
+            }
+            $this->set('msg', $lbl);
+        } else {
+            $this->set('msg', Labels::getLabel('MSG_PASSWORD_CHANGED_SUCCESSFULLY', $this->siteLangId));
+        }
+
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }
@@ -929,7 +944,9 @@ class AccountController extends LoggedUserController
         $this->_template->addJs('js/cropper-main.js');
         $this->includeDateTimeFiles();
 
-        $data = User::getAttributesById($this->userId, array('user_preferred_dashboard', 'user_registered_initially_for', 'user_parent'));
+        $userObj = new User($this->userId);
+        $srch = $userObj->getUserSearchObj(array('user_preferred_dashboard', 'user_registered_initially_for', 'user_parent', 'uc.credential_active', 'uc.credential_verified'));
+        $data = FatApp::getDb()->fetch($srch->getResultSet());
         if ($data === false) {
             FatUtility::dieWithError(Labels::getLabel('MSG_INVALID_ACCESS', $this->siteLangId));
         }
@@ -941,6 +958,7 @@ class AccountController extends LoggedUserController
 
         $payoutPlugins = Plugin::getNamesWithCode(Plugin::TYPE_PAYOUTS, $this->siteLangId);
 
+        $this->set('loggedUserInfo', $data);
         $this->set('userParentId', $data['user_parent']);
         $this->set('payouts', $payoutPlugins);
         $this->set('showSellerActivateButton', $showSellerActivateButton);
@@ -1868,7 +1886,7 @@ class AccountController extends LoggedUserController
                 'product_id', 'prodcat_id', 'ufp_id', 'IFNULL(product_name, product_identifier) as product_name', 'IFNULL(prodcat_name, prodcat_identifier) as prodcat_name', 'product_updated_on',
                 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'brand.brand_id', 'product_model',
                 'IFNULL(brand_name, brand_identifier) as brand_name', 'IFNULL(splprice_price, selprod_price) AS theprice', 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type',
-                'CASE WHEN splprice_selprod_id IS NULL THEN 0 ELSE 1 END AS special_price_found', 'selprod_price', 'selprod_user_id', 'selprod_code', 'selprod_sold_count', 'selprod_condition', 'IFNULL(uwlp.uwlp_selprod_id, 0) as is_in_any_wishlist', 'IFNULL(uwlp.uwlp_uwlist_id, 0) as uwlp_uwlist_id', 'ifnull(prod_rating,0) prod_rating', 'selprod_min_order_qty', 'selprod_available_from', 'selprod_stock', 'shop_id', 'product_updated_on'
+                'CASE WHEN splprice_selprod_id IS NULL THEN 0 ELSE 1 END AS special_price_found', 'selprod_price', 'selprod_user_id', 'selprod_code', 'selprod_sold_count', 'selprod_condition', 'IFNULL(uwlp.uwlp_selprod_id, 0) as is_in_any_wishlist', 'IFNULL(uwlp.uwlp_uwlist_id, 0) as uwlp_uwlist_id', 'ifnull(prod_rating,0) prod_rating', 'selprod_min_order_qty', 'selprod_available_from', 'selprod_stock', 'shop_id', 'product_updated_on', 'selprod_cart_type', 'selprod_hide_price', 'shop_rfq_enabled', 'product_type'
             )
         );
 
@@ -1978,7 +1996,7 @@ class AccountController extends LoggedUserController
                 'product_id', 'prodcat_id', 'ufp_id', 'IFNULL(product_name, product_identifier) as product_name', 'IFNULL(prodcat_name, prodcat_identifier) as prodcat_name', 'product_updated_on',
                 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'brand.brand_id', 'product_model',
                 'IFNULL(brand_name, brand_identifier) as brand_name', 'IFNULL(splprice_price, selprod_price) AS theprice', 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type',
-                'CASE WHEN splprice_selprod_id IS NULL THEN 0 ELSE 1 END AS special_price_found', 'selprod_price', 'selprod_user_id', 'selprod_code', 'selprod_condition', 'IFNULL(uwlp.uwlp_selprod_id, 0) as is_in_any_wishlist', 'ifnull(prod_rating,0) prod_rating', 'selprod_sold_count', 'selprod_min_order_qty', 'selprod_available_from', 'selprod_stock'
+                'CASE WHEN splprice_selprod_id IS NULL THEN 0 ELSE 1 END AS special_price_found', 'selprod_price', 'selprod_user_id', 'selprod_code', 'selprod_condition', 'IFNULL(uwlp.uwlp_selprod_id, 0) as is_in_any_wishlist', 'ifnull(prod_rating,0) prod_rating', 'selprod_sold_count', 'selprod_min_order_qty', 'selprod_available_from', 'selprod_stock', 'selprod_cart_type', 'selprod_hide_price', 'shop_rfq_enabled', 'product_type'
             )
         );
 
@@ -2181,7 +2199,9 @@ class AccountController extends LoggedUserController
         $totalProductsToShow = 4;
         if ($shops) {
             foreach ($shops as &$shop) {
+                $uploadedTime = AttachedFile::setTimeParam($shop['shop_updated_on']);
                 $shop['shopRating'] = SelProdRating::getSellerRating($shop['shop_user_id'], true);
+                $shop['shop_logo'] = UrlHelper::generateFullUrl('image', 'shopLogo', [$shop['shop_id'], $this->siteLangId, ImageDimension::VIEW_SMALL], CONF_WEBROOT_FRONTEND) . $uploadedTime;
             }
         }
         $this->set('page', $page);
@@ -2878,11 +2898,14 @@ class AccountController extends LoggedUserController
     private function getChangePasswordForm()
     {
         $frm = new Form('changePwdFrm');
-        $curPwd = $frm->addPasswordField(
-            Labels::getLabel('FRM_CURRENT_PASSWORD', $this->siteLangId),
-            'current_password'
-        );
-        $curPwd->requirements()->setRequired();
+
+        if (false == UserAuthentication::isGuestUserLogged()) {
+            $curPwd = $frm->addPasswordField(
+                Labels::getLabel('FRM_CURRENT_PASSWORD', $this->siteLangId),
+                'current_password'
+            );
+            $curPwd->requirements()->setRequired();
+        }
 
         $newPwd = $frm->addPasswordField(
             Labels::getLabel('FRM_NEW_PASSWORD', $this->siteLangId),
@@ -3880,5 +3903,23 @@ class AccountController extends LoggedUserController
             FatUtility::dieJsonError($giftcard->getError());
         }
         FatUtility::dieJsonSuccess(Labels::getLabel('MSG_GIFTCARD_REDEEMED_SUCCESSFULLY'));
+    }
+
+    public function guestActivate()
+    {
+        if (false == UserAuthentication::isGuestUserLogged()) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId), true);
+        }
+
+        $userObj = new User($this->userId);
+        $srch = $userObj->getUserSearchObj(array('u.user_name', 'uc.credential_email as user_email'));
+        $data = FatApp::getDb()->fetch($srch->getResultSet());
+        if (empty($data)) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_INVALID_USER', $this->siteLangId), true);
+        }
+        if (false == $userObj->userEmailVerification($data, $this->siteLangId)) {
+            LibHelper::exitWithError($userObj->getError(), true);
+        }
+        FatUtility::dieJsonSuccess(Labels::getLabel("MSG_VERIFICATION_EMAIL_SENT!", $this->siteLangId));
     }
 }

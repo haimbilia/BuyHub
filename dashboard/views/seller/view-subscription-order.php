@@ -60,6 +60,11 @@
                     </li>
                     <li class="list-stats-item">
                         <span class="label">
+                            <?php echo Labels::getLabel('LBL_RFQ_OFFERS_LIMIT', $siteLangId); ?>:</span>
+                        <span class="value"><?php echo $orderDetail['ossubs_rfq_offers_allowed']; ?></span>
+                    </li>
+                    <li class="list-stats-item">
+                        <span class="label">
                             <?php echo Labels::getLabel('LBL_Images_Limit', $siteLangId); ?>:</span>
                         <span class="value"><?php echo $orderDetail['ossubs_images_allowed']; ?></span>
                     </li>

@@ -10,38 +10,42 @@
     if (!empty($collectionData)) { ?>
         <section class="section pt-0">
             <div class="container">
-                <div class="section-head">
+                <header class="section-head">
                     <div class="section-heading">
                         <h2><?php echo Labels::getLabel('LBL_SHOP_COLLECTIONS'); ?></h2>
                     </div>
-                    <div class="section-action">
-                        <div class="slider-controls">
-                            <button class="btn btn-prev" type="button" data-href="#shop-collection-listing"
-                                aria-label="Previous"> <span></span>
+                    <div class="section-action" >
+                        <div class="slider-controls shopprod">
+                            <button class="btn btn-prev slick-arrow arrow-prev" type="button">
+                                <span></span>
                             </button>
-                            <button class="btn btn-next" type="button" data-href="#shop-collection-listing"
-                                aria-label="Next"> <span></span>
+                            <button class="btn btn-next slick-arrow arrow-next" type="button">
+                                <span></span>
                             </button>
                         </div>
                     </div>
-                </div>
-                <div class="js-carousel shop-slider" id="shop-collection-listing" data-slides="3,3,2,2">
-                    <?php foreach ($collectionData as $collection) { ?>
-                        <div class="item">
-                            <div class="shop-slider-item">
-                                <img class=""
-                                    src="<?php echo UrlHelper::generateFileUrl('Image', 'shopCollectionImage', array($collection['scollection_id'], $siteLangId, ImageDimension::VIEW_SHOP)); ?>"
-                                    <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_SHOP_COLLECTION_IMAGE, ImageDimension::VIEW_SHOP); ?>>
-                                <div class="overlay-content">
-                                    <h4><?php echo $collection['scollection_name']; ?></h4>
-                                    <!--<p>From the runway to your wardrobe</p>-->
-                                    <a class="link-underline"
-                                        href="<?php echo UrlHelper::generateUrl('Shops', 'collection', array($shop['shop_id'], $collection['scollection_id'])) ?>">
-                                        <?php echo Labels::getLabel('MSG_Explore', $siteLangId) ?></a>
+                </header>
+                <div class="section-body">
+                    <div class="js-carousel shop-slider" id="shop-collection-listing" data-slides="3,3,2,2,2"
+                        data-arrows="true" data-slickdots="false" data-custom="#shop-collection-listing"             data-arrowcontainer="shopprod" data-dotscontainer="" data-customarrow="true"
+                        dir="<?php echo CommonHelper::getLayoutDirection(); ?>">
+                        <?php foreach ($collectionData as $collection) { ?>
+                            <div class="js-carousel-item">
+                                <div class="shop-slider-item">
+                                    <img class=""
+                                        src="<?php echo UrlHelper::generateFileUrl('Image', 'shopCollectionImage', array($collection['scollection_id'], $siteLangId, ImageDimension::VIEW_SHOP)); ?>"
+                                        <?php echo HtmlHelper::getImgDimParm(ImageDimension::TYPE_SHOP_COLLECTION_IMAGE, ImageDimension::VIEW_SHOP); ?>>
+                                    <div class="overlay-content">
+                                        <h4><?php echo $collection['scollection_name']; ?></h4>
+                                        <!--<p>From the runway to your wardrobe</p>-->
+                                        <a class="link-underline"
+                                            href="<?php echo UrlHelper::generateUrl('Shops', 'collection', array($shop['shop_id'], $collection['scollection_id'])) ?>">
+                                            <?php echo Labels::getLabel('MSG_Explore', $siteLangId) ?></a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    <?php } ?>
+                        <?php } ?>
+                    </div>
                 </div>
             </div>
         </section>

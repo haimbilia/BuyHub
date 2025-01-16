@@ -97,7 +97,7 @@
   flex-direction: column;
   width: 100%;
 
-  &_section ~ &_section {
+  &_section~&_section {
     margin-top: 3rem;
     // &:last-child {
     //     margin: 0;
@@ -108,6 +108,13 @@
     color: $txt-gray;
     display: flex;
     justify-content: space-between;
+
+    &_section~&_section {
+      margin-top: 3rem;
+      // &:last-child {
+      //     margin: 0;
+      // }
+    }
 
     gap: 1.5rem;
     margin-bottom: 1rem;
@@ -376,7 +383,7 @@
           opacity: 0;
           z-index: -1;
 
-          &:checked + .control-label {
+          &:checked+.control-label {
             background: $brand-color;
             border-color: $brand-color;
             color: $brand-color-inverse;
@@ -402,20 +409,51 @@
           }
         }
       }
+
+      .control-input {
+        position: absolute;
+        opacity: 0;
+        z-index: -1;
+
+        &:checked+.control-label {
+          background: $brand-color;
+          border-color: $brand-color;
+          color: $brand-color-inverse;
+        }
+      }
+
+      .control-label {
+        display: block;
+        background: $bg-white;
+        border: $border;
+        border-radius: $common-radius;
+        position: relative;
+        cursor: pointer;
+        font-size: 12px;
+        text-align: center;
+        transition: all 0.2s ease;
+
+        .time {
+          padding: 0.5rem 0.7rem;
+          display: block;
+          text-align: center;
+          white-space: nowrap;
+        }
+      }
     }
   }
-}
 
-.calendar-pickup {
-  .ui-datepicker {
-    min-width: auto;
-    border: $border !important;
-    border-radius: $common-radius !important;
-    box-shadow: none;
-    font-size: 0.8rem;
+  .calendar-pickup {
+    .ui-datepicker {
+      min-width: auto;
+      border: $border !important;
+      border-radius: $common-radius !important;
+      box-shadow: none;
+      font-size: 0.8rem;
 
-    td .ui-state-default {
-      padding: 5px;
+      td .ui-state-default {
+        padding: 5px;
+      }
     }
   }
 }
@@ -796,7 +834,7 @@
   margin-bottom: 1.5rem;
   font-size: 0.8125rem;
 
-  & + & {
+  &+& {
     margin-top: 3.5rem;
   }
 
@@ -808,7 +846,7 @@
 
   .shop-detail {
     display: flex;
-    gap: 10px;
+    gap: 0.5rem;
     justify-content: space-between;
     width: 100%;
 
@@ -819,7 +857,9 @@
     &.pickup-select {
       flex-flow: row wrap;
     }
+  }
 
+  .shipping-method {
     .shop-title {
       margin: 0;
       padding: 0;
@@ -866,6 +906,7 @@
   }
 
   .shipping-method {
+
     // position: absolute;
     // top: auto;
     // #{$end-direction}: 0;
@@ -920,7 +961,7 @@
 
 .transfer-payment-detail {
   display: flex;
-  gap: 10px;
+  gap: 0.5rem;
   flex-flow: row wrap;
   font-size: 0.8rem;
   color: $txt-gray;
@@ -1024,13 +1065,14 @@
   gap: 2rem;
   flex-flow: row wrap;
 
-    &-item {
-        display: flex;
-        gap: 7px;
-    }
-    span {
-        max-width: none;
-    }
+  &-item {
+    display: flex;
+    gap: 7px;
+  }
+
+  span {
+    max-width: none;
+  }
 }
 
 .payment-action {
@@ -1054,8 +1096,7 @@
     font-size: 1.5rem;
   }
 
-  &-body {
-  }
+  &-body {}
 
   .block-cart-detail-top {
     margin-bottom: 0;
@@ -1199,12 +1240,14 @@
 
 .shipping-comments {
   margin-bottom: 1rem;
+
   .btn-dropdown {
     background-color: transparent;
     border: none;
     font-weight: $font-weight-bold;
     padding-#{$start-direction}: 0;
   }
+
   .form-textarea {
     margin-top: 1rem;
   }

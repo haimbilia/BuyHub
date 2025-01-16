@@ -47,13 +47,7 @@
                                         <a class="title" title="<?php echo $product['selprod_title']; ?>" href="<?php echo UrlHelper::generateUrl('Products', 'View', array($product['selprod_id'])); ?>">
                                             <?php echo $product['selprod_title']; ?>
                                         </a>
-                                        <div class="products-price">
-                                            <span class="products-price-new"><?php echo trim(CommonHelper::displayMoneyFormat($product['theprice'], true, false, true, false, false, true)); ?></span>
-                                            <?php if ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) { ?>
-                                                <del class="products-price-old"><?php echo trim(CommonHelper::displayMoneyFormat($product['selprod_price'], true, false, true, false, false, true)); ?></del>
-                                                <div class="products-price-off"><?php echo trim(CommonHelper::showProductDiscountedText($product, $siteLangId)); ?></div>
-                                            <?php } ?>
-                                        </div>
+                                        <?php require(CONF_THEME_PATH . '_partial/collection/product-price.php'); ?>
                                         <div class="options">
                                             <?php if (isset($product['options']) && count($product['options'])) {
                                                 $optionStr = '';

@@ -241,6 +241,8 @@ $fld->setFieldTagAttribute('onclick', 'clearInvOptionForm()');
                     </div>
                 </div>
             <?php } ?>
+
+
             <div class="row">
                 <div class="selprod_cod_enabled_fld col-md-6">
                     <div class="field-set">

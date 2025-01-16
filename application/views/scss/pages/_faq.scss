@@ -95,7 +95,7 @@ div.faqanswer {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    grid-gap: 10px;
+    grid-gap: 0.5rem;
 
     a {
         border: $border;

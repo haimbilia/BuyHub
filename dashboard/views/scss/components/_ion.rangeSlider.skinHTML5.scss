@@ -61,7 +61,7 @@
 .irs-shadow {
     height: 2px;
     top: 38px;
-    background: #000;
+    background-color: #000;
     opacity: 0.3;
     border-radius: 5px;
 }
@@ -86,7 +86,7 @@
 /*
 
 .irs-slider.state_hover, .irs-slider:hover {
-    background: #FFF;
+    background-color: #fff;
 }
 */
 
@@ -143,5 +143,4 @@
     color: #99a4ac;
 }
 
-.irs-disabled {
-}
+.irs-disabled {}

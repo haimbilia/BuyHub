@@ -31,7 +31,7 @@ if ($layoutType == applicationConstants::SCREEN_DESKTOP) { ?>
         type="button" id="my-account-target" aria-expanded="false">
         <img class="my-account-avatar" src="<?php echo $profilePicUrl; ?>" alt="<?php echo $userName; ?>">
     </button>
-    <div class="my-account-target dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim"
+    <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim my-account-target"
         aria-labelledby="my-account-target">
         <div class="profile">
             <div class="profile-img">
@@ -46,53 +46,59 @@ if ($layoutType == applicationConstants::SCREEN_DESKTOP) { ?>
                 </span>
             </div>
         </div>
-        <div class="divider"></div>
-        <nav class="nav my-account-nav">
-            <a class="my-account-nav-link" href="<?php echo $dashboardOrgUrl; ?>"> <svg class="svg" width="14"
-                    height="14">
+        <li class="divider"></li>
+        <li class="dropdown-menu-item">
+            <a class="dropdown-menu-link" href="<?php echo $dashboardOrgUrl; ?>">
+                <svg class="svg" width="18" height="18">
                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#icn-dashboard"></use>
                 </svg><?php echo Labels::getLabel("NAV_DASHBOARD", $siteLangId); ?>
             </a>
-            <a class="my-account-nav-link" target="_blank"
+        </li>
+        <li class="dropdown-menu-item">
+            <a class="dropdown-menu-link" target="_blank"
                 href="<?php echo UrlHelper::generateUrl('', '', [], CONF_WEBROOT_FRONTEND); ?>"> <svg class="svg"
-                    width="14" height="14">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#home"></use>
+                    width="18" height="18">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#icn-home"></use>
                 </svg>
                 <?php echo Labels::getLabel("NAV_HOME", $siteLangId); ?>
             </a>
-            <?php if ($isShopActive && $shop_id > 0 && $activeTab == 'S') { ?>
-            <a class="my-account-nav-link" title="<?php echo Labels::getLabel('NAV_SHOP', $siteLangId); ?>"
-                target="_blank"
+        </li>
+        <?php if ($isShopActive && $shop_id > 0 && $activeTab == 'S') { ?>
+        <li class="dropdown-menu-item"> <a class="dropdown-menu-link"
+                title="<?php echo Labels::getLabel('NAV_SHOP', $siteLangId); ?>" target="_blank"
                 href="<?php echo UrlHelper::generateUrl('Shops', 'view', array($shop_id), CONF_WEBROOT_FRONTEND); ?>">
-                <svg class="svg" width="14" height="14">
-                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#manage-shop">
+                <svg class="svg" width="18" height="18">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#icn-shop">
                     </use>
                 </svg><?php echo Labels::getLabel("NAV_SHOP", $siteLangId); ?>
-            </a>
-            <?php } ?>
-            <a class="my-account-nav-link"
+            </a> </li>
+        <?php } ?>
+        <li class="dropdown-menu-item"><a class="dropdown-menu-link"
                 href="<?php echo UrlHelper::generateUrl('account', 'profileInfo', [], CONF_WEBROOT_DASHBOARD); ?>">
-                <svg class="svg" width="14" height="14">
+                <svg class="svg" width="18" height="18">
                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#icn-user"></use>
-                </svg><?php echo Labels::getLabel("NAV_PROFILE", $siteLangId); ?></a>
+                </svg><?php echo Labels::getLabel("NAV_PROFILE", $siteLangId); ?></a> </li>
 
-            <a class="my-account-nav-link"
-                href="<?php echo UrlHelper::generateUrl('Account', 'changeEmailPassword'); ?>"> <svg class="svg"
-                    width="14" height="14">
+        <li class="dropdown-menu-item"> <a class="dropdown-menu-link"
+                href="<?php echo UrlHelper::generateUrl('Account', 'changeEmailPassword'); ?>">
+                <svg class="svg" width="18" height="18">
                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#icn-update"></use>
-                </svg><?php echo Labels::getLabel('NAV_UPDATE_CREDENTIALS', $siteLangId); ?></a>
-            <div class="divider"></div>
-            <a class="my-account-nav-link"
+                </svg><?php echo Labels::getLabel('NAV_UPDATE_CREDENTIALS', $siteLangId); ?></a> </li>
+
+        <li class="divider"></li>
+        <li class="dropdown-menu-item">
+            <a class="logout-btn"
                 href="<?php echo UrlHelper::generateUrl('GuestUser', 'logout', [], CONF_WEBROOT_FRONTEND, null, false, false, true, $siteLangId); ?>">
-                <svg class="svg" width="14" height="14">
+                <svg class="svg" width="18" height="18">
                     <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#icn-logout"></use>
-                </svg><?php echo Labels::getLabel('NAV_LOGOUT', $siteLangId); ?></a>
-        </nav>
+                </svg>
+                <?php echo Labels::getLabel('NAV_LOGOUT', $siteLangId); ?></a>
+        </li>
     </div>
 </div>
 <?php
 } elseif ($layoutType == applicationConstants::SCREEN_MOBILE) { ?>
-<div class="offcanvas  offcanvas-start offcanvas-account" tabindex="-1" id="offcanvas-account">
+<div class="offcanvas offcanvas-start offcanvas-account" tabindex="-1" id="offcanvas-account">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title"><?php echo Labels::getLabel('LBL_Profile', $siteLangId); ?> </h5>
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>

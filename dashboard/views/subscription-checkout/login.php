@@ -1,5 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.'); ?>
-<div class="section-head">1. <?php echo Labels::getLabel('LBL_Log_In_/_Register', $siteLangId); ?> </div>
+<div class="section-head">
+    1. <?php echo Labels::getLabel('LBL_Log_In_/_Register', $siteLangId); ?>
+</div>
 
 <div class="box--tabled">
     <div class="box__cell">

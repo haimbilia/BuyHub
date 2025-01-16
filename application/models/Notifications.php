@@ -56,7 +56,7 @@ class Notifications extends MyAppModel
             }
 
             $siteName = FatApp::getConfig('CONF_WEBSITE_NAME_' . $this->commonLangId, FatUtility::VAR_STRING, 'Yo!Kart');
-            $message = array('title' => empty($siteName) ? $_SERVER['SERVER_NAME'] : $siteName, 'text' => $data['unotification_body'], 'type' => $data['unotification_type']);
+            $message = array('title' => empty($siteName) ? $_SERVER['SERVER_NAME'] : $siteName, 'text' => $data['unotification_body'], 'type' => $data['unotification_type'], 'customData' => $data['customData'] ?? []);
             foreach ($fcmDeviceIds as $pushNotificationApiToken) {
                 self::sendPushNotification($config, $pushNotificationApiToken['uauth_fcm_id'], $pushNotificationApiToken['uauth_device_os'], $message);
             }
@@ -83,8 +83,12 @@ class Notifications extends MyAppModel
             "title" => (string)($notiData['title'] ?? ''),
             "message" =>  (string)($notiData['text'] ?? ''),
             "type" => (string)($notiData['type'] ?? ''),
-            'image' => ($notiData['image'] ?? '')
+            'image' => ($notiData['image'] ?? ''),
         ];
+
+        if (isset($notiData['customData']) && !empty($notiData['customData'])) {
+            $msg = array_merge($msg, CommonHelper::cleanArray($notiData['customData']));
+        }
 
         $data = [
             "message" => [
@@ -94,7 +98,7 @@ class Notifications extends MyAppModel
                     "body" =>  $msg['message'],
                     "image" =>  $msg['image'],
                 ],
-                "data" => $notiData['customData'] ?? $msg,
+                "data" => $msg,
                 "android" => [
                     "priority" => 'high',
                 ],
@@ -126,6 +130,7 @@ class Notifications extends MyAppModel
         curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
         curl_setopt($ch, CURLOPT_VERBOSE, true); // Enable verbose output for debugging
         $response = curl_exec($ch);
+        
         if (curl_errno($ch)) {
             if (empty($response) || false == $response) {
                 $response = Labels::getLabel('ERR_UNABLE_TO_SEND_PUSH_NOTIFICATION._ERROR_{ERROR}');

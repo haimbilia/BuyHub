@@ -563,4 +563,12 @@ class LibHelper extends FatUtility
         }
         return strtoupper($class . '-' . $function . '-' . implode('-', $args));
     }
+
+    public static function addPrefixInArrValues($arr, $str)
+    {
+        array_walk($arr, function (&$value, $key) use ($str) {
+            $value = $str . $value;
+        });
+        return $arr;
+    }
 }

@@ -94,12 +94,12 @@ if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0))
                                             <?php echo $fld->getHtml(); ?>
                                             <div class="input-group-append">
                                                 <button type="button"
-                                                    class="btn btn-input dropdown-toggle warrantyTypeButtonJs"
+                                                    class="btn btn-input btn-outline-gray dropdown-toggle warrantyTypeButtonJs"
                                                     data-bs-toggle="dropdown" data-bs-auto-close="outside"
                                                     aria-haspopup="true" aria-expanded="true">
                                                     <?php echo $warrantTypes[$frm->getField('product_warranty_unit')->value] ?? current($warrantTypes); ?>
                                                 </button>
-                                                <div class="dropdown-menu">
+                                                <div class="dropdown-menu dropdown-menu-end">
                                                     <?php foreach ($warrantTypes as $type => $name) { ?>
                                                         <a class="dropdown-item warrantyTypeJs" href="javascript:void(0)"
                                                             data-type="<?php echo $type; ?>"><?php echo $name; ?></a>
@@ -168,7 +168,7 @@ if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0))
                                         <?php
                                         $fld = $frm->getField('use_shop_policy');
                                         if (null != $fld) {
-                                            $fld->setFieldTagAttribute('class', "fieldsVisibility-js");
+                                            $fld->setFieldTagAttribute('class', "fieldsVisibilityJs");
                                             HtmlHelper::configureSwitchForCheckbox($fld);
                                             $fld->developerTags['noCaptionTag'] = true;
                                             echo '<div class="col-md-12"><div class="form-group"><div class="setting-block">' . $fld->getHtml() . '</div></div></div>';

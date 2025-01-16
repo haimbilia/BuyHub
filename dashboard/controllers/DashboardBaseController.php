@@ -18,8 +18,18 @@ class DashboardBaseController extends FatController
         $this->action = $action;
 
         if ('updateUserCookies' != $action && FatApp::getConfig("CONF_MAINTENANCE", FatUtility::VAR_INT, 0) && (get_class($this) != "MaintenanceController") && (get_class($this) != ' Home' && $action != 'setLanguage')) {
-            if (true === MOBILE_APP_API_CALL || FatUtility::isAjaxCall()) {
-                FatUtility::dieJsonError(Labels::getLabel('ERR_SITE_UNDER_MAINTENANCE', CommonHelper::getLangId()));
+            $msg = Labels::getLabel('ERR_SITE_UNDER_MAINTENANCE', CommonHelper::getLangId());
+            if (true === MOBILE_APP_API_CALL) {
+                $data =  [
+                    'status' => '-2',
+                    'responseCode' => LibHelper::RC_OK,
+                    'msg' => $msg
+                ];
+                CommonHelper::jsonEncodeUnicode($data, true);
+            }
+
+            if (FatUtility::isAjaxCall()) {
+                FatUtility::dieJsonError($msg);
             }
             FatApp::redirectUser(UrlHelper::generateUrl('maintenance', '', [], CONF_WEBROOT_FRONTEND));
         }
@@ -56,9 +66,8 @@ class DashboardBaseController extends FatController
         $this->str_setup_successful = $arr['str_setup_successful'];
 
         $this->app_user['temp_user_id'] = 0;
-        if (true === MOBILE_APP_API_CALL) {
-            $this->setApiVariables();
-        }
+
+        $this->setApiVariables();
 
         if (0 < FatApp::getPostedData('appUser', FatUtility::VAR_INT, 0)) {
             CommonHelper::setAppUser();
@@ -197,6 +206,9 @@ class DashboardBaseController extends FatController
                     'maxLengthValidator' => CommonHelper::replaceStringData(Labels::getLabel('FRM_USED_{charsTyped}_of_{charsTotal}_CHAR', $this->siteLangId), ["{charsTyped}" => "%charsTyped%", "{charsTotal}" => "%charsTotal%"]), /* Used By Maxlength bootstrap validator. */
                     'fieldNotFound' => Labels::getLabel('LBL_{field}_NOT_FOUND', $this->siteLangId),
                     'savePrefilledValues' => Labels::getLabel('LBL_SAVE_PREFILLED_VALUES_FIRST.', $this->siteLangId),
+                    'total' => Labels::getLabel('LBL_TOTAL', $this->siteLangId),
+                    'confirmDeleteAddress' => Labels::getLabel('LBL_ARE_YOU_SURE?_IT_CAN_AFFECT_YOUR_RFQ_ORDERS_IF_LINKED.', $this->siteLangId),
+                    'subscriptionRenew' => Labels::getLabel('LBL_ARE_YOU_SURE?_PLEASE_MAINTAIN_WALLET_BALANCE_TO_RENEW.', $this->siteLangId),
                     'remove' => Labels::getLabel('LBL_REMOVE', $this->siteLangId),
                 );
 
@@ -238,6 +250,22 @@ class DashboardBaseController extends FatController
 
     private function setApiVariables()
     {
+        if (false === MOBILE_APP_API_CALL) {
+            return;
+        }
+
+        if (
+            isset($_SERVER['HTTP_X_APP_SESSION_ID']) &&
+            !empty($_SERVER['HTTP_X_APP_SESSION_ID']) &&
+            (session_status() !== PHP_SESSION_ACTIVE ||
+                $_SERVER['HTTP_X_APP_SESSION_ID'] != session_id()
+            )
+        ) {
+            session_destroy();
+            session_id($_SERVER['HTTP_X_APP_SESSION_ID']);
+            session_start();
+        }
+
         $this->db = FatApp::getDb();
         $post = FatApp::getPostedData();
 
@@ -506,8 +534,9 @@ class DashboardBaseController extends FatController
         $siteLangId = FatUtility::int($siteLangId);
         $frm = new Form('frmAddress');
         $frm->addSelectBox(Labels::getLabel('FRM_LANGUAGE', $siteLangId), 'lang_id', Language::getAllNames(), $siteLangId, array(), '');
-        $fld = $frm->addTextBox(Labels::getLabel('FRM_ADDRESS_LABEL', $siteLangId), 'addr_title');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_ADDRESS_TITLE', $siteLangId), 'addr_title');
         $fld->requirement->setRequired(true);
+        $fld->setFieldTagAttribute('maxlength', Address::ADDRESS_TITLE_LENGTH);
         $fld->setFieldTagAttribute('placeholder', Labels::getLabel('FRM_E.g:_My_Office_Address', $siteLangId));
         $frm->addRequiredField(Labels::getLabel('FRM_NAME', $siteLangId), 'addr_name');
         $frm->addRequiredField(Labels::getLabel('FRM_ADDRESS_LINE1', $siteLangId), 'addr_address1');
@@ -851,12 +880,26 @@ class DashboardBaseController extends FatController
 
     private function checkTempTokenLogin()
     {
-        if (!in_array($this->_controllerName, ['BuyerController', 'StripeConnectPayController'])) {
+        if (!in_array($this->_controllerName, ['BuyerController', 'StripeConnectPayController', 'RequestForQuotesController', 'RfqOffersController'])) {
             return;
         }
 
-        if (in_array($this->_controllerName, ['BuyerController']) && !in_array($this->_actionName, ['downloadDigitalFile', 'downloadDigitalFiles', 'downloadAttachedFileForReturn'])) {
-            return;
+        switch ($this->_controllerName) {
+            case 'BuyerController':
+                if (!in_array($this->_actionName, ['downloadDigitalFile', 'downloadDigitalFiles', 'downloadAttachedFileForReturn'])) {
+                    return;
+                }
+                break;
+            case 'RequestForQuotesController':
+                if (!in_array($this->_actionName, ['downloadFile', 'downloadRfqCopy'])) {
+                    return;
+                }
+                break;
+            case 'RfqOffersController':
+                if (!in_array($this->_actionName, ['downloadAttachmentFile'])) {
+                    return;
+                }
+                break;
         }
 
         $get = FatApp::getQueryStringData();

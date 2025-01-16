@@ -48,7 +48,7 @@ if (!empty($arrListing)) {
         $data->appendElement('h4', ['class' => 'title'], $fromUserName);
 
         $msg = $row['message_text'];
-        $msg = 25 < strlen($msg) ? substr($msg, 0, 25) . ' ...' : $msg;
+        $msg = 25 < strlen((string)$msg) ? substr($msg, 0, 25) . ' ...' : $msg;
         $data->appendElement('p', [], $msg);
         /* --------- */
 

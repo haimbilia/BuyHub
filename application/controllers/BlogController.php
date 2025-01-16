@@ -88,7 +88,7 @@ class BlogController extends MyAppController
     {
         $srch = BlogPost::getSearchObject($this->siteLangId, true, false, true, $addDefaultOrder);
         $srch->addMultipleFields(array('bp.*', 'IFNULL(bp_l.post_title,post_identifier) as post_title', 'bp_l.post_author_name', 'group_concat(bpcategory_id) categoryIds', 'group_concat(IFNULL(bpcategory_name, bpcategory_identifier) SEPARATOR "~") categoryNames', 'group_concat(GETBLOGCATCODE(bpcategory_id)) AS categoryCodes', 'post_description'));
-        $srch->addCondition('postlang_post_id', 'is not', 'mysql_func_null', 'and', true);
+        // $srch->addCondition('postlang_post_id', 'is not', 'mysql_func_null', 'and', true);
         $srch->addCondition('post_published', '=', applicationConstants::YES);
         $srch->addGroupby('post_id');
         return $srch;

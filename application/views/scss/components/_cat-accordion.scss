@@ -1,0 +1,89 @@
+.cat-accordion {
+  width: 100%;
+  font-weight: $font-weight-regular;
+  font-size: 0.8rem;
+  margin: 0;
+  li {
+    position: relative;
+    list-style-type: none;
+    border: none;
+  }
+  .is-active {
+    font-weight: $font-weight-normal;
+  }
+
+  ul li a {
+    position: relative;
+    margin: 5px 0;
+    padding: 0;
+    display: inline-block;
+    line-height: 1.7;
+
+    &:hover,
+    &:focus,
+    &:active {
+      color: $brand-color;
+    }
+  }
+}
+
+.cat-accordion ul ul li a {
+  display: block;
+  position: relative;
+}
+
+.cat-accordion ul ul {
+  display: none;
+}
+
+.cat-accordion li.active > ul {
+  display: block;
+}
+
+.cat-accordion ul ul {
+  margin-#{$start-direction}: 10px;
+}
+
+.cat-accordion .acc-trigger {
+  position: absolute;
+  top: 9px;
+  z-index: 1;
+  #{$end-direction}: 0;
+  cursor: pointer;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  text-align: center;
+}
+
+.cat-accordion .acc-trigger:before {
+  background: #44596b;
+  content: "";
+  height: 2px;
+  position: absolute;
+  #{$end-direction}: calc(50% - 5px);
+  top: calc(50% - 2px);
+  transform: rotate(90deg);
+  transition: all 0.2s ease-in-out;
+  width: 10px;
+}
+
+.cat-accordion .acc-trigger:after {
+  background: #44596b;
+  content: "";
+  height: 2px;
+  position: absolute;
+  #{$end-direction}: calc(50% - 5px);
+  top: calc(50% - 2px);
+  width: 10px;
+}
+
+.cat-accordion .acc-trigger.is-active:before {
+  transform: rotate(0deg);
+}
+
+.cat-accordion .badge {
+  float: right;
+  color: #b2b2b2;
+  font-size: 0.8em;
+}

@@ -36,7 +36,7 @@ class BrandsController extends MyAppController
                 array(
                     'product_id', 'selprod_id', 'IFNULL(product_name, product_identifier) as product_name', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title',
                     'special_price_found', 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type',
-                    'theprice', 'selprod_price', 'selprod_stock', 'selprod_condition', 'prodcat_id', 'IFNULL(prodcat_name, prodcat_identifier) as prodcat_name', 'product_rating as prod_rating ', 'product_total_reviews as totReviews', 'selprod_sold_count', 'selprod_min_order_qty', 'product_img_updated_on'
+                    'theprice', 'selprod_price', 'selprod_stock', 'selprod_condition', 'prodcat_id', 'IFNULL(prodcat_name, prodcat_identifier) as prodcat_name', 'product_rating as prod_rating ', 'product_total_reviews as totReviews', 'selprod_sold_count', 'selprod_min_order_qty', 'selprod_cart_type', 'selprod_hide_price', 'product_img_updated_on', 'shop_rfq_enabled'
                 )
             );
             if (UserAuthentication::isUserLogged()) {
@@ -106,6 +106,7 @@ class BrandsController extends MyAppController
         $get['brand_id'] = $brandId;
         $get['brand'] = array($brandId); /*For filters*/
         $get['vtype']  = $get['vtype'] ?? 'grid';
+        $viewType = FatApp::getPostedData('viewType', FatUtility::VAR_STRING, '');
         if (!FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, '')) && $get['vtype'] == 'map') {
             $get['vtype'] = 'grid';
         }
@@ -147,7 +148,7 @@ class BrandsController extends MyAppController
             'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'splprice_start_date', 'splprice_end_date',
             'brand_id', 'COALESCE(brand_name, brand_identifier) as brand_name', 'user_name', 'IF(selprod_stock > 0, 1, 0) AS in_stock',
             'selprod_sold_count', 'selprod_return_policy', /*'maxprice', 'ifnull(sq_sprating.totReviews,0) totReviews','IF(ufp_id > 0, 1, 0) as isfavorite', */ 'selprod_min_order_qty',
-            'shop.shop_id', 'shop.shop_lat', 'shop.shop_lng', 'COALESCE(shop_name, shop_identifier) as shop_name'
+            'shop.shop_id', 'shop.shop_lat', 'shop.shop_lng', 'COALESCE(shop_name, shop_identifier) as shop_name', 'selprod_cart_type', 'selprod_hide_price', 'shop.shop_rfq_enabled'
         );
         $removeFlds = array_diff($flds, ['1']);
         $this->setRecordCount(clone $srch, $get['pageSize'], $get['page'], $get, true, $removeFlds);
@@ -173,6 +174,7 @@ class BrandsController extends MyAppController
             'pageCount' => $this->pageData['pageCount'],
             'recordCount' => $this->pageData['recordCount'],
             'postedData' => $get,
+            'viewType' => $viewType,
             'pageTitle' => $brand['brand_name'],
             'canonicalUrl' => UrlHelper::generateFullUrl('Brands', 'view', array($brandId)),
             'productSearchPageType' => SavedSearchProduct::PAGE_BRAND,
@@ -183,7 +185,7 @@ class BrandsController extends MyAppController
             'pageSizeArr' => FilterHelper::getPageSizeArr($this->siteLangId)
         );
 
-        if (FatUtility::isAjaxCall()) {
+        if (FatUtility::isAjaxCall() && $viewType != 'popup') {
             $this->set('products', $products);
             /* $this->set('moreSellersProductsArr', $data['moreSellersProductsArr']);*/
             $this->set('siteLangId', $this->siteLangId);
@@ -192,8 +194,18 @@ class BrandsController extends MyAppController
             echo $this->_template->render(false, false, 'products/products-list.php', true);
             exit;
         }
-
+        
         $this->set('data', $data);
+        if (FatUtility::isAjaxCall() && $viewType == 'popup') {
+            $this->set('products', $products);
+            $this->set('postedData', $get);
+            $this->set('viewType', $viewType);
+            $this->set('siteLangId', $this->siteLangId);
+            $this->set('pageSizeArr', $data['pageSizeArr']);
+            $this->_template->render(false, false, 'products/listing-map-page.php');
+            exit;
+        }
+
         $this->includeProductPageJsCss();
         $this->_template->addJs('js/slick.min.js');
         $this->_template->render();

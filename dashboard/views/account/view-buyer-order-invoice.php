@@ -231,7 +231,7 @@ if ($orderDetail['order_is_wallet_selected'] > 0) {
                                 <th width="10%" style="padding:10px;text-align: center; border-bottom:1px solid #ddd;font-size:12px; background-color:#ddd;"><?php echo Labels::getLabel('LBL_Qty', $siteLangId); ?></th>
                                 <?php if ($col6) { ?>
                                     <th width="15%" style="padding:10px;text-align: center; border-bottom:1px solid #ddd;font-size:12px; background-color:#ddd;">
-                                        <?php if (FatApp::getConfig('CONF_TAX_CATEGORIES_CODE', FatUtility::VAR_INT, 1)) {
+                                        <?php if (isset($childOrder['op_tax_code']) && FatApp::getConfig('CONF_TAX_CATEGORIES_CODE', FatUtility::VAR_INT, 1)) {
                                             echo $childOrder['op_tax_code'] . ' (' . Labels::getLabel('LBL_Tax', $siteLangId) . ')'; ?>
                                         <?php } else {
                                             echo Labels::getLabel('LBL_Tax', $siteLangId);
@@ -405,26 +405,7 @@ if ($orderDetail['order_is_wallet_selected'] > 0) {
             </td>
         </tr>
         <tr>
-            <td>
-                <table width="100%" border="0" cellpadding="0" cellspacing="0">
-                    <?php $shopCodes = $childOrder['shop_invoice_codes'];
-                    $codesArr = explode("\n", $shopCodes); ?>
-                    <tbody>
-                        <?php $count = 1; ?>
-                        <tr>
-                            <?php foreach ($codesArr as $code) { ?>
-                                <td style="<?php echo ($count % 2 == 0) ? 'text-align: right;' : ''; ?> font-weight: 700;"><?php echo $code; ?></td>
-                            <?php
-                                if ($count % 2 == 0) {
-                                    echo '</tr><tr>';
-                                }
-                                $count++;
-                            } ?>
-
-                        </tr>
-                    </tbody>
-                </table>
-            </td>
+            <td><?php echo nl2br($childOrder['shop_invoice_codes']); ?></td>
         </tr>
     </tbody>
 </table>

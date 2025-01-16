@@ -6,10 +6,10 @@
                 <div class="col-lg-12 ">
                     <div class="cg-main">
                         <?php if (!empty($contentPages)) { ?>
-                            <h6 class="big-title">
+                            <h5 class="big-title-main">
                                 <?php echo Labels::getLabel('LBL_CONTENT_PAGES', $siteLangId); ?>
-                            </h6>
-                            <div class="item">
+                            </h5>
+                            <div class="cg-main-item">
                                 <ul>
                                     <?php
                                     foreach ($contentPages as $contentId => $contentPageName) {
@@ -25,19 +25,19 @@
                             <?php
                         }
                         if ($categoriesArr) { ?>
-                            <h6 class="big-title">
+                            <h5 class="big-title-main">
                                 <?php echo Labels::getLabel('LBL_Categories', $siteLangId); ?>
-                            </h6>
-                            <div class="item">
-                                <?php $this->includeTemplate('_partial/custom/categories-list.php', array('categoriesArr' => $categoriesArr), false); ?>
-                            </div>
+                            </h5>
+
+                            <?php $this->includeTemplate('_partial/custom/categories-list.php', array('categoriesArr' => $categoriesArr), false); ?>
+
                             <?php
                         }
                         if (!empty($allShops)) { ?>
-                            <h6 class="big-title">
+                            <h5 class="big-title-main">
                                 <?php echo Labels::getLabel('LBL_Shops', $siteLangId); ?>
-                            </h6>
-                            <div class="item ">
+                            </h5>
+                            <div class="cg-main-item">
                                 <ul>
                                     <?php foreach ($allShops as $shop) {
                                         ?>
@@ -54,10 +54,10 @@
                         }
 
                         if (!empty($allBrands)) { ?>
-                            <h6 class="big-title">
+                            <h5 class="big-title-main">
                                 <?php echo Labels::getLabel('LBL_Brands', $siteLangId); ?>
-                            </h6>
-                            <div class="item ">
+                            </h5>
+                            <div class="cg-main-item">
                                 <ul>
                                     <?php foreach ($allBrands as $brands) {
                                         ?>

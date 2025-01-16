@@ -59,7 +59,7 @@ if (User::isBuyer(true) || (!UserAuthentication::isUserLogged())) {
                                                 <div class="product-profile">
                                                     <div class="product-profile-data">
                                                         <div class="item__category">
-                                                            <a class="stores-link" href="<?php echo UrlHelper::generateUrl('shops', 'view', array($product['shop_id'])); ?>">
+                                                            <a class="link-brand" href="<?php echo UrlHelper::generateUrl('shops', 'view', array($product['shop_id'])); ?>">
                                                                 <span class="text--dark"><?php echo CommonHelper::renderHtml($product['shop_name'], true); ?></span>
                                                             </a>
                                                         </div>
@@ -68,13 +68,7 @@ if (User::isBuyer(true) || (!UserAuthentication::isUserLogged())) {
                                                         $productName = CommonHelper::renderHtml($productName, true);
                                                         ?>
                                                         <a class="title" title="<?php echo $productName; ?>" href="<?php echo $productUrl; ?>"><?php echo $productName; ?></a>
-                                                        <div class="products-price">
-                                                            <span class="products-price-new"><?php echo trim(CommonHelper::displayMoneyFormat($product['theprice'], true, false, true, false, false, true)); ?></span>
-                                                            <?php if ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) { ?>
-                                                                <del class="products-price-old"><?php echo trim(CommonHelper::displayMoneyFormat($product['selprod_price'], true, false, true, false, false, true)); ?></del>
-                                                                <div class="products-price-off"><?php echo trim(CommonHelper::showProductDiscountedText($product, $siteLangId)); ?></div>
-                                                            <?php } ?>
-                                                        </div>
+                                                        <?php require(CONF_THEME_PATH . '_partial/collection/product-price.php'); ?>
                                                         <div class="options">
                                                             <?php
                                                             if (isset($product['options']) && count($product['options'])) {

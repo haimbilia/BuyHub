@@ -36,25 +36,25 @@ if (null != $tosFld) {
     $tosFld->developerTags['col'] = 12;
 }
 
-if (0 < $loadBankForm) {    
+if (0 < $loadBankForm) {
     $frm->setFormTagAttribute('data-onclear', 'updateBankDetails()');
     $frm->addFormTagAttribute('class', 'modalFormJs');
     $formTitle = Labels::getLabel('LBL_UPDATE_BANK_DETAILS', $siteLangId);
     $includeTabs = false;
     require_once(CONF_THEME_PATH . '_partial/listing/form-head.php'); ?>
-        <div class="form-edit-body loaderContainerJs">
-            <?php echo $frm->getFormHtml(); ?>
-        </div>
-        <?php require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php'); ?>
+    <div class="form-edit-body loaderContainerJs">
+        <?php echo $frm->getFormHtml(); ?>
+    </div>
+    <?php require_once(CONF_THEME_PATH . '_partial/listing/form-edit-foot.php'); ?>
     </div>
 <?php } else { ?>
     <hr>
-    <div class="section__body">
+    <div class="section-body">
         <?php $this->includeTemplate('stripe-connect/fieldsErrors.php', ['errors' => $errors]); ?>
         <?php echo $frm->getFormHtml(); ?>
     </div>
     <script language="javascript">
-        $(document).ready(function() {
+        $(document).ready(function () {
             if (0 < $(".state").length) {
                 getStatesByCountryCode($(".state").data('country'), '0', '.state', 'state_code');
             }

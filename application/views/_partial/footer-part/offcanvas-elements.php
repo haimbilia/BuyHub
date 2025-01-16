@@ -4,6 +4,7 @@ $this->includeTemplate('_partial/footer-part/headerSearchFormArea.php'); ?>
 
 <div class="offcanvas offcanvas-start categories-menu categoriesJs" tabindex="-1" aria-labelledby="categories-menuLabel"
     id="categories-menu">
+
     <ul class="grouping grouping-level">
         <li class="skeleton grouping-item"></li>
         <li class="skeleton grouping-item"></li>
@@ -15,6 +16,7 @@ $this->includeTemplate('_partial/footer-part/headerSearchFormArea.php'); ?>
         <li class="skeleton grouping-item"></li>
         <li class="skeleton grouping-item"></li>
     </ul>
+
 </div>
 
 <?php if (!in_array($controllerName, ['Cart', 'Checkout'])) { ?>

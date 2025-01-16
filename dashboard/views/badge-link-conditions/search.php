@@ -114,7 +114,7 @@ foreach ($arrListing as $sn => $row) {
                         $class = 'label-danger';
                         if (in_array($row['blinkcond_id'], $autoSatisfiedBadgesArr)) {
                             $lbl = Labels::getLabel('LBL_TRUE', $siteLangId);
-                            $class = 'label-success';
+                            $class = 'badge-success';
                         }
 
                         $htm = ' <span class="badge badge-inline ' . $class . ' rounded-pill">' . $lbl . '</span>';

@@ -430,7 +430,8 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
 
             reloadList();
             if (t.langId > 0) {
-                editLangData(t.recordId, t.langId);
+                let extraLangTabClass = $('.modalDialogJs').hasClass('modal-dialog-vertical-md') ? 'modal-dialog-vertical-md' : '';
+                editLangData(t.recordId, t.langId, 0, extraLangTabClass);
             } else if ("openMediaForm" in t) {
                 mediaForm(t.recordId);
             } else if("banners" in t){
@@ -445,6 +446,10 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
         });
 
         setTimeout(() => {
+            if (isAjaxRunning) {
+                $(frm).attr('onsubmit', onSubmitFn);
+                $("." + $.ykmodal.element + ' .submitBtnJs').removeClass('loading').removeAttr('disabled');
+            }
             isAjaxRunning = false;
             $(frm).attr('onsubmit', onSubmitFn);
         }, 5000);
@@ -469,7 +474,8 @@ $(document).on("hidden.bs.modal", "#modalBoxJs", function () {
             }
 
             if (t.langId > 0) {
-                editLangData(t.recordId, t.langId);
+                let extraLangTabClass = $('.modalDialogJs').hasClass('modal-dialog-vertical-md') ? 'modal-dialog-vertical-md' : '';
+                editLangData(t.recordId, t.langId, 0 , extraLangTabClass);
             } else if ("openMediaForm" in t) {
                 mediaForm(t.recordId);
             }

@@ -155,22 +155,23 @@
                             true
                         );
                     }
-
-                    $li = $ul->appendElement("li");
-                    $li->appendElement(
-                        'a',
-                        array(
-                            'href' => 'javascript:void(0)',
-                            'onclick' => 'return addItemsToCart("' . $order['order_id'] . '");',
-                            'title' => Labels::getLabel('LBL_Re-Order', $siteLangId)
-                        ),
-                        '<svg class="svg" width="18" height="18">
-                        <use
-                            xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#cart">
-                        </use>
-                    </svg>',
-                        true
-                    );
+                    
+                    if (SellerProduct::CART_TYPE_RFQ_ONLY != $order['selprod_cart_type'] && (is_null($order['selprod_hide_price']) || false == SellerProduct::isPriceHidden($order['selprod_hide_price'], $order['shop_rfq_enabled']))) {
+                        $li = $ul->appendElement("li");
+                        $li->appendElement(
+                            'a',
+                            array(
+                                'href' => 'javascript:void(0)', 'onclick' => 'return addItemsToCart("' . $order['order_id'] . '");',
+                                'title' => Labels::getLabel('LBL_Re-Order', $siteLangId)
+                            ),
+                            '<svg class="svg" width="18" height="18">
+                                <use
+                                    xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#cart">
+                                </use>
+                            </svg>',
+                            true
+                        );
+                    }
 
                     if (!$order['order_deleted'] && !$order["order_payment_status"] && 'TransferBank' == $order['plugin_code']) {
                         $li = $ul->appendElement("li");

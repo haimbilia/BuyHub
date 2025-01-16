@@ -672,6 +672,7 @@ class BuyerController extends BuyerBaseController
             'ocr'
         );
         $srch->joinSellerProducts();
+        $srch->joinShop();
 
         $srch->addCondition('order_user_id', '=', $user_id);
         $srch->joinPaymentMethod();
@@ -753,7 +754,9 @@ class BuyerController extends BuyerBaseController
                 'opshipping_fulfillment_type',
                 'op_rounding_off',
                 'selprod_product_id',
-                'orderstatus_id'
+                'orderstatus_id',
+                'selprod_cart_type',
+                'selprod_hide_price', 'shop_rfq_enabled'
             )
         );
 
@@ -2253,7 +2256,6 @@ class BuyerController extends BuyerBaseController
         $srch->addMultipleFields(array('op_status_id', 'op_id', 'op_qty', 'op_product_type'));
         $rs = $srch->getResultSet();
         $opDetail = FatApp::getDb()->fetch($rs);
-
         if (!$opDetail || CommonHelper::isMultidimArray($opDetail)) {
             Message::addErrorMessage(Labels::getLabel('ERR_ERROR_INVALID_ACCESS', $this->siteLangId));
             // CommonHelper::redirectUserReferer();
@@ -2287,7 +2289,7 @@ class BuyerController extends BuyerBaseController
         }
 
         $frm = $this->getOrderReturnRequestForm($this->siteLangId, $opDetail);
-        $fld = $frm->getField('orrequest_qty');
+        // $fld = $frm->getField('orrequest_qty');
 
         $frm->fill(array('op_id' => $opDetail['op_id']));
         $this->set('frmOrderReturnRequest', $frm);
@@ -2763,15 +2765,13 @@ class BuyerController extends BuyerBaseController
 
     private function getOrderReturnRequestForm($langId, $opDetail = array())
     {
-        $returnQtyArr = array();
-        if (!empty($opDetail)) {
-            $op_qty = isset($opDetail["op_qty"]) ? $opDetail["op_qty"] : 1;
-            for ($k = 1; $k <= $op_qty; $k++) {
-                $returnQtyArr[$k] = $k;
-            }
-        }
         $frm = new Form('frmOrderReturnRequest', array('enctype' => "multipart/form-data"));
-        $frm->addSelectBox(Labels::getLabel('FRM_RETURN_QTY', $langId), 'orrequest_qty', $returnQtyArr, '', array(), '')->requirements()->setRequired();
+        $op_qty = $opDetail["op_qty"] ?? 1;
+        $fld = $frm->addRequiredField(Labels::getLabel('FRM_RETURN_QTY', $langId), 'orrequest_qty', $op_qty);
+        $fld->requirements()->setInt();
+        $fld->requirements()->setRange(1, $op_qty);
+        $fld->overrideFldType('number');
+
         $orderReturnReasonsArr = OrderReturnReason::getOrderReturnReasonArr($langId);
         $frm->addSelectBox(Labels::getLabel('FRM_REASON_FOR_RETURN', $langId), 'orrequest_returnreason_id', $orderReturnReasonsArr, '', array(), Labels::getLabel('FRM_SELECT_REASON', $langId))->requirements()->setRequired();
 
@@ -2821,6 +2821,11 @@ class BuyerController extends BuyerBaseController
 
     public function addItemsToCart($orderId)
     {
+        if (0 < FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) {
+            $message = Labels::getLabel('MSG_ITEMS_ARE_AVAILABLE_FOR_RFQ_ONLY', $this->siteLangId);
+            LibHelper::exitWithError($message, true);
+        }
+
         if (!$orderId) {
             $message = Labels::getLabel('MSG_Invalid_Access', $this->siteLangId);
             LibHelper::exitWithError($message, true);
@@ -2846,7 +2851,14 @@ class BuyerController extends BuyerBaseController
             if (strpos($keyDecoded, Cart::CART_KEY_PREFIX_PRODUCT) !== false) {
                 $selprod_id = FatUtility::int(str_replace(Cart::CART_KEY_PREFIX_PRODUCT, '', $keyDecoded));
             }
-            $selProdStock = SellerProduct::getAttributesById($selprod_id, 'selprod_stock', false);
+            
+            $selProdData = SellerProduct::getAttributesById($selprod_id, ['selprod_stock', 'selprod_cart_type'], false);
+            if (SellerProduct::CART_TYPE_RFQ_ONLY == $selProdData['selprod_cart_type']) {
+                $notAvailable++;
+                continue;
+            }
+
+            $selProdStock = $selProdData['selprod_stock'];
             if (!$selProdStock && $selProdStock <= 0) {
                 $outOfStock = true;
                 continue;
@@ -2860,7 +2872,7 @@ class BuyerController extends BuyerBaseController
         }
 
         if ($outOfStock) {
-            $message = Labels::getLabel('MSG_Product_not_available_or_out_of_stock_so_removed_from_cart_listing', $this->siteLangId);
+            $message = Labels::getLabel('MSG_PRODUCT_NOT_AVAILABLE_OR_OUT_OF_STOCK_SO_REMOVED_FROM_CART_LISTING', $this->siteLangId);
             LibHelper::exitWithError($message, true);
         }
 
@@ -2874,7 +2886,7 @@ class BuyerController extends BuyerBaseController
             }
             LibHelper::exitWithError($message, true);
         }
-
+        
         $cartObj->removeUsedRewardPoints();
         $cartObj->removeCartDiscountCoupon();
         $cartObj->removeProductShippingMethod();
@@ -2973,7 +2985,7 @@ class BuyerController extends BuyerBaseController
             FatUtility::dieJsonError($msg);
         }
 
-        if (!$orderPaymentObj->addOrderPayment($post["opayment_method"], $post['opayment_gateway_txn_id'], $post["opayment_amount"], $post["opayment_comments"], '', false, 0, Orders::ORDER_PAYMENT_PENDING)) {
+        if (!$orderPaymentObj->addOrderPayment($post["opayment_method"], $post['opayment_gateway_txn_id'], $post["opayment_amount"], $post["opayment_comments"], '', false, 0, Orders::ORDER_PAYMENT_PENDING, true)) {
             FatUtility::dieJsonError($orderPaymentObj->getError());
         }
 
@@ -3113,7 +3125,7 @@ class BuyerController extends BuyerBaseController
                 'COALESCE(shop_state_l.state_name,state_identifier) as shop_state_name',
                 'COALESCE(shop_country_l.country_name,shop_country.country_code) as shop_country_name',
                 'selprod_condition',
-                'product_warranty_unit'
+                'product_warranty_unit', 'selprod_cart_type', 'selprod_hide_price', 'shop_rfq_enabled'
             )
         );
         $productRs = $prodSrch->getResultSet();

@@ -1,15 +1,44 @@
-# Multivendor - Released Version : RV-10.1.0
+# Multivendor - Released Version : RV-10.2.0
 
-> IOS APP release :- 3.1.0
-> Android APP release :- 3.1.2
+> IOS APP release :- 3.-.0
+> Android APP release :- 3.-.2
 > System API version : 2.3
 
 ## New Features : 
-    - Maintain Single seller products to buyer cart.
-    - Collect customer comments on order product while checkout.
-    - Hide product variants and merge product catalog and inventory form.
-    - Product type as a service is added under product type.
-    - Gift card feature added for buyers.
+    
+## Standard RFQ module
+    - RFQ submission at product level (RFQs submitted by buyers will be assigned to all sellers selling any variants of the product catalog).
+    - RFQ submission at product variants level (Buyers submitted RFQ will be assigned to each seller selling the same variant of the product catalog).
+    - RFQ submission at Individual/inventory level (Buyers submitted RFQ will be assigned to the specific seller associated with the same product inventory).
+
+## Global RFQ module
+    - Buyers can place the RFQ based on the below options:
+        - Public: Globally available to each seller.
+        - Selected: Buyers can submit RFQs to selected sellers.
+        - Favourite Suppliers: Logged users/buyers can submit RFQs to their favorite list sellers.
+    - Global RFQs will be listed separately under the seller dashboard.
+    - Sellers can pick any Global RFQ from the listing and submit their quotation/offers.
+
+## RFQ module features:
+    - RFQ module can be enabled/disabled by the admin.
+    - Admin configuration to set "Admin approval is required on new RFQ?".
+    - Sellers can set their product availability for direct buying, RFQ only, or both (direct buying + RFQ).      
+    - Sellers can hide the product prices for RFQ-only products.
+    - Buyers (LoggedIn users & Guest users) can place the RFQ.
+    - Sellers can place quotations/offers corresponding to the RFQ submitted by buyers.
+    - Global RFQ's will be listed separately & Sellers can pick and submit their quotations/offers.
+    - Sellers can place different offers based on the quantity.
+    - Buyers and Sellers can communicate via the Messages module.
+    - Buyers and Sellers can share attachments as well during the message conversation.
+    - Buyers and Sellers can counter the offers submitted by each other.
+    - Buyers and Sellers can check the offer history.        
+    - Buyer can Accept/Counter/Reject the offer submitted by the Sellers.
+    - Sellers can add custom shipping charges while submitting the quotations/offers based on the product fulfillment type (Ship). Custom shipping charges will override the existing system shipping charges during checkout flow.
+    - Sellers can restrict buyers from placing counteroffers in response to their quotations/offers.
+    - Once the buyer accepts the offer, the vendor has to submit his/her final confirmation so that the buyer will be allowed to purchase the product with the accepted offer amount and quantities.
+    - Sellers shall have to link the product inventory before sharing a final acceptance. 
+    - Buyers can proceed with either the RFQ offer checkout flow or standard buying flow.
+    - Admin can perform all the actions on behalf of vendors.
 
 ## Known Issues and Problems :
 
@@ -18,33 +47,68 @@
         - Safari and IE 11 do not support our CSS. More info can be found at https://developer.microsoft.com/en-us/microsoft-edge/platform/status/csslevel3attrfunction/
         - System does not support Zero decimal currency while checking out with stripe
 ## Enhancements:
-    - Load all categories on ajax call instead of page load.
-    - Performance optimization to handle product ratings.
-    - Geo location popup at the header section.
-    - Language and currency selection via popup.
-    - Displayed review images at the top of reviews list.
-    - Performance optimization ar admin end, product search, filters and collections list.
-    - Upgraded paypal payment library deprecated code.
+    - New collection layouts for the home page have been added to support B2B design layouts.
+    - Header width management: Admin can set header to full width or fixed width.  
+    - Hide header & footer options for CMS pages.
+    - Performance optimization.
     
 ## Hit URL:
     - admin/patch-update/updateProductRating  
 
-## Bug Fixes:
-    - Bug-074802 - Omise Payment gateway deprecated issue.
-    - Bug-076133 - Stripe payment gateway functionality upgrade
-    - Bug-076193 - The unlimited plan validity expires after 24 hours.
-    - Bug-076198 - Unable to save downloadable file on new digital product.
-    - Bug-077681 - The user can download the preview files but not able to preview within the system.
-    - Bug-078138 - Product setup page gets distorted when the admin tries to paste the content in CMS editor (Firefox)
-    - Bug-076927 - The shipping charges get refunded to the buyer even if the admin disabled return shipping charges to the customer setting
-    - Bug-080244 - Error occur on the My Offers page on the buyer dashboard in Arabic language.
-    - Bug-079388 - "Pay At Store" not working.
-    - Bug-072665 - Product specification special character issue
-    - Bug-084657 - User is unable to add inventory for services.
-    - Bug-083721 - Depraction appears when the guest user tries to place a GDPRrequest
-    - Bug-083863 - A fatal error occurs when the admin enables the Payout settings in the production mode.
-    - Bug-084137 - Please remove the duplicity in the settings
-    - Bug-084136 - Need to remove Brand parameters from Inventory Missing Info when linking brand with the catalog is not mandatory
+## Bug Fixes:    
+    - Bug-080564 - Buy now button should not be there on the Detail page after offer acceptance.
+    - Bug-080559 - Hide price setting is not working properly
+    - Bug-080573 - no option appears to purchase a product or place rfq on the detail page.
+    - Bug-080931 - Shipping address is not similar to that of the defined address in the rfq form
+    - Bug-080934 - Multiple issues in email templates in case of rfq
+    - Bug-080917 - Variant selction does not appear properly
+    - Bug-080895 - it still shows manageblity for Rfq on shop level and Inventory level on admin end.
+    - Bug-082740 - The 'Enable RFQ' toggle button continues to appear on the 'Inventory Setup' page of the seller, even though the seller has disabled the 'Enable RFQ Module' toggle button on the 'Shop Details' page.
+    - Bug-082748 - 'Available quantity' of a product decreases when RFQ order of the product is completed
+    - Bug-082754 - When the 'Available Quantity' is 0, the buyer is unable to place the RFQ order
+    - Bug-082765 - No validation message appears when buyer does not add Delivery Address on 'Request a quote' popup box.
+    - Bug-082762 - The unit of the ordered quantity should be displayed on the 'Your Shopping Bag' page of buyer   
+    - Bug-082913 - Reorder functionality need to be managed properly.
+    - Bug-082875 - Shop name does not direct the user to shop detail page
+    - Bug-082874 - Price still appears for when hide price is enabled on system level  
+    - Bug-083140 - The same setting appears twice under the product settings
+    - Bug-083245 - Services: A warning appears when the seller/admin tries to update the media sequence using drag and drop.         
+    - Bug-084664 - Add inventory button is not working properly.
+    - Bug-084668 - it shows wrong information text.
+    - Bug-084662 - Offer acceptance flow is not proper in some cases
+    - Bug-084643 - it shows an invalid validation message.
+    - Bug-084638 - It shows unnecessary accept button and if clikced them creates a conflict.
+    - Bug-084644 - platform non registered product's name should not be clickable.
+    - Bug-084640 - Looking for field's options are not proeprly visible in mobile and tablet devices
+    - Bug-084639 - Category field's ui is not proper in global RFQ form
+    - Bug-084742 - All Data should appear in the downloaded RFQ details
+    - Bug-084727 - Email template is not proper in case of global RFQ.
+    - Bug-084726 - RFQ title should not appear as bold and clickable.
+    - Bug-084724 - Calender field's is not properly clickable
+    - Bug-084722 - Admin is able to assign any seller in case if Buyer had selected only one while filling form
+    - Bug-084718 - Favourite option is not coming even if a guest user have added the shop in fav
+    - Bug-084716 - Seller is unable to see that which inventory has been linked with the RFQ.
+    - Bug-084709 - Back button Redirection is not proper from GLobal RFQ offer detail page
+    - Bug-084700 - Attachment acess is not working properly
+    - Bug-084712 - There is no option to remove the atached file in the rfq form
+    - Bug-084775 - Content missing for No data found while searching Brand name.
+    - Bug-084685 - Dropdown suggestions still shows selected seller name.
+    - Bug-084686 - User is still able to activate the disabled field from console. 
+    - Bug-085023 - Global RFQ flow is not working properly
+    - Bug-085117 - Address Label Field Exceeds Character Limit in Shipping Address Form
+    - Bug-085115 - 'Duplicate offer with same quantity' error still appears when admin tries to add an offer for the same seller after deleting the previous offer.
+    - Bug-085113 - The admin can accept the buyer's offer on behalf of the seller when the seller has not linked the product's inventory
+    - Bug-085132 - issue on 'RFQ detail' page of buyer and seller account
+    - Bug-085112 - 'New' button does not appear for the RFQ sent to a particular seller.
+    - Bug-085196 - 'Reject' button should appear to buyer when seller has given the offer while the 'Buyer can negotiate the offer' toggle button is disabled.
+    - Bug-085191 - RFQ >> suggestion >> 'New' button should be replaced with 'Offer' text.
+    - Bug-085186 - RFQ >> Suggestion >> A validation message should be displayed to the seller when they attempt to accept the buyer's counteroffer without linking the inventory
+    - Bug-085183 - 'Accept' button still appears for the seller's offer to the buyer even when seller has accepted the counter offer
+    - Bug-085177 - 'Final Acceptance button does not appear to seller when buyer accepts the offer of seller
+    - Bug-085157 - 'Request for Quote' button is displayed on the bottom of the home page also
+    - Bug-085127 - Global RFQ form, "Invite To" validation workflow
+    - Bug-085820 - RFQ >> The product image and the 'By' field should not appear in emails when a global RFQ request is submitted by the buyer or received by the seller
+    - Bug-085716 - RFQ >> Previous RFQs are also displayed to the recently registered seller
     - Bug-085143 - 404 on the product details page when the new user creates a product.
     - Bug-085068 - cancellation is not working properly if stripe connect is on.
     - Bug-086044 - Branch 1: The image added in the review also appears in the product images gallery.
@@ -87,6 +151,19 @@
     - Bug-087200 - partial payment is not working with wallet + stripe
     - Bug-086479 - sender email should also be visible to receiver and admin.
     - Bug-087199 - Debit entry content need to be upadated
+    - Bug-087356 - When a seller is not a buyer rfq attachement does not get opened.
+    - Bug-087400 - Site stops working in case if multiple quantity
+    - Bug-087395 - A warning appears when the admin tries to approve the seller-added catalog
+    - Bug-087344 - Users did't get notified about the messages or attachement bound with RFQ offer
+    - Bug-087413 - <<RFQ+B1>>Download rfq copy option is not working properly
+    - Bug-087468 - There is no option to update the inventory binded, could lead to conflict.
+    - Bug-087453 - << RFQ >> Multiple sellers can not share offers with the same quantity for any RFQ
+    - Bug-087503 - Expired tag should appear on the buyer end as well.
+    - Bug-087447 - <<RFQ+B1>> email notification in case of final approval is wrong
+    - Bug-087532 - Attachment selected does not appear on chat screen for RFQ offer
+    - Bug-087529 - Calender selection does not works properly while placing an offer
+    - Bug-087579 - <<RFQ+BRanch1>>Add to cart button should not appear in More seller section.
+    - Bug-087595 - All Data should appear in the downloaded RFQ details in case of standard RFQ as well
     - Bug-087215 - The user's phone number is missing in the GDPR request for the user registered with a phone number only
     - Bug-087213 - A warning appears when the user tries to place a pickup order in Arabic
     - Bug-087210 - The phone number direction is not correct in the RTL on the seller registration page
@@ -97,17 +174,59 @@
     - Bug-087607 - Order ID missing in the email subject for the bank transaction request notification
     - Bug-087602 - Branch 1>> The Categories filters are not working on the shop details page
     - Bug-086852 - Branch 1 >> RTL >> Product description field appears on the product details page even if no details are added in the description.
+    - Bug-087615 - UI issue in the pickup slots section on the checkout page
+    - Bug-087580 - Cart only setting is not working properly in case of more sellers
     - Bug-087648 - Deprecation appears on the product details page
     - Bug-087664 - Error message appears when the buyer reports spam to any shop
     - Bug-087684 - The default comment appearing on the status change is incorrect for the service product
     - Bug-087658 - <<Branch 1>> The master product requested by any seller appears in the My Product after approval instead of the marketplace products listing
     - Bug-087657 - << Branch 1 >> UI issue on the master product request setup form
+    - Bug-087541 - Offer listing page's design should get some enhancements
+    - Bug-087739 - The edit button does not work when the seller tries to edit the sent RFQ offer
+    - Bug-088088 - <<RFQ+ BRanch1>> wrong infomation appears
+    - Bug-088118 - The homepage slides are not working properly when added multiple times in the collection
+    - Bug-088212 - <<RFQ>> link inventory icon does not appear in a condition
+    - Bug-088131 - << RFQ Collections >> Extra spacing appears in the category banner on the category collection 2 layout
     - Bug-088263 - UI issue on the subscription order details page on the admin end.
     - Bug-088262 - The discount coupon appears applied on the order details page even if the seller has not applied any discount on the subscription order.
     - Bug-088170 - << Branch 1>> Deprecation appears on the special price listing page on the seller's end.
     - Bug-088324 - << Branch 1 >> Shipping profile is mandatory to bind with service in case of service product through import
+    - Bug-088186 - Product layout 2 does not shows complete data according to the layout view defined
+    - Bug-088180 - Toggle selections are not working properly
+    - Bug-087450 - << RFQ >> The content is not right aligned on the RFQ invoice in Arabic.
+    - Bug-087449 - UI issue on the product setup form
+    - Bug-088469 - Collections >> The Image added previously is not visible when the admin tries to edit the category collection
+    - Bug-088467 - Collections >> A fatal error occurs on the order details page
+    - Bug-088424 - Sorting filters are not working properly on the Banners listing page on the admin end
+    - Bug-088419 - Item counts on the collections listing page are not correct
+    - Bug-088422 - Banners added by the admin are not visible on the product details page on the admin end
+    - Bug-088545 - Multiple banners list appears in the banner collection 1
+    - Bug-088548 - Issue in Banner layout 2, the media added for Tab, and mobile is not visible on the front end
+    - Bug-088543 - Multiple issue on the collections listing page on the admin end
+    - Bug-088542 - Deprecation appears in testimonials layout 2
+    - Bug-088559 - RFQ offer limit flow is not working properly.
+    - Bug-088558 - Flow conflicts due to hide price functionality on inventory level
     - Bug-088567 - Error occurs on the payment page when the advertiser tries to add money to the wallet
+    - Bug-088568 - The listing UI is not proper when there is only single record bound with the Brand collection
     - Bug-088571 - UI issue in the brand layout 2 on the homepage
+    - Bug-088580 - UI issue in the category layout 7 on mobile devices
+    - Bug-088605 - Testimonial content and media added by the admin are not visible on the front end
+    - Bug-088639 - The user does not get auto-verified even if email verifications are off
+    - Bug-088651 - Issue in the content in the categories collection
+    - Bug-088675 - Warning appears when the seller clicks on the save button while adding new product
+    - Bug-088667 - Error when the seller tries to downgrade or purchase the subscription package
+    - Bug-088727 - Multiple issues in the hide price on the inventory form
+    - Bug-088753 - Email template is not proper
+    - Bug-088726 - Add to cart button is appearing in case of RFQ only
+    - Bug-088716 - The seller's name is visible in the RFQ form seller's suggestion listing even if the seller disables the RFQ at the shop level
+    - Bug-088767 - RFQ >> COD is available on the front end even if it is disabled from the product setup form
+    - Bug-088768 - The volume discount and buy-together products should not appear on the product details page when the Hide Price setting is enabled
+    - Bug-088770 - The price filter option should not appear on the search listing page in case the hide price is enabled
+    - Bug-088843 - Offer should stay as Rejected when user edits the offer without making any changes
+    - Bug-088834 - Change inventory functionality is not there in case of Assigned RFQ's
+    - Bug-088940 - task-8872- Publish inventory logic not working properly
+    - Bug-089174 - RFQ permissions are not available for seller sub-users.
+    - Bug-089024 - Fatal error occur on the front end when the product ordered in rfq is deleted.
     - Bug-088639 - The user does not get auto-verified even if email verifications are off
     - bug-089147 - Multiple issues with the pickup address setup form.
     - bug-088936 - Collections: The data is not being saved in the content editor when using Arabic.
@@ -115,11 +234,29 @@
     - bug-089133 - A warning appears on the inventory listing page on the seller's end
     - bug-089138 - The product tags added by the seller for any product in Arabic are not saved
     - bug-088968 - The listing is not sorted in Brands filters on the search listing page.
+    - Bug-089351 - it shows PHp error in email template.
+    - Bug-089345 - Product type should appear as auto selected according to the RFq requirement.
     - bug-089337 - The banners tab appears disabled when the user tries to add the new banner collection.
     - bug-089359 - <<RFQ>> The requests listings are not loaded when the without option variant setting is enabled.
     - bug-089141 - auto Scrolling functionality does not works in Mobile view for seo meta tags.
     - bug-088885 - Categories linked with the collection are not visible on the front end. 
     - bug-089013 - The savings icon is not visible on the Order details page on the buyer's end.
+    
+    - bug-088958 - Records linked with the category layout 7 are not visible on the front end in Arabic.
+    - bug-088963 - Category layout 9 records are visible on mobile devices in Arabic.
     - Bug-089339 - An invalid request error occurs when the seller clicks the remove icon for any product on the badge request popup.
-    - Bug-089450 - Favourite functionality is not working properly in apps.
-    - Bug-089415 - Notification not proper and also not direct the user anywhere.
+    - bug-089531 - The page language data is missing for "Request for Quotes" section.
+    - bug-089479 - Ui disruption in email template for order status change.
+    - bug-087647 - Inconsistency issue on the inventory and product setup form.
+    - Bug-089509 - Proper info does not appear when user clicks on shipping rates.
+    - Bug-089356 - Users did't get notified about the messages or attachment bound with RFQ offer.
+    - bug-089600 - Missing guiding/information text with "Product level for RFQ submission" setting under the Admin Dashboard > Settings > System Configuration > Request for quote (RFQ).
+  
+    - Bug-089671 - Issue while disabling RFQ,Global RFQ from admin.
+    - Bug-089589 - Sub user is also able to rebew the subscription plan.
+    - Bug-089773 - Sub user is not abel to purchase the Subscription plan.
+    - Bug-087557 - There should be a tag for product type in case of service and Digital.
+    - Bug-089142 - Enable shop does not appear on the shop level and creates a conflict in flow.
+    - Bug-089263 - it shows wrong validation related to Minimum order quantity.
+    - Bug-089818 - wrong notification in case of the transaction details sent to admin.
+    - Bug-089896 - Lable not maneged properly.

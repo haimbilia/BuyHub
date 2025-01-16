@@ -29,7 +29,7 @@ class ProductsController extends MyAppController
     private function productsData($method, $validateBrand = false, $post = [])
     {
         $get = (!empty($post)) ? $post : Product::convertArrToSrchFiltersAssocArr(FatApp::getParameters());
-
+        $viewType = FatApp::getPostedData('viewType', FatUtility::VAR_STRING, '');
         $postBrands = [];
         if (MOBILE_APP_API_CALL) {
             $postBrands = FatApp::getPostedData('brand', FatUtility::VAR_STRING, '[]');
@@ -78,6 +78,7 @@ class ProductsController extends MyAppController
         switch ($method) {
             case 'index':
                 $arr = array(
+                    'viewType' => $viewType,
                     'pageTitle' => Labels::getLabel('MSG_All_PRODUCTS', $this->siteLangId),
                     'canonicalUrl' => UrlHelper::generateFullUrl('Products', 'index'),
                     'productSearchPageType' => SavedSearchProduct::PAGE_PRODUCT_INDEX,
@@ -86,6 +87,7 @@ class ProductsController extends MyAppController
                 break;
             case 'search':
                 $arr = array(
+                    'viewType' => $viewType,
                     'pageTitle' => Labels::getLabel('MSG_SEARCH_RESULTS_FOR', $this->siteLangId),
                     'canonicalUrl' => UrlHelper::generateFullUrl('Products', 'search'),
                     'productSearchPageType' => SavedSearchProduct::PAGE_PRODUCT,
@@ -95,6 +97,7 @@ class ProductsController extends MyAppController
                 break;
             case 'featured':
                 $arr = array(
+                    'viewType' => $viewType,
                     'pageTitle' => Labels::getLabel('MSG_FEATURED_PRODUCTS', $this->siteLangId),
                     'canonicalUrl' => UrlHelper::generateFullUrl('Products', 'featured'),
                     'productSearchPageType' => SavedSearchProduct::PAGE_FEATURED_PRODUCT,
@@ -148,7 +151,7 @@ class ProductsController extends MyAppController
             $et->sendRequest();
         }
 
-        if (FatUtility::isAjaxCall()) {
+        if (FatUtility::isAjaxCall()&& $viewType != 'popupProduct' && $viewType != 'popup') {
             $this->set('products', $data['products']);
             $this->set('tRightRibbons', $tRightRibbons);
             /*$this->set('moreSellersProductsArr', $data['moreSellersProductsArr']);*/
@@ -160,6 +163,24 @@ class ProductsController extends MyAppController
             $this->set('pageSize', $data['pageSize']);
             $this->set('pageSizeArr', $data['pageSizeArr']);
             echo $this->_template->render(false, false, 'products/products-list.php', true);
+            exit;
+        }
+        if (FatUtility::isAjaxCall() && $viewType == 'popupProduct') {
+            $this->set('products', $data['products']);
+            $this->set('postedData', $get);
+            $this->set('siteLangId', $this->siteLangId);
+            $this->set('pageSizeArr', $data['pageSizeArr']);
+            $this->set('tRightRibbons', $tRightRibbons);
+            echo $this->_template->render(false, false, 'products/products-map-list-left.php', true);
+            exit;
+        }
+        if (FatUtility::isAjaxCall() && $viewType == 'popup') {
+            $this->set('products', $data['products']);
+            $this->set('postedData', $get);
+            $this->set('siteLangId', $this->siteLangId);
+            $this->set('pageSizeArr', $data['pageSizeArr']);
+            $this->set('tRightRibbons', $tRightRibbons);
+            $this->_template->render(false, false, 'products/listing-map-page.php');
             exit;
         }
         $data['tRightRibbons'] = $tRightRibbons;
@@ -548,7 +569,7 @@ class ProductsController extends MyAppController
                 'theprice', 'selprod_stock', 'selprod_threshold_stock_level', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'brand_id', 'COALESCE(brand_name, brand_identifier) as brand_name', 'brand_short_description', 'user_name',
                 'shop_id', 'COALESCE(shop_name, shop_identifier) as shop_name',
                 'splprice_display_dis_type', 'splprice_display_dis_val', 'splprice_display_list_price', 'product_attrgrp_id', 'product_youtube_video', 'product_cod_enabled', 'selprod_cod_enabled', 'selprod_available_from', 'selprod_min_order_qty', 'product_updated_on', 'product_warranty', 'selprod_return_age', 'selprod_cancellation_age', 'shop_return_age',
-                'shop_cancellation_age', 'selprod_fulfillment_type', 'shop_fulfillment_type', 'product_fulfillment_type', 'product_attachements_with_inventory', 'selprod_product_id', 'COALESCE(shop_state_l.state_name,state_identifier) as shop_state_name', 'COALESCE(shop_country_l.country_name,shop_country.country_code) as shop_country_name', 'selprod_condition', 'product_warranty_unit'
+                'shop_cancellation_age', 'selprod_fulfillment_type', 'shop_fulfillment_type', 'product_fulfillment_type', 'product_attachements_with_inventory', 'selprod_product_id', 'COALESCE(shop_state_l.state_name,state_identifier) as shop_state_name', 'COALESCE(shop_country_l.country_name,shop_country.country_code) as shop_country_name', 'selprod_condition', 'product_warranty_unit', 'shop_rfq_enabled', 'selprod_cart_type', 'selprod_hide_price'
             )
         );
         $productRs = $prodSrch->getResultSet();
@@ -702,9 +723,8 @@ class ProductsController extends MyAppController
             $isProductShippedBySeller = Product::isProductShippedBySeller($product['product_id'], $product['product_seller_id'], $product['selprod_user_id']);
             if ($isProductShippedBySeller) {
                 $walletBalance = User::getUserBalance($product['selprod_user_id']);
-                if ($product['selprod_cod_enabled']) {
-                    $codEnabled = true;
-                }
+                
+                $codEnabled = (0 < $product['product_cod_enabled'] ? $product['selprod_cod_enabled'] : 0);
                 $codMinWalletBalance = -1;
                 $shop_cod_min_wallet_balance = Shop::getAttributesByUserId($product['selprod_user_id'], 'shop_cod_min_wallet_balance');
                 if ($shop_cod_min_wallet_balance > -1) {
@@ -1188,7 +1208,7 @@ class ProductsController extends MyAppController
                 'selprod_id', 'selprod_user_id',  'selprod_code', 'selprod_stock', 'selprod_condition', 'selprod_price', 'COALESCE(selprod_title, product_name, product_identifier) as selprod_title',
                 'special_price_found', 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type',
                 'theprice', 'brand_id', 'COALESCE(brand_name, brand_identifier) as brand_name', 'brand_short_description',
-                'IF(selprod_stock > 0, 1, 0) AS in_stock', 'selprod_sold_count', 'selprod_return_policy', 'shop_id'
+                'IF(selprod_stock > 0, 1, 0) AS in_stock', 'selprod_sold_count', 'selprod_return_policy', 'shop_id', 'selprod_cart_type', 'selprod_hide_price', 'shop_rfq_enabled', 'product_type'
             )
         );
 
@@ -1288,7 +1308,7 @@ class ProductsController extends MyAppController
             array(
                 'product_id', 'COALESCE(product_name, product_identifier) as product_name', 'prodcat_id', 'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name', 'product_updated_on',
                 'selprod_id', 'selprod_condition', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'theprice',
-                'special_price_found', 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'selprod_sold_count', 'COALESCE(selprod_title, product_name, product_identifier) as selprod_title', 'selprod_price', 'shop_id'
+                'special_price_found', 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'selprod_sold_count', 'COALESCE(selprod_title, product_name, product_identifier) as selprod_title', 'selprod_price', 'shop_id', 'selprod_cart_type', 'selprod_hide_price', 'shop_rfq_enabled', 'product_type'
             )
         );
         $productRs = $prodSrch->getResultSet();
@@ -1323,7 +1343,7 @@ class ProductsController extends MyAppController
                 array(
                     'product_id', 'COALESCE(product_name, product_identifier) as product_name', 'prodcat_id', 'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name', 'product_updated_on', 'COALESCE(selprod_title,product_name, product_identifier) as selprod_title',
                     'selprod_id', 'selprod_condition', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'theprice',
-                    'special_price_found', 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'selprod_sold_count', 'selprod_price', 'selprod_stock', 'selprod_min_order_qty'
+                    'special_price_found', 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'selprod_sold_count', 'selprod_price', 'selprod_stock', 'selprod_min_order_qty', 'selprod_cart_type', 'selprod_hide_price', 'shop_rfq_enabled', 'product_type'
                 )
             );
 
@@ -1797,6 +1817,10 @@ class ProductsController extends MyAppController
                 'text' => strip_tags(html_entity_decode($product, ENT_QUOTES, 'UTF-8'))
             );
         }
+        if (MOBILE_APP_API_CALL) {
+            $this->set('data', ['categories' => $json['results'] ?? []]);
+            $this->_template->render();
+        }
         die(json_encode($json));
     }
 
@@ -1881,7 +1905,7 @@ class ProductsController extends MyAppController
                 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'splprice_start_date', 'splprice_end_date',
                 'brand_id', 'COALESCE(brand_name, brand_identifier) as brand_name', 'user_name', 'IF(selprod_stock > 0, 1, 0) AS in_stock',
                 'selprod_sold_count', 'selprod_return_policy', /*'maxprice', 'ifnull(sq_sprating.totReviews,0) totReviews','IF(ufp_id > 0, 1, 0) as isfavorite', */ 'selprod_min_order_qty',
-                'shop.shop_id', 'shop.shop_lat', 'shop.shop_lng', 'COALESCE(shop_name, shop_identifier) as shop_name'
+                'shop.shop_id', 'shop.shop_lat', 'shop.shop_lng', 'COALESCE(shop_name, shop_identifier) as shop_name', 'selprod_cart_type', 'selprod_hide_price', 'shop.shop_rfq_enabled'
             );
             $removeFlds = array_diff($flds, ['1']);
             $this->setRecordCount(clone $srch, $get['pageSize'], $get['page'], $get, true, $removeFlds);
@@ -1960,7 +1984,7 @@ class ProductsController extends MyAppController
             'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'splprice_start_date', 'splprice_end_date',
             'brand_id', 'COALESCE(brand_name, brand_identifier) as brand_name', 'user_name', 'IF(selprod_stock > 0, 1, 0) AS in_stock',
             'selprod_sold_count', 'selprod_return_policy', /*'maxprice', 'ifnull(sq_sprating.totReviews,0) totReviews','IF(ufp_id > 0, 1, 0) as isfavorite', */ 'selprod_min_order_qty',
-            'shop.shop_id', 'shop.shop_lat', 'shop.shop_lng', 'COALESCE(shop_name, shop_identifier) as shop_name'
+            'shop.shop_id', 'shop.shop_lat', 'shop.shop_lng', 'COALESCE(shop_name, shop_identifier) as shop_name', 'selprod_cart_type', 'selprod_hide_price', 'shop.shop_rfq_enabled'
         );
         $removeFlds = array_diff($flds, ['1']);
         $this->setRecordCount(clone $srch, $post['pageSize'], $post['page'], $post, true, $removeFlds);

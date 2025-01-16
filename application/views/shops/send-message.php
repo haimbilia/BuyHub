@@ -53,12 +53,14 @@ if (isset($product)) {
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-6">
-                    <div class="section-head">
+                    <header class="section-head">
                         <h4>
                             <?php echo Labels::getLabel('LBL_Send_Message_to_shop_owner', $siteLangId); ?>
                         </h4>
+                    </header>
+                    <div class="section-body">
+                        <div class=""><?php echo $frm->getFormHtml(); ?> </div>
                     </div>
-                    <div class=""><?php echo $frm->getFormHtml(); ?> </div>
                 </div>
             </div>
         </div>

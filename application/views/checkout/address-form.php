@@ -19,12 +19,14 @@ $addressFrm->removeField($fld);
 ?>
 <div class="modal-header">
     <h5 class="modal-title">
-        <a class="btn-back" href="javascript:void(0);" onclick="showAddressList()">
-            <svg class="svg" width="24" height="24">
-                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#back">
-                </use>
-            </svg>
-        </a>
+        <?php if (!isset($_SESSION['offer_checkout'])) { ?>
+            <a class="btn-back" href="javascript:void(0);" onclick="showAddressList()">
+                <svg class="svg" width="24" height="24">
+                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#back">
+                    </use>
+                </svg>
+            </a>
+        <?php } ?>
         <?php echo $labelHeading; ?>
     </h5>
 </div>

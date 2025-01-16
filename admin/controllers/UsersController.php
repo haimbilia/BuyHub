@@ -259,7 +259,6 @@ class UsersController extends ListingBaseController
             }
         }
         /* new user ]   */
-
         $db = FatApp::getDb();
         $db->startTransaction();
         $userObj = new User($recordId);

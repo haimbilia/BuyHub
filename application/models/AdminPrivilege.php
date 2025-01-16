@@ -133,6 +133,8 @@ class AdminPrivilege
     public const SECTION_PAGES_LANGUAGE_DATA = 125;
     public const SECTION_CATEGORY_REQUEST = 126;
     public const SECTION_GETTING_STARTED = 127;
+    public const SECTION_REQUEST_FOR_QUOTE = 128;
+    public const SECTION_RFQ_OFFERS = 129;
 
     public const PRIVILEGE_NONE = 0;
     public const PRIVILEGE_READ = 1;
@@ -302,6 +304,7 @@ class AdminPrivilege
                 static::SECTION_SETTINGS => Labels::getLabel('NAV_SYSTEM_SETTINGS', $langId),
                 static::SECTION_PAGES_LANGUAGE_DATA => Labels::getLabel('NAV_PAGES_LANGUAGE_DATA_SETTINGS', $langId),
                 static::SECTION_GETTING_STARTED => Labels::getLabel('NAV_GETTING_STARTED', $langId),
+                static::SECTION_REQUEST_FOR_QUOTE => Labels::getLabel('NAV_REQUEST_FOR_QUOTES', $langId),
 
                 /* static::SECTION_Languages => Labels::getLabel('NAV_LANGUAGES',$langId),
                 static::SECTION_Languages => Labels::getLabel('NAV_ORDER_STATUS',$langId), */
@@ -331,7 +334,7 @@ class AdminPrivilege
             static::SECTION_UPLOAD_BULK_IMAGES,
         );
     }
-    
+
     public static function getReadOnlyPermissionModulesArr(): array
     {
         return array(
@@ -362,7 +365,7 @@ class AdminPrivilege
             $srch->addCondition('admperm_section_id', '=', 'mysql_func_' . $sectionId, 'AND', true);
         }
 
-        $srch->addMultipleFields(array('admperm_section_id', 'admperm_value'));        
+        $srch->addMultipleFields(array('admperm_section_id', 'admperm_value'));
         $rs = $srch->getResultSet();
         $arr = FatApp::getDb()->fetchAllAssoc($rs);
         return $arr;
@@ -1536,7 +1539,7 @@ class AdminPrivilege
         return $this->checkPermission($adminId, static::SECTION_PRODUCT_ADVERTISEMENT, static::PRIVILEGE_WRITE, $returnResult);
     }
 
-   /*  public function canViewAppThemeSettings($adminId = 0, $returnResult = false)
+    /*  public function canViewAppThemeSettings($adminId = 0, $returnResult = false)
     {
         return $this->checkPermission($adminId, static::SECTION_APP_THEME_SETTINGS, static::PRIVILEGE_READ, $returnResult);
     }
@@ -1710,5 +1713,25 @@ class AdminPrivilege
     public function canViewGettingStarted($adminId = 0, $returnResult = false)
     {
         return $this->checkPermission($adminId, static::SECTION_GETTING_STARTED, static::PRIVILEGE_READ, $returnResult);
+    }
+
+    public function canViewRequestForQuote($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_REQUEST_FOR_QUOTE, static::PRIVILEGE_READ, $returnResult);
+    }
+
+    public function canEditRequestForQuote($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_REQUEST_FOR_QUOTE, static::PRIVILEGE_WRITE, $returnResult);
+    }
+
+    public function canViewRfqOffers($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_RFQ_OFFERS, static::PRIVILEGE_READ, $returnResult);
+    }
+
+    public function canEditRfqOffers($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_RFQ_OFFERS, static::PRIVILEGE_WRITE, $returnResult);
     }
 }

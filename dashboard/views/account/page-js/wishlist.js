@@ -19,6 +19,7 @@ $("document").ready(function () {
         fcom.ajax(fcom.makeUrl("Account", "wishListSearch"), "", function (res) {
             fcom.removeLoader();
             $(dv).html(res);
+            $('#headerToolbar').html('');
         });
     };
 
@@ -249,12 +250,14 @@ $("document").ready(function () {
                     removeSelectedFromFavtlist(event, true);
                 }
                 setTimeout(function () {
-                    location.href = fcom.makeUrl(
-                        "cart",
-                        "",
-                        [],
-                        siteConstants.webrootfront
-                    );
+                    if ('undefined' != typeof ans.successCount && 0 < ans.successCount) {
+                        location.href = fcom.makeUrl(
+                            "cart",
+                            "",
+                            [],
+                            siteConstants.webrootfront
+                        );
+                    }
                 }, 1000);
             }
         );

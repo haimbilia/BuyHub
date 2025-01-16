@@ -12,7 +12,7 @@ class Address extends MyAppModel
 
     public const ADDRESS_TYPE_BILLING = 1;
     public const ADDRESS_TYPE_SHIPPING = 2;
-    
+
     public const ADDRESS_TITLE_LENGTH = 20;
 
     private const GOOGLE_GEOCODE_URL = 'https://maps.googleapis.com/maps/api/geocode/json?';
@@ -71,18 +71,23 @@ class Address extends MyAppModel
      * getData
      *
      * @param  int $type
-     * @param  string $recordId
+     * @param  string $recordId // Address belongs to
      * @param  int $isDefault
+     * @param  string $sessionId
      * @return array
      */
-    public function getData(int $type, string $recordId, int $isDefault = 0, $joinTimeSlots = false): array
+    public function getData(int $type, string $recordId, int $isDefault = 0, $joinTimeSlots = false, $sessionId = ''): array
     {
         $srch = new AddressSearch($this->langId);
         $srch->joinCountry();
         $srch->joinState();
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
-        $srch->addMultipleFields(array('addr.*', 'state_code', 'country_code', 'country_code_alpha3', 'IFNULL(country_name, country_code) as country_name', 'IFNULL(state_name, state_identifier) as state_name'));
+        $columns = array('addr.*', 'state_code', 'country_code', 'country_code_alpha3', 'IFNULL(country_name, country_code) as country_name', 'IFNULL(state_name, state_identifier) as state_name');
+        if (Address::TYPE_USER == $type) {
+            $columns[] = 'addr_record_id as user_id';
+        }
+        $srch->addMultipleFields($columns);
         $srch->addCondition('country_active', '=', applicationConstants::ACTIVE);
         $srch->addCondition('state_active', '=', applicationConstants::ACTIVE);
         $srch->addCondition('addr_deleted', '=', applicationConstants::NO);
@@ -92,6 +97,11 @@ class Address extends MyAppModel
         if (0 < $isDefault) {
             $srch->addCondition(self::tblFld('is_default'), '=', $isDefault);
         }
+
+        if (0 < $sessionId && 1 > $recordId) {
+            $srch->addCondition(self::tblFld('session_id'), '=', $sessionId);
+        }
+        
         if ($recordId == 0) {
             $srch->addOrder(static::tblFld('id'), 'DESC');
         } else {

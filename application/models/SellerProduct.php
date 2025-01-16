@@ -32,6 +32,10 @@ class SellerProduct extends MyAppModel
     public const MULTIPLE_OPTION_SEPARATOR = ' | ';
     public const MAX_RANGE_OF_AVAILBLE_QTY = 999999999;
 
+    public const CART_TYPE_BOTH = 0;
+    public const CART_TYPE_CART_ONLY = 1;
+    public const CART_TYPE_RFQ_ONLY = 2;
+
     public function __construct($id = 0)
     {
         parent::__construct(static::DB_TBL, static::DB_TBL_PREFIX . 'id', $id);
@@ -307,6 +311,7 @@ class SellerProduct extends MyAppModel
         $srch->joinTable(Product::DB_TBL . '_lang', 'LEFT JOIN', 'lang.productlang_product_id = ' . static::DB_TBL_LANG_PREFIX . 'selprod_id AND productlang_lang_id = ' . $lang_id, 'lang');
 
         if (true === $forFrontend) {
+            $srch->joinTable(Shop::DB_TBL, 'INNER JOIN', 'selprod_user_id = shop.shop_user_id', 'shop');
             $srch->joinTable(Product::DB_TBL_PRODUCT_TO_CATEGORY, 'LEFT OUTER JOIN', 'ptc.ptc_product_id = product_id', 'ptc');
             $srch->joinTable(ProductCategory::DB_TBL, 'LEFT OUTER JOIN', 'c.prodcat_id = ptc.ptc_prodcat_id', 'c');
 
@@ -337,14 +342,36 @@ class SellerProduct extends MyAppModel
 
             if (empty($attr)) {
                 $attr = array(
-                    'upsell_sellerproduct_id', 'upsell_recommend_sellerproduct_id', 'selprod_id', 'product_id', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'selprod_price', 'selprod_stock', 'IFNULL(product_identifier ,product_name) as product_name', 'product_identifier', 'selprod_product_id', 'CASE WHEN m.splprice_selprod_id IS NULL THEN 0 ELSE 1 END AS special_price_found',
-                    'IFNULL(m.splprice_price, selprod_price) AS theprice', 'selprod_min_order_qty', 'product_updated_on'
+                    'upsell_sellerproduct_id',
+                    'upsell_recommend_sellerproduct_id',
+                    'selprod_id',
+                    'product_id',
+                    'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title',
+                    'selprod_price',
+                    'selprod_stock',
+                    'IFNULL(product_identifier ,product_name) as product_name',
+                    'product_identifier',
+                    'selprod_product_id',
+                    'CASE WHEN m.splprice_selprod_id IS NULL THEN 0 ELSE 1 END AS special_price_found',
+                    'IFNULL(m.splprice_price, selprod_price) AS theprice',
+                    'selprod_min_order_qty',
+                    'selprod_cart_type',
+                    'product_updated_on',
+                    'selprod_hide_price',
+                    'shop_rfq_enabled'
                 );
             }
         } else {
             if (empty($attr)) {
                 $attr = array(
-                    'upsell_sellerproduct_id', 'upsell_recommend_sellerproduct_id', 'selprod_id', 'product_id', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'IFNULL(product_identifier ,product_name) as product_name', 'product_identifier', 'selprod_product_id',
+                    'upsell_sellerproduct_id',
+                    'upsell_recommend_sellerproduct_id',
+                    'selprod_id',
+                    'product_id',
+                    'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title',
+                    'IFNULL(product_identifier ,product_name) as product_name',
+                    'product_identifier',
+                    'selprod_product_id',
                     'product_updated_on'
                 );
             }
@@ -772,7 +799,7 @@ class SellerProduct extends MyAppModel
         $srch->joinTable(static::DB_TBL . '_lang', 'LEFT JOIN', 'slang.' . static::DB_TBL_LANG_PREFIX . 'selprod_id = ' . static::DB_TBL_RELATED_PRODUCTS_PREFIX . 'recommend_sellerproduct_id AND ' . static::DB_TBL_LANG_PREFIX . 'lang_id = ' . $lang_id, 'slang');
         $srch->joinTable(Product::DB_TBL, 'LEFT JOIN', Product::DB_TBL_PREFIX . 'id = ' . static::DB_TBL_PREFIX . 'product_id');
         $srch->joinTable(Product::DB_TBL . '_lang', 'LEFT JOIN', 'lang.productlang_product_id = ' . static::DB_TBL_LANG_PREFIX . 'selprod_id AND productlang_lang_id = ' . $lang_id, 'lang');
-
+        $srch->joinTable(Shop::DB_TBL, 'INNER JOIN', 'selprod_user_id = shop.shop_user_id', 'shop');
         if (!empty($criteria)) {
             if (is_string($criteria)) {
                 $srch->addFld($criteria);
@@ -780,7 +807,7 @@ class SellerProduct extends MyAppModel
                 $srch->addMultipleFields($criteria);
             }
         } else {
-            $srch->addMultipleFields(array('related_sellerproduct_id', 'selprod_id', 'IFNULL(product_identifier ,product_name) as product_name', 'IFNULL(selprod_title, IFNULL(product_name, product_identifier)) as selprod_title', 'product_identifier', 'selprod_price', 'product_updated_on'));
+            $srch->addMultipleFields(array('related_sellerproduct_id', 'selprod_id', 'IFNULL(product_identifier ,product_name) as product_name', 'IFNULL(selprod_title, IFNULL(product_name, product_identifier)) as selprod_title', 'product_identifier', 'selprod_price', 'product_updated_on', 'selprod_cart_type', 'selprod_hide_price', 'shop_rfq_enabled'));
         }
         return $srch;
     }
@@ -1630,6 +1657,17 @@ class SellerProduct extends MyAppModel
         return $validationArr;
     }
 
+    public static function getSellerProductIdByCode(string $selprod_code)
+    {
+        $srch = SellerProduct::getSearchObject();
+        $srch->addCondition('selprod_code', 'LIKE', $selprod_code);
+        $srch->addFld('selprod_id');
+        $srch->doNotCalculateRecords();
+        $srch->doNotLimitRecords();
+        $row = FatApp::getDb()->fetch($srch->getResultSet());
+        return is_array($row) && isset($row['selprod_id']) ? $row['selprod_id'] : 0;
+    }
+
     public static function getSelprodIdByProductId(int $productId): int
     {
         if (1 > $productId || 1 > FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
@@ -1641,5 +1679,32 @@ class SellerProduct extends MyAppModel
         $srch->addFld('selprod_id');
         $result = FatApp::getDb()->fetch($srch->getResultSet());
         return $result['selprod_id'] ?? 0;
+    }
+
+    public static function getCartType(int $siteLangId = 0): array
+    {
+        $siteLangId = 0 < $siteLangId ? $siteLangId : CommonHelper::getLangId();
+        return [
+            self::CART_TYPE_BOTH => Labels::getLabel('LBL_RFQ_AND_CART', $siteLangId),
+            self::CART_TYPE_CART_ONLY => Labels::getLabel('LBL_CART_ONLY', $siteLangId),
+            self::CART_TYPE_RFQ_ONLY => Labels::getLabel('LBL_RFQ_ONLY', $siteLangId),
+        ];
+    }
+
+    public static function isPriceHidden(int $selprodHidePrice, int $shopRfqEnabled)
+    {
+        if (1 > FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0)) {
+            return false;
+        }
+
+        if (0 < FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) {
+            return true;
+        }
+
+        if (1 > $shopRfqEnabled) {
+            return false;
+        }
+
+        return (0 < $selprodHidePrice);
     }
 }

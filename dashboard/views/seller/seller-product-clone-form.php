@@ -2,6 +2,7 @@
 
 HtmlHelper::formatFormFields($frm);
 $returnAgeFld = $frm->getField('selprod_return_age');
+$cancellationAgeFld = $frm->getField('selprod_cancellation_age');
 if (null != $returnAgeFld) {
     $returnAge = FatUtility::int($returnAgeFld->value);
     $hidden = '';
@@ -11,7 +12,6 @@ if (null != $returnAgeFld) {
     $returnAgeFld->setWrapperAttribute('class', 'use-shop-policy ' . $hidden);
 }
 
-$cancellationAgeFld = $frm->getField('selprod_cancellation_age');
 if (null != $returnAgeFld) {
     $hidden = '';
     if ('' === $cancellationAgeFld->value) {
@@ -20,12 +20,17 @@ if (null != $returnAgeFld) {
     $cancellationAgeFld->setWrapperAttribute('class', 'use-shop-policy ' . $hidden);
 }
 
-$fld = $frm->getField('use_shop_policy');
-HtmlHelper::configureSwitchForCheckbox($fld);
-$fld->developerTags['noCaptionTag'] = true;
-$fld->developerTags['colWidthValues'] = [null, '12', null, null];
+$fld = $frm->getField('selprod_hide_price');
+if (null != $fld) {
+    HtmlHelper::configureSwitchForCheckbox($fld);
+}
 
-?>
+$fld = $frm->getField('use_shop_policy');
+if (null != $fld) {
+    HtmlHelper::configureSwitchForCheckbox($fld);
+    $fld->developerTags['noCaptionTag'] = true;
+    $fld->developerTags['colWidthValues'] = [null, '12', null, null];
+} ?>
 <div class="modal-header">
     <h5 class="modal-title"><?php echo Labels::getLabel('LBL_Clone_Inventory', $siteLangId); ?></h5>
 </div>

@@ -67,6 +67,7 @@
 @import "components/responsive-datatable";
 @import "components/product-profile";
 @import "components/system-messages";
+@import "components/chat-room";
 @import "components/misc";
 @import "components/sticky-head-demo";
 
@@ -82,8 +83,7 @@
 @import "vendor/chartist-settings";
 @import "vendor/chartist";
 //@import "vendor/simplebar";
-@import "vendor/scroll-hint";
-//@import "vendor/bootstrap-select";
+@import "vendor/scroll-hint"; 
 //@import "vendor/kanban";
 @import "vendor/jquery-ui";
 
@@ -109,3 +109,4 @@
 @import "page/categories";
 @import "page/add-stock";
 @import "page/messages";
+@import "page/rfq-list";

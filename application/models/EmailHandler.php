@@ -1,8 +1,6 @@
 <?php
-
 class EmailHandler extends FatModel
 {
-
     public const ADD_ADDITIONAL_ALERTS = 1;
     public const NO_ADDITIONAL_ALERT = 0;
     public const ONLY_SUPER_ADMIN = 1;
@@ -35,7 +33,7 @@ class EmailHandler extends FatModel
     }
 
     // Send mail to super Admin, Sub Admin and additonal alert emails.
-    public function sendMailToAdminAndAdditionalEmails($tpl, $arrReplacements, $additonalAlerts = 1, $onlySuperAdmin = 0, $langId = 0)
+    public function sendMailToAdminAndAdditionalEmails($tpl, $arrReplacements, $additonalAlerts = 1, $onlySuperAdmin = 0, $langId = 0, $attachmentsArr = [])
     {
         $langId = FatUtility::int($langId);
 
@@ -47,10 +45,13 @@ class EmailHandler extends FatModel
             return false;
         }
         $onlySuperAdmin = FatUtility::int($onlySuperAdmin);
+        $path = $attachmentsArr['path'] ?? '';
+        $name = $attachmentsArr['name'] ?? '';
         if (0 < $onlySuperAdmin) {
             return (new FatMailer($langId, $tpl))
                 ->setTo(FatApp::getConfig('CONF_SITE_OWNER_EMAIL'))
                 ->setVariables($arrReplacements)
+                ->addAttachment($path, $name)
                 ->send();
         }
 
@@ -94,6 +95,7 @@ class EmailHandler extends FatModel
                 $resp = (new FatMailer($langId, $tpl))
                     ->setTo($email)
                     ->setVariables($arrReplacements)
+                    ->addAttachment($path, $name)
                     ->send();
                 if (1 > $index) {
                     $superAdminResp = $resp;
@@ -1382,7 +1384,13 @@ class EmailHandler extends FatModel
         $srch->joinTable(User::DB_TBL_USR_WITHDRAWAL_REQ_SPEC, 'LEFT JOIN', User::DB_TBL_USR_WITHDRAWAL_REQ_SPEC_PREFIX . 'withdrawal_id = tuwr.withdrawal_id');
         $srch->addMultipleFields(
             array(
-                'tuwr.*', 'GROUP_CONCAT(CONCAT(`uwrs_key`, ":", `uwrs_value`)) as payout_detail', 'user_name', 'credential_email as user_email', 'credential_username as user_username', 'user_phone_dcode', 'user_phone'
+                'tuwr.*',
+                'GROUP_CONCAT(CONCAT(`uwrs_key`, ":", `uwrs_value`)) as payout_detail',
+                'user_name',
+                'credential_email as user_email',
+                'credential_username as user_username',
+                'user_phone_dcode',
+                'user_phone'
             )
         );
         $srch->addCondition('tuwr.withdrawal_id', '=', 'mysql_func_' . $requestId, 'AND', true);
@@ -1624,10 +1632,26 @@ class EmailHandler extends FatModel
         $srch->addCondition('orrmsg_id', '=', 'mysql_func_' . $orrmsg_id, 'AND', true);
         $srch->addMultipleFields(
             array(
-                'op_selprod_id', 'op_selprod_user_id', 'op_is_batch', 'orrmsg_orrequest_id', 'op_product_name', 'op_selprod_title',
-                'op_shop_owner_name', 'buyer_cred.credential_username as buyer_username', 'orrequest_qty', 'orrequest_type', 'orrequest_reference',
-                'IFNULL(orreason_title, orreason_identifier) as orreason_title', 'orrmsg_msg', 'op_shop_owner_email', 'op_shop_owner_phone_dcode', 'op_shop_owner_phone',
-                'op_selprod_options', 'op_brand_name', 'op_invoice_number', 'orrequest_user_id'
+                'op_selprod_id',
+                'op_selprod_user_id',
+                'op_is_batch',
+                'orrmsg_orrequest_id',
+                'op_product_name',
+                'op_selprod_title',
+                'op_shop_owner_name',
+                'buyer_cred.credential_username as buyer_username',
+                'orrequest_qty',
+                'orrequest_type',
+                'orrequest_reference',
+                'IFNULL(orreason_title, orreason_identifier) as orreason_title',
+                'orrmsg_msg',
+                'op_shop_owner_email',
+                'op_shop_owner_phone_dcode',
+                'op_shop_owner_phone',
+                'op_selprod_options',
+                'op_brand_name',
+                'op_invoice_number',
+                'orrequest_user_id'
             )
         );
         $rs = $srch->getResultSet();
@@ -1758,13 +1782,35 @@ class EmailHandler extends FatModel
         $srch->addCondition('orrmsg_id', '=', 'mysql_func_' . $orrmsg_id, 'AND', true);
         $srch->addMultipleFields(
             array(
-                'op_selprod_id', 'op_is_batch', 'op_product_name', 'op_selprod_title',
-                'op_shop_owner_name', 'op_shop_owner_username', 'op_shop_owner_email', 'op_shop_owner_phone_dcode', 'op_shop_owner_phone', 'op_selprod_user_id',
-                'buyer_cred.credential_username as buyer_username', 'buyer_cred.credential_email as buyer_email',
-                'orrequest_id', 'orrequest_qty', 'orrequest_reference', 'orrequest_type', 'orrequest_user_id', 'orrmsg_from_user_id',
+                'op_selprod_id',
+                'op_is_batch',
+                'op_product_name',
+                'op_selprod_title',
+                'op_shop_owner_name',
+                'op_shop_owner_username',
+                'op_shop_owner_email',
+                'op_shop_owner_phone_dcode',
+                'op_shop_owner_phone',
+                'op_selprod_user_id',
+                'buyer_cred.credential_username as buyer_username',
+                'buyer_cred.credential_email as buyer_email',
+                'orrequest_id',
+                'orrequest_qty',
+                'orrequest_reference',
+                'orrequest_type',
+                'orrequest_user_id',
+                'orrmsg_from_user_id',
                 'IFNULL(orreason_title, orreason_identifier) as orreason_title',
-                'orrmsg_msg', 'orrequest_status', 'buyer.user_name as buyer_name', 'buyer.user_phone_dcode as buyer_phone_dcode', 'buyer.user_phone as buyer_phone', 'buyer.user_id as buyer_id', 'op_selprod_user_id as seller_id',
-                'orrmsg_from_admin_id', 'admin_name', 'admin_username'
+                'orrmsg_msg',
+                'orrequest_status',
+                'buyer.user_name as buyer_name',
+                'buyer.user_phone_dcode as buyer_phone_dcode',
+                'buyer.user_phone as buyer_phone',
+                'buyer.user_id as buyer_id',
+                'op_selprod_user_id as seller_id',
+                'orrmsg_from_admin_id',
+                'admin_name',
+                'admin_username'
             )
         );
         $rs = $srch->getResultSet();
@@ -1895,8 +1941,15 @@ class EmailHandler extends FatModel
         $srch->addMultipleFields(
             array(
                 'scatrequestmsg_from_user_id',
-                'scatrequestmsg_msg', 'scatrequest_status', 'scatrequest_id', 'scatrequest_user_id',
-                'scatrequestmsg_from_admin_id', 'admin_name', 'admin_username', 'receiver_user.user_name', 'receiver_user_cred.credential_email'
+                'scatrequestmsg_msg',
+                'scatrequest_status',
+                'scatrequest_id',
+                'scatrequest_user_id',
+                'scatrequestmsg_from_admin_id',
+                'admin_name',
+                'admin_username',
+                'receiver_user.user_name',
+                'receiver_user_cred.credential_email'
             )
         );
         $rs = $srch->getResultSet();
@@ -1962,8 +2015,14 @@ class EmailHandler extends FatModel
         $srch->addCondition('orrequest_id', '=', 'mysql_func_' . $orrequest_id, 'AND', true);
         $srch->addMultipleFields(
             array(
-                'orrequest_id', 'orrequest_user_id', 'orrequest_status', 'orrequest_reference',
-                'buyer.user_name as buyer_name', 'buyer_cred.credential_email as buyer_email', 'op_selprod_user_id', 'seller.user_name as seller_name',
+                'orrequest_id',
+                'orrequest_user_id',
+                'orrequest_status',
+                'orrequest_reference',
+                'buyer.user_name as buyer_name',
+                'buyer_cred.credential_email as buyer_email',
+                'op_selprod_user_id',
+                'seller.user_name as seller_name',
                 'seller_cred.credential_email as seller_email'
             )
         );
@@ -1985,8 +2044,14 @@ class EmailHandler extends FatModel
         $msgSrch->setPageSize(1);
         $msgSrch->addMultipleFields(
             array(
-                'orrmsg_id', 'orrmsg_from_user_id', 'user_name', 'user_phone_dcode', 'user_phone',
-                'orrmsg_from_admin_id', 'admin_name', 'admin_username'
+                'orrmsg_id',
+                'orrmsg_from_user_id',
+                'user_name',
+                'user_phone_dcode',
+                'user_phone',
+                'orrmsg_from_admin_id',
+                'admin_name',
+                'admin_username'
             )
         );
         $msgRs = $msgSrch->getResultSet();
@@ -2094,8 +2159,16 @@ class EmailHandler extends FatModel
         $srch->doNotLimitRecords();
         $srch->addMultipleFields(
             array(
-                'ocrequest_id', 'ocrequest_op_id', 'ocrequest_ocreason_id', 'ocrequest_status',
-                'op_invoice_number', 'buyer.user_name as buyer_name', 'buyer.user_phone_dcode as buyer_phone_dcode', 'buyer.user_phone as buyer_phone', 'buyer_cred.credential_email as buyer_email', 'buyer.user_id as buyer_id'
+                'ocrequest_id',
+                'ocrequest_op_id',
+                'ocrequest_ocreason_id',
+                'ocrequest_status',
+                'op_invoice_number',
+                'buyer.user_name as buyer_name',
+                'buyer.user_phone_dcode as buyer_phone_dcode',
+                'buyer.user_phone as buyer_phone',
+                'buyer_cred.credential_email as buyer_email',
+                'buyer.user_id as buyer_id'
             )
         );
         $rs = $srch->getResultSet();
@@ -2154,8 +2227,11 @@ class EmailHandler extends FatModel
         $srch->addCondition('sreport_id', '=', 'mysql_func_' . $sreport_id, 'AND', true);
         $srch->addMultipleFields(
             array(
-                'sreport_id', 'sreport_reportreason_id', 'IFNULL(shop_name, shop_identifier) as shop_name',
-                'credential_username', 'sreport_message'
+                'sreport_id',
+                'sreport_reportreason_id',
+                'IFNULL(shop_name, shop_identifier) as shop_name',
+                'credential_username',
+                'sreport_message'
             )
         );
         $rs = $srch->getResultSet();
@@ -2849,11 +2925,34 @@ class EmailHandler extends FatModel
         $prodSrch->doNotLimitRecords();
         $prodSrch->addMultipleFields(
             array(
-                'product_id', 'product_identifier', 'IFNULL(product_name,product_identifier) as product_name', 'product_seller_id', 'product_model', 'product_type', 'prodcat_id', 'IFNULL(prodcat_name,prodcat_identifier) as prodcat_name', 'product_upc', 'product_isbn',
-                'selprod_id', 'selprod_user_id', 'selprod_condition', 'selprod_price', 'special_price_found', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title',
-                'theprice', 'selprod_stock', 'selprod_threshold_stock_level', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'brand_id', 'IFNULL(brand_name, brand_identifier) as brand_name', 'user_name',
-                'shop_id', 'shop_name',
-                'splprice_display_dis_type', 'splprice_display_dis_val', 'splprice_display_list_price'
+                'product_id',
+                'product_identifier',
+                'IFNULL(product_name,product_identifier) as product_name',
+                'product_seller_id',
+                'product_model',
+                'product_type',
+                'prodcat_id',
+                'IFNULL(prodcat_name,prodcat_identifier) as prodcat_name',
+                'product_upc',
+                'product_isbn',
+                'selprod_id',
+                'selprod_user_id',
+                'selprod_condition',
+                'selprod_price',
+                'special_price_found',
+                'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title',
+                'theprice',
+                'selprod_stock',
+                'selprod_threshold_stock_level',
+                'IF(selprod_stock > 0, 1, 0) AS in_stock',
+                'brand_id',
+                'IFNULL(brand_name, brand_identifier) as brand_name',
+                'user_name',
+                'shop_id',
+                'shop_name',
+                'splprice_display_dis_type',
+                'splprice_display_dis_val',
+                'splprice_display_list_price'
             )
         );
         $productRs = $prodSrch->getResultSet();
@@ -2908,11 +3007,35 @@ class EmailHandler extends FatModel
         $prodSrch->setPageSize(9);
         $prodSrch->addMultipleFields(
             array(
-                'product_id', 'selprod_product_id', 'product_identifier', 'IFNULL(product_name,product_identifier) as product_name', 'product_seller_id', 'product_model', 'product_type', 'prodcat_id', 'IFNULL(prodcat_name,prodcat_identifier) as prodcat_name', 'product_upc', 'product_isbn',
-                'selprod_id', 'selprod_user_id', 'selprod_condition', 'selprod_price', 'special_price_found', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title',
-                'theprice', 'selprod_stock', 'selprod_threshold_stock_level', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'brand_id', 'IFNULL(brand_name, brand_identifier) as brand_name', 'user_name',
-                'shop_id', 'shop_name',
-                'splprice_display_dis_type', 'splprice_display_dis_val', 'splprice_display_list_price'
+                'product_id',
+                'selprod_product_id',
+                'product_identifier',
+                'IFNULL(product_name,product_identifier) as product_name',
+                'product_seller_id',
+                'product_model',
+                'product_type',
+                'prodcat_id',
+                'IFNULL(prodcat_name,prodcat_identifier) as prodcat_name',
+                'product_upc',
+                'product_isbn',
+                'selprod_id',
+                'selprod_user_id',
+                'selprod_condition',
+                'selprod_price',
+                'special_price_found',
+                'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title',
+                'theprice',
+                'selprod_stock',
+                'selprod_threshold_stock_level',
+                'IF(selprod_stock > 0, 1, 0) AS in_stock',
+                'brand_id',
+                'IFNULL(brand_name, brand_identifier) as brand_name',
+                'user_name',
+                'shop_id',
+                'shop_name',
+                'splprice_display_dis_type',
+                'splprice_display_dis_val',
+                'splprice_display_list_price'
             )
         );
         $productRs = $prodSrch->getResultSet();
@@ -3126,7 +3249,7 @@ class EmailHandler extends FatModel
      * @param  mixed $d
      * @return bool
      */
-    public function sendTransferBankNotification($langId, $d)
+    public function sendTransferBankNotification($langId, $d, $isBuyerDash)
     {
         $tpl = 'ADMIN_ORDER_PAYMENT_TRANSFERRED_TO_BANK';
         $vars = array(
@@ -3145,7 +3268,7 @@ class EmailHandler extends FatModel
         $this->sendSms($tpl, ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode')) . FatApp::getConfig('CONF_SITE_PHONE'), $vars, $langId);
 
         /* Send Success Notification To Buyer With Bank Transfer Order Placed.  */
-        $msg = Labels::getLabel('MSG_ORDER_#{ORDER-ID}_PLACED_USING_BANK_TRANFER_PAYMENT_METHOD', $langId);
+        $msg = Labels::getLabel('MSG_ORDER_#{ORDER-ID}_BANK_TRANSFER_TRANSACTION_DETAIL_HAVE_BEEN_ADDED', $langId);
         $msg = CommonHelper::replaceStringData($msg, ['{ORDER-ID}' => $d['order_number']]);
         $notificationObj = new Notifications();
         $notificationDataArr = array(
@@ -3157,6 +3280,20 @@ class EmailHandler extends FatModel
         if (!$notificationObj->addNotification($notificationDataArr)) {
             $this->error = $notificationObj->getError();
             return false;
+        }
+
+        if(!$isBuyerDash) {
+            $notificationObj = new Notifications();
+            $notificationDataArr = array(
+                'unotification_user_id' => $d["order_user_id"],
+                'unotification_body' => CommonHelper::replaceStringData(Labels::getLabel('MSG_YOUR_ORDER_{ORDERID}_HAVE_BEEN_PLACE', $langId), array('{ORDERID}' => $d['order_number'])),
+                'unotification_type' => 'BUYER_ORDER',
+                'unotification_data' => json_encode(array('orderId' => $d['order_id'])),
+            );
+            if (!$notificationObj->addNotification($notificationDataArr)) {
+                $this->error = $notificationObj->getError();
+                return false;
+            }
         }
         /* Send Success Notification To Buyer With Bank Transfer Order Placed.  */
 
@@ -3205,42 +3342,440 @@ class EmailHandler extends FatModel
         return true;
     }
 
-    public function sendTransferBankActionNotification($langId, $d)
+    public function sendNewRfqNotification($langId, $data)
     {
-        $tpl = 'BANK_TRANSFER_ORDER_PAYMENT_ACTIONS';
+        $tpl = new FatTemplate('', '');
+        $tpl->set('data', $data);
+        $tpl->set('siteLangId', $langId);
+        $rfqTableFormat = $tpl->render(false, false, '_partial/emails/request-for-quote.php', true);
+
         $vars = array(
-            '{USER_NAME}' => $d['user_name'],
-            '{ORDER_ID}' => $d['order_number'],
-            '{STATUS}' => $d['txn_status'],
+            '{rfq_table}' => $rfqTableFormat,
+            '{rfq_number}' => $data['rfq_number']
         );
 
-        if (!(new FatMailer($langId, $tpl))
-            ->setTo($d['credential_email'])
-            ->setVariables($vars)
-            ->send()) {
+        $attachmentsArr = [];
+        $res = AttachedFile::getAttachment(AttachedFile::FILETYPE_RFQ, $data['rfq_id']);
+        if (!empty($res) && !empty($res['afile_physical_path']) && !empty($res['afile_physical_path']) && !empty($res['afile_name'])) {
+            $attachmentsArr = [
+                'path' => CONF_UPLOADS_PATH . $res['afile_physical_path'],
+                'name' => $res['afile_name'],
+            ];
+        }
+
+        if (!$this->sendMailToAdminAndAdditionalEmails('NEW_RFQ', $vars, onlySuperAdmin: static::NOT_ONLY_SUPER_ADMIN, langId: $langId, attachmentsArr: $attachmentsArr)) {
             return false;
         }
 
-        if (!empty($d['user_phone']) && !empty($d['user_phone_dcode'])) {
-            $phone = ValidateElement::formatDialCode($d['user_phone_dcode']) . $d['user_phone'];
-            $this->sendSms($tpl, $phone, $vars, $langId);
+        $vars = array(
+            '{rfq_title}' => $data['rfq_title'],
+            '{rfq_number}' => $data['rfq_number'],
+            '{qty}' => $data['rfq_quantity'] . ' ' . applicationConstants::getWeightUnitName($langId, $data['rfq_quantity_unit'], true),
+        );
+        $this->sendSms('NEW_RFQ', ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode')) . FatApp::getConfig('CONF_SITE_PHONE'), $vars, $langId);
+
+        return true;
+    }
+
+    public function sendNewRfqAssignedNotification($langId, $data)
+    {
+        $tpl = new FatTemplate('', '');
+        $tpl->set('data', $data);
+        $tpl->set('siteLangId', $langId);
+        $rfqTableFormat = $tpl->render(false, false, '_partial/emails/request-for-quote.php', true);
+
+        $vars = array(
+            '{rfq_table}' => $rfqTableFormat,
+            '{rfq_number}' => $data['rfq_number'],
+            '{shop_user_name}' => $data['shop_user_name']
+        );
+
+        $path = $name = '';
+        $res = AttachedFile::getAttachment(AttachedFile::FILETYPE_RFQ, $data['rfqts_rfq_id']);
+        if (!empty($res) && !empty($res['afile_physical_path']) && !empty($res['afile_physical_path']) && !empty($res['afile_name'])) {
+            $path = CONF_UPLOADS_PATH . $res['afile_physical_path'];
+            $name = $res['afile_name'];
         }
 
-        /* Send Notification To Buyer about Bank Transfer transaction status.  */
-        $msg = Labels::getLabel('MSG_ORDER_#{ORDER_ID}_TXN._HAS_BEEN_{STATUS}', $langId);
-        $msg = CommonHelper::replaceStringData($msg, $vars);
+        if (!empty($data['shop_user_email'])) {
+            if (!(new FatMailer($langId, 'NEW_RFQ_ASSIGNED'))
+                ->setTo($data['shop_user_email'])
+                ->setVariables($vars)
+                ->addAttachment($path, $name)
+                ->send()) {
+                return false;
+            }
+        }
+
+        $qty = $data['rfq_quantity'] . ' ' . applicationConstants::getWeightUnitName($langId, $data['rfq_quantity_unit'], true);
+        if (!empty($data['user_phone']) && !empty($data['user_phone_dcode'])) {
+            $vars = array(
+                '{shop_user_name}' => $data['shop_user_name'],
+                '{rfq_title}' => $data['rfq_title'],
+                '{rfq_number}' => $data['rfq_number'],
+                '{qty}' => $qty,
+            );
+            $this->sendSms('NEW_RFQ_ASSIGNED', ValidateElement::formatDialCode($data['user_phone_dcode']) . $data['user_phone'], $vars, $langId);
+        }
+
+        return true;
+    }
+
+    public function sendApprovalStatusRfqNotification($langId, $data)
+    {
+        $tpl = new FatTemplate('', '');
+        $tpl->set('data', $data);
+        $tpl->set('siteLangId', $langId);
+        $rfqTableFormat = $tpl->render(false, false, '_partial/emails/request-for-quote.php', true);
+        $approvalStatus = RequestForQuote::getApprovalStatusArr($langId)[$data['rfq_approved']] ?? '';
+        $vars = array(
+            '{user_name}' => $data['user_name'],
+            '{rfq_table}' => $rfqTableFormat,
+            '{approval_status}' => $approvalStatus,
+            '{rfq_number}' => $data['rfq_number']
+        );
+
+        if (!empty($data['credential_email'])) {
+            if (!(new FatMailer($langId, 'RFQ_APPROVAL'))
+                ->setTo($data['credential_email'])
+                ->setVariables($vars)
+                ->send()) {
+                return false;
+            }
+        }
+
+        $qty = $data['rfq_quantity'] . ' ' . applicationConstants::getWeightUnitName($langId, $data['rfq_quantity_unit'], true);
+        if (!empty($data['user_phone']) && !empty($data['user_phone_dcode'])) {
+            $vars = array(
+                '{user_name}' => $data['user_name'],
+                '{rfq_title}' => $data['rfq_title'],
+                '{rfq_number}' => $data['rfq_number'],
+                '{qty}' => $qty,
+                '{approval_status}' => $approvalStatus,
+            );
+            $this->sendSms('RFQ_APPROVAL', ValidateElement::formatDialCode($data['user_phone_dcode']) . $data['user_phone'], $vars, $langId);
+        }
+
+        $rData = ['{RFQ-NUMBER}' => $data['rfq_number'], '{APPROVAL-STATUS}' => $approvalStatus];
+        $appNotification = CommonHelper::replaceStringData(Labels::getLabel('MSG_RFQ_({RFQ-NUMBER})_HAS_BEEN_{APPROVAL-STATUS}', $langId), $rData);
+
+        $notificationObj = new Notifications();
+
+        $customData = array(
+            'rfq_id' => $data["rfq_id"],
+            'rfq_title' => $data['rfq_title'],
+            'rfq_number' => $data['rfq_number'],
+            'qty' => $qty,
+            'approval_status' => $approvalStatus
+        );
+
+        $notificationDataArr = array(
+            'unotification_user_id' => $data["user_id"],
+            'unotification_body' => $appNotification,
+            'unotification_type' => 'RFQ_APPROVAL',
+            'unotification_data' => json_encode($customData),
+            'customData' => $customData,
+        );
+        $notificationObj->addNotification($notificationDataArr);
+        return true;
+    }
+
+    public function sendNewRfqOfferNotification($langId, $data)
+    {
+        $tpl = new FatTemplate('', '');
+        $tpl->set('data', $data);
+        $tpl->set('siteLangId', $langId);
+        $offerTableFormat = $tpl->render(false, false, '_partial/emails/new-rfq-offer.php', true);
+        $vars = array(
+            '{shop_name}' => $data['shop_name'],
+            '{user_name}' => $data['buyer_user_name'],
+            '{offer_table}' => $offerTableFormat,
+            '{rfq_number}' => $data['rfq_number']
+        );
+        if (!empty($data['buyer_credential_email'])) {
+            if (!(new FatMailer($langId, 'NEW_RFQ_OFFER'))
+                ->setTo($data['buyer_credential_email'])
+                ->setVariables($vars)
+                ->send()) {
+                return false;
+            }
+        }
+
+        if (!empty($data['buyer_phone']) && !empty($data['buyer_phone_dcode'])) {
+            $vars = array(
+                '{rfq_number}' => $data['rfq_number'],
+                '{shop_name}' => $data['shop_name'],
+                '{user_name}' => $data['buyer_user_name'],
+                '{qty}' => $data['offer_quantity'],
+                '{offer_price}' => CommonHelper::displayMoneyFormat($data['offer_price']),
+            );
+            $this->sendSms('NEW_RFQ_OFFER', ValidateElement::formatDialCode($data['buyer_phone_dcode']) . $data['buyer_phone'], $vars, $langId);
+        }
+
+        $rData = ['{RFQ-NUMBER}' => $data['rfq_number'], '{SHOP-NAME}' => $data['shop_name']];
+        $appNotification = CommonHelper::replaceStringData(Labels::getLabel('MSG_NEW_OFFER_RECEIVED_FROM_{SHOP-NAME}_ON_RFQ_({RFQ-NUMBER})', $langId), $rData);
+
+        $customData = array(
+            'rfq_id' => $data['offer_rfq_id'],
+            'rfq_number' => $data['rfq_number'],
+            'qty' => $data['offer_quantity'],
+            'offer_price' => CommonHelper::displayMoneyFormat($data['offer_price'])
+        );
+
         $notificationObj = new Notifications();
         $notificationDataArr = array(
-            'unotification_user_id' => $d["order_user_id"],
-            'unotification_body' => $msg,
-            'unotification_type' => 'BANK_TRANSFER_ORDER_PAYMENT_APPROVAL',
-            'unotification_data' => json_encode(array('orderId' => $d['order_id'])),
+            'unotification_user_id' => $data["buyer_user_id"],
+            'unotification_body' => $appNotification,
+            'unotification_type' => 'NEW_RFQ_OFFER',
+            'unotification_data' => json_encode($customData),
+            'customData' => $customData,
         );
-        if (!$notificationObj->addNotification($notificationDataArr)) {
-            $this->error = $notificationObj->getError();
-            return false;
+        $notificationObj->addNotification($notificationDataArr);
+        return true;
+    }
+
+    public function sendCounterRfqOfferNotification($langId, $data)
+    {
+        $ftpl = new FatTemplate('', '');
+        $ftpl->set('data', $data);
+        $ftpl->set('siteLangId', $langId);
+        if ($data['isSeller']) {
+            $offerTableFormat = $ftpl->render(false, false, '_partial/emails/counter-rfq-offer-seller.php', true);
+            $tpl = 'COUNTER_RFQ_OFFER_SELLER';
+            $phone = ValidateElement::formatDialCode($data['buyer_phone_dcode']) . $data['buyer_phone'];
+        } else {
+            $offerTableFormat = $ftpl->render(false, false, '_partial/emails/counter-rfq-offer-buyer.php', true);
+            $tpl = 'COUNTER_RFQ_OFFER_BUYER';
+            $phone = ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode')) . FatApp::getConfig('CONF_SITE_PHONE');
         }
-        /* Send Notification To Buyer about Bank Transfer transaction status.  */
+        $vars = array(
+            '{shop_name}' => $data['shop_name'],
+            '{user_name}' => $data['buyer_user_name'],
+            '{offer_table}' => $offerTableFormat,
+            '{rfq_number}' => $data['rfq_number']
+        );
+
+        if ($data['isSeller']) {
+            if (!empty($data['buyer_credential_email'])) {
+                if (!(new FatMailer($langId, $tpl))
+                    ->setTo($data['buyer_credential_email'])
+                    ->setVariables($vars)
+                    ->send()) {
+                    return false;
+                }
+            }
+
+            $rData = ['{RFQ-NUMBER}' => $data['rfq_number'], '{SHOP-NAME}' => $data['shop_name']];
+            $appNotification = CommonHelper::replaceStringData(Labels::getLabel('MSG_COUNTER_OFFER_RECEIVED_FROM_{SHOP-NAME}_ON_RFQ_({RFQ-NUMBER})', $langId), $rData);
+
+            $customData = array(
+                'rfq_id' => $data['offer_rfq_id'],
+                'rfq_number' => $data['rfq_number'],
+                'qty' => $data['offer_quantity'],
+                'offer_price' => CommonHelper::displayMoneyFormat($data['offer_price'])
+            );
+
+            $notificationObj = new Notifications();
+            $notificationDataArr = array(
+                'unotification_user_id' => $data["buyer_user_id"],
+                'unotification_body' => $appNotification,
+                'unotification_type' => $tpl,
+                'unotification_data' => json_encode($customData),
+                'customData' => $customData,
+            );
+            $notificationObj->addNotification($notificationDataArr);
+        } else {
+            if (!empty($data['seller_email'])) {
+                if (!(new FatMailer($langId, $tpl))
+                    ->setTo($data['seller_email'])
+                    ->setVariables($vars)
+                    ->send()) {
+                    return false;
+                }
+            } else {
+                if (!$this->sendMailToAdminAndAdditionalEmails($tpl, $vars, onlySuperAdmin: static::NOT_ONLY_SUPER_ADMIN, langId: $langId)) {
+                    return false;
+                }
+            }
+        }
+
+        if (!empty($phone)) {
+            $vars = array(
+                '{rfq_number}' => $data['rfq_number'],
+                '{shop_name}' => $data['shop_name'],
+                '{user_name}' => $data['buyer_user_name'],
+                '{qty}' => ($data['isSeller']) ? $data['offer_quantity'] : $data['counter_offer_quantity'],
+                '{offer_price}' => ($data['isSeller']) ? CommonHelper::displayMoneyFormat($data['offer_price']) : CommonHelper::displayMoneyFormat($data['counter_offer_price']),
+            );
+            $this->sendSms($tpl, $phone, $vars, $langId);
+        }
+        return true;
+    }
+
+    public function sendRfqOfferActionNotification($langId, $data, $acceptance = 0)
+    {
+        $ftpl = new FatTemplate('', '');
+        $ftpl->set('data', $data);
+        $ftpl->set('siteLangId', $langId);
+        if ($data['isSeller']) {
+            $offerTableFormat = $ftpl->render(false, false, '_partial/emails/rfq-offer-action-seller.php', true);
+            $tpl = 'RFQ_OFFER_ACTION_SELLER';
+            $phone = ValidateElement::formatDialCode($data['user_phone_dcode']) . $data['user_phone'];
+        } else {
+            $offerTableFormat = $ftpl->render(false, false, '_partial/emails/rfq-offer-action-buyer.php', true);
+            $tpl = 'RFQ_OFFER_ACTION_BUYER';
+            $phone = ValidateElement::formatDialCode(FatApp::getConfig('CONF_SITE_PHONE_dcode')) . FatApp::getConfig('CONF_SITE_PHONE');
+        }
+
+        if (0 < $acceptance) {
+            $data['offer_status'] = RfqOffers::STATUS_ACCEPTED;
+        }
+
+        $offerStatusArr = RfqOffers::getStatusArr($langId);
+        $vars = array(
+            '{shop_name}' => $data['shop_name'],
+            '{user_name}' => $data['user_name'],
+            '{offer_status}' => $offerStatusArr[$data['offer_status']],
+            '{offer_table}' => $offerTableFormat,
+            '{rfq_number}' => $data['rfq_number']
+        );
+
+        if ($data['isSeller']) {
+            if (!empty($data['credential_email'])) {
+                if (!(new FatMailer($langId, $tpl))
+                    ->setTo($data['credential_email'])
+                    ->setVariables($vars)
+                    ->send()) {
+                    return false;
+                }
+            }
+
+            $rData = ['{RFQ-NUMBER}' => $data['rfq_number'], '{SHOP-NAME}' => $data['shop_name'], '{OFFER-STATUS}' => $offerStatusArr[$data['offer_status']]];
+            $appNotification = CommonHelper::replaceStringData(Labels::getLabel('MSG_YOUR_OFFER_HAS_BEEN_{OFFER-STATUS}_BY_{SHOP-NAME}_ON_RFQ_({RFQ-NUMBER})', $langId), $rData);
+
+            $customData = array(
+                'rfq_id' => $data['offer_rfq_id'],
+                'rfq_number' => $data['rfq_number'],
+                'qty' => $data['offer_quantity'],
+                'offer_price' => CommonHelper::displayMoneyFormat($data['offer_price']),
+                'offer_status_id' => $data['offer_status'],
+                'offer_status' => $offerStatusArr[$data['offer_status']]
+            );
+
+            $notificationObj = new Notifications();
+            $notificationDataArr = array(
+                'unotification_user_id' => $data["user_id"],
+                'unotification_body' => $appNotification,
+                'unotification_type' => $tpl,
+                'unotification_data' => json_encode($customData),
+                'customData' => $customData,
+            );
+            $notificationObj->addNotification($notificationDataArr);
+        } else {
+            if (!empty($data['seller_email'])) {
+                if (!(new FatMailer($langId, $tpl))
+                    ->setTo($data['seller_email'])
+                    ->setVariables($vars)
+                    ->send()) {
+                    return false;
+                }
+            } else {
+                if (!$this->sendMailToAdminAndAdditionalEmails($tpl, $vars, onlySuperAdmin: static::NOT_ONLY_SUPER_ADMIN, langId: $langId)) {
+                    return false;
+                }
+            }
+        }
+
+        if (isset($data['sellers']) && !empty($data['sellers'])) {
+            $acceptedTpl = $data['isSeller'] ? 'RFQ_OFFER_ACCEPTED_BY_SELLER' : 'RFQ_OFFER_ACCEPTED_BY_BUYER';
+            foreach ($data['sellers'] as $seller) {
+                if (!empty($seller['rfqts_user_id']) && $data['seller_user_id'] != $seller['rfqts_user_id'] && !empty($seller['shop_user_email'])) {
+                    $otherVars = array(
+                        '{shop_name}' => $seller['shop_name'],
+                        '{user_name}' => $data['user_name'],
+                        '{rfq_number}' => $data['rfq_number']
+                    );
+
+                    if (!(new FatMailer($langId, $acceptedTpl))
+                        ->setTo($seller['shop_user_email'])
+                        ->setVariables($otherVars)
+                        ->send()) {
+                        return false;
+                    }
+
+                    if (!empty($data['shop_phone_dcode']) && !empty($data['shop_phone'])) {
+                        $otherSellersPhone = ValidateElement::formatDialCode($data['shop_phone_dcode']) . $data['shop_phone'];
+                        $this->sendSms($acceptedTpl, $otherSellersPhone, $otherVars, $langId);
+                    }
+                }
+            }
+        }
+
+        if (!empty($phone)) {
+            $vars = array(
+                '{rfq_number}' => $data['rfq_number'],
+                '{shop_name}' => $data['shop_name'],
+                '{user_name}' => $data['user_name'],
+                '{offer_status}' => $offerStatusArr[$data['offer_status']],
+                '{qty}' => $data['offer_quantity'],
+                '{offer_price}' => CommonHelper::displayMoneyFormat($data['offer_price']),
+            );
+            $this->sendSms($tpl, $phone, $vars, $langId);
+        }
+        return true;
+    }
+
+    public function sendDeletionRfqNotification($langId, $data)
+    {
+        $tpl = new FatTemplate('', '');
+        $tpl->set('data', $data);
+        $tpl->set('siteLangId', $langId);
+        $rfqTableFormat = $tpl->render(false, false, '_partial/emails/request-for-quote.php', true);
+        $vars = array(
+            '{user_name}' => $data['user_name'],
+            '{rfq_table}' => $rfqTableFormat,
+            '{rfq_number}' => $data['rfq_number']
+        );
+
+        if (!empty($data['credential_email'])) {
+            if (!(new FatMailer($langId, 'RFQ_DELETION'))
+                ->setTo($data['credential_email'])
+                ->setVariables($vars)
+                ->send()) {
+                return false;
+            }
+        }
+
+        $qty = $data['rfq_quantity'] . ' ' . applicationConstants::getWeightUnitName($langId, $data['rfq_quantity_unit'], true);
+        if (!empty($data['user_phone']) && !empty($data['user_phone_dcode'])) {
+            $vars = array(
+                '{user_name}' => $data['user_name'],
+                '{rfq_title}' => $data['rfq_title'],
+                '{rfq_number}' => $data['rfq_number'],
+                '{qty}' => $qty,
+            );
+            $this->sendSms('RFQ_DELETION', ValidateElement::formatDialCode($data['user_phone_dcode']) . $data['user_phone'], $vars, $langId);
+        }
+        $rData = ['{RFQ-NUMBER}' => $data['rfq_number']];
+        $appNotification = CommonHelper::replaceStringData(Labels::getLabel('MSG_YOUR_RFQ_({RFQ-NUMBER})_HAS_BEEN_DELETED', $langId), $rData);
+
+        $customData = array(
+            'rfq_id' => $data['rfq_id'],
+            'rfq_title' => $data['rfq_title'],
+            'rfq_number' => $data['rfq_number'],
+            'qty' => $qty
+        );
+
+        $notificationObj = new Notifications();
+        $notificationDataArr = array(
+            'record_id' => $data["rfq_id"],
+            'unotification_user_id' => $data["user_id"],
+            'unotification_body' => $appNotification,
+            'unotification_type' => 'RFQ_DELETION',
+            'unotification_data' => json_encode($customData),
+            'customData' => $customData,
+        );
+        $notificationObj->addNotification($notificationDataArr);
         return true;
     }
 
@@ -3252,8 +3787,12 @@ class EmailHandler extends FatModel
         $srch->joinTable(User::DB_TBL_CRED, 'INNER JOIN', 'user.user_id = usercred.credential_user_id', 'usercred');
         $srch->addCondition('ogcards_order_id', '=', $orderId);
         $srch->addMultipleFields([
-            'ogcards_receiver_email', 'ogcards_receiver_name', 'ogcards_code', 'order_net_amount',
-            'user.user_name', 'usercred.credential_email'
+            'ogcards_receiver_email',
+            'ogcards_receiver_name',
+            'ogcards_code',
+            'order_net_amount',
+            'user.user_name',
+            'usercred.credential_email'
         ]);
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
@@ -3318,7 +3857,6 @@ class EmailHandler extends FatModel
         return true;
     }
 
-
     public function sendRedeemGiftCardNotification(array $card)
     {
         $tpl = 'user-redeem-gift-card';
@@ -3338,10 +3876,48 @@ class EmailHandler extends FatModel
         }
 
         if (false === $sendEmail) {
-
             $this->error = Labels::getLabel("ERR_UNABLE_TO_SEND_EMAIL", $langId);
             return false;
         }
+        return true;
+    }
+
+    public function sendTransferBankActionNotification($langId, $d)
+    {
+        $tpl = 'BANK_TRANSFER_ORDER_PAYMENT_ACTIONS';
+        $vars = array(
+            '{USER_NAME}' => $d['user_name'],
+            '{ORDER_ID}' => $d['order_number'],
+            '{STATUS}' => $d['txn_status'],
+        );
+
+        if (!(new FatMailer($langId, $tpl))
+            ->setTo($d['credential_email'])
+            ->setVariables($vars)
+            ->send()) {
+            return false;
+        }
+
+        if (!empty($d['user_phone']) && !empty($d['user_phone_dcode'])) {
+            $phone = ValidateElement::formatDialCode($d['user_phone_dcode']) . $d['user_phone'];
+            $this->sendSms($tpl, $phone, $vars, $langId);
+        }
+
+        /* Send Notification To Buyer about Bank Transfer transaction status.  */
+        $msg = Labels::getLabel('MSG_ORDER_#{ORDER-ID}_TXN._HAS_BEEN_{STATUS}', $langId);
+        $msg = CommonHelper::replaceStringData($msg, $vars);
+        $notificationObj = new Notifications();
+        $notificationDataArr = array(
+            'unotification_user_id' => $d["order_user_id"],
+            'unotification_body' => $msg,
+            'unotification_type' => 'BANK_TRANSFER_ORDER_PAYMENT_APPROVAL',
+            'unotification_data' => json_encode(array('orderId' => $d['order_id'])),
+        );
+        if (!$notificationObj->addNotification($notificationDataArr)) {
+            $this->error = $notificationObj->getError();
+            return false;
+        }
+        /* Send Notification To Buyer about Bank Transfer transaction status.  */
         return true;
     }
 }

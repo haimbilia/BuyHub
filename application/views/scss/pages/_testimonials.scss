@@ -1,40 +1,40 @@
 .testimonials-item {
-    display: block;
-    position: relative;
-    height: 100%;
-    border-radius: $common-radius;
-    border: $border;
-    //box-shadow: 0 0px 15px 0 rgba(0, 0, 0, 0.22);
-    background-color: $bg-white;
-    padding: 1.5rem;
+  display: block;
+  position: relative;
+  height: 100%;
+  border-radius: $common-radius;
+  border: $border;
+  //box-shadow: 0 0px 15px 0 rgba(0, 0, 0, 0.22);
+  background-color: $bg-white;
+  padding: 1.5rem;
 
-    .user {
-        display: flex;
+  .user {
+    display: flex;
 
-        gap: 10px;
-        transition: all 0.3s ease 0s;
-        margin-bottom: 1rem;
+    gap: 0.5rem;
+    transition: all 0.3s ease 0s;
+    margin-bottom: 1rem;
 
-        img {
-            border-radius: $common-radius;
-            overflow: hidden;
-            width: 60px;
-            height: 60px;
-            max-width: 100%;
-        }
-
-        .user-name {
-            padding-top: 10px;
-            font-size: 1rem;
-            font-weight: $font-weight-normal;
-        }
+    img {
+      border-radius: $common-radius;
+      overflow: hidden;
+      width: 60px;
+      height: 60px;
+      max-width: 100%;
     }
 
-    .testimonials-content {
-        p {
-            font-weight: $font-weight-regular;
-            font-size: 0.95rem;
-            padding: 0;
-        }
+    .user-name {
+      padding-top: 10px;
+      font-size: 1rem;
+      font-weight: $font-weight-normal;
     }
+  }
+
+  .testimonials-content {
+    p {
+      font-weight: $font-weight-regular;
+      font-size: 0.95rem;
+      padding: 0;
+    }
+  }
 }

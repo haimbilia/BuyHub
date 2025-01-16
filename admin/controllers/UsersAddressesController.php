@@ -76,7 +76,7 @@ class UsersAddressesController extends ListingBaseController
         $srch = new AddressSearch($this->siteLangId);
         $srch->joinUser();
         $srch->joinCountry();
-        $srch->joinState();        
+        $srch->joinState();
         $srch->addCondition('country_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         $srch->addCondition('state_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
         $srch->addCondition('user_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
@@ -254,6 +254,7 @@ class UsersAddressesController extends ListingBaseController
 
         $fld = $frm->addTextBox(Labels::getLabel('FRM_ADDRESS_TITLE', $this->siteLangId), 'addr_title');
         $fld->setFieldTagAttribute('placeholder', Labels::getLabel('FRM_E.g:_My_Office_Address', $this->siteLangId));
+        $fld->setFieldTagAttribute('maxlength', Address::ADDRESS_TITLE_LENGTH);
 
         $frm->addRequiredField(Labels::getLabel('FRM_CONTACT_PERSON_NAME', $this->siteLangId), 'addr_name');
         $phnFld = $frm->addTextBox(Labels::getLabel('FRM_PHONE', $this->siteLangId), 'addr_phone', '', array('class' => 'phoneJs ltr-right', 'placeholder' => ValidateElement::PHONE_NO_FORMAT, 'maxlength' => ValidateElement::PHONE_NO_LENGTH));

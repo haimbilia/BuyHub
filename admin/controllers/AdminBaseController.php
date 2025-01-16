@@ -136,7 +136,6 @@ class AdminBaseController extends FatController
                     'lengthOf' => Labels::getLabel('VLBL_LENGTH_OF', $this->siteLangId),
                     'valueOf' => Labels::getLabel('VLBL_VALUE_OF', $this->siteLangId),
                     'mustBeBetween' => Labels::getLabel('VLBL_MUST_BE_BETWEEN', $this->siteLangId),
-                    'mustBeBetween' => Labels::getLabel('VLBL_MUST_BE_BETWEEN', $this->siteLangId),
                     'and' => Labels::getLabel('VLBL_AND', $this->siteLangId),
                     'pleaseSelect' => Labels::getLabel('VLBL_PLEASE_SELECT', $this->siteLangId),
                     'to' => Labels::getLabel('VLBL_TO', $this->siteLangId),
@@ -185,7 +184,6 @@ class AdminBaseController extends FatController
                     'dropFilesToUpload' => Labels::getLabel('MSG_DROP_FILES_HERE_TO_UPLOAD', $this->siteLangId),
                     'invalidUploadFileType' => Labels::getLabel('MSG_INVALID_FILE_TYPE._ONLY_{FILE-TYPE}_FILE_CAN_BE_UPLOADED', $this->siteLangId),
                     'clickToCopy' => Labels::getLabel('LBL_CLICK_TO_COPY', $this->siteLangId),
-                    'copied' => Labels::getLabel('LBL_COPIED', $this->siteLangId),
                     'confirmAsBuyer' => Labels::getLabel('LBL_DO_YOU_WANT_TO_MARK_THIS_USER_AS_BUYER?', $this->siteLangId),
                     'maxLengthValidator' => CommonHelper::replaceStringData(Labels::getLabel('FRM_USED_{charsTyped}_of_{charsTotal}_CHAR', $this->siteLangId), ["{charsTyped}" => "%charsTyped%", "{charsTotal}" => "%charsTotal%"]), /* Used By Maxlength bootstrap validator. */
                     'unread' => Labels::getLabel('LBL_UNREAD', $this->siteLangId),
@@ -195,6 +193,10 @@ class AdminBaseController extends FatController
                     'systemIdentifier' => Labels::getLabel('LBL_SYSTEM_IDENTIFIER', $this->siteLangId),
                     'clickToHide' => Labels::getLabel('LBL_CLICK_TO_HIDE', $this->siteLangId),
                     'clickToExpand' => Labels::getLabel('LBL_CLICK_TO_EXPAND', $this->siteLangId),
+                    'total' => Labels::getLabel('LBL_TOTAL', $this->siteLangId),
+                    'enableRfqModule' => Labels::getLabel('LBL_PLEASE_ENABLE_RFQ_MODULE_FIRST.', $this->siteLangId),
+                    'disableHidePriceSettings' => Labels::getLabel('LBL_PLEASE_DISABLE_HIDE_PRICE_SETTING_FIRST.', $this->siteLangId),
+                    'confirmDisableRfq' => Labels::getLabel('LBL_ARE_YOU_SURE?_GLOBAL_RFQ_MODULE_WILL_BE_DISABLED', $this->siteLangId),
                 );
                 foreach ($languages as $val) {
                     if (empty($val)) {
@@ -686,12 +688,12 @@ $frm->addTextBox('ISBN Code','product_isbn'); */
             $fld1 = $frm->addIntegerField(Labels::getLabel('FRM_DOWNLOAD_VALIDITY_(days)', $this->siteLangId), 'selprod_download_validity_in_days');
             $fld1->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('FRM_-1_for_unlimited', $this->siteLangId) . '</span>';
             $frm->addHiddenField('', 'selprod_condition', $defaultProductCond);
-        } else if ($productData['product_type'] != Product::PRODUCT_TYPE_SERVICE) {
+        } else {
             $fld = $frm->addSelectBox(Labels::getLabel('FRM_PRODUCT_CONDITION', $this->siteLangId), 'selprod_condition', Product::getConditionArr($this->siteLangId), '', array(), Labels::getLabel('FRM_SELECT_CONDITION', $this->siteLangId));
             $fld->requirements()->setRequired();
         }
 
-        if (!in_array($productData['product_type'], [Product::PRODUCT_TYPE_DIGITAL, Product::PRODUCT_TYPE_SERVICE])) {
+        if ($productData['product_type'] != Product::PRODUCT_TYPE_DIGITAL) {
             $codFld = $frm->addSelectBox(Labels::getLabel('FRM_AVAILABLE_FOR_COD', $this->siteLangId), 'selprod_cod_enabled', applicationConstants::getYesNoArr($this->siteLangId), '0', array(), '');
             $paymentMethod = new PaymentMethods();
             if (!$paymentMethod->cashOnDeliveryIsActive()) {
@@ -705,6 +707,23 @@ $frm->addTextBox('ISBN Code','product_isbn'); */
         }
 
         $frm->addDateField(Labels::getLabel('FRM_DATE_AVAILABLE', $this->siteLangId), 'selprod_available_from', '', array('readonly' => 'readonly', 'class' => 'field--calender'))->requirements()->setRequired();
+        
+        if (0 < FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0) && 1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) {
+            $cartTypeFld = $frm->addSelectBox(Labels::getLabel('FRM_CART_TYPE', $this->siteLangId), 'selprod_cart_type', SellerProduct::getCartType(), SellerProduct::CART_TYPE_BOTH, array('class' => 'fieldsVisibilityJs onlyShowHideJs'), '');
+            $cartTypeFld->requirements()->setRequired();
+            $frm->addCheckBox(Labels::getLabel("FRM_HIDE_PRICE", $this->siteLangId), 'selprod_hide_price', 1, array(), false, 0);
+
+            $hidePriceReqFld = new FormFieldRequirement('selprod_hide_price', Labels::getLabel('FRM_HIDE_PRICE', $this->siteLangId));
+            $hidePriceReqFld->setRequired(true);
+            $hidePriceReqFld->setPositive();
+
+            $hidePriceUnReqFld = new FormFieldRequirement('selprod_hide_price', Labels::getLabel('FRM_HIDE_PRICE', $this->siteLangId));
+            $hidePriceUnReqFld->setRequired(false);
+            $hidePriceUnReqFld->setPositive();
+
+            $cartTypeFld->requirements()->addOnChangerequirementUpdate(SellerProduct::CART_TYPE_RFQ_ONLY, 'eq', 'selprod_hide_price', $hidePriceReqFld);
+            $cartTypeFld->requirements()->addOnChangerequirementUpdate(SellerProduct::CART_TYPE_RFQ_ONLY, 'ne', 'selprod_hide_price', $hidePriceUnReqFld);
+        }
 
         if ($productData['product_type'] != Product::PRODUCT_TYPE_SERVICE) {
             $frm->addCheckBox(Labels::getLabel('FRM_SYSTEM_SHOULD_MAINTAIN_STOCK_LEVELS', $this->siteLangId), 'selprod_subtract_stock', applicationConstants::YES, array(), false, 0);
@@ -735,8 +754,8 @@ $frm->addTextBox('ISBN Code','product_isbn'); */
             $orderReturnAgeUnReqFld = new FormFieldRequirement('selprod_return_age', Labels::getLabel('FRM_PRODUCT_ORDER_RETURN_PERIOD_(Days)', $this->siteLangId));
             $orderReturnAgeUnReqFld->setRequired(false);
             $orderReturnAgeUnReqFld->setPositive();
-            $orderReturnAgeUnReqFld->htmlAfterField = '<br/><small>' . Labels::getLabel('FRM_WARRANTY_IN_DAYS', $this->siteLangId) . ' </small>';
         }
+
         $fld = $frm->addIntegerField(Labels::getLabel('FRM_PRODUCT_ORDER_CANCELLATION_PERIOD_(Days)', $this->siteLangId), 'selprod_cancellation_age');
         $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('FRM_PERIOD_IN_DAYS', $this->siteLangId) . ' </span>';
 

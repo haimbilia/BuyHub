@@ -1,14 +1,14 @@
 $(function () {
 	$(document).ready(function () {
 		var type = $('input[name="fulfillment_type"]:checked').val();
-		if (typeof type == undefined) {
+		if ('undefined' == typeof type) {
 			type = 2;
 		}
 		listCartProducts(type);
 	});
 });
 (function () {
-	listCartProducts = function (fulfilmentType = 2) {
+	listCartProducts = function (fulfilmentType = 2) {		
 		if (true === isAjaxRunning) { return; }
 		if (fulfilmentType == 2) {
 			$("#shipping").prop("checked", true);

@@ -1,6 +1,6 @@
 .collection-shops {
     &-item {
-        background: #fff;
+        background-color: #fff;
         display: flex;
         flex-flow: row wrap;
         justify-content: space-between;
@@ -111,17 +111,18 @@
 
 .product-layout-2 {
     display: grid;
-    grid-gap: 1px;
-    grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
+    grid-gap: 4px;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
 
     @include media-breakpoint-up(lg) {
         grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-        grid-gap: 3rem;
+        grid-gap: $gap;
     }
 
     .product-item {
         display: flex;
-        align-items: center;
+        //align-items: center;
+        align-items: normal;
         justify-content: space-between;
         height: 100%;
         flex-direction: column;
@@ -145,7 +146,7 @@
 
         .products-foot {
             @include media-breakpoint-up(lg) {
-                padding: 20px;
+                padding: 0;
                 width: calc(100% - 150px);
                 text-align: #{$start-direction};
             }
@@ -170,14 +171,23 @@
 
     @include media-breakpoint-up(lg) {
         display: grid;
-        column-gap: 3rem;
-        grid-template-columns: repeat(4, 1fr);
+        column-gap: $gap;
+
+        &[data-view="3"] {
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        &[data-view="5"] {
+            grid-template-columns: repeat(4, 1fr);
+        }
     }
 
     .products {
         height: 100%;
         display: flex;
+        flex-direction: row;
         align-content: center;
+        gap: 0;
 
         &-body {
             flex: 0 0 50%;
@@ -197,6 +207,7 @@
             // padding: 0;
             min-height: 50%;
             min-width: 0;
+            padding: 1rem;
 
             @include media-breakpoint-up(lg) {
                 align-items: center;
@@ -258,6 +269,24 @@
             grid-row-start: 2;
             grid-row-end: 3;
         }
+
+        &-4 {
+            grid-column-start: 4;
+            grid-column-end: 6;
+            grid-row-start: 2;
+            grid-row-end: 3;
+        }
+
+        &-4 {
+            grid-column-start: 4;
+            grid-column-end: 6;
+            grid-row-start: 2;
+            grid-row-end: 3;
+        }
+    }
+
+    .products-title {
+        width: 100%;
     }
 }
 
@@ -267,8 +296,15 @@
     grid-template-columns: repeat(2, 1fr);
 
     @include media-breakpoint-up(lg) {
-        gap: 2rem;
-        grid-template-columns: repeat(6, 1fr);
+        gap: $gap;
+
+        &[data-view="6"] {
+            grid-template-columns: repeat(6, 1fr);
+        }
+
+        &[data-view="8"] {
+            grid-template-columns: repeat(7, 1fr);
+        }
     }
 
     .products {
@@ -387,4 +423,39 @@
     opacity: 0;
     transform: translate(-50%, -50%);
     transition: all 0.3s ease-in-out 0s;
+}
+
+//B2B collection
+.product-layout-5 {
+    background-color: transparent;
+    border: $border;
+    border-radius: $kart;
+    display: flex;
+    flex-direction: row;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+
+    .js-carousel-item {
+        padding: 0;
+    }
+
+    .products {
+        padding: 1rem;
+        border-#{$end-direction}: $border;
+    }
+
+    .price-off {
+        background-color: #fbd33f;
+        color: #000;
+        border-bottom-#{$start-direction}-radius: 9px;
+        padding: 4px 7px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        line-height: 1;
+        position: absolute;
+        z-index: 1;
+        top: 0;
+        #{$end-direction}: 0;
+    }
 }

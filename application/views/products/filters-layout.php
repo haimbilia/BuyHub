@@ -23,7 +23,7 @@
                 <?php if (0 < FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) { ?>
                 <div class="product-ratings">
                     <i class="icn">
-                        <svg class="svg" width="14" height="14">
+                        <svg class="svg svg-star" width="14" height="14">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow"></use>
                         </svg></i>
                     <span class="rate">

@@ -22,7 +22,7 @@
                     echo '<div class="alert alert-danger"><p>' . $error . '</p></div>';
                 if (isset($success))
                     echo '<div class="alert alert-success" ><p>' . Labels::getLabel('LBL_Your_payment_has_been_successfully', $siteLangId) . '</p></div>';
-                if (strlen($orderId) > 0 && $orderInfo["order_payment_status"] == Orders::ORDER_PAYMENT_PENDING) echo '<div class="text-center" style="margin-top:40px;" id="AmazonPayButton"></div>';
+                if (strlen((string)$orderId) > 0 && $orderInfo["order_payment_status"] == Orders::ORDER_PAYMENT_PENDING) echo '<div class="text-center" style="margin-top:40px;" id="AmazonPayButton"></div>';
                 ?>
             </div>
             <?php if (CommonHelper::getCurrencyId() != FatApp::getConfig('CONF_CURRENCY', FatUtility::VAR_INT, 1)) { ?>
@@ -33,8 +33,8 @@
 </section>
 <?php include(CONF_THEME_PATH . '_partial/footer-part/fonts.php'); ?>
 <?php
-if (isset($amazon) && strlen($orderId) > 0 && $orderInfo["order_payment_status"] == Orders::ORDER_PAYMENT_PENDING) {
-    if (strlen($amazon['merchant_id']) > 0 && strlen($amazon['access_key']) > 0 && strlen($amazon['secret_key']) > 0 && strlen($amazon['client_id']) > 0 && strlen(FatApp::getConfig('CONF_TRANSACTION_MODE', FatUtility::VAR_STRING, '0'))) {
+if (isset($amazon) && strlen((string)$orderId) > 0 && $orderInfo["order_payment_status"] == Orders::ORDER_PAYMENT_PENDING) {
+    if (strlen((string)$amazon['merchant_id']) > 0 && strlen((string)$amazon['access_key']) > 0 && strlen((string)$amazon['secret_key']) > 0 && strlen((string)$amazon['client_id']) > 0 && strlen(FatApp::getConfig('CONF_TRANSACTION_MODE', FatUtility::VAR_STRING, '0'))) {
 ?>
         <?php if (!FatUtility::isAjaxCall()) { ?>
             <script type='text/javascript' src='https://static-na.payments-amazon.com/OffAmazonPayments/us/sandbox/js/Widgets.js'></script>

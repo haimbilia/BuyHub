@@ -134,6 +134,7 @@ class AdsBatch extends MyAppModel
         $srch->doNotLimitRecords();
         $srch->addCondition(AdsBatch::DB_TBL_BATCH_PRODS_PREFIX . 'adsbatch_id', '=', $this->getMainTableRecordId());
         $srch->addCondition(AdsBatch::DB_TBL_PREFIX . 'user_id', '=', $userId);
+        $srch->addCondition('selprod_cart_type', '!=', SellerProduct::CART_TYPE_RFQ_ONLY);
         $srch->addMultipleFields(
             [
                 'selprod_id',

@@ -239,6 +239,8 @@ $(document).ready(function () {
             }
         }
         fcom.updateWithAjax(fcom.makeUrl('CustomProducts', "customProductImageForm", [recordId, tempProductId]), '', function (t) {
+            fcom.removeLoader();
+            fcom.closeProcessing();
             isImageUploadByPopUp = true;
             $.ykmodal(t.html);
             loadImageOptions();
@@ -294,7 +296,7 @@ $(document).ready(function () {
                         record_id,
                         file_type,
                         ids: sort
-                    });
+                    }, function(){fcom.closeProcessing();});
                 }
             }).disableSelection();
         });

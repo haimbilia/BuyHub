@@ -584,8 +584,8 @@ $this->includeTemplate('_partial/dashboardNavigation.php'); ?>
                                                             <?php echo Labels::getLabel('Lbl_Comments', $siteLangId) ?>:
                                                             <?php
                                                             $comentDetail = $row['ocrequest_message'];
-                                                            if (strlen($comentDetail) > 25) {
-                                                                echo  $newDetail = strlen($comentDetail) > 25 ? substr($comentDetail, 0, 25) . "..." : $comentDetail;
+                                                            if (strlen((string)$comentDetail) > 25) {
+                                                                echo  $newDetail = strlen((string)$comentDetail) > 25 ? substr($comentDetail, 0, 25) . "..." : $comentDetail;
                                                             ?>
                                                                 <button class="btn btn-view" data-bs-toggle="tooltip" data-placement="top" data-bs-original-title="<?php echo Labels::getLabel('LBL_VIEW_MORE', $siteLangId); ?>" onclick='getCancellationRequestComment(<?php echo $row['ocrequest_id']; ?>)'>
                                                                     <svg class="svg" width="10" height="10">

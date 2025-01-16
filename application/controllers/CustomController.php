@@ -500,11 +500,12 @@ class CustomController extends MyAppController
 
         $showOrderDetails = UserAuthentication::isGuestUserLogged()  || UserAuthentication::isUserLogged();
 
+        $user_id = User::getUserParentId(UserAuthentication::getLoggedUserId(true));
         $orderId = $orderInfo['order_id'];
 
         $user = [];
         if ($orderInfo['order_user_id'] > 0) {
-            if (0 < UserAuthentication::getLoggedUserId(true) && $orderInfo['order_user_id'] != UserAuthentication::getLoggedUserId(true)) {
+            if (0 < UserAuthentication::getLoggedUserId(true) && $orderInfo['order_user_id'] != $user_id) {
                 $message = Labels::getLabel("ERR_INVALID_ORDER", $this->siteLangId);
                 if (true === MOBILE_APP_API_CALL) {
                     LibHelper::dieJsonError($message);
@@ -612,7 +613,12 @@ class CustomController extends MyAppController
         $orderInfo['orderProducts'] = $orderObj->getChildOrders(['order_id' => $orderInfo['order_id']], $orderInfo['order_type'], $orderInfo['order_language_id'], true);
 
         if (UserAuthentication::isGuestUserLogged()) {
-            unset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]);
+            // unset($_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]);
+        }
+
+        if (UserAuthentication::isUserLogged()) {
+            unset($_SESSION['offer_checkout']);
+            $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['acceptedOffers'] = RfqOffers::getAllAcceptedOffers(UserAuthentication::getLoggedUserId(true));
         }
 
         $this->set('orderId', $orderId);
@@ -795,5 +801,26 @@ class CustomController extends MyAppController
     public function cookiePreferencesData()
     {
         $this->_template->render(false, false);
+    }
+
+    public function rfqSuccess()
+    {
+        $rfqId = FatApp::getQueryStringData('rfq_id', FatUtility::VAR_INT, 0);
+        if (empty($rfqId)) {
+            Message::addErrorMessage(Labels::getLabel('ERR_RFQ_ID_NOT_FOUND!', $this->siteLangId));
+            CommonHelper::redirectUserReferer();
+        }
+        $srch = new RequestForQuoteSearch();
+        $srch->joinBuyer();
+        $srch->joinBuyerAddress($this->siteLangId);
+        $srch->joinCountry(true);
+        $srch->joinState(true);
+
+        $dbFlds = array_merge(RequestForQuote::FIELDS, ['addr_name', 'addr_address1', 'addr_address2', 'addr_city', 'state_name', 'country_name', 'addr_zip', 'addr_phone_dcode', 'addr_phone', 'buc.credential_username as credential_username', 'bu.user_id as user_id', 'bu.user_updated_on', 'credential_email', 'bu.user_name', 'IFNULL(country_name, country_code) as country_name', 'IFNULL(state_name, state_identifier) as state_name']);
+        $srch->addMultipleFields($dbFlds);
+
+        $srch->addCondition('rfq_id', '=', $rfqId);
+        $this->set("rfqData", FatApp::getDb()->fetch($srch->getDataResultSet()));
+        $this->_template->render();
     }
 }

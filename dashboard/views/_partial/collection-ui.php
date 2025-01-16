@@ -20,56 +20,53 @@ if (!isset($isOutOfMinOrderQty)) {
 }
 
 if ($showAddToFavorite) {
-    /* Get Ribbon */
-    if ((!isset($includeRibbon) || true === $includeRibbon) && !empty($selProdRibbons)) {
-        foreach ($selProdRibbons as $ribbRow) {
-            $this->includeTemplate('_partial/ribbon-ui.php', ['ribbRow' => $ribbRow], false);
-        }
-    }
-    ?>
-<?php if (true == $showActionBtns) { ?>
-<ul class="actions actions-wishlist">
-    <?php if ($product['in_stock'] && time() >= strtotime($product['selprod_available_from']) && 0 == $isOutOfMinOrderQty) { ?>
-    <li>
-        <label class="checkbox">
-            <input type="checkbox" name='selprod_id[]' class="selectItem--js"
-                value="<?php echo $product['selprod_id']; ?>" />
-        </label>
-    </li>
-    <li>
-        <a onclick="addToCart( $(this), event , <?php echo $isWishList; ?>);" href="javascript:void(0)" class=""
-            title="<?php echo Labels::getLabel('LBL_Move_to_cart', $siteLangId); ?>"
-            data-id='<?php echo $product['selprod_id']; ?>'>
-            <svg class="svg" width="18" height="18">
-                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#cart">
-                </use>
-            </svg>
-        </a>
-    </li>
-    <?php } ?>
-    <li>
-        <?php if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::YES) { ?>
-        <a title='<?php echo Labels::getLabel('LBL_Move_to_trash', $siteLangId); ?>'
-            onclick="removeFromWishlist(<?php echo $product['selprod_id']; ?>, <?php echo $product['uwlp_uwlist_id']; ?>, event);"
-            href="javascript:void(0)" class="">
-            <svg class="svg" width="18" height="18">
-                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
-                </use>
-            </svg>
-        </a>
-        <?php } else { ?>
-        <a title='<?php echo Labels::getLabel('LBL_Move_to_trash', $siteLangId); ?>' href="javascript:void(0)"
-            onclick="removeFromFavorite(<?php echo $product['selprod_id']; ?>, 'searchFavouriteListItems');"
-            data-id="<?php echo $product['selprod_id']; ?>">
-            <svg class="svg" width="18" height="18">
-                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
-                </use>
-            </svg>
-        </a>
-        <?php } ?>
-    </li>
-</ul>
-<?php
+    /* Get Ribbon */?>
+    <div class="badges-wrap">
+        <?php $this->includeTemplate('_partial/product-type-ribbon.php', ['productType' => $product['product_type'], 'siteLangId' => $siteLangId], false);
+        if ((!isset($includeRibbon) || true === $includeRibbon) && !empty($selProdRibbons)) {
+            foreach ($selProdRibbons as $ribbRow) {
+                $this->includeTemplate('_partial/ribbon-ui.php', ['ribbRow' => $ribbRow], false);
+            }
+        } ?>
+    </div>
+    <?php if (true ==  $showActionBtns) { ?>
+        <ul class="actions actions-wishlist">
+            <?php if ($product['in_stock'] &&  time() >= strtotime($product['selprod_available_from']) && 0 == $isOutOfMinOrderQty) { ?>
+                <li>
+                    <label class="checkbox">
+                        <input type="checkbox" name='selprod_id[]' class="selectItem--js" value="<?php echo $product['selprod_id']; ?>" />
+                    </label>
+                </li>
+                <?php if (false === SellerProduct::isPriceHidden($product['selprod_hide_price'], $product['shop_rfq_enabled']) && SellerProduct::CART_TYPE_RFQ_ONLY != $product['selprod_cart_type']) { ?>
+                    <li>
+                        <a onclick="addToCart( $(this), event , <?php echo $isWishList; ?>);" href="javascript:void(0)" class="" title="<?php echo Labels::getLabel('LBL_Move_to_cart', $siteLangId); ?>" data-id='<?php echo $product['selprod_id']; ?>'>
+                            <svg class="svg" width="18" height="18">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#cart">
+                                </use>
+                            </svg>
+                        </a>
+                    </li>
+                <?php } ?>
+            <?php } ?>
+            <li>
+                <?php if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::YES) { ?>
+                    <a title='<?php echo Labels::getLabel('LBL_Move_to_trash', $siteLangId); ?>' onclick="removeFromWishlist(<?php echo $product['selprod_id']; ?>, <?php echo $product['uwlp_uwlist_id']; ?>, event);" href="javascript:void(0)" class="">
+                        <svg class="svg" width="18" height="18">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
+                            </use>
+                        </svg>
+                    </a>
+                <?php } else { ?>
+                    <a title='<?php echo Labels::getLabel('LBL_Move_to_trash', $siteLangId); ?>' href="javascript:void(0)" onclick="removeFromFavorite(<?php echo $product['selprod_id']; ?>, 'searchFavouriteListItems');" data-id="<?php echo $product['selprod_id']; ?>">
+                        <svg class="svg" width="18" height="18">
+                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-actions.svg#delete">
+                            </use>
+                        </svg>
+                    </a>
+                <?php } ?>
+            </li>
+        </ul>
+        <?php
     }
 
     if (isset($productView) && true == $productView) {

@@ -113,7 +113,6 @@ class MyAppController extends FatController
                     'lengthOf' => Labels::getLabel('VLBL_Length_of', $this->siteLangId),
                     'valueOf' => Labels::getLabel('VLBL_Value_of', $this->siteLangId),
                     'mustBeBetween' => Labels::getLabel('VLBL_must_be_between', $this->siteLangId),
-                    'mustBeBetween' => Labels::getLabel('VLBL_must_be_between', $this->siteLangId),
                     'and' => Labels::getLabel('VLBL_and', $this->siteLangId),
                     'pleaseSelect' => Labels::getLabel('VLBL_Please_select', $this->siteLangId),
                     'to' => Labels::getLabel('VLBL_to', $this->siteLangId),
@@ -173,6 +172,7 @@ class MyAppController extends FatController
                     'dialCodeFieldNotFound' => Labels::getLabel('LBL_DIAL_CODE_FIELD_NOT_FOUND', $this->siteLangId),
                     'searchAsIMoveTheMap' => Labels::getLabel('MSG_SEARCH_AS_I_MOVE_THE_MAP', $this->siteLangId),
                     'currentSearchLocation' => Labels::getLabel('LBL_CURRENT_SEARCH_LOCATION', $this->siteLangId),
+                    'shopInfo' => Labels::getLabel('LBL_SHOP_INFO', $this->siteLangId),
                     'cacheTimeStamp' => UrlHelper::getCacheTimestamp($this->siteLangId),
                     'close' => Labels::getLabel('LBL_CLOSE', $this->siteLangId),
                     'copiedText' => Labels::getLabel('LBL_COPIED_TEXT', $this->siteLangId),
@@ -182,6 +182,7 @@ class MyAppController extends FatController
                     'maxLengthValidator' => CommonHelper::replaceStringData(Labels::getLabel('FRM_USED_{charsTyped}_of_{charsTotal}_CHAR', $this->siteLangId), ["{charsTyped}" => "%charsTyped%", "{charsTotal}" => "%charsTotal%"]), /* Used By Maxlength bootstrap validator. */
                     'geoLocationNotSupported' => Labels::getLabel('FRM_GEO_LOCATION_NOT_SUPPORTED', $this->siteLangId),
                     'dontReloadPageWhilePayment' => Labels::getLabel('FRM_PLEASE_DON`T_REFRESH/RELOAD_OR_HITTING_BACK_BUTTON_ON_THE_BROWSER._WE_ARE_PROCESSING_YOUR_TRANSACTION.', $this->siteLangId),
+                    'deliveryAddressMandatory' => Labels::getLabel('ERR_DELIVERY_ADDRESS_IS_MANDATORY', $this->siteLangId),
                 );
 
                 $languages = Language::getAllNames(false);
@@ -494,8 +495,9 @@ class MyAppController extends FatController
         $frm = new Form('frmAddress');
         $frm->addHiddenField('', 'addr_id');
         $frm->addHiddenField('', 'shipping_addr_id');
-        $fld = $frm->addTextBox(Labels::getLabel('LBL_Address_Label', $siteLangId), 'addr_title');
+        $fld = $frm->addTextBox(Labels::getLabel('FRM_ADDRESS_TITLE', $siteLangId), 'addr_title');
         $fld->requirement->setRequired(true);
+        $fld->setFieldTagAttribute('maxlength', Address::ADDRESS_TITLE_LENGTH);
         $fld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_E.g:_My_Office_Address', $siteLangId));
         $frm->addRequiredField(Labels::getLabel('LBL_Name', $siteLangId), 'addr_name');
         $frm->addRequiredField(Labels::getLabel('LBL_Address_Line1', $siteLangId), 'addr_address1');
@@ -536,6 +538,10 @@ class MyAppController extends FatController
             'discounted' => Labels::getLabel('LBL_Most_discounted', $this->siteLangId),
         );
 
+        if (0 < FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) {
+            unset($sortByArr['price_asc'], $sortByArr['price_desc']);
+        }
+
         /* if (0 < FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) {
             $sortByArr['rating_desc'] = Labels::getLabel('LBL_Sort_by_Rating', $this->siteLangId);
         } */
@@ -563,6 +569,7 @@ class MyAppController extends FatController
         $frm->addSubmitButton('', 'btnProductSrchSubmit', '');
         $frm->addHiddenField('', 'pageRecordCount');
         $frm->addHiddenField('', 'vtype');
+        $frm->addHiddenField('', 'viewType');
         return $frm;
     }
 

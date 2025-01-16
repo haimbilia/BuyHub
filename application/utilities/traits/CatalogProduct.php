@@ -68,7 +68,6 @@ trait CatalogProduct
         $fld->requirements()->setRange('0.01', '99999999.99');
 
         if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
-
             if ($productType != Product::PRODUCT_TYPE_SERVICE) {
                 $fld = $frm->addIntegerField(Labels::getLabel('FRM_STOCK', $this->siteLangId), 'selprod_stock');
                 $fld->requirements()->setPositive();
@@ -157,6 +156,25 @@ trait CatalogProduct
 
             $frm->addCheckBox(Labels::getLabel('FRM_PUBLISH_INVENTORY', $this->siteLangId), 'selprod_active', applicationConstants::ACTIVE, [], false, applicationConstants::INACTIVE);
 
+            if (0 < FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0) && 1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) {
+                if (isset($this->admin_id)) {
+                    $shopRfqEnabled = 1;
+                    if (0 < $recordId) {
+                        $userParentId = Product::getAttributesById($recordId, 'product_seller_id');
+                        if (0 < $userParentId) {
+                            $shopRfqEnabled = Shop::getAttributesByUserId($userParentId, 'shop_rfq_enabled', false);
+                        }
+                    }
+                } else {
+                    $shopRfqEnabled = Shop::getAttributesByUserId($this->userParentId, 'shop_rfq_enabled', false);
+                }
+
+                if (0 < $shopRfqEnabled) {
+                    $cartTypeFld = $frm->addSelectBox(Labels::getLabel('FRM_CART_TYPE', $this->siteLangId), 'selprod_cart_type', SellerProduct::getCartType(), SellerProduct::CART_TYPE_BOTH, array(), '');
+                    $cartTypeFld->requirements()->setRequired();
+                    $frm->addCheckBox(Labels::getLabel("FRM_HIDE_PRICE", $this->siteLangId), 'selprod_hide_price', 1, array(), false, 0);
+                }
+            }
             $frm->addTextArea(Labels::getLabel('FRM_ANY_EXTRA_COMMENT_FOR_BUYER', $this->siteLangId), 'selprod_comments');
         }
 

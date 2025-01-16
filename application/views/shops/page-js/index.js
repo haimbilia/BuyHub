@@ -28,22 +28,27 @@ $(function () {
 			} else {
 				$(dv).html(ans.html);
 			}
-			if (CONF_ENABLE_GEO_LOCATION) {
-				if (typeof map == 'undefined') {
-					initMutipleMapMarker(markers, 'shopMap--js', getCookie('_ykGeoLat'), getCookie('_ykGeoLng'), dragCallback);
-				} else {
-					clearMarkers();
-					createMarkers(markers);
-				}
-			} else {
 				$("#loadMoreBtnDiv").html(ans.loadMoreBtnHtml);
 				$("#favShopCount").html(ans.totalRecords);
-			}
 		});
 	};
 
 	goToShopSearchPage = function (page) {
-		goToLoadMore(page, 0);
+		if (typeof page == 'undefined' || page == null) {
+			page = 1;
+		}
+		currPage = page;
+		var frm = document.frmSearchShopsPagingMap;
+		$(frm.page).val(page);
+		var data = fcom.frmData(frm);
+
+		fcom.updateWithAjax(fcom.makeUrl('Shops', 'search'), data, function (ans) {
+			fcom.closeProcessing();
+			fcom.removeLoader();
+				$('#mapShops--js').html(ans.html);
+				clearMarkers();
+				createMarkers(markers);
+		});
 	}
 
 	goToLoadMore = function (page, append = 1) {
@@ -72,6 +77,18 @@ $(function () {
 		$(e).html(langLbl.unfavoriteToShop);
 		//reloadListing();
 	};
+
+	$(document).on("change", "select[name=pageSizeSelectMap]", function () {
+        var selectedVal = $(this).val();
+        $("form[name=frmSearchShopsPagingMap] input[name=viewType]").val(
+            "popupShops"
+        );
+        $("form[name=frmSearchShopsPagingMap] input[name=pageSize]").val(
+            selectedVal
+        );
+        goToShopSearchPage();
+    });
+
 	dragCallback = function (dragendMap) {
 		canSetCookie = true;
 		codeLatLng(dragendMap.getCenter().lat(), dragendMap.getCenter().lng(), function (data) {
@@ -79,9 +96,19 @@ $(function () {
 			if (typeof dragTimeOutEvent != "undefined") {
 				clearTimeout(dragTimeOutEvent);
 			}
-			dragTimeOutEvent = setTimeout(function () { reloadListing(); }, 1000);
+			dragTimeOutEvent = setTimeout(function () { goToShopSearchPage(); }, 1000);
 		});
 	};
+
+	toogleMapView = function () {
+		fcom.displayProcessing();
+		var data = "viewType=popup";
+		fcom.updateWithAjax(fcom.makeUrl('Shops', 'search'), data, function (ans) {
+			$.facebox(ans.html, "modal-fullscreen modal-map");
+			fcom.displaySuccessMessage();
+		});
+	};
+
 })();
 
 $(document).on('mouseover mouseout', '#mapShops--js > li', function (e) {

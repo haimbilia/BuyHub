@@ -199,7 +199,7 @@ $(document).on('change', formClass + 'select[name="blinkcond_position"]', functi
         }).on('select2:open', function(e) {     
             selector.data("select2").$dropdown.addClass("custom-select2 custom-select2-multiple");   
         })
-        .data("select2").$container.addClass("custom-select2-width custom-select2 custom-select2-multiple");;
+        .data("select2").$container.addClass("custom-select2-width custom-select2 custom-select2-multiple");
     }
 
     searchRecords = function (form) {

@@ -22,7 +22,7 @@ if (!empty($addresses)) { ?>
 
                                     <address class="address lb-txt js-addr">
                                         <p><?php echo $addr ?></p>
-                                        <?php if (strlen($address['addr_phone']) > 0) {
+                                        <?php if (strlen((string)$address['addr_phone']) > 0) {
                                             $addrPhone = ValidateElement::formatDialCode($address['addr_phone_dcode']) . $address['addr_phone'];
                                         ?>
                                             <ul class="phone-list">

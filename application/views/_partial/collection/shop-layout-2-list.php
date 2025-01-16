@@ -16,7 +16,7 @@
             'siteLangId' => $siteLangId,
         ];
         $prodUrl = 0 < $selProdId ? UrlHelper::generateUrl('Products', 'View', array($selProdId)) : 'javascript:void(0);';
-    ?>
+        ?>
         <div class="shop">
             <div class="shop-body">
                 <a title="<?php echo $prodcatName; ?>" href="<?php echo $prodUrl; ?>">
@@ -25,32 +25,36 @@
             </div>
             <div class="shop-foot">
                 <div class="shop-title">
-                    <a href="<?php echo (!isset($shop['shopData']['promotion_id']) ? UrlHelper::generateUrl('shops', 'view', array($shop['shopData']['shop_id'])) : UrlHelper::generateUrl('shops', 'track', array($shop['shopData']['promotion_record_id']))); ?>"><?php echo $shop['shopData']['shop_name']; ?>
+                    <a
+                        href="<?php echo (!isset($shop['shopData']['promotion_id']) ? UrlHelper::generateUrl('shops', 'view', array($shop['shopData']['shop_id'])) : UrlHelper::generateUrl('shops', 'track', array($shop['shopData']['promotion_record_id']))); ?>"><?php echo $shop['shopData']['shop_name']; ?>
                     </a>
                 </div>
                 <div class="shop-location">
-                    <?php echo $shop['shopData']['state_name']; ?><?php echo ($shop['shopData']['country_name'] && $shop['shopData']['state_name']) ? ', ' : ''; ?><?php echo $shop['shopData']['country_name']; ?>
+                    <?php echo $shop['shopData']['state_name']; ?>    <?php echo ($shop['shopData']['country_name'] && $shop['shopData']['state_name']) ? ', ' : ''; ?>    <?php echo $shop['shopData']['country_name']; ?>
                 </div>
                 <?php if (round($collection['rating'][$shop['shopData']['shop_id']]) > 0) { ?>
                     <div class="product-ratings">
-                        <svg class="svg" width="14" height="14">
+                        <svg class="svg svg-star" width="14" height="14">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow"></use>
                         </svg>
                         <span class="rate">
-                            <?php echo  round($collection['rating'][$shop['shopData']['shop_id']], 1); ?>
+                            <?php echo round($collection['rating'][$shop['shopData']['shop_id']], 1); ?>
                         </span>
                     </div>
                 <?php } ?>
                 <div class="shop-action">
-                    <a class="btn btn-outline-black btn-sm" href="<?php echo (!isset($shop['shopData']['promotion_id']) ? UrlHelper::generateUrl('shops', 'view', array($shop['shopData']['shop_id'])) : UrlHelper::generateUrl('shops', 'track', array($shop['shopData']['promotion_record_id'],))); ?>"> <?php echo Labels::getLabel('LBL_Shop_Now', $siteLangId); ?></a>
+                    <a class="btn btn-outline-black btn-sm"
+                        href="<?php echo (!isset($shop['shopData']['promotion_id']) ? UrlHelper::generateUrl('shops', 'view', array($shop['shopData']['shop_id'])) : UrlHelper::generateUrl('shops', 'track', array($shop['shopData']['promotion_record_id'], ))); ?>">
+                        <?php echo Labels::getLabel('LBL_Shop_Now', $siteLangId); ?></a>
                 </div>
 
             </div>
         </div>
 
 
-    <?php $i++;
+        <?php $i++;
         isset($shop['shopData']['promotion_id']) ? Promotion::updateImpressionData($shop['shopData']['promotion_id']) : '';
-        if ($i == Collections::LIMIT_SHOP_LAYOUT2) break;
+        if ($i == Collections::LIMIT_SHOP_LAYOUT2)
+            break;
     } ?>
 </div>

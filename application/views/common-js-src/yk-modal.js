@@ -2,7 +2,7 @@
     var displayInPopup = false;
     var isloader = false;
     $.ykmodal = function (data, popupView = '', dialogClassParm = "", modalClassParm = "", bodyClass = "",
-        requiredHeader = true) {
+        requiredHeader = true, dataAttr = "") {
         modalClass = 'fixed-right ' + modalClassParm;
         var dialogClass = 'modal-dialog-vertical ' + dialogClassParm;
         var bodyClass = 'p-0 ' + bodyClass;
@@ -16,7 +16,7 @@
 
         isloader = $(data).hasClass("loaderJs");
 
-        init(modalClass, dialogClass);
+        init(modalClass, dialogClass, dataAttr);
         if (data.ajax) { fillYKModalFromAjax(data.ajax); }
         else if (data.image) { fillYKModalFromImage(data.image); }
         else if (data.div) { fillYKModalFromHref(data.div); }
@@ -75,10 +75,10 @@
         }
     });
 
-    function init(modalClass, dialogClass) {
+    function init(modalClass, dialogClass, dataAttr) {
         if (1 > $("body").find("." + $.ykmodal.element).length) {
             var content = '<div class="modal-dialog ' + dialogClass + ' " role="document"><div class="modal-content contentBodyJs"></div></div>';
-            var htm = '<div class="modal ' + modalClass + ' fade ' + $.ykmodal.element + '" tabindex="-1" role="dialog">' + content + "</div>";
+            var htm = '<div class="modal ' + modalClass + ' fade ' + $.ykmodal.element + '" tabindex="-1" ' + dataAttr + ' role="dialog">' + content + "</div>";
             $("body").append(htm)
         } else if (true === displayInPopup && true === $("." + $.ykmodal.element).hasClass('fixed-right')) {
             $("." + $.ykmodal.element).removeClass('fixed-right');

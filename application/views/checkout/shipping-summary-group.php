@@ -12,8 +12,14 @@
                     $shippingCharges = $shippedByItemArr[$shipLevel]['rates'];
                 }
                 if (count($shippingCharges) > 0) {
+                    $dnone = '';
+                    if (1 == count($shippingCharges)) {
+                        $shippingChrgs = current($shippingCharges);
+                        echo '<span class="alert alert-secondary">' . $shippingChrgs['title'] . ' ( ' . CommonHelper::displayMoneyFormat($shippingChrgs['cost']) . ' ) </span>';
+                        $dnone = 'd-none';
+                    }
                     $name = current($shippingCharges)['code'];
-                    echo '<select class="form-control custom-select" name="shipping_services[' . $name . ']">';
+                    echo '<select class="form-control custom-select ' . $dnone . '" name="shipping_services[' . $name . ']">';
                     foreach ($shippingCharges as $key => $shippingcharge) {
                         $selected = '';
                         if (!empty($orderShippingData)) {
@@ -80,19 +86,20 @@
                             <a class="title" href="<?php echo $productUrl; ?>">
                                 <?php echo ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name']; ?>
                             </a>
-
-                            <div class="products-price">
-                                <span class="products-price-new">
-                                    <?php echo trim(CommonHelper::displayMoneyFormat($product['theprice'])); ?>
-                                    <?php if (FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0)) { ?>
-                                        <div class="products-price-off">(<?php echo Labels::getLabel('LBL_WITHOUT_TAXES', $siteLangId); ?>)</div>
+                            <?php if (false === SellerProduct::isPriceHidden($product['selprod_hide_price'], $product['shop_rfq_enabled'])) { ?>
+                                <div class="products-price">
+                                    <span class="products-price-new">
+                                        <?php echo trim(CommonHelper::displayMoneyFormat($product['theprice'])); ?>
+                                        <?php if (FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0)) { ?>
+                                            <div class="products-price-off">(<?php echo Labels::getLabel('LBL_WITHOUT_TAXES', $siteLangId); ?>)</div>
+                                        <?php } ?>
+                                    </span>
+                                    <?php if ($product['selprod_price'] > $product['actualPrice']) { ?>
+                                        <del class="products-price-old"><?php echo trim(CommonHelper::displayMoneyFormat($product['selprod_price'])); ?></del>
+                                        <div class="products-price-off"><?php echo trim(CommonHelper::showProductDiscountedText($product, $siteLangId)); ?></div>
                                     <?php } ?>
-                                </span>
-                                <?php if ($product['selprod_price'] > $product['actualPrice']) { ?>
-                                    <del class="products-price-old"><?php echo trim(CommonHelper::displayMoneyFormat($product['selprod_price'])); ?></del>
-                                    <div class="products-price-off"><?php echo trim(CommonHelper::showProductDiscountedText($product, $siteLangId)); ?></div>
-                                <?php } ?>
-                            </div>
+                                </div>
+                            <?php } ?>
                             <div class="options">
                                 <?php if (isset($product['options']) && count($product['options'])) {
                                     foreach ($product['options'] as $key => $option) {
@@ -109,48 +116,44 @@
                     </div>
                     <div class="product-quantity">
                         <div class="quantity quantity-sm">
-                            <button
-                                class="decrease decrease-js <?php echo ($product['quantity'] <= $product['selprod_min_order_qty']) ? 'disabled' : ''; ?>"
-                                type="button">
-                                <svg class="svg" width="16" height="16">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
-                                    </use>
-                                </svg>
-                            </button>
-                            <input class="qty-input no-focus cartQtyTextBox productQty-js"
-                                title="<?php echo Labels::getLabel('LBL_Quantity', $siteLangId) ?>" data-page="checkout"
-                                type="text" name="qty_<?php echo md5($product['key']); ?>"
-                                data-key="<?php echo md5($product['key']); ?>" value="<?php echo $product['quantity']; ?>">
-                            <button
-                                class="increase increase-js <?php echo ($product['selprod_stock'] <= $product['quantity']) ? 'disabled' : ''; ?>">
-                                <svg class="svg" width="16" height="16">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
-                                    </use>
-                                </svg>
-                            </button>
+                            <?php if (isset($_SESSION['offer_checkout']) && $_SESSION['offer_checkout']['selprod_id'] == $product['selprod_id']) { ?>
+                                <div class="selected-qty">
+                                    <strong><?php echo Labels::getLabel('LBL_QTY_:') ?></strong>
+                                    <?php echo $product['quantity']; ?>
+                                    <?php echo $_SESSION['offer_checkout']['offer_quantity_unit']; ?>
+                                </div>
+                            <?php } else { ?>
+                                <button class="decrease decrease-js <?php echo ($product['quantity'] <= $product['selprod_min_order_qty']) ? 'disabled' : ''; ?>" type="button">
+                                    <svg class="svg" width="16" height="16">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
+                                        </use>
+                                    </svg>
+                                </button>
+                                <input class="qty-input no-focus cartQtyTextBox productQty-js" title="<?php echo Labels::getLabel('LBL_Quantity', $siteLangId) ?>" data-page="checkout" type="text" name="qty_<?php echo md5($product['key']); ?>" data-key="<?php echo md5($product['key']); ?>" value="<?php echo $product['quantity']; ?>">
+                                <button class="increase increase-js <?php echo ($product['selprod_stock'] <= $product['quantity']) ? 'disabled' : ''; ?>">
+                                    <svg class="svg" width="16" height="16">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
+                                        </use>
+                                    </svg>
+                                </button>
+                            <?php } ?>
                         </div>
                     </div>
                 </div>
                 <div class="block-cart-detail-middle">
                     <div class="shipping-comments">
-                        <button class="btn-dropdown dropdown-toggle-custom  collapsed" type="button"
-                            data-bs-toggle="collapse" data-bs-target="#collapse<?php echo $product['selprod_id']; ?>"
-                            aria-expanded="false" aria-controls="collapse<?php echo $product['selprod_id']; ?>">
-                            <?php echo Labels::getLabel('LBL_COMMENTS', $siteLangId); ?> <i
-                                class="dropdown-toggle-custom-arrow"></i>
+                        <button class="btn-dropdown dropdown-toggle-custom  collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<?php echo $product['selprod_id']; ?>" aria-expanded="false" aria-controls="collapse<?php echo $product['selprod_id']; ?>">
+                            <?php echo Labels::getLabel('LBL_COMMENTS', $siteLangId); ?> <i class="dropdown-toggle-custom-arrow"></i>
                         </button>
                         <div class="collapse form" id="collapse<?php echo $product['selprod_id']; ?>">
-                            <textarea maxlength="250" class="form-textarea form-control opCommentsJs"
-                                placeholder="<?php echo Labels::getLabel('LBL_WRITE_YOUR_COMMENTS', $siteLangId); ?>"
-                                name="op_comments[<?php echo $product['selprod_id']; ?>]" spellcheck="false"></textarea>
+                            <textarea maxlength="250" class="form-textarea form-control opCommentsJs" placeholder="<?php echo Labels::getLabel('LBL_WRITE_YOUR_COMMENTS', $siteLangId); ?>" name="op_comments[<?php echo $product['selprod_id']; ?>]" spellcheck="false"></textarea>
                         </div>
                     </div>
                 </div>
                 <div class="block-cart-detail-bottom">
                     <ul class="cart-action">
                         <li class="cart-action-item">
-                            <button class="btn btn-link" type="button"
-                                onclick="cart.remove('<?php echo md5($product['key']); ?>','checkout')">
+                            <button class="btn btn-link" type="button" onclick="cart.remove('<?php echo md5($product['key']); ?>','checkout')">
                                 <?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>
                             </button>
                         </li>

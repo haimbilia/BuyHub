@@ -4,7 +4,8 @@
             <div class="col-md-8">
                 <div class="cell">
                     <div class="cell__left">
-                        <div class="avtar avtar--rounded"><img alt="<?php echo $userInfo['user_name']; ?>" src="<?php echo UrlHelper::generateFileUrl('Image', 'user', array($userInfo['user_id'], ImageDimension::VIEW_THUMB, '1'), CONF_WEBROOT_FRONTEND); ?>">
+                        <div class="avtar avtar--rounded"><img alt="<?php echo $userInfo['user_name']; ?>"
+                                src="<?php echo UrlHelper::generateFileUrl('Image', 'user', array($userInfo['user_id'], ImageDimension::VIEW_THUMB, '1'), CONF_WEBROOT_FRONTEND); ?>">
                         </div>
                     </div>
                     <div class="cell__right">
@@ -25,10 +26,9 @@
     </div>
 </div>
 <div class="container container--fixed">
-
     <div class="panel panel--centered clearfix">
         <div class="section section--info clearfix">
-            <div class="section__body">
+            <div class="section-body">
                 <div class="box box--white" id="listing">
                 </div>
                 <div id="loadMoreBtnDiv"></div>

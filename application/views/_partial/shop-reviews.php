@@ -16,7 +16,7 @@ if (!empty($reviews)) {
                             <h2 class="title"><?php echo Labels::getLabel('LBL_CUSTOMER_REVIEWS', $siteLangId); ?></h2>
                             <?php if ($totReviews > 0) { ?>
                                 <div class="">
-                                    <div class="sort-by" title="<?php echo Labels::getLabel("LBL_SORT_BY", $siteLangId); ?>"
+                                    <div class="sort-byx" title="<?php echo Labels::getLabel("LBL_SORT_BY", $siteLangId); ?>"
                                         data-bs-toggle="tooltip">
                                         <div class="dropdown">
                                             <button class="dropdown-toggle-custom btn btn-outline-gray btn-dropdown"
@@ -67,8 +67,8 @@ if (!empty($reviews)) {
                                                 if (true) {
                                                     //if (1 < $reviewId) {
                                                     $shop_city = $shop['shop_city'] ?? '';
-                                                    $shop_state = (strlen($shop_city) > 0) ? ', ' . $shop['shop_state_name'] : $shop['shop_state_name'];
-                                                    $shop_country = (strlen($shop_state) > 0) ? ', ' . $shop['shop_country_name'] : $shop['shop_country_name'];
+                                                    $shop_state = (strlen((string) $shop_city) > 0) ? ', ' . $shop['shop_state_name'] : $shop['shop_state_name'];
+                                                    $shop_country = (strlen((string) $shop_state) > 0) ? ', ' . $shop['shop_country_name'] : $shop['shop_country_name'];
                                                     $shopLocation = $shop_city . $shop_state . $shop_country;
                                                     ?>
 
@@ -82,7 +82,7 @@ if (!empty($reviews)) {
                                                 <div class="rating-block">
                                                     <div class="average-rating">
                                                         <span class="rate"><?php echo round($shopRating, 1); ?>
-                                                            <svg class="svg" width="16" height="16">
+                                                            <svg class="svg svg-star" width="16" height="16">
                                                                 <use
                                                                     xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
                                                                 </use>

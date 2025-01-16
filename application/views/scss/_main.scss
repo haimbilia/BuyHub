@@ -13,7 +13,7 @@
 @import "layout/footer";
 
 //components
-@import "components/site-demo";
+// @import "components/site-demo";
 @import "components/main-search";
 @import "components/carousels";
 @import "components/accordion";
@@ -28,6 +28,7 @@
 @import "components/clipboard";
 @import "components/checkbox";
 @import "components/button";
+@import "components/link";
 @import "components/side-cart";
 @import "components/catalog-popup";
 @import "components/section";
@@ -48,6 +49,8 @@
 @import "components/multi-list";
 @import "components/pagination";
 @import "components/product-card";
+@import "components/product-listing";
+@import "components/product-prices";
 @import "components/pro-info";
 //@import "components/scroll-hint";
 @import "components/slider";
@@ -67,6 +70,7 @@
 @import "components/media-more";
 @import "components/bg";
 @import "components/location-permission";
+@import "components/cat-accordion";
 @import "components/quantity-input";
 @import "components/filter-directory";
 @import "components/filters-left";
@@ -80,7 +84,9 @@
 @import "components/share-this";
 @import "components/cart-summary";
 @import "components/list-cart";
+@import "components/list-shipping";
 @import "components/product-profile";
+@import "components/shop-profile";
 @import "components/collection-product";
 @import "components/collection-shop";
 @import "components/collection-category";
@@ -98,8 +104,12 @@
 @import "components/collection-faq";
 @import "components/product-gallery-slider";
 @import "components/alert";
-@import "components/misc";
 @import "components/system-messages";
+@import "components/requestquote";
+@import "components/select2";
+@import "components/dropdown-toggle-custom";
+@import "components/plugin";
+@import "components/misc";
 
 //vendors
 //@import "vendors/animate";
@@ -116,6 +126,7 @@
 //@import "vendors/tagify";
 @import "vendors/intlTelInput.min";
 @import "vendors/nouislider.min";
+@import "vendors/select2/core";
 
 //pages
 @import "pages/offline";

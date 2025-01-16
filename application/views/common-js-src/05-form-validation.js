@@ -402,7 +402,15 @@
                             field.parent().after(errorlist.empty());
                         }
                         else {
-                            field.after(errorlist.empty());
+                            if (0 < field.parent().hasClass('groupFieldsJs')) {
+                                field.parent().after(errorlist.empty());
+                            } else {
+                                if (field.parent().hasClass('input-group')) {
+                                    field.parent().after(errorlist.empty());
+                                } else {
+                                    field.after(errorlist.empty());
+                                }
+                            }
                         }
                         break;
                     case 0:
@@ -518,7 +526,7 @@
         if (!str) return;
         var arr = JSON.parse(str);
         var v = el.val();
-        var fieldsVisibility = el.hasClass('fieldsVisibility-js');
+        var fieldsVisibility = el.hasClass('fieldsVisibilityJs');
         if (el.attr('type') == 'checkbox' && !el.is(':checked')) {
             v = '';
         }

@@ -27,7 +27,6 @@ class UserPrivilege
     public const SECTION_UPLOAD_BULK_IMAGES = 25;
     public const SECTION_PROMOTIONS = 26;
     public const SECTION_PROMOTION_CHARGES = 27;
-    public const SECTION_SUBSCRIPTION = 28;
     public const SECTION_SHIPPING_PROFILE = 28;
     public const SECTION_SHIPPING_PACKAGES = 29;
     public const SECTION_SELLER_REQUESTS = 30;
@@ -38,6 +37,9 @@ class UserPrivilege
     public const SECTION_BADGES = 35;
     public const SECTION_BADGE_LINKS = 36;
     public const SECTION_MARKETPLACE_CHANNEL = 37;
+    public const SECTION_REQUEST_FOR_QUOTE = 38;
+    public const SECTION_RFQ_OFFERS = 39;
+    public const SECTION_SUBSCRIPTION = 40;
 
     public const MODULE_SHOP = 1;
     public const MODULE_ORDERS = 2;
@@ -56,9 +58,7 @@ class UserPrivilege
     private static $instance = null;
     private $loadedPermissions = array();
 
-    private function __construct()
-    {
-    }
+    private function __construct() {}
 
     public static function getInstance()
     {
@@ -133,7 +133,7 @@ class UserPrivilege
             static::SECTION_INVENTORY_REPORT => Labels::getLabel('LBL_Inventory_Report', $langId),
             static::SECTION_UPLOAD_BULK_IMAGES => Labels::getLabel('LBL_Upload_Bulk_Images', $langId),
             static::SECTION_PROMOTIONS => Labels::getLabel('LBL_Promotions', $langId),
-            // static::SECTION_SUBSCRIPTION => Labels::getLabel('LBL_Subscription', $langId),
+            static::SECTION_SUBSCRIPTION => Labels::getLabel('LBL_Subscription', $langId),
             static::SECTION_SHIPPING_PROFILE => Labels::getLabel('LBL_Shipping_Profiles', $langId),
             static::SECTION_SHIPPING_PACKAGES => Labels::getLabel('LBL_Shipping_Packages', $langId),
             static::SECTION_ADVERTISEMENT_FEED => Labels::getLabel('LBL_Advertisement_Feed', $langId),
@@ -142,6 +142,8 @@ class UserPrivilege
             static::SECTION_FINANCIAL_REPORT => Labels::getLabel('LBL_Financial_Report', $langId),
             static::SECTION_BADGES => Labels::getLabel('LBL_BADGES', $langId),
             static::SECTION_BADGE_LINKS => Labels::getLabel('LBL_BADGE_LINKS', $langId),
+            static::SECTION_REQUEST_FOR_QUOTE => Labels::getLabel('LBL_REQUEST_FOR_QUOTE', $langId),
+            static::SECTION_RFQ_OFFERS => Labels::getLabel('LBL_REQUEST_FOR_QUOTE', $langId),
         );
         return $arr;
     }
@@ -174,6 +176,8 @@ class UserPrivilege
                 static::SECTION_SALES => Labels::getLabel('LBL_Sales', $langId),
                 static::SECTION_CANCELLATION_REQUESTS => Labels::getLabel('LBL_Cancellation_Requests', $langId),
                 static::SECTION_RETURN_REQUESTS => Labels::getLabel('LBL_Return_Requests', $langId),
+                static::SECTION_REQUEST_FOR_QUOTE => Labels::getLabel('LBL_REQUEST_FOR_QUOTE', $langId),
+                static::SECTION_RFQ_OFFERS => Labels::getLabel('LBL_RFQ_OFFERS', $langId),
             ),
             static::MODULE_SHIPPING =>
             array(
@@ -199,7 +203,7 @@ class UserPrivilege
             static::MODULE_ACCOUNT =>
             array(
                 static::SECTION_MESSAGES => Labels::getLabel('LBL_Messages', $langId),
-                // static::SECTION_SUBSCRIPTION => Labels::getLabel('LBL_Seller_Subscription', $langId),
+                static::SECTION_SUBSCRIPTION => Labels::getLabel('LBL_Seller_Subscription', $langId),
             ),
             static::MODULE_IMPORT_EXPORT =>
             array(
@@ -810,8 +814,7 @@ class UserPrivilege
 
     public function canViewSubscription($sellerId = 0, $returnResult = false)
     {
-        return true;
-        // return $this->checkPermission($sellerId, static::SECTION_SUBSCRIPTION, static::PRIVILEGE_READ, $returnResult);
+        return $this->checkPermission($sellerId, static::SECTION_SUBSCRIPTION, static::PRIVILEGE_READ, $returnResult);
     }
     public function canViewGiftCardOrders($sellerId = 0, $returnResult = false)
     {
@@ -820,8 +823,7 @@ class UserPrivilege
     }
     public function canEditSubscription($sellerId = 0, $returnResult = false)
     {
-        return true;
-        // return $this->checkPermission($sellerId, static::SECTION_SUBSCRIPTION, static::PRIVILEGE_WRITE, $returnResult);
+        return $this->checkPermission($sellerId, static::SECTION_SUBSCRIPTION, static::PRIVILEGE_WRITE, $returnResult);
     }
 
     public function canViewCredits($sellerId = 0, $returnResult = false)
@@ -972,5 +974,25 @@ class UserPrivilege
     public function canEditMarketplaceChannel($sellerId = 0, $returnResult = false)
     {
         return $this->checkPermission($sellerId, static::SECTION_MARKETPLACE_CHANNEL, static::PRIVILEGE_WRITE, $returnResult);
+    }
+
+    public function canViewRequestForQuote($sellerId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($sellerId, static::SECTION_REQUEST_FOR_QUOTE, static::PRIVILEGE_READ, $returnResult);
+    }
+
+    public function canEditRequestForQuote($sellerId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($sellerId, static::SECTION_REQUEST_FOR_QUOTE, static::PRIVILEGE_WRITE, $returnResult);
+    }
+
+    public function canViewRfqOffers($sellerId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($sellerId, static::SECTION_RFQ_OFFERS, static::PRIVILEGE_READ, $returnResult);
+    }
+
+    public function canEditRfqOffers($sellerId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($sellerId, static::SECTION_RFQ_OFFERS, static::PRIVILEGE_WRITE, $returnResult);
     }
 }

@@ -2,19 +2,23 @@
     display: flex;
 
     flex: 1;
+
     @include media-breakpoint-down(lg) {
         & {
             flex: none;
         }
     }
+
     .toggle--search {
         display: none;
+
         @include media-breakpoint-down(lg) {
             & {
                 display: block;
                 padding: 10px;
             }
         }
+
         .icn {
             width: 42px;
             height: 42px;
@@ -22,6 +26,7 @@
             border: none;
             border-radius: $radius3;
         }
+
         .icn {
             vertical-align: top;
 
@@ -32,12 +37,14 @@
             justify-content: center;
             width: 20px;
             height: 20px;
+
             svg {
                 width: 20px;
                 height: 20px;
                 fill: $brand-color;
             }
         }
+
         .icn-txt {
             vertical-align: top;
             font-size: 0.8em;
@@ -50,22 +57,26 @@
     flex: 1;
     margin: 15px auto;
     max-width: 850px;
+
     .main-search-form {
         display: flex;
 
         align-items: center;
         flex: 1;
         width: 100%;
+
         .main-search__field {
             position: relative;
             width: 100%;
 
             flex: 1;
+
             .close-layer {
                 top: 2px;
                 display: flex;
             }
         }
+
         .search--keyword {
             border: none;
             border-radius: 0px;
@@ -82,6 +93,7 @@
             border-bottom-#{$start-direction}-radius: $radius3;
             border: solid 1px $brand-color;
         }
+
         .scroll-y {
             max-height: 350px;
         }
@@ -99,7 +111,7 @@
         z-index: 10;
         -webkit-transition: all 400ms ease-in;
         transition: all 400ms ease-in;
-        background: #fff;
+        background-color: #fff;
         opacity: 0;
         visibility: hidden;
 
@@ -108,6 +120,7 @@
         align-items: center;
         max-width: 100%;
         pointer-events: none;
+
         @include media-breakpoint-down(lg) {
             &--on & {
                 opacity: 1;
@@ -115,19 +128,24 @@
                 pointer-events: all;
             }
         }
+
         .close-layer {
             top: 20px;
             #{$end-direction}: 20px;
             display: none;
         }
+
         .select__cover {
             float: none;
         }
+
         .form__cover {
             #{$start-direction}: 5%;
             #{$end-direction}: 5%;
+
             form {
                 display: block;
+
                 input[type="text"],
                 select {
                     display: block;
@@ -135,9 +153,11 @@
                     border: none;
                     border-bottom: solid 1px rgba(255, 255, 255, 0.2);
                 }
+
                 input[type="text"] {
                     border: none;
                 }
+
                 input[type="submit"] {
                     position: static;
                     display: block;
@@ -147,6 +167,7 @@
                 }
             }
         }
+
         .dropdown__target {
             position: absolute;
             top: 100%;
@@ -158,6 +179,7 @@
             #{$end-direction}: 0;
             border-radius: 0;
         }
+
         .link__close {
             display: block;
             #{$end-direction}: 10px;
@@ -183,6 +205,7 @@
     border-#{$end-direction}: solid 1px $brand-color;
     font-size: 0.8em;
     cursor: pointer;
+
     &:after {
         border-#{$start-direction}: 5px solid rgba(0, 0, 0, 0);
         border-#{$end-direction}: 5px solid rgba(0, 0, 0, 0);
@@ -227,19 +250,17 @@
     bottom: auto;
     z-index: 10;
     padding: 1rem;
-
-    display: -webkit-flex;
-
     display: flex;
     box-shadow: 0 0 35px 10px rgba(0, 0, 0, 0.1);
     border-radius: $common-radius;
-    -webkit-animation: dropdown-menu-fade-in 0.3s ease 1, dropdown-menu-move-up 0.3s ease-out 1;
     animation: dropdown-menu-fade-in 0.3s ease 1, dropdown-menu-move-up 0.3s ease-out 1;
+
     @include media-breakpoint-down(lg) {
         & {
             flex-direction: column;
         }
     }
+
     .suggestions-title {
         text-transform: uppercase;
         color: $txt-gray;
@@ -247,6 +268,7 @@
         margin: 0;
         padding: 0;
     }
+
     .text-suggestions {
         -webkit-flex: 1;
 
@@ -259,6 +281,7 @@
         -ms-flex-direction: column;
         flex-direction: column;
         font-size: 0.75rem;
+
         li {
             padding-bottom: 8px;
             transition: all 0.2s ease-in-out;
@@ -268,6 +291,7 @@
                 position: relative;
 
                 transition: all 0.2s linear;
+
                 &:before {
                     visibility: hidden;
                     opacity: 0;
@@ -285,9 +309,11 @@
 
                     transition: all 0.2s linear;
                 }
+
                 &:hover {
                     margin-#{$start-direction}: 10px;
                     color: $brand-color;
+
                     &:before {
                         #{$start-direction}: -12px;
                         visibility: visible;
@@ -297,40 +323,50 @@
             }
         }
     }
+
     .history-suggestions {
         width: 100%;
+
         li {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
+
         .clear-all {
             font-size: inherit;
         }
+
         .recent-search {
-            margin: 8px 0;
+            margin: 0.5rem 0;
+
             &:last-child {
                 margin: 0;
             }
+
             &__cross {
                 position: relative;
                 flex: 0 0 20px;
                 max-width: 20px;
                 height: 20px;
                 margin-#{$end-direction}: 10px;
+
                 .close-layer {
                     top: 0;
                     #{$start-direction}: 0;
                     #{$end-direction}: auto;
                 }
             }
+
             &__link {
                 flex: 1;
             }
+
             &__arrow {
                 -ms-transform: rotate(-45deg);
                 transform: rotate(-45deg);
                 cursor: pointer;
+
                 .svg {
                     width: 16px;
                     height: 16px;
@@ -339,8 +375,10 @@
             }
         }
     }
+
     .matched {
         display: block;
+
         .matched-brands {
             margin-bottom: 1rem;
         }

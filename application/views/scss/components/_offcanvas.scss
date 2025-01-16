@@ -1,4 +1,6 @@
 $offcanvas-space: 1rem 2rem;
+$offcanvas-radius: 12px;
+
 .offcanvas {
   &-backdrop {
     opacity: 1 !important;
@@ -9,18 +11,22 @@ $offcanvas-space: 1rem 2rem;
   &-header {
     padding: $offcanvas-space;
   }
+
   &-body {
     padding: $offcanvas-space;
   }
+
   &-foot {
     padding: $offcanvas-space;
   }
+
   &-start {
     border: none;
     #{$end-direction}: auto;
     #{$start-direction}: 0;
     transform: translateX(-100% * $transform-direction);
   }
+
   &-end {
     border: none;
     #{$start-direction}: auto;
@@ -31,10 +37,22 @@ $offcanvas-space: 1rem 2rem;
   &-gps-location {
     height: 50vh;
   }
+
   &-side-cart {
     width: 500px;
+
     .cart-summary {
       margin-bottom: 2rem;
     }
   }
+}
+
+.offcanvas-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1040;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.7);
 }

@@ -32,7 +32,10 @@ class ShopsController extends MyAppController
         $db = FatApp::getDb();
         $data = FatApp::getPostedData();
         $page = (empty($data['page']) || FatUtility::int($data['page']) <= 0) ? 1 : FatUtility::int($data['page']);
-        $pageSize = applicationConstants::getFrontEndPageSize(FatApp::getPostedData('pageSize', FatUtility::VAR_INT));
+        $pageSize = FatApp::getPostedData('pageSize', FatUtility::VAR_INT);
+        if (!in_array($pageSize, FilterHelper::getPageSizeValues())) {
+            $pageSize = FatApp::getConfig('CONF_ITEMS_PER_PAGE_CATALOG', FatUtility::VAR_INT, 10);
+        }
 
         $searchForm = $this->getShopSearchForm($this->siteLangId);
         $post = $searchForm->getFormDataFromArray($data);
@@ -61,8 +64,16 @@ class ShopsController extends MyAppController
 
 
         $flds = [
-            's.shop_id', 'shop_user_id', 'shop_ltemplate_id', 'shop_created_on', 'IFNULL(shop_name, shop_identifier) as shop_name', 'shop_description',
-            'shop_country_l.country_name as country_name', 'shop_state_l.state_name as state_name', 'shop_city', 'shop_updated_on'
+            's.shop_id',
+            'shop_user_id',
+            'shop_ltemplate_id',
+            'shop_created_on',
+            'IFNULL(shop_name, shop_identifier) as shop_name',
+            'shop_description',
+            'shop_country_l.country_name as country_name',
+            'shop_state_l.state_name as state_name',
+            'shop_city',
+            'shop_updated_on'
         ];
         $srch->addMultipleFields($flds);
 
@@ -100,9 +111,27 @@ class ShopsController extends MyAppController
         $productSrchObj->addCondition('selprod_deleted', '=', applicationConstants::NO);
         $productSrchObj->addMultipleFields(
             array(
-                'product_id', 'selprod_id', 'IFNULL(product_name, product_identifier) as product_name', 'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title', 'product_updated_on',
-                'special_price_found', 'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type',
-                'theprice', 'selprod_price', 'selprod_stock', 'selprod_condition', 'prodcat_id', 'IFNULL(prodcat_name, prodcat_identifier) as prodcat_name', 'selprod_sold_count', 'IF(selprod_stock > 0, 1, 0) AS in_stock'
+                'product_id',
+                'selprod_id',
+                'IFNULL(product_name, product_identifier) as product_name',
+                'IFNULL(selprod_title  ,IFNULL(product_name, product_identifier)) as selprod_title',
+                'product_updated_on',
+                'special_price_found',
+                'splprice_display_list_price',
+                'splprice_display_dis_val',
+                'splprice_display_dis_type',
+                'theprice',
+                'selprod_price',
+                'selprod_stock',
+                'selprod_condition',
+                'prodcat_id',
+                'IFNULL(prodcat_name, prodcat_identifier) as prodcat_name',
+                'selprod_sold_count',
+                'IF(selprod_stock > 0, 1, 0) AS in_stock',
+                'selprod_cart_type',
+                'selprod_hide_price',
+                'shop_rfq_enabled',
+                'product_type'
             )
         );
         foreach ($allShops as $val) {
@@ -130,6 +159,7 @@ class ShopsController extends MyAppController
         $this->set('allShops', $allShops);
         $this->set('totalProdCountToDisplay', $totalProdCountToDisplay);
         $this->set('postedData', $post);
+        $this->set('pageSizeArr', FilterHelper::getPageSizeArr($this->siteLangId));
 
         $startRecord = ($page - 1) * $pageSize + 1;
         $endRecord = $pageSize;
@@ -144,10 +174,12 @@ class ShopsController extends MyAppController
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }
-
-        if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) {
+        if (isset($data['viewType']) && $data['viewType']=='popup' ) {
             $json['html'] = $this->_template->render(false, false, 'shops/search-map-view.php', true, false);
-        } else {
+        } elseif (isset($data['viewType']) && $data['viewType']=='popupShops' ) {
+            $json['html'] = $this->_template->render(false, false, 'shops/search-list-map-view.php', true, false);
+        }
+        else {
             $json['html'] = $this->_template->render(false, false, 'shops/search.php', true, false);
             $json['loadMoreBtnHtml'] = $this->_template->render(false, false, '_partial/load-more-btn.php', true, false);
         }
@@ -177,7 +209,7 @@ class ShopsController extends MyAppController
             $get = FatApp::getParameters();
             $get = array_filter(Product::convertArrToSrchFiltersAssocArr($get));
         }
-
+        $viewType = FatApp::getPostedData('viewType', FatUtility::VAR_STRING, '');
         if (array_key_exists('currency', $get)) {
             $get['currency_id'] = $get['currency'];
         }
@@ -206,12 +238,13 @@ class ShopsController extends MyAppController
                 'canonicalUrl' => UrlHelper::generateFullUrl('Shops', 'view', array($shop_id)),
                 'productSearchPageType' => SavedSearchProduct::PAGE_SHOP,
                 'recordId' => $shop_id,
+                'viewType' => $viewType,
                 'bannerListigUrl' => UrlHelper::generateFullUrl('Banner', 'categories'),
                 'pageSizeArr' => FilterHelper::getPageSizeArr($this->siteLangId),
             );
             $data = array_merge($data, $arr);
 
-            if (FatUtility::isAjaxCall()) {
+            if (FatUtility::isAjaxCall() && $viewType != 'popupProduct' && $viewType != 'popup') {
                 $this->set('products', $data['products']);
                 $this->set('page', $data['page']);
                 $this->set('pageCount', $data['pageCount']);
@@ -224,6 +257,26 @@ class ShopsController extends MyAppController
                 echo $this->_template->render(false, false, 'products/products-list.php', true);
                 exit;
             }
+            if (FatUtility::isAjaxCall() && $viewType == 'popupProduct') {
+                $this->set('products', $data['products']);
+                $this->set('postedData', $get);
+                $this->set('siteLangId', $this->siteLangId);
+                $this->set('pageSizeArr', $data['pageSizeArr']);
+                $this->set('tRightRibbons', $data['tRightRibbons']);
+                echo $this->_template->render(false, false, 'products/products-map-list-left.php', true);
+                exit;
+            }
+
+            if (FatUtility::isAjaxCall() && $viewType == 'popup') {
+                $this->set('products', $data['products']);
+                $this->set('postedData', $get);
+                $this->set('siteLangId', $this->siteLangId);
+                $this->set('pageSizeArr', $data['pageSizeArr']);
+                $this->set('tRightRibbons', $data['tRightRibbons']);
+                $this->_template->render(false, false, 'products/listing-map-page.php');
+                exit;
+            }
+    
 
             $this->includeProductPageJsCss();
             $this->_template->addJs(['js/slick.min.js', 'js/shop-nav.js', 'js/jquery.colourbrightness.min.js', 'js/slick-carousels.js']);
@@ -260,7 +313,7 @@ class ShopsController extends MyAppController
 
         if (false === MOBILE_APP_API_CALL) {
             $this->includeProductPageJsCss();
-            $this->_template->addJs(array('js/slick.min.js', 'js/shop-nav.js', 'js/jquery.colourbrightness.min.js'));
+            $this->_template->addJs(array('js/slick.min.js', 'js/shop-nav.js', 'js/jquery.colourbrightness.min.js', 'js/slick-carousels.js'));
         }
 
         $this->set('showBanner', true);
@@ -317,9 +370,20 @@ class ShopsController extends MyAppController
 
         $srch->addMultipleFields(
             array(
-                'shop_id', 'tu.user_name', 'tu.user_regdate', 'shop_user_id', 'shop_ltemplate_id', 'shop_created_on', 'shop_name', 'shop_description',
-                'shop_country_l.country_name as shop_country_name', 'shop_state_l.state_name as shop_state_name', 'shop_city',
-                'IFNULL(ufs.ufs_id, 0) as is_favorite', 'u_cred.credential_username as shop_owner_username', 'u.user_name as shop_owner_name',
+                'shop_id',
+                'tu.user_name',
+                'tu.user_regdate',
+                'shop_user_id',
+                'shop_ltemplate_id',
+                'shop_created_on',
+                'shop_name',
+                'shop_description',
+                'shop_country_l.country_name as shop_country_name',
+                'shop_state_l.state_name as shop_state_name',
+                'shop_city',
+                'IFNULL(ufs.ufs_id, 0) as is_favorite',
+                'u_cred.credential_username as shop_owner_username',
+                'u.user_name as shop_owner_name',
             )
         );
         $srch->addCondition('shop_id', '=', $shop_id);
@@ -330,7 +394,7 @@ class ShopsController extends MyAppController
         $shop = $db->fetch($shopRs);
 
         if (!$shop) {
-            FatApp::redirectUser(FatUtility::exitWithErrorCode('404'));
+            FatUtility::exitWithErrorCode('404');
         }
 
         $this->set('shop', $this->shopPoliciesData($shop));
@@ -467,10 +531,9 @@ class ShopsController extends MyAppController
         $this->set('data', $data);
 
         $this->includeProductPageJsCss();
-        $this->_template->addJs('js/slick.min.js');
 
-        $this->_template->addJs('js/shop-nav.js');
-        $this->_template->addJs('js/jquery.colourbrightness.min.js');
+        $this->includeProductPageJsCss();
+        $this->_template->addJs(array('js/slick.min.js', 'js/shop-nav.js', 'js/jquery.colourbrightness.min.js', 'js/slick-carousels.js'));
         $this->_template->render(true, true, 'shops/view.php');
     }
 
@@ -807,7 +870,7 @@ class ShopsController extends MyAppController
         $this->set('redirectUri', UrlHelper::generateUrl('Shops', 'View', [$shop_id]));
         $this->_template->render(false, false, 'json-success.php');
     }
-    
+
     public function policies($shop_id)
     {
         $shop = $this->getShopInfo($shop_id);
@@ -884,9 +947,23 @@ class ShopsController extends MyAppController
         $srch->joinSellerSubscription();
         $srch->addMultipleFields(
             array(
-                'shop_id', 'shop_user_id', 'shop_ltemplate_id', 'shop_created_on', 'shop_name', 'shop_description',
-                'shop_payment_policy', 'shop_delivery_policy', 'shop_refund_policy', 'shop_additional_info', 'shop_seller_info',
-                'shop_country_l.country_name as shop_country_name', 'shop_state_l.state_name as shop_state_name', 'shop_city', 'u.user_name as shop_owner_name', 'u.user_regdate', 'u_cred.credential_username as shop_owner_username'
+                'shop_id',
+                'shop_user_id',
+                'shop_ltemplate_id',
+                'shop_created_on',
+                'shop_name',
+                'shop_description',
+                'shop_payment_policy',
+                'shop_delivery_policy',
+                'shop_refund_policy',
+                'shop_additional_info',
+                'shop_seller_info',
+                'shop_country_l.country_name as shop_country_name',
+                'shop_state_l.state_name as shop_state_name',
+                'shop_city',
+                'u.user_name as shop_owner_name',
+                'u.user_regdate',
+                'u_cred.credential_username as shop_owner_username'
             )
         );
 
@@ -1026,8 +1103,17 @@ class ShopsController extends MyAppController
 
             $srch->addMultipleFields(
                 array(
-                    'shop_id', 'tu.user_name', 'tu.user_regdate', 'shop_user_id', 'shop_ltemplate_id', 'shop_created_on', 'IFNULL(shop_name, shop_identifier) as shop_name', 'shop_description',
-                    'shop_country_l.country_name as shop_country_name', 'shop_state_l.state_name as shop_state_name', 'shop_city',
+                    'shop_id',
+                    'tu.user_name',
+                    'tu.user_regdate',
+                    'shop_user_id',
+                    'shop_ltemplate_id',
+                    'shop_created_on',
+                    'IFNULL(shop_name, shop_identifier) as shop_name',
+                    'shop_description',
+                    'shop_country_l.country_name as shop_country_name',
+                    'shop_state_l.state_name as shop_state_name',
+                    'shop_city',
                     'IFNULL(ufs.ufs_id, 0) as is_favorite'
                 )
             );
@@ -1065,16 +1151,43 @@ class ShopsController extends MyAppController
 
         $srch = Product::getListingObj($get, $this->siteLangId, $userId);
         $flds = array(
-            'prodcat_code', 'product_id', 'prodcat_id', 'COALESCE(product_name, product_identifier) as product_name', 'product_model',  'product_updated_on', 'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name',
-            'selprod_id', 'selprod_user_id',  'selprod_code', 'selprod_stock', 'selprod_condition', 'selprod_price', 'COALESCE(selprod_title  ,COALESCE(product_name, product_identifier)) as selprod_title',
-            'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'splprice_start_date', 'splprice_end_date',
-            'brand_id', 'COALESCE(brand_name, brand_identifier) as brand_name', 'user_name', 'IF(selprod_stock > 0, 1, 0) AS in_stock',
-            'selprod_sold_count', 'selprod_return_policy', /*'maxprice', 'ifnull(sq_sprating.totReviews,0) totReviews','IF(ufp_id > 0, 1, 0) as isfavorite', */ 'selprod_min_order_qty',
-            'shop.shop_id', 'shop.shop_lat', 'shop.shop_lng', 'COALESCE(shop_name, shop_identifier) as shop_name'
+            'prodcat_code',
+            'product_id',
+            'prodcat_id',
+            'COALESCE(product_name, product_identifier) as product_name',
+            'product_model',
+            'product_updated_on',
+            'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name',
+            'selprod_id',
+            'selprod_user_id',
+            'selprod_code',
+            'selprod_stock',
+            'selprod_condition',
+            'selprod_price',
+            'COALESCE(selprod_title  ,COALESCE(product_name, product_identifier)) as selprod_title',
+            'splprice_display_list_price',
+            'splprice_display_dis_val',
+            'splprice_display_dis_type',
+            'splprice_start_date',
+            'splprice_end_date',
+            'brand_id',
+            'COALESCE(brand_name, brand_identifier) as brand_name',
+            'user_name',
+            'IF(selprod_stock > 0, 1, 0) AS in_stock',
+            'selprod_sold_count',
+            'selprod_return_policy', /*'maxprice', 'ifnull(sq_sprating.totReviews,0) totReviews','IF(ufp_id > 0, 1, 0) as isfavorite', */
+            'selprod_min_order_qty',
+            'shop.shop_id',
+            'shop.shop_lat',
+            'shop.shop_lng',
+            'COALESCE(shop_name, shop_identifier) as shop_name',
+            'selprod_cart_type',
+            'selprod_hide_price',
+            'shop_rfq_enabled'
         );
         $removeFlds = array_diff($flds, ['1']);
         $this->setRecordCount(clone $srch, $get['pageSize'], $get['page'], $get, true, $removeFlds);
-        
+
         Product::setOrderOnListingObj($srch, $get);
 
         $srch->setPageNumber($page);

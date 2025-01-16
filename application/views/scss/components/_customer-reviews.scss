@@ -41,10 +41,6 @@
     font-weight: $font-weight-normal;
   }
 
-  .svg {
-    fill: $secondary-color;
-  }
-
   .totals {
     font-weight: $font-weight-regular;
   }
@@ -176,16 +172,12 @@
   }
 
   .out-of {
+    line-height: 1;
     margin-#{$start-direction}: 5px;
     white-space: nowrap;
     min-width: 40px;
     text-align: #{$end-direction};
-
     font-size: 0.8rem;
-  }
-
-  .svg {
-    fill: $star-color;
   }
 }
 
@@ -240,6 +232,7 @@
     padding: 1rem 2rem;
     display: block;
     text-align: center;
+
     &:hover {
       @include bg-black;
       text-decoration: none;
@@ -262,7 +255,7 @@
   .review-images {
     display: flex;
     flex-flow: row wrap;
-    gap: 10px;
+    gap: 0.5rem;
 
     .image {
       background: $bg-placeholder;
@@ -278,8 +271,9 @@
         aspect-ratio: $product-ratio;
         mix-blend-mode: multiply;
       }
-      .thumbnail {
-      }
+
+      .thumbnail {}
+
       &.txt-over {
         background: rgba(0, 0, 0, 0.5);
         color: #fff;
@@ -300,15 +294,14 @@
   gap: 1.8rem;
   flex-flow: row wrap;
 
-  @include media-breakpoint-up(lg) {
-  }
+  @include media-breakpoint-up(lg) {}
 
   &-item {
     //border-radius: $common-radius;
     // border: $border;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 0.5rem;
     // flex: 1;
     //justify-content: space-between;
     padding: 0;
@@ -355,6 +348,7 @@
     box-shadow: none;
     height: auto;
     line-height: 1;
+
     .counts {
       color: $txt-gray;
       font-weight: $font-weight-regular;

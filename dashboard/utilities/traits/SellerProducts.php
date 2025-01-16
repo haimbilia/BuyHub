@@ -20,9 +20,13 @@ trait SellerProducts
 
     public function products($product_id = 0)
     {
+        if (FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+            FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'catalog'));
+        }
+
         $this->userPrivilege->canViewProducts(UserAuthentication::getLoggedUserId());
         $this->includeDateTimeFiles();
-        if (!$this->isShopActive($this->userParentId, 0, true)) {
+        if (!$this->isShopActive($this->userParentId)) {
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'shop'));
         }
 
@@ -70,6 +74,7 @@ trait SellerProducts
         $userId = $this->userParentId;
 
         $srch = SellerProduct::searchSellerProducts($this->siteLangId, $userId, $keyword);
+        $srch->joinTable(Shop::DB_TBL, 'INNER JOIN', 'shop_user_id = selprod_user_id', 'shop');
 
         $pageSize = FatApp::getConfig('CONF_PAGE_SIZE');
         $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
@@ -89,6 +94,8 @@ trait SellerProducts
                 'selprod_price',
                 'selprod_stock',
                 'selprod_track_inventory',
+                'selprod_cart_type',
+                'selprod_hide_price',
                 'selprod_threshold_stock_level',
                 'selprod_product_id',
                 'product_identifier',
@@ -96,7 +103,7 @@ trait SellerProducts
                 'selprod_available_from',
                 'IFNULL(product_name, product_identifier) as product_name',
                 'COALESCE(selprod_title, product_name, product_identifier) as selprod_title',
-                'product_updated_on'
+                'product_updated_on', 'shop_rfq_enabled'
             )
         );
         $srch->setPageNumber($page);
@@ -278,6 +285,7 @@ trait SellerProducts
                 $customUrl = explode("/", $urlRow['urlrewrite_custom']);
                 $sellerProductRow['selprod_url_keyword'] = $customUrl[0];
             }
+            $sellerProductRow['selprod_cod_enabled'] = (0 < $productRow['product_cod_enabled'] ? $sellerProductRow['selprod_cod_enabled'] : 0);
         } else {
             $sellerProductRow['selprod_available_from'] = date('Y-m-d');
             $sellerProductRow['selprod_cod_enabled'] = $productRow['product_cod_enabled'];
@@ -306,7 +314,7 @@ trait SellerProducts
                 }
             }
         } else {
-            $sellerProductRow['selprod_title' . FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1)] = $productRow['product_name'];
+            $sellerProductRow['selprod_title' . $this->siteLangId] = $productRow['product_name'];
         }
 
         $frmSellerProduct->fill($sellerProductRow);
@@ -549,12 +557,16 @@ trait SellerProducts
 
         $post['selprod_subtract_stock'] = FatApp::getPostedData('selprod_subtract_stock', FatUtility::VAR_INT, 0);
         $post['selprod_track_inventory'] = FatApp::getPostedData('selprod_track_inventory', FatUtility::VAR_INT, 0);
-        $post['selprod_min_order_qty'] = FatApp::getPostedData('selprod_min_order_qty', FatUtility::VAR_INT, 1);
-        $post['selprod_stock'] = FatApp::getPostedData('selprod_stock', FatUtility::VAR_INT, 1);
-        $post['selprod_stock'] = ($post['selprod_stock'] > 0) ? $post['selprod_stock'] : 1;
-        $post['selprod_min_order_qty'] = ($post['selprod_min_order_qty'] > 0) ? $post['selprod_min_order_qty'] : 1;
+        $post['selprod_hide_price'] = (SellerProduct::CART_TYPE_RFQ_ONLY != FatApp::getPostedData('selprod_cart_type', FatUtility::VAR_INT, 0) ? 0 : FatApp::getPostedData('selprod_hide_price', FatUtility::VAR_INT, 0));
 
-        $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
+        $selprodStock = FatApp::getPostedData('selprod_stock', FatUtility::VAR_INT, 1);
+        $post['selprod_stock'] = (0 < $selprodStock) ? $selprodStock : 1;
+
+        $minOrderQty = FatApp::getPostedData('selprod_min_order_qty', FatUtility::VAR_INT, 1);
+        $post['selprod_min_order_qty'] = 0 < $minOrderQty ? $minOrderQty : 1;
+
+        // $siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
+        $siteDefaultLangId = $this->siteLangId;
 
         $keywordSlug = '';
         $productId = SellerProduct::getAttributesById($selprod_id, 'selprod_product_id', false);
@@ -576,7 +588,7 @@ trait SellerProducts
             $keywordSlug = $keywordSlug . '-' . $shopData['shop_name'];
             $post['selprod_url_keyword'] = strtolower(CommonHelper::createSlug($keywordSlug));
         }
-
+        $post['selprod_active'] = FatApp::getPostedData('selprod_active', FatUtility::VAR_INT, 0);
         $data_to_be_save = $post;
         $sellerProdObj = new SellerProduct($selprod_id);
         $sellerProdObj->assignValues($data_to_be_save);
@@ -2108,6 +2120,7 @@ trait SellerProducts
         $srch->addOrder('product_name');
         $srch->addCondition('product_deleted', '=', applicationConstants::NO);
         $srch->addCondition('selprod_deleted', '=', applicationConstants::NO);
+        $srch->addCondition('selprod_cart_type', '!=', SellerProduct::CART_TYPE_RFQ_ONLY);
         if (isset($post['volumeDiscount']) && $post['volumeDiscount']) {
             $srch->addCondition(Product::DB_TBL_PREFIX . 'type', '!=', Product::PRODUCT_TYPE_SERVICE);
         }
@@ -2416,6 +2429,26 @@ trait SellerProducts
             $fld->requirements()->setCustomErrorMessage(Labels::getLabel('FRM_MINIMUM_SELLING_PRICE_FOR_THIS_PRODUCT_IS', $this->siteLangId) . ' ' . CommonHelper::displayMoneyFormat($productData['product_min_selling_price'], true, true));
         }
 
+        if (0 < FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0) && 1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) {
+            $shopRfqEnabled = Shop::getAttributesByUserId($this->userParentId, 'shop_rfq_enabled', false);
+            if (0 < $shopRfqEnabled) {
+                $cartTypeFld = $frm->addSelectBox(Labels::getLabel('FRM_CART_TYPE', $this->siteLangId), 'selprod_cart_type', SellerProduct::getCartType(), SellerProduct::CART_TYPE_BOTH, array('class' => 'fieldsVisibilityJs onlyShowHideJs'), '');
+                $cartTypeFld->requirements()->setRequired();
+                $frm->addCheckBox(Labels::getLabel("FRM_HIDE_PRICE", $this->siteLangId), 'selprod_hide_price', 1, array(), false, 0);
+
+                $hidePriceReqFld = new FormFieldRequirement('selprod_hide_price', Labels::getLabel('FRM_HIDE_PRICE', $this->siteLangId));
+                $hidePriceReqFld->setRequired(true);
+                $hidePriceReqFld->setPositive();
+
+                $hidePriceUnReqFld = new FormFieldRequirement('selprod_hide_price', Labels::getLabel('FRM_HIDE_PRICE', $this->siteLangId));
+                $hidePriceUnReqFld->setRequired(false);
+                $hidePriceUnReqFld->setPositive();
+
+                $cartTypeFld->requirements()->addOnChangerequirementUpdate(SellerProduct::CART_TYPE_RFQ_ONLY, 'eq', 'selprod_hide_price', $hidePriceReqFld);
+                $cartTypeFld->requirements()->addOnChangerequirementUpdate(SellerProduct::CART_TYPE_RFQ_ONLY, 'ne', 'selprod_hide_price', $hidePriceUnReqFld);
+            }
+        }
+
         if ($productData['product_type'] != Product::PRODUCT_TYPE_SERVICE) {
             $fld = $frm->addIntegerField(Labels::getLabel('FRM_QUANTITY', $this->siteLangId), 'selprod_stock');
             $fld->requirements()->setRange(1, SellerProduct::MAX_RANGE_OF_AVAILBLE_QTY);
@@ -2423,9 +2456,9 @@ trait SellerProducts
 
         $frm->addDateField(Labels::getLabel('FRM_DATE_AVAILABLE', $this->siteLangId), 'selprod_available_from', '', array('readonly' => 'readonly'))->requirements()->setRequired();
 
-        $useShopPolicy = $frm->addCheckBox(Labels::getLabel('FRM_USE_SHOP_RETURN_AND_CANCELLATION_AGE_POLICY', $this->siteLangId), 'use_shop_policy', 1, ['id' => 'use_shop_policy'], false, 0);
 
-        if ($productData['product_type'] != Product::PRODUCT_TYPE_SERVICE) {
+        if (Product::PRODUCT_TYPE_PHYSICAL == $productData['product_type']) {
+            $useShopPolicy = $frm->addCheckBox(Labels::getLabel('FRM_USE_SHOP_RETURN_AND_CANCELLATION_AGE_POLICY', $this->siteLangId), 'use_shop_policy', 1, ['id' => 'use_shop_policy'], false, 0);
             $fld = $frm->addIntegerField(Labels::getLabel('FRM_ORDER_RETURN_AGE', $this->siteLangId), 'selprod_return_age');
             $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('FRM_WARRANTY_IN_DAYS', $this->siteLangId) . ' </span>';
 
@@ -2436,26 +2469,24 @@ trait SellerProducts
             $orderReturnAgeUnReqFld = new FormFieldRequirement('selprod_return_age', Labels::getLabel('FRM_ORDER_RETURN_AGE', $this->siteLangId));
             $orderReturnAgeUnReqFld->setRequired(false);
             $orderReturnAgeUnReqFld->setPositive();
-        }
 
-        $fld = $frm->addIntegerField(Labels::getLabel('FRM_ORDER_CANCELLATION_AGE', $this->siteLangId), 'selprod_cancellation_age');
-        $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('FRM_WARRANTY_IN_DAYS', $this->siteLangId) . ' </span>';
+            $fld = $frm->addIntegerField(Labels::getLabel('FRM_ORDER_CANCELLATION_AGE', $this->siteLangId), 'selprod_cancellation_age');
+            $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('FRM_WARRANTY_IN_DAYS', $this->siteLangId) . ' </span>';
 
-        $orderCancellationAgeReqFld = new FormFieldRequirement('selprod_cancellation_age', Labels::getLabel('FRM_ORDER_CANCELLATION_AGE', $this->siteLangId));
-        $orderCancellationAgeReqFld->setRequired(true);
-        $orderCancellationAgeReqFld->setPositive();
+            $orderCancellationAgeReqFld = new FormFieldRequirement('selprod_cancellation_age', Labels::getLabel('FRM_ORDER_CANCELLATION_AGE', $this->siteLangId));
+            $orderCancellationAgeReqFld->setRequired(true);
+            $orderCancellationAgeReqFld->setPositive();
 
-        $orderCancellationAgeUnReqFld = new FormFieldRequirement('selprod_cancellation_age', Labels::getLabel('FRM_ORDER_CANCELLATION_AGE', $this->siteLangId));
-        $orderCancellationAgeUnReqFld->setRequired(false);
-        $orderCancellationAgeUnReqFld->setPositive();
+            $orderCancellationAgeUnReqFld = new FormFieldRequirement('selprod_cancellation_age', Labels::getLabel('FRM_ORDER_CANCELLATION_AGE', $this->siteLangId));
+            $orderCancellationAgeUnReqFld->setRequired(false);
+            $orderCancellationAgeUnReqFld->setPositive();
 
-        if ($productData['product_type'] != Product::PRODUCT_TYPE_SERVICE) {
             $useShopPolicy->requirements()->addOnChangerequirementUpdate(Shop::USE_SHOP_POLICY, 'eq', 'selprod_return_age', $orderReturnAgeUnReqFld);
             $useShopPolicy->requirements()->addOnChangerequirementUpdate(Shop::USE_SHOP_POLICY, 'ne', 'selprod_return_age', $orderReturnAgeReqFld);
-        }
 
-        $useShopPolicy->requirements()->addOnChangerequirementUpdate(Shop::USE_SHOP_POLICY, 'eq', 'selprod_cancellation_age', $orderCancellationAgeUnReqFld);
-        $useShopPolicy->requirements()->addOnChangerequirementUpdate(Shop::USE_SHOP_POLICY, 'ne', 'selprod_cancellation_age', $orderCancellationAgeReqFld);
+            $useShopPolicy->requirements()->addOnChangerequirementUpdate(Shop::USE_SHOP_POLICY, 'eq', 'selprod_cancellation_age', $orderCancellationAgeUnReqFld);
+            $useShopPolicy->requirements()->addOnChangerequirementUpdate(Shop::USE_SHOP_POLICY, 'ne', 'selprod_cancellation_age', $orderCancellationAgeReqFld);
+        }
 
         $frm->addHiddenField('', 'selprod_product_id', $product_id);
         $frm->addHiddenField('', 'selprod_id', $selprod_id);
@@ -2517,8 +2548,10 @@ trait SellerProducts
         unset($sellerProductRow['selprod_id']);
         $data_to_be_save = $sellerProductRow;
         $data_to_be_save['selprod_price'] = $post['selprod_price'];
-        $data_to_be_save['selprod_stock'] = $post['selprod_stock'] ?? 1;
+        $data_to_be_save['selprod_stock'] = (isset($post['selprod_stock']) && $post['selprod_stock'] > 0) ? $post['selprod_stock'] : 1;
         $data_to_be_save['selprod_available_from'] = $post['selprod_available_from'];
+        $data_to_be_save['selprod_cart_type'] = $post['selprod_cart_type'] ?? 0;
+        $data_to_be_save['selprod_hide_price'] = (SellerProduct::CART_TYPE_RFQ_ONLY != $post['selprod_cart_type'] ? 0 : FatApp::getPostedData('selprod_hide_price', FatUtility::VAR_INT, 0));
 
         if (!empty($selProdAvailable)) {
             if (!$selProdAvailable['selprod_deleted']) {

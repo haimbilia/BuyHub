@@ -11,7 +11,7 @@
 				var minWidth = document.frmRecordImage.banner_min_width.value;
 				var minHeight = document.frmRecordImage.banner_min_height.value;
 				var options = {
-					aspectRatio: minWidth/minHeight,
+					aspectRatio: minWidth / minHeight,
 					data: {
 						width: minWidth,
 						height: minHeight,
@@ -149,23 +149,27 @@
 	};
 
 	categoryImages = function (prodCatId, imageType, slide_screen, lang_id = 0) {
-		fcom.updateWithAjax(fcom.makeUrl('ProductCategories', 'images', [prodCatId, imageType, lang_id, slide_screen]), '', function (t) {
+		if (imageType == 'icon') {
+			var selector = $('#icon-imageListingJs');
+		} else if (imageType == 'banner') {
+			var selector = $('#banner-imageListingJs');
+		} else if (imageType == 'thumb') {
+			var selector = $('#thumb-imageListingJs');
+		}
+		selector.prepend(fcom.getLoader());
+		fcom.ajax(fcom.makeUrl('ProductCategories', 'images', [prodCatId, imageType, lang_id, slide_screen]), '', function (t) {
 			fcom.closeProcessing();
 			fcom.removeLoader();
+			selector.html(t.html);
 			if (imageType == 'icon') {
-				$('#icon-imageListingJs').html(t.html);
 				var prodCatId = $("[name='prodcat_id']").val();
 				if (prodCatId == 0) {
 					var iconImageId = $("#icon-imageListingJs li").attr('id');
 					var selectedLangId = $(".icon-language-js").val();
 					$("[name='cat_icon_image_id[" + selectedLangId + "]']").val(iconImageId);
 				}
-			} else if (imageType == 'banner') {
-				$('#banner-imageListingJs').html(t.html);
-			} else if (imageType == 'thumb') {
-				$('#thumb-imageListingJs').html(t.html);
 			}
-		});
+		}, { fOutMode: 'json' });
 	};
 	catMediaForm = function (record_id) {
 		fcom.updateWithAjax(fcom.makeUrl('ProductCategories', 'imagesForm', [record_id]), '', function (t) {

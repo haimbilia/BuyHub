@@ -83,6 +83,10 @@ class FatMailer extends FatModel
      */
     public function addAttachment($path, $name): object
     {
+        if (empty($path) || empty($name)) {
+            return $this;
+        }
+        
         array_push($this->attachments, ['path' => $path, 'name' => $name]);
         return $this;
     }
@@ -182,6 +186,8 @@ class FatMailer extends FatModel
             return false;
         }
         $this->markArchiveSent();
+
+        SystemLog::system($subject . ' - Email sent to - ' . $this->toEmail, 'Email sent', SystemLog::TYPE_SUCCESS);
         return true;
     }
 

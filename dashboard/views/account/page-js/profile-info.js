@@ -193,5 +193,9 @@ $(document).ready(function () {
 		var data = fcom.frmData(frm);
 		fcom.updateWithAjax(fcom.makeUrl('Account', 'updateCookiesPreferences'), data, function (t) { });
 	};
-
+	guestActivate = function () {
+		fcom.updateWithAjax(fcom.makeUrl('Account', 'guestActivate'), '', function (t) {
+			fcom.displaySuccessMessage(t.msg);
+		});
+	}
 })();

@@ -1,8 +1,7 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
 
 $primaryOrder = $primaryOrder ?? true;
-$cancelOrder = $cancelOrder ?? false;
-;
+$cancelOrder = $cancelOrder ?? false;;
 ?>
 <div class="col-md-8">
     <div class="card">
@@ -53,7 +52,7 @@ $cancelOrder = $cancelOrder ?? false;
 
                                 $opId = $orderDetail['op_id'];
                                 if (0 < $orderDetail['opshipping_rate_id'] && (empty($orderDetail['opshipping_plugin_id']) || ($shippingApiObj->getKey('plugin_id') != $orderDetail['opshipping_plugin_id'] && empty($orderDetail['opr_response'])))) {
-                                    ?>
+                            ?>
                                     <li class="dropdown-menu-item">
                                         <a class="dropdown-menu-link no-print" href="javascript:void(0)"
                                             onclick="shippingRatesForm(<?php echo $opId; ?>)"
@@ -67,7 +66,7 @@ $cancelOrder = $cancelOrder ?? false;
                                     if ($shippingApiObj->getKey('plugin_id') == $orderDetail['opshipping_plugin_id']) {
                                         if (empty($orderDetail['opr_response']) && empty($orderDetail['opship_tracking_number']) && true === $shippingApiObj->canGenerateLabelSeparately()) {
                                             $orderId = $orderDetail['order_id'];
-                                            ?>
+                                    ?>
                                             <li class="dropdown-menu-item">
                                                 <a class="dropdown-menu-link no-print" href="javascript:void(0)"
                                                     onclick='generateLabel(<?php echo $opId; ?>)'
@@ -78,7 +77,7 @@ $cancelOrder = $cancelOrder ?? false;
                                             <?php
                                         } elseif (!empty($orderDetail['opr_response'])) {
                                             if (FatApp::getConfig("CONF_RETURN_REQUEST_APPROVED_ORDER_STATUS") == $orderDetail["op_status_id"]) {
-                                                ?>
+                                            ?>
                                                 <li class="dropdown-menu-item">
                                                     <a class="dropdown-menu-link no-print" target="_blank"
                                                         href="<?php echo UrlHelper::generateUrl("ShippingServices", 'previewReturnLabel', [$orderDetail['op_id']]); ?>"
@@ -95,7 +94,7 @@ $cancelOrder = $cancelOrder ?? false;
                                                     </a>
                                                 </li>
                                             <?php } ?>
-                                            <?php
+                                        <?php
                                         }
                                         if ((!empty($orderStatus) && 'awaiting_shipment' == $orderStatus && !empty($orderDetail['opr_response']) || ($shippingApiObj->canGenerateLabelFromShipment() || !empty($orderDetail['opship_tracking_number']))) && empty($orderDetail['opship_order_number'])) {
                                             if (true === $shippingApiObj->canGenerateLabelFromShipment()) {
@@ -103,22 +102,22 @@ $cancelOrder = $cancelOrder ?? false;
                                             } else {
                                                 $label = Labels::getLabel('LBL_BUY_SHIPMENT', $siteLangId);
                                             }
-                                            ?>
+                                        ?>
                                             <li class="dropdown-menu-item">
                                                 <a class="dropdown-menu-link no-print" href="javascript:void(0)"
                                                     onclick="proceedToShipment(<?php echo $opId; ?>)" title="<?php echo $label; ?>">
                                                     <span><?php echo $label; ?></span>
                                                 </a>
                                             </li>
-                                            <?php
+                                        <?php
                                         }
 
                                         if ($orderDetail['orderstatus_id'] == FatApp::getConfig("CONF_DEFAULT_SHIPPING_ORDER_STATUS") && true === $shippingApiObj->canCreatePickup()) {
-                                            ?>
+                                        ?>
                                             <?php
                                             $pickUpDetails = OrderProduct::getPickUpShedule($opId);
                                             if (!$pickUpDetails || 1 > $pickUpDetails['opsp_scheduled']) {
-                                                ?>
+                                            ?>
                                                 <li class="dropdown-menu-item">
                                                     <a class="dropdown-menu-link no-print" href="javascript:void(0)"
                                                         onclick="getPickupForm(<?php echo $opId; ?>)"
@@ -135,16 +134,16 @@ $cancelOrder = $cancelOrder ?? false;
                                                     </a>
                                                 </li>
                                             <?php } ?>
-                                        <?php }
+                                <?php }
                                     }
                                 }
                             }
                         } else {
-                            ?>
-                            <li class="dropdown-menu-item">
-                                <a class="dropdown-menu-link no-print" href="javascript:void(0)"
-                                    onclick="return addItemsToCart('<?php echo $orderDetail['order_id']; ?>');"><?php echo Labels::getLabel('LBL_Buy_Again', $siteLangId); ?></a>
-                            </li>
+                            if (1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) { ?>
+                                <li class="dropdown-menu-item">
+                                    <a class="dropdown-menu-link no-print" href="javascript:void(0)" onclick="return addItemsToCart('<?php echo $orderDetail['order_id']; ?>');"><?php echo Labels::getLabel('LBL_Buy_Again', $siteLangId); ?></a>
+                                </li>
+                            <?php } ?>
                             <li class="dropdown-menu-item">
                                 <a class="dropdown-menu-link no-print"
                                     href="<?php echo (0 < $opId) ? UrlHelper::generateUrl('Account', 'viewBuyerOrderInvoice', [$orderDetail['order_id'], $opId]) : UrlHelper::generateUrl('Account', 'viewBuyerOrderInvoice', [$orderDetail['order_id']]); ?>"
@@ -175,7 +174,7 @@ $cancelOrder = $cancelOrder ?? false;
                             $discount = CommonHelper::orderProductAmount($childOrder, 'DISCOUNT');
                             $tax = CommonHelper::orderProductAmount($childOrder, 'TAX', false, ($isSellerDashboardView ? User::USER_TYPE_SELLER : User::USER_TYPE_BUYER));
                             $taxableAmount = CommonHelper::orderProductAmount($childOrder, 'TAXABLE_AMOUNT', false, ($isSellerDashboardView ? User::USER_TYPE_SELLER : User::USER_TYPE_BUYER));
-                            ?>
+                        ?>
                             <tr>
                                 <td>
                                     <?php $this->includeTemplate('_partial/product/product-info-html.php', $this->variables + ['order' => $childOrder], false); ?>
@@ -183,7 +182,7 @@ $cancelOrder = $cancelOrder ?? false;
                                 <td>
                                     <?php if ($childOrder['op_selprod_price'] > $childOrder['op_unit_price']) { ?>
                                         <strong>
-                                            <?php
+                                        <?php
                                     }
                                     echo CommonHelper::displayMoneyFormat($childOrder['op_unit_price'], true, false, true, false, true); ?>
                                         <?php
@@ -193,7 +192,7 @@ $cancelOrder = $cancelOrder ?? false;
                                         <del>
                                             <?php echo CommonHelper::displayMoneyFormat($childOrder['op_selprod_price'], true, false, true, false, true); ?>
                                         </del>
-                                        <?php
+                                    <?php
                                         } ?>
                                 </td>
                                 <td><?php echo $childOrder['op_qty']; ?></td>

@@ -22,7 +22,6 @@ $langFld->setFieldTagAttribute('onChange', "addAddressForm(" . $addr_id . ", thi
 
 $addrLabelFld = $addressFrm->getField('addr_title');
 $addrLabelFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_E.G:_MY_HOME_ADDRESS'));
-$addrLabelFld->setFieldTagAttribute('maxlength', Address::ADDRESS_TITLE_LENGTH);
 ?>
 <div class="modal-header">
     <h5 class="modal-title">

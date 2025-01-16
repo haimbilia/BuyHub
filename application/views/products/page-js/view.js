@@ -272,6 +272,7 @@ function setupReviewAbuse(frm) {
             if ('' == ans.html) {
                 $('.reviewsWithImagesSectionJs').remove();
             } else {
+                $('.reviewsImageblockJs').show();
                 $('.reviewsWithImagesSectionJs').fadeIn();
                 $(riDv).append(ans.html);
                 pageNumber = ans.page;

@@ -1,7 +1,5 @@
 <?php
 
-use Google\Service\AnalyticsReporting\Resource\UserActivity;
-
 class Cart extends FatModel
 {
     private $products = array();
@@ -88,7 +86,6 @@ class Cart extends FatModel
             }
 
             $this->SYSTEM_ARR['cart'] = json_decode($row["usercart_details"], true);
-            // CommonHelper::printArray($this->SYSTEM_ARR['cart'], true);
             if (isset($this->SYSTEM_ARR['cart']['shopping_cart'])) {
                 $this->SYSTEM_ARR['shopping_cart'] = $this->SYSTEM_ARR['cart']['shopping_cart'];
                 unset($this->SYSTEM_ARR['cart']['shopping_cart']);
@@ -105,6 +102,11 @@ class Cart extends FatModel
         if (!isset($this->SYSTEM_ARR['shopping_cart']) || !is_array($this->SYSTEM_ARR['shopping_cart'])) {
             $this->SYSTEM_ARR['shopping_cart'] = array();
         }
+
+        if (!isset($this->SYSTEM_ARR['rfqOnlyCount'])) {
+            $this->SYSTEM_ARR['rfqOnlyCount'] = 0;
+        }
+
         $this->cartCache = true;
         $this->pageType = $pageType;
         $this->discounts = [];
@@ -163,10 +165,14 @@ class Cart extends FatModel
             return false;
         }
 
-        $selProdData = SellerProduct::getAttributesById($selprod_id, ['selprod_user_id', 'selprod_track_inventory']);
+        if (isset($_SESSION['offer_checkout']) && $_SESSION['offer_checkout']['selprod_id'] == $selprod_id) {
+            $this->error = Labels::getLabel('ERR_ALREADY_ADDED_FROM_OFFER');
+            return false;
+        }
+        $selProdData = SellerProduct::getAttributesById($selprod_id, ['selprod_user_id', 'selprod_track_inventory', 'selprod_cart_type']);
         if ($this->hasProducts() > 0 && FatApp::getConfig('CONF_SINGLE_SELLER_CART', FatUtility::VAR_INT, 0)) {
             $this->getBasketProducts($this->cart_lang_id);
-            $sellerUserId = $selProdData['selprod_user_id'];
+            $sellerUserId = $selProdData['selprod_user_id'] ?? 0;
             if ($this->singleCartSellerId > 0 && $sellerUserId != $this->singleCartSellerId) {
                 $this->clear();
             }
@@ -181,6 +187,12 @@ class Cart extends FatModel
             $key = base64_encode(json_encode($key));
             if (!isset($this->SYSTEM_ARR['cart'][$key])) {
                 $this->SYSTEM_ARR['cart'][$key] = FatUtility::int($qty);
+                if (!empty($selProdData)) {
+                    $shopRfqEnabled = Shop::getAttributesByUserId($selProdData['selprod_user_id'], 'shop_rfq_enabled');
+                    if (RequestForQuote::isCartTypeRfqOnly($shopRfqEnabled, $selProdData['selprod_cart_type'])) {
+                        $this->SYSTEM_ARR['rfqOnlyCount'] += 1;
+                    }
+                }
             } else {
                 $this->SYSTEM_ARR['cart'][$key] += FatUtility::int($qty);
             }
@@ -215,6 +227,17 @@ class Cart extends FatModel
             return $this->cart_user_id;
         }
         return true;
+    }
+
+    public function countRfqOnlyProducts(): int
+    {
+        return $this->SYSTEM_ARR['rfqOnlyCount'] ?? 0;
+    }
+
+    public function countCartProducts(): int
+    {
+        $cnt = count($this->SYSTEM_ARR['cart']) - self::countRfqOnlyProducts();
+        return (0 > $cnt ? 0 : $cnt);
     }
 
     public function countProducts()
@@ -327,6 +350,16 @@ class Cart extends FatModel
         $this->products = [];
         $this->basketProducts = [];
         return false;
+    }
+
+    public function hasValidStripeOnboardedSellers()
+    {
+        foreach ($this->getBasketProducts($this->cart_lang_id) as $product) {
+            if (empty(User::getUserMeta($product['selprod_user_id'], 'stripe_account_id'))) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public function getBasketProducts($siteLangId = 0)
@@ -477,7 +510,7 @@ class Cart extends FatModel
         return (int) $this->shipmentItemsCount;
     }
 
-    public function getProducts($siteLangId = 0, $checkFulfilmentType = true)
+    public function getProducts($siteLangId = 0, $checkFulfilmentType = true, $excludeCartType = -1, $removeCartType = -1)
     {
         if (!$this->products) {
             $this->isAnyOutOfStock = true;
@@ -543,6 +576,16 @@ class Cart extends FatModel
                     continue;
                 }
 
+                $sellerProductRow =  $cartProdsData[$selprod_id] ?? [];
+                if (!empty($sellerProductRow) && $excludeCartType == $sellerProductRow['selprod_cart_type']) {
+                    continue;
+                }
+
+                if (RequestForQuote::isCartTypeRfqOnly($sellerProductRow['shop_rfq_enabled'], $sellerProductRow['selprod_cart_type']) && SellerProduct::CART_TYPE_RFQ_ONLY == $removeCartType) {
+                    $this->removeCartKey($key, $selprod_id, $quantity);
+                    continue;
+                }
+
                 $this->products[$key]['shipping_cost'] = 0;
                 $this->products[$key]['opshipping_rate_id'] = 0;
                 $this->products[$key]['commission_percentage'] = '';
@@ -563,6 +606,9 @@ class Cart extends FatModel
                         continue;
                     }
 
+                    $ofrSelprodId = $_SESSION['offer_checkout']['selprod_id'] ?? 0;
+                    $rfqOfferProd = (isset($_SESSION['offer_checkout']) && $ofrSelprodId == $sellerProductRow['selprod_id']);
+
                     $quantity = $sellerProductRow['quantity'];
                     $fulfilmentType = $this->fulfilmentType;
                     if (isset($this->SYSTEM_ARR['shopping_cart']['checkout_type'])) {
@@ -579,7 +625,7 @@ class Cart extends FatModel
                     $isOutOfMinOrderQty = ((int)($sellerProductRow['selprod_min_order_qty'] > $availableStock));
 
                     /* Has Stock */
-                    if ((!$sellerProductRow['in_stock'] && true === $this->isAnyOutOfStock) || 0 < $isOutOfMinOrderQty) {
+                    if (!$rfqOfferProd && ((!$sellerProductRow['in_stock'] && true === $this->isAnyOutOfStock) || 0 < $isOutOfMinOrderQty)) {
                         $this->isAnyOutOfStock = false;
                     }
                     /* Has Stock */
@@ -795,12 +841,49 @@ class Cart extends FatModel
         $prodSrch->doNotLimitRecords();
         $prodSrch->addDirectCondition('selprod_id IN (' . implode(',', $selProdIds) . ')');
         $prodSrch->addMultipleFields(array(
-            'product_id', 'product_type', 'product_length', 'product_width', 'product_height', 'product_ship_free',
-            'product_dimension_unit', 'product_weight', 'product_weight_unit', 'product_fulfillment_type',
-            'selprod_id', 'selprod_code', 'selprod_stock', 'selprod_user_id', 'IF(selprod_stock > 0, 1, 0) AS in_stock', 'selprod_min_order_qty',
-            'special_price_found', 'theprice', 'shop_id', 'shop_free_ship_upto', 'shop_state_id', 'shop_country_id',
-            'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'selprod_price', 'selprod_cost', 'case when product_seller_id=0 then IFNULL(psbs_user_id,0)   else product_seller_id end  as psbs_user_id', 'product_seller_id', 'product_cod_enabled', 'shop_fulfillment_type', 'selprod_fulfillment_type', 'selprod_cod_enabled', 'shippack_length', 'shippack_width', 'shippack_height', 'shippack_units',
-            'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name', 'product_updated_on', 'selprod_track_inventory'
+            'product_id',
+            'product_type',
+            'product_length',
+            'product_width',
+            'product_height',
+            'product_ship_free',
+            'product_dimension_unit',
+            'product_weight',
+            'product_weight_unit',
+            'product_fulfillment_type',
+            'selprod_id',
+            'selprod_code',
+            'selprod_stock',
+            'selprod_user_id',
+            'IF(selprod_stock > 0, 1, 0) AS in_stock',
+            'selprod_min_order_qty',
+            'special_price_found',
+            'theprice',
+            'shop_id',
+            'shop_free_ship_upto',
+            'shop_state_id',
+            'shop_country_id',
+            'splprice_display_list_price',
+            'splprice_display_dis_val',
+            'splprice_display_dis_type',
+            'selprod_price',
+            'selprod_cost',
+            'case when product_seller_id=0 then IFNULL(psbs_user_id,0)   else product_seller_id end  as psbs_user_id',
+            'product_seller_id',
+            'product_cod_enabled',
+            'shop_fulfillment_type',
+            'selprod_fulfillment_type',
+            'selprod_cod_enabled',
+            'shippack_length',
+            'shippack_width',
+            'shippack_height',
+            'shippack_units',
+            'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name',
+            'product_updated_on',
+            'selprod_track_inventory',
+            'selprod_cart_type',
+            'shop_rfq_enabled',
+            'selprod_hide_price'
         ));
 
         if ($siteLangId) {
@@ -825,7 +908,20 @@ class Cart extends FatModel
 
         $productSelectedShippingMethodsArr = $this->getProductShippingMethod();
         foreach ($sellerProductRows as $key => $sellerProductRow) {
+            $rfqOfferProd = (isset($_SESSION['offer_checkout']) && $_SESSION['offer_checkout']['selprod_id'] == $sellerProductRow['selprod_id']);
+            if ($rfqOfferProd) {
+                $ofrTheprice = $_SESSION['offer_checkout']['offer_price'] ?? $sellerProductRow['theprice'];
+                $selprodPrice = $_SESSION['offer_checkout']['offer_price'] ?? $sellerProductRow['selprod_price'];
+                $ofrQuantity = $_SESSION['offer_checkout']['offer_quantity'] ?? $sellerProductRow['selprod_stock'];
+                $sellerProductRows[$key]['selprod_stock'] = $sellerProductRow['selprod_stock'] = $ofrQuantity;
+                $sellerProductRows[$key]['theprice'] =  $sellerProductRow['theprice'] = $ofrTheprice / $ofrQuantity;
+                $sellerProductRows[$key]['selprod_price'] = $sellerProductRow['selprod_price'] = $selprodPrice / $ofrQuantity;
+                $sellerProductRows[$key]['volume_discount'] = $sellerProductRow['volume_discount'] = 0;
+                $sellerProductRows[$key]['splprice_price'] = $sellerProductRow['splprice_price'] = 0;
+            }
+
             $quantity = ($cartData[$key] > $sellerProductRow['selprod_stock']) ? $sellerProductRow['selprod_stock'] : $cartData[$key];
+            $quantity = (1 > $quantity) ? 1 : $quantity;
             $sellerProductRows[$key]['actualPrice'] = $sellerProductRow['theprice'];
 
             $extraData = [];
@@ -898,20 +994,22 @@ class Cart extends FatModel
             $sellerProductRows[$key]['volume_discount'] = 0;
             $sellerProductRows[$key]['volume_discount_percentage'] = 0;
             $sellerProductRows[$key]['volume_discount_total'] = 0;
-            $srch = new SellerProductVolumeDiscountSearch();
-            $srch->doNotCalculateRecords();
-            $srch->addCondition('voldiscount_selprod_id', '=', 'mysql_func_' . $sellerProductRow['selprod_id'], 'AND', true);
-            $srch->addCondition('voldiscount_min_qty', '<=', 'mysql_func_' . $quantity, 'AND', true);
-            $srch->addOrder('voldiscount_min_qty', 'DESC');
-            $srch->setPageSize(1);
-            $srch->addMultipleFields(array('voldiscount_percentage'));
-            $rs = $srch->getResultSet();
-            $volumeDiscountRow = FatApp::getDb()->fetch($rs);
-            if ($volumeDiscountRow) {
-                $volumeDiscount = $sellerProductRows[$key]['theprice'] * ($volumeDiscountRow['voldiscount_percentage'] / 100);
-                $sellerProductRows[$key]['volume_discount_percentage'] = $volumeDiscountRow['voldiscount_percentage'];
-                $sellerProductRows[$key]['volume_discount'] = $volumeDiscount;
-                $sellerProductRows[$key]['volume_discount_total'] = $volumeDiscount * $quantity;
+            if (!$rfqOfferProd) {
+                $srch = new SellerProductVolumeDiscountSearch();
+                $srch->doNotCalculateRecords();
+                $srch->addCondition('voldiscount_selprod_id', '=', 'mysql_func_' . $sellerProductRow['selprod_id'], 'AND', true);
+                $srch->addCondition('voldiscount_min_qty', '<=', 'mysql_func_' . $quantity, 'AND', true);
+                $srch->addOrder('voldiscount_min_qty', 'DESC');
+                $srch->setPageSize(1);
+                $srch->addMultipleFields(array('voldiscount_percentage'));
+                $rs = $srch->getResultSet();
+                $volumeDiscountRow = FatApp::getDb()->fetch($rs);
+                if ($volumeDiscountRow) {
+                    $volumeDiscount = $sellerProductRows[$key]['theprice'] * ($volumeDiscountRow['voldiscount_percentage'] / 100);
+                    $sellerProductRows[$key]['volume_discount_percentage'] = $volumeDiscountRow['voldiscount_percentage'];
+                    $sellerProductRows[$key]['volume_discount'] = $volumeDiscount;
+                    $sellerProductRows[$key]['volume_discount_total'] = $volumeDiscount * $quantity;
+                }
             }
             /* ] */
 
@@ -1002,6 +1100,7 @@ class Cart extends FatModel
             $sellerProductRows[$key]['isProductShippedBySeller'] = $isProductShippedBySeller;
 
             $fulfillmentType = $sellerProductRow['selprod_fulfillment_type'];
+
             if (true == $isProductShippedBySeller) {
                 if ($sellerProductRow['shop_fulfillment_type'] != Shipping::FULFILMENT_ALL) {
                     $fulfillmentType = $sellerProductRow['shop_fulfillment_type'];
@@ -1030,6 +1129,15 @@ class Cart extends FatModel
         if (is_numeric($this->cart_user_id) && $this->cart_user_id > 0) {
             AbandonedCart::saveAbandonedCart($this->cart_user_id, $selProdId, $quantity, AbandonedCart::ACTION_DELETED);
         }
+
+        $selProdData = SellerProduct::getAttributesById($selProdId, ['selprod_cart_type', 'selprod_user_id']);
+        if(!empty($selProdData)){
+            $shopRfqEnabled = Shop::getAttributesByUserId($selProdData['selprod_user_id'], 'shop_rfq_enabled');
+            if (RequestForQuote::isCartTypeRfqOnly($shopRfqEnabled, $selProdData['selprod_cart_type']) && isset($this->SYSTEM_ARR['rfqOnlyCount'])) {
+                $this->SYSTEM_ARR['rfqOnlyCount'] -= 1;
+            }
+        }
+
         unset($this->products[$key]);
         unset($this->basketProducts[$key]);
         unset($this->SYSTEM_ARR['cart'][$key]);
@@ -1050,6 +1158,9 @@ class Cart extends FatModel
             foreach ($cartProducts as $cartKey => $product) {
                 if (($key == 'all' || (md5($product['key']) == $key) && !$product['is_batch'])) {
                     $found = true;
+                    if (RequestForQuote::isCartTypeRfqOnly($product['shop_rfq_enabled'], $product['selprod_cart_type']) && isset($this->SYSTEM_ARR['rfqOnlyCount'])) {
+                        $this->SYSTEM_ARR['rfqOnlyCount'] -= 1;
+                    }
                     unset($this->SYSTEM_ARR['cart'][$cartKey]);
                     $this->updateTempStockHold($product['selprod_id'], 0, 0);
                     if (($key == 'all' || md5($product['key']) == $key) && !$product['is_batch']) {
@@ -1075,6 +1186,7 @@ class Cart extends FatModel
         if (false === $found) {
             $this->error = Labels::getLabel('ERR_INVALID_PRODUCT', $this->cart_lang_id);
         }
+        unset($_SESSION['offer_checkout']);
         return $found;
     }
 
@@ -1128,6 +1240,9 @@ class Cart extends FatModel
             if (is_array($cartProducts)) {
                 foreach ($cartProducts as $cartKey => $product) {
                     if (md5($product['key']) == $key) {
+                        if (isset($_SESSION['offer_checkout']) && $_SESSION['offer_checkout']['selprod_id'] == $product['selprod_id']) {
+                            continue;
+                        }
                         $found = true;
                         /* minimum quantity check[ */
                         $minimum_quantity = ($product['selprod_min_order_qty']) ? $product['selprod_min_order_qty'] : 1;
@@ -1359,7 +1474,6 @@ class Cart extends FatModel
     {
         $cartTotal = 0;
         $products = $this->getBasketProducts($this->cart_lang_id);
-        // CommonHelper::printArray($products); die;
         if (is_array($products) && count($products) > 0) {
             foreach ($products as $product) {
                 $cartTotal += $product['total'];
@@ -1890,6 +2004,10 @@ class Cart extends FatModel
     /* to keep track of temporary hold the product stock[ */
     public function updateTempStockHold($selprod_id, $quantity = 0, $prodgroup_id = 0)
     {
+        if (isset($_SESSION['offer_checkout']['selprod_id']) && $_SESSION['offer_checkout']['selprod_id'] == $selprod_id) {
+            $quantity = 0;
+        }
+
         $selprod_id = FatUtility::int($selprod_id);
         $quantity = FatUtility::int($quantity);
         $prodgroup_id = FatUtility::int($prodgroup_id);
@@ -1955,6 +2073,7 @@ class Cart extends FatModel
         unset($_SESSION['shopping_cart']["order_id"]);
         unset($_SESSION['wallet_recharge_cart']["order_id"]);
         unset($_SESSION["order_id"]);
+        unset($_SESSION['offer_checkout']);
     }
 
     public static function setCartAttributes($userId = 0, $tempUserId = 0)
@@ -2167,7 +2286,7 @@ class Cart extends FatModel
                 $shipping->setSelectedShipping($this->selectedShippingService);
             }
 
-            $response =  $shipping->calculateCharges($physicalSelProdIdArr, $shippingAddressDetail, $productInfo);
+            $response =  $shipping->calculateCharges($physicalSelProdIdArr, $shippingAddressDetail, $productInfo, true);
             $shippedByArr = $response['data'];
         }
         /*Include digital products */
@@ -2243,6 +2362,10 @@ class Cart extends FatModel
                 continue;
             }
 
+            if (RequestForQuote::isCartTypeRfqOnly($product['shop_rfq_enabled'], $product['selprod_cart_type']) && isset($this->SYSTEM_ARR['rfqOnlyCount'])) {
+                $this->SYSTEM_ARR['rfqOnlyCount'] -= 1;
+            }
+
             unset($this->SYSTEM_ARR['cart'][$cartKey]);
             $this->updateTempStockHold($product['selprod_id'], 0, 0);
             if (is_numeric($this->cart_user_id) && $this->cart_user_id > 0) {
@@ -2260,6 +2383,10 @@ class Cart extends FatModel
         foreach ($cartProducts as $cartKey => $product) {
             if ($product['fulfillment_type'] != Shipping::FULFILMENT_SHIP) {
                 continue;
+            }
+
+            if (RequestForQuote::isCartTypeRfqOnly($product['shop_rfq_enabled'], $product['selprod_cart_type']) && isset($this->SYSTEM_ARR['rfqOnlyCount'])) {
+                $this->SYSTEM_ARR['rfqOnlyCount'] -= 1;
             }
 
             unset($this->SYSTEM_ARR['cart'][$cartKey]);
@@ -2356,5 +2483,18 @@ class Cart extends FatModel
         $key = static::CART_KEY_PREFIX_PRODUCT . $selprod_id;
         $key = base64_encode(json_encode($key));
         return $this->SYSTEM_ARR['cart'][$key] ?? 0;
+    }
+
+    public function excludeOfferCheckoutItems()
+    {
+        /* Excluding offer checkout items from cart listing. */
+        if (isset($_SESSION['offer_checkout'])) {
+            $offerSelprodId = $_SESSION['offer_checkout']['selprod_id'] ?? 0;
+            if (0 < $offerSelprodId) {
+                $key = static::CART_KEY_PREFIX_PRODUCT . $offerSelprodId;
+                $key = base64_encode(json_encode($key));
+                unset($this->SYSTEM_ARR['cart'][$key]);
+            }
+        }
     }
 }

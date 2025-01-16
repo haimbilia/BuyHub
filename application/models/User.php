@@ -1493,6 +1493,13 @@ class User extends MyAppModel
             return false;
         }
 
+        if (UserAuthentication::isGuestUserLogged()) {
+            $user = new self($userId);
+            $userdata = $user->getUserInfo('credential_email', false, false, true);
+            $authentication = new UserAuthentication();
+            $authentication->login($userdata['credential_email'], $password, $_SERVER['REMOTE_ADDR'], true, 0, 0, User::USER_TYPE_BUYER);
+        }
+
         return true;
     }
 
@@ -3289,5 +3296,28 @@ class User extends MyAppModel
             return false;
         }
         return true;
+    }
+    
+    /**
+     * getUserParentId //if parent id is zero it will give the current user id.
+     *
+     * @param  mixed $userId
+     * @param  mixed $active
+     * @return void
+     */
+    public static function getUserParentId(int $userId, $active = true)
+    {
+        $userId = FatUtility::int($userId);
+        $srch = new SearchBase(User::DB_TBL, 'u');
+        $srch->addCondition('user_id', '=', $userId);
+
+        if (true == $active) {
+            $srch->joinTable(static::DB_TBL_CRED, 'LEFT OUTER JOIN', 'uc.' . static::DB_TBL_CRED_PREFIX . 'user_id = u.user_id', 'uc');
+            $srch->addCondition('uc.' . static::DB_TBL_CRED_PREFIX . 'active', '=', applicationConstants::ACTIVE);
+            $srch->addCondition('uc.' . static::DB_TBL_CRED_PREFIX . 'verified', '=', applicationConstants::YES);
+        }
+        $srch->addFld('if(u.user_parent > 0, u.user_parent, u.user_id) as user_parent');
+        $record = FatApp::getDb()->fetch($srch->getResultSet());
+        return $record['user_parent'];
     }
 }

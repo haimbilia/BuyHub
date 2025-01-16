@@ -12,25 +12,27 @@
                     } ?>
                 </h5>
 
-                <div class="review-block-action" role="cell">
-                    <button class="link-underline" onClick="showAddressList()">
-                        <span>
-                            <?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?>
-                        </span>
-                    </button>
-                </div>
+                <?php if (!isset($_SESSION['offer_checkout'])) { ?>
+                    <div class="review-block-action" role="cell">
+                        <button class="link-underline" onClick="showAddressList()">
+                            <span>
+                                <?php echo Labels::getLabel('LBL_Edit', $siteLangId); ?>
+                            </span>
+                        </button>
+                    </div>
+                <?php } ?>
             </div>
             <div class="review-block-body" role="cell">
                 <address class="address delivery-address">
                     <p><?php echo $addresses['addr_name'] . ', ' . $addresses['addr_address1']; ?>
-                        <?php if (strlen($addresses['addr_address2']) > 0) {
+                        <?php if (strlen((string)$addresses['addr_address2']) > 0) {
                             echo ", " . $addresses['addr_address2']; ?>
                         <?php } ?>
                     </p>
                     <p><?php echo $addresses['addr_city'] . ", " . $addresses['state_name'] . ", " . $addresses['country_name'] . ", " . $addresses['addr_zip']; ?>
                     </p>
 
-                    <?php if (strlen($addresses['addr_phone']) > 0) {
+                    <?php if (strlen((string)$addresses['addr_phone']) > 0) {
                         $addrPhone = ValidateElement::formatDialCode($addresses['addr_phone_dcode']) . $addresses['addr_phone'];
                     ?>
                         <ul class="phone-list">

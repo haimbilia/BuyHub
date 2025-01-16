@@ -14,6 +14,12 @@ class CartController extends MyAppController
     public function index()
     {
         $cartObj = new Cart();
+        if (!isset($_SESSION['offer_checkout']) && FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) {
+            $cartObj->clear();
+            $cartObj->updateUserCart();
+            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_CHECKOUT_WITH_ACCEPTED_OFFER_ONLY.'), redirect: true);
+            CommonHelper::redirectUserReferer();
+        }
 
         $loggedUserId = UserAuthentication::getLoggedUserId(true);
         if (0 < $loggedUserId) {
@@ -31,7 +37,8 @@ class CartController extends MyAppController
         $cartObj->invalidateCheckoutType();
         $cartObj->removeProductShippingMethod();
         $cartObj->removeProductPickUpAddresses();
-        $productsArr = $cartObj->getProducts($this->siteLangId);
+        $removeCartType = !isset($_SESSION['offer_checkout']) ? SellerProduct::CART_TYPE_RFQ_ONLY : -1;
+        $productsArr = $cartObj->getProducts($this->siteLangId, removeCartType: $removeCartType);
         $fulfillmentProdArr = [
             Shipping::FULFILMENT_SHIP => [],
             Shipping::FULFILMENT_PICKUP => [],
@@ -233,6 +240,13 @@ class CartController extends MyAppController
             }
         }
 
+        if (isset($_SESSION['offer_checkout'])) {
+            $cartObj = new Cart(UserAuthentication::getLoggedUserId(true), $this->siteLangId, $this->app_user['temp_user_id']);
+            $cartObj->clear(true);
+            $cartObj->updateUserCart();
+            unset($_SESSION['offer_checkout']);
+        }
+
         $selprod_id = FatApp::getPostedData('selprod_id', FatUtility::VAR_INT, 0);
         $quantity = FatApp::getPostedData('quantity', FatUtility::VAR_INT, 1);
 
@@ -330,15 +344,30 @@ class CartController extends MyAppController
 
     public function addSelectedToCart()
     {
+        if (0 < FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) {
+            $message = Labels::getLabel('ERR_ITEM`S_ARE_NOT_AVAILALE_FOR_THE_CART', $this->siteLangId);
+            LibHelper::exitWithError($message, true);
+        }
         $selprod_id_arr = FatApp::getPostedData('selprod_id');
         $selprod_id_arr = !empty($selprod_id_arr) ? array_filter($selprod_id_arr) : array();
         if (!empty($selprod_id_arr) && is_array($selprod_id_arr)) {
             $successCount = 0;
             $hasError = false;
             foreach ($selprod_id_arr as $selprod_id) {
-                $sellerProductRow = SellerProduct::getAttributesById($selprod_id, ['selprod_stock', 'selprod_min_order_qty'], false);
+                $sellerProductRow = SellerProduct::getAttributesById($selprod_id, ['selprod_stock', 'selprod_min_order_qty', 'selprod_user_id', 'selprod_cart_type'], false);
                 if (empty($sellerProductRow)) {
                     $hasError = true;
+                    continue;
+                }
+
+                $shopRfqEnabled = $shopRfqEnabledArr[$sellerProductRow['selprod_user_id']] ?? null;
+                if (null == $shopRfqEnabled) {
+                    $shopRfqEnabled = Shop::getAttributesByUserId($sellerProductRow['selprod_user_id'], 'shop_rfq_enabled');
+                    $shopRfqEnabledArr[$sellerProductRow['selprod_user_id']] = $shopRfqEnabled;
+                }
+
+                if (RequestForQuote::isCartTypeRfqOnly($shopRfqEnabled, $sellerProductRow['selprod_cart_type'])) {
+                    $rfqOnly = $hasError = true;
                     continue;
                 }
 
@@ -358,11 +387,23 @@ class CartController extends MyAppController
             }
 
             if (true === $hasError) {
-                $msg = Labels::getLabel('ERR_INVALID_PRODUCTS/_PRODUCT`S_MIN_ORDER_QUANTITY_IS_HIGHER_THAN_STOCK_LIMIT._CANNOT_BE_ADDED');
-                if (0 < $successCount) {
-                    $msg = Labels::getLabel('ERR_SOME_OF_THE_PRODUCTS_ARE_INVALID/_PRODUCT`S_MIN_ORDER_QUANTITY_IS_HIGHER_THAN_STOCK_LIMIT._CANNOT_BE_ADDED');
+                if ($rfqOnly) {
+                    if (0 < $successCount) {
+                        $msg = Labels::getLabel('ERR_SOME_OF_THE_ITEMS_ARE_RFQ_ONLY_SO_CANNOT_BE_ADDED_TO_CART');
+                    } else {
+                        $msg = Labels::getLabel('ERR_RFQ_ONLY_ITEMS_CANNOT_BE_ADDED_TO_CART');
+                    }
+                } else {
+                    $msg = Labels::getLabel('ERR_INVALID_PRODUCTS/_PRODUCT`S_MIN_ORDER_QUANTITY_IS_HIGHER_THAN_STOCK_LIMIT._CANNOT_BE_ADDED');
+                    if (0 < $successCount) {
+                        $msg = Labels::getLabel('ERR_SOME_OF_THE_PRODUCTS_ARE_INVALID/_PRODUCT`S_MIN_ORDER_QUANTITY_IS_HIGHER_THAN_STOCK_LIMIT._CANNOT_BE_ADDED');
+                    }
                 }
-                LibHelper::exitWithError($msg, true);
+                $error = [
+                    'successCount' => $successCount,
+                    'msg' => $msg
+                ];
+                LibHelper::exitWithError($error, true);
             }
 
             if (0 < $successCount) {
@@ -395,8 +436,35 @@ class CartController extends MyAppController
             $productErr['product'] = $message;
         }
 
+        $advanceEcommerce = FatApp::getConfig('CONF_ANALYTICS_ADVANCE_ECOMMERCE', FatUtility::VAR_INT, 0);
+        $ga4 = FatApp::getConfig('CONF_GOOGLE_ANALYTICS_4', FatUtility::VAR_INT, 0);
+        $loggedUserId = UserAuthentication::getLoggedUserId(true);
+
         $cartItems = [];
+        $shopRfqEnabledArr = [];
         foreach ($productsToAdd as $productId => $quantity) {
+            if ($quantity == 0) {
+                $quantity = 1;
+            }
+            $selprodProducData = SellerProduct::getAttributesById($productId, ['selprod_product_id', 'selprod_user_id', 'selprod_cart_type']);
+            $selprodProductId = $selprodProducData['selprod_product_id'];
+            $cartType = $selprodProducData['selprod_cart_type'];
+            $shopRfqEnabled = $shopRfqEnabledArr[$selprodProducData['selprod_user_id']] ?? null;
+            if (null == $shopRfqEnabled) {
+                $shopRfqEnabled = Shop::getAttributesByUserId($selprodProducData['selprod_user_id'], 'shop_rfq_enabled');
+                $shopRfqEnabledArr[$selprodProducData['selprod_user_id']] = $shopRfqEnabled;
+            }
+
+            if (RequestForQuote::isCartTypeRfqOnly($shopRfqEnabled, $cartType) && 1 > FatApp::getPostedData('isAddToQuote', FatUtility::VAR_INT, 0)) {
+                $message = Labels::getLabel('ERR_SOME_OF_THE_ITEMS_ARE_RFQ_ONLY_SO_CANNOT_BE_ADDED_TO_CART', $this->siteLangId);
+                if ($productId != $selprod_id) {
+                    $productErr['addon'][$productId] = $message;
+                } else {
+                    $productErr['product'] = $message;
+                }
+                continue;
+            }
+
             if ($productId <= 0) {
                 $productAdd = false;
                 $message = Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId);
@@ -410,14 +478,14 @@ class CartController extends MyAppController
                 }
             }
             $srch = new ProductSearch($this->siteLangId);
-            $srch->setDefinedCriteria();
+            $srch->setDefinedCriteria(0, 0, ['product_id' => $selprodProductId]);
             $srch->joinBrands();
             $srch->joinSellerSubscription();
             $srch->addSubscriptionValidCondition();
             $srch->joinProductToCategory();
             $srch->addCondition('pricetbl.selprod_id', '=', 'mysql_func_' . $productId, 'AND', true);
             $srch->addCondition('selprod_deleted', '=', 'mysql_func_' . applicationConstants::NO, 'AND', true);
-            $srch->addMultipleFields(array('selprod_id', 'selprod_code', 'selprod_min_order_qty', 'selprod_stock', 'COALESCE(product_name, product_identifier) as product_name', 'prodcat_name', 'brand_name', 'selprod_title', 'selprod_price', 'COALESCE(splprice_price, selprod_price) as theprice'));
+            $srch->addMultipleFields(array('selprod_id', 'selprod_code', 'selprod_min_order_qty', 'selprod_cart_type', 'selprod_hide_price', 'selprod_stock', 'COALESCE(product_name, product_identifier) as product_name', 'prodcat_name', 'brand_name', 'selprod_title', 'selprod_price', 'COALESCE(splprice_price, selprod_price) as theprice', 'shop_rfq_enabled'));
             $srch->doNotCalculateRecords();
             $srch->setPageSize(1);
             $rs = $srch->getResultSet();
@@ -485,10 +553,7 @@ class CartController extends MyAppController
                 }
             }
             /* ] */
-
-            /* product availability date check covered in product search model[ ] */
-            $loggedUserId = UserAuthentication::getLoggedUserId(true);
-            $cartObj = new Cart($loggedUserId, $this->siteLangId, $this->app_user['temp_user_id']);
+            
 
             /* cannot add quantity more than stock of the product[ */
             $selprod_stock = $sellerProductRow['selprod_stock'] - Product::tempHoldStockCount($productId);
@@ -506,11 +571,13 @@ class CartController extends MyAppController
                 }
             }
             /* ] */
-            $advanceEcommerce = FatApp::getConfig('CONF_ANALYTICS_ADVANCE_ECOMMERCE', FatUtility::VAR_INT, 0);
-            $ga4 = FatApp::getConfig('CONF_GOOGLE_ANALYTICS_4', FatUtility::VAR_INT, 0);
+
+            $cartObj = new Cart($loggedUserId, $this->siteLangId, $this->app_user['temp_user_id']);
+            
             if ($productAdd) {
+                $cObj = clone $cartObj;
                 $returnUserId = (true === MOBILE_APP_API_CALL) ? true : false;
-                $cartUserId = $cartObj->add($productId, $quantity, 0, $returnUserId);
+                $cartUserId = $cObj->add($productId, $quantity, 0, $returnUserId);
                 if ($advanceEcommerce) {
                     if (0 == $ga4) {
                         $et = new EcommerceTracking(Labels::getLabel('MSG_PRODUCT_DETAIL', $this->siteLangId), UserAuthentication::getLoggedUserId(true));
@@ -551,7 +618,8 @@ class CartController extends MyAppController
 
             $this->set('msg', Labels::getLabel("MSG_ADDED_TO_CART", $this->siteLangId));
         }
-        $this->set('total', $cartObj->countProducts());
+
+        $this->set('total', (isset($cartObj) ? $cartObj->countProducts() : 0));
     }
 
     public function remove()
@@ -821,7 +889,9 @@ class CartController extends MyAppController
         $offCanvasHtml = $this->_template->render(false, false, '_partial/cart-summary.php', true);
         $jsonData = [
             'buttonHtml' => $buttonHtml,
-            'offCanvasHtml' => $offCanvasHtml
+            'offCanvasHtml' => $offCanvasHtml,
+            'onlyRfqItemsLeft' => ($cartObj->countProducts() == $cartObj->countRfqOnlyProducts()),
+            'itemsCount' => $cartObj->countProducts()
         ];
         LibHelper::exitWithSuccess($jsonData, true);
     }

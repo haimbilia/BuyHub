@@ -1,73 +1,161 @@
+.section-banner {
+  padding: 0;
+}
+
 .banner-wrappers {
-    .banner-ppc {
-        border-radius: $common-radius;
-        overflow: hidden;
-        .advertise__block {
-            margin-bottom: 2rem;
-            display: block;
-        }
-        img {
-            margin: 0 auto;
-            display: inline-block;
-        }
+  .banner-ppc {
+    border-radius: $common-radius;
+    overflow: hidden;
+
+    .advertise__block {
+      margin-bottom: 2rem;
+      display: block;
     }
+
+    img {
+      margin: 0 auto;
+      display: inline-block;
+    }
+  }
+}
+
+.poster-layout {
+  display: grid;
+  grid-gap: $gap;
+
+  @include media-breakpoint-down(sm) {
+    //display: block;
+  }
+
+  &[data-view="2"] {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  &[data-view="3"] {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .poster {
+    background: $bg-placeholder;
+    border-radius: $kart;
+    text-align: center;
+    aspect-ratio: 4/3;
+    position: relative;
+    overflow: hidden;
+
+    &:before {
+      position: absolute;
+      top: 0;
+      left: -75%;
+      z-index: 2;
+      display: block;
+      content: "";
+      width: 50%;
+      height: 100%;
+      background: -webkit-linear-gradient(left,
+          rgba(255, 255, 255, 0) 0%,
+          rgba(255, 255, 255, 0.3) 100%);
+      background: linear-gradient(to right,
+          rgba(255, 255, 255, 0) 0%,
+          rgba(255, 255, 255, 0.3) 100%);
+      transform: skewX(-25deg);
+    }
+
+    &:hover::before {
+      animation: shine 0.75s;
+    }
+
+    @-webkit-keyframes shine {
+      100% {
+        left: 125%;
+      }
+    }
+
+    @keyframes shine {
+      100% {
+        left: 125%;
+      }
+    }
+
+    img {
+      object-fit: cover;
+      height: 100%;
+      width: 100%;
+    }
+  }
 }
 
 .poster-layout-1 {
-    padding: 0;
-    .poster {
-        text-align: center;
-        background: $bg-placeholder;
-        aspect-ratio: 3/1;
-        img {
-            width: 100%;
-        }
+  padding: 0;
+
+  .poster {
+    background: $bg-placeholder;
+    border-radius: $kart;
+    text-align: center;
+    aspect-ratio: 3/1;
+    overflow: hidden;
+
+    img {
+      width: 100%;
     }
+  }
 }
 
 .poster-layout-2 {
-    display: grid;
-    grid-gap: 10px;
-    grid-template-columns: 1fr 1fr;
-    @include media-breakpoint-down(sm) {
-        //display: block;
+  display: grid;
+  grid-gap: $gap;
+  padding: 0;
+
+  &[data-view="3"] {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .poster {
+    background: $bg-placeholder;
+    border-radius: $kart;
+    text-align: center;
+    aspect-ratio: 2/1;
+    position: relative;
+    overflow: hidden;
+
+    &:before {
+      position: absolute;
+      top: 0;
+      left: -75%;
+      z-index: 2;
+      display: block;
+      content: "";
+      width: 50%;
+      height: 100%;
+      background: -webkit-linear-gradient(left,
+          rgba(255, 255, 255, 0) 0%,
+          rgba(255, 255, 255, 0.3) 100%);
+      background: linear-gradient(to right,
+          rgba(255, 255, 255, 0) 0%,
+          rgba(255, 255, 255, 0.3) 100%);
+      transform: skewX(-25deg);
     }
-    .poster {
-        text-align: center;
-        background: $bg-placeholder;
-        aspect-ratio: 4/3;
-        position: relative;
-        overflow: hidden;
-        &:before {
-            position: absolute;
-            top: 0;
-            left: -75%;
-            z-index: 2;
-            display: block;
-            content: "";
-            width: 50%;
-            height: 100%;
-            background: -webkit-linear-gradient(left, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.3) 100%);
-            background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.3) 100%);
-            transform: skewX(-25deg);
-        }
-        &:hover::before {
-            animation: shine 0.75s;
-        }
-        @-webkit-keyframes shine {
-            100% {
-                left: 125%;
-            }
-        }
-        @keyframes shine {
-            100% {
-                left: 125%;
-            }
-        }
-        img {
-            object-fit: cover;
-            height: 100%;
-            width: 100%;
-        }
+
+    &:hover::before {
+      animation: shine 0.75s;
     }
+
+    @-webkit-keyframes shine {
+      100% {
+        left: 125%;
+      }
+    }
+
+    @keyframes shine {
+      100% {
+        left: 125%;
+      }
+    }
+
+    img {
+      object-fit: cover;
+      height: 100%;
+      width: 100%;
+    }
+  }
 }

@@ -1,8 +1,10 @@
 .section {
     padding: calc(1rem + 4vw) 0;
+
     @include media-breakpoint-down(sm) {
         padding: calc(1rem + 3vw) 0;
     }
+
     &-head {
         width: 100%;
         margin-bottom: 0.5rem;
@@ -12,36 +14,44 @@
         flex-flow: row wrap;
         gap: 1.5rem;
         overflow: auto;
+
         @include media-breakpoint-up(lg) {
             margin-bottom: 2.5rem;
         }
+
         &-center {
             justify-content: center;
             text-align: center;
         }
     }
+
     &-heading {
         color: $txt-body;
         display: inline-block;
+
         h1,
         h2,
         h3,
         h4 {
             font-weight: 500;
         }
+
         h1,
         h2 {
             font-size: clamp(1.2rem, 2vw, 3rem);
-            > span {
+
+            >span {
                 display: block;
                 font-size: 0.875rem;
                 text-align: center;
             }
+
             .search-results {
                 font-size: 2rem;
                 display: inline-block;
             }
         }
+
         p {
             font-size: 1rem;
             font-weight: $font-weight-light;
@@ -51,6 +61,7 @@
     &-action {
         // overflow: auto;
     }
+
     &-foot {
         text-align: center;
         margin-top: 1.5rem;
@@ -65,6 +76,7 @@
     text-align: center;
     position: relative;
     color: #fff;
+
     &:after {
         background: rgba(36, 40, 56, 0.75);
         height: 100%;
@@ -77,6 +89,7 @@
         right: 0;
         z-index: 0;
     }
+
     .container {
         z-index: 1;
         position: relative;
@@ -87,26 +100,32 @@
     h1 {
         font-weight: 400;
     }
+
     h2 {
         font-weight: 400;
     }
+
     h3 {
         font-size: 1.5rem;
         color: #000;
         font-weight: 400;
     }
+
     h4 {
         font-size: 1.25rem;
         font-weight: 400;
     }
+
     h5 {
         font-size: 1rem;
         font-weight: 400;
     }
+
     h6 {
         font-size: 0.875rem;
         font-weight: 400;
     }
+
     p {
         font-size: 0.875rem;
         line-height: 1.8;
@@ -115,12 +134,15 @@
         font-weight: $font-weight-light;
         color: $txt-gray;
     }
+
     &.space {
         padding: 50px 0;
     }
+
     ul {
         margin: 10px 0;
         color: $txt-body;
+
         li {
             position: relative;
             padding: 5px 0;
@@ -128,6 +150,7 @@
             color: inherit;
             list-style: disc;
             display: list-item;
+
             ul {
                 li {
                     font-size: 0.875rem;
@@ -135,8 +158,10 @@
             }
         }
     }
+
     ol {
         list-style: decimal;
+
         li {
             position: relative;
             padding: 0 0 15px 0;
@@ -144,14 +169,17 @@
             margin: 0;
             font-size: 1.1em;
         }
+
         a {
             color: inherit;
         }
     }
+
     table {
         th {
             font-weight: 600;
         }
+
         th,
         td {
             padding: 10px;
@@ -164,39 +192,48 @@
 .list-vertical {
     margin: 0;
     padding: 0;
+
     li {
         padding: 5px 0;
         display: block;
         position: relative;
         border: none !important;
-        > label {
+
+        >label {
             display: block;
         }
+
         .divider {
             margin: 0;
         }
+
         span {
             color: $txt-body;
         }
+
         &.logout {
             a {
                 color: #000;
                 font-weight: 600;
             }
         }
+
         &:last-child {
             border-bottom: none;
         }
+
         &.is-active {
             a {
                 color: #555555;
                 font-weight: 700;
             }
         }
+
         .parents--link {
             position: relative;
             display: block;
             cursor: pointer;
+
             &:after {
                 position: absolute;
                 content: "+";
@@ -207,19 +244,23 @@
                 top: -4px;
             }
         }
+
         &.seprator {
             border-top: $border;
             padding-top: 10px;
             margin-top: 10px;
         }
     }
+
     .remove_buyTogether {
         margin-#{$end-direction}: 10px;
         cursor: pointer;
+
         &:hover {
             color: $brand-color;
         }
     }
+
     a {
         color: $txt-body;
         display: block;
@@ -233,16 +274,20 @@
         transition: all 0.2s linear;
         padding: 5px 0;
     }
+
     img {
         display: inline-block;
         vertical-align: middle;
         margin-#{$end-direction}: 5px;
     }
+
     .childs {
         display: none;
+
         &.opened {
             display: block;
         }
+
         li {
             font-size: 0.95em;
             margin: 4px 0;
@@ -260,6 +305,7 @@
         text-overflow: ellipsis;
         white-space: nowrap;
         margin: 0.5rem 0;
+
         a {
             color: #666;
             font-size: 14px;
@@ -268,6 +314,7 @@
             position: relative;
             min-height: 22px;
             display: block;
+
             &:before {
                 height: 20px;
                 width: 20px;
@@ -279,6 +326,7 @@
                 border-radius: $radius2;
             }
         }
+
         &.is-active {
             a {
                 &:before {
@@ -286,6 +334,7 @@
                     color: $brand-color-inverse;
                     border-color: $brand-color;
                 }
+
                 &:after {
                     height: 12px;
                     width: 7px;
@@ -313,6 +362,7 @@
         padding: 0 0 8px 18px;
         font-size: 0.875em;
         color: $txt-body;
+
         &:before {
             position: absolute;
             #{$start-direction}: 0;
@@ -330,6 +380,7 @@
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
+
     @include media-breakpoint-down(md) {
         justify-content: flex-start;
     }
@@ -339,14 +390,17 @@
     li {
         padding: 10px 1rem;
         display: flex;
+
         .fa {
             font-size: 2.5em;
             opacity: 0.6;
             margin: 0 20px 0 0;
             width: 2.5rem;
         }
+
         p {
             font-size: 0.875rem;
+
             strong {
                 display: block;
                 opacity: 1;
@@ -359,22 +413,27 @@
 .links-inline {
     color: $txt-body;
     display: flex;
-    gap: 10px;
+    gap: 0.5rem;
     width: 100%;
+
     &-center {
         justify-content: center;
     }
+
     li {
         font-size: 0.875rem;
         padding-bottom: 5px;
         padding-#{$end-direction}: 1rem;
+
         a {
             color: inherit;
+
             &:hover {
                 color: inherit;
                 text-decoration: underline;
             }
         }
+
         .fa {
             margin: 0 5px 0 0;
         }
@@ -410,6 +469,7 @@ span.subheading {
     font-weight: $font-weight-light;
     font-size: 1.2rem;
 }
+
 .txt-sm {
     font-size: 0.8rem;
 }

@@ -28,6 +28,7 @@ class Configurations extends FatModel
     public const FORM_USER_ACCOUNT = 21;
     public const FORM_CART_WISHLIST = 22;
     public const FORM_COMMISSION = 23;
+    public const FORM_RFQ = 24;
 
     public const MESSAGE_AUTOCLOSE_TIME = 3;
 
@@ -68,6 +69,7 @@ class Configurations extends FatModel
             Configurations::FORM_REWARD_POINTS => Labels::getLabel('NAV_REWARD_POINTS', $langId),
             Configurations::FORM_REFERAL => Labels::getLabel('NAV_REFERAL_(_APPLICABLE_FOR_WEB_INTERFACE_ONLY_)', $langId),
             Configurations::FORM_COMMISSION => Labels::getLabel('NAV_WEBSITE_COMMISION', $langId),
+            Configurations::FORM_RFQ => Labels::getLabel('NAV_REQUEST_FOR_QUOTE_(RFQ)', $langId),
             Configurations::FORM_AFFILIATE => Labels::getLabel('NAV_AFFILIATE', $langId),
             Configurations::FORM_SUBSCRIPTION => Labels::getLabel('NAV_SUBSCRIPTION', $langId),
             Configurations::FORM_SEO => Labels::getLabel('NAV_SEO', $langId),
@@ -100,6 +102,7 @@ class Configurations extends FatModel
             Configurations::FORM_CHECKOUT_PROCESS => Labels::getLabel('NAV_SETUP_COD,_WALLET_BALANCE,_ORDER_STATUS_AND_MORE', $langId),
             Configurations::FORM_COMMISSION => Labels::getLabel('NAV_SETUP_COMMISSION_ON_TAX_AND_SHIPPING', $langId),
             Configurations::FORM_DISCOUNT => Labels::getLabel('NAV_SETUP_DISCOUNT_COUPONS,_MINIMUM_ORDER_VALUE_AND_MORE', $langId),
+            Configurations::FORM_RFQ => Labels::getLabel('NAV_REQUEST_FOR_QUOTE', $langId),
             Configurations::FORM_REWARD_POINTS => Labels::getLabel('NAV_SETUP_BIRTHDAY_REWARDS,_YEAR-END_REWARDS_AND_MORE', $langId),
             Configurations::FORM_AFFILIATE => Labels::getLabel('NAV_SETUP_AFFILIATE\'S_SIGNUP_COMMISSION,_COMMISSION_VALIDITY_AND_MORE', $langId),
             Configurations::FORM_REVIEWS => Labels::getLabel('NAV_SETUP_REVIEWS_MODULE_VISIBILITY_AND_DEFAULT_STATUS', $langId),
@@ -202,6 +205,7 @@ class Configurations extends FatModel
             self::FORM_SYSTEM => 'system',
             self::FORM_LIVE_CHAT => 'live-chat',
             self::FORM_PPC => 'ppc',
+            self::FORM_RFQ => 'request-quote',
             /* self::FORM_SERVER => 'server', */
         ];
     }

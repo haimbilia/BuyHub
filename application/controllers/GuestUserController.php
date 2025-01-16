@@ -199,9 +199,10 @@ class GuestUserController extends MyAppController
             }
 
             $userInfo = $uObj->getUserInfo(array('user_name', 'user_id', 'user_phone_dcode', 'user_phone', 'credential_email'), true, true, true);
-
+            $appSessionId = isset($_SERVER['HTTP_X_APP_SESSION_ID']) && !empty($_SERVER['HTTP_X_APP_SESSION_ID']) ? $_SERVER['HTTP_X_APP_SESSION_ID'] : session_id();
             $this->set('token', $token);
             $this->set('userInfo', $userInfo);
+            $this->set('app_session_id', $appSessionId);
             $this->_template->render();
         }
 
@@ -672,7 +673,7 @@ class GuestUserController extends MyAppController
 
         $db->commitTransaction();
 
-        if (FatApp::getConfig('CONF_AUTO_LOGIN_REGISTRATION', FatUtility::VAR_INT, 1)  && $userdata['credential_active'] == applicationConstants::YES) {
+        if (FatApp::getConfig('CONF_AUTO_LOGIN_REGISTRATION', FatUtility::VAR_INT, 1)  && $userdata['credential_active'] == applicationConstants::YES && !UserAuthentication::isGuestUserLogged()) {
             $authentication = new UserAuthentication();
             if (!$authentication->login($userdata['credential_email'], $userdata['credential_password'], $_SERVER['REMOTE_ADDR'], false)) {
                 Message::addErrorMessage(Labels::getLabel($authentication->getError(), $this->siteLangId));
@@ -681,8 +682,12 @@ class GuestUserController extends MyAppController
             FatApp::redirectUser(UrlHelper::generateUrl('Account', '', [], CONF_WEBROOT_DASHBOARD, null, false, false, false));
         }
 
-        Message::addMessage(Labels::getLabel("MSG_EMAIL_VERIFIED", $this->siteLangId));
+        if (UserAuthentication::isGuestUserLogged()) {
+            Message::addMessage(Labels::getLabel("MSG_EMAIL_VERIFIED._PLEASE_UPDATE_YOUR_NEW_PASSWORD", $this->siteLangId));
+            FatApp::redirectUser(UrlHelper::generateUrl('Account', 'changeEmailPassword', [], CONF_WEBROOT_DASHBOARD, null, false, false, false));
+        }
 
+        Message::addMessage(Labels::getLabel("MSG_EMAIL_VERIFIED", $this->siteLangId));
         FatApp::redirectUser(UrlHelper::generateUrl('GuestUser', 'loginForm', [], CONF_WEBROOT_FRONTEND));
     }
 

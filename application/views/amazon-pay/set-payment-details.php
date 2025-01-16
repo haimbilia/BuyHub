@@ -18,7 +18,7 @@
 		if(isset($success))
 			echo '<div class="success-message" style="color:green;"><p>Your payment has been successfull.</p></div>';
 		
-		if(strlen($orderId) > 0 && $orderInfo["order_payment_status"] == Orders::ORDER_PAYMENT_PENDING ){ ?>
+		if(strlen((string)$orderId) > 0 && $orderInfo["order_payment_status"] == Orders::ORDER_PAYMENT_PENDING ){ ?>
 			<div class="text-center" style="margin-top:40px;">
 				<div id="addressBookWidgetDiv" style="width:400px; height:240px; display:inline-block;"></div>
 				<div id="walletWidgetDiv" style="width:400px; height:240px; display:inline-block;"></div>
@@ -35,8 +35,8 @@
   </div>
 </div>
 <?php 
-if(isset($amazon) && strlen($orderId) > 0 &&  $orderInfo["order_payment_status"] == Orders::ORDER_PAYMENT_PENDING){
-	if( strlen($amazon['merchant_id']) > 0 && strlen($amazon['access_key']) > 0 && strlen($amazon['secret_key']) > 0 && strlen($amazon['client_id']) > 0 && strlen(FatApp::getConfig('CONF_TRANSACTION_MODE',FatUtility::VAR_STRING,'0')) > 0) {
+if(isset($amazon) && strlen((string)$orderId) > 0 &&  $orderInfo["order_payment_status"] == Orders::ORDER_PAYMENT_PENDING){
+	if( strlen((string)$amazon['merchant_id']) > 0 && strlen((string)$amazon['access_key']) > 0 && strlen((string)$amazon['secret_key']) > 0 && strlen((string)$amazon['client_id']) > 0 && strlen(FatApp::getConfig('CONF_TRANSACTION_MODE',FatUtility::VAR_STRING,'0')) > 0) {
 		?>
 		<script type="text/javascript">
 			var redirectAfterSuccess = '<?php echo UrlHelper::generateUrl('custom', 'paymentSuccess', array($orderNo), CONF_WEBROOT_URL); ?>';

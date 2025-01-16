@@ -276,6 +276,7 @@ $products = $orderInfo['orderProducts'];
                                                         <li class="list-cart-item"><?php echo Labels::getLabel("LBL_ACTIVE_PRODUCTS", $siteLangId); ?> <span><?php echo $subscription['ossubs_products_allowed']; ?></span></li>
                                                         <li class="list-cart-item"><?php echo Labels::getLabel("LBL_PRODUCT_INVENTORY", $siteLangId); ?> <span><?php echo $subscription['ossubs_inventory_allowed']; ?></span></li>
                                                         <li class="list-cart-item"><?php echo Labels::getLabel("LBL_IMAGES_PER_PRODUCT", $siteLangId); ?> <span><?php echo $subscription['ossubs_images_allowed']; ?></span></li>
+                                                        <li class="list-cart-item"><?php echo Labels::getLabel("LBL_RFQ_OFFERS", $siteLangId); ?> <span><?php echo $subscription['ossubs_rfq_offers_allowed']; ?></span></li>
                                                 <?php }
                                                 } ?>
                                             </ul>

@@ -61,4 +61,18 @@ class SellerBaseController extends LoggedUserController
         $this->set('html', $this->_template->render(false, false, 'cropper/index.php', true));
         $this->_template->render(false, false, 'json-success.php', true, false);
     }
+    
+    protected function isShopActive($userId, $shopId = 0, $returnResult = false)
+    {
+        $shop = new Shop($shopId, $userId);
+        if (false == $returnResult) {
+            return $shop->isActive();
+        }
+
+        if ($shop->isActive()) {
+            return $shop->getData();
+        }
+
+        return false;
+    }
 }

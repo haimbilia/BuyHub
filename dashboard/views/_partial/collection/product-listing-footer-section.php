@@ -1,25 +1,28 @@
 <div class="products-foot">
     <?php /* if(round($product['prod_rating'])>0 && FatApp::getConfig("CONF_ALLOW_REVIEWS",FatUtility::VAR_INT,0)){ ?>
-    <?php if(round($product['prod_rating'])>0 ){ ?>
-    <div class="products__rating"> <i class="icn"><svg class="svg">
-        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow" href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow"></use>
-        </svg></i> <?php if(round($product['prod_rating'])>0 ){ ?>
-      <span class="rate"><?php echo round($product['prod_rating'],1);?></span>
-      <?php } ?>
-          <?php if(isset($firstToReview) && $firstToReview){ ?>
-          <?php if(round($product['prod_rating'])==0 ){  ?>
-          <span class="be-first"> <a href="javascript:void(0)"><?php echo Labels::getLabel('LBL_Be_the_first_to_review_this_product', $siteLangId); ?> </a> </span>
-          <?php } ?>
-      <?php }?>
-    </div>
+<?php if(round($product['prod_rating'])>0 ){ ?>
+<div class="products__rating"> <i class="icn"><svg class="svg svg-star">
+           <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow"
+               href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow"></use>
+       </svg></i> <?php if(round($product['prod_rating'])>0 ){ ?>
+   <span class="rate"><?php echo round($product['prod_rating'],1);?></span>
+   <?php } ?>
+   <?php if(isset($firstToReview) && $firstToReview){ ?>
+   <?php if(round($product['prod_rating'])==0 ){  ?>
+   <span class="be-first"> <a
+           href="javascript:void(0)"><?php echo Labels::getLabel('LBL_Be_the_first_to_review_this_product', $siteLangId); ?>
+       </a> </span>
+   <?php } ?>
+   <?php }?>
+</div>
 <?php }  ?>
-    <?php } */ ?>
-    <div class="products-category">
-        <a href="<?php echo UrlHelper::generateUrl('Category', 'View', array($product['prodcat_id']), CONF_WEBROOT_FRONTEND); ?>"><?php echo $product['prodcat_name']; ?> </a>
-    </div>
-    <div class="products-title">
-        <a title="<?php echo $product['selprod_title']; ?>" href="<?php echo UrlHelper::generateUrl('Products', 'View', array($product['selprod_id']), CONF_WEBROOT_FRONTEND); ?>">
-            <?php echo $product['selprod_title']; ?> </a>
-    </div>
+<?php } */ ?>
+    <a class="products-category"
+        href="<?php echo UrlHelper::generateUrl('Category', 'View', array($product['prodcat_id']), CONF_WEBROOT_FRONTEND); ?>"><?php echo $product['prodcat_name']; ?>
+    </a>
+    <a class="products-title" title="<?php echo $product['selprod_title']; ?>"
+        href="<?php echo UrlHelper::generateUrl('Products', 'View', array($product['selprod_id']), CONF_WEBROOT_FRONTEND); ?>">
+        <?php echo $product['selprod_title']; ?> </a>
+
     <?php include(CONF_THEME_PATH . '_partial/collection/product-price.php'); ?>
 </div>

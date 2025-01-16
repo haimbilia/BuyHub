@@ -235,7 +235,7 @@ class MyAppModel extends FatModel
         return $row;
     }
 
-    public static function getAttributesByLangId($langId, $recordId, $attr = null, ?int $primaryTableJoinType = NULL, $active = NULL, $deleted =  NULL)
+    public static function getAttributesByLangId($langId, $recordId, $attr = null, int $primaryTableJoinType = NULL, $active = NULL, $deleted =  NULL)
     {
         $recordId = FatUtility::convertToType($recordId, FatUtility::VAR_INT);
         $langId = FatUtility::convertToType($langId, FatUtility::VAR_INT);
@@ -254,7 +254,7 @@ class MyAppModel extends FatModel
         } else {
             $srch = new SearchBase(static::DB_TBL . '_lang', 'ln');
         }
-
+       
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
         $prefix = substr(static::DB_TBL_PREFIX, 0, -1);

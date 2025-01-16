@@ -1,115 +1,139 @@
 .brand-layout-1 {
-    display: flex;
-    gap: 1rem;
-    flex: 0 0 100%;
-    @include media-breakpoint-down(lg) {
-        overflow-x: auto;
-        padding: 2px;
-        flex-flow: row;
-    }
-    @include media-breakpoint-up(lg) {
-        gap: 3rem;
-        flex-flow: row wrap;
-        justify-content: center;
-    }
-    .brand {
-        min-width: 200px;
-        &-logo {
-            flex: 1 0 140px;
-            @include media-breakpoint-down(lg) {
-                min-width: 200px;
-            }
-            aspect-ratio: 16/9;
-            display: flex;
-            align-items: center;
-            justify-items: center;
-            padding: 10px;
-            margin: 0;
-            background-color: #fff;
-            box-shadow: $shadow4;
-            border-radius: $radius2;
-            img {
-                margin: 0 auto;
-                // max-width: 100px;
-                // margin: auto;
-                // object-fit: cover;
-                //width: 100%;
-                &[data-ratio="16:9"] {
-                    max-width: 120px;
-                }
-                &[data-ratio="1:1"] {
-                    max-width: 60px;
-                }
-            }
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  // grid-template-columns: repeat(auto-fill, minmax(min(100%, 165px), 1fr));
+  // grid-auto-flow: column;
+  gap: 0.5rem;
+  flex: 0 0 100%;
+
+  @include media-breakpoint-down(lg) {
+    overflow-x: auto;
+    padding: 2px;
+  }
+
+  @include media-breakpoint-up(lg) {
+    gap: $gap;
+  }
+
+  .brand {
+
+    // max-width: 350px;
+    //min-width: 180px;
+    &-logo {
+      background-color: #fff;
+      border: $border;
+      border-radius: $kart;
+      overflow: hidden;
+      height: 100%;
+      flex: 1 0 140px;
+      aspect-ratio: 16/9;
+      display: flex;
+      align-items: center;
+      justify-items: center;
+      padding: 10px;
+      margin: 0;
+
+      @include media-breakpoint-up(lg) {
+        // min-width: 200px;
+      }
+
+      img {
+        margin: 0 auto;
+
+        // max-width: 100px;
+        // margin: auto;
+        // object-fit: cover;
+        //width: 100%;
+        &[data-ratio="16:9"] {
+          max-width: 120px;
         }
+
+        &[data-ratio="1:1"] {
+          max-width: 60px;
+        }
+      }
     }
+  }
 }
+
 .brand-layout-2 {
-    display: grid;
-    grid-gap: 1rem;
-    flex: 0 0 100%;
-    @include media-breakpoint-down(lg) {
-        grid-auto-flow: column;
-        overflow-x: auto;
-        padding: 2px;
-    }
+  display: grid;
+  grid-gap: 1rem;
+  flex: 0 0 100%;
+
+  @include media-breakpoint-down(lg) {
+    grid-auto-flow: column;
+    overflow-x: auto;
+    padding: 2px;
+  }
+
+  @include media-breakpoint-up(lg) {
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    grid-gap: $gap;
+  }
+
+  .brand {
+    border-radius: $kart;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    outline: $border;
+    min-width: 200px;
+
     @include media-breakpoint-up(lg) {
-        grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-        grid-gap: 2rem;
+      min-width: none;
     }
-    .brand {
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        outline: $border;
-        min-width: 200px;
-        @include media-breakpoint-up(lg) {
-            min-width: none;
-        }
-        //box-shadow: rgba(0, 0, 0, 0.22) 0px 0px 2px;
-        &:nth-child(even) {
-            flex-direction: column-reverse;
-        }
-        &-logo {
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-items: center;
-            padding: 1rem;
-            margin: 0;
-            position: relative;
-            aspect-ratio: 16/9;
-            box-shadow: rgba(0, 0, 0, 0.11) 0px 0px 2px;
-            img {
-                position: absolute;
-                left: 0;
-                right: 0;
-                object-fit: contain;
-                margin: auto;
-                width: 100%;
-                height: 100%;
-                &[data-ratio="16:9"] {
-                    max-width: 120px;
-                }
-                &[data-ratio="1:1"] {
-                    max-width: 60px;
-                }
-            }
-        }
-        &-thumb {
-            aspect-ratio: 1/1;
-            display: flex;
-            //align-items: center;
-            justify-content: center;
-            background-color: $bg-light;
-            img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-                margin: auto;
-                //border: solid 1px #f5f6f8;
-                // mix-blend-mode: multiply;
-            }
-        }
+
+    //box-shadow: rgba(0, 0, 0, 0.22) 0px 0px 2px;
+    &:nth-child(even) {
+      flex-direction: column-reverse;
     }
+
+    &-logo {
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-items: center;
+      padding: 1rem;
+      margin: 0;
+      position: relative;
+      aspect-ratio: 16/9;
+      box-shadow: rgba(0, 0, 0, 0.11) 0px 0px 2px;
+
+      img {
+        position: absolute;
+        left: 0;
+        right: 0;
+        object-fit: contain;
+        margin: auto;
+        width: 100%;
+        height: 100%;
+
+        &[data-ratio="16:9"] {
+          max-width: 120px;
+        }
+
+        &[data-ratio="1:1"] {
+          max-width: 60px;
+        }
+      }
+    }
+
+    &-thumb {
+      aspect-ratio: 1/1;
+      display: flex;
+      //align-items: center;
+      justify-content: center;
+      background-color: $bg-light;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        margin: auto;
+        //border: solid 1px #f5f6f8;
+        // mix-blend-mode: multiply;
+      }
+    }
+  }
 }

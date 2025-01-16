@@ -229,6 +229,11 @@ class FilterHelper extends FatUtility
         }
 
         unset($post['doNotJoinSpecialPrice']);
+
+        if (0 < FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0)) {
+            $post['excludeProdForRfqOnly'] = true;
+        }
+
         $priceSrch = static::getSearchObj($langIdForKeywordSeach, $post);
         $priceSrch->doNotLimitRecords();
         $priceSrch->doNotCalculateRecords();

@@ -3526,8 +3526,13 @@ class Importexport extends ImportexportCommon
                 if (in_array($columnKey, array('selprod_added_on', 'selprod_available_from'))) {
                     $colValue = $this->displayDateTime($colValue);
                 }
-                if (in_array($columnKey, array('selprod_subtract_stock', 'selprod_track_inventory', 'selprod_active', 'selprod_cod_enabled', 'selprod_deleted')) && !$this->settings['CONF_USE_O_OR_1']) {
+                if (in_array($columnKey, array('selprod_subtract_stock', 'selprod_track_inventory', 'selprod_active', 'selprod_cod_enabled', 'selprod_deleted', 'selprod_hide_price')) && !$this->settings['CONF_USE_O_OR_1']) {
                     $colValue = (FatUtility::int($colValue) == 1) ? 'YES' : 'NO';
+                }
+
+                if ('selprod_cart_type' == $columnKey) {
+                    $cartTypeArr = SellerProduct::getCartType($langId);
+                    $colValue = $cartTypeArr[$row['selprod_cart_type']];
                 }
 
                 if ('selprod_fulfillment_type' == $columnKey) {
@@ -3673,6 +3678,15 @@ class Importexport extends ImportexportCommon
                             $colValue = FatUtility::int($colValue);
                             if (0 > $colValue) {
                                 $invalid = true;
+                            }
+                            break;
+                        case 'selprod_cart_type':
+                            $cartTypeArr = array_flip(SellerProduct::getCartType($langId));
+                            $colValue = $cartTypeArr[$colValue];
+                            break;
+                        case 'selprod_hide_price':
+                            if (!$this->settings['CONF_USE_O_OR_1']) {
+                                $colValue = (strtoupper($colValue) == 'YES') ? applicationConstants::YES : applicationConstants::NO;
                             }
                             break;
                         case 'selprod_fulfillment_type':

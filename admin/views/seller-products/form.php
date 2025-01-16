@@ -94,8 +94,8 @@ if (null != $fld) {
 }
 
 $fld = $frm->getField('use_shop_policy');
-HtmlHelper::configureSwitchForCheckbox($fld);
 if (null != $fld) {
+    HtmlHelper::configureSwitchForCheckbox($fld);
     $fld->developerTags['noCaptionTag'] = true;
     $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 }
@@ -109,6 +109,16 @@ if (null != $fld) {
 $fld = $frm->getField('selprod_fulfillment_type');
 if (null != $fld) {
     $fld->developerTags['colWidthValues'] = [null, '6', null, null];
+}
+
+$fld = $frm->getField('selprod_cart_type');
+if (null != $fld) {
+    $fld->developerTags['colWidthValues'] = [null, '6', null, null];
+}
+
+$fld = $frm->getField('selprod_hide_price');
+if (null != $fld) {
+    HtmlHelper::configureSwitchForCheckbox($fld);
 }
 
 $fld = $frm->getField('selprod_subtract_stock');
@@ -144,5 +154,6 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php');
             $(".selprod_cod_enabled_fld").hide();
         <?php } ?>
         $("#selprod_track_inventory").trigger('change');
+        var includeEditor = false;
     });
 </script>

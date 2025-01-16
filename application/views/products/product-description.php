@@ -2,11 +2,10 @@
 
 <div class="product-description">
     <?php include(CONF_THEME_PATH . 'products/product-info.php'); ?>
-
     <?php if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0) && $product['prod_rating'] > 0) { ?>
         <?php $label = (round($product['prod_rating']) > 0) ? round($product['totReviews'], 1) . ' ' . Labels::getLabel('LBL_Reviews', $siteLangId) : Labels::getLabel('LBL_No_Reviews', $siteLangId); ?>
         <div class="product-ratings">
-            <svg class="svg" width="14" height="14">
+            <svg class="svg svg-star" width="14" height="14">
                 <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
                 </use>
             </svg>
@@ -20,7 +19,6 @@
             <?php echo Labels::getLabel('LBL_Inclusive_All_Taxes', $siteLangId); ?>
         </p>
     <?php } ?>
-
 
     <!-- Option block -->
 
@@ -93,13 +91,15 @@
             </div>
         <?php $count++;
         } ?>
-
     <?php } ?>
-
-
     <!-- Add To Cart -->
-
     <?php
+    $acceptedOfferId = 0;
+    if (RequestForQuote::isEnabled($product['shop_rfq_enabled'], $product['selprod_cart_type'])) {
+        $acceptedOffers = $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['acceptedOffers'] ?? [];
+        $acceptedOfferId = $acceptedOffers[$product['selprod_id']]['accepted_offer_id'] ?? 0;
+    }
+
     if (0 < $currentStock && !$isOutOfMinOrderQty) {
         if (true == $displayProductNotAvailableLable && array_key_exists('availableInLocation', $product) && 0 == $product['availableInLocation']) {  ?>
             <button type="button" disabled="disabled" class="btn btn-brand btn-block mt-3">
@@ -113,46 +113,118 @@
             $qtyFieldName =  $qtyField->getCaption();
             if (strtotime($product['selprod_available_from']) <= strtotime(FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d'))) { ?>
                 <div class="options-block">
-                    <div class="options-block-head">
-                        <h6 class="h6"><?php echo $qtyFieldName; ?></h6>
-                        <div class="quantity" data-stock="<?php echo $product['selprod_stock']; ?>">
-                            <button class="decrease decrease-js disabled" type="button">
-                                <svg class="svg" width="16" height="16">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
-                                    </use>
-                                </svg>
-                            </button>
-                            <div class="qty-input-wrapper" data-stock="<?php echo $product['selprod_stock']; ?>">
-                                <?php echo $frmBuyProduct->getFieldHtml('quantity'); ?>
+                    <?php if (false === SellerProduct::isPriceHidden($product['selprod_hide_price'], $product['shop_rfq_enabled'])) { ?>
+                        <div class="options-block-head">
+                            <h6 class="h6"><?php echo $qtyFieldName; ?></h6>
+                            <div class="quantity" data-stock="<?php echo $product['selprod_stock']; ?>">
+                                <button class="decrease decrease-js disabled" type="button">
+                                    <svg class="svg" width="16" height="16">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
+                                        </use>
+                                    </svg>
+                                </button>
+                                <div class="qty-input-wrapper" data-stock="<?php echo $product['selprod_stock']; ?>">
+                                    <?php echo $frmBuyProduct->getFieldHtml('quantity'); ?>
+                                </div>
+                                <button
+                                    class="increase increase-js <?php echo $product['selprod_stock'] <= $product['selprod_min_order_qty'] ? 'disabled' : ''; ?>">
+                                    <svg class="svg" width="16" height="16">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
+                                        </use>
+                                    </svg>
+                                </button>
                             </div>
-                            <button
-                                class="increase increase-js <?php echo $product['selprod_stock'] <= $product['selprod_min_order_qty'] ? 'disabled' : ''; ?>">
-                                <svg class="svg" width="16" height="16">
-                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
-                                    </use>
-                                </svg>
-                            </button>
                         </div>
-
-                    </div>
+                    <?php } else { ?>
+                        <span class="d-none">
+                            <?php echo $frmBuyProduct->getFieldHtml('quantity'); ?>
+                        </span>
+                    <?php } ?>
                 </div>
-                <?php if (strtotime($product['selprod_available_from']) <= strtotime(FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d'))) {
-                    echo $frmBuyProduct->getFieldHtml('btnAddToCart');
-                }
-                echo $frmBuyProduct->getFieldHtml('selprod_id'); ?>
+                <div class="buy-action">
+                    <?php
+                    $fromDate = strtotime($product['selprod_available_from']);
+                    $currentDate = strtotime(FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d'));
+
+                    if (
+                        $fromDate <= $currentDate &&
+                        false === SellerProduct::isPriceHidden($product['selprod_hide_price'], $product['shop_rfq_enabled']) &&
+                        (
+                            SellerProduct::CART_TYPE_RFQ_ONLY != $product['selprod_cart_type'] ||
+                            applicationConstants::NO == $product['shop_rfq_enabled'] ||
+                            1 > FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0)
+                        )
+                    ) {
+                        echo $frmBuyProduct->getFieldHtml('btnAddToCart');
+                    }
+                    echo $frmBuyProduct->getFieldHtml('selprod_id');
+
+                    /* if (0 < $acceptedOfferId) { ?>
+        <a class="btn btn-outline-brand btn-block btn-rfq"
+            href="<?php echo UrlHelper::generateUrl('RfqOffers', 'checkout', [$product['selprod_id'], $acceptedOfferId], CONF_WEBROOT_DASHBOARD); ?>"
+            title="<?php echo Labels::getLabel('BTN_BUY_NOW'); ?>">
+            <?php echo Labels::getLabel('BTN_BUY_NOW'); ?>
+            <svg class="svg" width="20" height="20">
+                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/procurenet/sprite.svg#icon-arrow-tr">
+                </use>
+            </svg>
+        </a>
+        <?php } else { */
+                    if (
+                        RequestForQuote::isEnabled($product['shop_rfq_enabled'], $product['selprod_cart_type']) &&
+                        (
+                            SellerProduct::CART_TYPE_CART_ONLY != $product['selprod_cart_type'] ||
+                            SellerProduct::isPriceHidden($product['selprod_hide_price'], $product['shop_rfq_enabled'])
+                        )
+                    ) { ?>
+                        <button class="btn btn-outline-brand btn-block btn-rfq" name="requestForQuote" type="button"
+                            onclick="requestForQuoteFn('<?php echo $product['selprod_id']; ?>');">
+                            <?php echo Labels::getLabel('BTN_REQUEST_FOR_QUOTE'); ?>
+                        </button>
+                    <?php //}
+                    } ?>
+                </div>
             <?php } ?>
-            </form>
-        <?php echo $frmBuyProduct->getExternalJs();
+        <?php echo '</form>' . $frmBuyProduct->getExternalJs();
         }
     } else { ?>
-        <button type="button" disabled="disabled" class="btn btn-brand btn-block mt-3">
-            <?php echo Labels::getLabel('LBL_Sold_Out', $siteLangId); ?>
-        </button>
-    <?php }
+        <div class="buy-action">
+            <?php if (!RequestForQuote::isEnabled($product['shop_rfq_enabled'], $product['selprod_cart_type'])) { ?>
+                <button type="button" disabled="disabled" class="btn btn-brand btn-block mt-3">
+                    <?php echo Labels::getLabel('LBL_SOLD_OUT', $siteLangId); ?>
+                </button>
+            <?php } else { ?>
+                <div class="divider mt-4"></div>
+            <?php }
 
-    if (strtotime($product['selprod_available_from']) > strtotime(FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d'))) { ?>
+            /* if (0 < $acceptedOfferId) { ?>
+        <a class="btn btn-brand btn-block btn-rfq"
+            href="<?php echo UrlHelper::generateUrl('RfqOffers', 'checkout', [$product['selprod_id'], $acceptedOfferId], CONF_WEBROOT_DASHBOARD); ?>"
+            title="<?php echo Labels::getLabel('BTN_BUY_NOW'); ?>">
+            <?php echo Labels::getLabel('BTN_BUY_NOW'); ?>
+            <svg class="svg" width="20" height="20">
+                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/procurenet/sprite.svg#icon-arrow-tr">
+                </use>
+            </svg>
+        </a>
+        <?php } else { */
+            echo $frmBuyProduct->getFieldHtml('selprod_id');
+            if (RequestForQuote::isEnabled($product['shop_rfq_enabled'], $product['selprod_cart_type'])) { ?>
+                <button class="btn btn-outline-brand btn-block btn-rfq" name="requestForQuote" type="button"
+                    onclick="requestForQuoteFn('<?php echo $product['selprod_id']; ?>');">
+                    <?php echo Labels::getLabel('BTN_REQUEST_FOR_QUOTE'); ?>
+                </button>
+                <span class="d-none">
+                    <?php echo $frmBuyProduct->getFieldHtml('quantity'); ?>
+                </span>
+            <?php //}
+            } ?>
+        </div>
+    <?php } ?>
+
+    <?php if (strtotime($product['selprod_available_from']) > strtotime(FatDate::nowInTimezone(FatApp::getConfig('CONF_TIMEZONE'), 'Y-m-d'))) { ?>
         <button type="button" disabled="disabled" class="btn btn-brand btn-block mt-3">
-            <?php echo Labels::getLabel('LBL_Not_Available', $siteLangId); ?>
+            <?php echo Labels::getLabel('LBL_NOT_AVAILABLE', $siteLangId); ?>
         </button>
         <p class="form-text text-muted">
             <?php echo str_replace('{available-date}', FatDate::Format($product['selprod_available_from']), Labels::getLabel('LBL_This_item_will_be_available_from_{available-date}', $siteLangId)); ?>
@@ -176,7 +248,8 @@
     <?php } ?>
 
     <?php
-    if (isset($volumeDiscountRows) && !empty($volumeDiscountRows) && 0 < $currentStock) { ?>
+    $hidePrice = (SellerProduct::isPriceHidden($product['selprod_hide_price'], $product['shop_rfq_enabled']) || RequestForQuote::isCartTypeRfqOnly($product['shop_rfq_enabled'], $product['selprod_cart_type']));
+    if (isset($volumeDiscountRows) && !empty($volumeDiscountRows) && 0 < $currentStock && false == $hidePrice) { ?>
         <div class="side-blocks wholesale-slider">
             <h5 class="h5"><?php echo Labels::getLabel('LBL_WHOLESALE_PRICE_(PIECE)') ?></h5>
             <div class="side-blocks-body">
@@ -204,7 +277,7 @@
     <?php }  ?>
 
     <!-- Upsell Products -->
-    <?php if (count($upsellProducts) > 0) { ?>
+    <?php if (count($upsellProducts) > 0 && false == $hidePrice) { ?>
         <div class="side-blocks product-add-ons">
             <h5 class="h5"> <?php echo Labels::getLabel('LBL_Product_Add-ons', $siteLangId); ?></h5>
             <div class="side-blocks-body">
@@ -215,9 +288,7 @@
                         if ($usproduct['selprod_stock'] <= 0) {
                             $cancelClass = 'cancel cancelled--js';
                             $uncheckBoxClass = 'remove-add-on';
-                        }
-
-                    ?>
+                        } ?>
                         <li
                             class="list-addons-item addon--js <?php echo $cancelClass; ?> <?php echo ($usproduct['selprod_stock'] <= 0) ? 'out-of-stock' : ''; ?>">
                             <div class="product-profile">
@@ -232,50 +303,47 @@
                                 <div class="product-profile-data">
                                     <a class="title"
                                         href="<?php echo UrlHelper::generateUrl('products', 'view', array($usproduct['selprod_id'])) ?>"><?php echo $usproduct['selprod_title'] ?></a>
-
-                                    <div class="products-price">
-                                        <?php echo CommonHelper::displayMoneyFormat($usproduct['theprice'], true, false, true, false, false, true); ?>
-                                    </div>
-                                    <div class="quantity quantity-2" data-stock="<?php echo $usproduct['selprod_stock']; ?>">
-                                        <button class="decrease decrease-js disabled" type="button">
-                                            <svg class="svg" width="16" height="16">
-                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
-                                                </use>
-                                            </svg>
-                                        </button>
-                                        <div class="qty-input-wrapper" data-stock="<?php echo $usproduct['selprod_stock']; ?>">
-                                            <input type="text" value="<?php echo $usproduct['selprod_min_order_qty']; ?>"
-                                                data-min-qty="<?php echo $usproduct['selprod_min_order_qty']; ?>"
-                                                data-page="product-view" placeholder="Qty"
-                                                class="qty-input cartQtyTextBox productQty-js"
-                                                data-lang="addons[<?php echo $usproduct['selprod_id'] ?>]"
-                                                name="addons[<?php echo $usproduct['selprod_id'] ?>]">
+                                    <?php if (false === SellerProduct::isPriceHidden($usproduct['selprod_hide_price'], $usproduct['shop_rfq_enabled'])) { ?>
+                                        <div class="products-price">
+                                            <?php echo CommonHelper::displayMoneyFormat($usproduct['theprice'], true, false, true, false, false, true); ?>
                                         </div>
-                                        <button
-                                            class="increase increase-js <?php echo $usproduct['selprod_stock'] <= $usproduct['selprod_min_order_qty'] ? 'disabled' : ''; ?>">
-                                            <svg class="svg" width="16" height="16">
-                                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
-                                                </use>
-                                            </svg>
-                                        </button>
-                                    </div>
+                                        <div class="quantity quantity-2" data-stock="<?php echo $usproduct['selprod_stock']; ?>">
+                                            <button class="decrease decrease-js disabled" type="button">
+                                                <svg class="svg" width="16" height="16">
+                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
+                                                    </use>
+                                                </svg>
+                                            </button>
+                                            <div class="qty-input-wrapper" data-stock="<?php echo $usproduct['selprod_stock']; ?>">
+                                                <input type="text" value="<?php echo $usproduct['selprod_min_order_qty']; ?>"
+                                                    data-min-qty="<?php echo $usproduct['selprod_min_order_qty']; ?>"
+                                                    data-page="product-view" placeholder="Qty"
+                                                    class="qty-input cartQtyTextBox productQty-js"
+                                                    data-lang="addons[<?php echo $usproduct['selprod_id'] ?>]"
+                                                    name="addons[<?php echo $usproduct['selprod_id'] ?>]">
+                                            </div>
+                                            <button
+                                                class="increase increase-js <?php echo $usproduct['selprod_stock'] <= $usproduct['selprod_min_order_qty'] ? 'disabled' : ''; ?>">
+                                                <svg class="svg" width="16" height="16">
+                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
+                                                    </use>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    <?php } ?>
                                 </div>
-                                <?php if ($usproduct['selprod_stock'] <= 0) { ?>
-                                    <div class="out-of-stock-txt">
-                                        <?php echo Labels::getLabel('LBL_SOLD_OUT', $siteLangId); ?>
-                                    </div>
-                                <?php  } ?>
                             </div>
-                            <label class="checkbox">
-                                <input <?php echo ($usproduct['selprod_stock'] > 0) ? 'checked="checked"' : ''; ?>
-                                    type="checkbox" class="cancel <?php echo $uncheckBoxClass; ?>" name="check_addons"
-                                    title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
-                            </label>
+                            <?php if (false === SellerProduct::isPriceHidden($usproduct['selprod_hide_price'], $usproduct['shop_rfq_enabled'])) { ?>
+                                <label class="checkbox">
+                                    <input <?php echo ($usproduct['selprod_stock'] > 0) ? 'checked="checked"' : ''; ?>
+                                        type="checkbox" class="cancel <?php echo $uncheckBoxClass; ?>" name="check_addons"
+                                        title="<?php echo Labels::getLabel('LBL_Remove', $siteLangId); ?>">
+                                </label>
+                            <?php } ?>
                         </li>
                     <?php } ?>
                 </ul>
             </div>
-
         </div>
     <?php } ?>
 </div>

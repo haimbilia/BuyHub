@@ -112,7 +112,7 @@ class CheckoutController extends MyAppController
 
                     $cartProducts = $this->cartObj->getProducts($this->siteLangId);
                     foreach ($cartProducts as $product) {
-                        if (!$product['in_stock']) {
+                        if (!$product['in_stock'] && !isset($_SESSION['offer_checkout'])) {
                             $stock = false;
                             $key = false;
                             $this->errMessage = Labels::getLabel('ERR_PRODUCTS_ARE_OUT_OF_STOCK.', $this->siteLangId);
@@ -140,20 +140,27 @@ class CheckoutController extends MyAppController
                                 }
                             }
                         } else {
-                            $tempHoldStock = (0 < $product['selprod_track_inventory']) ? Product::tempHoldStockCount($product['selprod_id']) : 0;
-                            $availableStock = $product['selprod_stock'] - $tempHoldStock;
+                            if (FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) {
+                                $tempHoldStock = 0;
+                                $availableStock = $product['quantity'];
+                            } else {
+                                $tempHoldStock = (0 < $product['selprod_track_inventory']) ? Product::tempHoldStockCount($product['selprod_id']) : 0;
+                                $availableStock = $product['selprod_stock'] - $tempHoldStock;
+                            }
                             $userTempHoldStock = 0;
                             if (0 < $product['selprod_track_inventory']) {
                                 $userTempHoldStock = Product::tempHoldStockCount($product['selprod_id'], $cart_user_id, 0, true);
                             }
                             $productName = (isset($product['selprod_title']) && $product['selprod_title'] != '') ? $product['selprod_title'] : $product['product_name'];
-                            if ($availableStock < ($product['quantity'] - $userTempHoldStock)) {
-                                $key = false;
-                                $this->errMessage = Labels::getLabel('ERR_{PRODUCT-NAME}_IS_TEMPORARY_OUT_OF_STOCK_OR_HOLD_BY_OTHER_CUSTOMER', $this->siteLangId);
-                            } elseif ($product['selprod_min_order_qty'] > ($availableStock + $userTempHoldStock)) {
-                                $this->errMessage = Labels::getLabel('ERR_{PRODUCT-NAME}_ITS_MIN_PURCHASE_QUANTITY_IS_HIGHER_THAN_AVAILABLE_STOCK_LIMIT._SO_UNABLE_TO_PROCEED_FURTHER.', $this->siteLangId);
-                            } elseif ($product['selprod_min_order_qty'] > $product['quantity']) {
-                                $this->errMessage = Labels::getLabel('ERR_{PRODUCT-NAME}_ITS_PURCHASE_QUANTITY_IS_LESS_THAN_MIN_PURCHASE_QUANTITY._SO_UNABLE_TO_PROCEED_FURTHER.', $this->siteLangId);
+                            if (!isset($_SESSION['offer_checkout'])) {
+                                if ($availableStock < ($product['quantity'] - $userTempHoldStock)) {
+                                    $key = false;
+                                    $this->errMessage = Labels::getLabel('ERR_{PRODUCT-NAME}_IS_TEMPORARY_OUT_OF_STOCK_OR_HOLD_BY_OTHER_CUSTOMER', $this->siteLangId);
+                                } elseif ($product['selprod_min_order_qty'] > ($availableStock + $userTempHoldStock)) {
+                                    $this->errMessage = Labels::getLabel('ERR_{PRODUCT-NAME}_ITS_MIN_PURCHASE_QUANTITY_IS_HIGHER_THAN_AVAILABLE_STOCK_LIMIT._SO_UNABLE_TO_PROCEED_FURTHER.', $this->siteLangId);
+                                } elseif ($product['selprod_min_order_qty'] > $product['quantity']) {
+                                    $this->errMessage = Labels::getLabel('ERR_{PRODUCT-NAME}_ITS_PURCHASE_QUANTITY_IS_LESS_THAN_MIN_PURCHASE_QUANTITY._SO_UNABLE_TO_PROCEED_FURTHER.', $this->siteLangId);
+                                }
                             }
 
                             if (!empty($this->errMessage)) {
@@ -213,6 +220,14 @@ class CheckoutController extends MyAppController
 
     public function index($appParam = '', $appLang = '1', $appCurrency = '1')
     {
+        if (!isset($_SESSION['offer_checkout']) && FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) {
+            $cartObj = new Cart();
+            $cartObj->clear();
+            $cartObj->updateUserCart();
+            LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_CHECKOUT_WITH_ACCEPTED_OFFER_ONLY.'), redirect: true);
+            CommonHelper::redirectUserReferer();
+        }
+
         if ($appParam == 'api') {
             $langId = FatUtility::int($appLang);
             if (0 < $langId) {
@@ -249,7 +264,9 @@ class CheckoutController extends MyAppController
         $addresses = $address->getData(Address::TYPE_USER, UserAuthentication::getLoggedUserId());
         $this->set('cartHasPhysicalProduct', $cartHasPhysicalProduct);
 
-        $cart_products = $this->cartObj->getProducts($this->siteLangId);
+        $removeCartType = !isset($_SESSION['offer_checkout']) ? SellerProduct::CART_TYPE_RFQ_ONLY : -1;
+        $cart_products = $this->cartObj->getProducts($this->siteLangId, removeCartType: $removeCartType);
+
         if (0 < count($cart_products) && FatApp::getConfig('CONF_ANALYTICS_ADVANCE_ECOMMERCE', FatUtility::VAR_INT, 0)) {
             $et = new EcommerceTracking(Labels::getLabel('MSG_CHECKOUT', $this->siteLangId), UserAuthentication::getLoggedUserId(true));
             $et->addProductAction(EcommerceTracking::PROD_ACTION_TYPE_CHECKOUT);
@@ -505,7 +522,8 @@ class CheckoutController extends MyAppController
 
         $this->cartObj->setCartCheckoutType($fulfillmentType);
 
-        $cartProducts = $this->cartObj->getProducts($this->siteLangId);
+        $removeCartType = isset($_SESSION['offer_checkout']) ? -1 : SellerProduct::CART_TYPE_RFQ_ONLY;
+        $cartProducts = $this->cartObj->getProducts($this->siteLangId, removeCartType:$removeCartType);
         if (count($cartProducts) == 0) {
             $this->errMessage = Labels::getLabel('ERR_YOUR_CART_IS_EMPTY', $this->siteLangId);
             if (true === MOBILE_APP_API_CALL) {
@@ -1377,8 +1395,13 @@ class CheckoutController extends MyAppController
                     }
                 */
 
+                $ofrSelprodId = $_SESSION['offer_checkout']['selprod_id'] ?? 0;
+                $offerId = $_SESSION['offer_checkout']['offer_id'] ?? 0;
+                $offerId = ($productInfo['selprod_id'] == $ofrSelprodId) ? $offerId : 0;
+
                 $orderData['products'][CART::CART_KEY_PREFIX_PRODUCT . $productInfo['selprod_id']] = array(
                     'op_selprod_id' => $productInfo['selprod_id'],
+                    'op_offer_id' => $offerId,
                     'op_is_batch' => 0,
                     'op_selprod_user_id' => $productInfo['selprod_user_id'],
                     'op_selprod_code' => $productInfo['selprod_code'],

@@ -15,18 +15,33 @@ if (null != $fld) {
 $fld = $frm->getField('collection_for_web');
 if (null != $fld) {
     HtmlHelper::configureSwitchForCheckbox($fld);
-    $fld->developerTags['noCaptionTag'] = true;
     $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 }
 
 $fld = $frm->getField('collection_for_app');
 if (null != $fld) {
     HtmlHelper::configureSwitchForCheckbox($fld);
-    $fld->developerTags['noCaptionTag'] = true;
     $fld->developerTags['colWidthValues'] = [null, '6', null, null];
     if (in_array($collection_layout_type, Collections::COLLECTIONS_FOR_APP_ONLY)) {
         $fld->setFieldTagAttribute('disabled', 'disabled');
     }
+}
+
+$fld = $frm->getField('collection_full_width');
+if (null != $fld) {
+    HtmlHelper::configureSwitchForCheckbox($fld);
+    $fld->developerTags['noCaptionTag'] = true;
+    $fld->developerTags['colWidthValues'] = [null, '6', null, null];
+}
+
+$fld = $frm->getField('auto_update_other_langs_data');
+if (null != $fld) {
+    $fld->developerTags['colWidthValues'] = [null, '6', null, null];
+}
+
+$fld = $frm->getField('collection_primary_records');
+if (null != $fld) {
+    $fld->developerTags['colWidthValues'] = [null, '6', null, null];
 }
 
 $generalTab['attr']['onclick'] = 'collectionForm(' . $collection_type . ', ' . $collection_layout_type . ', ' . $recordId . ');';
@@ -55,7 +70,7 @@ if ($collection_type == Collections::COLLECTION_TYPE_BANNER) {
     ];
 }
 
-if (!in_array($collection_type, Collections::COLLECTION_WITHOUT_MEDIA) && !in_array($collection_layout_type, Collections::COLLECTIONS_NOT_FOR_APP)) {
+if ((!in_array($collection_type, Collections::COLLECTION_WITHOUT_MEDIA) && !in_array($collection_layout_type, Collections::COLLECTIONS_FOR_WEB_ONLY))) {
     $otherButtons[] = [
         'attr' => [
             'href' => 'javascript:void(0)',

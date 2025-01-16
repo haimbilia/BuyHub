@@ -55,7 +55,7 @@ class SubscriptionCheckoutController extends LoggedUserController
         $prodSrch->joinPackage();
 
         $prodSrch->addCondition('spplan_id', '=', $spplan_id);
-        $fields = array('spplan_id', 'spplan_price', 'spackage_images_per_product', 'spackage_type', 'spackage_products_allowed', 'spackage_inventory_allowed', 'spplan_interval', 'spplan_frequency', 'spackage_commission_rate');
+        $fields = array('spplan_id', 'spplan_price', 'spackage_images_per_product', 'spackage_type', 'spackage_products_allowed', 'spackage_inventory_allowed', 'spackage_rfq_offers_allowed', 'spplan_interval', 'spplan_frequency', 'spackage_commission_rate');
         $prodSrch->addMultipleFields($fields);
         $prodSrch->doNotCalculateRecords();
         $prodSrch->setPageSize(1);
@@ -197,6 +197,7 @@ class SubscriptionCheckoutController extends LoggedUserController
                     OrderSubscription::DB_TBL_PREFIX . 'images_allowed' => $subscriptionInfo['spackage_images_per_product'],
                     OrderSubscription::DB_TBL_PREFIX . 'products_allowed' => $subscriptionInfo['spackage_products_allowed'],
                     OrderSubscription::DB_TBL_PREFIX . 'inventory_allowed' => $subscriptionInfo['spackage_inventory_allowed'],
+                    OrderSubscription::DB_TBL_PREFIX . 'rfq_offers_allowed' => $subscriptionInfo['spackage_rfq_offers_allowed'],
                     OrderSubscription::DB_TBL_PREFIX . 'type' => $subscriptionInfo['spackage_type'],
                     OrderSubscription::DB_TBL_PREFIX . 'plan_id' => $subscriptionInfo['spplan_id'],
                     OrderSubscription::DB_TBL_PREFIX . 'interval' => $subscriptionInfo['spplan_interval'],
@@ -601,6 +602,7 @@ class SubscriptionCheckoutController extends LoggedUserController
         $this->userPrivilege->canEditSubscription(UserAuthentication::getLoggedUserId());
         $this->_template->render(false, false);
     }
+
     public function renewSubscriptionOrder($ossubs_id = 0)
     {
         if (!$this->userPrivilege->canEditSubscription(UserAuthentication::getLoggedUserId(), true)) {
@@ -608,7 +610,7 @@ class SubscriptionCheckoutController extends LoggedUserController
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'subscriptions'));
         }
         $statusArr = Orders::getActiveSubscriptionStatusArr();
-        $endDate = date("Y-m-d");
+        // $endDate = date("Y-m-d");
         $srch = new OrderSubscriptionSearch();
         $srch->joinOrders();
         $srch->joinOrderUser();
@@ -617,10 +619,10 @@ class SubscriptionCheckoutController extends LoggedUserController
         $srch->addCondition('ossubs_id', '=', $ossubs_id);
         $srch->addCondition('ossubs_type', '=', SellerPackages::PAID_TYPE);
         $srch->addCondition('order_user_id', '=', $this->userParentId);
-        $srch->addCondition('ossubs_till_date', '<=', $endDate);
+        // $srch->addCondition('ossubs_till_date', '<=', $endDate);
         $srch->addCondition('ossubs_till_date', '!=', '0000-00-00');
         //$srch->addCondition('user_autorenew_subscription', '!=', 1);
-        $srch->addMultipleFields(array('order_user_id', 'order_id', 'order_number', 'ossubs_id', 'ossubs_type', 'ossubs_price', 'ossubs_images_allowed', 'ossubs_products_allowed', 'ossubs_inventory_allowed', 'ossubs_plan_id', 'ossubs_interval', 'ossubs_frequency', 'ossubs_commission'));  
+        $srch->addMultipleFields(array('order_user_id', 'order_id', 'order_number', 'ossubs_id', 'ossubs_type', 'ossubs_price', 'ossubs_images_allowed', 'ossubs_products_allowed', 'ossubs_inventory_allowed', 'ossubs_rfq_offers_allowed', 'ossubs_plan_id', 'ossubs_interval', 'ossubs_frequency', 'ossubs_commission'));  
         $srch->addOrder('ossubs_id', 'desc');
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);     
@@ -720,6 +722,7 @@ class SubscriptionCheckoutController extends LoggedUserController
             OrderSubscription::DB_TBL_PREFIX . 'images_allowed' => $activeSub['ossubs_images_allowed'],
             OrderSubscription::DB_TBL_PREFIX . 'products_allowed' => $activeSub['ossubs_products_allowed'],
             OrderSubscription::DB_TBL_PREFIX . 'inventory_allowed' => $activeSub['ossubs_inventory_allowed'],
+            OrderSubscription::DB_TBL_PREFIX . 'rfq_offers_allowed' => $activeSub['ossubs_rfq_offers_allowed'],
             OrderSubscription::DB_TBL_PREFIX . 'plan_id' => $activeSub['ossubs_plan_id'],
             OrderSubscription::DB_TBL_PREFIX . 'type' => $activeSub['ossubs_type'],
             OrderSubscription::DB_TBL_PREFIX . 'interval' => $activeSub['ossubs_interval'],

@@ -1,0 +1,20 @@
+.card-commerce {
+  &-bg {
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: right center;
+  }
+
+  .card-head {
+    padding-bottom: 0;
+  }
+
+  .card-body {
+    padding-top: 0;
+  }
+
+  h6 {
+    font-size: 0.85rem;
+    color: $txt-gray;
+  }
+}

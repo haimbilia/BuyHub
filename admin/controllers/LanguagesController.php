@@ -195,6 +195,10 @@ class LanguagesController extends ListingBaseController
             LibHelper::exitWithError($this->str_invalid_request, true);
         }
 
+        if (FatApp::getConfig('CONF_DEFAULT_SITE_LANG', FatUtility::VAR_INT, 1) == $recordId && applicationConstants::INACTIVE == $status) {
+            LibHelper::exitWithError(Labels::getLabel('ERR_YOU_CANNOT_TURN_OFF_DEFAULT_LANGUAGE', $this->siteLangId), true);
+        }
+
         if ($status == applicationConstants::INACTIVE && 1 == count(Language::getAllNames())) {
             LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_MAINTAIN_ATLEAST_ONE_ACTIVE_LANGUAGE', $this->siteLangId), true);
         }

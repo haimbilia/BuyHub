@@ -1,0 +1,44 @@
+//.shop-profile
+.shop-profile {
+  display: flex;
+  flex: 1;
+  gap: 0.8rem;
+  width: auto;
+  align-items: flex-start;
+  position: relative;
+  &-thumbnail {
+    position: relative;
+    img {
+      min-width: 30px;
+      max-width: 80px;
+      border-radius: $common-radius;
+      //border: $border;
+      border: none;
+
+      @include media-breakpoint-down(sm) {
+        max-width: 50px;
+      }
+    }
+  }
+  &-data {
+    display: flex;
+    flex: 1;
+    min-width: 0px;
+    flex-direction: column;
+    font-size: 0.85rem;
+    .title {
+      font-size: 0.9rem;
+      color: $txt-body;
+      font-weight: $font-weight-normal;
+      margin-bottom: 10px;
+    }
+    .shop-address {
+      font-size: 0.75rem;
+      color: $txt-gray;
+    }
+  }
+  .btn-close {
+    position: absolute;
+    #{$end-direction}: 0;
+  }
+}

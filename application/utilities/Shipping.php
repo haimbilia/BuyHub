@@ -10,6 +10,7 @@ class Shipping
     public const LEVEL_PRODUCT = 3;
 
     public const TYPE_MANUAL = -1;
+    public const TYPE_CUSTOM = 0;
     public const RATE_CACHE_KEY_NAME = "shipRateCache_";
     public const CARRIER_CACHE_KEY_NAME = "shipCarrierCache_";
 
@@ -22,6 +23,7 @@ class Shipping
     private $systemRatesToFetchSelprodIds = [];
     private $shippingServicesArr = [];
     private $pluginData = [];
+    public $fetchCustomShippingRates = false;
 
     public const FULFILMENT_ALL = -1;
     public const FULFILMENT_PICKUP = 1;
@@ -301,9 +303,10 @@ class Shipping
      * @param  array $shippingAddressDetail
      * @param  array $productInfo
      * @param  array $physicalSelProdIdArr
+     * @param  bool $isAccepted
      * @return bool
      */
-    private function fetchShippingRatesFromApi(array $shippingAddressDetail, array $productInfo, array &$physicalSelProdIdArr): bool
+    private function fetchShippingRatesFromApi(array $shippingAddressDetail, array $productInfo, array &$physicalSelProdIdArr, bool $isAccepted = false): bool
     {
         $weightUnitsArr = applicationConstants::getWeightUnitsArr($this->langId, true);
         $dimensionUnits = ShippingPackage::getUnitTypes($this->langId);
@@ -336,6 +339,21 @@ class Shipping
                 continue;
             }
 
+            $shippingLevel = self::LEVEL_PRODUCT;
+
+            $shippedBy = -1; /* admin shipping */
+            if (0 < $isProductShippedBySeller) {
+                $shippedBy = $product['shop_id'];
+            }
+
+            if (isset($shippingAddressDetail['user_id'])) {
+                $buyerId = $shippingAddressDetail['user_id'];
+                $shippingCost = $this->fetchCustomShippingRates($product['selprod_id'], $buyerId, $isAccepted);
+                if (!empty($shippingCost)) {
+                    $this->shippedByArr[$shippedBy][$shippingLevel]['rates'][$product['shop_id']][$shippingCost['id']] = $shippingCost;
+                    continue;
+                }
+            }
             $shippingApiKey = get_class($shippingApiObj)::KEY_NAME;
 
             $cacheKey = self::CARRIER_CACHE_KEY_NAME . $this->langId . get_class($shippingApiObj) . ($isProductShippedBySeller ? $product['selprod_user_id'] : 0);
@@ -417,12 +435,7 @@ class Shipping
             }
             /* Retrieve Selected Shipping Service Detail. */
 
-            $shippingLevel = self::LEVEL_PRODUCT;
-
-            $shippedBy = -1; /* admin shipping */
-            if (0 < $isProductShippedBySeller) {
-                $shippedBy = $product['shop_id'];
-            }
+            
             $prodWeight = $product['product_weight'] * $product['quantity'];
             $productWeightClass = isset($weightUnitsArr[$product['product_weight_unit']]) ? $weightUnitsArr[$product['product_weight_unit']] : '';
             $productWeightInOunce = static::convertWeightInOunce($prodWeight, $productWeightClass);
@@ -497,16 +510,63 @@ class Shipping
     }
 
     /**
+     * fetchCustomShippingRates
+     *
+     * @param  int $selProdId
+     * @param  int $buyerId
+     * @param  int $primaryOfferId
+     * @return array
+     */
+    private function fetchCustomShippingRates(int $selProdId, int $buyerId, bool $isAccepted = false): array
+    {
+        if (isset($_SESSION['offer_checkout']) && $_SESSION['offer_checkout']['selprod_id'] == $selProdId) {
+            $this->fetchCustomShippingRates = true;
+        }
+
+        if (false == $this->fetchCustomShippingRates) {
+            return [];
+        }
+
+        $acceptedOffers = $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['acceptedOffers'] ?? [];
+        $primaryOfferId = $acceptedOffers[$selProdId]['primary_offer_id'] ?? 0;
+        $offerDetail = [];
+        if (0 < $primaryOfferId) {
+            if ($isAccepted) {
+                $offerDetail = RfqOffers::getAcceptedOfferBySelProdId($selProdId, $buyerId, $primaryOfferId);
+            } else {
+                $offerDetail = RfqOffers::getPrimaryOfferDetail($selProdId, $buyerId, $primaryOfferId);
+            }
+        }
+
+        if (is_array($offerDetail) && !empty($offerDetail) && 0 < $offerDetail['rlo_shipping_charges'] && (empty($offerDetail['order_id']) || Orders::ORDER_PAYMENT_PAID != $offerDetail['order_payment_status'])) {
+            return [
+                'id' => $offerDetail['rlo_primary_offer_id'] . '_' . $offerDetail['rfq_number'],
+                'code' => $selProdId,
+                'title' => Labels::getLabel('LBL_CUSTOM_SHIPPING_CHARGES'),
+                'cost' => $offerDetail['rlo_shipping_charges'],
+                'shiprate_condition_type' => 0,
+                'shiprate_min_val' => 0,
+                'shiprate_max_val' => 0,
+                'shipping_level' => self::LEVEL_PRODUCT,
+                'shipping_type' => self::TYPE_CUSTOM,
+                'is_seller_plugin' => 0,
+                'carrier_code' => '',
+            ];
+        }
+        return [];
+    }
+
+    /**
      * fetchShippingRatesFromSystem
      *
      * @param  array $productInfo
      * @param  array $physicalSelProdIdArr
+     * @param  array $shippingAddressDetail
+     * @param  bool $isAccepted
      * @return bool
      */
-    private function fetchShippingRatesFromSystem(array $productInfo, array &$physicalSelProdIdArr): bool
+    private function fetchShippingRatesFromSystem(array $productInfo, array &$physicalSelProdIdArr, array $shippingAddressDetail = [], bool $isAccepted = false): bool
     {
-        $counter = [];
-
         foreach ($this->selProdShipRates as $rateId => $rates) {
             if (!empty($this->systemRatesToFetchSelprodIds) && !in_array($rates['selprod_id'], $this->systemRatesToFetchSelprodIds)) {
                 continue;
@@ -527,20 +587,28 @@ class Shipping
                 }
             }
 
-            $shippingCost = [
-                'id' => $rates['shiprate_id'],
-                'code' => $rates['selprod_id'],
-                'title' => $rates['shiprate_name'],
-                'cost' => $rates['shiprate_cost'],
-                'shiprate_condition_type' => $rates['shiprate_condition_type'],
-                'shiprate_min_val' => $rates['shiprate_min_val'],
-                'shiprate_max_val' => $rates['shiprate_max_val'],
-                'shipping_level' => $shippingLevel,
-                'shipping_type' => self::TYPE_MANUAL,
-                'is_seller_plugin' => 0,
-                /* 'shipprofile_key' => $rates['shipprofile_id'], */
-                'carrier_code' => $rates['shipprofile_name'],
-            ];
+            $shippingCost = [];
+            if (isset($shippingAddressDetail['user_id'])) {
+                $buyerId = $shippingAddressDetail['user_id'];
+                $shippingCost = $this->fetchCustomShippingRates($product['selprod_id'], $buyerId, $isAccepted);
+            }
+
+            if (empty($shippingCost)) {
+                $shippingCost = [
+                    'id' => $rates['shiprate_id'],
+                    'code' => $rates['selprod_id'],
+                    'title' => $rates['shiprate_name'],
+                    'cost' => $rates['shiprate_cost'],
+                    'shiprate_condition_type' => $rates['shiprate_condition_type'],
+                    'shiprate_min_val' => $rates['shiprate_min_val'],
+                    'shiprate_max_val' => $rates['shiprate_max_val'],
+                    'shipping_level' => $shippingLevel,
+                    'shipping_type' => self::TYPE_MANUAL,
+                    'is_seller_plugin' => 0,
+                    /* 'shipprofile_key' => $rates['shipprofile_id'], */
+                    'carrier_code' => $rates['shipprofile_name'],
+                ];
+            }
             unset($physicalSelProdIdArr[$rates['selprod_id']]);
 
             $combineRateId = self::LEVEL_PRODUCT == $shippingLevel ? $rates['selprod_id'] : $rates['shippro_shipprofile_id'];
@@ -592,27 +660,42 @@ class Shipping
      * @param  array $physicalSelProdIdArr
      * @param  array $shippingAddressDetail
      * @param  array $productInfo
+     * @param  bool $isAccepted
      * @return array
      */
-    public function calculateCharges(array $physicalSelProdIdArr, array $shippingAddressDetail, array $productInfo): array
+    public function calculateCharges(array $physicalSelProdIdArr, array $shippingAddressDetail, array $productInfo, bool $isAccepted = false): array
     {
         $shipToCountryId = isset($shippingAddressDetail['addr_country_id']) ? $shippingAddressDetail['addr_country_id'] : 0;
 
         $shipToStateId = isset($shippingAddressDetail['addr_state_id']) ? $shippingAddressDetail['addr_state_id'] : 0;
 
-        $this->fetchShippingRatesFromApi($shippingAddressDetail, $productInfo, $physicalSelProdIdArr);
-        if (count($physicalSelProdIdArr)) {
-            $this->selProdShipRates = $this->getSellerProductShippingRates($physicalSelProdIdArr, $shipToCountryId, $shipToStateId, $productInfo);
-            if (!empty($this->selProdShipRates)) {
-                $this->fetchShippingRatesFromSystem($productInfo, $physicalSelProdIdArr);
+        $shippingCost = [];
+        if (isset($shippingAddressDetail['user_id']) && isset($_SESSION['offer_checkout'])) {
+            foreach ($productInfo as $selProdId => $product) {
+                $buyerId = $shippingAddressDetail['user_id'];
+                $shippingCost = $this->fetchCustomShippingRates($product['selprod_id'], $buyerId, $isAccepted);
+                if (!empty($shippingCost)) {
+                    $this->shippedByArr[$productInfo[$selProdId]['shop_id']][self::LEVEL_PRODUCT]['products'][$selProdId] = $productInfo[$selProdId];
+                    $this->shippedByArr[$productInfo[$selProdId]['shop_id']][self::LEVEL_PRODUCT]['shipping_options'][$selProdId] = [];
+                    $this->shippedByArr[$productInfo[$selProdId]['shop_id']][self::LEVEL_PRODUCT]['rates'][$selProdId] = [$shippingCost['id'] => $shippingCost];
+                }
             }
         }
 
-        /*Include Physical products whose shipping rates not defined */
-        foreach ($physicalSelProdIdArr as $selProdId) {
-            $this->shippedByArr[$productInfo[$selProdId]['shop_id']][self::LEVEL_PRODUCT]['products'][$selProdId] = $productInfo[$selProdId];
-            $this->shippedByArr[$productInfo[$selProdId]['shop_id']][self::LEVEL_PRODUCT]['shipping_options'][$selProdId] = [];
-            $this->shippedByArr[$productInfo[$selProdId]['shop_id']][self::LEVEL_PRODUCT]['rates'][$selProdId] = [];
+        if (empty($this->shippedByArr)) {
+            $this->fetchShippingRatesFromApi($shippingAddressDetail, $productInfo, $physicalSelProdIdArr, $isAccepted);
+            if (count($physicalSelProdIdArr)) {
+                $this->selProdShipRates = $this->getSellerProductShippingRates($physicalSelProdIdArr, $shipToCountryId, $shipToStateId, $productInfo);
+                if (!empty($this->selProdShipRates)) {
+                    $this->fetchShippingRatesFromSystem($productInfo, $physicalSelProdIdArr, $shippingAddressDetail, $isAccepted);
+                }
+            }
+            /*Include Physical products whose shipping rates not defined */
+            foreach ($physicalSelProdIdArr as $selProdId) {
+                $this->shippedByArr[$productInfo[$selProdId]['shop_id']][self::LEVEL_PRODUCT]['products'][$selProdId] = $productInfo[$selProdId];
+                $this->shippedByArr[$productInfo[$selProdId]['shop_id']][self::LEVEL_PRODUCT]['shipping_options'][$selProdId] = [];
+                $this->shippedByArr[$productInfo[$selProdId]['shop_id']][self::LEVEL_PRODUCT]['rates'][$selProdId] = [];
+            }
         }
 
         return $this->formatOutput(applicationConstants::SUCCESS, $this->shippedByArr);

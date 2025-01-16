@@ -161,6 +161,26 @@ trait ProductSetup
         $useShopPolicy->requirements()->addOnChangerequirementUpdate(Shop::USE_SHOP_POLICY, 'ne', 'selprod_cancellation_age', $orderCancellationAgeReqFld);
 
         $frm->addCheckBox(Labels::getLabel('FRM_PUBLISH_INVENTORY', $this->siteLangId), 'selprod_active', applicationConstants::ACTIVE, [], false, applicationConstants::INACTIVE);
+        
+        if (0 < FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0) && 1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) {
+            $shopRfqEnabled = Shop::getAttributesByUserId($this->userParentId, 'shop_rfq_enabled', false);
+            if (0 < $shopRfqEnabled) {
+                $cartTypeFld = $frm->addSelectBox(Labels::getLabel('FRM_CART_TYPE', $this->siteLangId), 'selprod_cart_type', SellerProduct::getCartType(), SellerProduct::CART_TYPE_BOTH, array('class' => 'fieldsVisibilityJs onlyShowHideJs'), '');
+                $cartTypeFld->requirements()->setRequired();
+                $frm->addCheckBox(Labels::getLabel("FRM_HIDE_PRICE", $this->siteLangId), 'selprod_hide_price', 1, array(), false, 0);
+
+                $hidePriceReqFld = new FormFieldRequirement('selprod_hide_price', Labels::getLabel('FRM_HIDE_PRICE', $this->siteLangId));
+                $hidePriceReqFld->setRequired(true);
+                $hidePriceReqFld->setPositive();
+
+                $hidePriceUnReqFld = new FormFieldRequirement('selprod_hide_price', Labels::getLabel('FRM_HIDE_PRICE', $this->siteLangId));
+                $hidePriceUnReqFld->setRequired(false);
+                $hidePriceUnReqFld->setPositive();
+
+                $cartTypeFld->requirements()->addOnChangerequirementUpdate(SellerProduct::CART_TYPE_RFQ_ONLY, 'eq', 'selprod_hide_price', $hidePriceReqFld);
+                $cartTypeFld->requirements()->addOnChangerequirementUpdate(SellerProduct::CART_TYPE_RFQ_ONLY, 'ne', 'selprod_hide_price', $hidePriceUnReqFld);
+            }
+        }
 
         $frm->addTextArea(Labels::getLabel('FRM_ANY_EXTRA_COMMENT_FOR_BUYER', $this->siteLangId), 'selprod_comments');
 
@@ -181,6 +201,9 @@ trait ProductSetup
         $return = ($type == 'REQUESTED_CATALOG_PRODUCT');
         $postedData = FatApp::getPostedData();
         $productId = FatApp::getPostedData('selprod_product_id', Fatutility::VAR_INT, $prodId);
+        $cartType = FatApp::getPostedData('selprod_cart_type', Fatutility::VAR_INT, 0);
+        
+        $postedData['selprod_hide_price'] = (SellerProduct::CART_TYPE_RFQ_ONLY != $cartType ? 0 : FatApp::getPostedData('selprod_hide_price', FatUtility::VAR_INT, 0));
 
         if (0 < $prodId || $return) {
             $productSellerId = $postedData['product_seller_id'] ?? $this->userParentId ?? 0;
@@ -189,7 +212,7 @@ trait ProductSetup
             $postedData['selprod_price'] = $postedData['product_min_selling_price'];
             $postedData['selprod_title'] = $postedData['product_name'];
             $postedData['selprod_cod_enabled'] = $postedData['product_cod_enabled'] ?? 0;
-            $postedData['selprod_fulfillment_type'] = $postedData['product_fulfillment_type'] ?? -1;
+            $postedData['selprod_fulfillment_type'] = $postedData['product_fulfillment_type'] ?? -1;            
         }
 
         $frm = $this->getSellerProductForm($productId, $type);

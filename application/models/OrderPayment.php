@@ -151,7 +151,7 @@ class OrderPayment extends Orders
         return $arrOrder;
     }
 
-    public function addOrderPayment($paymentMethodName, $txnId, $amount, $comments = '', $response = '', $isWallet = false, $opId = 0, $orderPaymentStatus = Orders::ORDER_PAYMENT_PAID)
+    public function addOrderPayment($paymentMethodName, $txnId, $amount, $comments = '', $response = '', $isWallet = false, $opId = 0, $orderPaymentStatus = Orders::ORDER_PAYMENT_PAID, $isBuyerDash = false)
     {
         $paymentOrderId = $this->paymentOrderId;
         $defaultSiteLangId = FatApp::getConfig('conf_default_site_lang');
@@ -200,7 +200,7 @@ class OrderPayment extends Orders
                     'comments' => $comments,
                 ];
                 $emailObj = new EmailHandler();
-                $emailObj->sendTransferBankNotification($defaultSiteLangId, $emailNotificationData);
+                $emailObj->sendTransferBankNotification($defaultSiteLangId, $emailNotificationData, $isBuyerDash);
 
                 $admNotificationData = array(
                     'notification_record_type' => Notification::TYPE_ORDER,

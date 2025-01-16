@@ -208,7 +208,6 @@ select2 = function (
     }
 
     var obj = ele.closest('form').length ? ele.closest('form') : null;
-
     ele.select2({
         dropdownParent: ele.data('dropdownparent-id') ? $('#' + ele.data('dropdownparent-id')) : obj,
         closeOnSelect: ele.data("closeOnSelect") || true,

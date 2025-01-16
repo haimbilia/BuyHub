@@ -1349,12 +1349,16 @@ class SellerController extends SellerBaseController
     {
         $this->userPrivilege->canViewProducts(UserAuthentication::getLoggedUserId());
 
-        if (!$this->isShopActive($this->userParentId, 0, true)) {
+        if (!$this->isShopActive($this->userParentId)) {
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'shop'));
         }
-        if (!UserPrivilege::isUserHasValidSubsription($this->userParentId)) {
-            Message::addInfo(Labels::getLabel("MSG_Please_buy_subscription", $this->siteLangId));
+        if (1 > FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0) && !UserPrivilege::isUserHasValidSubsription($this->userParentId)) {
+            Message::addErrorMessage(Labels::getLabel("MSG_PLEASE_BUY_SUBSCRIPTION", $this->siteLangId));
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'Packages'));
+        }
+
+        if (0 < FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+            $this->set("statusButtons", true);
         }
 
         $frmSearchCatalogProduct = $this->getCatalogProductSearchForm($type);
@@ -1370,11 +1374,80 @@ class SellerController extends SellerBaseController
         $this->_template->render(true, true);
     }
 
+    public function toggleBulkStatusesForCatalogs()
+    {
+        $this->userPrivilege->canEditProducts(UserAuthentication::getLoggedUserId());
+        $status = FatApp::getPostedData('status', FatUtility::VAR_INT, -1);
+        $recordsArr = FatUtility::int(FatApp::getPostedData('record_ids'));
+        if (empty($recordsArr) || -1 == $status) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
+        foreach ($recordsArr as $recordId) {
+            if (1 > $recordId) {
+                continue;
+            }
+            $this->changeCatalogStatus($recordId, $status);
+        }
+        Product::updateMinPrices();
+        $this->set('msg', Labels::getLabel('MSG_STATUS_UPDATED', $this->siteLangId));
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
+    public function updateCatalogStatus()
+    {
+        $this->userPrivilege->canEditProducts(UserAuthentication::getLoggedUserId());
+
+        $recordId = FatApp::getPostedData('recordId', FatUtility::VAR_INT, 0);
+        if (0 == $recordId) {
+            LibHelper::exitWithError($this->str_invalid_request_id, true);
+        }
+        $status = FatApp::getPostedData('status', FatUtility::VAR_INT, 0);
+        if (!in_array($status, [applicationConstants::ACTIVE, applicationConstants::INACTIVE])) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
+        $this->changeCatalogStatus($recordId, $status);
+        $this->set('msg', Labels::getLabel('MSG_STATUS_UPDATED', $this->siteLangId));
+        $this->_template->render(false, false, 'json-success.php');
+    }
+
+    public function changeCatalogStatus(int $recordId, int $status)
+    {
+        $status = FatUtility::int($status);
+        $recordId = FatUtility::int($recordId);
+        if (1 > $recordId || -1 == $status) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
+        $productName = current(Product::getAttributesByLangId($this->siteLangId, $recordId, ['COALESCE(product_name, product_identifier) as product_name'], applicationConstants::JOIN_INNER));
+        $oldProductData = Product::getAttributesById($recordId, ['product_seller_id', 'product_active']);
+        if ($this->userParentId != $oldProductData['product_seller_id']) {
+            LibHelper::exitWithError($this->str_invalid_request, true);
+        }
+
+        if (
+            0 < $status &&
+            $oldProductData['product_active'] != $status &&
+            0 < $oldProductData['product_seller_id'] &&
+            FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0) &&
+            Product::getActiveCount($oldProductData['product_seller_id']) >= SellerPackages::getAllowedLimit($oldProductData['product_seller_id'], $this->siteLangId, 'ossubs_products_allowed')
+        ) {
+            LibHelper::exitWithError(CommonHelper::replaceStringData(Labels::getLabel('ERR_UNABLE_TO_CHANGE_STATUS_FOR_"{PRODUCT-NAME}"._AS_SELLER_SUBSCRIPTION_PACKAGE_LIMIT_CROSSED.', $this->siteLangId), ['{PRODUCT-NAME}' => $productName]), true);
+        }
+
+        $product = new Product($recordId);
+        if (!$product->changeStatus($status)) {
+            LibHelper::exitWithError($this->modelObj->getError(), true);
+        }
+        CalculativeDataRecord::updateSelprodRequestCount();
+    }
+
     public function productTags()
     {
 
         $this->userPrivilege->canViewProducts(UserAuthentication::getLoggedUserId());
-        if (!$this->isShopActive($this->userParentId, 0, true)) {
+        if (!$this->isShopActive($this->userParentId)) {
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'shop'));
         }
 
@@ -1396,7 +1469,7 @@ class SellerController extends SellerBaseController
     public function requestedCatalog()
     {
         $this->userPrivilege->canEditProducts(UserAuthentication::getLoggedUserId());
-        if (!$this->isShopActive($this->userParentId, 0, true)) {
+        if (!$this->isShopActive($this->userParentId)) {
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'shop'));
         }
         if (!User::canRequestProduct()) {
@@ -1773,6 +1846,13 @@ class SellerController extends SellerBaseController
         $srch->joinProductShippedBySeller($this->userParentId);
         $srch->joinTable(AttributeGroup::DB_TBL, 'LEFT OUTER JOIN', 'product_attrgrp_id = attrgrp_id', 'attrgrp');
         $srch->joinTable(UpcCode::DB_TBL, 'LEFT OUTER JOIN', 'upc_product_id = product_id', 'upc');
+
+
+        if (FatApp::getConfig('CONF_WITHOUT_PROD_VARIANTS', FatUtility::VAR_INT, 0)) {
+            $srch->joinTable(SellerProduct::DB_TBL, 'LEFT JOIN', 'selprod_product_id = product_id', 'sp');
+            $srch->addGroupBy('selprod_product_id');
+            $srch->addFld('selprod_id');
+        }
 
         $srch->addDirectCondition(
             '((CASE
@@ -2623,6 +2703,7 @@ class SellerController extends SellerBaseController
         if (!$shopObj->save()) {
             FatUtility::dieJsonError($shopObj->getError());
         }
+
         $shop_id = $shopObj->getMainTableRecordId();
 
         if ($newShop) {
@@ -3650,22 +3731,6 @@ class SellerController extends SellerBaseController
         }
         return $frm;
     }
-
-    private function isShopActive($userId, $shopId = 0, $returnResult = false)
-    {
-        $shop = new Shop($shopId, $userId);
-        if (false == $returnResult) {
-            return $shop->isActive();
-        }
-
-        if ($shop->isActive()) {
-            return $shop->getData();
-        }
-
-        return false;
-        //return Shop::isShopActive($userId, $shopId, $returnResult);
-    }
-
     private function getShopInfoForm($shopUserId, $shop_id = 0)
     {
         $frm = new Form('frmShop');
@@ -3734,6 +3799,15 @@ class SellerController extends SellerBaseController
             HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("FRM_MANUAL_SHIPPING_RATES_WERE_CONSIDERED_FOR_SELLER_SHIPPING.", $this->siteLangId));
             $fld->developerTags['noCaptionTag'] = false;
         }
+
+        if (
+            0 < FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0) &&
+            applicationConstants::NO == FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)
+        ) {
+            $fld = $frm->addCheckBox(Labels::getLabel("FRM_ENABLE_RFQ_MODULE", $this->siteLangId), 'shop_rfq_enabled', 1, array(), false, 0);
+            HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel('FRM_ENABLING_THIS,_MAKES_PRODUCTS_AVAILABLE_FOR_RFQ.', $this->siteLangId));
+        }
+
         $fld = $frm->addTextarea(Labels::getLabel("FRM_GOVERNMENT_INFORMATION_ON_INVOICES", $this->siteLangId), 'shop_invoice_codes');
         $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_INFORMATION_MANDATED_BY_THE_GOVERNMENT_ON_INVOICES.", $this->siteLangId) . "</span>";
 
@@ -4031,7 +4105,7 @@ class SellerController extends SellerBaseController
         $obj = new Extrapage();
         $pageData = $obj->getContentByPageType(Extrapage::SUBSCRIPTION_PAGE_BLOCK, $this->siteLangId);
         $this->set('pageData', $pageData);
-
+        $this->set('canEdit', $this->userPrivilege->canEditSubscription(UserAuthentication::getLoggedUserId(), true));
         $this->set('includeFreeSubscription', $includeFreeSubscription);
         $this->set('currentPlanData', $currentPlanData);
         $this->set('currentActivePlanId', $currentActivePlanId);
@@ -4443,6 +4517,7 @@ class SellerController extends SellerBaseController
     {
         /* Type is used when we called this form for custom catalog request with selprod data */
 
+        $shopDetails = Shop::getAttributesByUserId($this->userParentId, null, false);
         $defaultProductCond = '';
         $frm = new Form('frmSellerProduct');
 
@@ -4474,7 +4549,7 @@ class SellerController extends SellerBaseController
             }
         }
 
-        $frm->addRequiredField(Labels::getLabel('FRM_TITLE', $this->siteLangId), 'selprod_title' . FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1));
+        $frm->addRequiredField(Labels::getLabel('FRM_TITLE', $this->siteLangId), 'selprod_title' . $this->siteLangId);
         if ($productData['product_type'] != Product::PRODUCT_TYPE_SERVICE) {
             if (false === Plugin::isActive('EasyEcom')) {
                 $frm->addCheckBox(Labels::getLabel('FRM_SYSTEM_SHOULD_MAINTAIN_STOCK_LEVELS', $this->siteLangId), 'selprod_subtract_stock', applicationConstants::YES, array(), false, 0);
@@ -4501,8 +4576,28 @@ class SellerController extends SellerBaseController
             $fld = $frm->addSelectBox(Labels::getLabel('FRM_PRODUCT_CONDITION', $this->siteLangId), 'selprod_condition', Product::getConditionArr($this->siteLangId), $defaultProductCond, array(), Labels::getLabel('FRM_SELECT_CONDITION', $this->siteLangId));
             $fld->requirements()->setRequired();
         }
+
+        if (0 < FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0) && 1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) {
+            if (0 < $shopDetails['shop_rfq_enabled']) {
+                $cartTypeFld = $frm->addSelectBox(Labels::getLabel('FRM_CART_TYPE', $this->siteLangId), 'selprod_cart_type', SellerProduct::getCartType(), SellerProduct::CART_TYPE_BOTH, array('class' => 'fieldsVisibilityJs onlyShowHideJs'), '');
+                $cartTypeFld->requirements()->setRequired();
+                $frm->addCheckBox(Labels::getLabel("FRM_HIDE_PRICE", $this->siteLangId), 'selprod_hide_price', 1, array(), false, 0);
+
+                $hidePriceReqFld = new FormFieldRequirement('selprod_hide_price', Labels::getLabel('FRM_HIDE_PRICE', $this->siteLangId));
+                $hidePriceReqFld->setRequired(true);
+                $hidePriceReqFld->setPositive();
+
+                $hidePriceUnReqFld = new FormFieldRequirement('selprod_hide_price', Labels::getLabel('FRM_HIDE_PRICE', $this->siteLangId));
+                $hidePriceUnReqFld->setRequired(false);
+                $hidePriceUnReqFld->setPositive();
+
+                $cartTypeFld->requirements()->addOnChangerequirementUpdate(SellerProduct::CART_TYPE_RFQ_ONLY, 'eq', 'selprod_hide_price', $hidePriceReqFld);
+                $cartTypeFld->requirements()->addOnChangerequirementUpdate(SellerProduct::CART_TYPE_RFQ_ONLY, 'ne', 'selprod_hide_price', $hidePriceUnReqFld);
+            }
+        }
+
         $frm->addDateField(Labels::getLabel('FRM_DATE_AVAILABLE', $this->siteLangId), 'selprod_available_from', '', array('readonly' => 'readonly'))->requirements()->setRequired();
-        $frm->addCheckBox(Labels::getLabel('FRM_PUBLISH_INVENTORY', $this->siteLangId), 'selprod_active', applicationConstants::YES, array(), '', false, 0);
+        $frm->addCheckBox(Labels::getLabel('FRM_PUBLISH_INVENTORY', $this->siteLangId), 'selprod_active', applicationConstants::YES, [], true, applicationConstants::NO);
 
         $useShopPolicy = $frm->addCheckBox(Labels::getLabel('FRM_USE_SHOP_RETURN_AND_CANCELLATION_POLICY', $this->siteLangId), 'use_shop_policy', 1, ['id' => 'use_shop_policy'], false, 0);
 
@@ -4560,7 +4655,6 @@ class SellerController extends SellerBaseController
                 $fulfillmentType = FatApp::getConfig('CONF_FULFILLMENT_TYPE', FatUtility::VAR_INT, -1);
             }
 
-            $shopDetails = Shop::getAttributesByUserId($this->userParentId, null, false);
             $address = new Address(0, $this->siteLangId);
             $addresses = $address->getData(Address::TYPE_SHOP_PICKUP, $shopDetails['shop_id']);
 
@@ -4617,11 +4711,11 @@ class SellerController extends SellerBaseController
                 }
             }
         }
-        $frm->addTextArea(Labels::getLabel('FRM_ANY_EXTRA_COMMENT_FOR_BUYER', $this->siteLangId), 'selprod_comments' . FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1));
+        $frm->addTextArea(Labels::getLabel('FRM_ANY_EXTRA_COMMENT_FOR_BUYER', $this->siteLangId), 'selprod_comments' . $this->siteLangId);
 
         $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
         $languages = Language::getAllNames();
-        unset($languages[FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1)]);
+        unset($languages[ $this->siteLangId]);
         if (!empty($translatorSubscriptionKey) && count($languages) > 0) {
             $frm->addCheckBox(Labels::getLabel('FRM_TRANSLATE_TO_OTHER_LANGUAGES', $this->siteLangId), 'auto_update_other_langs_data', 1, array(), false, 0);
         }

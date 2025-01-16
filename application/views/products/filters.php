@@ -9,8 +9,8 @@ if (isset($prodcat_code)) {
         $n = FatUtility::int($n);
     });
 }
-?>
-<?php if (isset($priceArr) && $priceArr) { ?>
+
+if (isset($priceArr) && $priceArr && 1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) { ?>
     <div class="sidebar-widget">
         <div class="sidebar-widget_head" data-bs-toggle="collapse" data-bs-target="#price" aria-expanded="true">
             <?php echo Labels::getLabel('LBL_Price', $siteLangId) . ' (' . (CommonHelper::getCurrencySymbolRight() ? CommonHelper::getCurrencySymbolRight() : CommonHelper::getCurrencySymbolLeft()) . ')'; ?>
@@ -45,8 +45,6 @@ if (isset($prodcat_code)) {
     </div>
 <?php
 } ?>
-
-
 
 <?php if (isset($brandsArr) && count($brandsArr) > 1) {
     $brandsCheckedArr = (isset($brandsCheckedArr) && !empty($brandsCheckedArr)) ? $brandsCheckedArr : array(); ?>

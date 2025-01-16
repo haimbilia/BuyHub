@@ -36,7 +36,7 @@
                     break;
                 case 'taxcat_name':
                     $taxCatName = substr($row[$key], 0, $defaultStringLength);
-                    if ($defaultStringLength < strlen($row[$key])) {
+                    if ($defaultStringLength < strlen((string)$row[$key])) {
                         $taxCatName .= '...';
                     }
                     $td->appendElement('plaintext', array(), $taxCatName . '<br>', true);

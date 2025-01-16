@@ -39,6 +39,8 @@ class Shop extends MyAppModel
     private $active = null;
     private $data = null;
 
+    private static $sellerListingForRfq = false;
+
     /**
      * __construct
      *
@@ -516,6 +518,87 @@ class Shop extends MyAppModel
         return 0;
     }
 
+    public static function setSellerListingForRfq(bool $flag = false) {
+        self::$sellerListingForRfq = $flag;
+    }
+
+    public static function getSellersAutocomplete(int $langId, bool $favouriteOnly = false, int $userId = 0, bool $noLimit = false)
+    {
+        $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+        $page = 1 > $page ? 1 : $page;
+        $pageSize = FatApp::getPostedData('pageSize', FatUtility::VAR_INT, 10);
+
+        /* SubQuery, Shop have products[ */
+        $prodShopSrch = new ProductSearch($langId);
+        $prodShopSrch->addMultipleFields(array('distinct(shop_id)'));
+        $prodShopSrch->setGeoAddress();
+        $prodShopSrch->setDefinedCriteria();
+        $prodShopSrch->validateAndJoinDeliveryLocation();
+        $prodShopSrch->joinProductToCategory();
+        $prodShopSrch->doNotCalculateRecords();
+        $prodShopSrch->doNotLimitRecords();
+        $prodShopSrch->joinSellerSubscription($langId, true);
+        $prodShopSrch->addSubscriptionValidCondition();
+        /* ] */
+
+        $srch = new ShopSearch($langId);
+        $srch->setDefinedCriteria($langId);
+        $srch->joinShopCountry();
+        $srch->joinShopState();
+        $srch->joinSellerSubscription();
+        $srch->joinTable('(' . $prodShopSrch->getQuery() . ')', 'INNER JOIN', 'temp.shop_id = s.shop_id', 'temp');
+
+
+        $keyword = FatApp::getPostedData('keyword', null, '');
+        if (!empty($keyword)) {
+            $cond = $srch->addCondition('u_cred.credential_username', 'like', '%' . $keyword . '%');
+            $cond->attachCondition('u_cred.credential_email', 'like', '%' . $keyword . '%', 'OR');
+            $cond->attachCondition('u.user_name', 'like', '%' . $keyword . '%');
+            $cond->attachCondition('s_l.shop_name', 'like', '%' . $keyword . '%');
+            $cond->attachCondition('s.shop_identifier', 'like', '%' . $keyword . '%');
+        }
+
+        if ($favouriteOnly) {
+            $srch->joinTable(Shop::DB_TBL_SHOP_FAVORITE, 'INNER JOIN', 's.shop_id = ufs.ufs_shop_id AND ufs.ufs_user_id = ' . $userId, 'ufs');
+        }
+
+        if (self::$sellerListingForRfq) {
+            $srch->addCondition('shop_rfq_enabled', '=', applicationConstants::YES);
+        }
+
+        $flds = [
+            's.shop_id',
+            'shop_user_id',
+            'user_name',
+            'IFNULL(shop_name, shop_identifier) as shop_name'
+        ];
+        $srch->addMultipleFields($flds);
+        $srch->addGroupBy('s.shop_id');
+
+        if (false == $noLimit) {
+            $srch->setPageNumber($page);
+            $srch->setPageSize($pageSize);
+        } else {
+            $srch->doNotCalculateRecords();
+            $srch->doNotLimitRecords();
+        }
+        $srch->addOrder('shop_created_on');
+        $result = FatApp::getDb()->fetchAll($srch->getResultSet(), 'shop_id');
+        $allShops = array(
+            'pageCount' => $srch->pages(),
+            'results' => []
+        );
+
+        foreach ($result as $shop) {
+            $name = $shop['user_name'] . ' (' . $shop['shop_name'] . ')';
+            $allShops['results'][] = array(
+                'id' => $shop['shop_user_id'],
+                'text' => strip_tags(html_entity_decode($name, ENT_QUOTES, 'UTF-8'))
+            );
+        }
+
+        return $allShops;
+    }
     public static function updateValidSubscription(int $userId = 0): bool
     {
         if (1 > FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
@@ -538,7 +621,7 @@ class Shop extends MyAppModel
         if (0 < $userId) {
             $srch->addCondition('u.user_id', '= ', $userId);
         }
-        
+
         $srch->addCondition('u.user_has_valid_subscription', '= ', applicationConstants::YES);
         $srch->addCondition('oss.ossubs_status_id', 'IN ', Orders::getActiveSubscriptionStatusArr());
         $srch->addCondition('o.order_type', '=', 'mysql_func_' . ORDERS::ORDER_SUBSCRIPTION, 'AND', true);

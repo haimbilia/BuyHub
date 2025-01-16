@@ -28,7 +28,7 @@ class CategoryController extends MyAppController
         } else {
             $get = Product::convertArrToSrchFiltersAssocArr(FatApp::getParameters());
         }
-
+        $viewType = FatApp::getPostedData('viewType', FatUtility::VAR_STRING, '');
         $get['category'] = $categoryId;
         $get['join_price'] = 1;
         $get['vtype']  = $get['vtype'] ?? 'grid';
@@ -99,21 +99,48 @@ class CategoryController extends MyAppController
 
         $srch = Product::getListingObj($get, $this->siteLangId, $userId);
         $flds = array(
-            'prodcat_code', 'product_id', 'prodcat_id', 'COALESCE(product_name, product_identifier) as product_name', 'product_model',  'product_updated_on', 'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name',
-            'selprod_id', 'selprod_user_id',  'selprod_code', 'selprod_stock', 'selprod_condition', 'selprod_price', 'COALESCE(selprod_title  ,COALESCE(product_name, product_identifier)) as selprod_title',
-            'splprice_display_list_price', 'splprice_display_dis_val', 'splprice_display_dis_type', 'splprice_start_date', 'splprice_end_date',
-            'brand_id', 'COALESCE(brand_name, brand_identifier) as brand_name', 'user_name', 'IF(selprod_stock > 0, 1, 0) AS in_stock',
-            'selprod_sold_count', 'selprod_return_policy', /*'maxprice', 'ifnull(sq_sprating.totReviews,0) totReviews','IF(ufp_id > 0, 1, 0) as isfavorite', */ 'selprod_min_order_qty',
-            'shop.shop_id', 'shop.shop_lat', 'shop.shop_lng', 'COALESCE(shop_name, shop_identifier) as shop_name'
+            'prodcat_code',
+            'product_id',
+            'prodcat_id',
+            'COALESCE(product_name, product_identifier) as product_name',
+            'product_model',
+            'product_updated_on',
+            'COALESCE(prodcat_name, prodcat_identifier) as prodcat_name',
+            'selprod_id',
+            'selprod_user_id',
+            'selprod_code',
+            'selprod_stock',
+            'selprod_condition',
+            'selprod_price',
+            'COALESCE(selprod_title  ,COALESCE(product_name, product_identifier)) as selprod_title',
+            'splprice_display_list_price',
+            'splprice_display_dis_val',
+            'splprice_display_dis_type',
+            'splprice_start_date',
+            'splprice_end_date',
+            'brand_id',
+            'COALESCE(brand_name, brand_identifier) as brand_name',
+            'user_name',
+            'IF(selprod_stock > 0, 1, 0) AS in_stock',
+            'selprod_sold_count',
+            'selprod_return_policy', /*'maxprice', 'ifnull(sq_sprating.totReviews,0) totReviews','IF(ufp_id > 0, 1, 0) as isfavorite', */
+            'selprod_min_order_qty',
+            'shop.shop_id',
+            'shop.shop_lat',
+            'shop.shop_lng',
+            'COALESCE(shop_name, shop_identifier) as shop_name',
+            'selprod_cart_type',
+            'selprod_hide_price',
+            'shop.shop_rfq_enabled'
         );
         $this->setRecordCount(clone $srch, $get['pageSize'], $get['page'], $get, true, $flds);
-          
+
         Product::setOrderOnListingObj($srch, $get);
         $srch->setPageNumber($page);
         if ($pageSize) {
             $srch->setPageSize($pageSize);
         }
-        
+
         $products = FatApp::getDb()->fetchAll($srch->getResultSet());
 
         $selProdIdsArr = array_column($products, 'selprod_id');
@@ -139,10 +166,11 @@ class CategoryController extends MyAppController
             'bannerListigUrl' => UrlHelper::generateFullUrl('Banner', 'categories'),
             'siteLangId' => $this->siteLangId,
             'showBreadcrumb' => true,
+            'viewType' => $viewType,
             'pageSizeArr' => FilterHelper::getPageSizeArr($this->siteLangId)
         );
 
-        if (FatUtility::isAjaxCall()) {
+        if (FatUtility::isAjaxCall() && $viewType != 'popupProduct' && $viewType != 'popup') {
             $this->set('products', $products);
             /* $this->set('page', $page);           
             $this->set('pageCount', $srch->pages());
@@ -156,7 +184,28 @@ class CategoryController extends MyAppController
             exit;
         }
 
+        if (FatUtility::isAjaxCall() && $viewType == 'popupProduct') {
+            $this->set('products', $products);
+            $this->set('postedData', $get);
+            $this->set('siteLangId', $this->siteLangId);
+            $this->set('pageSizeArr', $data['pageSizeArr']);
+            $this->set('tRightRibbons', $tRightRibbons);
+            echo $this->_template->render(false, false, 'products/products-map-list-left.php', true);
+            exit;
+        }
         $this->set('data', $data);
+        $this->set('viewType', $viewType);
+        if (FatUtility::isAjaxCall() && $viewType == 'popup') {
+            $this->set('products', $products);
+            $this->set('postedData', $get);
+            $this->set('siteLangId', $this->siteLangId);
+            $this->set('pageSizeArr', $data['pageSizeArr']);
+            $this->set('tRightRibbons', $tRightRibbons);
+            $this->_template->render(false, false, 'products/listing-map-page.php');
+            exit;
+        }
+
+
         if (false === MOBILE_APP_API_CALL) {
             $this->includeProductPageJsCss();
             $this->_template->addJs('js/slick.min.js');
@@ -193,7 +242,7 @@ class CategoryController extends MyAppController
 
     public function icon($catId, $langId = 0, $sizeType = '')
     {
-        $default_image = 'logo_default.svg';
+        $default_image = 'no_image.jpg';
         $catId = FatUtility::int($catId);
         $langId = FatUtility::int($langId);
         $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_CATEGORY_ICON, $catId, 0, $langId);

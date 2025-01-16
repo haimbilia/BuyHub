@@ -16,6 +16,13 @@
     z-index: $zindex-fixed;
     &-item {
       flex: 1 1 0%;
+      &.active {
+        // background-image: linear-gradient($secondary-color, $secondary-color);
+        // background-position: 100% 0;
+        // background-repeat: no-repeat;
+        // background-size: 100% 2px;
+        // transition: background-size 0.3s;
+      }
     }
     &-link {
       margin: 0 auto;

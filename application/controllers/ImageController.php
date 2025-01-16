@@ -288,10 +288,9 @@ class ImageController extends FatController
         }
     }
 
-
     public function displayBrandImage($recordId, $langId = 0, $sizeType = '', $afile_id = 0, $screen = 0, $displayUniversalImage = true)
     {
-        $default_image = 'brand_deafult_image.jpg';
+        $default_image = 'brand_deafult_banner_image.jpg';
         $recordId = FatUtility::int($recordId);
         $afile_id = FatUtility::int($afile_id);
         $langId = FatUtility::int($langId);
@@ -310,8 +309,6 @@ class ImageController extends FatController
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_BRAND_IMAGE, $sizeType);
 
         if ($sizeType && $sizeType != ImageDimension::VIEW_COLLECTION_PAGE) {
-
-
             AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'], $default_image);
         } else {
             AttachedFile::displayOriginalImage($image_name, $default_image);
@@ -830,8 +827,9 @@ class ImageController extends FatController
                 $file_row = $res;
             }
         } else {
-            $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_TESTIMONIAL_IMAGE, $recordId, 0, 0, $displayUniversalImage);
+            $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_TESTIMONIAL_IMAGE, $recordId, 0, -1, $displayUniversalImage);
         }
+        
         $image_name = (isset($file_row['afile_physical_path']) && 0 < $file_row['afile_id']) ? $file_row['afile_physical_path'] : '';
         $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
         $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_TESTIMONIAL, $sizeType);

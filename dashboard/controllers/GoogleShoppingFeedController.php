@@ -624,6 +624,7 @@ class GoogleShoppingFeedController extends AdvertisementFeedBaseController
         ];
 
         $srch = $this->getBatchProductsObj();
+        $srch->addCondition('selprod_cart_type', '!=', SellerProduct::CART_TYPE_RFQ_ONLY);
         $srch->addMultipleFields($attr);
 
         if (!empty($keyword)) {

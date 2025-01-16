@@ -37,7 +37,7 @@
 
                 <ul class="list-stats list-stats-double">
                     <?php foreach ($supplierRequest['field_values'] as $val) { ?>
-                        <li class="list-stats-item <?php if (strlen($val['sfreqvalue_text']) > 40) { ?> list-stats-item-full<?php } ?>">
+                        <li class="list-stats-item <?php if (strlen((string)$val['sfreqvalue_text']) > 40) { ?> list-stats-item-full<?php } ?>">
 
                             <?php
                             if ($val['sformfield_caption'] != '') {

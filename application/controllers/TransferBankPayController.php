@@ -56,7 +56,9 @@ class TransferBankPayController extends PaymentController
     public function send($orderId)
     {
         $frm = $this->getTransferBankForm($this->siteLangId);
-        $post = $frm->getFormDataFromArray(FatApp::getPostedData());
+        $post = FatApp::getPostedData();
+        $isBuyerDash = isset($post['isBuyerDashboard']) ? $post['isBuyerDashboard'] : false;
+        $post = $frm->getFormDataFromArray($post);
         if (false === $post) {
             FatUtility::dieJsonError(current($frm->getValidationErrors()));
         }
@@ -69,7 +71,7 @@ class TransferBankPayController extends PaymentController
             $cartObj->clear();
             $cartObj->updateUserCart();
             if (1 < count(array_filter($post))) {
-                if (!$orderPaymentObj->addOrderPayment($post["opayment_method"], $post['opayment_gateway_txn_id'], $post["opayment_amount"], $post["opayment_comments"], '', false, 0, Orders::ORDER_PAYMENT_PENDING)) {
+                if (!$orderPaymentObj->addOrderPayment($post["opayment_method"], $post['opayment_gateway_txn_id'], $post["opayment_amount"], $post["opayment_comments"], '', false, 0, Orders::ORDER_PAYMENT_PENDING, $isBuyerDash)) {
                     FatUtility::dieJsonError($orderPaymentObj->getError());
                 }
             } else {
@@ -80,7 +82,8 @@ class TransferBankPayController extends PaymentController
             }
 
             if (true === MOBILE_APP_API_CALL) {
-                $this->set('msg', Labels::getLabel('MSG_ORDER_PLACED_SUCCESSFULLY', $this->siteLangId));
+                $msg = $isBuyerDash == true ? Labels::getLabel('MSG_TRANSACTION_DETAIL_SUBMITTED_SUCCESSFULLY', $this->siteLangId) : Labels::getLabel('MSG_ORDER_PLACED_SUCCESSFULLY', $this->siteLangId);
+                $this->set('msg', $msg);
                 $this->_template->render();
             }
 

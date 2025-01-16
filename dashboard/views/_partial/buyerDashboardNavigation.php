@@ -43,6 +43,13 @@ $action = strtolower($action); ?>
                     <span class="menu-sub-title navTextJs"><?php echo Labels::getLabel("LBL_Return_Requests", $siteLangId); ?></span>
                 </a>
             </li>
+            <?php if(0 < FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0)) {?>
+                <li class="menu-sub-item navItemJs">
+                    <a class="menu-sub-link navLinkJs <?php echo (false === $quickSearch && (($controller == 'requestforquotes' && $action == 'index') || ($controller == 'rfqoffers' && $action == 'listing'))) ? 'active' : ''; ?>" title="<?php echo Labels::getLabel("LBL_REQUEST_FOR_QUOTES", $siteLangId); ?>" href="<?php echo UrlHelper::generateUrl('RequestForQuotes', '', [], CONF_WEBROOT_DASHBOARD); ?>">
+                        <span class="menu-sub-title navTextJs"><?php echo Labels::getLabel("LBL_REQUEST_FOR_QUOTES", $siteLangId); ?></span>
+                    </a>
+                </li>
+            <?php }?>
         </ul>
     </li>
     <?php if (User::canViewBuyerTab()) { ?>

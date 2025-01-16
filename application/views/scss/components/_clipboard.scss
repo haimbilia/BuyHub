@@ -2,7 +2,7 @@ $clipboard-size: 40px;
 
 .clipboard {
   position: relative;
-  gap: 10px;
+  gap: 0.5rem;
   flex: 1;
   //max-width: 400px;
   width: 100%;
@@ -38,6 +38,7 @@ $clipboard-size: 40px;
     padding: 0;
     color: $txt-gray;
     font-weight: $font-weight-bold;
+    text-align: initial;
 
     &:focus {
       outline: none;
@@ -56,6 +57,10 @@ $clipboard-size: 40px;
     border-radius: $common-radius;
     font-size: 1.2rem;
     transition: all 0.5s ease;
+
+    @include media-breakpoint-down(md) {
+      opacity: 1;
+    }
 
     &:active,
     &:focus {

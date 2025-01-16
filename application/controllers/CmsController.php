@@ -11,7 +11,7 @@ class CmsController extends MyAppController
     {
         $cPageId = FatUtility::int($cPageId);
         $srch = ContentPage::getSearchObject($this->siteLangId);
-        $srch->addMultipleFields(array('cpage_id', 'IFNULL(cpage_title, cpage_identifier) as cpage_title', 'cpage_layout', 'cpage_image_title', 'cpage_image_content', 'cpage_content' ));
+        $srch->addMultipleFields(array('cpage_id', 'IFNULL(cpage_title, cpage_identifier) as cpage_title', 'cpage_layout', 'cpage_image_title', 'cpage_image_content', 'cpage_content', 'cpage_hide_header_footer'));
         $srch->addCondition('cpage_id', '=', $cPageId);
         $srch->doNotCalculateRecords();
         $srch->setPageSize(1);
@@ -32,6 +32,9 @@ class CmsController extends MyAppController
         }
         $this->set('blockData', $blockData);
         $this->set('cPage', $cPage);
+
+        $this->set('exculdeMainHeaderDiv', (0 < $cPage['cpage_hide_header_footer']));
+        $this->set('exculdeMainFooterElement', (0 < $cPage['cpage_hide_header_footer']));
         if ($isAppUser) {
             $this->set('isAppUser', $isAppUser);
             $this->_template->render(false, false);
@@ -52,9 +55,9 @@ class CmsController extends MyAppController
             $title = isset($cPage['cpage_title']) ? $cPage['cpage_title'] : $cPage['cpage_identifier'];
         }
         switch ($action) {
-        default:
-            $nodes[] = array('title' => $title);
-            break;
+            default:
+                $nodes[] = array('title' => $title);
+                break;
         }
         return $nodes;
     }

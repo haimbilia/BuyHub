@@ -14,13 +14,13 @@
             <div class="review-block-body">
                 <address class="address">
                     <p><?php echo $addresses['addr_name'] . ', ' . $addresses['addr_address1']; ?>
-                        <?php if (strlen($addresses['addr_address2']) > 0) {
+                        <?php if (strlen((string)$addresses['addr_address2']) > 0) {
                             echo ", " . $addresses['addr_address2']; ?>
                         <?php } ?>
                     </p>
                     <p><?php echo $addresses['addr_city'] . ", " . $addresses['state_name'] . ", " . $addresses['country_name'] . ", " . $addresses['addr_zip']; ?>
                     </p>
-                    <?php if (strlen($addresses['addr_phone']) > 0) {
+                    <?php if (strlen((string)$addresses['addr_phone']) > 0) {
                         $addrPhone = ValidateElement::formatDialCode($addresses['addr_phone_dcode']) . $addresses['addr_phone'];
                     ?>
                         <ul class="phone-list">
@@ -99,14 +99,14 @@
                                 ?>
                                     <address class="address shop-address">
                                         <p><?php echo $address['addr_name'] . ', ' . $address['addr_address1']; ?>
-                                            <?php if (strlen($address['addr_address2']) > 0) {
+                                            <?php if (strlen((string)$address['addr_address2']) > 0) {
                                                 echo ", " . $address['addr_address2']; ?>
                                             <?php } ?>
                                         </p>
                                         <p><?php echo $address['addr_city'] . ", " . $address['state_name']; ?></p>
                                         <p><?php echo $address['country_name'] . ", " . $address['addr_zip']; ?></p>
                                         <ul class="phone-list">
-                                            <?php if (strlen($address['addr_phone']) > 0) {
+                                            <?php if (strlen((string)$address['addr_phone']) > 0) {
                                                 $addrPhone = ValidateElement::formatDialCode($address['addr_phone_dcode']) . $address['addr_phone'];
                                             ?>
                                                 <li class="phone-list-item phone-txt">
@@ -166,13 +166,7 @@
                                                 <a class="title" href="<?php echo $productUrl; ?>">
                                                     <?php echo ($product['selprod_title']) ? $product['selprod_title'] : $product['product_name']; ?>
                                                 </a>
-                                                <div class="products-price">
-                                                    <span class="products-price-new"><?php echo trim(CommonHelper::displayMoneyFormat($product['theprice'], true, false, true, false, false, true)); ?></span>
-                                                    <?php if ($product['special_price_found'] && $product['selprod_price'] > $product['theprice']) { ?>
-                                                        <del class="products-price-old"><?php echo trim(CommonHelper::displayMoneyFormat($product['selprod_price'], true, false, true, false, false, true)); ?></del>
-                                                        <div class="products-price-off"><?php echo trim(CommonHelper::showProductDiscountedText($product, $siteLangId)); ?></div>
-                                                    <?php } ?>
-                                                </div>
+                                                <?php require(CONF_THEME_PATH . '_partial/collection/product-price.php'); ?>
                                                 <div class="options">
                                                     <?php if (isset($product['options']) && count($product['options'])) {
                                                         foreach ($product['options'] as $key => $option) {
@@ -187,19 +181,27 @@
                                         </div>
                                         <div class="product-quantity">
                                             <div class="quantity quantity-sm">
-                                                <button class="decrease decrease-js <?php echo ($product['quantity'] <= $product['selprod_min_order_qty']) ? 'disabled' : ''; ?>" type="button">
-                                                    <svg class="svg" width="16" height="16">
-                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
-                                                        </use>
-                                                    </svg>
-                                                </button>
-                                                <input class="qty-input no-focus cartQtyTextBox productQty-js" title="<?php echo Labels::getLabel('LBL_Quantity', $siteLangId) ?>" data-page="checkout" type="text" name="qty_<?php echo md5($product['key']); ?>" data-key="<?php echo md5($product['key']); ?>" value="<?php echo $product['quantity']; ?>">
-                                                <button class="increase increase-js <?php echo ($product['selprod_stock'] <= $product['quantity']) ? 'disabled' : ''; ?>">
-                                                    <svg class="svg" width="16" height="16">
-                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
-                                                        </use>
-                                                    </svg>
-                                                </button>
+                                                <?php if (isset($_SESSION['offer_checkout']) && $_SESSION['offer_checkout']['selprod_id'] == $product['selprod_id']) { ?>
+                                                    <div class="selected-qty">
+                                                        <strong><?php echo Labels::getLabel('LBL_QTY_:') ?></strong>
+                                                        <?php echo $product['quantity']; ?>
+                                                        <?php echo $_SESSION['offer_checkout']['offer_quantity_unit']; ?>
+                                                    </div>
+                                                <?php } else { ?>
+                                                    <button class="decrease decrease-js <?php echo ($product['quantity'] <= $product['selprod_min_order_qty']) ? 'disabled' : ''; ?>" type="button">
+                                                        <svg class="svg" width="16" height="16">
+                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
+                                                            </use>
+                                                        </svg>
+                                                    </button>
+                                                    <input class="qty-input no-focus cartQtyTextBox productQty-js" title="<?php echo Labels::getLabel('LBL_Quantity', $siteLangId) ?>" data-page="checkout" type="text" name="qty_<?php echo md5($product['key']); ?>" data-key="<?php echo md5($product['key']); ?>" value="<?php echo $product['quantity']; ?>">
+                                                    <button class="increase increase-js <?php echo ($product['selprod_stock'] <= $product['quantity']) ? 'disabled' : ''; ?>">
+                                                        <svg class="svg" width="16" height="16">
+                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
+                                                            </use>
+                                                        </svg>
+                                                    </button>
+                                                <?php } ?>
                                             </div>
                                         </div>
                                     </div>
@@ -286,19 +288,27 @@
                                         </div>
                                         <div class="product-quantity">
                                             <div class="quantity quantity-sm">
-                                                <button class="decrease decrease-js <?php echo ($product['quantity'] <= $product['selprod_min_order_qty']) ? 'disabled' : ''; ?>" type="button">
-                                                    <svg class="svg" width="16" height="16">
-                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
-                                                        </use>
-                                                    </svg>
-                                                </button>
-                                                <input class="qty-input no-focus cartQtyTextBox productQty-js" title="<?php echo Labels::getLabel('LBL_Quantity', $siteLangId) ?>" data-page="checkout" type="text" name="qty_<?php echo md5($product['key']); ?>" data-key="<?php echo md5($product['key']); ?>" value="<?php echo $product['quantity']; ?>">
-                                                <button class="increase increase-js <?php echo ($product['selprod_stock'] <= $product['quantity']) ? 'disabled' : ''; ?>">
-                                                    <svg class="svg" width="16" height="16">
-                                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
-                                                        </use>
-                                                    </svg>
-                                                </button>
+                                                <?php if (isset($_SESSION['offer_checkout']) && $_SESSION['offer_checkout']['selprod_id'] == $product['selprod_id']) { ?>
+                                                    <div class="selected-qty">
+                                                        <strong><?php echo Labels::getLabel('LBL_QTY_:') ?></strong>
+                                                        <?php echo $product['quantity']; ?>
+                                                        <?php echo $_SESSION['offer_checkout']['offer_quantity_unit']; ?>
+                                                    </div>
+                                                <?php } else { ?>
+                                                    <button class="decrease decrease-js <?php echo ($product['quantity'] <= $product['selprod_min_order_qty']) ? 'disabled' : ''; ?>" type="button">
+                                                        <svg class="svg" width="16" height="16">
+                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
+                                                            </use>
+                                                        </svg>
+                                                    </button>
+                                                    <input class="qty-input no-focus cartQtyTextBox productQty-js" title="<?php echo Labels::getLabel('LBL_Quantity', $siteLangId) ?>" data-page="checkout" type="text" name="qty_<?php echo md5($product['key']); ?>" data-key="<?php echo md5($product['key']); ?>" value="<?php echo $product['quantity']; ?>">
+                                                    <button class="increase increase-js <?php echo ($product['selprod_stock'] <= $product['quantity']) ? 'disabled' : ''; ?>">
+                                                        <svg class="svg" width="16" height="16">
+                                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
+                                                            </use>
+                                                        </svg>
+                                                    </button>
+                                                <?php } ?>
                                             </div>
                                         </div>
                                     </div>

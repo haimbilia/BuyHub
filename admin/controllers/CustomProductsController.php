@@ -294,7 +294,9 @@ class CustomProductsController extends ListingBaseController
             $countryData = Countries::getAttributesByLangId($langId, $productData['ps_from_country_id'], [Countries::tblFld('name'), Countries::tblFld('code')], applicationConstants::JOIN_RIGHT, applicationConstants::YES);
             if ($countryData) {
                 $fld = $frm->getField('ps_from_country_id');
-                $fld->options = [$productData['ps_from_country_id'] => $countryData[Tax::tblFld('name')] ?? $taxData[Tax::tblFld('identifier')]];
+                if (null != $fld) {
+                    $fld->options = [$productData['ps_from_country_id'] => $countryData[Tax::tblFld('name')] ?? $taxData[Tax::tblFld('identifier')]];
+                }
             }
         }
 

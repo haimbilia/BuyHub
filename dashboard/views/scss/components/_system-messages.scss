@@ -126,9 +126,11 @@
         position: relative;
         padding: 0 0 10px 0;
         color: inherit;
+
         &:last-child {
             padding-bottom: 0;
         }
+
         a {
             font-weight: normal;
             font-size: 13px;
@@ -188,7 +190,7 @@
     position: absolute;
     top: 2px;
     content: "";
-    background: #fff;
+    background-color: #fff;
 }
 
 .system_message .closeMsg:after {
@@ -199,16 +201,18 @@
     margin: -2px 0 0 0;
     position: absolute;
     content: "";
-    background: #fff;
+    background-color: #fff;
 }
 
 @media (max-width: 767px) {
+
     #mbsmessage,
     .system_message {
         #{$start-direction}: 10px;
         #{$end-direction}: 10px;
         width: auto;
     }
+
     #mbsmessage .content,
     .system_message .content {
         min-width: inherit;

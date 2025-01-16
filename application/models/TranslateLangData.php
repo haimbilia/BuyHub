@@ -137,7 +137,7 @@ class TranslateLangData
         }
 
         $response = $this->translateObj->translateData($this->toLangQueryString, $dataToUpdate);
-        if (false === $response) {
+        if (false === $response || is_null($response)) {
             $this->error = $this->translateObj->getError();
             return false;
         }

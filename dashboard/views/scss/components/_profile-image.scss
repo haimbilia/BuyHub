@@ -1,0 +1,49 @@
+.profile-image {
+  position: relative;
+  margin: 2rem auto;
+
+  .avatar {
+    margin: 0 auto;
+    border-radius: 50%;
+    width: 7rem;
+    height: 7rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: $bg-gray;
+    box-shadow: $shadow1;
+    border: solid 1px transparent;
+    position: relative;
+    overflow: visible;
+
+    > img {
+      width: inherit;
+      height: inherit;
+      border-radius: 50%;
+    }
+  }
+
+  .btn-edit,
+  .btn-delete {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    margin-top: -15px;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    box-shadow: $shadow4;
+  }
+
+  .btn-edit {
+    #{$end-direction}: -40px;
+  }
+
+  .btn-delete {
+    #{$end-direction}: -80px;
+  }
+}

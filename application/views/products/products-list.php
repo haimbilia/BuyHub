@@ -1,6 +1,6 @@
 <?php
 defined('SYSTEM_INIT') or die('Invalid Usage.');
-$colMdVal = isset($colMdVal) ? $colMdVal : 3;
+$colMdVal = isset($colMdVal) ? $colMdVal : 4;
 $displayProductNotAvailableLable = false;
 if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !empty(FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''))) {
     $displayProductNotAvailableLable = true;
@@ -23,21 +23,23 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !em
                     $selProdRibbons = $product['ribbons'];
                 }
                 $productUrl = UrlHelper::generateUrl('Products', 'View', array($product['selprod_id'])); ?>
-                <div class="item productsListItemsJs" data-shopId="<?php echo $product['shop_id']; ?>">
+                <div class="product-listing-item productsListItemsJs" data-shopId="<?php echo $product['shop_id']; ?>">
                     <div class="products">
                         <div class="products-body">
                             <?php if ($product['in_stock'] == 0) { ?>
                                 <div class="out-of-stock-txt"><?php echo Labels::getLabel('LBL_SOLD_OUT', $siteLangId); ?></div>
                             <?php } ?>
-                            <?php
-                            if (!empty($selProdRibbons)) {
-                                foreach ($selProdRibbons as $ribbRow) {
-                                    $this->includeTemplate('_partial/ribbon-ui.php', ['ribbRow' => $ribbRow], false);
-                                }
-                            } ?>
+                            <div class="badges-wrap">
+                                <?php $this->includeTemplate('_partial/product-type-ribbon.php', ['productType' => $product['product_type'], 'siteLangId' => $siteLangId], false);
+                                if (!empty($selProdRibbons)) {
+                                    foreach ($selProdRibbons as $ribbRow) {
+                                        $this->includeTemplate('_partial/ribbon-ui.php', ['ribbRow' => $ribbRow], false);
+                                    }
+                                } ?>
+                            </div>
                             <?php if (true == $displayProductNotAvailableLable && array_key_exists('availableInLocation', $product) && 0 == $product['availableInLocation']) { ?>
                                 <div class="not-available">
-                                    <svg class="svg">
+                                    <svg class="svg" width="14" height="14">
                                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#linkedinfo">
                                         </use>
                                     </svg>
@@ -46,7 +48,8 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !em
                             <?php } ?>
                             <div class="products-img">
                                 <?php $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']); ?>
-                                <a title="<?php echo CommonHelper::renderHtml($product['selprod_title'], true); ?>" href="<?php echo !isset($product['promotion_id']) ? UrlHelper::generateUrl('Products', 'View', array($product['selprod_id'])) : UrlHelper::generateUrl('Products', 'track', array($product['promotion_record_id'])) ?>">
+                                <a title="<?php echo CommonHelper::renderHtml($product['selprod_title'], true); ?>"
+                                    href="<?php echo !isset($product['promotion_id']) ? UrlHelper::generateUrl('Products', 'View', array($product['selprod_id'])) : UrlHelper::generateUrl('Products', 'track', array($product['promotion_record_id'])) ?>">
                                     <?php
                                     $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_PRODUCT_IMAGE, $product['product_id']);
                                     $pictureAttr = [
@@ -71,67 +74,67 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !em
                             </div>
                         </div>
                         <div class="products-foot">
-                            <div class="products-category">
-                                <a href="<?php echo UrlHelper::generateUrl('Category', 'View', array($product['prodcat_id'])); ?>"><?php echo CommonHelper::renderHtml($product['prodcat_name'], true); ?>
-                                </a>
-                            </div>
-                            <div class="products-title"><a title="<?php echo CommonHelper::renderHtml($product['selprod_title'], true); ?>" href="<?php echo UrlHelper::generateUrl('Products', 'View', array($product['selprod_id'])); ?>"><?php echo (mb_strlen($product['selprod_title']) > 50) ? mb_substr(CommonHelper::renderHtml($product['selprod_title'], true), 0, 50) . "..." : CommonHelper::renderHtml($product['selprod_title'], true); ?>
-                                </a></div>
+                            <a class="products-category"
+                                href="<?php echo UrlHelper::generateUrl('Category', 'View', array($product['prodcat_id'])); ?>" title="<?php echo CommonHelper::renderHtml($product['prodcat_name'], true); ?>"><?php echo CommonHelper::renderHtml($product['prodcat_name'], true); ?>
+                            </a>
+                            <a class="products-title"
+                                title="<?php echo CommonHelper::renderHtml($product['selprod_title'], true); ?>"
+                                href="<?php echo UrlHelper::generateUrl('Products', 'View', array($product['selprod_id'])); ?>"><?php echo (mb_strlen($product['selprod_title']) > 50) ? mb_substr(CommonHelper::renderHtml($product['selprod_title'], true), 0, 50) . "..." : CommonHelper::renderHtml($product['selprod_title'], true); ?>
+                            </a>
                             <?php $this->includeTemplate('_partial/collection-product-price.php', array('product' => $product, 'siteLangId' => $siteLangId), false); ?>
                         </div>
                     </div>
                 </div>
                 <!--/product tile-->
             <?php } ?>
-    </div>
-    <?php
-            $searchFunction = 'goToProductListingSearchPage';
-            if (isset($pagingFunc)) {
-                $searchFunction = $pagingFunc;
-            }
+        </div>
+        <?php
+        $searchFunction = 'goToProductListingSearchPage';
+        if (isset($pagingFunc)) {
+            $searchFunction = $pagingFunc;
+        }
 
-            $postedData['page'] = (isset($page)) ? $page : 1;
-            $postedData['recordDisplayCount'] = $recordCount;
-            $postedData['pageRecordCount'] = FilterHelper::encrypt($recordCount);
-            echo FatUtility::createHiddenFormFromData($postedData, array('name' => 'frmProductSearchPaging', 'id' => 'frmProductSearchPaging'));
-            $pagingArr = array('pageCount' => $pageCount, 'page' => $postedData['page'], 'recordCount' => $recordCount, 'callBackJsFunc' => $searchFunction);
-            $itemsPerPage = FatApp::getConfig('CONF_ITEMS_PER_PAGE_CATALOG', FatUtility::VAR_INT, 10);
-            if ($itemsPerPage < $recordCount) { ?>
-        <div class="collection-pager">
-            <?php
+        $postedData['page'] = (isset($page)) ? $page : 1;
+        $postedData['recordDisplayCount'] = $recordCount;
+        $postedData['pageRecordCount'] = FilterHelper::encrypt($recordCount);
+        echo FatUtility::createHiddenFormFromData($postedData, array('name' => 'frmProductSearchPaging', 'id' => 'frmProductSearchPaging'));
+        $pagingArr = array('pageCount' => $pageCount, 'page' => $postedData['page'], 'recordCount' => $recordCount, 'callBackJsFunc' => $searchFunction);
+        $itemsPerPage = FatApp::getConfig('CONF_ITEMS_PER_PAGE_CATALOG', FatUtility::VAR_INT, 10);
+        if ($itemsPerPage < $recordCount) { ?>
+            <div class="collection-pager">
+                <?php
                 $this->includeTemplate('_partial/pagination.php', $pagingArr, false);
                 if (!isset($removePageSize)) { ?>
-                <select name="pageSizeSelect" id="pageSizeSelect" class="custom-select sorting-select">
-                    <?php foreach ($pageSizeArr as $key => $val) { ?>
-                        <option value="<?php echo $key; ?>" <?php echo ($key == $pageSize) ? 'selected' : ''; ?>>
-                            <?php echo $val; ?>
-                        </option>
-                    <?php
-                        if ($recordCount < $key) {
-                            break;
-                        }
-                    } ?>
-                </select>
-            <?php } ?>
-        </div>
-    <?php }
+                    <select name="pageSizeSelect" id="pageSizeSelect" class="custom-select sorting-select">
+                        <?php foreach ($pageSizeArr as $key => $val) { ?>
+                            <option value="<?php echo $key; ?>" <?php echo ($key == $pageSize) ? 'selected' : ''; ?>>
+                                <?php echo $val; ?>
+                            </option>
+                            <?php
+                            if ($recordCount < $key) {
+                                break;
+                            }
+                        } ?>
+                    </select>
+                <?php } ?>
+            </div>
+        <?php }
         } else { ?>
-</div>
-<?php
-        $arr['recordDisplayCount'] = $recordCount;
-        $arr['pageRecordCount'] = FilterHelper::encrypt($recordCount);
-        echo FatUtility::createHiddenFormFromData($arr, array('name' => 'frmProductSearchPaging', 'id' => 'frmProductSearchPaging'));
-        $message = Labels::getLabel('LBL_No_Records_Found', $siteLangId);
-        $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId, 'message' => $message));
-} ?>
+    </div>
+    <?php
+    $arr['recordDisplayCount'] = $recordCount;
+    $arr['pageRecordCount'] = FilterHelper::encrypt($recordCount);
+    echo FatUtility::createHiddenFormFromData($arr, array('name' => 'frmProductSearchPaging', 'id' => 'frmProductSearchPaging'));
+    $message = Labels::getLabel('LBL_No_Records_Found', $siteLangId);
+    $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId, 'message' => $message));
+        } ?>
 <script>
-    $(function() {
+    $(function () {
         var e = document.getElementById("pageSizeSelect");
         if (e != null) {
             var pageSize = e.options[e.selectedIndex].value;
             $('#pageSize').val(pageSize);
         }
-
     })
 </script>
 </div>

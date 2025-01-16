@@ -217,6 +217,10 @@ class SellerPackagesController extends ListingBaseController
 
         $fld = $frm->addIntegerField(Labels::getLabel('FRM_PACKAGE_IMAGES_PER_CATALOG', $this->siteLangId), SellerPackages::DB_TBL_PREFIX . 'images_per_product');
         $fld->requirements()->setIntPositive();
+        
+        $fld = $frm->addIntegerField(Labels::getLabel('FRM_RFQ_OFFERS_LIMIT', $this->siteLangId), SellerPackages::DB_TBL_PREFIX . 'rfq_offers_allowed');
+        $fld->requirements()->setIntPositive();
+        $fld->requirements()->setRange('1', '9999999');
 
         $fld = $frm->addRequiredField(Labels::getLabel('FRM_PACKAGE_DISPLAY_ORDER', $this->siteLangId), SellerPackages::DB_TBL_PREFIX . 'display_order');
         $fld->requirements()->setIntPositive();

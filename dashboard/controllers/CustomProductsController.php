@@ -145,7 +145,9 @@ class CustomProductsController extends SellerBaseController
                 $countryData = Countries::getAttributesByLangId($langId, $productData['ps_from_country_id'], [Countries::tblFld('name'), Countries::tblFld('code')], applicationConstants::JOIN_RIGHT, applicationConstants::YES);
                 if ($countryData) {
                     $fld = $frm->getField('ps_from_country_id');
-                    $fld->options = [$productData['ps_from_country_id'] => $countryData[Tax::tblFld('name')] ?? $taxData[Tax::tblFld('identifier')]];
+                    if (null != $fld) {
+                        $fld->options = [$productData['ps_from_country_id'] => $countryData[Tax::tblFld('name')] ?? $taxData[Tax::tblFld('identifier')]];
+                    }
                 }
             }
 
@@ -693,7 +695,7 @@ class CustomProductsController extends SellerBaseController
 
     private function canAddCustomCatalogProduct()
     {
-        if (!$this->isShopActive($this->userParentId, 0)) {
+        if (!$this->isShopActive($this->userParentId)) {
             LibHelper::exitWithError(Labels::getLabel('ERR_YOUR_SHOP_IS_INACTIVE', $this->siteLangId), false, true);
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'shop'));
         }
@@ -707,11 +709,5 @@ class CustomProductsController extends SellerBaseController
             LibHelper::exitWithError(Labels::getLabel("ERR_PLEASE_BUY_SUBSCRIPTION", $this->siteLangId), false, true);
             FatApp::redirectUser(UrlHelper::generateUrl('Seller', 'catalog'));
         }
-    }
-
-    private function isShopActive($userId, $shopId = 0)
-    {
-        $shop = new Shop($shopId, $userId);
-        return $shop->isActive();
     }
 }

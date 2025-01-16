@@ -143,6 +143,15 @@ class ConfigurationsController extends ListingBaseController
         if (false === $post) {
             LibHelper::exitWithError(current($frm->getValidationErrors()), true);
         }
+
+        if (isset($post['CONF_RFQ_MODULE']) || isset($post['CONF_HIDE_PRICES'])) {
+            $rfqModule = isset($post['CONF_RFQ_MODULE']) ? $post['CONF_RFQ_MODULE'] : FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0);
+            $hidePrice = isset($post['CONF_HIDE_PRICES']) ? $post['CONF_HIDE_PRICES'] : FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0);
+            if (applicationConstants::INACTIVE == $rfqModule && applicationConstants::ACTIVE == $hidePrice) {
+                LibHelper::exitWithError(Labels::getLabel('LBL_RFQ_MODULE_SHOULD_BE_ENABLED_ALONG_WITH_HIDE_PRICE_SETTING.', $this->siteLangId), true);
+            }
+        }
+
         unset($post['form_type']);
         unset($post['btn_submit']);
         foreach ($this->serializeArrayValues as $val) {
@@ -231,6 +240,10 @@ class ConfigurationsController extends ListingBaseController
             if (!empty($row)) {
                 LibHelper::exitWithError(Labels::getLabel('ERR_PLEASE_REMOVE_PRODUCTS_DATA_TO_CHANGE_THIS_SETTINGS', $this->siteLangId), true);
             }
+        }
+
+        if (false == CONF_DEVELOPMENT_MODE) {
+            unset($post['CONF_DEFAULT_SITE_LANG']); /* Restrict to update default site language. */
         }
 
         if (!$record->update($post)) {
@@ -525,7 +538,31 @@ class ConfigurationsController extends ListingBaseController
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_DEFAULT_SCHEMA_MSG", $langId) . "</span>";
 
                 break;
+            case Configurations::FORM_RFQ:
+                $fld = $frm->addCheckBox(Labels::getLabel("FRM_ENABLE_MAIN_RFQ_MODULE", $langId), 'CONF_RFQ_MODULE', 1, array(), false, 0);
+                HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel('FRM_ENABLING_THIS,_BUYER_CAN_REQUEST_FOR_QUOTATION', $langId));
 
+                $fld = $frm->addCheckBox(Labels::getLabel("FRM_ENABLE_GLOBAL_RFQ_MODULE", $langId), 'CONF_GLOBAL_RFQ_MODULE', 1, array(), false, 0);
+                HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel('FRM_ENABLING_THIS,_BUYER_CAN_REQUEST_GLOBALLY_FOR_QUOTATION', $langId));
+
+                $fld = $frm->addCheckBox(Labels::getLabel("FRM_HIDE_PRODUCT_PRICES", $langId), 'CONF_HIDE_PRICES', 1, array(), false, 0);
+                HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel('FRM_ENABLING_THIS,_PRODUCT_PRICE_WILL_NOT_DISPLAY', $langId));
+
+                $typeArr = RequestForQuote::getTypeArr($langId);
+                $fld = $frm->addSelectBox(Labels::getLabel('FRM_RFQ_MODULE_TYPE', $langId), 'CONF_RFQ_MODULE_TYPE', $typeArr, '', array(), '');
+                $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel('FRM_TEXT_FOR_RFQ_MODULE_TYPE_1.', $langId) . '</span>';
+
+                $fld = $frm->addCheckBox(
+                    Labels::getLabel("FRM_ENABLE_ADMIN_APPROVAL_ON_NEW_RFQ", $langId),
+                    'CONF_ENABLE_ADMIN_APPROVAL_ON_NEW_RFQ',
+                    1,
+                    array(),
+                    true,
+                    0
+                );
+                HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel('FRM_ENABLING_THIS,_ADMIN_APPROVAL_IS_REQUIRED_FOR_NEW_RFQ.', $langId));
+
+                break;
             case Configurations::FORM_PRODUCT:
                 // $frm->addHtml('', 'Product', '<h3 class="form-section-head">' . Labels::getLabel('FRM_PRODUCT', $langId) . '</h3>');
 
@@ -1605,7 +1642,7 @@ class ConfigurationsController extends ListingBaseController
                     'CONF_DEFAULT_SITE_LANG',
                     Language::getAllNames(),
                     false,
-                    array(),
+                    array('disabled' => 'disabled', 'title' => Labels::getLabel('ERR_YOU_CANNOT_CHANGE_SITE_DEFAULT_LANGUAGE', $langId), 'data-bs-toggle' => 'tooltip'),
                     ''
                 );
                 $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("FRM_CHANGING_DEFAULT_SITE_LANGUAGE,_MAKE_SURE_ALL_THE_INFORMATION_IS_UPDATED_WITH_THIS_LANGUAGE", $langId) . '</span>';
@@ -1633,6 +1670,9 @@ class ConfigurationsController extends ListingBaseController
                 HtmlHelper::configureSwitchForCheckbox($fld);
 
                 $fld = $frm->addCheckBox(Labels::getLabel("FRM_HEADER_MEGA_MENU", $langId), 'CONF_LAYOUT_MEGA_MENU', 1, array(), false, 0);
+                HtmlHelper::configureSwitchForCheckbox($fld);
+
+                $fld = $frm->addCheckBox(Labels::getLabel("FRM_HEADER_FULL_WIDTH", $langId), 'CONF_HEADER_FULL_WIDTH', 1, array(), false, 0);
                 HtmlHelper::configureSwitchForCheckbox($fld);
 
                 $fld = $frm->addCheckBox(Labels::getLabel("FRM_SINGLE_SELLER_CART", $langId), 'CONF_SINGLE_SELLER_CART', 1, array(), false, 0);

@@ -19,6 +19,8 @@ class applicationConstants
     public const WEIGHT_GRAM = 1;
     public const WEIGHT_KILOGRAM = 2;
     public const WEIGHT_POUND = 3;
+    public const WEIGHT_LITRE = 4;
+    public const WEIGHT_PIECE = 5;
     public const LENGTH_CENTIMETER = 1;
     public const LENGTH_METER = 2;
     public const LENGTH_INCH = 3;
@@ -99,6 +101,8 @@ class applicationConstants
                 static::WEIGHT_GRAM => 'GM',
                 static::WEIGHT_KILOGRAM => 'KG',
                 static::WEIGHT_POUND => 'PN',
+                static::WEIGHT_LITRE => 'LT',
+                static::WEIGHT_PIECE => 'Pc.',
             );
         }
 
@@ -106,7 +110,14 @@ class applicationConstants
             static::WEIGHT_GRAM => Labels::getLabel('LBL_Gram', $langId),
             static::WEIGHT_KILOGRAM => Labels::getLabel('LBL_Kilogram', $langId),
             static::WEIGHT_POUND => Labels::getLabel('LBL_Pound', $langId),
+            static::WEIGHT_LITRE => Labels::getLabel('LBL_LITRE', $langId),
+            static::WEIGHT_PIECE => Labels::getLabel('LBL_PIECE', $langId),
         );
+    }
+
+    public static function getWeightUnitName(int $langId, int $unitId, $unitOnly = false): string
+    {
+        return self::getWeightUnitsArr($langId, $unitOnly)[$unitId] ?? Labels::getLabel('LBL_PIECE`S', $langId);
     }
 
     public static function getAllLanguages()
@@ -477,7 +488,7 @@ class applicationConstants
     {
         $classArr = self::getClassArr();
         $class = $classArr[$class] ?? '';
-        
+
         switch ($class) {
             case applicationConstants::CLASS_INFO:
                 return '#5578eb';
@@ -501,6 +512,14 @@ class applicationConstants
     public static function getPageSizeValues()
     {
         return [10, 20, 25, 50, 100];
+    }
+
+    public static function getAdminPageSize(int $pageSize)
+    {
+        if (!in_array($pageSize, self::getPageSizeValues())) {
+            return FatApp::getConfig('CONF_ADMIN_PAGESIZE', FatUtility::VAR_INT, 10);
+        }
+        return $pageSize;
     }
 
     public static function getPageSize(int $pageSize)

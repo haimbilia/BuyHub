@@ -25,7 +25,14 @@ if (UserAuthentication::isUserLogged()) {
         $dashboardOrgUrl = UrlHelper::generateUrl('Account', '', [], CONF_WEBROOT_DASHBOARD, null, false, $getOrgUrl, false);
     }
 }
+
 if ($layoutType == applicationConstants::SCREEN_DESKTOP) {
+    /*if (0 < FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0) && (User::isBuyer(true) || !UserAuthentication::isUserLogged())) { ?>
+<button class="btn btn-outline-brand btn-sm btn-rfq" type="button" onclick="requestForQuoteFn(0);">
+    <?php echo Labels::getLabel('LBL_REQUEST_FOR_QUOTE', $siteLangId); ?>
+</button>
+<?php } */
+
     if (!UserAuthentication::isUserLogged()) {
         if (UserAuthentication::isGuestUserLogged()) { ?>
             <li class="quick-nav-item item-desktop">
@@ -68,7 +75,7 @@ if ($layoutType == applicationConstants::SCREEN_DESKTOP) {
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#login"></use>
                         </svg>
                         <span class="txt">
-                            <?php echo Labels::getLabel('LBL_Account', $siteLangId); ?> </span>
+                            <?php echo Labels::getLabel('LBL_Sign_In_/_Register', $siteLangId); ?> </span>
                     </button>
                 </div>
             </li> <?php

@@ -5,7 +5,7 @@ if ($selprod_id > 0 || empty($productOptions)) {
 } else {
     $frmSellerProduct->setFormTagAttribute('onsubmit', 'setUpMultipleSellerProducts(this); return(false);');
 }
-$siteDefaultLangId = FatApp::getConfig('conf_default_site_lang', FatUtility::VAR_INT, 1);
+
 $frmSellerProduct->setFormTagAttribute('class', 'form form--horizontal inventoryForm-js layout--' . Language::getLayoutDirection($siteLangId));
 $frmSellerProduct->setFormTagAttribute('dir', Language::getLayoutDirection($siteLangId));
 
@@ -47,9 +47,13 @@ if (false === Plugin::isActive('EasyEcom') && $product_type != Product::PRODUCT_
     $fld->developerTags['cbHtmlAfterCheckbox'] = '';
 }
 $fld = $frmSellerProduct->getField('use_shop_policy');
-$fld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
-$fld->developerTags['cbHtmlAfterCheckbox'] = '';
+HtmlHelper::configureSwitchForCheckbox($fld);
 
+$fld = $frmSellerProduct->getField('selprod_hide_price');
+if (null !== $fld) {
+    $fld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
+    $fld->developerTags['cbHtmlAfterCheckbox'] = '';
+}
 $submitBtnFld = $frmSellerProduct->getField('btn_submit');
 $submitBtnFld->setFieldTagAttribute('class', 'btn btn-brand');
 $submitBtnFld->developerTags['col'] = 12;
@@ -58,8 +62,10 @@ $cancelBtnFld = $frmSellerProduct->getField('btn_cancel');
 $cancelBtnFld->setFieldTagAttribute('class', 'btn btn-outline-gray js-cancel-inventory');
 
 $fld = $frmSellerProduct->getField('selprod_active');
-$fld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
-$fld->developerTags['cbHtmlAfterCheckbox'] = '';
+if (null !== $fld) {
+    $fld->developerTags['cbLabelAttributes'] = array('class' => 'checkbox');
+    $fld->developerTags['cbHtmlAfterCheckbox'] = '';
+}
 ?>
 <div class="row">
     <div class="col-md-12">
@@ -68,9 +74,9 @@ $fld->developerTags['cbHtmlAfterCheckbox'] = '';
             <div class="row">
                 <div class="col-md-<?php echo ($urlFld) ? 6 : 12; ?>">
                     <div class="field-set">
-                        <div class="caption-wraper"><label class="field_label"><?php echo $frmSellerProduct->getField('selprod_title' . $siteDefaultLangId)->getCaption(); ?><span class="spn_must_field">*</span></label></div>
+                        <div class="caption-wraper"><label class="field_label"><?php echo $frmSellerProduct->getField('selprod_title' . $siteLangId)->getCaption(); ?><span class="spn_must_field">*</span></label></div>
                         <div class="field-wraper">
-                            <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_title' . $siteDefaultLangId); ?>
+                            <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_title' . $siteLangId); ?>
                             </div>
                         </div>
                     </div>
@@ -170,25 +176,6 @@ $fld->developerTags['cbHtmlAfterCheckbox'] = '';
                 </div>
                 <?php echo $frmSellerProduct->getFieldHtml('selprod_condition'); ?>
             <?php } ?>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="field-set d-flex align-items-center">
-                        <div class="field-wraper">
-                            <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_active'); ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="field-set">
-                        <div class="caption-wraper"><label class="field_label"><?php echo $frmSellerProduct->getField('selprod_available_from')->getCaption(); ?><span class="spn_must_field">*</span></label></div>
-                        <div class="field-wraper">
-                            <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_available_from'); ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <?php if (in_array($product_type, [Product::PRODUCT_TYPE_PHYSICAL, Product::PRODUCT_TYPE_SERVICE])) { ?>
                 <div class="row">
                     <?php if ($product_type == Product::PRODUCT_TYPE_PHYSICAL) { ?>
@@ -202,16 +189,19 @@ $fld->developerTags['cbHtmlAfterCheckbox'] = '';
                             </div>
                         </div>
                     <?php } ?>
-                    <div class="col-md-<?php echo ($product_type == Product::PRODUCT_TYPE_PHYSICAL) ? 6 : 12; ?>">
-                        <div class="field-set">
-                            <div class="caption-wraper"><label class="field_label"></label></div>
-                            <div class="field-wraper">
-                                <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('use_shop_policy'); ?>
+
+                    <?php if ($product_type == Product::PRODUCT_TYPE_PHYSICAL) { ?>
+                        <div class="col-md-<?php echo ($product_type == Product::PRODUCT_TYPE_PHYSICAL) ? 6 : 12; ?>">
+                            <div class="form-group">
+                                <div class="setting-block">
+                                    <?php echo $frmSellerProduct->getFieldHtml('use_shop_policy'); ?>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    <?php } ?>
                 </div>
+            <?php } ?>
+            <?php if ($product_type == Product::PRODUCT_TYPE_PHYSICAL) { ?>
                 <div class="row use-shop-policy <?php echo $hidden; ?>">
                     <?php if ($product_type == Product::PRODUCT_TYPE_PHYSICAL) { ?>
                         <div class="col-md-6">
@@ -264,6 +254,48 @@ $fld->developerTags['cbHtmlAfterCheckbox'] = '';
                 <?php } ?>
             </div>
             <div class="row">
+                <div class="col-md-6">
+                    <div class="field-set">
+                        <div class="caption-wraper"><label class="field_label"><?php echo $frmSellerProduct->getField('selprod_available_from')->getCaption(); ?><span class="spn_must_field">*</span></label></div>
+                        <div class="field-wraper">
+                            <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_available_from'); ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="field-set ">
+                        <div class="caption-wraper"><label class="field_label"></label></div>
+                        <div class="field-wraper">
+                            <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_active'); ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <?php if (null != $frmSellerProduct->getField('selprod_cart_type')) { ?>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="field-set">
+                            <div class="caption-wraper"><label class="field_label"><?php echo $frmSellerProduct->getField('selprod_cart_type')->getCaption(); ?><span class="spn_must_field">*</span></label></div>
+                            <div class="field-wraper">
+                                <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_cart_type'); ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="field-set">
+                            <div class="caption-wraper"><label class="field_label"></label></div>
+                            <div class="field-wraper">
+                                <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_hide_price'); ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php } ?>
+            <div class="row">
                 <div class="col-md-12">
                     <div class="form-text text-muted my-4">
                         <?php
@@ -307,8 +339,8 @@ $fld->developerTags['cbHtmlAfterCheckbox'] = '';
                             </thead>
                             <tbody>
                                 <?php if ($selprod_id == 0 && !empty($availableOptions)) {
-                                    $i = $j = 0; ?>
-                                    <?php foreach ($availableOptions as $optionKey => $optionValue) {
+                                    $i = $j = 0;
+                                    foreach ($availableOptions as $optionKey => $optionValue) {
                                         if (SellerProduct::UPDATE_OPTIONS_COUNT < $i) {
                                             $j++;
                                             $i = 0;
@@ -365,10 +397,10 @@ $fld->developerTags['cbHtmlAfterCheckbox'] = '';
                 <div class="col-md-12">
                     <div class="field-set">
                         <div class="caption-wraper"><label class="field_label">
-                                <?php echo $frmSellerProduct->getField('selprod_comments' . $siteDefaultLangId)->getCaption(); ?></label>
+                                <?php echo $frmSellerProduct->getField('selprod_comments' . $siteLangId)->getCaption(); ?></label>
                         </div>
                         <div class="field-wraper">
-                            <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_comments' . $siteDefaultLangId); ?>
+                            <div class="field_cover"><?php echo $frmSellerProduct->getFieldHtml('selprod_comments' . $siteLangId); ?>
                             </div>
                         </div>
                     </div>
@@ -376,7 +408,7 @@ $fld->developerTags['cbHtmlAfterCheckbox'] = '';
             </div>
             <?php
             $languages = Language::getAllNames();
-            unset($languages[$siteDefaultLangId]);
+            unset($languages[$siteLangId]);
             $translatorSubscriptionKey = FatApp::getConfig('CONF_TRANSLATOR_SUBSCRIPTION_KEY', FatUtility::VAR_STRING, '');
             if (!empty($translatorSubscriptionKey) && count($languages) > 0) { ?>
                 <div class="row">
@@ -398,7 +430,7 @@ $fld->developerTags['cbHtmlAfterCheckbox'] = '';
                         <?php foreach ($languages as $langId => $langName) {
                             $layout = Language::getLayoutDirection($langId); ?>
                             <div class="accordion mt-4" id="specification-accordion">
-                                <h6 class="dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#collapseOne<?php echo $langId; ?>" aria-expanded="true" aria-controls="collapseOne<?php echo $langId; ?>" onclick="translateData(this, '<?php echo $siteDefaultLangId; ?>', '<?php echo $langId; ?>')">
+                                <h6 class="dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#collapseOne<?php echo $langId; ?>" aria-expanded="true" aria-controls="collapseOne<?php echo $langId; ?>" onclick="translateData(this, '<?php echo $siteLangId; ?>', '<?php echo $langId; ?>')">
                                     <?php echo Labels::getLabel('LBL_Inventory_Data_for', $siteLangId) ?>
                                     <?php echo $langName; ?>
                                 </h6>
@@ -429,8 +461,7 @@ $fld->developerTags['cbHtmlAfterCheckbox'] = '';
                                     </div>
                                 </div>
                             </div>
-                        <?php
-                        } ?>
+                        <?php } ?>
                     </div>
                 </div>
             <?php } ?>

@@ -31,7 +31,7 @@ class Navigation
 
         /* threshold level products */
         $threshSelProdCount = CalculativeDataRecord::getValue(CalculativeData::KEY_BLOG_COMMENTS);
-
+        
         /* seller orders */
         /* $sellerOrderStatus = FatApp::getConfig('CONF_BADGE_COUNT_ORDER_STATUS', FatUtility::VAR_STRING, '0');
         if ($sellerOrderStatus && $sellerOrderStatusArr = (array)unserialize($sellerOrderStatus)) {
@@ -56,6 +56,8 @@ class Navigation
         /* Seller product requests */
         $selProdReqCount = CalculativeDataRecord::getValue(CalculativeData::KEY_SELLER_PRODUCT);
 
+        /* RFQ */
+        $rfqCount = CalculativeDataRecord::getValue(CalculativeData::KEY_RFQ);
 
         /* set counter variables [ */
         $template->set('brandReqCount', $brandReqCount);
@@ -71,6 +73,7 @@ class Navigation
         $template->set('threshSelProdCount', $threshSelProdCount);
         $template->set('gdprReqCount', $gdprReqCount);
         $template->set('orderRetReqCount', $orderRetReqCount);
+        $template->set('rfqCount', $rfqCount);
         $template->set('siteLangId', CommonHelper::getLangId());
         /* ] */
 

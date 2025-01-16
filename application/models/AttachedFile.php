@@ -78,7 +78,9 @@ class AttachedFile extends MyAppModel
     public const FILETYPE_PRODUCT_IMAGE_TEMP = 64;
     public const FILETYPE_CUSTOM_PRODUCT_IMAGE_TEMP = 65;
     public const FILETYPE_CATEGORY_THUMB = 66; /* Used in category detail page */
-    public const FILETYPE_SHIPPING_COMPANY_USER_DOCUMENT = 67;
+    public const FILETYPE_RFQ = 67;
+    public const FILETYPE_RFQ_OFFER_FILE = 68;
+    public const FILETYPE_SHIPPING_COMPANY_USER_DOCUMENT = 69;
 
     public const APP_IMAGE_WIDTH = 640;
     public const APP_IMAGE_HEIGHT = 480;
@@ -276,7 +278,6 @@ class AttachedFile extends MyAppModel
         $tmpSrch->doNotCalculateRecords();
 
         if ($size > 0) {
-            //$srch->setPageSize($size);
             $tmpSrch->setPageSize($size);
         }
 

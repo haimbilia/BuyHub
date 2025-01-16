@@ -43,7 +43,7 @@ if (false == $canDo) {
     <div class="col-md-12" id="digital_download_formss">
         <div class="err-msg" style="color:red;">
             <?php
-            if (0 < strlen($msg)) {
+            if (0 < strlen((string)$msg)) {
                 echo $msg;
             }
             ?>

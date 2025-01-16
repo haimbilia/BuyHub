@@ -15,7 +15,7 @@
                             echo "</ul></div>";
                         }
                         $firstCharacter = $str; ?>
-                        <div class="item">
+                        <div class="cg-main-item">
                             <h6 class="big-title"><?php echo $firstCharacter; ?></h6>
                             <ul>
                             <?php } ?>
@@ -25,9 +25,11 @@
                                 </a>
                             </li>
                         <?php } ?>
-                            </ul>
-                        </div>
+                    </ul>
+                </div>
             <?php }
         }
+    } else {
+        $this->includeTemplate('_partial/no-record-found.php', array('siteLangId' => $siteLangId), false);
     } ?>
 </div>
