@@ -64,4 +64,4 @@ if (strpos(CONF_UPLOADS_PATH, 's3://') !== false) {
 }
 define('SYSTEM_INIT', true);
 define('WHITE_LABELED', false);
-define('CONF_WEB_APP_VERSION', 'TV-10.1.0.20240926');
+define('CONF_WEB_APP_VERSION', 'RV-10.1.0');
