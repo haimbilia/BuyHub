@@ -215,17 +215,18 @@ class ContentBlockController extends ListingBaseController
         }
 
         $getImageDimensions = ImageDimension::getData(ImageDimension::TYPE_CBLOCK_BG, ImageDimension::VIEW_DEFAULT);
-        if (array_key_exists($recordId, Extrapage::getContentBlockArrWithBg($this->siteLangId))) {
+        $pagetype =  Extrapage::getAttributesById($recordId,'epage_type');
+        if (array_key_exists($pagetype, Extrapage::getContentBlockArrWithBg($this->siteLangId))) {
             $frm->addHTML('', 'cblock_bg_image', '');
             $fld = $frm->addSelectBox(Labels::getLabel('FRM_BACKGROUND_IMAGE_REPEAT_TYPE', $this->siteLangId), 'epage_extra_info[' . Extrapage::TYPE_BKGROUND_IMAGE_REPEAT . ']', applicationConstants::getBkImageRepeatTypes($this->siteLangId), 'repeat', array(), '');
             $fld->requirements()->setRequired();
             $fld = $frm->addSelectBox(Labels::getLabel('FRM_BACKGROUND_IMAGE_SIZE_TYPE', $this->siteLangId), 'epage_extra_info[' . Extrapage::TYPE_BKGROUND_IMAGE_SIZE . ']', applicationConstants::getBkImageSizeTypes($this->siteLangId), 'repeat', array(), '');
             $fld->requirements()->setRequired();
-            if ($recordId == Extrapage::SELLER_BANNER_SLOGAN) {
+            if ($pagetype == Extrapage::SELLER_BANNER_SLOGAN) {
                 $fileType = AttachedFile::FILETYPE_SELLER_PAGE_SLOGAN_BG_IMAGE;
-            } elseif ($recordId == Extrapage::ADVERTISER_BANNER_SLOGAN) {
+            } elseif ($pagetype == Extrapage::ADVERTISER_BANNER_SLOGAN) {
                 $fileType = AttachedFile::FILETYPE_ADVERTISER_PAGE_SLOGAN_BG_IMAGE;
-            } elseif ($recordId == Extrapage::AFFILIATE_BANNER_SLOGAN) {
+            } elseif ($pagetype == Extrapage::AFFILIATE_BANNER_SLOGAN) {
                 $fileType = AttachedFile::FILETYPE_AFFILIATE_PAGE_SLOGAN_BG_IMAGE;
             } else {
                 $fileType = AttachedFile::FILETYPE_CPAGE_BACKGROUND_IMAGE;
@@ -259,13 +260,14 @@ class ContentBlockController extends ListingBaseController
         } else {
             $frm->addHtmlEditor(Labels::getLabel('FRM_PAGE_CONTENT', $langId), 'epage_content');
         }
-        if (array_key_exists($recordId, Extrapage::getContentBlockArrWithBg($langId))) {
+        $pagetype =  Extrapage::getAttributesById($recordId,'epage_type');
+        if (array_key_exists($pagetype, Extrapage::getContentBlockArrWithBg($langId))) {
             $frm->addHTML('', 'cblock_bg_image', '');
-            if ($recordId == Extrapage::SELLER_BANNER_SLOGAN) {
+            if ($pagetype == Extrapage::SELLER_BANNER_SLOGAN) {
                 $fileType = AttachedFile::FILETYPE_SELLER_PAGE_SLOGAN_BG_IMAGE;
-            } elseif ($recordId == Extrapage::ADVERTISER_BANNER_SLOGAN) {
+            } elseif ($pagetype == Extrapage::ADVERTISER_BANNER_SLOGAN) {
                 $fileType = AttachedFile::FILETYPE_ADVERTISER_PAGE_SLOGAN_BG_IMAGE;
-            } elseif ($recordId == Extrapage::AFFILIATE_BANNER_SLOGAN) {
+            } elseif ($pagetype == Extrapage::AFFILIATE_BANNER_SLOGAN) {
                 $fileType = AttachedFile::FILETYPE_AFFILIATE_PAGE_SLOGAN_BG_IMAGE;
             } else {
                 $fileType = AttachedFile::FILETYPE_CPAGE_BACKGROUND_IMAGE;
