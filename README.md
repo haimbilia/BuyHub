@@ -41,6 +41,7 @@ You will require the following server specifications for setting up the Yokart s
 - [Server Requirements](https://www.yo-kart.com/yokart-server-requirements.html) Server Requirements.
 
 ## Version History
+- **Version 10.1.0** :
 - **Version 10.0.0** :
 - **Version 9.3.1** :
 - **Version 9.3.0** :
