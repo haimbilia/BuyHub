@@ -524,7 +524,8 @@ class CollectionsController extends ListingBaseController
         $frm = $this->getRecordsForm($recordId, $collectionType);
         if (in_array($data['collection_layout_type'], [Collections::TYPE_CATEGORY_LAYOUT7, Collections::TYPE_CATEGORY_LAYOUT9])) {
             $fld = $frm->getField('collection_records[]');
-            $lbl = CommonHelper::replaceStringData(Labels::getLabel('LBL_BIND_ATLEAST_{LIMIT}_RECORDS_FOR_BETTER_COLLECTION_VIEW'), ['{LIMIT}' => Collections::LIMIT_CATEGORY_LAYOUT7]);
+            $limit = $data['collection_layout_type'] == Collections::TYPE_CATEGORY_LAYOUT7 ? Collections::LIMIT_CATEGORY_LAYOUT7 : Collections::LIMIT_CATEGORY_LAYOUT9;
+            $lbl = CommonHelper::replaceStringData(Labels::getLabel('LBL_BIND_ATLEAST_{LIMIT}_RECORDS_FOR_BETTER_COLLECTION_VIEW'), ['{LIMIT}' => $limit]);
             $fld->htmlAfterField = '<span class="form-text text-muted">' . $lbl . '</span>';
         }
 
