@@ -388,10 +388,10 @@ class CategoryController extends MyAppController
     public function structure()
     {
         $parentId = FatApp::getPostedData('parentId', FatUtility::VAR_INT, 0);
-        /* $categoriesArr = ProductCategory::getProdCatParentChildWiseArr($this->siteLangId, $parentId, true, false, false, false, true);
-        $categoriesArr = $this->resetKeyValues(array_values($categoriesArr), $this->siteLangId); */
+        //$categoriesArr = ProductCategory::getProdCatParentChildWiseArr($this->siteLangId, $parentId, true, false, false, false, true);
 
         $categoriesArr = ProductCategory::getArray($this->siteLangId, $parentId);
+        $categoriesArr = $this->resetKeyValues(array_values($categoriesArr), $this->siteLangId);
         $this->set('categoriesData', (array)$categoriesArr);
         $this->_template->render();
     }

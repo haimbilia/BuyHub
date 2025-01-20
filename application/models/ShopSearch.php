@@ -23,7 +23,11 @@ class ShopSearch extends SearchBase
         }
         if ($isActive) {
             $this->addCondition('shop_active', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
+            $this->addCondition('shop_user_valid', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
             $this->addCondition('shop_supplier_display_status', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
+            if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
+                $this->addCondition('shop_has_valid_subscription', '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
+            }
         }
         if ($shopSupplierDisplayStatus) {
             $this->addCondition('shop_supplier_display_status', '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);

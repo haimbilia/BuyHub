@@ -582,7 +582,7 @@ class ProductSearch extends SearchBase
             $shopCondition .= ' and shop.shop_id = ' . $shopId;
         }
 
-        if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
+        if ($isActive && FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
             $shopCondition .= ' and shop_has_valid_subscription = ' . applicationConstants::YES;
         }
 
@@ -596,9 +596,12 @@ class ProductSearch extends SearchBase
                         $shopSearch->doNotCalculateRecords();
                         $shopSearch->doNotLimitRecords();
                         $shopSearch->addCondition('shop.shop_supplier_display_status', '=', 'mysql_func_' . applicationConstants::ON, 'AND', true);
-                        $shopSearch->addCondition(Shop::tblFld('active'), '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
-                        $shopSearch->addCondition(Shop::tblFld('user_valid'), '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
+                        $shopSearch->addCondition('shop' . Shop::tblFld('active'), '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
+                        $shopSearch->addCondition('shop' . Shop::tblFld('user_valid'), '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
                         $shopSearch->addFld('*');
+                        if ($isActive && FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
+                            $shopSearch->addCondition('shop' . Shop::tblFld('has_valid_subscription'), '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
+                        }
                         /*  $shopSearch->addFld('( 6371 * acos( cos( radians(' . $this->geoAddress['ykGeoLat'] . ') ) * cos( radians( shop.`shop_lat` ) ) * cos( radians( shop.`shop_lng` ) - radians(' . $this->geoAddress['ykGeoLng'] . ') ) + sin( radians(' . $this->geoAddress['ykGeoLat'] . ') ) * sin( radians( shop.`shop_lat` ) ) ) ) AS distance'); */
                         $shopSearch->addFld('(ST_Distance_Sphere(point(' . $this->geoAddress['ykGeoLng'] . ', ' . $this->geoAddress['ykGeoLat'] . '), point(shop.`shop_lng`, shop.`shop_lat`)) / 1000) AS distance');
                         $shopSearch->addHaving('distance', '<=', FatApp::getConfig('CONF_RADIUS_DISTANCE_IN_MILES', FatUtility::VAR_INT, 10));
@@ -610,6 +613,9 @@ class ProductSearch extends SearchBase
                             $shopSearch->addCondition('sshop.shop_supplier_display_status', '=', 'mysql_func_' . applicationConstants::ON, 'AND', true);
                             $shopSearch->addCondition('sshop.' . Shop::tblFld('active'), '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
                             $shopSearch->addCondition('sshop.' . Shop::tblFld('user_valid'), '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
+                            if ($isActive && FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
+                                $shopSearch->addCondition('sshop.' . Shop::tblFld('has_valid_subscription'), '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
+                            }
                             $shopSearch->addMultipleFields(array('sshop.*', 'shop.distance'));
                             $shopSearch->joinTable('(' . $shopSubQuery . ')', 'LEFT OUTER JOIN', 'shop.shop_id = sshop.shop_id', 'shop');
                         }

@@ -16,14 +16,12 @@ class BrandsController extends MyAppController
         $brandRs = $brandSrch->getResultSet();
         $brandsArr = FatApp::getDb()->fetchAll($brandRs);
         if (true === MOBILE_APP_API_CALL) {
-            $db = FatApp::getDb();
+            /* $db = FatApp::getDb();
             $totalProdCountToDisplay = 4;
             $productCustomSrchObj = new ProductSearch($this->siteLangId);
             $productCustomSrchObj->joinProductToCategory($this->siteLangId);
             $productCustomSrchObj->setDefinedCriteria(0, 0, ['doNotJoinSellers' => true, 'doNotJoinShippingPkg' => true]);
-            $productCustomSrchObj->joinSellerSubscription($this->siteLangId, true);
-            $productCustomSrchObj->addSubscriptionValidCondition();
-
+           
             if (UserAuthentication::isUserLogged()) {
                 $productCustomSrchObj->joinFavouriteProducts(UserAuthentication::getLoggedUserId());
             }
@@ -64,15 +62,15 @@ class BrandsController extends MyAppController
                 $productCustomSrchObj->addFld(array('0 as isfavorite', '0 as ufp_id'));
             }
 
-            $productCustomSrchObj->setPageSize($totalProdCountToDisplay);
+            $productCustomSrchObj->setPageSize($totalProdCountToDisplay);*/
             $cnt = 0;
             foreach ($brandsArr as $val) {
-                $prodSrch = clone $productCustomSrchObj;
+                $brandsArr[$cnt] = $val;
+                /* $prodSrch = clone $productCustomSrchObj;
                 $prodSrch->addBrandCondition($val['brand_id']);
                 $prodSrch->doNotCalculateRecords();
                 $prodSrch->addGroupBy('selprod_id');
-                $prodRs = $prodSrch->getResultSet();
-                $brandsArr[$cnt] = $val;
+                $prodRs = $prodSrch->getResultSet();                
                 $brandProducts = $db->fetchAll($prodRs);
 
                 foreach ($brandProducts as &$brandProduct) {
@@ -82,10 +80,10 @@ class BrandsController extends MyAppController
                     $brandProduct['product_image'] = $mainImgUrl;
                     $brandProduct['currency_selprod_price'] = CommonHelper::displayMoneyFormat($brandProduct['selprod_price']);
                     $brandProduct['currency_theprice'] = CommonHelper::displayMoneyFormat($brandProduct['theprice']);
-                }
-                $brandsArr[$cnt]['brand_image'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'brand', array($val['brand_id'], $this->siteLangId)), CONF_IMG_CACHE_TIME, '.jpg');
+                }                
                 $brandsArr[$cnt]['products'] = $brandProducts;
-                $brandsArr[$cnt]['totalProducts'] = $prodSrch->recordCount();
+                $brandsArr[$cnt]['totalProducts'] = $prodSrch->recordCount(); */
+                $brandsArr[$cnt]['brand_image'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'brand', array($val['brand_id'], $this->siteLangId)), CONF_IMG_CACHE_TIME, '.jpg');
                 $cnt++;
             }
         }

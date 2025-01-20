@@ -51,17 +51,11 @@ class ShopsController extends MyAppController
         $prodShopSrch->joinProductToCategory();
         $prodShopSrch->doNotCalculateRecords();
         $prodShopSrch->doNotLimitRecords();
-        $prodShopSrch->joinSellerSubscription(0, true);
-        $prodShopSrch->addSubscriptionValidCondition();
-        /* ] */
 
         $srch = new ShopSearch($this->siteLangId);
-        $srch->setDefinedCriteria($this->siteLangId);
-        $srch->joinShopCountry();
-        $srch->joinShopState();
-        $srch->joinSellerSubscription();
+        $srch->joinShopCountry($this->siteLangId);
+        $srch->joinShopState($this->siteLangId);
         $srch->joinTable('(' . $prodShopSrch->getQuery() . ')', 'INNER JOIN', 'temp.shop_id = s.shop_id', 'temp');
-
 
         $flds = [
             's.shop_id',
@@ -103,7 +97,7 @@ class ShopsController extends MyAppController
         $productSrchObj->joinProductToCategory($this->siteLangId);
         $productSrchObj->joinProductToTax();
         $productSrchObj->doNotCalculateRecords();
-        $productSrchObj->setDefinedCriteria(0, 0, ['doNotJoinSellers' => true]);
+        $productSrchObj->setDefinedCriteria(0, 0, ['doNotJoinSellers' => true, 'doNotJoinShippingPkg' => true]);
         $productSrchObj->joinSellerSubscription($this->siteLangId, true);
         $productSrchObj->addSubscriptionValidCondition();
         $productSrchObj->validateAndJoinDeliveryLocation();
