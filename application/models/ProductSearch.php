@@ -596,8 +596,8 @@ class ProductSearch extends SearchBase
                         $shopSearch->doNotCalculateRecords();
                         $shopSearch->doNotLimitRecords();
                         $shopSearch->addCondition('shop.shop_supplier_display_status', '=', 'mysql_func_' . applicationConstants::ON, 'AND', true);
-                        $shopSearch->addCondition('shop' . Shop::tblFld('active'), '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
-                        $shopSearch->addCondition('shop' . Shop::tblFld('user_valid'), '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
+                        $shopSearch->addCondition('shop.' . Shop::tblFld('active'), '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
+                        $shopSearch->addCondition('shop.' . Shop::tblFld('user_valid'), '=', 'mysql_func_' . applicationConstants::ACTIVE, 'AND', true);
                         $shopSearch->addFld('*');
                         if ($isActive && FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
                             $shopSearch->addCondition('shop' . Shop::tblFld('has_valid_subscription'), '=', 'mysql_func_' . applicationConstants::YES, 'AND', true);
