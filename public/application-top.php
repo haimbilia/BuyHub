@@ -11,7 +11,7 @@ if (isset($_SERVER['HTTP_ACCEPT_ENCODING']) && substr_count($_SERVER['HTTP_ACCEP
 
 ini_set('display_errors', (CONF_DEVELOPMENT_MODE) ? 1 : 0);
 
-error_reporting((CONF_DEVELOPMENT_MODE) ? E_ALL : E_ALL & ~E_NOTICE & ~E_WARNING);
+error_reporting((CONF_DEVELOPMENT_MODE) ? E_ALL & ~E_DEPRECATED : E_ALL & ~E_NOTICE & ~E_WARNING);
 
 require_once CONF_INSTALLATION_PATH . 'library/autoloader.php';
 

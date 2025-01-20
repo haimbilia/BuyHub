@@ -301,20 +301,20 @@ class ProductCategoriesController extends ListingBaseController
         $frm->addHtml('', 'seperator', '');
 
         /* if ($isParent) { */
-            $frm->addHTML('', 'heading_thumb', '');
-            if (count($mediaLanguages) > 1) {
-                $frm->addSelectBox(Labels::getLabel('FRM_Language', $this->siteLangId), 'thumb_lang_id', $mediaLanguages, '', array(), '');
-            } else {
-                $langid = array_key_first($mediaLanguages);
-                $frm->addHiddenField('', 'thumb_lang_id', $langid);
-            }
-            $frm->addHiddenField('', 'thumb_file_type', AttachedFile::FILETYPE_CATEGORY_THUMB);
-            $frm->addHiddenField('', 'thumb_min_width');
-            $frm->addHiddenField('', 'thumb_min_height');
+        $frm->addHTML('', 'heading_thumb', '');
+        if (count($mediaLanguages) > 1) {
+            $frm->addSelectBox(Labels::getLabel('FRM_Language', $this->siteLangId), 'thumb_lang_id', $mediaLanguages, '', array(), '');
+        } else {
+            $langid = array_key_first($mediaLanguages);
+            $frm->addHiddenField('', 'thumb_lang_id', $langid);
+        }
+        $frm->addHiddenField('', 'thumb_file_type', AttachedFile::FILETYPE_CATEGORY_THUMB);
+        $frm->addHiddenField('', 'thumb_min_width');
+        $frm->addHiddenField('', 'thumb_min_height');
 
-            $frm->addHtml('', 'cat_thumb', '');
-            $frm->addHtml('', 'seperatorthumb', '');
-       /*  } */
+        $frm->addHtml('', 'cat_thumb', '');
+        $frm->addHtml('', 'seperatorthumb', '');
+        /*  } */
 
         $frm->addHTML('', 'heading_banner', '');
         if (count($mediaLanguages) > 1) {
@@ -579,6 +579,7 @@ class ProductCategoriesController extends ListingBaseController
             LibHelper::exitWithError($this->modelObj->getError(), true);
         }
         Product::updateMinPrices();
+        ProductCategory::UpdateHasChildCategoryFlag(0);
     }
 
     public function changeRequestStatus()
@@ -608,6 +609,7 @@ class ProductCategoriesController extends ListingBaseController
             LibHelper::exitWithError($prodCat->getError(), true);
         }
         CalculativeDataRecord::updateCategoryRequestCount();
+        ProductCategory::UpdateHasChildCategoryFlag($recordId);
         $this->set('msg', $this->str_update_record);
         $this->_template->render(false, false, 'json-success.php');
     }
@@ -649,7 +651,7 @@ class ProductCategoriesController extends ListingBaseController
         if (!$prodCateObj->save()) {
             LibHelper::exitWithError($prodCateObj->getError(), true);
         }
-
+        ProductCategory::UpdateHasChildCategoryFlag($prodcat_id);
         Product::updateMinPrices();
         $this->set("msg", $this->str_delete_record);
         $this->_template->render(false, false, 'json-success.php');

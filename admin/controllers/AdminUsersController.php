@@ -135,14 +135,19 @@ class AdminUsersController extends ListingBaseController
             "CREATE TRIGGER `ADDNEWCATEGORY`
             AFTER INSERT ON `tbl_product_categories` 
             FOR EACH ROW 
-            CALL UPDATECATEGORYRELATIONS(new.prodcat_id)",
+            BEGIN
+                CALL UPDATECATEGORYRELATIONS(new.prodcat_id);                
+            END",
             "DROP TRIGGER IF EXISTS `UPDATECATEGORY`",
             "CREATE TRIGGER `UPDATECATEGORY` AFTER UPDATE ON `tbl_product_categories`
-            FOR EACH ROW IF new.prodcat_parent != old.prodcat_parent THEN 
-               CALL UPDATECATEGORYRELATIONS(new.prodcat_id);
-               CALL UPDATECATEGORYRELATIONS(old.prodcat_parent);
-            END IF",
-            "CALL updateCategoryRelations(0)",
+            FOR EACH ROW 
+            BEGIN
+                IF new.prodcat_parent != old.prodcat_parent THEN 
+                    CALL UPDATECATEGORYRELATIONS(new.prodcat_id);
+                    CALL UPDATECATEGORYRELATIONS(old.prodcat_parent);                                                  
+                END IF; 
+                    CALL updateCategoryRelations(0);
+            END",
             "DROP PROCEDURE IF EXISTS updateShopUserValid",
             "CREATE PROCEDURE updateShopUserValid(IN userId INT)
             BEGIN    
@@ -179,6 +184,38 @@ class AdminUsersController extends ListingBaseController
                 IF NEW.credential_active != OLD.credential_active OR NEW.credential_verified != OLD.credential_verified THEN
                     CALL updateShopUserValid(NEW.credential_user_id);
                 END IF;     
+            END",
+            "DROP PROCEDURE IF EXISTS UpdateHasChildCategoryFlag",
+            "CREATE PROCEDURE UpdateHasChildCategoryFlag(IN catId INT)
+            BEGIN                
+                IF 0 < catId THEN 
+                    -- Reset all flags to false
+                    UPDATE tbl_product_categories SET prodcat_has_child = 0 WHERE prodcat_id = catId;
+                    -- Update the flag for the category has child
+                    UPDATE tbl_product_categories c
+                    INNER JOIN (
+                    SELECT c2.prodcat_parent
+                        FROM tbl_product_categories c2
+                        WHERE c2.prodcat_active = 1 
+                        AND c2.prodcat_deleted = 0
+                        AND c2.prodcat_parent = catId         
+                        group by c2.prodcat_parent
+                    ) AS sub ON sub.prodcat_parent = c.prodcat_id
+                    SET c.prodcat_has_child = 1 where c.prodcat_id = catId;
+                ELSE
+                    -- Reset all flags to false
+                    UPDATE tbl_product_categories SET prodcat_has_child = 0;
+                    -- Update the flag for the category has child
+                    UPDATE tbl_product_categories c
+                    INNER JOIN (
+                    SELECT c2.prodcat_parent
+                        FROM tbl_product_categories c2
+                        WHERE c2.prodcat_active = 1 
+                        AND c2.prodcat_deleted = 0      
+                        group by c2.prodcat_parent
+                    ) AS sub ON sub.prodcat_parent = c.prodcat_id
+                    SET c.prodcat_has_child = 1;
+                END IF;    
             END"
         );
 

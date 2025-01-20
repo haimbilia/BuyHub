@@ -43,15 +43,15 @@ class ShopsController extends MyAppController
         $post['pageSize'] = $pageSize;
 
         /* SubQuery, Shop have products[ */
-        $prodShopSrch = new ProductSearch($this->siteLangId);
+        $prodShopSrch = new ProductSearch(0);
         $prodShopSrch->addMultipleFields(array('distinct(shop_id)'));
         $prodShopSrch->setGeoAddress();
-        $prodShopSrch->setDefinedCriteria(0, 0, ['doNotJoinSpecialPrice' => true, 'doNotJoinSellers' => true]);
+        $prodShopSrch->setDefinedCriteria(0, 0, ['doNotJoinSpecialPrice' => true, 'doNotJoinSellers' => true, 'doNotJoinShippingPkg' => true]);
         $prodShopSrch->validateAndJoinDeliveryLocation();
         $prodShopSrch->joinProductToCategory();
         $prodShopSrch->doNotCalculateRecords();
         $prodShopSrch->doNotLimitRecords();
-        $prodShopSrch->joinSellerSubscription($this->siteLangId, true);
+        $prodShopSrch->joinSellerSubscription(0, true);
         $prodShopSrch->addSubscriptionValidCondition();
         /* ] */
 
@@ -174,12 +174,11 @@ class ShopsController extends MyAppController
         if (true === MOBILE_APP_API_CALL) {
             $this->_template->render();
         }
-        if (isset($data['viewType']) && $data['viewType']=='popup' ) {
+        if (isset($data['viewType']) && $data['viewType'] == 'popup') {
             $json['html'] = $this->_template->render(false, false, 'shops/search-map-view.php', true, false);
-        } elseif (isset($data['viewType']) && $data['viewType']=='popupShops' ) {
+        } elseif (isset($data['viewType']) && $data['viewType'] == 'popupShops') {
             $json['html'] = $this->_template->render(false, false, 'shops/search-list-map-view.php', true, false);
-        }
-        else {
+        } else {
             $json['html'] = $this->_template->render(false, false, 'shops/search.php', true, false);
             $json['loadMoreBtnHtml'] = $this->_template->render(false, false, '_partial/load-more-btn.php', true, false);
         }
@@ -276,7 +275,7 @@ class ShopsController extends MyAppController
                 $this->_template->render(false, false, 'products/listing-map-page.php');
                 exit;
             }
-    
+
 
             $this->includeProductPageJsCss();
             $this->_template->addJs(['js/slick.min.js', 'js/shop-nav.js', 'js/jquery.colourbrightness.min.js', 'js/slick-carousels.js']);

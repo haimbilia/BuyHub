@@ -868,3 +868,14 @@ INSERT INTO `tbl_language_labels` ( `label_key`, `label_lang_id`, `label_caption
 ("LBL_DIGITAL_TAG", 1, "DIGITAL", 1),
 ("LBL_DIGITAL_PRODUCT_TOOLTIP", 1, "Digital product", 1)
 ON DUPLICATE KEY UPDATE label_caption = VALUES(label_caption);
+
+ALTER TABLE `tbl_product_categories` ADD `prodcat_has_child` TINYINT(1) NOT NULL AFTER `prodcat_featured`;
+UPDATE tbl_product_categories c
+INNER JOIN (
+   SELECT c2.prodcat_parent
+    FROM tbl_product_categories c2
+    WHERE c2.prodcat_active = 1 
+      AND c2.prodcat_deleted = 0
+    group by c2.prodcat_parent
+) AS sub ON sub.prodcat_parent = c.prodcat_id
+SET c.prodcat_has_child = 1;

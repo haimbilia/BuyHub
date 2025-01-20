@@ -1001,6 +1001,7 @@ class Importexport extends ImportexportCommon
         $ProductCategory = new ProductCategory();
         $ProductCategory->updateCatCode();
         FatApp::getDb()->query('CALL updateCategoryRelations(0)');
+        ProductCategory::UpdateHasChildCategoryFlag(0);
         // Close File
         CommonHelper::writeToCSVFile($this->CSVfileObj, array(), true);
 

@@ -234,7 +234,7 @@ class ProductCategory extends MyAppModel
             $prodSrchObj = new ProductSearch();
             // $prodSrchObj->addMultipleFields(array('count(selprod_id) as productCounts', 'c.prodcat_id as qryProducts_prodcat_id'));
             $prodSrchObj->addMultipleFields(array('DISTINCT(prodcat_code)', 'cr.pcr_parent_id as qryProducts_prodcat_id'));
-            $prodSrchObj->setDefinedCriteria(0, 0, array('doNotJoinSpecialPrice' => true, 'doNotJoinSellers' => true));
+            $prodSrchObj->setDefinedCriteria(0, 0, array('doNotJoinSpecialPrice' => true, 'doNotJoinSellers' => true, 'doNotJoinShippingPkg' => true));
             $prodSrchObj->joinSellerSubscription(0, true);
             $prodSrchObj->addSubscriptionValidCondition();
             $prodSrchObj->doNotCalculateRecords();
@@ -261,7 +261,7 @@ class ProductCategory extends MyAppModel
         $srch->doNotLimitRecords();
         // $srch->addMultipleFields(['cr.pcr_prodcat_id', 'cr.pcr_parent_id']);
         $srch->addGroupBy('cr.pcr_prodcat_id');
-        $srch->addMultipleFields(array('c.prodcat_id', 'COALESCE(c_l.prodcat_name,c.prodcat_identifier ) as prodcat_name', 'substr(c.prodcat_code,1,6) AS prodrootcat_code',  'c_l.prodcat_content_block', 'c.prodcat_active', 'c.prodcat_parent', 'c.prodcat_code', 'c.prodcat_ordercode'));
+        $srch->addMultipleFields(array('c.prodcat_id', 'COALESCE(c_l.prodcat_name,c.prodcat_identifier ) as prodcat_name', 'substr(c.prodcat_code,1,6) AS prodrootcat_code',  'c_l.prodcat_content_block', 'c.prodcat_active', 'c.prodcat_parent', 'c.prodcat_code', 'c.prodcat_ordercode', 'prodcat_has_child', 'prodcat_updated_on'));
 
         if ($sortByName) {
             $srch->addOrder('prodcat_name');
@@ -847,17 +847,17 @@ class ProductCategory extends MyAppModel
         if (is_object($prodCatSrchObj)) {
             $prodCatSrch = clone $prodCatSrchObj;
         } else {
-            $prodCatSrch = new ProductCategorySearch($langId);
+            $prodCatSrch = new ProductCategorySearch($langId, true, true, false);
             $prodCatSrch->setParent($parentId);
         }
         $prodCatSrch->doNotCalculateRecords();
         $prodCatSrch->doNotLimitRecords();
 
-        $prodCatSrch->addMultipleFields(array('prodcat_id', 'COALESCE(prodcat_name,prodcat_identifier ) as prodcat_name', 'substr(prodcat_code,1,6) AS prodrootcat_code', 'prodcat_content_block', 'prodcat_active', 'prodcat_parent', 'prodcat_code as prodcat_code', 'prodcat_updated_on'));
+        $prodCatSrch->addMultipleFields(array('prodcat_id', 'COALESCE(prodcat_name,prodcat_identifier ) as prodcat_name', 'substr(prodcat_code,1,6) AS prodrootcat_code', 'prodcat_content_block', 'prodcat_active', 'prodcat_parent', 'prodcat_code as prodcat_code', 'prodcat_updated_on', 'prodcat_has_child'));
 
         if ($excludeCategoriesHavingNoProducts) {
             $prodSrchObj = new ProductSearch();
-            $prodSrchObj->setDefinedCriteria(0, 0, array('doNotJoinSpecialPrice' => true, 'doNotJoinSellers' => true));
+            $prodSrchObj->setDefinedCriteria(0, 0, array('doNotJoinSpecialPrice' => true, 'doNotJoinSellers' => true, 'doNotJoinShippingPkg' => true));
             $prodSrchObj->doNotCalculateRecords();
             $prodSrchObj->doNotLimitRecords();
             $prodSrchObj->joinSellerSubscription(0, true);
@@ -879,6 +879,7 @@ class ProductCategory extends MyAppModel
         } else {
             $prodCatSrch->addOrder('prodcat_ordercode');
         }
+
         $rs = $prodCatSrch->getResultSet();
         if ($forSelectBox) {
             $categoriesArr = FatApp::getDb()->fetchAllAssoc($rs);
@@ -889,7 +890,10 @@ class ProductCategory extends MyAppModel
         if (true === $includeChildCat && $categoriesArr) {
             foreach ($categoriesArr as $key => $cat) {
                 $uploadedTime = AttachedFile::setTimeParam($cat['prodcat_updated_on']);
+                $categoriesArr[$key] = $cat;
+                $categoriesArr[$key]['isLastChildCategory'] = ($cat['prodcat_has_child']) ? 0 : 1;
                 $categoriesArr[$key]['icon'] = UrlHelper::generateFullUrl('Category', 'icon', array($cat['prodcat_id'], $langId, 'COLLECTION_PAGE')) . $uploadedTime;
+                $categoriesArr[$key]['image'] = UrlHelper::generateFullUrl('Category', 'banner', array($cat['prodcat_id'], $langId, 'MOBILE', applicationConstants::SCREEN_MOBILE)) . $uploadedTime;
                 $categoriesArr[$key]['children'] = self::getProdCatParentChildWiseArr($langId, $cat['prodcat_id'], $includeChildCat, $forSelectBox, $sortByName, $prodCatSrchObj, $excludeCategoriesHavingNoProducts);
             }
         }
@@ -1197,6 +1201,8 @@ class ProductCategory extends MyAppModel
             $this->mainTableRecordId = $record->getMainTableRecordId();
         }
 
+        ProductCategory::UpdateHasChildCategoryFlag($this->mainTableRecordId);
+
         /*  $childrens = $this->getChildrens();
         $db = FatApp::getDb();
         foreach ($childrens as $catId => $notInUse) {
@@ -1444,6 +1450,7 @@ class ProductCategory extends MyAppModel
                 return false;
             }
         }
+        ProductCategory::UpdateHasChildCategoryFlag($this->mainTableRecordId);
         return true;
     }
 
@@ -1538,7 +1545,7 @@ class ProductCategory extends MyAppModel
             $this->error = $db->getError();
             return false;
         }
-
+        ProductCategory::UpdateHasChildCategoryFlag(0);
         return true;
     }
 
@@ -1560,7 +1567,7 @@ class ProductCategory extends MyAppModel
             $this->error = $db->getError();
             return false;
         }
-
+        ProductCategory::UpdateHasChildCategoryFlag(0);
         return true;
     }
 
@@ -1714,5 +1721,10 @@ class ProductCategory extends MyAppModel
             return false;
         }
         return true;
+    }
+
+    public static function UpdateHasChildCategoryFlag($catId = 0)
+    {
+        FatApp::getDb()->query('CALL UpdateHasChildCategoryFlag(' . $catId . ')');
     }
 }

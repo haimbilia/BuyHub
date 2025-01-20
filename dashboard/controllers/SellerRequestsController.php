@@ -259,7 +259,7 @@ class SellerRequestsController extends SellerBaseController
             }
             LibHelper::exitWithError($msg, true);
         }
-        $record->updateCatCode();
+        $record->updateCatCode();        
         $categoryReqId = $record->getMainTableRecordId();
 
         $this->setLangData($record, [$record::tblFld('name') => $post[$record::tblFld('name')]]);

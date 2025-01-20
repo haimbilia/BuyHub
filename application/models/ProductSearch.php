@@ -116,7 +116,15 @@ class ProductSearch extends SearchBase
         }
         $this->joinShopState(0, true, $stateId);
         $this->joinBrands(0, true, true, true, $criteria);
-        $this->joinShippingPackages();
+
+        $joinShippingPkg = true;
+        if (isset($criteria['doNotJoinShippingPkg']) && true == $criteria['doNotJoinShippingPkg']) {
+            $joinShippingPkg = false;
+        }
+
+        if ($joinShippingPkg) {
+            $this->joinShippingPackages();
+        }
     }
 
     public function setBatchProductsCriteria($splPriceForDate = '')

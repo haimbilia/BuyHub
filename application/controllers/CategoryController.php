@@ -369,8 +369,7 @@ class CategoryController extends MyAppController
             $uploadedTime = AttachedFile::setTimeParam($val['prodcat_updated_on']);
 
             $result[$key] = $val;
-            $isLastChildCategory = ProductCategory::isLastChildCategory($val['prodcat_id']);
-            $result[$key]['isLastChildCategory'] = $isLastChildCategory ? 1 : 0;
+            $result[$key]['isLastChildCategory'] = ($val['prodcat_has_child']) ? 0 : 1;
             $result[$key]['icon'] = UrlHelper::generateFullUrl('Category', 'icon', array($val['prodcat_id'], $langId, 'COLLECTION_PAGE')) . $uploadedTime;
             $result[$key]['image'] = UrlHelper::generateFullUrl('Category', 'banner', array($val['prodcat_id'], $langId, 'MOBILE', applicationConstants::SCREEN_MOBILE)) . $uploadedTime;
             $childernArr = array();
@@ -389,9 +388,10 @@ class CategoryController extends MyAppController
     public function structure()
     {
         $parentId = FatApp::getPostedData('parentId', FatUtility::VAR_INT, 0);
-        $categoriesArr = ProductCategory::getProdCatParentChildWiseArr($this->siteLangId, $parentId, true, false, false, false, true);
+        /* $categoriesArr = ProductCategory::getProdCatParentChildWiseArr($this->siteLangId, $parentId, true, false, false, false, true);
+        $categoriesArr = $this->resetKeyValues(array_values($categoriesArr), $this->siteLangId); */
 
-        $categoriesArr = $this->resetKeyValues(array_values($categoriesArr), $this->siteLangId);
+        $categoriesArr = ProductCategory::getArray($this->siteLangId, $parentId);
         $this->set('categoriesData', (array)$categoriesArr);
         $this->_template->render();
     }
