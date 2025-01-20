@@ -53,8 +53,7 @@ class ShopsController extends MyAppController
         $prodShopSrch->doNotLimitRecords();
 
         $srch = new ShopSearch($this->siteLangId);
-        $srch->joinShopCountry($this->siteLangId);
-        $srch->joinShopState($this->siteLangId);
+        $srch->setDefinedCriteria($this->siteLangId);
         $srch->joinTable('(' . $prodShopSrch->getQuery() . ')', 'INNER JOIN', 'temp.shop_id = s.shop_id', 'temp');
 
         $flds = [
@@ -347,8 +346,7 @@ class ShopsController extends MyAppController
         }
 
         $srch = new ShopSearch($this->siteLangId);
-        $srch->setDefinedCriteria($this->siteLangId);
-        $srch->joinSellerSubscription();
+        $srch->setDefinedCriteria($this->siteLangId);        
         $srch->doNotCalculateRecords();
         $srch->joinTable('tbl_users', 'LEFT OUTER JOIN', 'tu.user_id = shop_user_id', 'tu');
         $loggedUserId = 0;
