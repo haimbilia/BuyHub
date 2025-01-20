@@ -129,15 +129,20 @@ class ShopsController extends MyAppController
             )
         );
         foreach ($allShops as $val) {
-            $productShopSrchTempObj = clone $productSrchObj;
-            $productShopSrchTempObj->addCondition('selprod_user_id', '=', $val['shop_user_id']);
-            $productShopSrchTempObj->addOrder('in_stock', 'DESC');
-            $productShopSrchTempObj->addOrder('availableInLocation', 'DESC');
-            $productShopSrchTempObj->addGroupBy('selprod_product_id');
-            $productShopSrchTempObj->setPageSize(4);
-            $Prs = $productShopSrchTempObj->getResultSet();
-            $allShops[$val['shop_id']]['products'] = $db->fetchAll($Prs);
-            $allShops[$val['shop_id']]['totalProducts'] = $productShopSrchTempObj->recordCount();
+            if (false == MOBILE_APP_API_CALL) {
+                $productShopSrchTempObj = clone $productSrchObj;
+                $productShopSrchTempObj->addCondition('selprod_user_id', '=', $val['shop_user_id']);
+                $productShopSrchTempObj->addOrder('in_stock', 'DESC');
+                $productShopSrchTempObj->addOrder('availableInLocation', 'DESC');
+                $productShopSrchTempObj->addGroupBy('selprod_product_id');
+                $productShopSrchTempObj->setPageSize(4);
+                $Prs = $productShopSrchTempObj->getResultSet();
+                $allShops[$val['shop_id']]['products'] = $db->fetchAll($Prs);
+                $allShops[$val['shop_id']]['totalProducts'] = $productShopSrchTempObj->recordCount();
+            } else {
+                $allShops[$val['shop_id']]['products'] = [];
+                $allShops[$val['shop_id']]['totalProducts'] = 0;
+            }
 
             $allShops[$val['shop_id']]['shopRating'] = 0;
             if (FatApp::getConfig("CONF_ALLOW_REVIEWS", FatUtility::VAR_INT, 0)) {
