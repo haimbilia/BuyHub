@@ -91,6 +91,7 @@ class Collections extends MyAppModel
     public const LIMIT_CATEGORY_LAYOUT5 = 5;
     public const LIMIT_CATEGORY_LAYOUT6 = 4;
     public const LIMIT_CATEGORY_LAYOUT7 = 15;
+    public const LIMIT_CATEGORY_LAYOUT9 = 10;
     public const LIMIT_SHOP_LAYOUT1 = 4;
     public const LIMIT_SHOP_LAYOUT2 = 3;
     public const LIMIT_BRAND_LAYOUT1 = 5;
@@ -1195,8 +1196,10 @@ class Collections extends MyAppModel
                 $limit = self::LIMIT_CATEGORY_LAYOUT5;
                 break;
             case self::TYPE_CATEGORY_LAYOUT6:
-            case self::TYPE_CATEGORY_LAYOUT9:
                 $limit = self::LIMIT_CATEGORY_LAYOUT6;
+                break;
+            case self::TYPE_CATEGORY_LAYOUT9:
+                $limit = self::LIMIT_CATEGORY_LAYOUT9;
                 break;
             case self::TYPE_CATEGORY_LAYOUT7:
                 $limit = self::LIMIT_CATEGORY_LAYOUT7;
