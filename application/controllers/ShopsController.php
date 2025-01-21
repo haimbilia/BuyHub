@@ -97,8 +97,8 @@ class ShopsController extends MyAppController
         $productSrchObj->joinProductToTax();
         $productSrchObj->doNotCalculateRecords();
         $productSrchObj->setDefinedCriteria(0, 0, ['doNotJoinSellers' => true, 'doNotJoinShippingPkg' => true]);
-        $productSrchObj->joinSellerSubscription($this->siteLangId, true);
-        $productSrchObj->addSubscriptionValidCondition();
+        /* $productSrchObj->joinSellerSubscription($this->siteLangId, true);
+        $productSrchObj->addSubscriptionValidCondition(); */
         $productSrchObj->validateAndJoinDeliveryLocation();
 
         $productSrchObj->addCondition('selprod_deleted', '=', applicationConstants::NO);

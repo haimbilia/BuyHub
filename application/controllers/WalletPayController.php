@@ -53,6 +53,7 @@ class WalletPayController extends MyAppController
             $cond =   $srch->addCondition('order_type', '=', Orders::ORDER_PRODUCT);
             $cond->attachCondition('order_type', '=', Orders::ORDER_GIFT_CARD);
         }
+       
         $rs = $srch->getResultSet();
         $orderInfo = FatApp::getDb()->fetch($rs);
         if (!$orderInfo) {
@@ -146,7 +147,7 @@ class WalletPayController extends MyAppController
         }
 
         $loggedUserId = UserAuthentication::getLoggedUserId();
-        $orderObj = new Orders();
+        
         $srch = Orders::getSearchObject();
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();

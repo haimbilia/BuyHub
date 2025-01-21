@@ -26,7 +26,7 @@ if (isset($priceArr) && $priceArr && 1 > FatApp::getConfig('CONF_HIDE_PRICES', F
                     <div class="price-input">
                         <div class="price-text-box input-group">
                             <div class="input-group-prepend"><span class="input-group-text"><?php echo $symbol; ?></span></div>
-                            <input class="input-filter form-control" value="<?php echo floor($priceArr['minPrice']); ?>" data-defaultvalue="<?php echo $filterDefaultMinValue; ?>" name="priceFilterMinValue" type="text" id="priceFilterMinValue">
+                            <input class="input-filter form-control" value="<?php echo floor($priceArr['minPrice']); ?>" data-defaultvalue="<?php echo floor($filterDefaultMinValue); ?>" name="priceFilterMinValue" type="text" id="priceFilterMinValue">
 
                         </div>
                     </div>
@@ -34,7 +34,7 @@ if (isset($priceArr) && $priceArr && 1 > FatApp::getConfig('CONF_HIDE_PRICES', F
                     <div class="price-input">
                         <div class="price-text-box input-group">
                             <div class="input-group-prepend"><span class="input-group-text"><?php echo $symbol; ?></span></div>
-                            <input class="input-filter form-control" value="<?php echo ceil($priceArr['maxPrice']); ?>" data-defaultvalue="<?php echo $filterDefaultMaxValue; ?>" name="priceFilterMaxValue" type="text" id="priceFilterMaxValue">
+                            <input class="input-filter form-control" value="<?php echo ceil($priceArr['maxPrice']); ?>" data-defaultvalue="<?php echo ceil($filterDefaultMaxValue); ?>" name="priceFilterMaxValue" type="text" id="priceFilterMaxValue">
 
                         </div>
                     </div>

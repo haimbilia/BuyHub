@@ -32,7 +32,7 @@ class MyAppController extends FatController
 
         if (0 < FatApp::getPostedData('appUser', FatUtility::VAR_INT, 0)) {
             CommonHelper::setAppUser();
-        } 
+        }
 
         $this->set('siteLangId', $this->siteLangId);
 
@@ -49,7 +49,7 @@ class MyAppController extends FatController
 
         $controllerName = substr($this->_controllerName, 0, '-' . strlen('Controller'));
 
-        if (!FatUtility::isAjaxCall() && !in_array($this->_controllerName, ['Cart', 'Checkout'])) {
+        if (!FatUtility::isAjaxCall() && !in_array($controllerName, ['Cart', 'Checkout', 'WalletPay'])) {
             /* to keep track of temporary hold the product stock, update time in each row of tbl_product_stock_hold against current user[ */
             $cartObj = new Cart(UserAuthentication::getLoggedUserId(true), $this->siteLangId, $this->app_user['temp_user_id']);
             $cartObj->excludeTax();
@@ -65,7 +65,7 @@ class MyAppController extends FatController
             /* ] */
         }
 
-        if (true === MOBILE_APP_API_CALL) {
+        if (true === MOBILE_APP_API_CALL && !in_array($controllerName, ['WalletPay'])) {
             $cartObj = $cartObj ?? new Cart(UserAuthentication::getLoggedUserId(true), $this->siteLangId, $this->app_user['temp_user_id']);
             $this->cartItemsCount = $cartObj->countProducts();
             $this->set('cartItemsCount', $this->cartItemsCount);

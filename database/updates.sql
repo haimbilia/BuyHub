@@ -881,3 +881,4 @@ SET c.prodcat_has_child = 1;
 
 ALTER TABLE `tbl_brands` ADD INDEX(`brand_active`);
 ALTER TABLE `tbl_brands` ADD INDEX(`brand_deleted`);
+ALTER TABLE `tbl_user_transactions` ADD INDEX(`utxn_status`);
