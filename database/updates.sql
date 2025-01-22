@@ -882,3 +882,7 @@ SET c.prodcat_has_child = 1;
 ALTER TABLE `tbl_brands` ADD INDEX(`brand_active`);
 ALTER TABLE `tbl_brands` ADD INDEX(`brand_deleted`);
 ALTER TABLE `tbl_user_transactions` ADD INDEX(`utxn_status`);
+
+INSERT INTO `tbl_configurations` (`conf_name`, `conf_val`) VALUES 
+('CONF_ANALYTICS_ADVANCE_ECOMMERCE', 0)
+ON DUPLICATE KEY UPDATE conf_val = VALUES(conf_val);

@@ -234,7 +234,7 @@ class ConfigurationsController extends ListingBaseController
             $srch->joinProductVariant('INNER JOIN');
             $srch->addFld(1);
             $srch->doNotCalculateRecords();
-            $srch->setPageSize(1);          
+            $srch->setPageSize(1);
             $rs = $srch->getResultSet();
             $row = FatApp::getDb()->fetch($rs);
             if (!empty($row)) {
@@ -1375,10 +1375,9 @@ class ConfigurationsController extends ListingBaseController
                 $ga4Fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 HtmlHelper::configureSwitchForCheckbox($ga4Fld, Labels::getLabel("LBL_WHEN_DISABLED_CODE_WILL_BE_IN_SYNC_WITH_THE_OLDER_GOOGLE_ANALYTICS_VERSION.", $this->siteLangId));
 
-
-                $fld = $frm->addRadioButtons(Labels::getLabel("FRM_ADVANCE_ECOMMERCE_TRACKING", $langId), 'CONF_ANALYTICS_ADVANCE_ECOMMERCE', applicationConstants::getYesNoArr($langId), applicationConstants::NO, array('class' => 'list-radio'));
+                /* $fld = $frm->addRadioButtons(Labels::getLabel("FRM_ADVANCE_ECOMMERCE_TRACKING", $langId), 'CONF_ANALYTICS_ADVANCE_ECOMMERCE', applicationConstants::getYesNoArr($langId), applicationConstants::NO, array('class' => 'list-radio'));
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_INCASE_OF_GOOGLE_ANALYTICS_4_YOU_NEED_TO_UPDATE_JS_TRACKING_CODE_IN_SEO_TAB.", $langId) . "</span>";
-                HtmlHelper::configureSwitchForRadio($fld);
+                HtmlHelper::configureSwitchForRadio($fld); */
 
 
                 $fld = $frm->addTextBox(Labels::getLabel("FRM_CLIENT_ID", $langId), 'CONF_ANALYTICS_CLIENT_ID');
