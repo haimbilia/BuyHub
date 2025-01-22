@@ -10,7 +10,14 @@ if (isset($prodcat_code)) {
     });
 }
 
-if (isset($priceArr) && $priceArr && 1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) { ?>
+if (isset($priceArr) && $priceArr && 1 > FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) {
+    if ($filterDefaultMinValue >= $filterDefaultMaxValue) {
+        $filterDefaultMinValue = $filterDefaultMinValue - 1;
+    }
+    if ($priceArr['minPrice'] >= $priceArr['maxPrice']) {
+        $priceArr['minPrice'] = $priceArr['minPrice'] - 1;
+    }
+?>
     <div class="sidebar-widget">
         <div class="sidebar-widget_head" data-bs-toggle="collapse" data-bs-target="#price" aria-expanded="true">
             <?php echo Labels::getLabel('LBL_Price', $siteLangId) . ' (' . (CommonHelper::getCurrencySymbolRight() ? CommonHelper::getCurrencySymbolRight() : CommonHelper::getCurrencySymbolLeft()) . ')'; ?>
