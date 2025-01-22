@@ -21,7 +21,7 @@ if (false === Extrapage::nonHtmlEditorBlocks($recordId)) {
 
 
 $formTitle = Labels::getLabel('LBL_CONTENT_BLOCK_SETUP', $siteLangId);
-if (array_key_exists($recordId, Extrapage::getContentBlockArrWithBg($siteLangId))) {
+if (array_key_exists($epageType, Extrapage::getContentBlockArrWithBg($siteLangId))) {
     $imageLangFld = $frm->getField('lang_id');
     $imageLangFld->addFieldTagAttribute('id', 'imageLanguageJs');
 

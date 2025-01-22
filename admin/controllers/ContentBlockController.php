@@ -195,6 +195,7 @@ class ContentBlockController extends ListingBaseController
         $this->set('image', $cbgImage);
         $this->set('defaultContent', $epageData['epage_default_content'] ?? '');
         $this->set('imageFunction', 'cblockBackgroundImage');
+        $this->set('epageType', $epageData['epage_type']);
         $this->checkEditPrivilege(true);
 
         $this->set('html', $this->_template->render(false, false, NULL, true));
