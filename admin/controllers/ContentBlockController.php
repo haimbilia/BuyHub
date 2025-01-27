@@ -154,7 +154,7 @@ class ContentBlockController extends ListingBaseController
         }
 
         $fieldsArray = [
-            'epage_id', 'epage_identifier', 'epage_active', 'IFNULL(epage_label,epage_identifier) as epage_label', 'epage_content', 'epage_default_content', 'epage_extra_info'
+            'epage_id', 'epage_identifier', 'epage_active', 'IFNULL(epage_label,epage_identifier) as epage_label', 'epage_content', 'epage_default_content', 'epage_extra_info','epage_type'
         ];
         $epageData = Extrapage::getAttributesByLangId($this->siteLangId, $recordId, $fieldsArray, applicationConstants::JOIN_RIGHT);
         if ($epageData === false) {
