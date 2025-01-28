@@ -4,7 +4,7 @@ if ($headerNavigation || $isMegaMenuEnabled) {
     $getOrgUrl = (CONF_DEVELOPMENT_MODE) ? true : false;
 
     if (count($headerNavigation)) {
-        $noOfCharAllowedInNav = 80;
+        $noOfCharAllowedInNav = 75;
         $rightNavCharCount = 10;
         if (!UserAuthentication::isUserLogged()) {
             $rightNavCharCount = $rightNavCharCount + mb_strlen(html_entity_decode(Labels::getLabel('LBL_Sign_In', $siteLangId), ENT_QUOTES, 'UTF-8'));
