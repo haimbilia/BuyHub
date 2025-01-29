@@ -907,6 +907,9 @@ ALTER TABLE `tbl_app_release_versions`
   ADD PRIMARY KEY (`arv_id`),
   ADD UNIQUE KEY `arv_package_name` (`arv_package_name`,`arv_app_type`);
 
+ALTER TABLE `tbl_app_release_versions`
+  MODIFY `arv_id` int(11) NOT NULL AUTO_INCREMENT;
+
 CREATE TABLE `tbl_app_release_version_logs` (
   `arvlog_id` int(11) NOT NULL,
   `arvlog_arv_id` int(11) NOT NULL,
