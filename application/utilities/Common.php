@@ -387,4 +387,18 @@ class Common
         $template->set('pollForm', $pollForm);
         $template->set('siteLangId', CommonHelper::getLangId());
     }
+
+    public static function convertDataTypeToString($data)
+    {
+        array_walk_recursive($data, function (&$val, $key) {
+            if (is_object($val) && get_class($val) == "stdClass") {
+                $val = $val;
+            } else {
+                $val = strval($val);
+            }
+        });
+        return $data;
+        /* Not used FatUtility::convertToType($data, FatUtility::VAR_STRING)
+         * Reason:: becuase internally at library level, it is throwing error "object of class stdClass could not be converted to string" */
+    }
 }
