@@ -386,6 +386,22 @@
                                 </div>
                             </a>
                         <?php } ?>
+                        <?php if ($objPrivilege->canViewAppReleaseVersions(AdminAuthentication::getLoggedAdminId(), true)) { ?>
+                            <a class="setting" href="<?php echo UrlHelper::generateUrl('AppReleaseVersion'); ?>">
+                                <div class="setting__icon">
+                                    <span class="icon">
+                                        <svg class="icon" width="40" height="40">
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-settings.svg#app-update">
+                                            </use>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div class="setting__detail">
+                                    <h6><?php echo Labels::getLabel('NAV_APP_RELEASE_VERSIONS', $siteLangId); ?></h6>
+                                    <span><?php echo Labels::getLabel('MSG_APP_RELEASE_VERSION_UPDATES', $siteLangId); ?></span>
+                                </div>
+                            </a>
+                        <?php } ?>
                     </div>
                 <?php } ?>
                 <div style="display: none;">

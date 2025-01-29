@@ -1562,4 +1562,10 @@ class GuestUserController extends MyAppController
         }
         return $userId;
     }
+
+    public function appversion()
+    {
+        $this->set('versionDetails', CommonHelper::getAppVersionDetail());
+        $this->_template->render(false, false);
+    }
 }

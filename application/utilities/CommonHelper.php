@@ -2273,4 +2273,30 @@ class CommonHelper extends FatUtility
         }
         return $str;
     }
+
+    public static function getAppVersionDetail()
+    {
+        $deviceType = isset($_SERVER['HTTP_DEVICETYPE']) ? $_SERVER['HTTP_DEVICETYPE'] : '';
+        $packageName = isset($_SERVER['HTTP_PACKAGENAME']) ? $_SERVER['HTTP_PACKAGENAME'] : '';
+        $appversion = isset($_SERVER['HTTP_APPVERSION']) ? $_SERVER['HTTP_APPVERSION'] : '';
+        if (empty($deviceType)) {
+            MobileAppUtility::dieWithJsonData(MobileAppUtility::STATUS_ERROR, ['msg' => 'Invalid device type'], true);
+        }
+        if (empty($packageName)) {
+            MobileAppUtility::dieWithJsonData(MobileAppUtility::STATUS_ERROR, ['msg' => 'Invalid package name'], true);
+        }
+
+        $srch = new AppReleaseVersionSearch();
+        $versionRow = $srch->searchVersions(['arv_app_type' => $deviceType, 'arv_package_name' => $packageName]);
+        if (empty($versionRow)) {
+            MobileAppUtility::dieWithJsonData(MobileAppUtility::STATUS_ERROR, ['msg' => 'Invalid device type or package name'], true);
+        }
+
+        return [
+            'app_version' => $versionRow['arv_app_version'],
+            'is_version_critical' => $versionRow['arv_is_critical'],
+            'version_features' => $versionRow['arv_description'],
+            'appstore_url' => $versionRow['arv_store_url'],
+        ];
+    }
 }

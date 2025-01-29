@@ -886,3 +886,39 @@ ALTER TABLE `tbl_user_transactions` ADD INDEX(`utxn_status`);
 INSERT INTO `tbl_configurations` (`conf_name`, `conf_val`) VALUES 
 ('CONF_ANALYTICS_ADVANCE_ECOMMERCE', 0)
 ON DUPLICATE KEY UPDATE conf_val = VALUES(conf_val);
+
+
+-- ------------------------task ----------------------------------- --
+CREATE TABLE `tbl_app_release_versions` (
+  `arv_id` int(11) NOT NULL,
+  `arv_package_name` varchar(255) NOT NULL,
+  `arv_app_name` varchar(255) NOT NULL,
+  `arv_app_version` varchar(50) NOT NULL,
+  `arv_app_type` int(1) NOT NULL COMMENT '1 => Android, 2 => Ios',
+  `arv_store_url` varchar(255) NOT NULL,
+  `arv_is_critical` int(1) NOT NULL COMMENT '0 => NO, 1 => Yes',
+  `arv_description` text NOT NULL,
+  `arv_added_on` datetime NOT NULL,
+  `arv_added_by` varchar(255) NOT NULL,
+  `arv_updated_on` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+ALTER TABLE `tbl_app_release_versions`
+  ADD PRIMARY KEY (`arv_id`),
+  ADD UNIQUE KEY `arv_package_name` (`arv_package_name`,`arv_app_type`);
+
+CREATE TABLE `tbl_app_release_version_logs` (
+  `arvlog_id` int(11) NOT NULL,
+  `arvlog_arv_id` int(11) NOT NULL,
+  `arvlog_app_version` varchar(20) NOT NULL,
+  `arvlog_is_critical` tinyint(1) NOT NULL,
+  `arvlog_description` text NOT NULL,
+  `arvlog_added_on` datetime NOT NULL,
+  `arvlog_added_by` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+ALTER TABLE `tbl_app_release_version_logs`
+  ADD PRIMARY KEY (`arvlog_id`);
+  
+ALTER TABLE `tbl_app_release_version_logs`
+  MODIFY `arvlog_id` int(11) NOT NULL AUTO_INCREMENT;

@@ -89,6 +89,9 @@ class applicationConstants
     public const JOIN_INNER = 3;
     /* join type ]*/
 
+    const LOGIN_VIA_ANDROID = 1;
+    const LOGIN_VIA_IOS = 2;
+
     public static function getWeightUnitsArr($langId, $unitOnly = false)
     {
         $langId = FatUtility::int($langId);
@@ -173,6 +176,14 @@ class applicationConstants
             static::LENGTH_METER => Labels::getLabel('LBL_Meter', $langId),
             static::LENGTH_INCH => Labels::getLabel('LBL_Inch', $langId),
         );
+    }
+
+    public static function getAppTypeArray($langId)
+    {
+        return [
+            static::LOGIN_VIA_ANDROID => Labels::getLabel('LBL_Android', $langId),
+            static::LOGIN_VIA_IOS => Labels::getLabel('LBL_IOS', $langId),
+        ];
     }
 
     public static function getYesNoArr($langId)

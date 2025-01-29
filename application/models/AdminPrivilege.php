@@ -135,6 +135,7 @@ class AdminPrivilege
     public const SECTION_GETTING_STARTED = 127;
     public const SECTION_REQUEST_FOR_QUOTE = 128;
     public const SECTION_RFQ_OFFERS = 129;
+    public const SECTION_APP_RELEASE = 130;
 
     public const PRIVILEGE_NONE = 0;
     public const PRIVILEGE_READ = 1;
@@ -1733,5 +1734,14 @@ class AdminPrivilege
     public function canEditRfqOffers($adminId = 0, $returnResult = false)
     {
         return $this->checkPermission($adminId, static::SECTION_RFQ_OFFERS, static::PRIVILEGE_WRITE, $returnResult);
+    }
+    public function canViewAppReleaseVersions($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_APP_RELEASE, static::PRIVILEGE_READ, $returnResult);
+    }
+
+    public function canEditAppReleaseVersions($adminId = 0, $returnResult = false)
+    {
+        return $this->checkPermission($adminId, static::SECTION_APP_RELEASE, static::PRIVILEGE_WRITE, $returnResult);
     }
 }

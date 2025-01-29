@@ -21,6 +21,12 @@ RewriteRule ^app-api/(.*)/dashboard/(.*)$ /dashboard/app-api/$1/$2 [L]
     Header set X-XSS-Protection "1; mode=block"
     #Header set X-Content-Type-Options "nosniff"    
 </IfModule>
+
+<IfModule mod_headers.c>
+    <Files "apple-app-site-association">
+        Header set Content-Type application/json
+    </Files>
+</IfModule>
 FileETag None
 
 <IfModule mod_rewrite.c>
