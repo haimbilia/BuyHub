@@ -61,11 +61,13 @@ class SocialMediaAuthController extends PluginBaseController
         if (true === MOBILE_APP_API_CALL) {
             $userId = $userInfo['user_id'];
             $userObj = new User($userId);
+            $appSessionId = isset($_SERVER['HTTP_X_APP_SESSION_ID']) && !empty($_SERVER['HTTP_X_APP_SESSION_ID']) ? $_SERVER['HTTP_X_APP_SESSION_ID'] : session_id();
             if (!$token = $userObj->setMobileAppToken()) {
                 FatUtility::dieJsonError(Labels::getLabel('ERR_INVALID_REQUEST', $this->siteLangId));
             }
             $this->set('token', $token);
             $this->set('userInfo', $userInfo);
+            $this->set('app_session_id', $appSessionId);
             $this->_template->render(true, true, 'guest-user/login.php');
         }
         
