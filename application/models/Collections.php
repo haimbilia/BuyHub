@@ -156,6 +156,7 @@ class Collections extends MyAppModel
         self::TYPE_CATEGORY_LAYOUT9,
         self::TYPE_CATEGORY_LAYOUT10,
         self::TYPE_CATEGORY_LAYOUT11,
+        self::TYPE_CATEGORY_LAYOUT12,
         self::TYPE_BRAND_LAYOUT2,
         self::TYPE_SHOP_LAYOUT2,
         self::TYPE_SHOP_LAYOUT3,
