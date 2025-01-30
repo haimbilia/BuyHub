@@ -701,6 +701,7 @@
 
     &-item {
         display: block;
+        min-width: 0;
     }
 
     &-link {
@@ -710,6 +711,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
+
     }
 
     &-icon {
