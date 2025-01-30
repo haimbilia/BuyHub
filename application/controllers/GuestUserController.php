@@ -1565,7 +1565,30 @@ class GuestUserController extends MyAppController
 
     public function appversion()
     {
-        $this->set('versionDetails', CommonHelper::getAppVersionDetail());
-        $this->_template->render(false, false);
+        $deviceType = isset($_SERVER['HTTP_DEVICETYPE']) ? $_SERVER['HTTP_DEVICETYPE'] : '';
+        $packageName = isset($_SERVER['HTTP_PACKAGENAME']) ? $_SERVER['HTTP_PACKAGENAME'] : '';
+        if (empty($deviceType)) {
+            $message = Labels::getLabel('ERR_INVALID_DEVICE_TYPE', $this->siteLangId);
+            FatUtility::dieJsonError($message);
+        }
+        if (empty($packageName)) {
+            $message = Labels::getLabel('ERR_INVALID_PACKAGE_NAME', $this->siteLangId);
+            FatUtility::dieJsonError($message);
+        }
+
+        $srch = new AppReleaseVersionSearch();
+        $versionRow = $srch->searchVersions(['arv_app_type' => $deviceType, 'arv_package_name' => $packageName]);
+        if (empty($versionRow)) {
+            $message = Labels::getLabel('ERR_INVALID_DEVICE_TYPE_OR_PACKAGE_NAME', $this->siteLangId);
+            FatUtility::dieJsonError($message);
+        }
+        $getAppVersionDetail =  [
+            'app_version' => $versionRow['arv_app_version'],
+            'is_version_critical' => $versionRow['arv_is_critical'],
+            'version_features' => $versionRow['arv_description'],
+            'appstore_url' => $versionRow['arv_store_url'],
+        ];
+        $this->set('versionDetails', $getAppVersionDetail);
+        $this->_template->render();
     }
 }
