@@ -10,7 +10,10 @@ class HomeController extends MyAppController
         $sponProdLayoutCount = count($sponsoredProdsInCollection);
         if (0 < $sponProdLayoutCount) {
             foreach ($sponsoredProdsInCollection as $indexId => $collectionId) {
-                $ind = (true === MOBILE_APP_API_CALL) ? $indexId : $collectionId;
+                $ind = $collectionId;
+                if (true === MOBILE_APP_API_CALL) {
+                    $ind =  array_search(Collections::COLLECTION_TYPE_SPONSORED_PRODUCTS, array_column($collections, 'collection_type'));
+                }
                 $sponsoredProds = $this->getSponsoredProducts($loggedUserId);
 
                 if (empty($sponsoredProds)) {
@@ -47,7 +50,10 @@ class HomeController extends MyAppController
 
         if (0 < $sponShopLayoutCount) {
             foreach ($sponsoredShopsInCollection as $indexId => $collectionId) {
-                $recordId = (true === MOBILE_APP_API_CALL) ? $indexId : $collectionId;
+                $recordId = $collectionId;
+                if (true === MOBILE_APP_API_CALL) {
+                    $recordId =  array_search(Collections::COLLECTION_TYPE_SPONSORED_SHOPS, array_column($collections, 'collection_type'));
+                }
                 $sponsoredShops = $this->getSponsoredShops();
 
                 if (empty($sponsoredShops)) {
@@ -729,13 +735,18 @@ class HomeController extends MyAppController
             if (MOBILE_APP_API_CALL) {
                 $collectionsArr = unserialize($collectionsArr);
                 $pagesCount = $collectionsArr['pageCount'];
+                $collectionsArr = $collectionsArr['collectionArr'];
+            } else {
+                $collectionsArr = unserialize($collectionsArr);
             }
-            $collectionsArr = unserialize($collectionCache);
         } else {
             $srch = new CollectionSearch($langId);
             if (MOBILE_APP_API_CALL) {
                 $srch->setPageNumber($page);
                 $srch->setPageSize($pageSize);
+                if ($page > 1) {
+                    $srch->doNotCalculateRecords();
+                }
             } else {
                 $srch->doNotCalculateRecords();
                 $srch->doNotLimitRecords();
@@ -750,7 +761,7 @@ class HomeController extends MyAppController
             $collectionsArr = $db->fetchAll($rs, 'collection_id');
             if (MOBILE_APP_API_CALL) {
                 $cacheData = [
-                    'pageCount' => $srch->pages(),
+                    'pageCount' => (1 == $page ? $srch->pages() : $pagesCount),
                     'collectionArr' => $collectionsArr,
                 ];
             } else {
@@ -760,7 +771,7 @@ class HomeController extends MyAppController
             if (!empty($collectionsArr)) {
                 CacheHelper::create('collectionsArr' . $cacheKey, serialize($cacheData), CacheHelper::TYPE_COLLECTIONS);
             }
-            $pagesCount = $srch->pages();
+            $pagesCount = (1 == $page ? $srch->pages() : $pagesCount);
         }
 
         if (MOBILE_APP_API_CALL) {
@@ -1508,6 +1519,7 @@ class HomeController extends MyAppController
             }
             $i++;
         }
+
         if ($collectionCache) {
             return unserialize($collectionCache);
         }
