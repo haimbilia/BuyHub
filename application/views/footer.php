@@ -121,8 +121,7 @@ if (false === $exculdeMainFooterElement) {
             <section class="footer-cta">
                 <div class="container">
                     <div class="footer-cta-inner">
-                        <h4 class="footer-cta-title">Yo!Kart Comes With All Essential eCommerce Features To Start An Online
-                            Marketplace</h4>
+                        <h4 class="footer-cta-title"><?php Labels::getLabel('MSG_FOOTER_CTA_CONTENT', $siteLangId); ?></h4>
                         <a class="footer-cta-link btn btn-brand"
                             href="https://www.yo-kart.com/contact-us.html?q=demo-footer">Get Started</a>
 
