@@ -736,9 +736,9 @@ class HomeController extends MyAppController
             if (MOBILE_APP_API_CALL) {
                 $srch->setPageNumber($page);
                 $srch->setPageSize($pageSize);
-                if ($page > 1) {
+               /*  if ($page > 1) {
                     $srch->doNotCalculateRecords();
-                }
+                } */
             } else {
                 $srch->doNotCalculateRecords();
                 $srch->doNotLimitRecords();
