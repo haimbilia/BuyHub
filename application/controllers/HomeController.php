@@ -736,9 +736,6 @@ class HomeController extends MyAppController
             if (MOBILE_APP_API_CALL) {
                 $srch->setPageNumber($page);
                 $srch->setPageSize($pageSize);
-               /*  if ($page > 1) {
-                    $srch->doNotCalculateRecords();
-                } */
             } else {
                 $srch->doNotCalculateRecords();
                 $srch->doNotLimitRecords();
@@ -753,7 +750,7 @@ class HomeController extends MyAppController
             $collectionsArr = $db->fetchAll($rs, 'collection_id');
             if (MOBILE_APP_API_CALL) {
                 $cacheData = [
-                    'pageCount' => (1 == $page ? $srch->pages() : $pagesCount),
+                    'pageCount' => $srch->pages(),
                     'collectionArr' => $collectionsArr,
                 ];
             } else {
@@ -763,7 +760,7 @@ class HomeController extends MyAppController
             if (!empty($collectionsArr)) {
                 CacheHelper::create('collectionsArr' . $cacheKey, serialize($cacheData), CacheHelper::TYPE_COLLECTIONS);
             }
-            $pagesCount = (1 == $page ? $srch->pages() : $pagesCount);
+            $pagesCount = $srch->pages();
         }
 
         if (MOBILE_APP_API_CALL) {
