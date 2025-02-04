@@ -347,8 +347,8 @@ class HtmlHelper
         $titleArr = explode(' ', $keyword);
         $title = '';
         foreach ($titleArr as $val) {
-            $title .= substr($val, 0, 1);
-            if (strlen($title) == $len) {
+            $title .= mb_substr($val, 0, 1);
+            if (mb_strlen($title) == $len) {
                 break;
             }
         }
