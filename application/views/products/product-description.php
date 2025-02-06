@@ -171,12 +171,7 @@
         </a>
         <?php } else { */
                     if (
-                        RequestForQuote::isEnabled($product['shop_rfq_enabled'], $product['selprod_cart_type']) &&
-                        (
-                            SellerProduct::CART_TYPE_CART_ONLY != $product['selprod_cart_type'] ||
-                            SellerProduct::isPriceHidden($product['selprod_hide_price'], $product['shop_rfq_enabled'])
-                        )
-                    ) { ?>
+                        RequestForQuote::isEnabled($product['shop_rfq_enabled'], $product['selprod_cart_type'])) { ?>
                         <button class="btn btn-outline-brand btn-block btn-rfq" name="requestForQuote" type="button"
                             onclick="requestForQuoteFn('<?php echo $product['selprod_id']; ?>');">
                             <?php echo Labels::getLabel('BTN_REQUEST_FOR_QUOTE'); ?>
