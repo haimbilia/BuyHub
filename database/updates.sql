@@ -925,3 +925,6 @@ ALTER TABLE `tbl_app_release_version_logs`
   
 ALTER TABLE `tbl_app_release_version_logs`
   MODIFY `arvlog_id` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `tbl_attached_files`  ADD `afile_attachment_type` TINYINT(2) NOT NULL  AFTER `afile_name`;
+ALTER TABLE `tbl_attached_files_temp`  ADD `afile_attachment_type` TINYINT(2) NOT NULL  AFTER `afile_name`;
