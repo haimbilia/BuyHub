@@ -23,14 +23,21 @@ if (null != $captchaFld) {
 <div class="login-page login-1">
     <div class="container">
         <div class="login-block">
-            <div class="logo">
+            <?php
+            $imgDataType = '';
+            $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_ADMIN_LOGO, 0, 0, $siteLangId, false);
+            if (AttachedFile::FILE_ATTACHMENT_TYPE_SVG == $fileData['afile_attachment_type']) {
+                $imgUrl = UrlHelper::getStaticImageUrl($fileData['afile_physical_path']);
+                $imgDataType = 'data-type="svg"';
+            } else {
+                $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
+                $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
+                $imgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'siteAdminLogo', array($siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+            }
+            ?>
+            <div class="logo" <?php echo  $imgDataType; ?>>
                 <a href="<?php echo UrlHelper::generateUrl(); ?>">
-                    <?php
-                    $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_ADMIN_LOGO, 0, 0, $siteLangId, false);
-                    $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
-                    $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
-                    ?>
-                    <img <?php if ($fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?> title="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId); ?>" src="<?php echo UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'siteAdminLogo', array($siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'); ?>" alt="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId); ?>">
+                    <img <?php if (AttachedFile::FILE_ATTACHMENT_TYPE_OTHER == $fileData['afile_attachment_type'] && $fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?> title="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId); ?>" src="<?php echo $imgUrl; ?>" alt="<?php echo FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId); ?>">
                 </a>
             </div>
 

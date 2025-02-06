@@ -15,15 +15,21 @@
             <div class="container">
                 <div class="top-bar__inner">
                     <div class="top-bar__left">
-                        <div class="logo">
+                    <?php
+                        $imgDataType = '';
+                        $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_FRONT_LOGO, 0, 0, $siteLangId, false);
+                        if (AttachedFile::FILE_ATTACHMENT_TYPE_SVG == $fileData['afile_attachment_type']) {
+                            $siteLogo = UrlHelper::getStaticImageUrl($fileData['afile_physical_path']);
+                            $imgDataType = 'data-type="svg"';
+                        } else {
+                            $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
+                            $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
+                            $siteLogo = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'siteLogo', array($siteLangId), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+                        }
+                        ?>
+                        <div class="logo" <?php echo $imgDataType;?>>
                             <a href="<?php echo UrlHelper::generateUrl('', '', [], CONF_WEBROOT_FRONTEND); ?>">
-                                <?php
-                                $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_FRONT_LOGO, 0, 0, $siteLangId, false);
-                                $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
-                                $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
-                                $siteLogo = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'siteLogo', array($siteLangId), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
-                                ?>
-                                <img <?php if ($fileData['afile_aspect_ratio'] > 0) { ?>
+                                <img <?php if (AttachedFile::FILE_ATTACHMENT_TYPE_OTHER == $fileData['afile_attachment_type'] && $fileData['afile_aspect_ratio'] > 0) { ?>
                                     data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>"
                                     <?php } ?> src="<?php echo $siteLogo; ?>"
                                     alt="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, FatUtility::VAR_STRING, '') ?>"
