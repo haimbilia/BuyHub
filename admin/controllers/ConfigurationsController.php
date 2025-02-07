@@ -1780,10 +1780,11 @@ class ConfigurationsController extends ListingBaseController
         $hasRatio = false;
         $imageArr = [];
         $fileData = AttachedFile::getAttachment($fileType, 0, 0, $langId);
-        if (AttachedFile::FILE_ATTACHMENT_TYPE_SVG == $fileData['afile_attachment_type']) {
-            $imgUrl = UrlHelper::getStaticImageUrl($fileData['afile_physical_path']);
-        }
         $uploadedTime = !empty($fileData['afile_updated_at']) ? AttachedFile::setTimeParam($fileData['afile_updated_at']) : '';
+
+        if (AttachedFile::FILE_ATTACHMENT_TYPE_SVG == $fileData['afile_attachment_type']) {
+           $imgUrl = UrlHelper::getStaticImageUrl($fileData['afile_physical_path']) . $uploadedTime;
+        }
 
         $hasSvg = in_array($fileType, AttachedFile::getSvgFileType());
 
