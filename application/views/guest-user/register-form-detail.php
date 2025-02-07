@@ -25,7 +25,7 @@ if (AttachedFile::FILE_ATTACHMENT_TYPE_SVG == $fileData['afile_attachment_type']
             <?php $this->includeTemplate('guest-user/registerationFormTemplate.php', $registerdata, false); ?>
         </div>
         <div class="card-sign_foot">
-            <h6><?php echo Labels::getLabel('LBL_DON’T_HAVE_AN_ACCOUNT?', $siteLangId); ?></h6>
+            <h6><?php echo Labels::getLabel('LBL_ALREADY_HAVE_AN_ACCOUNT?', $siteLangId); ?></h6>
             <div class="more-links">
                 <?php if (isset($registerdata['signUpWithPhone']) && true === $smsPluginStatus) {
                     if (0 == $registerdata['signUpWithPhone']) { ?>

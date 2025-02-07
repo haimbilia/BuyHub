@@ -90,7 +90,7 @@ $canSendSms = $canSendSms ?? false;
         </div>
     </div>
     <div class="card-sign_foot">
-        <h6><?php echo Labels::getLabel('DON’T_HAVE_AN_ACCOUNT?', $siteLangId); ?></h6>
+        <h6><?php echo Labels::getLabel('LBL_DON’T_HAVE_AN_ACCOUNT?', $siteLangId); ?></h6>
         <div class="more-links">
             <?php
             if (1 > $signInWithPhone) {
