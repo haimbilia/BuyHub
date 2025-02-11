@@ -1948,7 +1948,8 @@ class CommonHelper extends FatUtility
     }
 
     public static function cleanArray($obj)
-    {
+    {        
+        ini_set('memory_limit', '100M');
         $orig_obj = $obj;
 
         // We want to preserve the object name to the array
