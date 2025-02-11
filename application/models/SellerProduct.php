@@ -1728,6 +1728,10 @@ class SellerProduct extends MyAppModel
             return true;
         }
 
+        if (!RequestForQuote::isEnabled($shopRfqEnabled, $selProdCartType)) {
+            return true;
+        }
+
         return false;
     }
 }
