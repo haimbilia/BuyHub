@@ -150,9 +150,7 @@
                         $fromDate <= $currentDate &&
                         false === SellerProduct::isPriceHidden($product['selprod_hide_price'], $product['shop_rfq_enabled']) &&
                         (
-                            SellerProduct::CART_TYPE_RFQ_ONLY != $product['selprod_cart_type'] ||
-                            applicationConstants::NO == $product['shop_rfq_enabled'] ||
-                            1 > FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0)
+                            SellerProduct::isCartType($product['shop_rfq_enabled'], $product['selprod_cart_type'])
                         )
                     ) {
                         echo $frmBuyProduct->getFieldHtml('btnAddToCart');
@@ -171,7 +169,8 @@
         </a>
         <?php } else { */
                     if (
-                        RequestForQuote::isEnabled($product['shop_rfq_enabled'], $product['selprod_cart_type'])) { ?>
+                        RequestForQuote::isEnabled($product['shop_rfq_enabled'], $product['selprod_cart_type'])
+                    ) { ?>
                         <button class="btn btn-outline-brand btn-block btn-rfq" name="requestForQuote" type="button"
                             onclick="requestForQuoteFn('<?php echo $product['selprod_id']; ?>');">
                             <?php echo Labels::getLabel('BTN_REQUEST_FOR_QUOTE'); ?>

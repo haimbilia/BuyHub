@@ -1711,4 +1711,23 @@ class SellerProduct extends MyAppModel
 
         return (0 < $selprodHidePrice);
     }
+
+    public static function isCartType($shopRfqEnabled, $selProdCartType)
+    {
+        if (!FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0)) {
+            return true;
+        }
+
+        $moduleType = FatApp::getConfig('CONF_RFQ_MODULE_TYPE', FatUtility::VAR_INT, 0);
+
+        if ($moduleType != RequestForQuote::TYPE_INDIVIDUAL && SellerProduct::CART_TYPE_RFQ_ONLY != $selProdCartType) {
+            return true;
+        }
+
+        if (SellerProduct::CART_TYPE_RFQ_ONLY != $selProdCartType) {
+            return true;
+        }
+
+        return false;
+    }
 }
