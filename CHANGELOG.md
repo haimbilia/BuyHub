@@ -51,6 +51,7 @@
     - Header width management: Admin can set header to full width or fixed width.  
     - Hide header & footer options for CMS pages.
     - Performance optimization.
+    - Admin can upload logo as SVG.
     
 ## Hit URL:
     - admin/patch-update/updateProductRating  
