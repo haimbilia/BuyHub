@@ -23,6 +23,10 @@
     }
 
     &-space {
+      @include media-breakpoint-down(sm) {
+        flex-flow: row wrap;
+      }
+
       @include media-breakpoint-up(lg) {
         align-items: normal;
         flex-wrap: inherit;
@@ -64,10 +68,15 @@
         font-size: 2rem;
         display: inline-block;
       }
+
+      &~p {
+        margin-top: 1rem;
+      }
     }
 
     p {
-      font-size: 1rem;
+      font-size: 0.9rem;
+      line-height: 1.5;
       font-weight: $font-weight-regular;
     }
   }
