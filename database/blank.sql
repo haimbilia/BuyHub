@@ -9660,6 +9660,8 @@ LOCK TABLES `tbl_zones_lang` WRITE;
 /*!40000 ALTER TABLE `tbl_zones_lang` DISABLE KEYS */;
 INSERT INTO `tbl_zones_lang` VALUES (1,1,'Africa'),(10,1,'Antarctica'),(2,1,'Asia'),(3,1,'Central America'),(4,1,'Europe'),(5,1,'Middle East'),(6,1,'North America'),(7,1,'Oceania'),(8,1,'South America'),(9,1,'The Caribbean');
 /*!40000 ALTER TABLE `tbl_zones_lang` ENABLE KEYS */;
+ALTER TABLE `tbl_attached_files`  ADD `afile_attachment_type` TINYINT(2) NOT NULL  AFTER `afile_name`;
+ALTER TABLE `tbl_attached_files_temp`  ADD `afile_attachment_type` TINYINT(2) NOT NULL  AFTER `afile_name`;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 

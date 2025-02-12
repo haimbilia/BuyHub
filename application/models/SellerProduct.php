@@ -1684,11 +1684,15 @@ class SellerProduct extends MyAppModel
     public static function getCartType(int $siteLangId = 0): array
     {
         $siteLangId = 0 < $siteLangId ? $siteLangId : CommonHelper::getLangId();
-        return [
+        $arr = [
             self::CART_TYPE_BOTH => Labels::getLabel('LBL_RFQ_AND_CART', $siteLangId),
             self::CART_TYPE_CART_ONLY => Labels::getLabel('LBL_CART_ONLY', $siteLangId),
             self::CART_TYPE_RFQ_ONLY => Labels::getLabel('LBL_RFQ_ONLY', $siteLangId),
         ];
+        if (RequestForQuote::TYPE_INDIVIDUAL != FatApp::getConfig('CONF_RFQ_MODULE_TYPE', FatUtility::VAR_INT, 0)) {
+            unset($arr[self::CART_TYPE_CART_ONLY]);
+        }
+        return $arr;
     }
 
     public static function isPriceHidden(int $selprodHidePrice, int $shopRfqEnabled)
@@ -1706,5 +1710,28 @@ class SellerProduct extends MyAppModel
         }
 
         return (0 < $selprodHidePrice);
+    }
+
+    public static function isCartType($shopRfqEnabled, $selProdCartType)
+    {
+        if (!FatApp::getConfig('CONF_RFQ_MODULE', FatUtility::VAR_INT, 0)) {
+            return true;
+        }
+
+        $moduleType = FatApp::getConfig('CONF_RFQ_MODULE_TYPE', FatUtility::VAR_INT, 0);
+
+        if ($moduleType != RequestForQuote::TYPE_INDIVIDUAL && SellerProduct::CART_TYPE_RFQ_ONLY != $selProdCartType) {
+            return true;
+        }
+
+        if (SellerProduct::CART_TYPE_RFQ_ONLY != $selProdCartType) {
+            return true;
+        }
+
+        if (!RequestForQuote::isEnabled($shopRfqEnabled, $selProdCartType)) {
+            return true;
+        }
+
+        return false;
     }
 }

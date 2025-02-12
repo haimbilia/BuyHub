@@ -695,9 +695,9 @@ class RequestForQuote extends MyAppModel
             return true;
         }
 
-        if ($moduleType == RequestForQuote::TYPE_INDIVIDUAL && SellerProduct::CART_TYPE_CART_ONLY != $cartType) {
+        /* if ($moduleType == RequestForQuote::TYPE_INDIVIDUAL && SellerProduct::CART_TYPE_CART_ONLY != $cartType) {
             return true;
-        }
+        } */
 
         if (0 < FatApp::getConfig('CONF_HIDE_PRICES', FatUtility::VAR_INT, 0)) {
             return true;
