@@ -25,20 +25,20 @@ $fld->value = $credential_username;
 ?>
 <div id="body" class="body enter-page">
     <div class="form-sign">
-    <?php
+        <?php
         $logoUrl = UrlHelper::generateUrl();
         $imgDataType = '';
         $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_FRONT_LOGO, 0, 0, $siteLangId, false);
+        $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
         if (AttachedFile::FILE_ATTACHMENT_TYPE_SVG == $fileData['afile_attachment_type']) {
-            $siteLogo = UrlHelper::getStaticImageUrl($fileData['afile_physical_path']);
+            $siteLogo = UrlHelper::getStaticImageUrl($fileData['afile_physical_path']) . $uploadedTime;
             $imgDataType = 'data-type="svg"';
         } else {
             $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
-            $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
             $siteLogo = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'siteLogo', array($siteLangId), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
         }
         ?>
-        <a class="form-sign-logo" href="<?php echo $logoUrl; ?>" <?php echo $imgDataType;?>>
+        <a class="form-sign-logo" href="<?php echo $logoUrl; ?>" <?php echo $imgDataType; ?>>
             <img <?php if (AttachedFile::FILE_ATTACHMENT_TYPE_OTHER == $fileData['afile_attachment_type'] && $fileData['afile_aspect_ratio'] > 0) { ?> data-ratio="<?php echo $aspectRatioArr[$fileData['afile_aspect_ratio']]; ?>" <?php } ?> src="<?php echo $siteLogo; ?>" alt="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, FatUtility::VAR_STRING, '') ?>" title="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, FatUtility::VAR_STRING, '') ?>" width="180">
         </a>
         <div class="form-sign-body">
@@ -57,7 +57,7 @@ $fld->value = $credential_username;
                             <?php echo Labels::getLabel('LBL_BACK_TO_LOGIN', $siteLangId); ?>
                         </a>
                     </div>
-                </div>                
+                </div>
             </div>
         </div>
     </div>
