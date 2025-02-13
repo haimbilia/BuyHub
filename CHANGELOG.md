@@ -52,6 +52,7 @@
     - Hide header & footer options for CMS pages.
     - Performance optimization.
     - Admin can upload logo as SVG.
+    - Shop level - Missing info for the shop.
     
 ## Hit URL:
     - admin/patch-update/updateProductRating  
