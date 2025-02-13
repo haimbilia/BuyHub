@@ -157,7 +157,7 @@ if (1 == $page) {
         }
         unset($product['moreSellersArr']);
     }
-
+    
     $product['codEnabled'] = (true === $codEnabled ? 1 : 0);
     $product['isOutOfMinOrderQty'] = $isOutOfMinOrderQty;
     $product['shippingDetails'] = empty($shippingDetails) ? (object) array() : $shippingDetails;
