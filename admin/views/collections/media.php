@@ -33,13 +33,19 @@ $fld->value = HtmlHelper::getfileInputHtml(
     'dropzone-custom dropzoneContainerJs'
 );
 
-$htmlAfterField = '<span class="form-text text-muted">' . sprintf(Labels::getLabel('LBL_PREFERRED_DIMENSIONS', $siteLangId), $imageDimension['width'].'*'.$imageDimension['height']) . '</span>';
+$htmlAfterField = '<span class="form-text text-muted dimensionsJs">' . sprintf(Labels::getLabel('LBL_PREFERRED_DIMENSIONS', $siteLangId), $imageDimension['width'].'*'.$imageDimension['height']) . '</span>';
 $htmlAfterField .= '<div id="imageListingJs"></div>';
 $fld->htmlAfterField = $htmlAfterField;
 
 $langFld = $frm->getField('lang_id');
 $langFld->setWrapperAttribute('class', 'mediaElementsJs');
 $langFld->addFieldTagAttribute('onchange', 'loadImages(' . $recordId . ', this.value);');
+if(in_array($collection_layout_type, Collections::COLLECTION_WITH_MEDIA)) {
+    $screenFld = $frm->getField('collection_screen');
+    $screenFld->addFieldTagAttribute('id', 'slideScreenJs');
+    $screenFld->developerTags['colWidthValues'] = [null, '6', null, null];
+    $langFld->developerTags['colWidthValues'] = [null, '6', null, null];
+}
 
 $generalTab['attr']['onclick'] = 'collectionForm(' . $collection_type . ', ' . $collection_layout_type . ', ' . $recordId . ');';
 
@@ -74,4 +80,36 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php');
 <script type="text/javascript">
     $('input[name=min_width]').val(<?php echo $imageDimension['width'];?>);
     $('input[name=min_height]').val(<?php echo $imageDimension['height'];?>); 
+<?php if(in_array($collection_layout_type, Collections::COLLECTION_WITH_MEDIA)) {?>
+    $(document).off('change', '#slideScreenJs').on('change', '#slideScreenJs', function() {
+        var screenDesktop = <?php echo applicationConstants::SCREEN_DESKTOP ?>;
+        var screenIpad = <?php echo applicationConstants::SCREEN_IPAD ?>;
+
+        if ($(this).val() == screenDesktop) {
+
+            $('.dimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $imageDimensions[ImageDimension::VIEW_DESKTOP]['width'] .
+                                                                                            " x " . $imageDimensions[ImageDimension::VIEW_DESKTOP]['height']; ?>'));
+            $('input[name=min_width]').val('<?php echo $imageDimensions[ImageDimension::VIEW_DESKTOP]['width']; ?>');
+            $('input[name=min_height]').val('<?php echo $imageDimensions[ImageDimension::VIEW_DESKTOP]['height']; ?>');
+
+        } else if ($(this).val() == screenIpad) {
+            $('.dimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $imageDimensions[ImageDimension::VIEW_TABLET]['width'] .
+                                                                                            " x " . $imageDimensions[ImageDimension::VIEW_TABLET]['height']; ?>'));
+            $('input[name=min_width]').val('<?php echo $imageDimensions[ImageDimension::VIEW_TABLET]['width']; ?>');
+            $('input[name=min_height]').val('<?php echo $imageDimensions[ImageDimension::VIEW_TABLET]['height']; ?>');
+
+        } else {
+            $('.dimensionsJs').html((langLbl.preferredDimensions).replace(/%s/g, '<?php echo $imageDimensions[ImageDimension::VIEW_MOBILE]['width'] .
+                                                                                            " x " . $imageDimensions[ImageDimension::VIEW_MOBILE]['height']; ?>'));
+            $('input[name=min_width]').val('<?php echo $imageDimensions[ImageDimension::VIEW_MOBILE]['width']; ?>');
+            $('input[name=min_height]').val('<?php echo $imageDimensions[ImageDimension::VIEW_MOBILE]['height']; ?>');
+
+        }
+
+        let screenType = $(this).val();
+        let langId = $("select[name='lang_id']").val();
+        let collectionId = '<?php echo $recordId; ?>';
+        loadImages(collectionId, langId, screenType);
+    });
+    <?php } ?>
 </script>
