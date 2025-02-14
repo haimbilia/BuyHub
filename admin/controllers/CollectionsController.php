@@ -701,11 +701,13 @@ class CollectionsController extends ListingBaseController
         $frm->addHiddenField('', 'min_width');
         $frm->addHiddenField('', 'min_height');
 
-        $frm->addCheckBox(Labels::getLabel("FRM_DISPLAY_MEDIA_ONLY", $this->siteLangId), 'collection_display_media_only', 1, array(), false, 0);
+        
         $data = Collections::getAttributesById($recordId, ['collection_type', 'collection_layout_type']);
         if(in_array($data['collection_layout_type'], Collections::COLLECTION_WITH_MEDIA)) {
             $screenArr = applicationConstants::getDisplaysArr($this->siteLangId);
             $frm->addSelectBox(Labels::getLabel("FRM_DEVICE", $this->siteLangId), 'collection_screen', $screenArr, '', array(), '');
+        } else {
+            $frm->addCheckBox(Labels::getLabel("FRM_DISPLAY_MEDIA_ONLY", $this->siteLangId), 'collection_display_media_only', 1, array(), false, 0);
         }
 
         $languagesArr = applicationConstants::getAllLanguages();
