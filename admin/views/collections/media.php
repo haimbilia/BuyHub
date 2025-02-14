@@ -5,17 +5,19 @@ HtmlHelper::formatFormFields($frm);
 $frm->setFormTagAttribute('data-onclear', 'collectionMediaForm(' . $recordId . ',' . $collection_type . ')');
 $frm->setFormTagAttribute('class', 'form modalFormJs');
 
-$displayMediaOnlyObj = $frm->getField('collection_display_media_only');
-HtmlHelper::configureSwitchForCheckbox($displayMediaOnlyObj);
-$displayMediaOnlyObj->developerTags['noCaptionTag'] = true;
-$displayMediaOnlyObj->setFieldTagAttribute('class', 'displayMediaOnlyJs');
-$displayMediaOnlyObj->setFieldTagAttribute('onclick', 'displayMediaOnly(' . $recordId . ', this)');
-if (0 < $displayMediaOnly) {
-    $displayMediaOnlyObj->setFieldTagAttribute('checked', 'checked');
+if(!in_array($collection_layout_type, Collections::COLLECTION_WITH_MEDIA)) {
+    $displayMediaOnlyObj = $frm->getField('collection_display_media_only');
+    HtmlHelper::configureSwitchForCheckbox($displayMediaOnlyObj);
+    $displayMediaOnlyObj->developerTags['noCaptionTag'] = true;
+    $displayMediaOnlyObj->setFieldTagAttribute('class', 'displayMediaOnlyJs');
+    $displayMediaOnlyObj->setFieldTagAttribute('onclick', 'displayMediaOnly(' . $recordId . ', this)');
+    if (0 < $displayMediaOnly) {
+        $displayMediaOnlyObj->setFieldTagAttribute('checked', 'checked');
+    }
+    
+    $str = '<span class="form-text text-muted">' . Labels::getLabel('LBL_IF_USED_FOR_MOBILE_APPLICATIONS', $siteLangId) . '</span>';
+    $displayMediaOnlyObj->htmlAfterField = $str;
 }
-
-$str = '<span class="form-text text-muted">' . Labels::getLabel('LBL_IF_USED_FOR_MOBILE_APPLICATIONS', $siteLangId) . '</span>';
-$displayMediaOnlyObj->htmlAfterField = $str;
 
 $fld = $frm->getField('collection_image');
 $fld->setWrapperAttribute('class', 'mediaElementsJs');
@@ -61,7 +63,7 @@ if (!in_array($collection_type, Collections::COLLECTION_WITHOUT_RECORDS)) {
     ];
 }
 
-if ((!in_array($collection_type, Collections::COLLECTION_WITHOUT_MEDIA) && !in_array($collection_layout_type, Collections::COLLECTIONS_FOR_WEB_ONLY))) {
+if ((!in_array($collection_type, Collections::COLLECTION_WITHOUT_MEDIA) && !in_array($collection_layout_type, Collections::COLLECTIONS_FOR_WEB_ONLY)) || in_array($collection_layout_type, Collections::COLLECTION_WITH_MEDIA)) {
     $otherButtons[] = [
         'attr' => [
             'href' => 'javascript:void(0)',

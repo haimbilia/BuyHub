@@ -803,13 +803,8 @@ class HomeController extends MyAppController
 
             if (true === MOBILE_APP_API_CALL && 0 < $collection['collection_display_media_only'] && !in_array($collection['collection_type'], Collections::COLLECTION_WITHOUT_MEDIA)) {
                 $uploadedTime = AttachedFile::setTimeParam($collection['collection_updated_on']);
-                $screen = 0;
-                $resType = ImageDimension::VIEW_MOBILE;
-                if(in_array($collection['collection_layout_type'], Collections::COLLECTION_WITH_MEDIA)) {
-                    $screen = CommonHelper::getAppScreenType();
-                    $resType = $screen == applicationConstants::SCREEN_IPAD ? ImageDimension::VIEW_TABLET : ImageDimension::VIEW_MOBILE;
-                }
-                $collection['collection_image'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'collectionReal', array($collection_id, $langId, $resType, AttachedFile::FILETYPE_COLLECTION_IMAGE, $screen, $collection['collection_layout_type'])) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
+
+                $collection['collection_image'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'collectionReal', array($collection_id, $langId, ImageDimension::VIEW_MOBILE, AttachedFile::FILETYPE_COLLECTION_IMAGE)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                 $collections[] = $collection;
                 $i++;
                 continue;
@@ -975,7 +970,7 @@ class HomeController extends MyAppController
                     break;
 
                 case Collections::COLLECTION_TYPE_CATEGORY:
-                    if (true === MOBILE_APP_API_CALL && in_array($collection['collection_layout_type'], [Collections::TYPE_CATEGORY_LAYOUT2])) {
+                    if (true === MOBILE_APP_API_CALL && in_array($collection['collection_layout_type'], [Collections::TYPE_CATEGORY_LAYOUT2, Collections::TYPE_CATEGORY_LAYOUT12])) {
                         continue 2;
                     }
                     $tempObj = clone $collectionObj;
