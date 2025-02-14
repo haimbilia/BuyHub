@@ -25,11 +25,11 @@ if (false === $exculdeMainFooterElement) {
                             <a href="<?php echo UrlHelper::generateUrl('', '', [], CONF_WEBROOT_FRONTEND); ?>">
                                 <?php
                                 $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_FRONT_LOGO, 0, 0, $siteLangId, false);
+                                $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
                                 if (AttachedFile::FILE_ATTACHMENT_TYPE_SVG == $fileData['afile_attachment_type']) {
-                                    $siteLogo = UrlHelper::getStaticImageUrl($fileData['afile_physical_path']);
+                                    $siteLogo = UrlHelper::getStaticImageUrl($fileData['afile_physical_path']) . $uploadedTime;
                                 } else {
                                     $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
-                                    $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
                                     $siteLogo = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'siteLogo', array($siteLangId), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
                                 }
                                 ?>
@@ -236,7 +236,7 @@ if (false === $exculdeMainFooterElement) {
     </script>
 <?php }
 if (!isset($_SESSION['geo_location']) && FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, '') != '') { ?>
-    <script 
+    <script
         src="https://maps.google.com/maps/api/js?key=<?php echo FatApp::getConfig('CONF_GOOGLEMAP_API_KEY', FatUtility::VAR_STRING, ''); ?>&libraries=places&callback=initMap" loading="async" defer>
     </script>
 <?php }

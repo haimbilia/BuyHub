@@ -3,7 +3,7 @@ $actionItemsData = array_merge($actionItemsData, ['otherButtons' =>  [[
     'attr' => [
         'href' => 'javascript:void(0)',
         'class' => 'btn btn-icon btn-link',
-        'onclick' => 'exportRecords()',
+        'onclick' => 'exportForm()',
         'title' => Labels::getLabel('LBL_Export', $siteLangId)
     ],
     'label' => '<svg class="svg" width="18" height="18">

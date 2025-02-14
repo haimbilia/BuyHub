@@ -1705,7 +1705,9 @@ class SellerProduct extends MyAppModel
             return true;
         }
 
-        if (1 > $shopRfqEnabled) {
+        $moduleType = FatApp::getConfig('CONF_RFQ_MODULE_TYPE', FatUtility::VAR_INT, 0);
+
+        if ($moduleType == RequestForQuote::TYPE_INDIVIDUAL && 1 > $shopRfqEnabled) {
             return false;
         }
 
