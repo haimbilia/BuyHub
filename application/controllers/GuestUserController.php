@@ -1324,7 +1324,7 @@ class GuestUserController extends MyAppController
         $frm = new Form('frmPwdForgot');
         $frm->addHiddenField('', 'withPhone', $withPhone);
         if (1 > $withPhone) {
-            $frm->addRequiredField(Labels::getLabel('FRM_USERNAME_OR_EMAIL', $this->siteLangId), 'user_email_username');
+            $frm->addRequiredField(Labels::getLabel('FRM_ENTER_YOUR_EMAIL_ADDRESS', $this->siteLangId), 'user_email_username');
         } else {
             $frm->addHiddenField('', 'user_phone_dcode');
             $phnFld = $frm->addRequiredField(Labels::getLabel('FRM_PHONE_NUMBER', $this->siteLangId), 'user_phone', '', array('placeholder' => Labels::getLabel('FRM_PHONE_NUMBER', $this->siteLangId), 'class' => 'phone-js'));

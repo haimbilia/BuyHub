@@ -42,7 +42,7 @@ if (!empty($fields)) {
             ],
             [
                 'attr' => [
-                    'onclick' => 'exportReport()',
+                    'onclick' => 'exportForm()',
                     'title' => Labels::getLabel('LBL_Export', $siteLangId)
                 ],
                 'icon' => '<svg class="svg btn-icon-start" width="18" height="18">
