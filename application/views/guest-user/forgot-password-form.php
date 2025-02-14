@@ -18,7 +18,7 @@ if (0 < $withPhone) {
         }
         ?>
         <a class="form-sign-logo" href="<?php echo UrlHelper::generateFullFileUrl(); ?>" <?php echo $imgDataType; ?>>
-            <img src="<?php echo $siteLogo; ?>" alt="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, FatUtility::VAR_STRING, '') ?>" title="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, FatUtility::VAR_STRING, '') ?>" width="180">
+            <img src="<?php echo $siteLogo; ?>" alt="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, FatUtility::VAR_STRING, '') ?>" title="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, FatUtility::VAR_STRING, '') ?>" width="200">
         </a>
         <div class="form-sign-body">
             <div class="card-sign">
