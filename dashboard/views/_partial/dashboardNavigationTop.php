@@ -10,12 +10,14 @@
     </div>
     <?php
     $imgDataType = '';
+    $logoWidth = '';
     $logoUrl = UrlHelper::generateUrl('', '', [], CONF_WEBROOT_FRONTEND, null, false, false, true, $siteLangId);
     $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_FRONT_LOGO, 0, 0, $siteLangId, false);
     $uploadedTime = isset($fileData['afile_updated_at']) ? AttachedFile::setTimeParam($fileData['afile_updated_at']) : '';
     if (AttachedFile::FILE_ATTACHMENT_TYPE_SVG == $fileData['afile_attachment_type']) {
         $siteLogo = UrlHelper::getStaticImageUrl($fileData['afile_physical_path']) . $uploadedTime;
         $imgDataType = 'data-type="svg"';
+        $logoWidth = 'width="200"';
     } else {
         $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
         $siteLogo = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'siteLogo', array($siteLangId), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
@@ -28,7 +30,7 @@
     ?>
     <div class="logo-dashboard" <?php echo $imgDataType; ?>>
         <a href="<?php echo $logoUrl; ?>">
-            <img data-ratio="<?php echo $ratio; ?>" src="<?php echo $siteLogo; ?>" alt="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId) ?>" title="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId) ?>">
+            <img data-ratio="<?php echo $ratio; ?>" src="<?php echo $siteLogo; ?>" alt="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId) ?>" title="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId) ?>" <?php echo $logoWidth; ?>>
         </a>
     </div>
 

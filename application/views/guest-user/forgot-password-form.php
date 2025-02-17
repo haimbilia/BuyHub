@@ -7,18 +7,20 @@ if (0 < $withPhone) {
     <div id="otpFom" class="form-sign">
         <?php
         $imgDataType = '';
+        $logoWidth = '';
         $fileData = AttachedFile::getAttachment(AttachedFile::FILETYPE_FRONT_LOGO, 0, 0, $siteLangId, false);
         $uploadedTime = AttachedFile::setTimeParam($fileData['afile_updated_at']);
         if (AttachedFile::FILE_ATTACHMENT_TYPE_SVG == $fileData['afile_attachment_type']) {
             $siteLogo = UrlHelper::getStaticImageUrl($fileData['afile_physical_path']) . $uploadedTime;
             $imgDataType = 'data-type="svg"';
+            $logoWidth = 'width="200"';
         } else {
             $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
             $siteLogo = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'siteLogo', array($siteLangId), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
         }
         ?>
         <a class="form-sign-logo" href="<?php echo UrlHelper::generateFullFileUrl(); ?>" <?php echo $imgDataType; ?>>
-            <img src="<?php echo $siteLogo; ?>" alt="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, FatUtility::VAR_STRING, '') ?>" title="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, FatUtility::VAR_STRING, '') ?>" width="200">
+            <img src="<?php echo $siteLogo; ?>" alt="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, FatUtility::VAR_STRING, '') ?>" title="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, FatUtility::VAR_STRING, '') ?>" <?php echo $logoWidth; ?>>
         </a>
         <div class="form-sign-body">
             <div class="card-sign">
