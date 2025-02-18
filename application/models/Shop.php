@@ -708,4 +708,40 @@ class Shop extends MyAppModel
 
         return $validationArr;
     }
+
+    
+        /**
+     * updateShopsDisplayStatus
+     * disable shop_supplier_display_status when an country or state marked disabled
+     * 
+     * @param  mixed $countryId
+     * @param  mixed $stateId
+     * @return bool
+     */
+    public static function updateShopsDisplayStatus(int $countryId = 0, int $stateId = 0)
+    {
+        $where = '';
+        $values = [];
+
+        if ($countryId) {
+            $where .= static::tblFld('country_id') . " = ?";
+            array_push($values, $countryId);
+        }
+
+        if ($stateId) {
+            if ($where != '') {
+                $where .= ' and ';
+            }
+            $where .= static::tblFld('state_id') . " = ?";
+            array_push($values, $stateId);
+        }
+
+        if (!empty($values)) {
+            $whereCondition = ['smt' => $where, 'vals' => $values];
+            if (!FatApp::getDb()->updateFromArray(static::DB_TBL, array(static::tblFld('supplier_display_status') => 0), $whereCondition)) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
