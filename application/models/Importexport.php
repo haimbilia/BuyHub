@@ -5710,6 +5710,14 @@ class Importexport extends ImportexportCommon
                     }
                 }
 
+                if(!$countryArr['country_active']){
+                    if(!Shop::updateShopsDisplayStatus(countryId: $countryId)){
+                        $errInSheet = true;
+                        $err = array($rowIndex, 'NA', $this->db->getError());
+                        CommonHelper::writeToCSVFile(Labels::getLabel('LBL_UNABLE_TO_UPDATE_DISPLAY_STATUS_OF_SHOP', $langId), $err);
+                    }
+                }
+
                 if ($countryId) {
                     /* Lang Data [*/
                     $langData = array(
@@ -5877,6 +5885,14 @@ class Importexport extends ImportexportCommon
                         $stateId = $this->db->getInsertId();
                     }
                 }
+
+                if(!$statesArr['state_active']) {
+                    if(!Shop::updateShopsDisplayStatus(stateId: $stateId)){
+                        $errInSheet = true;
+                        CommonHelper::writeToCSVFile($this->CSVfileObj, array($rowIndex, 0, Labels::getLabel('LBL_UNABLE_TO_UPDATE_DISPLAY_STATUS_OF_SHOP', $langId)));
+                    }
+                }
+                
                 if ($stateId) {
                     /* Lang Data [*/
                     $langData = array(
