@@ -928,3 +928,13 @@ ALTER TABLE `tbl_app_release_version_logs`
 
 ALTER TABLE `tbl_attached_files`  ADD `afile_attachment_type` TINYINT(2) NOT NULL  AFTER `afile_name`;
 ALTER TABLE `tbl_attached_files_temp`  ADD `afile_attachment_type` TINYINT(2) NOT NULL  AFTER `afile_name`;
+
+UPDATE tbl_shops AS s
+INNER JOIN (
+    select shop_id from tbl_shops s 
+    INNER join tbl_countries c on c.country_id = s.shop_country_id
+    INNER JOIN tbl_states st on st.state_id = s.shop_state_id
+    where shop_supplier_display_status = 1 and (country_active = 0 or state_active = 0)
+) t ON t.shop_id = s.shop_id
+SET s.shop_supplier_display_status = 0;
+ALTER TABLE `tbl_shops` ADD INDEX(`shop_supplier_display_status`);

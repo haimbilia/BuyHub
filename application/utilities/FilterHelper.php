@@ -35,12 +35,10 @@ class FilterHelper extends FatUtility
         // $prodSrchObj->joinSellers();
         $prodSrchObj->setGeoAddress();
         $prodSrchObj->joinShops($langId, true, true, 0, true);
-        $prodSrchObj->joinShopCountry();
-        $prodSrchObj->joinShopState();
+        /* $prodSrchObj->joinShopCountry();
+        $prodSrchObj->joinShopState(); */
         $prodSrchObj->joinBrands($langId);
         $prodSrchObj->joinProductToCategory($langId);
-        $prodSrchObj->joinSellerSubscription(0, false, true);
-        $prodSrchObj->addSubscriptionValidCondition();
         $prodSrchObj->validateAndJoinDeliveryLocation();
         $prodSrchObj->joinProductToTax();
 
