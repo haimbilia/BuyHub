@@ -938,3 +938,5 @@ INNER JOIN (
 ) t ON t.shop_id = s.shop_id
 SET s.shop_supplier_display_status = 0;
 ALTER TABLE `tbl_shops` ADD INDEX(`shop_supplier_display_status`);
+ALTER TABLE `tbl_users` ADD INDEX(`user_deleted`);
+ALTER TABLE `tbl_users` ADD INDEX(`user_is_supplier`);

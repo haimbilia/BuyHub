@@ -1501,17 +1501,17 @@ class Product extends MyAppModel
             $srch->joinForPrice('', $criteria, true);
         }
         $srch->unsetDefaultLangForJoins();
-        $srch->joinSellers();
+        /* $srch->joinSellers(); */
         $srch->setGeoAddress();
-        $srch->joinShops($langId, true, true, $shop_id);
+        $srch->joinShops($langId, true, true, $shop_id, true);
         $srch->validateAndJoinDeliveryLocation();
-        $srch->joinShopCountry();
-        $srch->joinShopState();
+        /* $srch->joinShopCountry();
+        $srch->joinShopState(); */
         $srch->joinBrands($langId);
         $srch->joinProductToCategory($langId);
         $srch->joinProductToTax();
-        $srch->joinSellerSubscription(0, false, true);
-        $srch->addSubscriptionValidCondition();
+        /* $srch->joinSellerSubscription(0, false, true);
+        $srch->addSubscriptionValidCondition(); */
 
         /* to check current product is in wish list or not[ */
         /*  if (FatApp::getConfig('CONF_ADD_FAVORITES_TO_WISHLIST', FatUtility::VAR_INT, 1) == applicationConstants::NO) {
@@ -1545,7 +1545,7 @@ class Product extends MyAppModel
                 'splprice_end_date',
                 'brand_id',
                 'COALESCE(brand_name, brand_identifier) as brand_name',
-                'user_name',
+                'shop_name as user_name',
                 'IF(selprod_stock > 0, 1, 0) AS in_stock',
                 'selprod_sold_count',
                 'selprod_return_policy', /*'maxprice', 'ifnull(sq_sprating.totReviews,0) totReviews','IF(ufp_id > 0, 1, 0) as isfavorite', */
