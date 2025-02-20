@@ -288,7 +288,7 @@ class SellerController extends SellerBaseController
         if ('' != $shippedById) {
             $srch->addCondition('opshipping_by_seller_user_id', '=', $shippedById);
         }
-
+        echo $srch->getQuery();
         $this->setRecordCount(clone $srch, $pagesize, $page, $post);
         $srch->doNotCalculateRecords();
         $srch->addOrder("op_id", "DESC");
