@@ -1,4 +1,5 @@
 <?php defined('SYSTEM_INIT') or die('Invalid Usage.');
+$viewType = $viewType ?? '';
 if (empty($products)) {
     $pSrchFrm = Common::getSiteSearchForm();
     // $pSrchFrm->fill(array('btnSiteSrchSubmit' => Labels::getLabel('LBL_Submit', $siteLangId)));
