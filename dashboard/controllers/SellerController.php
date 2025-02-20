@@ -6057,19 +6057,28 @@ class SellerController extends SellerBaseController
             LibHelper::exitWithError($this->str_invalid_request);
         }
 
-        $record = new Tag();
-        $record->assignValues(['tag_name' => $tagName, 'tag_lang_id' => $langId, 'tag_user_id' => $this->userParentId]);
+        $srch = Tag::getSearchObject($langId);
+        $srch->addMultipleFields(array('tag_id'));
+        $srch->addCondition('tag_name', 'like', $tagName);
+        $res = $srch->getResultSet();
+        $row = FatApp::getDb()->fetch($res);
+        if (false == $row || empty($row)) {
+            $record = new Tag();
+            $record->assignValues(['tag_name' => $tagName, 'tag_lang_id' => $langId, 'tag_user_id' => $this->userParentId]);
 
-        if (!$record->save()) {
-            FatUtility::dieJsonError(Labels::getLabel('ERR_THIS_IDENTIFIER_IS_NOT_AVAILABLE._PLEASE_TRY_WITH_ANOTHER_ONE.', $this->siteLangId));
+            if (!$record->save()) {
+                FatUtility::dieJsonError(Labels::getLabel('ERR_THIS_IDENTIFIER_IS_NOT_AVAILABLE._PLEASE_TRY_WITH_ANOTHER_ONE.', $this->siteLangId));
+            }
+            $tagId = $record->getMainTableRecordId();
+        } else {
+            $tagId = $row['tag_id'];
         }
-        $tag_id = $record->getMainTableRecordId();
         /* update product tags association and tag string in products lang table[ */
-        Tag::updateTagStrings($tag_id);
+        Tag::updateTagStrings($tagId);
         /* ] */
 
         $this->set('msg', Labels::getLabel('MSG_TAG_UPDATED_SUCCESSFUL', $this->siteLangId));
-        $this->set('tagId', $tag_id);
+        $this->set('tagId', $tagId);
         $this->_template->render(false, false, 'json-success.php');
     }
 
