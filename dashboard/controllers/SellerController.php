@@ -287,8 +287,7 @@ class SellerController extends SellerBaseController
         $shippedById = FatApp::getPostedData('opshipping_by_seller_user_id');
         if ('' != $shippedById) {
             $srch->addCondition('opshipping_by_seller_user_id', '=', $shippedById);
-        }
-        echo $srch->getQuery();
+        }        
         $this->setRecordCount(clone $srch, $pagesize, $page, $post);
         $srch->doNotCalculateRecords();
         $srch->addOrder("op_id", "DESC");
