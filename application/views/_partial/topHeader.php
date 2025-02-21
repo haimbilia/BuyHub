@@ -66,7 +66,7 @@
 
                                             <svg class="svg" width="18" height="18">
                                                 <use
-                                                    xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#gps">
+                                                    xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#gps">
                                                 </use>
                                             </svg>
 
@@ -96,7 +96,7 @@
                                 <button class="quick-nav-link button-store" type="button">
                                     <svg class="svg" width="20" height="20">
                                         <use
-                                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#wishlist">
+                                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#wishlist">
                                         </use>
                                     </svg>
                                     <span
@@ -110,7 +110,7 @@
                                     aria-label="search">
                                     <svg class="svg" width="20" height="20">
                                         <use
-                                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#magnifying">
+                                            xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#magnifying">
                                         </use>
                                     </svg>
                                 </button>
@@ -122,7 +122,7 @@
                                         data-bs-target="#sideCartJs">
                                         <svg class="svg" width="20" height="20">
                                             <use
-                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#cart">
+                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#cart">
                                             </use>
                                         </svg>
                                         <span class="cart-qty">

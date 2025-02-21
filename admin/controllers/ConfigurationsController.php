@@ -82,7 +82,7 @@ class ConfigurationsController extends ListingBaseController
         if (!empty($redirection)) {
             $headerHtmlContent = '<a href="' . $redirection['link'] . '" class="btn btn-icon btn-outline-gray ms-2" title="" data-bs-toggle="tooltip" data-placement="top" data-bs-original-title="' . $redirection['title'] . '">
                                     <svg class="svg btn-icon-start" width="18" height="18">
-                                        <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#gear">
+                                        <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#gear">
                                         </use>
                                     </svg>                                
                                 </a>';

@@ -6,7 +6,7 @@
         <?php $label = (round($product['prod_rating']) > 0) ? round($product['totReviews'], 1) . ' ' . Labels::getLabel('LBL_Reviews', $siteLangId) : Labels::getLabel('LBL_No_Reviews', $siteLangId); ?>
         <div class="product-ratings">
             <svg class="svg svg-star" width="14" height="14">
-                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#star-yellow">
+                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#star-yellow">
                 </use>
             </svg>
             <span class="rate"><?php echo round($product['prod_rating'], 1); ?></span>
@@ -119,7 +119,7 @@
                             <div class="quantity" data-stock="<?php echo $product['selprod_stock']; ?>">
                                 <button class="decrease decrease-js disabled" type="button">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#minus">
                                         </use>
                                     </svg>
                                 </button>
@@ -129,7 +129,7 @@
                                 <button
                                     class="increase increase-js <?php echo $product['selprod_stock'] <= $product['selprod_min_order_qty'] ? 'disabled' : ''; ?>">
                                     <svg class="svg" width="16" height="16">
-                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
+                                        <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#plus">
                                         </use>
                                     </svg>
                                 </button>
@@ -163,7 +163,7 @@
             title="<?php echo Labels::getLabel('BTN_BUY_NOW'); ?>">
             <?php echo Labels::getLabel('BTN_BUY_NOW'); ?>
             <svg class="svg" width="20" height="20">
-                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/procurenet/sprite.svg#icon-arrow-tr">
+                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/procurenet/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#icon-arrow-tr">
                 </use>
             </svg>
         </a>
@@ -197,7 +197,7 @@
             title="<?php echo Labels::getLabel('BTN_BUY_NOW'); ?>">
             <?php echo Labels::getLabel('BTN_BUY_NOW'); ?>
             <svg class="svg" width="20" height="20">
-                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/procurenet/sprite.svg#icon-arrow-tr">
+                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/procurenet/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#icon-arrow-tr">
                 </use>
             </svg>
         </a>
@@ -304,7 +304,7 @@
                                         <div class="quantity quantity-2" data-stock="<?php echo $usproduct['selprod_stock']; ?>">
                                             <button class="decrease decrease-js disabled" type="button">
                                                 <svg class="svg" width="16" height="16">
-                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#minus">
+                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#minus">
                                                     </use>
                                                 </svg>
                                             </button>
@@ -319,7 +319,7 @@
                                             <button
                                                 class="increase increase-js <?php echo $usproduct['selprod_stock'] <= $usproduct['selprod_min_order_qty'] ? 'disabled' : ''; ?>">
                                                 <svg class="svg" width="16" height="16">
-                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#plus">
+                                                    <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#plus">
                                                     </use>
                                                 </svg>
                                             </button>

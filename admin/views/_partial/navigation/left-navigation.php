@@ -33,7 +33,7 @@ $adminSidebar = (in_array(FatApp::getController(), ['ProductsController', 'Custo
                     <button class="menu-section menuLinkJs" data-selector='["Settings"]' onclick="redirectFn('<?php echo UrlHelper::generateUrl('Settings'); ?>')" type="button">
                         <span class="menu-icon">
                             <svg class="svg" width="24" height="24">
-                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg#icon-system-settings">
+                                <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-aside-menu.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#icon-system-settings">
                                 </use>
                             </svg>
                         </span>

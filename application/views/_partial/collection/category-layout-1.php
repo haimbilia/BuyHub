@@ -67,7 +67,7 @@ if (isset($collection['categories']) && count($collection['categories'])) { ?>
                                                     <div class="not-available">
                                                         <svg class="svg">
                                                             <use
-                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg#linkedinfo">
+                                                                xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#linkedinfo">
                                                             </use>
                                                         </svg>
                                                         <?php echo Labels::getLabel('LBL_NOT_AVAILABLE', $siteLangId); ?>

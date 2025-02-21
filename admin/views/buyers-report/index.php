@@ -7,7 +7,7 @@ $actionItemsData = array_merge($actionItemsData, ['otherButtons' =>  [[
         'title' => Labels::getLabel('LBL_Export', $siteLangId)
     ],
     'label' => '<svg class="svg" width="18" height="18">
-    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg#export">
+    <use xlink:href="' . CONF_WEBROOT_URL . 'images/retina/sprite-actions.svg' . AttachedFile::setTimeParam(RELEASE_DATE) . '#export">
     </use>
 </svg>' . Labels::getLabel('LBL_Export', $siteLangId)
 ]]]);

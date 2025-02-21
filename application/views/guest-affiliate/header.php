@@ -64,7 +64,7 @@ $this->includeTemplate('_partial/header/commonHeadBottom.php', $commonHeadData, 
                                 <div class="dropdown">
                                     <button type="button" class="quick-nav-link" data-bs-toggle="offcanvas" data-bs-target="#offcanvas-seller-nav" aria-controls="offcanvas-seller-nav">
                                         <svg class="svg" width="20" height="20">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#mbl-menu"></use>
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#mbl-menu"></use>
                                         </svg>
                                     </button>
                                 </div>
@@ -73,7 +73,7 @@ $this->includeTemplate('_partial/header/commonHeadBottom.php', $commonHeadData, 
                                 <div class="dropdown">
                                     <button type="button" class="quick-nav-link button-account sign-in sign-in-popup-js">
                                         <svg class="svg" width="20" height="20">
-                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg#login"></use>
+                                            <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#login"></use>
                                         </svg>
                                         <span class="txt">
                                             <?php echo Labels::getLabel('LBL_Login', $siteLangId); ?> </span>

@@ -34,7 +34,7 @@ if (isset($collection['shops']) && count($collection['shops'])) {
                                         <?php if (round($shop['shopData']['shop_avg_rating']) > 0) { ?>
                                             <div class="product-ratings">
                                                 <svg class="svg svg-star" width="14" height="14">
-                                                    <use xlink:href="/images/retina/sprite.svg#star-yellow"></use>
+                                                    <use xlink:href="/images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#star-yellow"></use>
                                                 </svg>
                                                 <span class="rate">
                                                     <?php echo round($shop['shopData']['shop_avg_rating']); ?>
