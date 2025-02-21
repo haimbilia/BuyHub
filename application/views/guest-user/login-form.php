@@ -24,7 +24,7 @@ if (0 < $signinpopup) { ?>
             if (AttachedFile::FILE_ATTACHMENT_TYPE_SVG == $fileData['afile_attachment_type']) {
                 $siteLogo = UrlHelper::getStaticImageUrl($fileData['afile_physical_path']) . $uploadedTime;
                 $imgDataType = 'data-type="svg"';
-                $logoWidth = 'width="200"';
+                $logoWidth = 'width="120"';
             } else {
                 $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
                 $siteLogo = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('Image', 'siteLogo', array($siteLangId), CONF_WEBROOT_FRONT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');

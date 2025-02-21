@@ -34,7 +34,7 @@ $confirmPwd->setRequiredStarWith('none');
             if (AttachedFile::FILE_ATTACHMENT_TYPE_SVG == $fileData['afile_attachment_type']) {
                 $imgUrl = UrlHelper::getStaticImageUrl($fileData['afile_physical_path']) . $uploadedTime;
                 $imgDataType = 'data-type="svg"';
-                $logoWidth = 'width="200"';
+                $logoWidth = 'width="120"';
             } else {
                 $aspectRatioArr = AttachedFile::getRatioTypeArray($siteLangId);
                 $imgUrl = UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('Image', 'siteAdminLogo', array($siteLangId)) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
