@@ -947,3 +947,7 @@ ALTER TABLE `tbl_promotions` ADD INDEX(`promotion_user_id`);
 ALTER TABLE `tbl_promotions` ADD INDEX(`promotion_active`, `promotion_deleted`);
 ALTER TABLE `tbl_order_products` ADD INDEX(`op_order_id`);
 ALTER TABLE `tbl_order_products` ADD INDEX(`op_selprod_user_id`);
+
+ALTER TABLE tbl_user_notifications ADD unotification_sent_to_app TINYINT(4) NOT NULL AFTER `unotification_data`;
+UPDATE tbl_user_notifications set unotification_sent_to_app = 1;
+INSERT INTO `tbl_cron_schedules` (`cron_id`, `cron_name`, `cron_command`, `cron_duration`, `cron_active`) VALUES (NULL, 'APP Push Notifications', 'Notifications/triggerNotification', '2', 1);

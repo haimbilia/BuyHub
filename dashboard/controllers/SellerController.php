@@ -5994,7 +5994,7 @@ class SellerController extends SellerBaseController
     {
         $post = FatApp::getPostedData();
 
-        $srch = Tag::getSearchObject($post['LangId']);
+        $srch = Tag::getSearchObject($post['langId']);
         $srch->addOrder('tag_name');
         $srch->addMultipleFields(array('tag_id', 'tag_name'));
 

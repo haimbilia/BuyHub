@@ -2471,8 +2471,9 @@ class User extends MyAppModel
         $srch->addCondition('uc.' . static::DB_TBL_CRED_PREFIX . 'active', '=', 1);
         $srch->addCondition('uc.' . static::DB_TBL_CRED_PREFIX . 'verified', '=', 1);
         $srch->addCondition('uauth_fcm_id', '!=', '');
-        $srch->addCondition('uauth_last_access', '>=', date('Y-m-d H:i:s', strtotime("-7 DAYS")));
+        // $srch->addCondition('uauth_last_access', '>=', date('Y-m-d H:i:s', strtotime("-7 DAYS")));
         $srch->addMultipleFields(['uauth_fcm_id', 'uauth_device_os']);
+        $srch->addOrder('uauth_last_access', 'DESC');
         $srch->doNotCalculateRecords();
         $srch->doNotLimitRecords();
         $rs = $srch->getResultSet();
