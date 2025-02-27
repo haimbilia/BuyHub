@@ -9662,6 +9662,33 @@ INSERT INTO `tbl_zones_lang` VALUES (1,1,'Africa'),(10,1,'Antarctica'),(2,1,'Asi
 /*!40000 ALTER TABLE `tbl_zones_lang` ENABLE KEYS */;
 ALTER TABLE `tbl_attached_files`  ADD `afile_attachment_type` TINYINT(2) NOT NULL  AFTER `afile_name`;
 ALTER TABLE `tbl_attached_files_temp`  ADD `afile_attachment_type` TINYINT(2) NOT NULL  AFTER `afile_name`;
+
+ALTER TABLE `tbl_shops` ADD INDEX(`shop_supplier_display_status`);
+ALTER TABLE `tbl_users` ADD INDEX(`user_deleted`);
+ALTER TABLE `tbl_users` ADD INDEX(`user_is_supplier`);
+ALTER TABLE `tbl_plugins` ADD INDEX(`plugin_type`, `plugin_active`);
+ALTER TABLE `tbl_user_withdrawal_requests` ADD INDEX(`withdrawal_status`);
+ALTER TABLE `tbl_user_withdrawal_requests` ADD INDEX(`withdrawal_user_id`);
+ALTER TABLE `tbl_promotions` ADD INDEX(`promotion_user_id`);
+ALTER TABLE `tbl_promotions` ADD INDEX(`promotion_active`, `promotion_deleted`);
+ALTER TABLE `tbl_order_products` ADD INDEX(`op_order_id`);
+ALTER TABLE `tbl_order_products` ADD INDEX(`op_selprod_user_id`);
+ALTER TABLE `tbl_promotions_charges` ADD INDEX(`pcharge_promotion_id`);
+ALTER TABLE `tbl_promotions_charges` ADD INDEX(`pcharge_end_piclick_id`);
+ALTER TABLE `tbl_promotion_item_charges` ADD INDEX(`picharge_pclick_id`);
+ALTER TABLE `tbl_promotions_clicks` ADD INDEX(`pclick_promotion_id`);
+ALTER TABLE `tbl_order_payments` ADD INDEX(`opayment_txn_status`);
+ALTER TABLE `tbl_order_prod_charges_logs` ADD INDEX(`opchargelog_op_id`);
+ALTER TABLE `tbl_badges` ADD INDEX(`badge_active`);
+ALTER TABLE `tbl_badge_link_conditions` ADD INDEX(`blinkcond_record_type`);
+ALTER TABLE `tbl_badge_link_conditions` ADD INDEX(`blinkcond_position`);
+ALTER TABLE `tbl_attached_files` ADD INDEX(`afile_display_order`);
+ALTER TABLE `tbl_attached_files` ADD INDEX(`afile_screen`);
+
+ALTER TABLE tbl_user_notifications ADD unotification_sent_to_app TINYINT(4) NOT NULL AFTER `unotification_data`;
+UPDATE tbl_user_notifications set unotification_sent_to_app = 1;
+INSERT INTO `tbl_cron_schedules` (`cron_id`, `cron_name`, `cron_command`, `cron_duration`, `cron_active`) VALUES (NULL, 'APP Push Notifications', 'Notifications/triggerNotification', '2', 1);
+
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
