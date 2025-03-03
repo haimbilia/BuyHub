@@ -52,7 +52,7 @@ if (!$isUserLogged) {
 $fld = $frm->getField('rfq_title');
 if (1 > $selprodId && null != $fld) {
     $fld->addFieldTagAttribute('class', 'form-input');
-    $fld->addFieldTagAttribute('placeholder', Labels::getLabel('LBL_TYPE_HERE..', $siteLangId));
+    $fld->addFieldTagAttribute('placeholder', Labels::getLabel('LBL_I_am_looking_for...', $siteLangId));
     $fld->addFieldTagAttribute('id', 'rfqItemNameJs');
 }
 

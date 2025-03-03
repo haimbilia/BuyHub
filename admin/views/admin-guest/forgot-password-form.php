@@ -46,7 +46,7 @@ if (null != $captchaFld) {
             <div class="card">
                 <div class="card-head">
                     <div class="title">
-                        <h2><?php echo Labels::getLabel('LBL_Forgot_Your_Password?', CommonHelper::getLangId()); ?></h2>
+                        <h2><?php echo Labels::getLabel('LBL_FORGOT_PASSWORD?', CommonHelper::getLangId()); ?></h2>
                         <p class="text-muted"><?php echo Labels::getLabel('LBL_Enter_The_E-mail_Address_Associated_With_Your_Account', $siteLangId) ?></p>
                     </div>
                 </div>

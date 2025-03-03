@@ -30,7 +30,7 @@ if (0 < $withPhone) {
                     </h1>
                     <p>
                         <?php if (1 > $withPhone) {
-                            echo Labels::getLabel('LBL_FORGOT_PASSWORD_MSG', $siteLangId);
+                            echo Labels::getLabel('LBL_ENTER_THE_E-MAIL_ADDRESS_ASSOCIATED_WITH_YOUR_ACCOUNT', $siteLangId);
                         } else {
                             echo Labels::getLabel('LBL_RECOVER_PASSWORD_FORM_MSG', $siteLangId);
                         } ?>
