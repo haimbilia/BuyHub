@@ -158,17 +158,16 @@ class Notifications extends MyAppModel
                 curl_close($ch);
                 return false;
             }
-        }
-
-        if ($notificationId) {
-            FatApp::getDb()->updateFromArray(
-                self::DB_TBL,
-                array('unotification_sent_to_app' => 1),
-                array(
-                    'smt' => "unotification_id",
-                    'vals' => $notificationId
-                )
-            );
+            if ($notificationId) {
+                FatApp::getDb()->updateFromArray(
+                    self::DB_TBL,
+                    array('unotification_sent_to_app' => 1),
+                    array(
+                        'smt' => "unotification_id = ?",
+                        'vals' => array((int)$notificationId)
+                        )
+                    );
+            }
         }
         curl_close($ch);
         return true;
