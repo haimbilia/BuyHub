@@ -2388,7 +2388,7 @@ class User extends MyAppModel
         return isset($row['uauth_user_id']) ? $row['uauth_user_id'] : '';
     }
 
-    public static function getUserAuthFcmFormattedData(int $userType, string $fcmToken, int $deviceOs = null, int $mainTableRecordId = null, string $appToken = '')
+    public static function getUserAuthFcmFormattedData(int $userType, string $fcmToken, mixed $deviceOs = null, mixed $mainTableRecordId = null, string $appToken = '')
     {
         $expiry = strtotime("+7 DAYS");
         $userType = 1 > $userType ? User::USER_TYPE_BUYER : $userType;
@@ -2402,11 +2402,11 @@ class User extends MyAppModel
             'uauth_last_ip' => CommonHelper::getClientIp(),
         ];
 
-        if (null !== $deviceOs) {
+        if (null !== $deviceOs && is_int($deviceOs)) {
             $data['uauth_device_os'] = $deviceOs;
         }
 
-        if (null !== $mainTableRecordId) {
+        if (null !== $mainTableRecordId && is_int($mainTableRecordId)) {
             $data['uauth_user_id'] = $mainTableRecordId;
         }
 
