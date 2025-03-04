@@ -1332,7 +1332,7 @@ class GuestUserController extends MyAppController
         }
 
         CommonHelper::addCaptchaField($frm);
-        $label = (1 > $withPhone) ? Labels::getLabel('BTN_SUBMIT_FORGOT_PASSWORD', $this->siteLangId) : Labels::getLabel('BTN_GET_OTP', $this->siteLangId);
+        $label = (1 > $withPhone) ? Labels::getLabel('BTN_SUBMIT', $this->siteLangId) : Labels::getLabel('BTN_GET_OTP', $this->siteLangId);
         $frm->addSubmitButton('', 'btn_submit', $label);
         return $frm;
     }
