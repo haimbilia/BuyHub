@@ -1510,6 +1510,7 @@ class Product extends MyAppModel
         $srch->joinBrands($langId);
         $srch->joinProductToCategory($langId);
         $srch->joinProductToTax();
+        $srch->addCondition('selprod_code', 'IS NOT', 'mysql_func_null', 'and', true);
         /* $srch->joinSellerSubscription(0, false, true);
         $srch->addSubscriptionValidCondition(); */
 

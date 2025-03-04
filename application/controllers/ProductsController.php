@@ -562,6 +562,7 @@ class ProductsController extends MyAppController
             $prodSrch->joinUserWishListProducts($loggedUserId);
             $prodSrch->addFld('COALESCE(uwlp.uwlp_selprod_id, 0) as is_in_any_wishlist');
         }
+        $prodSrch->addCondition('selprod_code', 'IS NOT', 'mysql_func_null', 'and', true);
         $prodSrch->addMultipleFields(
             array(
                 'product_id',
