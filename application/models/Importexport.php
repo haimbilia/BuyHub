@@ -3816,7 +3816,24 @@ class Importexport extends ImportexportCommon
                         $this->db->insertFromArray(Importexport::DB_TBL_TEMP_SELPROD_IDS, $tempData, false, array(), $tempData);
                     }
                 } else {
-                    $selProdGenArr['selprod_code'] = $productId . '_';
+                    $productOptions = Product::getProductOptions($productId, $langId, true);
+                    if(empty($productOptions)){
+                        $selProdGenArr['selprod_code'] = $productId . '_';
+                    } else {
+                        $availableOptionsCount = 1;
+                        array_walk($productOptions, function ($val) use (&$availableOptionsCount) {
+                            $availableOptionsCount *= count($val['optionValues']);
+                        });
+                        $srch = SellerProduct::searchSellerProducts($langId, $userId);
+                        $srch->addCondition('selprod_product_id', '=', 'mysql_func_' . $productId, 'AND', true);
+                        $srch->doNotCalculateRecords();
+                        $srch->addMultipleFields(['selprod_id', 'IFNULL(selprod_title, IFNULL(product_name, product_identifier)) as selprod_title']);
+                        $arrListing = FatApp::getDb()->fetchAll($srch->getResultSet());
+                        if(count($arrListing) >= $availableOptionsCount) {
+                            continue;
+                        }
+
+                    }
                     if ($sellerId) {
                         unset($selProdGenArr['selprod_id']);
                         unset($selProdGenArr['selprod_sold_count']);

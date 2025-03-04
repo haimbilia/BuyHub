@@ -1550,7 +1550,7 @@ class SellerProduct extends MyAppModel
             $validationArr['subscription'] = ['title' => Labels::getLabel('LBL_SELLER_SUBSCRIPTION_ACTIVE', $langId), 'currentStatus' => '', 'valid' => false];
         }
 
-        $selProd = SellerProduct::getAttributesById($selProdId, ['selprod_deleted', 'selprod_product_id', 'selprod_user_id']);
+        $selProd = SellerProduct::getAttributesById($selProdId, ['selprod_deleted', 'selprod_product_id', 'selprod_user_id', 'selprod_code']);
 
         if ($selProd) {
             if (FatApp::getConfig('CONF_ENABLE_SELLER_SUBSCRIPTION_MODULE', FatUtility::VAR_INT, 0)) {
@@ -1651,6 +1651,14 @@ class SellerProduct extends MyAppModel
                         }
                     }
                 }
+            }
+            if(empty($selProd['selprod_code'])) {
+                $validationArr['selprod_code'] = ['title' => Labels::getLabel('LBL_OPTION_BINDED', $langId), 'currentStatus' => '', 'valid' => false];
+                $validationArr['selprod_code']['code'] = 'selprod_code';
+                $validationArr['selprod_code']['valid']  = false;
+                $validationArr['selprod_code']['currentStatus']  = 0;
+                $validationArr['selprod_code']['valid'] = empty($selProd['selprod_code']) ? false : true;
+                $validationArr['selprod_code']['currentStatus']  = empty($selProd['selprod_code']) ? false : true;
             }
         }
 

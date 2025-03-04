@@ -41,6 +41,7 @@ class FilterHelper extends FatUtility
         $prodSrchObj->joinProductToCategory($langId);
         $prodSrchObj->validateAndJoinDeliveryLocation();
         $prodSrchObj->joinProductToTax();
+        $prodSrchObj->addCondition('selprod_code', 'IS NOT', 'mysql_func_null', 'and', true);
 
         if (array_key_exists('category', $post)) {
             $joinWithRelationTableInstead = $headerFormParamsAssocArr['joinWithRelationTableInstead'] ?? false;
