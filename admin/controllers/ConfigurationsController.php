@@ -1497,24 +1497,26 @@ class ConfigurationsController extends ListingBaseController
                 $fld =  $frm->addHtml('', 'Translatorseperator', '<div class="separator separator-dashed my-2"></div>');
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
-                $frm->addHtml('', 'Microsoft Translator Text API', '<h3 class="form-section-head">' . Labels::getLabel("FRM_MICROSOFT_TRANSLATOR_TEXT_API", $langId) . '</h3>');
-
-                $frm->addHtml('', 'GoogleFontsAPI', '<h3 class="form-section-head">' . Labels::getLabel("FRM_GOOGLE_FONTS_API", $langId) . '</h3>');
+                $fld = $frm->addHtml('', 'Microsoft Translator Text API', '<h3 class="form-section-head">' . Labels::getLabel("FRM_MICROSOFT_TRANSLATOR_TEXT_API", $langId) . '</h3>');
+                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
                 $fld = $frm->addTextBox(Labels::getLabel("FRM_SUBSCRIPTION_KEY", $langId), 'CONF_TRANSLATOR_SUBSCRIPTION_KEY');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_MICROSOFT_TRANSLATOR_TEXT_API_3.0_SUBSCRIPTION_KEY.", $langId) . "</span>";
 
+                $fld = $frm->addTextBox(Labels::getLabel("FRM_SUBSCRIPTION_KEY_REGION", $langId), 'CONF_TRANSLATOR_SUBSCRIPTION_KEY_REGION');
+                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_MICROSOFT_TRANSLATOR_TEXT_API_3.0_SUBSCRIPTION_KEY_REGION_(OPTIONAL).", $langId) . "</span>";
 
-                $fld = $frm->addTextBox(Labels::getLabel("FRM_API_KEY", $langId), 'CONF_GOOGLE_FONTS_API_KEY');
                 $fld =  $frm->addHtml('', 'JWPlayerseperator', '<div class="separator separator-dashed my-2"></div>');
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 /* JW player Settings */
                 $frm->addHtml('', 'JWPlayerSettings', '<h3 class="form-section-head">' . Labels::getLabel("FRM_JW_PLAYER_SETTINGS", $langId) . '</h3>');
+                $frm->addHtml('', 'GoogleFontsAPI', '<h3 class="form-section-head">' . Labels::getLabel("FRM_GOOGLE_FONTS_API", $langId) . '</h3>');
 
                 $fld = $frm->addTextBox(Labels::getLabel("FRM_JW_PLAYER_KEY", $langId), 'CONF_JW_PLAYER_KEY');
-                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_THIS_IS_THE_KEY_PROVIDED_BY_JW_PLAYER", $langId) . "</span>";
                 /* JW player Settings */
+
+                $fld = $frm->addTextBox(Labels::getLabel("FRM_API_KEY", $langId), 'CONF_GOOGLE_FONTS_API_KEY');
                 break;
             case Configurations::FORM_REFERAL:
                 $fld = $frm->addRadioButtons(
