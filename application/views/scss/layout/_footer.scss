@@ -85,7 +85,7 @@
                 a {
                     color: currentColor;
                     font-weight: $font-weight-bold;
-                    text-decoration: underline;
+                    /* text-decoration: underline; */
 
                     &:hover {
                         text-decoration: underline;

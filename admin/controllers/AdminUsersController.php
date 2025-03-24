@@ -143,10 +143,10 @@ class AdminUsersController extends ListingBaseController
             FOR EACH ROW 
             BEGIN
                 IF new.prodcat_parent != old.prodcat_parent THEN 
-                    CALL UPDATECATEGORYRELATIONS(new.prodcat_id);
+                    CALL UPDATECATEGORYRELATIONS(new.prodcat_parent);
                     CALL UPDATECATEGORYRELATIONS(old.prodcat_parent);                                                  
                 END IF; 
-                    CALL updateCategoryRelations(0);
+                    CALL updateCategoryRelations(new.prodcat_id);
             END",
             "DROP PROCEDURE IF EXISTS updateShopUserValid",
             "CREATE PROCEDURE updateShopUserValid(IN userId INT)
