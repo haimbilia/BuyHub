@@ -446,11 +446,11 @@ class HomeController extends ListingBaseController
             unlink($cacheKey);
         } */
 
+        ProductCategory::UpdateHasChildCategoryFlag(0);
         Product::updateMinPrices();
         if (CommonHelper::demoUrl()) {
             $str = file_get_contents('https://' . $_SERVER['SERVER_NAME'] . '/admin/admin-users/createProcedures');
-        }
-        ProductCategory::UpdateHasChildCategoryFlag(0);
+        }        
         FatUtility::dieJsonSuccess(Labels::getLabel('MSG_CACHE_HAS_BEEN_CLEARED', $this->siteLangId));
         //FatApp::redirectUser(UrlHelper::generateUrl("home"));
     }
