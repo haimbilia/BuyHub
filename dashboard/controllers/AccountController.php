@@ -934,6 +934,7 @@ class AccountController extends LoggedUserController
             $personalInfo['userImage'] = UrlHelper::getCachedUrl(UrlHelper::generateFullFileUrl('image', 'user', array($this->userId, ImageDimension::VIEW_SMALL, true), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg');
             $this->set('personalInfo', empty($personalInfo) ? (object) array() : $personalInfo);
             $this->set('privacyPolicyLink', FatApp::getConfig('CONF_PRIVACY_POLICY_PAGE', FatUtility::VAR_STRING, ''));
+            $this->set('gdprPolicyLink', FatApp::getConfig('CONF_GDPR_POLICY_PAGE', FatUtility::VAR_STRING, ''));
             $this->set('hasDigitalProducts', $hasDigitalProducts);
             $this->set('splitPaymentMethods', $splitPaymentMethods);
             $this->_template->render();
