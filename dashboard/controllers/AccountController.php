@@ -1764,6 +1764,7 @@ class AccountController extends LoggedUserController
 
     public function wishlist()
     {
+        $_SESSION[UserAuthentication::SESSION_ELEMENT_NAME]['activeTab'] = 'B';
         $this->_template->addJs('js/slick.js');
         $this->_template->render();
     }
