@@ -4558,8 +4558,7 @@ CREATE TABLE `tbl_product_categories` (
   PRIMARY KEY (`prodcat_id`),
   UNIQUE KEY `prodcat_identifier` (`prodcat_identifier`),
   KEY `prodcat_parent` (`prodcat_parent`),
-  KEY `prodcat_code` (`prodcat_code`),
-  KEY `prodcat_code_2` (`prodcat_code`)
+  KEY `prodcat_code` (`prodcat_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -5366,8 +5365,7 @@ CREATE TABLE `tbl_products` (
   UNIQUE KEY `product_identifier` (`product_identifier`),
   KEY `product_seller_id` (`product_seller_id`),
   KEY `product_brand_id` (`product_brand_id`),
-  KEY `product_ship_package` (`product_ship_package`),
-  KEY `product_ship_package_2` (`product_ship_package`)
+  KEY `product_ship_package` (`product_ship_package`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -8861,8 +8859,7 @@ CREATE TABLE `tbl_user_extras` (
   `uextra_cheque_payee_name` varchar(100) NOT NULL,
   `uextra_paypal_email_id` varchar(100) NOT NULL,
   PRIMARY KEY (`uextra_id`),
-  UNIQUE KEY `uextra_user_id_2` (`uextra_user_id`),
-  KEY `uextra_user_id` (`uextra_user_id`)
+  UNIQUE KEY `uextra_user_id` (`uextra_user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -9395,7 +9392,6 @@ CREATE TABLE `tbl_user_transactions` (
   `utxn_type` int(11) NOT NULL COMMENT 'defined in transactions model',
   PRIMARY KEY (`utxn_id`),
   KEY `utxn_user_id` (`utxn_user_id`),
-  KEY `utxn_user_id_2` (`utxn_user_id`),
   KEY `utxn_status` (`utxn_status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
