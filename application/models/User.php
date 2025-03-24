@@ -3319,6 +3319,6 @@ class User extends MyAppModel
         }
         $srch->addFld('if(u.user_parent > 0, u.user_parent, u.user_id) as user_parent');
         $record = FatApp::getDb()->fetch($srch->getResultSet());
-        return $record['user_parent'];
+        return $record['user_parent'] ?? 0;
     }
 }
