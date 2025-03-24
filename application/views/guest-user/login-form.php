@@ -41,6 +41,16 @@ if (0 < $signinpopup) { ?>
                 ?>
             </div>
         </div>
+        <?php if (!empty(CommonHelper::getTechPartner())) { ?>
+            <div class="form-sign-copyright">
+                <div class="copyright">
+                    <?php echo CommonHelper::getCopyRight($siteLangId); ?>
+                </div> |
+                <div class="tech-partner">
+                    <?php echo CommonHelper::getTechPartner(); ?>
+                </div>
+            </div>
+        <?php } ?>
     </div>
     <?php include(CONF_THEME_PATH . '_partial/footer-part/fonts.php'); ?>
 <?php } ?>

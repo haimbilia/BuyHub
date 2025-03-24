@@ -4,7 +4,7 @@ $btn-focus-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 
     height: 100%;
     position: relative;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     flex-wrap: nowrap;
 
     @include media-breakpoint-up(md) {
@@ -357,4 +357,15 @@ $btn-focus-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 
     .btn-InstagramLogin {
         background: #3f729b;
     }
+}
+
+.form-sign-copyright{
+    position: sticky;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    padding: 1.5rem;
 }
