@@ -451,7 +451,7 @@ class PatchUpdateController extends ListingBaseController
             ('Shops', 'index', 0, 0, 1, 0),
             ('Blog', 'index', 0, 0, 1, 0),
             ('Products', 'index', 0, 0, 1, 0)");
-            FatApp::getDb()->guery("INSERT INTO tbl_url_rewrite (urlrewrite_original, urlrewrite_custom, urlrewrite_lang_id) VALUES
+            FatApp::getDb()->query("INSERT INTO tbl_url_rewrite (urlrewrite_original, urlrewrite_custom, urlrewrite_lang_id) VALUES
             ('supplier', 'seller', 1),
             ('custom/contact-us', 'contact-us', 1),
             ('custom/sitemap', 'sitemap', 1),
