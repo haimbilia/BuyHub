@@ -992,7 +992,7 @@ class ProductSearch extends SearchBase
 
         $keywordLength = mb_strlen($keyword);
         $cnd = $obj->addCondition('product_isbn', 'LIKE', '%' . $keyword . '%');
-        /* $cnd->attachCondition('product_upc', 'LIKE', '%' . $keyword . '%'); */
+        $cnd->attachCondition('selprod_title', 'LIKE', '%' . $keyword . '%'); 
 
         $arr = explode(' ', $keyword);
         $arr_keywords = array();
