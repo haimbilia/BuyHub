@@ -1086,7 +1086,7 @@ class ConfigurationsController extends ListingBaseController
                 $fld = $frm->addIntegerField(Labels::getLabel("FRM_REMINDER_INTERVAL_FOR_PRODUCTS_IN_WISHLIST_[Days]", $langId), 'CONF_REMINDER_INTERVAL_PRODUCTS_IN_WISHLIST', '');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_THIS_IS_THE_INTERVAL_IN_DAYS_TO_SEND_AUTO_NOTIFICATION_ALERT_TO_BUYER_FOR_PRODUCTS_IN_WISHLIST.", $langId) . "</span>";
 
-                $fld = $frm->addIntegerField(Labels::getLabel("FRM_SET_NOTIFICATION_COUNT_TO_BE_SENT", $langId), 'CONF_SENT_WISHLIST_REMINDER_COUNT', '');
+                $fld = $frm->addIntegerField(Labels::getLabel("FRM_SET_NOTIFICATION_COUNT_TO_BE_SENT_FOR_WISHLIST", $langId), 'CONF_SENT_WISHLIST_REMINDER_COUNT', '');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_SET_HOW_MANY_NOTIFICATIONS_WILL_BE_SENT_TO_BUYER.", $langId) . "</span>";
 
                 break;
