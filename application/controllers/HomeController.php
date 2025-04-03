@@ -814,8 +814,8 @@ class HomeController extends MyAppController
             switch ($collection['collection_type']) {
                 case Collections::COLLECTION_TYPE_HERO_SLIDES:
                     $collections[$ind] = $collection;
-                    $slides = $this->getSlides();
                     if (true === MOBILE_APP_API_CALL) {
+                        $slides = $this->getSlides();
                         $appScreenType = CommonHelper::getAppScreenType();
                         $resType = $appScreenType == applicationConstants::SCREEN_IPAD ? ImageDimension::VIEW_TABLET : ImageDimension::VIEW_MOBILE;
                         foreach ($slides as &$slideDetail) {
@@ -844,6 +844,8 @@ class HomeController extends MyAppController
                                 }
                             }
                         }
+                    } else {
+                        $slides = $this->getSlides(1);
                     }
                     $collections[$ind]['slides'] = $slides;
                     break;
