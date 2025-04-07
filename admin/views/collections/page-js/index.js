@@ -141,7 +141,7 @@ $(document).on('change', '.prefDimensionsJs', function () {
     };
 
     loadImages = function (recordId, langId = 0, screen = 0) {
-        if(0 == screen){
+        if (0 == screen) {
             screen = $("select[name='collection_screen']").val();
             screen = 'undefined' == typeof screen ? 0 : screen;
         }
@@ -288,6 +288,12 @@ $(document).on('change', '.prefDimensionsJs', function () {
         if (1 > screen || 'undefined' == typeof screen) {
             screen = $('.prefDimensionsJs').val();
         }
+
+        var screenVal = $('#slideScreenJs').val();
+        if (screen == 1 && screenVal != 1) {
+            $('#slideScreenJs').val(1);
+        }
+
         fcom.updateWithAjax(fcom.makeUrl(controllerName, 'bannerImages', [collectionId, bannerId, langId, screen]), '', function (t) {
             fcom.closeProcessing();
             fcom.removeLoader();
