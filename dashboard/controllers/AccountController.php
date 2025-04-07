@@ -3857,16 +3857,14 @@ class AccountController extends LoggedUserController
             $opChargesLog = new OrderProductChargeLog($op_id);
             $taxOptions = $opChargesLog->getData($this->siteLangId);
             $childOrderDetail[$op_id]['taxOptions'] = $taxOptions;
+
+            $pickUpAddress = $orderObj->getOrderAddresses($orderDetail['order_id'], $op_id);
+            $orderDetail[$op_id]['pickupAddress'] = (!empty($pickUpAddress[Orders::PICKUP_ADDRESS_TYPE])) ? $pickUpAddress[Orders::PICKUP_ADDRESS_TYPE] : array();
         }
 
         $address = $orderObj->getOrderAddresses($orderDetail['order_id']);
         $orderDetail['billingAddress'] = $address[Orders::BILLING_ADDRESS_TYPE];
         $orderDetail['shippingAddress'] = (!empty($address[Orders::SHIPPING_ADDRESS_TYPE])) ? $address[Orders::SHIPPING_ADDRESS_TYPE] : array();
-
-        $pickUpAddress = $orderObj->getOrderAddresses($orderDetail['order_id'], $opId);
-        $orderDetail['pickupAddress'] = (!empty($pickUpAddress[Orders::PICKUP_ADDRESS_TYPE])) ? $pickUpAddress[Orders::PICKUP_ADDRESS_TYPE] : array();
-
-        // CommonHelper::printArray($childOrderDetail, true);
 
         $template = new FatTemplate('', '');
         $template->set('siteLangId', $this->siteLangId);
