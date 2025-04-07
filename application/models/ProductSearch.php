@@ -992,7 +992,7 @@ class ProductSearch extends SearchBase
 
         $keywordLength = mb_strlen($keyword);
         $cnd = $obj->addCondition('product_isbn', 'LIKE', '%' . $keyword . '%');
-        $cnd->attachCondition('selprod_title', 'LIKE', '%' . $keyword . '%'); 
+        $cnd->attachCondition('selprod_title', 'LIKE', '%' . $keyword . '%');
 
         $arr = explode(' ', $keyword);
         $arr_keywords = array();
@@ -1004,24 +1004,70 @@ class ProductSearch extends SearchBase
             $arr_keywords[] = $value;
         }
 
-        if (count($arr_keywords) > 0) {
+        $totalKeywordCount = count($arr_keywords);
+        $keywordRelevancyFldCond = '';
+        if ($totalKeywordCount > 0) {
             if ($keywordLength <= 80) {
+                $loopCount = 1;
                 foreach ($arr_keywords as $value) {
                     $cnd->attachCondition('product_tags_string', 'LIKE', '%' . $value . '%');
                     $cnd->attachCondition('selprod_title', 'LIKE', '%' . $value . '%');
                     /*  $cnd->attachCondition('product_name', 'LIKE', '%' . $value . '%'); */
                     $cnd->attachCondition('brand_name', 'LIKE', '%' . $value . '%');
                     $cnd->attachCondition('prodcat_name', 'LIKE', '%' . $value . '%');
+
+                    if ($useRelevancy === true && $loopCount <= 2) {
+                        $strvalue = FatApp::getDb()->quoteVariable('%' . $value . '%');
+                        /* $obj->addFld(
+                            "IF(selprod_title LIKE $strvalue, " . 4 - $loopCount . ", 0)
+                            + IF(product_tags_string LIKE $strvalue, " . 4 - $loopCount . ", 0)
+                        AS keyword_relevancy"
+                        ); */
+                        if (!empty($keywordRelevancyFldCond)) {
+                            $keywordRelevancyFldCond .= " + ";
+                        }
+                        $keywordRelevancyFldCond .= "IF(selprod_title LIKE $strvalue, " . 4 - $loopCount . ", 0)
+                            + IF(product_tags_string LIKE $strvalue, " . 4 - $loopCount . ", 0)";
+                    }
+                    $loopCount++;
                 }
             }
             $strKeyword = FatApp::getDb()->quoteVariable('%' . $keyword . '%');
             if ($useRelevancy === true) {
-                $obj->addFld(
+                /* $obj->addFld(
                     "IF(product_isbn LIKE $strKeyword, 15, 0)
-                + IF(selprod_title LIKE $strKeyword, 4, 0)                
-                + IF(product_tags_string LIKE $strKeyword, 4, 0)
+                + IF(selprod_title LIKE $strKeyword, 5, 0)                
+                + IF(product_tags_string LIKE $strKeyword, 5, 0)
                 AS keyword_relevancy"
-                );
+                ); */
+                if (!empty($keywordRelevancyFldCond)) {
+                    $keywordRelevancyFldCond .= " + ";
+                }
+                $keywordRelevancyFldCond .= "IF(product_isbn LIKE $strKeyword, 15, 0)
+                + IF(selprod_title LIKE $strKeyword, 5, 0)                
+                + IF(product_tags_string LIKE $strKeyword, 5, 0)";
+
+                if ($totalKeywordCount > 1) {
+                    $cond = '';
+                    foreach ($arr_keywords as $value) {
+                        $strvalue = FatApp::getDb()->quoteVariable('%' . $value . '%');
+                        if (!empty($cond)) {
+                            $cond .= ' and ';
+                        }
+                        $cond .= 'selprod_title LIKE' . $strvalue;
+                    }
+
+                    if (!empty($cond)) {
+                        /* $obj->addFld("IF($cond, 4, 0) AS keyword_relevancy"); */
+                        if (!empty($keywordRelevancyFldCond)) {
+                            $keywordRelevancyFldCond .= " + ";
+                        }
+                        $keywordRelevancyFldCond .= "IF($cond, 4, 0)";
+                    }
+                }
+                if (!empty($keywordRelevancyFldCond)) {
+                    $obj->addFld("$keywordRelevancyFldCond AS keyword_relevancy");
+                }
             } else {
                 $obj->addFld('0 AS keyword_relevancy');
             }
