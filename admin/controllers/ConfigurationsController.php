@@ -531,8 +531,9 @@ class ConfigurationsController extends ListingBaseController
 
                 $fld = $frm->addFileUpload(Labels::getLabel('FRM_XML_FILE_AUTHENTICATION', $langId), 'bing_file_verification', array('accept' => '.xml', 'onChange' => 'updateVerificationFile(this, "bing")'));
                 $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("FRM_XML_FILE_VERIFICATION_MSG", $langId) . '</span>';
-
+                
                 $fld = $frm->addHtml('', 'hotjar', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("FRM_HOTJAR", $langId) . '</h3>');
+                $fld->htmlAfterField = '<span class="form-text text-muted">' . Labels::getLabel("FRM_HOTJAR_TEXT_INFO", $langId) . '</span>';
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 $fld = $frm->addTextarea(Labels::getLabel("FRM_HEAD_SCRIPT", $langId), 'CONF_HOTJAR_HEAD_SCRIPT');
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
@@ -574,41 +575,25 @@ class ConfigurationsController extends ListingBaseController
             case Configurations::FORM_PRODUCT:
                 // $frm->addHtml('', 'Product', '<h3 class="form-section-head">' . Labels::getLabel('FRM_PRODUCT', $langId) . '</h3>');
 
-                $fld = $frm->addCheckBox(
-                    Labels::getLabel("FRM_ALLOW_SELLERS_TO_ADD_PRODUCTS", $langId),
-                    'CONF_ENABLED_SELLER_CUSTOM_PRODUCT',
-                    1,
-                    array(),
-                    false,
-                    0
-                );
+                $fld = $frm->addCheckBox(Labels::getLabel("FRM_ALLOW_SELLERS_TO_ADD_PRODUCTS", $langId), 'CONF_ENABLED_SELLER_CUSTOM_PRODUCT', 1, array(), false, 0);
                 HtmlHelper::configureSwitchForCheckbox($fld);
+                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_ALLOW_SELLERS_TO_ADD_PRODUCTS_INFO_TEXT.", $langId) . "</span>";
 
-                $fld = $frm->addCheckBox(
-                    Labels::getLabel("FRM_ENABLE_ADMIN_APPROVAL_ON_PRODUCTS_ADDED_BY_SELLERS", $langId),
-                    'CONF_CUSTOM_PRODUCT_REQUIRE_ADMIN_APPROVAL',
-                    1,
-                    array(),
-                    false,
-                    0
-                );
+                $fld = $frm->addCheckBox(Labels::getLabel("FRM_ENABLE_ADMIN_APPROVAL_ON_PRODUCTS_ADDED_BY_SELLERS", $langId), 'CONF_CUSTOM_PRODUCT_REQUIRE_ADMIN_APPROVAL', 1, array(), false, 0);
                 HtmlHelper::configureSwitchForCheckbox($fld);
+                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_ENABLE_ADMIN_APPROVAL_ON_PRODUCTS_ADDED_BY_SELLERS_INFO_TEXT.", $langId) . "</span>";
 
-                $fld = $frm->addCheckBox(
-                    Labels::getLabel("FRM_ALLOW_SELLERS_TO_REQUEST_PRODUCTS_WHICH_ARE_AVAILABLE_TO_ALL_SELLERS", $langId),
-                    'CONF_SELLER_CAN_REQUEST_CUSTOM_PRODUCT',
-                    1,
-                    array(),
-                    false,
-                    0
-                );
+                $fld = $frm->addCheckBox( Labels::getLabel("FRM_ALLOW_SELLERS_TO_REQUEST_PRODUCTS_WHICH_ARE_AVAILABLE_TO_ALL_SELLERS", $langId), 'CONF_SELLER_CAN_REQUEST_CUSTOM_PRODUCT', 1, array(), false, 0);
                 HtmlHelper::configureSwitchForCheckbox($fld);
+                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_ALLOW_SELLERS_TO_REQUEST_PRODUCTS_WHICH_ARE_AVAILABLE_TO_ALL_SELLERS_INFO_TEXT.", $langId) . "</span>";
 
                 $fld = $frm->addCheckBox(Labels::getLabel("FRM_ADDING_MODEL_#_for_products_will_be_mandatory", $langId), 'CONF_PRODUCT_MODEL_MANDATORY', 1, array(), false, 0);
                 HtmlHelper::configureSwitchForCheckbox($fld);
+                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_ADDING_MODEL_#_for_products_will_be_mandatory_INFO_TEXT.", $langId) . "</span>";
 
                 $fld = $frm->addCheckBox(Labels::getLabel("FRM_ADDING_SKU_FOR_PRODUCTS_WILL_BE_MANDATORY", $langId), 'CONF_PRODUCT_SKU_MANDATORY', 1, array(), false, 0);
                 HtmlHelper::configureSwitchForCheckbox($fld);
+                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_ADDING_SKU_FOR_PRODUCTS_WILL_BE_MANDATORY_INFO_TEXT.", $langId) . "</span>";
 
                 $fld = $frm->addCheckBox(Labels::getLabel("FRM_ENABLE_LINKING_SHIPPING_PACKAGES_TO_PRODUCTS", $langId), 'CONF_PRODUCT_DIMENSIONS_ENABLE', 1, array(), false, 0);
                 HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("FRM_SHIPPING_PACKAGES_ARE_REQUIRED_IN_CASE_SHIPPING_API_IS_ENABLED", $langId));
@@ -624,6 +609,7 @@ class ConfigurationsController extends ListingBaseController
 
                 $fld = $frm->addCheckBox(Labels::getLabel("FRM_BRAND_WILL_BE_MANDATORY_FOR_PRODUCTS", $langId), 'CONF_PRODUCT_BRAND_MANDATORY', 1, array(), false, 0);
                 HtmlHelper::configureSwitchForCheckbox($fld);
+                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_BRAND_WILL_BE_MANDATORY_FOR_PRODUCTS_INFO_TEXT.", $langId) . "</span>";
 
                 $fld = $frm->addCheckBox(Labels::getLabel("FRM_PRODUCT_PRICES_WILL_BE_INCLUSIVE_OF_TAX", $langId), 'CONF_PRODUCT_INCLUSIVE_TAX', 1, array(), false, 0);
                 HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel('FRM_ENABLING_THIS,_TAX_AFTER_DISCOUNT_FEATURE_WILL_BE_DEACTIVED', $langId));
@@ -632,7 +618,8 @@ class ConfigurationsController extends ListingBaseController
                 HtmlHelper::configureSwitchForCheckbox($fld, Labels::getLabel("FRM_THIS_WILL_ENABLE_TAX_CATEGORIES_CODE", $langId));
 
                 $fulFillmentArr = Shipping::getFulFillmentArr($langId);
-                $frm->addSelectBox(Labels::getLabel('FRM_FULFILLMENT_METHOD', $langId), 'CONF_FULFILLMENT_TYPE', $fulFillmentArr, applicationConstants::NO, array(), '');
+                $fld = $frm->addSelectBox(Labels::getLabel('FRM_FULFILLMENT_METHOD', $langId), 'CONF_FULFILLMENT_TYPE', $fulFillmentArr, applicationConstants::NO, array(), '');
+                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_FULFILLMENT_METHOD_INFO_TEXT.", $langId) . "</span>";
 
                 $fld3 = $frm->addTextBox(Labels::getLabel("FRM_DEFAULT_ITEMS_PER_PAGE_(Catalog)", $langId), "CONF_ITEMS_PER_PAGE_CATALOG");
                 $fld3->requirements()->setInt();
@@ -680,6 +667,7 @@ class ConfigurationsController extends ListingBaseController
 
                 $fld = $frm->addTextBox(Labels::getLabel('FRM_RADIUS_MAX_DISTANCE_IN_MILES', $langId), 'CONF_RADIUS_DISTANCE_IN_MILES');
                 $fld->requirements()->setInt();
+                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_RADIUS_MAX_DISTANCE_IN_MILES_INFO_TEXT.", $langId) . "</span>";
                 if (FatApp::getConfig('CONF_PRODUCT_GEO_LOCATION', FatUtility::VAR_INT, 0) != applicationConstants::BASED_ON_RADIUS) {
                     $fld->setFieldTagAttribute('disabled', 'disabled');
                 }
@@ -1078,7 +1066,7 @@ class ConfigurationsController extends ListingBaseController
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_THIS_IS_THE_INTERVAL_IN_DAYS_TO_SEND_AUTO_NOTIFICATION_ALERT_TO_BUYER_FOR_PRODUCTS_IN_CART.", $langId) . "</span>";
 
                 $fld = $frm->addIntegerField(Labels::getLabel("FRM_SET_NOTIFICATION_COUNT_TO_BE_SENT", $langId), 'CONF_SENT_CART_REMINDER_COUNT', '');
-                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_SET_HOW_MANY_NOTIFICATIONS_WILL_BE_SENT_TO_BUYER.", $langId) . "</span>";
+                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_SET_HOW_MANY_NOTIFICATIONS_WILL_BE_SENT_TO_BUYER_FOR_THE_PRODUCTS_IN_CART.", $langId) . "</span>";
 
                 $fld = $frm->addHtml('', 'Wishlist', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("FRM_WISHLIST", $langId) . '</h3>');
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
@@ -1087,7 +1075,7 @@ class ConfigurationsController extends ListingBaseController
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_THIS_IS_THE_INTERVAL_IN_DAYS_TO_SEND_AUTO_NOTIFICATION_ALERT_TO_BUYER_FOR_PRODUCTS_IN_WISHLIST.", $langId) . "</span>";
 
                 $fld = $frm->addIntegerField(Labels::getLabel("FRM_SET_NOTIFICATION_COUNT_TO_BE_SENT_FOR_WISHLIST", $langId), 'CONF_SENT_WISHLIST_REMINDER_COUNT', '');
-                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_SET_HOW_MANY_NOTIFICATIONS_WILL_BE_SENT_TO_BUYER.", $langId) . "</span>";
+                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_SET_HOW_MANY_NOTIFICATIONS_WILL_BE_SENT_TO_BUYER_FOR_WISHLIST_REMINDER.", $langId) . "</span>";
 
                 break;
 
@@ -1199,11 +1187,12 @@ class ConfigurationsController extends ListingBaseController
 
                 $fld = $frm->addTextBox(Labels::getLabel("FRM_BIRTHDAY_REWARD_POINTS", $langId), 'CONF_BIRTHDAY_REWARD_POINTS');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_USER_GET_THIS_REWARD_POINTS_ON_HIS_BIRTHDAY.", $langId) . "</span>";
-
+                
                 $fld = $frm->addTextBox(Labels::getLabel("FRM_REWARD_POINTS_VALIDITY", $langId), 'CONF_BIRTHDAY_REWARD_POINTS_VALIDITY');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_REWARD_POINTS_VALIDITY_IN_DAYS_FROM_THE_DATE_OF_CREDIT._Please_leave_it_blank_if_you_don't_want_reward_points_to_expire.", $langId) . "</span>";
-
+                
                 $fld = $frm->addHtml('', 'BuyingAnYear', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("FRM_BUYING_IN_AN_YEAR_REWARD_POINTS", $langId) . '</h3>');
+                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_BUYING_IN_AN_YEAR_REWARD_POINTS_INFO_TEXT.", $langId) . "</span>";
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 $fld = $frm->addRadioButtons(
                     Labels::getLabel("FRM_ENABLE_MODULE", $langId),
@@ -1237,6 +1226,7 @@ class ConfigurationsController extends ListingBaseController
 
                 $fld = $frm->addRadioButtons(Labels::getLabel("FRM_ALLOW_REVIEWS", $langId), 'CONF_ALLOW_REVIEWS', applicationConstants::getYesNoArr($langId), '', array('class' => 'list-radio'));
                 HtmlHelper::configureSwitchForRadio($fld);
+                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_ALLOW_REVIEWS_INFO_TEXT.", $langId) . "</span>";
 
                 // $fld = $frm->addRadioButtons(Labels::getLabel("FRM_NEW_REVIEW_ALERT_EMAIL", $langId), 'CONF_REVIEW_ALERT_EMAIL', applicationConstants::getYesNoArr($langId), '', array('class' => 'list-radio'));
                 // HtmlHelper::configureSwitchForRadio($fld);
@@ -1533,6 +1523,7 @@ class ConfigurationsController extends ListingBaseController
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . $string . "</span>";
 
                 $fld = $frm->addHtml('', 'RewardsOnRegistration', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("FRM_REWARD_BENEFITS_ON_REGISTRATION_(_APPLICABLE_FOR_WEB_INTERFACE_ONLY_)", $langId) . '</h3>');
+                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_REWARD_BENEFITS_ON_REGISTRATION_(_APPLICABLE_FOR_WEB_INTERFACE_ONLY_)_INFO_TEXT", $langId) . "</span>";
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
                 $fld = $frm->addTextBox(Labels::getLabel("FRM_REFERRER_REWARD_POINTS", $langId), 'CONF_REGISTRATION_REFERRER_REWARD_POINTS');
@@ -1552,6 +1543,7 @@ class ConfigurationsController extends ListingBaseController
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_REWARDS_POINTS_VALIDITY_IN_DAYS_FROM_THE_DATE_OF_CREDIT", $langId) . "</span>";
 
                 $fld =  $frm->addHtml('', 'RewardsonPurchase', '<div class="separator separator-dashed my-2"></div><h3 class="form-section-head">' . Labels::getLabel("FRM_REWARD_BENEFITS_ON_FIRST_PURCHASE_(_APPLICABLE_FOR_WEB_INTERFACE_ONLY_)", $langId) . '</h3>');
+                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_REWARD_BENEFITS_ON_FIRST_PURCHASE_(_APPLICABLE_FOR_WEB_INTERFACE_ONLY_)_INFO_TEXT", $langId) . "</span>";
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
                 $fld = $frm->addTextBox(Labels::getLabel("FRM_REFERRER_REWARD_POINTS", $langId), 'CONF_SALE_REFERRER_REWARD_POINTS');
@@ -1581,12 +1573,15 @@ class ConfigurationsController extends ListingBaseController
                     array('class' => 'list-radio')
                 );
                 HtmlHelper::configureSwitchForRadio($fld);
-
+                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_ENABLE_1ST_TIME_BUYERS_DISCOUNT_INFO_TEXT.", $langId) . "</span>";
+                
                 $percentageFlatArr = applicationConstants::getPercentageFlatArr($langId);
-                $frm->addSelectBox(Labels::getLabel("FRM_DISCOUNT_IN", $langId), 'CONF_FIRST_TIME_BUYER_COUPON_IN_PERCENT', $percentageFlatArr, '', array('class' => 'discountInJs'), '');
-
+                $fld = $frm->addSelectBox(Labels::getLabel("FRM_DISCOUNT_IN", $langId), 'CONF_FIRST_TIME_BUYER_COUPON_IN_PERCENT', $percentageFlatArr, '', array('class' => 'discountInJs'), '');
+                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_DISCOUNT_IN_INFO_TEXT.", $langId) . "</span>";
+                
                 $fld =  $frm->addTextBox(Labels::getLabel("FRM_DISCOUNT_VALUE", $langId), 'CONF_FIRST_TIME_BUYER_COUPON_DISCOUNT_VALUE');
                 $fld->requirements()->setPositive();
+                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_DISCOUNT_VALUE_INFO_TEXT.", $langId) . "</span>";
 
                 $fld = $frm->addTextBox(Labels::getLabel("FRM_MINIMUM_ORDER_VALUE", $langId), 'CONF_FIRST_TIME_BUYER_COUPON_MIN_ORDER_VALUE');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_MINIMUM_ORDER_VALUE_ON_WHICH_THE_COUPON_CAN_BE_APPLIED.", $langId) . "</span>";
@@ -1621,7 +1616,7 @@ class ConfigurationsController extends ListingBaseController
                 $orderSubscriptionStatusArr = Orders::getOrderSubscriptionStatusArr($langId);
                 $fld = $frm->addTextBox(Labels::getLabel("FRM_REMINDER_EMAIL_BEFORE_SUBSCRIPTION_EXPIRE_DAYS", $langId), 'CONF_BEFORE_EXIPRE_SUBSCRIPTION_REMINDER_EMAIL_DAYS');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_BEFORE_HOW_MANY_DAYS_EMAIL_NEEDS_TO_BE_SENT_TO_USER_BEFORE_ENDING_SUBSCRIPTION.", $langId) . "</span>";
-
+                
                 $fld = $frm->addSelectBox(
                     Labels::getLabel("FRM_IN-Active_Order_Status", $langId),
                     'CONF_SUBSCRIPTION_INACTIVE_ORDER_STATUS',
@@ -1630,11 +1625,13 @@ class ConfigurationsController extends ListingBaseController
                     array(),
                     ''
                 );
-
+                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_IN-Active_Order_Status_TEXT_INFO.", $langId) . "</span>";
+                
                 $fld = $frm->addCheckBoxes(Labels::getLabel("FRM_SELLER_SUBSCRIPTION_STATUSES", $langId), 'CONF_SELLER_SUBSCRIPTION_STATUS', $orderSubscriptionStatusArr, [], array('class' => 'list-checkboxes'));
                 $fld->developerTags['colWidthValues'] = [null, '12', null, null];
                 $fld->developerTags['cbLabelAttributes'] = ['class' => 'checkbox'];
                 $fld->developerTags['cbHtmlBeforeCheckbox'] = '';
+                $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_SELLER_SUBSCRIPTION_STATUSES_TEXT_INFO.", $langId) . "</span>";
                 break;
 
             case Configurations::FORM_SYSTEM:
@@ -1748,8 +1745,6 @@ class ConfigurationsController extends ListingBaseController
                 }
                 break;
             case Configurations::FORM_SHARING:
-                $fld =  $frm->addHtml('', 'ShareAndEarn', '<h3 class="form-section-head">' . Labels::getLabel('FRM_SHARE_AND_EARN_SETTINGS', $langId) . '</h3>');
-                $fld->developerTags['colWidthValues'] = [null, '12', null, null];
 
                 $fld = $frm->addTextBox(Labels::getLabel("FRM_FACEBOOK_APP_ID", $langId), 'CONF_FACEBOOK_APP_ID');
                 $fld->htmlAfterField = "<span class='form-text text-muted'>" . Labels::getLabel("FRM_THIS_IS_THE_APPLICATION_ID_USED_IN_POST.", $langId) . "</span>";
@@ -1785,7 +1780,7 @@ class ConfigurationsController extends ListingBaseController
         $uploadedTime = !empty($fileData['afile_updated_at']) ? AttachedFile::setTimeParam($fileData['afile_updated_at']) : '';
 
         if (AttachedFile::FILE_ATTACHMENT_TYPE_SVG == $fileData['afile_attachment_type']) {
-           $imgUrl = UrlHelper::getStaticImageUrl($fileData['afile_physical_path']) . $uploadedTime;
+            $imgUrl = UrlHelper::getStaticImageUrl($fileData['afile_physical_path']) . $uploadedTime;
         }
 
         $hasSvg = in_array($fileType, AttachedFile::getSvgFileType());
