@@ -19,7 +19,7 @@
         ?>
         <div class="shop">
             <div class="shop-body">
-                <a title="<?php echo $prodcatName; ?>" href="<?php echo $prodUrl; ?>">
+                <a href="<?php echo $prodUrl; ?>" aria-label="<?php echo $prodcatName; ?>">
                     <?php $this->includeTemplate('_partial/picture-tag.php', $pictureAttr); ?>
                 </a>
             </div>

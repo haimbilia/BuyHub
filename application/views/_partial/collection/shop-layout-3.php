@@ -1,6 +1,6 @@
 <?php
 if (isset($collection['shops']) && count($collection['shops'])) {
-    ?>
+?>
     <section class="section" data-section="section">
         <div class="container">
             <header class="section-head">
@@ -15,7 +15,7 @@ if (isset($collection['shops']) && count($collection['shops'])) {
                         $productId = $shop['shopData']['product']['product_id'] ?? 0;
                         $selProdId = $shop['shopData']['product']['selprod_id'] ?? 0;
                         $prodcatName = $shop['shopData']['product']['prodcat_name'] ?? '';
-                        ?>
+                    ?>
                         <div class="recommended-layout-item">
                             <div class="recommended-layout-head">
                                 <div class="shop-profile">
@@ -28,7 +28,7 @@ if (isset($collection['shops']) && count($collection['shops'])) {
                                             'imageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'shopLogo', array($shop['shopData']['shop_id'], $siteLangId, ImageDimension::VIEW_THUMB, 0, false), CONF_WEBROOT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
                                             'siteLangId' => $siteLangId
                                         ]; ?>
-                                        <a href="<?php echo UrlHelper::generateUrl('Shops', 'view', [$shop['shopData']['shop_id']]);?>"><?php $this->includeTemplate('_partial/picture-tag.php', $pictureAttr); ?></a>                                        
+                                        <a href="<?php echo UrlHelper::generateUrl('Shops', 'view', [$shop['shopData']['shop_id']]); ?>" aria-label="<?php echo $shop['shopData']['shop_name']; ?>"><?php $this->includeTemplate('_partial/picture-tag.php', $pictureAttr); ?></a>
                                     </div>
                                     <div class="shop-profile-data">
                                         <?php if (round($shop['shopData']['shop_avg_rating']) > 0) { ?>
@@ -69,9 +69,9 @@ if (isset($collection['shops']) && count($collection['shops'])) {
                                     ];
                                     $prodUrl = 0 < $selProdId ? UrlHelper::generateUrl('Products', 'View', array($selProdId)) : 'javascript:void(0);';
 
-                                    ?>
+                                ?>
                                     <div class="products-img">
-                                        <a title="<?php echo $prodcatName; ?>" href="<?php echo $prodUrl; ?>">
+                                        <a href="<?php echo $prodUrl; ?>" aria-label="<?php echo $prodcatName; ?>">
                                             <?php $this->includeTemplate('_partial/picture-tag.php', $pictureAttr); ?>
                                         </a>
                                     </div>

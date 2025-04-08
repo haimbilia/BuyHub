@@ -29,7 +29,7 @@
                                 ];
                                 $prodUrl = 0 < $selProdId ? UrlHelper::generateUrl('Products', 'View', array($selProdId)) : 'javascript:void(0);';
                                 ?>
-                                <a title="<?php echo $prodcatName; ?>" href="<?php echo $prodUrl; ?>">
+                                <a href="<?php echo $prodUrl; ?>" aria-label="<?php echo $prodcatName; ?>">
                                     <?php $this->includeTemplate('_partial/picture-tag.php', $pictureAttr); ?>
                                 </a>
                             </div>

@@ -48,7 +48,7 @@ if (FatApp::getConfig('CONF_ENABLE_GEO_LOCATION', FatUtility::VAR_INT, 0) && !em
                             <?php } ?>
                             <div class="products-img">
                                 <?php $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']); ?>
-                                <a title="<?php echo CommonHelper::renderHtml($product['selprod_title'], true); ?>"
+                                <a aria-label="<?php echo CommonHelper::renderHtml($product['selprod_title'], true); ?>"
                                     href="<?php echo !isset($product['promotion_id']) ? UrlHelper::generateUrl('Products', 'View', array($product['selprod_id'])) : UrlHelper::generateUrl('Products', 'track', array($product['promotion_record_id'])) ?>">
                                     <?php
                                     $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_PRODUCT_IMAGE, $product['product_id']);

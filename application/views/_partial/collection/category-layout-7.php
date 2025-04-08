@@ -28,10 +28,10 @@
                             $catIconUrl = UrlHelper::generateFileUrl('Category', $viewType, array($afile_record_id, $afile_lang_id, ImageDimension::VIEW_THUMB, $afile_id), CONF_WEBROOT_FRONT_URL) . $uploadedTime;
                             $prodCatUrl = UrlHelper::generateUrl('Category', 'View', array($category['prodcat_id']));
                             ?>
-                    <a class="industry-carousal-link" title="<?php echo $category['prodcat_name']; ?>"
+                    <a class="industry-carousal-link" aria-label="<?php echo $category['prodcat_name']; ?>"
                         href="<?php echo $prodCatUrl; ?>">
                         <div class="industry-carousal-block">
-                            <img class="industry-carousal-icon" src="<?php echo $catIconUrl; ?>" alt="<?php echo $category['prodcat_name']; ?>">
+                            <img class="industry-carousal-icon" src="<?php echo $catIconUrl; ?>" alt="" aria-hidden="true">
                             <div class="industry-carousal-name"><span><?php echo $category['prodcat_name']; ?></span>
                             </div>
                         </div>

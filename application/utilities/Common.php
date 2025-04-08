@@ -11,11 +11,11 @@ class Common
         $cartObj = new Cart();
         $cartObj->invalidateCheckoutType();
         $siteLangId = CommonHelper::getLangId();
-        
+
         if (FatApp::getConfig("CONF_PRODUCT_INCLUSIVE_TAX", FatUtility::VAR_INT, 0)) {
             $cartObj->excludeTax();
         }
-        
+
         // $cartObj->excludeOfferCheckoutItems();
         $rfqOnlyProdCount = $cartObj->countRfqOnlyProducts();
         $prodCount = $cartObj->countProducts();

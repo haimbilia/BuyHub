@@ -53,8 +53,7 @@ if (isset($collection['categories']) && count($collection['categories'])) { ?>
 
                                                 <?php $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']); ?>
                                                 <div class="products-img">
-                                                    <a title="<?php echo $product['selprod_title']; ?>"
-                                                        href="<?php echo !isset($product['promotion_id']) ? UrlHelper::generateUrl('Products', 'View', array($product['selprod_id'])) : UrlHelper::generateUrl('Products', 'track', array($product['promotion_record_id'])); ?>">
+                                                    <a href="<?php echo !isset($product['promotion_id']) ? UrlHelper::generateUrl('Products', 'View', array($product['selprod_id'])) : UrlHelper::generateUrl('Products', 'track', array($product['promotion_record_id'])); ?>" aria-label="<?php echo $product['selprod_title']; ?>">
                                                         <?php
                                                         $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_PRODUCT_IMAGE, $product['product_id']);
                                                         $pictureAttr = [

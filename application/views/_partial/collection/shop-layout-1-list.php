@@ -7,7 +7,7 @@
         <div class="shop">
             <div class="shop-head">
                 <a href="<?php echo (!isset($shop['shopData']['promotion_id']) ? UrlHelper::generateUrl('shops', 'view', array($shop['shopData']['shop_id'])) : UrlHelper::generateUrl('shops', 'track', array($shop['shopData']['promotion_record_id']))); ?>"
-                    class="shop-logo">
+                    class="shop-logo" aria-label="<?php echo $shop['shopData']['shop_name'];?>">
                     <?php
                     $pictureAttr = [
                         'webpImageUrl' => [ImageDimension::VIEW_DESKTOP => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'shopLogo', array($shop['shopData']['shop_id'], $siteLangId, "WEBP" . ImageDimension::VIEW_THUMB, 0, false), CONF_WEBROOT_URL) . $uploadedTime, CONF_IMG_CACHE_TIME, '.webp')],

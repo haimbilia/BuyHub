@@ -7,6 +7,7 @@ $keywordFld->overrideFldType('search');
 $keywordFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_I_am_looking_for...', $siteLangId));
 
 $keywordFld->setFieldTagAttribute('id', 'header_search_keyword');
+$keywordFld->setFieldTagAttribute('aria-label', 'Search');
 
 $selectFld = $headerSrchFrm->getField('category');
 $selectFld->setFieldTagAttribute('id', 'searched_category');
@@ -16,13 +17,13 @@ $selectFld->setFieldTagAttribute('id', 'searched_category');
     $headerSrchFrm->setFormTagAttribute('class', ' open-search-form');
     $keywordFld->setFieldTagAttribute('class', 'open-search-input search--keyword search--keyword--js');
 ?>
-    <div class="open-search">
+    <div class="open-search" role="Search">
         <?php echo $headerSrchFrm->getFormTag(); ?>
         <?php /* <select class="open-search-select" name="" id="">
                 <option value="">Select</option>
             </select>  */ ?>
         <?php echo $headerSrchFrm->getFieldHTML('keyword'); ?>
-        <button class="open-search-btn">
+        <button class="open-search-btn" aria-label="Search">
             <svg class="svg" width="18" height="18" xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24" fill="currentColor">
                 <path
@@ -36,7 +37,8 @@ $selectFld->setFieldTagAttribute('id', 'searched_category');
     </div>
 <?php } else {
     $headerSrchFrm->setFormTagAttribute('class', ' mega-search-form');
-    $keywordFld->setFieldTagAttribute('class', 'mega-search-input search--keyword search--keyword--js'); ?>
+    $keywordFld->setFieldTagAttribute('class', 'mega-search-input search--keyword search--keyword--js');    
+?>
     <div class="offcanvas offcanvas-top offcanvas-mega-search" tabindex="-1" id="mega-nav-search">
 
         <div class="mega-search">

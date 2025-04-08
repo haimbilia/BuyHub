@@ -21,7 +21,7 @@
                                 <div class="post-head">
                                     <div class="post-media">
                                         <a href="<?php echo UrlHelper::generateUrl('Blog', 'postDetail', array($blog['post_id'])); ?>"
-                                            class="animate-scale">
+                                            class="animate-scale" aria-label="<?php echo (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $blog['post_title']; ?>">
                                             <?php $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_BLOG_POST_IMAGE, $blog['post_id']);
                                             $uploadedTime = AttachedFile::setTimeParam($fileRow['afile_updated_at']);
                                             $pictureAttr = [

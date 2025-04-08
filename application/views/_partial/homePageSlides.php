@@ -58,7 +58,9 @@ if (isset($slides) && count($slides)) { ?>
                         }
                     }
                     if ($haveUrl) {
-                        $out .= '<a target="' . $slide['slide_target'] . '" href="' . $slideUrl . '">';
+                        $arialLabelTxt = ($slide['slide_target'] == applicationConstants::LINK_TARGET_BLANK_WINDOW) ? 'Opens in a new tab' : 'Opens in a current tab';
+
+                        $out .= '<a target="' . $slide['slide_target'] . '" href="' . $slideUrl . '" aria-label="Read More. ' . $arialLabelTxt . '">';
                     }
                     $out .= '<div class="hero-slider-media">';
                     $pictureAttr = [
