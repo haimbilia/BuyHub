@@ -82,14 +82,17 @@ class GoogleShoppingFeed extends AdvertisementFeedBase
             $channelNode = $xml->createElement("channel");
             $rss->appendChild($channelNode);
 
-            $childTitleNode = $xml->createElement('title', $data['batchTitle']);
+            $childTitleNode = $xml->createElement('title');
+            $childTitleNode->appendChild($xml->createTextNode($data['batchTitle']));
             $channelNode->appendChild($childTitleNode);
 
             $shopId = Shop::getAttributesByUserId(UserAuthentication::getLoggedUserId(), 'shop_id');
-            $childTitleNode = $xml->createElement('link', UrlHelper::generateFullUrl('Shops', 'View', array($shopId)));
+            $childTitleNode = $xml->createElement('link');
+            $childTitleNode->appendChild($xml->createTextNode(UrlHelper::generateFullUrl('Shops', 'View', array($shopId))));
             $channelNode->appendChild($childTitleNode);
 
-            $childTitleNode = $xml->createElement('description', $data['batchTitle']);
+            $childTitleNode = $xml->createElement('description', );
+            $childTitleNode->appendChild($xml->createTextNode($data['batchTitle']));
             $channelNode->appendChild($childTitleNode);
         } else {
             $serviceAccountDetail = $this->getUserMeta('service_account');
@@ -155,7 +158,8 @@ class GoogleShoppingFeed extends AdvertisementFeedBase
         $subChildItemNode = $xml->createElement('title', $prodDetail['selprod_title']);
         $childItemNode->appendChild($subChildItemNode);
 
-        $subChildItemNode = $xml->createElement('link', UrlHelper::generateFullUrl('Products', 'View', array($prodDetail['selprod_id']), CONF_WEBROOT_FRONTEND));
+        $subChildItemNode = $xml->createElement('link');
+        $subChildItemNode->appendChild($xml->createTextNode(UrlHelper::generateFullUrl('Products', 'View', array($prodDetail['selprod_id']), CONF_WEBROOT_FRONTEND)));
         $childItemNode->appendChild($subChildItemNode);
 
         $subChildItemNode = $xml->createElement('description', preg_replace("/\s|&nbsp;/", ' ', strip_tags($prodDetail['product_description'])));
