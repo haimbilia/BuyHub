@@ -38,8 +38,8 @@ if ($layoutType == applicationConstants::SCREEN_DESKTOP) {
             <li class="quick-nav-item item-desktop">
                 <div class="dropdown">
                     <button type="button" class="quick-nav-link button-account dropdown-toggle no-after" data-bs-toggle="dropdown"
-                        data-bs-auto-close="outside">
-                        <svg class="svg" width="20" height="20">
+                        data-bs-auto-close="outside" aria-label="Login">
+                        <svg class="svg" width="20" height="20" aria-hidden="true">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#login"></use>
                         </svg>
                         <span class="txt">
@@ -65,13 +65,13 @@ if ($layoutType == applicationConstants::SCREEN_DESKTOP) {
 
                 </div>
             </li>
-            <?php
+        <?php
         } else {
-            ?>
+        ?>
             <li class="quick-nav-item item-desktop">
                 <div class="dropdown">
-                    <button type="button" class="quick-nav-link button-account sign-in sign-in-popup-js">
-                        <svg class="svg" width="20" height="20">
+                    <button type="button" class="quick-nav-link button-account sign-in sign-in-popup-js" aria-label="SignIn">
+                        <svg class="svg" width="20" height="20" aria-hidden="true">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#login"></use>
                         </svg>
                         <span class="txt">
@@ -79,13 +79,13 @@ if ($layoutType == applicationConstants::SCREEN_DESKTOP) {
                     </button>
                 </div>
             </li> <?php
-        }
-    } else { ?>
+                }
+            } else { ?>
         <li class="quick-nav-item item-desktop">
             <div class="dropdown">
                 <button type="button" class="quick-nav-link button-account dropdown-toggle no-after" data-bs-toggle="dropdown"
-                    data-bs-auto-close="outside">
-                    <svg class="svg" width="20" height="20">
+                    data-bs-auto-close="outside" aria-label="Login">
+                    <svg class="svg" width="20" height="20" aria-hidden="true">
                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#login"></use>
                     </svg>
                     <span class="txt">
@@ -117,7 +117,7 @@ if ($layoutType == applicationConstants::SCREEN_DESKTOP) {
             </div>
         </li>
     <?php }
-} elseif ($layoutType == applicationConstants::SCREEN_MOBILE) { ?>
+        } elseif ($layoutType == applicationConstants::SCREEN_MOBILE) { ?>
     <div class="offcanvas offcanvas-start  offcanvas-account" tabindex="-1" id="offcanvas-account">
         <div class="offcanvas-header">
             <h5 class="offcanvas-title"><?php echo Labels::getLabel('LBL_PROFILE', $siteLangId); ?> </h5>

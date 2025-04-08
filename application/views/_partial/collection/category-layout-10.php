@@ -73,8 +73,8 @@ if (isset($collection['categories']) && count($collection['categories'])) { ?>
                                             </div>
                                             <div class="products-foot">
                                                 <?php if ($product['product_rating']) { ?>
-                                                    <div class="product-ratings">
-                                                        <svg class="svg svg-star" width="14" height="14">
+                                                    <div class="product-ratings" aria-label="Rated <?php echo $product['product_rating']; ?>">
+                                                        <svg class="svg svg-star" width="14" height="14" aria-hidden="true">
                                                             <use xlink:href="/images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#star-yellow">
                                                             </use>
                                                         </svg>

@@ -93,8 +93,8 @@
                             <?php } ?>
 
                             <li class="quick-nav-item item-desktop wishListJs">
-                                <button class="quick-nav-link button-store" type="button">
-                                    <svg class="svg" width="20" height="20">
+                                <button class="quick-nav-link button-store" type="button" aria-label="Add To Wishlist">
+                                    <svg class="svg" width="20" height="20" aria-hidden="true">
                                         <use
                                             xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#wishlist">
                                         </use>
@@ -108,7 +108,7 @@
                                 <button class="quick-nav-link btn-mega-search toggle--search" role="button"
                                     data-bs-backdrop="true" data-bs-toggle="offcanvas" data-bs-target="#mega-nav-search"
                                     aria-label="search">
-                                    <svg class="svg" width="20" height="20">
+                                    <svg class="svg" width="20" height="20" aria-hidden="true">
                                         <use
                                             xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#magnifying">
                                         </use>
@@ -119,8 +119,8 @@
                             <?php if ($controllerName != 'Cart' && (User::isBuyer(true) || (!UserAuthentication::isUserLogged()))) { ?>
                                 <li class="quick-nav-item" id="cartSummaryJs">
                                     <button class="quick-nav-link button-cart" type="button" data-bs-toggle="offcanvas"
-                                        data-bs-target="#sideCartJs">
-                                        <svg class="svg" width="20" height="20">
+                                        data-bs-target="#sideCartJs" aria-label="Cart">
+                                        <svg class="svg" width="20" height="20" aria-hidden="true">
                                             <use
                                                 xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#cart">
                                             </use>
