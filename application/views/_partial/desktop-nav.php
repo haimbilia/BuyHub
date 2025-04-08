@@ -4,7 +4,7 @@
         <?php if ($isMegaMenuEnabled == Navigations::LAYOUT_MEGA_MENU) { ?>
             <li role="none">
                 <button class="hamburger-categories dropdown-toggle-custom" type="button" data-bs-toggle="offcanvas"
-                    data-bs-target="#categories-menu" aria-controls="categories-menu" onclick="openMobileMenu();">
+                    data-bs-target="#categories-menu" aria-controls="categories-menu" onclick="openMobileMenu();" role="menuitem">
                     <svg class="svg" width="16" height="16">
                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#hamburger-menu">
                         </use>
@@ -34,7 +34,7 @@
                         } ?>
                         <li class="navigation-item <?php echo $navchild; ?>" role="none">
                             <a class="navigation-link" target="<?php echo $target; ?>" data-org-url="<?php echo $OrgnavUrl; ?>"
-                                href="<?php echo $href; ?>" role="menuitem"><?php echo $link['nlink_caption']; ?></a>
+                                href="<?php echo $href; ?>" role="menuitem" aria-label="<?php echo $link['nlink_caption']; ?>"><?php echo $link['nlink_caption']; ?></a>
                             <?php if (isset($link['children']) && count($link['children']) > 0) { ?>
                                 <span class="link__mobilenav"></span>
                                 <div class="subnav">
