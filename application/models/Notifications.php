@@ -205,6 +205,8 @@ class Notifications extends MyAppModel
     public static function triggerNotification($notificationId = 0)
     {
         $srch = new SearchBase(static::DB_TBL, 'unt');
+        $srch->joinTable(UserAuthentication::DB_TBL_USER_AUTH, 'INNER JOIN', 'uauth.uauth_user_id = unt.unotification_user_id', 'uauth');
+        $srch->addCondition('uauth_fcm_id', '!=', '');
         if ($notificationId) {
             $srch->addCondition('unotification_id', '=', $notificationId);
         } else {

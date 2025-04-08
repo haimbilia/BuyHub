@@ -82,30 +82,6 @@ if (!empty($orderDetail['billingAddress'])) {
     }
 }
 
-
-
-if (isset($orderDetail['pickupAddress']) && !empty($orderDetail['pickupAddress'])) {
-    $pickUpAddress = $orderDetail['pickupAddress']['oua_name'] . '<br/>';
-    if ($orderDetail['pickupAddress']['oua_address1'] != '') {
-        $pickUpAddress .= $orderDetail['pickupAddress']['oua_address1'] . '<br/>';
-    }
-    if ($orderDetail['pickupAddress']['oua_address2'] != '') {
-        $pickUpAddress .= $orderDetail['pickupAddress']['oua_address2'] . '<br/>';
-    }
-    if ($orderDetail['pickupAddress']['oua_city'] != '') {
-        $pickUpAddress .= $orderDetail['pickupAddress']['oua_city'] . ',';
-    }
-    if ($orderDetail['pickupAddress']['oua_zip'] != '') {
-        $pickUpAddress .= $orderDetail['pickupAddress']['oua_state'];
-    }
-    if ($orderDetail['pickupAddress']['oua_zip'] != '') {
-        $pickUpAddress .= '-' . $orderDetail['pickupAddress']['oua_zip'];
-    }
-    if ($orderDetail['pickupAddress']['oua_phone'] != '') {
-        $pickUpAddress .= '<br><span class="default-ltr">' . ValidateElement::formatDialCode($orderDetail['pickupAddress']['oua_phone_dcode']) . $orderDetail['pickupAddress']['oua_phone'] . '</span>';
-    }
-}
-
 $paymentMethodName = empty($orderDetail['plugin_name']) ? $orderDetail['plugin_identifier'] : $orderDetail['plugin_name'];
 if (!empty($paymentMethodName) && $orderDetail['order_pmethod_id'] > 0 && $orderDetail['order_is_wallet_selected'] > 0) {
     $paymentMethodName  .= ' + ';
@@ -123,7 +99,29 @@ if ($orderDetail['order_is_wallet_selected'] > 0) {
         </tr>
         <?php $count = 0;
         foreach ($childOrderDetail as $childOrder) {
-            if ($childOrder['op_product_type'] != Product::PRODUCT_TYPE_DIGITAL && !empty($orderDetail['shippingAddress'])) {
+            if (isset($orderDetail[$childOrder['op_id']]['pickupAddress']) && !empty($orderDetail[$childOrder['op_id']]['pickupAddress'])) {
+                $pickUpAddress = $orderDetail[$childOrder['op_id']]['pickupAddress']['oua_name'] . '<br/>';
+                if ($orderDetail[$childOrder['op_id']]['pickupAddress']['oua_address1'] != '') {
+                    $pickUpAddress .= $orderDetail[$childOrder['op_id']]['pickupAddress']['oua_address1'] . '<br/>';
+                }
+                if ($orderDetail[$childOrder['op_id']]['pickupAddress']['oua_address2'] != '') {
+                    $pickUpAddress .= $orderDetail[$childOrder['op_id']]['pickupAddress']['oua_address2'] . '<br/>';
+                }
+                if ($orderDetail[$childOrder['op_id']]['pickupAddress']['oua_city'] != '') {
+                    $pickUpAddress .= $orderDetail[$childOrder['op_id']]['pickupAddress']['oua_city'] . ',';
+                }
+                if ($orderDetail[$childOrder['op_id']]['pickupAddress']['oua_zip'] != '') {
+                    $pickUpAddress .= $orderDetail[$childOrder['op_id']]['pickupAddress']['oua_state'];
+                }
+                if ($orderDetail[$childOrder['op_id']]['pickupAddress']['oua_zip'] != '') {
+                    $pickUpAddress .= '-' . $orderDetail[$childOrder['op_id']]['pickupAddress']['oua_zip'];
+                }
+                if ($orderDetail[$childOrder['op_id']]['pickupAddress']['oua_phone'] != '') {
+                    $pickUpAddress .= '<br><span class="default-ltr">' . ValidateElement::formatDialCode($orderDetail[$childOrder['op_id']]['pickupAddress']['oua_phone_dcode']) . $orderDetail[$childOrder['op_id']]['pickupAddress']['oua_phone'] . '</span>';
+                }
+            }
+
+            if (($childOrder['op_product_type'] != Product::PRODUCT_TYPE_DIGITAL || $childOrder['op_product_type'] != Product::PRODUCT_TYPE_SERVICE) && !empty($orderDetail['shippingAddress'])) {
                 $shippingAddress = $orderDetail['shippingAddress']['oua_name'] . '<br/>';
                 if ($orderDetail['shippingAddress']['oua_address1'] != '') {
                     $shippingAddress .= $orderDetail['shippingAddress']['oua_address1'] . '<br/>';
@@ -191,10 +189,10 @@ if ($orderDetail['order_is_wallet_selected'] > 0) {
                         <tbody>
                             <tr>
                                 <td><strong><?php echo Labels::getLabel('LBL_Bill_to', $siteLangId); ?></strong> <br><?php echo $billingAddress; ?></td>
-                                <?php if ($childOrder['op_product_type'] != Product::PRODUCT_TYPE_DIGITAL && !empty($orderDetail['shippingAddress'])) { ?>
+                                <?php if (($childOrder['op_product_type'] != Product::PRODUCT_TYPE_DIGITAL || $childOrder['op_product_type'] != Product::PRODUCT_TYPE_SERVICE) && !empty($orderDetail['shippingAddress'])) { ?>
                                     <td><strong><?php echo Labels::getLabel('LBL_Ship_to', $siteLangId); ?></strong>:<br><?php echo $shippingAddress; ?></td>
                                 <?php } ?>
-                                <?php if (!empty($orderDetail['pickupAddress'])) { ?>
+                                <?php if (!empty($orderDetail[$childOrder['op_id']]['pickupAddress'])) { ?>
                                     <td><strong><?php echo Labels::getLabel('LBL_Pickup_Details', $siteLangId); ?></strong>:<br> <br><?php echo $pickUpAddress; ?></td>
                                 <?php } ?>
                             </tr>
