@@ -15,9 +15,11 @@ $selectFld->setFieldTagAttribute('id', 'searched_category');
 
 <?php if ($openSerachForm) {
     $headerSrchFrm->setFormTagAttribute('class', ' open-search-form');
+    $headerSrchFrm->setFormTagAttribute('role', 'Search');
+    $headerSrchFrm->setFormTagAttribute('id', 'frm-main-search');
     $keywordFld->setFieldTagAttribute('class', 'open-search-input search--keyword search--keyword--js');
 ?>
-    <div class="open-search" role="Search">
+    <div class="open-search">
         <?php echo $headerSrchFrm->getFormTag(); ?>
         <?php /* <select class="open-search-select" name="" id="">
                 <option value="">Select</option>
@@ -37,7 +39,7 @@ $selectFld->setFieldTagAttribute('id', 'searched_category');
     </div>
 <?php } else {
     $headerSrchFrm->setFormTagAttribute('class', ' mega-search-form');
-    $keywordFld->setFieldTagAttribute('class', 'mega-search-input search--keyword search--keyword--js');    
+    $keywordFld->setFieldTagAttribute('class', 'mega-search-input search--keyword search--keyword--js');
 ?>
     <div class="offcanvas offcanvas-top offcanvas-mega-search" tabindex="-1" id="mega-nav-search">
 
@@ -65,7 +67,7 @@ $selectFld->setFieldTagAttribute('id', 'searched_category');
                         title="<?php echo FatApp::getConfig('CONF_WEBSITE_NAME_' . $siteLangId, FatUtility::VAR_STRING, '') ?>" <?php echo $logoWidth; ?> />
                 </a>
             </div>
-            <div class="mega-search-inner" role="Search">
+            <div class="mega-search-inner">
                 <?php echo $headerSrchFrm->getFormTag(); ?>
                 <?php echo $headerSrchFrm->getFieldHTML('keyword'); ?>
                 <div id="search-suggestions-js"> </div>

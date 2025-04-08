@@ -8,7 +8,7 @@ $lazyLoading = $lazyLoading ?? true;
 $imageUrl = isset($imageUrl) ? $imageUrl : '';
 $ratio = isset($ratio) ? $ratio : '';
 
-$alt = isset($alt) ? htmlspecialchars_decode($alt) : '';
+$alt = isset($alt) ? htmlspecialchars_decode($alt) : FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId, FatUtility::VAR_STRING, '');
 $title = isset($title) ? htmlspecialchars_decode($title) : $alt;
 ?>
 <picture>
@@ -58,5 +58,5 @@ $title = isset($title) ? htmlspecialchars_decode($title) : $alt;
 
         <source srcset="<?php echo $url; ?>" type="image/jpeg" <?php echo $media; ?>>
     <?php } ?>
-    <img <?php (true == $lazyLoading) ? "loading='lazy'" : ""; ?> <?php echo !empty($ratio) ? "data-ratio='" . $ratio . "'" : ""; ?> src="<?php echo empty($imageUrl) ? rtrim($jpgImageUrl[ImageDimension::VIEW_DESKTOP], ',') : rtrim($imageUrl, ','); ?>" alt="<?php echo $alt; ?>" title="<?php echo $title; ?>" <?php if (empty($alt)) { ?> role="presentation" <?php } ?>>
+    <img <?php (true == $lazyLoading) ? "loading='lazy'" : ""; ?> <?php echo !empty($ratio) ? "data-ratio='" . $ratio . "'" : ""; ?> src="<?php echo empty($imageUrl) ? rtrim($jpgImageUrl[ImageDimension::VIEW_DESKTOP], ',') : rtrim($imageUrl, ','); ?>" alt="<?php echo $alt; ?>" title="<?php echo $title; ?>">
 </picture>
