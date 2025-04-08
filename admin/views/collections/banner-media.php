@@ -126,6 +126,6 @@ require_once(CONF_THEME_PATH . '_partial/listing/form.php'); ?>
         let recordId = $(this).closest("form").find('input[name="banner_id"]').val();
         let langId = $("#imageLanguageJs").val();
         let collectionId = '<?php echo $collectionId; ?>';
-        loadBannerImages(collectionId, recordId, '<?php echo ImageDimension::VIEW_THUMB; ?>', slideScreen, langId);
+        loadBannerImages(collectionId, recordId, langId, slideScreen);
     });
 </script>

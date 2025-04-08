@@ -263,3 +263,4 @@
     - Bug-089263 - it shows wrong validation related to Minimum order quantity.
     - Bug-089818 - wrong notification in case of the transaction details sent to admin.
     - Bug-089896 - Lable not maneged properly.
+    - Bug-092470 - wrong pickcup details are appearing on the Buyer order receipt.
