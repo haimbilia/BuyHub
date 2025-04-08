@@ -40,6 +40,7 @@
                     ],
                     'ratio' => '1:1',
                     'alt' => $product['prodcat_name'],
+                    'title' =>  $product['selprod_title'],
                     'imageUrl' => UrlHelper::getCachedUrl(UrlHelper::generateFileUrl('image', 'product', array($product['product_id'], (isset($prodImgSize) && isset($i) && ($i == 1)) ? $prodImgSize : ImageDimension::VIEW_CLAYOUT1, $product['selprod_id'], 0, $siteLangId), CONF_WEBROOT_FRONTEND) . $uploadedTime, CONF_IMG_CACHE_TIME, '.jpg'),
                     'siteLangId' => $siteLangId,
                 ];

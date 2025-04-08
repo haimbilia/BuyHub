@@ -2259,7 +2259,7 @@ class CommonHelper extends FatUtility
     public static function getCopyRight($siteLangId, $backEnd = false, $includeVersion = false)
     {
         if (self::demoUrl()) {
-            $str = 'Copyright &copy; ' . date('Y') . ' <a target="_blank" href="https://yo-kart.com">Yo!Kart</a></a>';
+            $str = 'Copyright &copy; ' . date('Y') . ' <a target="_blank" href="https://yo-kart.com" aria-label="Yo!Kart open in new tab">Yo!Kart</a></a>';
         } else {
             if ((FatApp::getController() == 'HomeController' || true == $backEnd) && false == WHITE_LABELED) {
                 $str = 'Copyright &copy; ' . date('Y') . ' ' . FatApp::getConfig("CONF_WEBSITE_NAME_" . $siteLangId, FatUtility::VAR_STRING, '');
@@ -2282,10 +2282,10 @@ class CommonHelper extends FatUtility
     {
         $str = '';
         if (self::demoUrl()) {
-            $str = 'Developed by <a target="_blank" href="https://www.fatbit.com/">FATbit Technologies</a>';
+            $str = 'Developed by <a target="_blank" href="https://www.fatbit.com/" aria-label="FATbit Technologies Opens in new tab">FATbit Technologies</a>';
         } else {
             if ((FatApp::getController() == 'HomeController' || FatApp::getAction() == 'loginForm' || true == $backEnd) && false == WHITE_LABELED) {
-                $str = 'Technology Partner: <a class="link-underline" href="https://www.fatbit.com/" target="_blank" rel="nofollow">FATbit</a>';
+                $str = 'Technology Partner: <a class="link-underline" href="https://www.fatbit.com/" target="_blank" rel="nofollow" aria-label="FATbit opens in new tab">FATbit</a>';
             }
         }
         return $str;
