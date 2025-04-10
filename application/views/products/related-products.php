@@ -9,9 +9,9 @@ if ($relatedProductsRs) { ?>
                 </div>
                 <div class="section-action">
                     <div class="slider-controls relatedprod">
-                        <button class="btn btn-prev" type="button" data-href="#product-listing-rep"> <span class=""></span>
+                        <button class="btn btn-prev" type="button" data-href="#product-listing-rep" aria-label="Previous"> <span class=""></span>
                         </button>
-                        <button class="btn btn-next" type="button" data-href="#product-listing-rep"> <span class=""></span>
+                        <button class="btn btn-next" type="button" data-href="#product-listing-rep" aria-label="Next"> <span class=""></span>
                         </button>
                     </div>
                 </div>

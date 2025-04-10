@@ -19,7 +19,7 @@
         ?>
         <div class="shop">
             <div class="shop-body">
-                <a title="<?php echo $prodcatName; ?>" href="<?php echo $prodUrl; ?>">
+                <a href="<?php echo $prodUrl; ?>" aria-label="<?php echo $prodcatName; ?>">
                     <?php $this->includeTemplate('_partial/picture-tag.php', $pictureAttr); ?>
                 </a>
             </div>
@@ -33,8 +33,8 @@
                     <?php echo $shop['shopData']['state_name']; ?>    <?php echo ($shop['shopData']['country_name'] && $shop['shopData']['state_name']) ? ', ' : ''; ?>    <?php echo $shop['shopData']['country_name']; ?>
                 </div>
                 <?php if (round($collection['rating'][$shop['shopData']['shop_id']]) > 0) { ?>
-                    <div class="product-ratings">
-                        <svg class="svg svg-star" width="14" height="14">
+                    <div class="product-ratings" aria-label="Rated <?php echo round($collection['rating'][$shop['shopData']['shop_id']], 1); ?>">
+                        <svg class="svg svg-star" width="14" height="14" aria-hidden="true">
                             <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#star-yellow"></use>
                         </svg>
                         <span class="rate">

@@ -14,12 +14,12 @@
                     <div class="section-heading">
                         <h2><?php echo Labels::getLabel('LBL_SHOP_COLLECTIONS'); ?></h2>
                     </div>
-                    <div class="section-action" >
+                    <div class="section-action">
                         <div class="slider-controls shopprod">
-                            <button class="btn btn-prev slick-arrow arrow-prev" type="button">
+                            <button class="btn btn-prev slick-arrow arrow-prev" type="button" aria-label="Previous">
                                 <span></span>
                             </button>
-                            <button class="btn btn-next slick-arrow arrow-next" type="button">
+                            <button class="btn btn-next slick-arrow arrow-next" type="button" aria-label="Next">
                                 <span></span>
                             </button>
                         </div>

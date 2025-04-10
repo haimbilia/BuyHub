@@ -31,7 +31,7 @@
                         ];
                     ?>
                         <div class="brand">
-                            <a href="<?php echo $productUrl; ?>">
+                            <a href="<?php echo $productUrl; ?>" aria-label="<?php echo (!empty($fileRow['afile_attribute_alt'])) ? $fileRow['afile_attribute_alt'] : $prodcatName; ?>">
                                 <div class="brand-thumb">
                                     <?php $this->includeTemplate('_partial/picture-tag.php', $pictureAttr); ?>
                                 </div>

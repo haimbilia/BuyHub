@@ -53,8 +53,7 @@ if (isset($collection['categories']) && count($collection['categories'])) { ?>
 
                                                 <?php $uploadedTime = AttachedFile::setTimeParam($product['product_updated_on']); ?>
                                                 <div class="products-img">
-                                                    <a title="<?php echo $product['selprod_title']; ?>"
-                                                        href="<?php echo !isset($product['promotion_id']) ? UrlHelper::generateUrl('Products', 'View', array($product['selprod_id'])) : UrlHelper::generateUrl('Products', 'track', array($product['promotion_record_id'])); ?>">
+                                                    <a href="<?php echo !isset($product['promotion_id']) ? UrlHelper::generateUrl('Products', 'View', array($product['selprod_id'])) : UrlHelper::generateUrl('Products', 'track', array($product['promotion_record_id'])); ?>" aria-label="<?php echo $product['selprod_title']; ?>">
                                                         <?php
                                                         $fileRow = CommonHelper::getImageAttributes(AttachedFile::FILETYPE_PRODUCT_IMAGE, $product['product_id']);
                                                         $pictureAttr = [
@@ -74,8 +73,8 @@ if (isset($collection['categories']) && count($collection['categories'])) { ?>
                                             </div>
                                             <div class="products-foot">
                                                 <?php if ($product['product_rating']) { ?>
-                                                    <div class="product-ratings">
-                                                        <svg class="svg svg-star" width="14" height="14">
+                                                    <div class="product-ratings" aria-label="Rated <?php echo $product['product_rating']; ?>">
+                                                        <svg class="svg svg-star" width="14" height="14" aria-hidden="true">
                                                             <use xlink:href="/images/retina/sprite.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#star-yellow">
                                                             </use>
                                                         </svg>

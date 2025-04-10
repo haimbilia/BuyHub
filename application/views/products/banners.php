@@ -18,7 +18,7 @@
 
                     <div class="poster">
                         <a href="<?php echo UrlHelper::generateUrl('Banner', 'track', array($val['banner_id'])); ?>"
-                            target="<?php echo $val['banner_target']; ?>" title="<?php echo $val['banner_title']; ?>">
+                            target="<?php echo $val['banner_target']; ?>" aria-label="<?php echo $val['banner_title']; ?>">
                             <?php
                             $pictureAttr = [
                                 'siteLangId' => $siteLangId,

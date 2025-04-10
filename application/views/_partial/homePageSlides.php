@@ -58,16 +58,20 @@ if (isset($slides) && count($slides)) { ?>
                         }
                     }
                     if ($haveUrl) {
-                        $out .= '<a target="' . $slide['slide_target'] . '" href="' . $slideUrl . '">';
+                        $arialLabelTxt = ($slide['slide_target'] == applicationConstants::LINK_TARGET_BLANK_WINDOW) ? 'Opens in a new tab' : 'Opens in a current tab';
+
+                        $out .= '<a target="' . $slide['slide_target'] . '" href="' . $slideUrl . '" aria-label="' . $slide['slide_title'] . ' ' . $arialLabelTxt . '">';
                     }
                     $out .= '<div class="hero-slider-media">';
+                    $slideTypeArr = Slides::getSlideTypesArr($siteLangId);
                     $pictureAttr = [
                         'siteLangId' => $siteLangId,
                         'webpImageUrl' => [ImageDimension::VIEW_MOBILE => $mobileWebpUrl, ImageDimension::VIEW_TABLET => $tabletWebpUrl, ImageDimension::VIEW_DESKTOP => $desktopWebpUrl],
                         'jpgImageUrl' => [ImageDimension::VIEW_MOBILE => $mobileUrl, ImageDimension::VIEW_TABLET => $tabletUrl, ImageDimension::VIEW_DESKTOP => $desktopUrl],
                         'imageUrl' => $desktopUrl,
                         'ratio' => $imageDimension[ImageDimension::VIEW_DESKTOP]['aspectRatio'],
-                        'alt' => $slide['slide_title'],
+                        'alt' => $slideTypeArr[$slide['slide_type']] . ' ' . $slide['slide_title'],
+                        'title' => $slide['slide_title'],
                     ];
                     $out .= $this->includeTemplate('_partial/picture-tag.php', $pictureAttr, true, true);
                     $out .= '</div>';

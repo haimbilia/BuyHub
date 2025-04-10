@@ -1,10 +1,10 @@
 <!-- Start Navigation Bar -->
-<div class="navigation-wrapper">
-    <ul class="navigation">
+<div class="navigation-wrapper" role="navigation" aria-label="Main menu">
+    <ul class="navigation" role="menubar">
         <?php if ($isMegaMenuEnabled == Navigations::LAYOUT_MEGA_MENU) { ?>
-            <li>
+            <li role="none">
                 <button class="hamburger-categories dropdown-toggle-custom" type="button" data-bs-toggle="offcanvas"
-                    data-bs-target="#categories-menu" aria-controls="categories-menu" onclick="openMobileMenu();">
+                    data-bs-target="#categories-menu" aria-controls="categories-menu" onclick="openMobileMenu();" role="menuitem">
                     <svg class="svg" width="16" height="16">
                         <use xlink:href="<?php echo CONF_WEBROOT_URL; ?>images/retina/sprite-header.svg<?php echo AttachedFile::setTimeParam(RELEASE_DATE); ?>#hamburger-menu">
                         </use>
@@ -32,9 +32,9 @@
                             $navchild = 'navchild';
                             $target = '_self';
                         } ?>
-                        <li class="navigation-item <?php echo $navchild; ?>">
+                        <li class="navigation-item <?php echo $navchild; ?>" role="none">
                             <a class="navigation-link" target="<?php echo $target; ?>" data-org-url="<?php echo $OrgnavUrl; ?>"
-                                href="<?php echo $href; ?>"><?php echo $link['nlink_caption']; ?></a>
+                                href="<?php echo $href; ?>" role="menuitem" aria-label="<?php echo $link['nlink_caption']; ?>"><?php echo $link['nlink_caption']; ?></a>
                             <?php if (isset($link['children']) && count($link['children']) > 0) { ?>
                                 <span class="link__mobilenav"></span>
                                 <div class="subnav">
@@ -45,26 +45,26 @@
                                                 foreach ($link['children'] as $children) {
                                                     $subCatUrl = UrlHelper::generateUrl('category', 'view', array($children['prodcat_id']));
                                                     $subCatOrgUrl = UrlHelper::generateUrl('category', 'view', array($children['prodcat_id']), '', null, false, $getOrgUrl);
-                                                    ?>
+                                                ?>
                                                     <div class="categories-cols">
-                                                        <ul class="categories-list">
-                                                            <li class="categories-list-item">
+                                                        <ul class="categories-list" role="menu">
+                                                            <li class="categories-list-item" role="none">
                                                                 <a class="categories-list-link categories-list-head"
                                                                     data-org-url="<?php echo $subCatOrgUrl; ?>"
-                                                                    href="<?php echo $subCatUrl; ?>"><?php echo $children['prodcat_name']; ?></a>
+                                                                    href="<?php echo $subCatUrl; ?>" role="menuitem"><?php echo $children['prodcat_name']; ?></a>
                                                             </li>
                                                             <?php $subChild = 0;
                                                             foreach ($children['children'] as $childCat) {
                                                                 $catUrl = UrlHelper::generateUrl('category', 'view', array($childCat['prodcat_id']));
                                                                 $catOrgUrl = UrlHelper::generateUrl('category', 'view', array($children['prodcat_id']), '', null, false, $getOrgUrl);
-                                                                ?>
+                                                            ?>
 
-                                                                <li class="categories-list-item">
+                                                                <li class="categories-list-item" role="none">
                                                                     <a class="categories-list-link" data-org-url="<?php echo $catOrgUrl; ?>"
                                                                         href="<?php echo $catUrl; ?>">
                                                                         <?php echo $childCat['prodcat_name']; ?></a>
                                                                 </li>
-                                                                <?php
+                                                            <?php
                                                                 if ($subChild++ == 7) {
                                                                     break;
                                                                 }
@@ -73,7 +73,7 @@
                                                             ?>
                                                         </ul>
                                                     </div>
-                                                    <?php
+                                                <?php
                                                     if ($subyChild++ == 8) {
                                                         break;
                                                     }
@@ -95,17 +95,17 @@
                                 </div>
                             <?php } ?>
                         </li> <?php
+                            }
+                        }
                     }
-                }
-            }
-        } ?>
+                } ?>
 
         <?php
         foreach ($headerNavigation as $nav) {
             $subMoreNavigation = (count($nav['pages']) > $navLinkCount) ? array_slice($nav['pages'], $navLinkCount) : array();
             if (count($subMoreNavigation)) { ?>
-                <li class="navigation-item navchild seemore">
-                    <a class="navigation-link"><?php echo Labels::getLabel('NAV_MORE', $siteLangId); ?></a>
+                <li class="navigation-item navchild seemore" role="none">
+                    <button type="button" class="navigation-link" role="menuitem"><?php echo Labels::getLabel('NAV_MORE', $siteLangId); ?></button>
                     <span class="link__mobilenav"></span>
                     <div class="subnav">
                         <div class="subnav-inner">
@@ -115,26 +115,26 @@
                                     foreach ($subMoreNavigation as $index => $link) {
                                         $url = CommonHelper::getnavigationUrl($link['nlink_type'], $link['nlink_url'], $link['nlink_cpage_id'], $link['nlink_category_id']);
                                         $OrgUrl = CommonHelper::getnavigationUrl($link['nlink_type'], $link['nlink_url'], $link['nlink_cpage_id'], $link['nlink_category_id'], $getOrgUrl);
-                                        ?>
+                                    ?>
                                         <div class="categories-cols">
-                                            <ul class="categories-list">
-                                                <li class="categories-list-item">
+                                            <ul class="categories-list" role="menu">
+                                                <li class="categories-list-item" role="none">
                                                     <a class="categories-list-link categories-list-head"
                                                         data-org-url="<?php echo $OrgUrl; ?>"
-                                                        href="<?php echo $url; ?>"><?php echo $link['nlink_caption']; ?></a>
+                                                        href="<?php echo $url; ?>" role="menuitem"><?php echo $link['nlink_caption']; ?></a>
                                                 </li>
                                                 <?php $subChild = 0;
                                                 foreach ($link['children'] as $childCat) {
                                                     $catUrl = UrlHelper::generateUrl('category', 'view', array($childCat['prodcat_id']));
                                                     $catOrgUrl = UrlHelper::generateUrl('category', 'view', array($childCat['prodcat_id']), '', null, false, $getOrgUrl);
-                                                    ?>
+                                                ?>
 
-                                                    <li class="categories-list-item">
+                                                    <li class="categories-list-item" role="none">
                                                         <a class="categories-list-link" data-org-url="<?php echo $catOrgUrl; ?>"
                                                             href="<?php echo $catUrl; ?>">
                                                             <?php echo $childCat['prodcat_name']; ?></a>
                                                     </li>
-                                                    <?php
+                                                <?php
                                                     if ($subChild++ == 7) {
                                                         break;
                                                     }
@@ -149,7 +149,7 @@
                         </div>
                     </div>
                 </li>
-            <?php }
+        <?php }
         } ?>
     </ul>
 </div>

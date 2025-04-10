@@ -7,6 +7,7 @@ $keywordFld->overrideFldType('search');
 $keywordFld->setFieldTagAttribute('placeholder', Labels::getLabel('LBL_I_am_looking_for...', $siteLangId));
 
 $keywordFld->setFieldTagAttribute('id', 'header_search_keyword');
+$keywordFld->setFieldTagAttribute('aria-label', 'Search');
 
 $selectFld = $headerSrchFrm->getField('category');
 $selectFld->setFieldTagAttribute('id', 'searched_category');
@@ -14,6 +15,8 @@ $selectFld->setFieldTagAttribute('id', 'searched_category');
 
 <?php if ($openSerachForm) {
     $headerSrchFrm->setFormTagAttribute('class', ' open-search-form');
+    $headerSrchFrm->setFormTagAttribute('role', 'Search');
+    $headerSrchFrm->setFormTagAttribute('id', 'frm-main-search');
     $keywordFld->setFieldTagAttribute('class', 'open-search-input search--keyword search--keyword--js');
 ?>
     <div class="open-search">
@@ -22,9 +25,9 @@ $selectFld->setFieldTagAttribute('id', 'searched_category');
                 <option value="">Select</option>
             </select>  */ ?>
         <?php echo $headerSrchFrm->getFieldHTML('keyword'); ?>
-        <button class="open-search-btn">
+        <button class="open-search-btn" aria-label="Search">
             <svg class="svg" width="18" height="18" xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24" fill="currentColor">
+                viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                 <path
                     d="M18.031 16.6168L22.3137 20.8995L20.8995 22.3137L16.6168 18.031C15.0769 19.263 13.124 20 11 20C6.032 20 2 15.968 2 11C2 6.032 6.032 2 11 2C15.968 2 20 6.032 20 11C20 13.124 19.263 15.0769 18.031 16.6168ZM16.0247 15.8748C17.2475 14.6146 18 12.8956 18 11C18 7.1325 14.8675 4 11 4C7.1325 4 4 7.1325 4 11C4 14.8675 7.1325 18 11 18C12.8956 18 14.6146 17.2475 15.8748 16.0247L16.0247 15.8748Z">
                 </path>
@@ -36,7 +39,8 @@ $selectFld->setFieldTagAttribute('id', 'searched_category');
     </div>
 <?php } else {
     $headerSrchFrm->setFormTagAttribute('class', ' mega-search-form');
-    $keywordFld->setFieldTagAttribute('class', 'mega-search-input search--keyword search--keyword--js'); ?>
+    $keywordFld->setFieldTagAttribute('class', 'mega-search-input search--keyword search--keyword--js');
+?>
     <div class="offcanvas offcanvas-top offcanvas-mega-search" tabindex="-1" id="mega-nav-search">
 
         <div class="mega-search">
