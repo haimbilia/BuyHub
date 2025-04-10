@@ -1086,7 +1086,7 @@ class EmailHandler extends FatModel
                     '{vendor_name}' => trim($val['op_shop_owner_name']),
                     '{order_items_table_format}' => $orderItemsTableFormatHtml,
                     '{order_shipping_information}' => '',
-                    '{order_user_email}' => $userInfo['credential_email'],
+                    '{order_user_email}' => $userInfo['credential_email'] ?? $userInfo['user_name'],
                     '{order_id}' => $orderDetail['order_number'],
                 );
 
