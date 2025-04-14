@@ -267,7 +267,7 @@ class ProductCategory extends MyAppModel
             $srch->addOrder('prodcat_name');
             $srch->addOrder('prodcat_identifier');
         } else {
-            $srch->addOrder('prodcat_ordercode');
+            $srch->addOrder('prodcat_display_order');
         }
 
         if (!empty($keywords)) {
