@@ -786,6 +786,8 @@ class User extends MyAppModel
         $newEmail = '';
         if (!empty($userData['user_email'])) {
             $newEmail = 'xxxxxxx-' . $this->mainTableRecordId . substr($userData['user_email'], strpos($userData['user_email'], "@"));
+        } else {
+            $newEmail = 'xxxxxxx-' . $this->mainTableRecordId .'@'.  $this->mainTableRecordId .'com';
         }
 
         $data = array(
