@@ -2568,7 +2568,7 @@ class User extends MyAppModel
                 $link = UrlHelper::generateFullUrl('GuestUser', 'loginForm');
                 if (!$this->userWelcomeEmailRegistration($postedData, $link, $this->commonLangId)) {
                     $db->rollbackTransaction();
-                    $message = Labels::getLabel("ERR_ERROR_IN_SENDING_WELCOME_EMAIL", $this->siteLangId);
+                    $message = Labels::getLabel("ERR_ERROR_IN_SENDING_WELCOME_EMAIL", $this->commonLangId);
                     return false;
                 }
             }
