@@ -1887,12 +1887,12 @@ END,   special_price_found ) as special_price_found'
             $srch->addCondition('shop_id', '=', $shopId);
         }
 
-        if (0 < $countryId) {
+        /*  if (0 < $countryId) {
             $srch->addCondition('country_id', '=', $countryId);
         }
         if (0 < $stateId) {
             $srch->addCondition('state_id', '=', $stateId);
-        }
+        } */
 
         $tmpQry = $srch->getQuery();
 
