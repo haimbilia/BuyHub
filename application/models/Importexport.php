@@ -3709,6 +3709,16 @@ class Importexport extends ImportexportCommon
                             $colValue = SellerProduct::setSellerProdFulfillmentType($colValue);
                             break;
                     }
+
+                    if (in_array($columnKey, array('selprod_deleted'))) {
+                        if($colValue == applicationConstants::YES) {
+                            $selprodObj = new SellerProduct($selprodId);
+                            if (!$selprodObj->deleteSellerProduct($selprodId)) {
+                                $inavlid = true;
+                            }
+                            continue 2;
+                        }
+                    }
                     /* Check if inventory already added for the product without option [ */
                     if (0 < $productId && true === $checkOption) {
                         $srch = Product::getSearchObject();
