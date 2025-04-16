@@ -264,3 +264,4 @@
     - Bug-089818 - wrong notification in case of the transaction details sent to admin.
     - Bug-089896 - Lable not maneged properly.
     - Bug-092470 - wrong pickcup details are appearing on the Buyer order receipt.
+    - Bug-092716 - Fulfillment Type Options Not Reflecting Admin Settings on Seller Product Setup Form.

@@ -840,14 +840,14 @@ class ProductsController extends SellerBaseController
 
             if ($shipBySeller && !FatApp::getConfig('CONF_SHIPPED_BY_ADMIN_ONLY', FatUtility::VAR_INT, 0)) {
                 $fulfillmentType = Shop::getAttributesByUserId($this->userParentId, 'shop_fulfillment_type');
+                $shopDetails = Shop::getAttributesByUserId($this->userParentId, null, false);
+                $address = new Address(0, $langId);
+                $addresses = $address->getData(Address::TYPE_SHOP_PICKUP, $shopDetails['shop_id']);
+                $fulfillmentType = empty($addresses) ? Shipping::FULFILMENT_SHIP : $fulfillmentType;
             } else {
                 $fulfillmentType = FatApp::getConfig('CONF_FULFILLMENT_TYPE', FatUtility::VAR_INT, -1);
             }
 
-            $shopDetails = Shop::getAttributesByUserId($this->userParentId, null, false);
-            $address = new Address(0, $langId);
-            $addresses = $address->getData(Address::TYPE_SHOP_PICKUP, $shopDetails['shop_id']);
-            $fulfillmentType = empty($addresses) ? Shipping::FULFILMENT_SHIP : $fulfillmentType;
 
             $productFulfillmentType = $frm->getField('product_fulfillment_type');
             $productFulfillmentType->options = Shipping::getFulFillmentArr($langId, $fulfillmentType);
