@@ -1,0 +1,59 @@
+.rfq-item {
+  display: block;
+  position: relative;
+  height: 100%;
+  border-radius: $common-radius;
+  border: $border;
+  //box-shadow: 0 0px 15px 0 rgba(0, 0, 0, 0.22);
+  background-color: $bg-white;
+  padding: 1.5rem;
+
+  box-sizing: border-box;
+  overflow: hidden;
+  word-wrap: break-word;
+  box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.1);
+  
+  .user {
+    display: flex;
+
+    gap: 0.5rem;
+    transition: all 0.3s ease 0s;
+    margin-bottom: 1rem;
+
+    img {
+      border-radius: $common-radius;
+      overflow: hidden;
+      width: 60px;
+      height: 60px;
+      max-width: 100%;
+    }
+
+    .user-name {
+      padding-top: 10px;
+      font-size: 1rem;
+      font-weight: $font-weight-normal;
+    }
+  }
+
+  .rfq-content {
+    p {
+      font-weight: $font-weight-regular;
+      font-size: 0.95rem;
+      padding: 0;
+    }
+  }
+}
+/* === Custom: Ensure RFQ image fills its container in listings === */
+.products__media {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: $common-radius;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+}

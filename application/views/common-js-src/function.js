@@ -1287,6 +1287,7 @@ function requestForQuoteFn(selprodId) {
                 true,
                 'data-bs-backdrop="static" data-bs-keyboard="false"'
             );
+			$(".addrIdJs").removeAttr("data-fatreq");
             $(".rfqDeliveryDateJs").datepicker("option", {
                 minDate: date,
                 onClose: function () {
@@ -1306,16 +1307,15 @@ function saveRfq(frm) {
         return;
     }
 
-    let addrId = $(".addrIdJs", frm).val();
-    if (
-        ("undefined" == typeof addrId || "" == addrId || "0" == addrId) &&
-        2 != $("#rfqProductTypeJs").val()
-    ) {
-        addAddress($(".selprodIdJs", frm).val());
-        fcom.displayErrorMessage(langLbl.deliveryAddressMandatory);
-        return false;
-    }
-
+	// let addrId = $(".addrIdJs", frm).val();
+	// if (
+	//     ("undefined" == typeof addrId || "" == addrId || "0" == addrId) &&
+	//     2 != $("#rfqProductTypeJs").val()
+	// ) {
+	//     addAddress($(".selprodIdJs", frm).val());
+	//     fcom.displayErrorMessage(langLbl.deliveryAddressMandatory);
+	//     return false;
+	// }
     $(".modalRfqJS .contentBodyJs")
         .addClass("processing-wrap")
         .prepend(fcom.getLoader());

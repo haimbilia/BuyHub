@@ -32,21 +32,12 @@
         background-color: #798189;
     }
 
-    &-y {
-        overflow-y: auto;
-    }
-
-    &-x {
-        overflow-x: auto;
-    }
 }
 
-.scroll {
-    &-y {
-        overflow-y: auto;
-    }
+.scroll-y {
+    overflow-y: auto;
+}
 
-    &-x {
-        overflow-x: auto;
-    }
+.scroll-x {
+    overflow-x: auto;
 }

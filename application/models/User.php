@@ -2,6 +2,16 @@
 
 class User extends MyAppModel
 {
+	/**
+     * split username and credential_username
+     */
+	private string $userRealName = '';
+    private string $credentialUsernameOverride = '';
+	/**
+     * split username and credential_username
+     */
+	 
+	 
     public const ADMIN_SESSION_ELEMENT_NAME = 'yokartAdmin';
     public const DB_TBL = 'tbl_users';
     public const DB_TBL_PREFIX = 'user_';
@@ -2755,6 +2765,26 @@ class User extends MyAppModel
      * @param  string $referralToken
      * @return mixed
      */
+	 
+	 
+	 
+	 /**
+     * split username and credential_username
+     */
+	public function setUserName($name)
+    {
+        $this->userRealName = $name;
+    }
+    public function setCredentialUsername($username)
+    {
+        $this->credentialUsernameOverride = $username;
+    }
+	 /**
+     * split username and credential_username
+     */
+	 
+	 
+	 
     public function validateUser($email, $username, $socialAccountId, $keyName, $userType, $referralToken = '')
     {
         $db = FatApp::getDb();
@@ -2880,15 +2910,19 @@ class User extends MyAppModel
 
         $db->startTransaction();
 
-        $userData = [
-            'user_name' => $username,
+        // Store full name in user_name (for tbl_users)
+			$userData = [
+			'user_name' => $username, // this remains full name
             'user_is_buyer' => $user_is_buyer,
             'user_is_supplier' => $user_is_supplier,
             'user_is_advertiser' => $user_is_advertiser,
             'user_preferred_dashboard' => $userPreferredDashboard,
             'user_registered_initially_for' => $user_registered_initially_for
         ];
-
+		// If it's a Google social login, override credential_username
+		$emailParts = explode('@', $email);
+		$googleUsername = $emailParts[0]; // this becomes 'credential_username'
+		
         $this->assignValues($userData);
         if (!$this->save()) {
             $this->error = Labels::getLabel("ERR_USER_COULD_NOT_BE_SET", $this->commonLangId) . $this->getError();
@@ -2896,7 +2930,7 @@ class User extends MyAppModel
         }
         $userId = $this->getMainTableRecordId();
         $this->updateUserMeta($socialIdColumn, $socialAccountId);
-        if (!$this->setLoginCredentials($username, $email, uniqid(), 1, 1)) {
+        if (!$this->setLoginCredentials($googleUsername, $email, uniqid(), 1, 1)) {
             $this->error = Labels::getLabel("ERR_LOGIN_CREDENTIALS_COULD_NOT_BE_SET", $this->commonLangId) . $this->getError();
             $db->rollbackTransaction();
             return false;

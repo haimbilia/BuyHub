@@ -1,4 +1,5 @@
 <?php
+
 header('Strict-Transport-Security: max-age=31536000; includeSubDomains');
 header("Content-Security-Policy: frame-ancestors 'self'");
 header('X-Frame-Options: SAMEORIGIN');

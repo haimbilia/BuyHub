@@ -216,20 +216,23 @@ class RequestForQuotesController extends MyAppController
         }
 
         $productType = FatApp::getPostedData('rfq_product_type', FatUtility::VAR_INT, Product::PRODUCT_TYPE_PHYSICAL);
-        if (empty($post['rfq_addr_id']) && Product::PRODUCT_TYPE_DIGITAL != $productType) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_DELIVERY_ADDRESS_IS_MANDATORY'), true);
-        }
+        // if (empty($post['rfq_addr_id']) && Product::PRODUCT_TYPE_DIGITAL != $productType) {
+		//     LibHelper::exitWithError(Labels::getLabel('ERR_DELIVERY_ADDRESS_IS_MANDATORY'), true);
+		// } 
 
-        $existingAddressUserId = Address::getAttributesById($post['rfq_addr_id'], 'addr_record_id');
+		$existingAddressUserId = 0;
+		if (!empty($post['rfq_addr_id'])) {
+			$existingAddressUserId = Address::getAttributesById($post['rfq_addr_id'], 'addr_record_id');
+		}
         $this->loggedUserId = UserAuthentication::getLoggedUserId(true);
-        if (
-            0 < $existingAddressUserId && (
-                (0 == $this->loggedUserId) ||
-                (0 < $this->loggedUserId && $this->loggedUserId != $existingAddressUserId)
-            )
-        ) {
-            LibHelper::exitWithError(Labels::getLabel('ERR_DELIVERY_ADDRESS_SHOULD_BELONGS_TO_CURRENT_USER'), true);
-        }
+		if (0 < $existingAddressUserId) {
+			if (
+				(0 == $this->loggedUserId) ||
+				(0 < $this->loggedUserId && $this->loggedUserId != $existingAddressUserId)
+			) {
+				LibHelper::exitWithError(Labels::getLabel('ERR_DELIVERY_ADDRESS_SHOULD_BELONGS_TO_CURRENT_USER'), true);
+			}
+		}
 
         $linkingType = FatApp::getPostedData('rfq_seller_linking_type', FatUtility::VAR_INT, RequestForQuote::SELLER_LINKING_OPEN);
 
@@ -670,4 +673,113 @@ class RequestForQuotesController extends MyAppController
         }
         die(FatUtility::convertToJson($json));
     }
+	
+public function listing()
+{
+
+$page = FatApp::getQueryStringData('page', FatUtility::VAR_INT, 1);
+$page = max($page, 1);
+$pageSize = 10;
+
+    $srch = new SearchBase('tbl_rfq', 'rfq');
+    $srch->addCondition('rfq_deleted', '=', 0);
+    $srch->addOrder('rfq_added_on', 'DESC');
+
+
+$srch->setPageNumber($page);
+$srch->setPageSize($pageSize);
+
+
+    $rs = $srch->getResultSet();
+    $rfqList = FatApp::getDb()->fetchAll($rs, 'rfq_id');
+
+
+    // Attach image path
+    foreach ($rfqList as $id => $rfq) {
+        $userRow = User::getAttributesById($rfq['rfq_user_id'], ['user_name']);
+        $rfqList[$id]['user_name'] = $userRow ? $userRow['user_name'] : '';
+
+        $imgSrch = new SearchBase('tbl_attached_files', 'af');
+        $imgSrch->addCondition('afile_type', '=', 67);
+        $imgSrch->addCondition('afile_record_id', '=', $rfq['rfq_id']);
+        $imgSrch->addCondition('afile_lang_id', '=', 1); // assuming Hebrew images
+
+        $imgSrch->addOrder('afile_id', 'DESC');
+        $imgSrch->setPageSize(1);
+        $imgSrch->doNotCalculateRecords(true);
+        $imgSrch->doNotLimitRecords(false);
+
+        $imgRs = $imgSrch->getResultSet();
+        $imgRow = FatApp::getDb()->fetch($imgRs);
+			// --- BuyHub: Use ImageController::rfq to serve image dynamically ---
+			if ($imgRow && !empty($imgRow['afile_id'])) {
+				$rfqList[$id]['afile_id'] = $imgRow['afile_id'];
+				$rfqList[$id]['image_url'] = CommonHelper::generateUrl('image', 'rfq', [$rfq['rfq_id'], 1, 'DEFAULT']) . '?t=' . $imgRow['afile_id'];
+
+			} else {
+				$rfqList[$id]['afile_id'] = 0;
+				$rfqList[$id]['image_url'] = CommonHelper::generateUrl('image', 'rfq', [$rfq['rfq_id'], 1, 'DEFAULT']) . '?t=0';
+
+			}
+    }
+
+    $this->set('rfqList', $rfqList);
+    $this->set('siteLangId', $this->siteLangId);
+
+if ($page > 1) {
+    $this->_template->render(false, false, 'request-for-quotes/list-rows.php');
+    return;
+}
+
+    $this->_template->render(true, true, 'request-for-quotes/listing.php');
+}
+
+
+
+public function ajaxListing()
+{
+    $page = FatApp::getPostedData('page', FatUtility::VAR_INT, 1);
+    $page = max(1, $page);
+    $pageSize = 10;
+
+    $srch = new SearchBase('tbl_rfq', 'rfq');
+    $srch->addCondition('rfq_deleted', '=', 0);
+    $srch->addOrder('rfq_added_on', 'DESC');
+    $srch->setPageNumber($page);
+    $srch->setPageSize($pageSize);
+
+    $rs = $srch->getResultSet();
+    $rfqList = FatApp::getDb()->fetchAll($rs, 'rfq_id');
+
+    foreach ($rfqList as $id => $rfq) {
+        $userRow = User::getAttributesById($rfq['rfq_user_id'], ['user_name']);
+        $rfqList[$id]['user_name'] = $userRow ? $userRow['user_name'] : '';
+
+        $imgSrch = new SearchBase('tbl_attached_files', 'af');
+        $imgSrch->addCondition('afile_type', '=', 67);
+        $imgSrch->addCondition('afile_record_id', '=', $rfq['rfq_id']);
+        $imgSrch->addCondition('afile_lang_id', '=', 1);
+        $imgSrch->addOrder('afile_id', 'DESC');
+        $imgSrch->setPageSize(1);
+        $imgSrch->doNotCalculateRecords(true);
+        $imgSrch->doNotLimitRecords(false);
+
+        $imgRs = $imgSrch->getResultSet();
+        $imgRow = FatApp::getDb()->fetch($imgRs);
+
+        if ($imgRow && !empty($imgRow['afile_id'])) {
+            $rfqList[$id]['afile_id'] = $imgRow['afile_id'];
+            $rfqList[$id]['image_url'] = CommonHelper::generateUrl('image', 'rfq', [$rfq['rfq_id'], 1, 'DEFAULT']) . '?t=' . $imgRow['afile_id'];
+        } else {
+            $rfqList[$id]['afile_id'] = 0;
+            $rfqList[$id]['image_url'] = CommonHelper::generateUrl('image', 'rfq', [$rfq['rfq_id'], 1, 'DEFAULT']) . '?t=0';
+        }
+    }
+
+    $this->set('rfqList', $rfqList);
+    $this->set('siteLangId', $this->siteLangId);
+    $this->_template->render(false, false, 'request-for-quotes/list-rows.php');
+}
+
+	
 }

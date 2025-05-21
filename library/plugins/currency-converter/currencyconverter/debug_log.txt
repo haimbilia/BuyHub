@@ -1,0 +1,2 @@
+GETRATES called at 2025-05-14T15:03:58+03:00 with: {"1":"USD","8":"EUR"}
+GETRATES called at 2025-05-14T15:05:38+03:00 with: {"1":"USD","8":"EUR"}

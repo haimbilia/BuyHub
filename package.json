@@ -18,7 +18,6 @@
         "gulp-svg-sprite": "^1.5.0",
         "gulp-watch": "^5.0.1",
         "mini-css-extract-plugin": "^2.6.1",
-        "node-sass": "^7.0.1",
         "npm": "^8.17.0",
         "sass-loader": "^13.0.2",
         "style-loader": "^3.3.1",
@@ -39,6 +38,6 @@
     },
     "homepage": "https://github.com/AblySoft268/Yokart-V8#readme",
     "devDependencies": {
-        "sass": "^1.54.4"
+        "sass": "^1.89.0"
     }
 }

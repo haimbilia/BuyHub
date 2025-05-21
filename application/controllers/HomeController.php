@@ -1958,4 +1958,15 @@ class HomeController extends MyAppController
     {
         $this->_template->render();
     }
+	
+public function firstVisitPopup()
+{
+    $tpl = new FatTemplate('', '');
+    $tpl->set('siteLangId', $this->siteLangId); // If you need language ID
+    echo $tpl->render(false, false, 'home/firstVisitPopup.php', true, true);
+    exit;
+}
+
+
+
 }

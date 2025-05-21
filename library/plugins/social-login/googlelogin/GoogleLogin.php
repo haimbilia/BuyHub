@@ -43,7 +43,7 @@ class GoogleLogin extends SocialMediaAuthBase
 
         $this->client = new Google_Client();
         $this->client->setApplicationName(FatApp::getConfig('CONF_WEBSITE_NAME_' . $this->langId, FatUtility::VAR_STRING, ''));
-        $this->client->setScopes(['email']);
+        $this->client->setScopes(['email', 'profile']);
         $this->client->setClientId($this->settings['client_id']);
         $this->client->setClientSecret($this->settings['client_secret']);
         $this->client->setRedirectUri($this->redirectUri);
@@ -136,11 +136,17 @@ class GoogleLogin extends SocialMediaAuthBase
      *
      * @return array
      */
-    public function getClientData(): array
-    {
-        return (array) $this->clientData;
-    }
-
+public function getClientData(): array
+{
+    return [
+        'id'          => $this->clientData->getId(),
+        'email'       => $this->clientData->getEmail(),
+        'name'        => $this->clientData->getName(),         // ✅ Full name
+        'given_name'  => $this->clientData->getGivenName(),    // Optional
+        'family_name' => $this->clientData->getFamilyName(),   // Optional
+        'picture'     => $this->clientData->getPicture(),      // Optional
+    ];
+}
     /**
      * getAuthUrl
      *

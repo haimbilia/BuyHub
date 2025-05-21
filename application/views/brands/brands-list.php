@@ -1,4 +1,4 @@
-<div class="cg-main">
+foundjs<div class="cg-main">
     <?php if (!empty($brandsArr)) {
         foreach ($brandsArr[$collectionLayoutType] as $allBrands) {
             if (!empty($allBrands['brands'])) {

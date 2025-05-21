@@ -1,6 +1,5 @@
 const { src, dest, watch, series, parallel, task } = require("gulp");
 const sass = require("gulp-sass")(require("sass"));
-sass.compiler = require("node-sass");
 const sourcemaps = require("gulp-sourcemaps");
 const autoprefixer = require("gulp-autoprefixer");
 const minify = require("gulp-minify");
@@ -89,3 +88,6 @@ function watchFiles() {
 
 exports.default = series(minifyjs, css, dashboard, manager);
 exports.watch = watchFiles;
+// --- BuyHub: compile full SCSS theme ---
+const theme = series(css, dashboard, manager);
+exports.theme = theme;

@@ -43,7 +43,8 @@ class ImageDimension extends FatUtility
     public const TYPE_CATEGORY_BANNER = 40;
     public const TYPE_ADMIN_BADGE_REQUEST = 41;
     public const TYPE_PUSH_NOTIFICATION = 42;
-
+    public const TYPE_RFQ = 43;
+	
     public const WIDTH = 'width';
     public const HEIGHT = 'height';
 
@@ -213,6 +214,9 @@ class ImageDimension extends FatUtility
                 break;
             case self::TYPE_PUSH_NOTIFICATION:
                 $imageDimensions = self::getPushNotification($sizeType);
+                break;
+            case self::TYPE_RFQ:
+                $imageDimensions = self::getRfqImageData($sizeType);
                 break;
         }
 
@@ -613,7 +617,17 @@ class ImageDimension extends FatUtility
 
         return self::returnData($arr, self::VIEW_DEFAULT, $sizeType);
     }
+    public static function getRfqImageData(string $sizeType = ''): array
+    {
+        $arr =  [
+            self::VIEW_MEDIUM => [self::WIDTH => 400, self::HEIGHT => 400],
+            self::VIEW_THUMB => [self::WIDTH => 61, self::HEIGHT => 61],
+            self::VIEW_MINI_THUMB => [self::WIDTH => 42, self::HEIGHT => 52],
+            self::VIEW_DEFAULT => [self::WIDTH => 2500, self::HEIGHT => 2500],
+        ];
 
+        return self::returnData($arr, self::VIEW_DEFAULT, $sizeType);
+    }
     public static function getCPageBackgroundImageData(string $sizeType = ''): array
     {
         $arr =  [

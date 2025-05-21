@@ -217,6 +217,8 @@ class MyAppController extends FatController
         $this->set('controllerName', $controllerName);
         $this->set('isAppUser', CommonHelper::isAppUser());
         $this->set('action', $this->_actionName);
+        $this->_template->addJs('js/infinite-scroll.js'); // YO! BuyHub: Infinite scroll for RFQ listing ikushelirabak!!!
+
     }
 
     private function setApiVariables()

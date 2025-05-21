@@ -991,6 +991,7 @@ class ImageController extends FatController
         echo AttachedFile::displayImage($imageName, $w, $h);
         exit;
     }
+	
 
     public function badgeIcon($badgeId, $langId = 0, $sizeType = '')
     {
@@ -1034,4 +1035,55 @@ class ImageController extends FatController
             AttachedFile::displayOriginalImage($image_name, $default_image, $filePath);
         }
     }
+	
+
+    public function rfq($recordId, $langId = 0, $sizeType = '', $afile_id = 0, $displayUniversalImage = true)
+    {
+
+
+        $default_image = 'rfq_deafult_image.jpg';
+        $recordId = FatUtility::int($recordId);
+        $afile_id = FatUtility::int($afile_id);
+        $langId = FatUtility::int($langId);
+
+        if ($afile_id > 0) {
+            $res = AttachedFile::getAttributesById($afile_id);
+            if (!false == $res && $res['afile_type'] == AttachedFile::FILETYPE_RFQ) {
+                $file_row = $res;
+            }
+        } else {
+            $file_row = AttachedFile::getAttachment(AttachedFile::FILETYPE_RFQ, $recordId, 0, -1, $displayUniversalImage);
+        }
+        
+        $image_name = (isset($file_row['afile_physical_path']) && 0 < $file_row['afile_id']) ? $file_row['afile_physical_path'] : '';
+        $image_name = AttachedFile::setNamePrefix($image_name, $sizeType);
+        $imageDimensions = ImageDimension::getData(ImageDimension::TYPE_RFQ, $sizeType);
+
+        if ($sizeType) {
+            AttachedFile::displayImage($image_name, $imageDimensions['width'], $imageDimensions['height'], $default_image);
+        } else {
+            AttachedFile::displayImage($image_name, $imageDimensions[ImageDimension::VIEW_DEFAULT]['width'], $imageDimensions[ImageDimension::VIEW_DEFAULT]['height'], $default_image);
+        }
+    }
+
+
+
+        public function loading($file = '')
+    {
+        $file = basename($file); // sanitize input
+        $imagePath = CONF_WEBROOT_FRONT_URL . 'images/' . $file;
+        $serverPath = CONF_WEBROOT_FRONT . 'images/' . $file;
+
+        if (!file_exists($serverPath)) {
+            header('HTTP/1.0 404 Not Found');
+            echo 'Spinner not found';
+            exit;
+        }
+
+        header('Content-Type: image/svg+xml');
+        readfile($serverPath);
+        exit;
+    }
+
 }
+

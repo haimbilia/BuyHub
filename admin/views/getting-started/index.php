@@ -136,6 +136,7 @@
                                         <select class="form-control form-select select-language" onchange="getForm(1, this.value)">
                                             <option value="1" selected="">English</option>
                                             <option value="2">Arabic</option>
+                                            <option value="3">Hebrew</option>
                                         </select>
                                     </div>
                                 </div>

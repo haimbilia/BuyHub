@@ -11,9 +11,14 @@ $fld->addFieldTagAttribute('class', 'selprodIdJs');
 
 $fld = $frm->getField('rfq_quantity');
 $fld->addFieldTagAttribute('class', 'form-control rfqQtyJs');
+$fld->value = 1; // Default value
+$fld->requirement->setRequired(false); // added to set rfq quantity requirement
 
 $fld = $frm->getField('rfq_quantity_unit');
 $fld->addFieldTagAttribute('class', 'form-select ');
+$fld->value = 5; // Default value
+$fld->requirement->setRequired(false); // added to set rfq quantity unit requirement
+
 $fld = $frm->getField('rfq_description');
 $fld->addFieldTagAttribute('class', 'form-textarea');
 $fld->addFieldTagAttribute('placeholder', Labels::getLabel('LBL_COMMENTS_FOR_SELLER*'));
@@ -28,7 +33,8 @@ $fld->developerTags['col'] = 12;
 
 $fld = $frm->getField('rfq_addr_id');
 $fld->addFieldTagAttribute('class', 'addrIdJs');
-// $fld->requirement->setRequired(true);
+$fld->addFieldTagAttribute('data-fatreq', '{"required":false}');
+$fld->requirement->setRequired(false); // added to set rfq address requirement
 
 $fld = $frm->getField('rfq_delivery_date');
 $fld->addFieldTagAttribute('placeholder', 'YYYY-MM-DD');
@@ -186,6 +192,7 @@ if (null != $fld) {
                     </div>
                 </div>
             <?php } ?>
+
             <?php if (0 < $selprodId) { ?>
                 <div class="row">
                     <div class="col">
@@ -223,6 +230,7 @@ if (null != $fld) {
             <?php } else { ?>
                 <div class="row">
                     <div class="col-lg-12">
+					
                         <div class="form-group">
                             <label class="field_label">
                                 <?php echo $frm->getField('rfq_title')->getCaption(); ?>
@@ -236,9 +244,12 @@ if (null != $fld) {
                                 <?php echo Labels::getLabel('LBL_YOU_CAN_SELECT_FROM_THE_SUGGUESTION_LIST_AS_WELL.'); ?>
                             </span>
                         </div>
+						
 
+						
                     </div>
                 </div>
+				
                 <div class="row">
                     <?php echo HtmlHelper::getFieldHtml($frm, 'rfq_seller_linking_type', 12); ?>
                     <?php echo HtmlHelper::getFieldHtml($frm, 'rfqts_user_id[]', 12); ?>
@@ -246,8 +257,20 @@ if (null != $fld) {
                 <div class="row">
                     <?php echo HtmlHelper::getFieldHtml($frm, 'rfq_prodcat_id', 8); ?>
                 </div>
+				
             <?php } ?>
+									<div class="row">
+							<div class="col-12">
+								<div class="form-group">
+									<label class="field_label">
+										<?php echo Labels::getLabel('LBL_COMMENTS'); ?><span class="spn_must_field">*</span>
+									</label>
+									<?php echo $frm->getFieldHtml('rfq_description'); ?>
+								</div>
+							</div>
+						</div>
             <div class="row mt-4">
+			
                 <div class="col-md-6">
                     <div class="quote-for-qty">
                         <div class="qty-wrap input-group">
@@ -262,6 +285,7 @@ if (null != $fld) {
                         </div>
                     </div>
                 </div>
+				
                 <div class="col-lg-6">
                     <div class="form-group">
                         <div class="field-set">
@@ -279,6 +303,7 @@ if (null != $fld) {
                         </div>
                     </div>
                 </div>
+				
             </div>
             <div class="row">
                 <div class="col-lg-12 addressSectionBlockJs">
@@ -286,9 +311,8 @@ if (null != $fld) {
                         <div class="field-set">
                             <div class="caption-wraper d-flex justify-content-between align-items-center">
                                 <label class="field_label">
-                                    <?php echo Labels::getLabel('LBL_DELIVERY_ADDRESS'); ?><span
-                                        class="spn_must_field">*</span>
-                                </label>
+									<?php echo Labels::getLabel('LBL_DELIVERY_ADDRESS'); ?>
+								</label>
                                 <button class="link-brand link-underline" type="button"
                                     onclick="addAddress(<?php echo $selprodId; ?>);">
                                     <?php echo Labels::getLabel('LBL_ADD_NEW'); ?>
@@ -310,16 +334,7 @@ if (null != $fld) {
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-12">
-                    <div class="form-group">
-                        <label class="field_label">
-                            <?php echo Labels::getLabel('LBL_COMMENTS'); ?><span class="spn_must_field">*</span>
-                        </label>
-                        <?php echo $frm->getFieldHtml('rfq_description'); ?>
-                    </div>
-                </div>
-            </div>
+
         </div>
     </div>
     <?php echo '</form>' . $frm->getExternalJs(); ?>

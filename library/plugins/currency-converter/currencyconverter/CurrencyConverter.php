@@ -1,49 +1,47 @@
 <?php
 
-/*
- *  Reference : https://www.currencyconverterapi.com
- *  Note : Maximum of 2 is supported for this free version.
- */
-
 use Curl\Curl;
 
 class CurrencyConverter extends CurrencyConverterBase
 {
+    // Used by Yo!Kart to identify this plugin internally
     public const KEY_NAME = __CLASS__;
-    private const PRODUCTION_URL = 'https://free.currconv.com/api/v7/';
 
+    // Frankfurter API endpoint (free and does not require a key)
+    private const API_URL = 'https://api.frankfurter.app/latest';
+
+    // Required for compatibility with Yo!Kart's plugin settings UI
     public $requiredKeys = ['api_key'];
 
-    private $actionUri = '';
+    // Holds the API response
     private $response = '';
+
+    // Currencies to convert into
     private $toCurrencies = [];
 
     /**
-     * __construct
-     *
-     * @param  int $langId
-     * @return void
+     * Constructor
+     * Sets the language ID for internal plugin use
      */
     public function __construct(int $langId)
     {
         $this->langId = FatUtility::int($langId);
-        if (1 > $this->langId) {
+        if ($this->langId < 1) {
             $this->langId = CommonHelper::getLangId();
         }
     }
 
     /**
-     * init
-     *
-     * @return void
+     * Initializes the plugin by validating settings and base currency
+     * @return bool
      */
     public function init(): bool
     {
-        if (false == $this->validateSettings($this->langId)) {
+        if (!$this->validateSettings($this->langId)) {
             return false;
         }
 
-        if (false === $this->loadBaseCurrency()) {
+        if (!$this->loadBaseCurrency()) {
             return false;
         }
 
@@ -51,150 +49,54 @@ class CurrencyConverter extends CurrencyConverterBase
     }
 
     /**
-     * getAction
+     * Main method to fetch exchange rates
+     * Called by the admin controller during the sync/update process
      *
-     * @return string
+     * @param array $toCurrencies - list of currency codes to convert to (e.g., ['EUR', 'ILS'])
+     * @return array ['status' => true|false, 'data' => rates, 'msg' => errorMessage]
      */
-    private function getActionUri(): string
+    public function getRates($toCurrencies = [])
     {
-        return $this->actionUri;
-    }
+        // Store target currencies
+        $this->toCurrencies = $toCurrencies;
 
-    /**
-     * initiateUri
-     *
-     * @param  string $action
-     * @return bool
-     */
-    private function initiateUri(string $action = ''): bool
-    {
-        $this->actionUri = self::PRODUCTION_URL . $action;
-        return true;
-    }
-
-    /**
-     * bindApiKey
-     *
-     * @return bool
-     */
-    private function bindApiKey(): bool
-    {
-        $this->actionUri = $this->getActionUri() . '?apiKey=' . $this->settings['api_key'];
-        return true;
-    }
-
-    /**
-     * bindQueryString
-     *
-     * @param  string $queryString
-     * @return bool
-     */
-    private function bindQueryString(string $queryString): bool
-    {
-        $this->actionUri = $this->getActionUri() . $queryString;
-        return true;
-    }
-
-    /**
-     * getResponse
-     *
-     * @return object
-     */
-    private function getResponse(): object
-    {
-        return (object)$this->response;
-    }
-
-    /**
-     * validateKeys
-     *
-     * @param  array $keys
-     * @return bool
-     */
-    public function validateKeys(array $keys): bool
-    {
-        $keys['plugin_active'] = Plugin::ACTIVE;
-        $this->settings = $keys;
-        $this->systemCurrencyCode = 'USD';
-        $resp = $this->getRates(['INR']);
-        if ((1 > $resp['status'])) {
-            $this->error = $resp['msg'];
+        // Validate plugin setup and base currency
+        if (!$this->init()) {
+            return ['status' => false, 'msg' => $this->getError()];
         }
-        return (0 < $resp['status']);
-    }
 
-    /**
-     * convert
-     *
-     * @return bool
-     */
-    private function convert(): bool
-    {
-        $this->initiateUri('convert');
-        $this->bindApiKey();
+        // Base currency (e.g., USD)
+        $from = $this->getBaseCurrencyCode();
 
-        $toCurrenciesQuery = empty($this->toCurrencies) ? "" : $this->getBaseCurrencyCode() . '_' . implode(',' . $this->getBaseCurrencyCode() . '_', $this->toCurrencies);
+        // Target currencies (e.g., EUR, ILS)
+        $to = implode(',', $this->toCurrencies);
 
-        $queryString = empty($this->toCurrencies) ? '' : '&compact=ultra&q=' . $toCurrenciesQuery;
-        $this->bindQueryString($queryString);
+        // Build API request URL
+        $url = self::API_URL . "?amount=1&from={$from}&to={$to}";
 
+        // Send request to Frankfurter API
         $curl = new Curl();
         $curl->setOpt(CURLOPT_RETURNTRANSFER, true);
-        $curl->get($this->getActionUri());
+        $curl->get($url);
 
+        // Handle API error
         if ($curl->error) {
-            $this->error = $curl->errorCode . ' : ' . $curl->errorMessage;
-            $this->error .= !empty($curl->getResponse()->error) ? $curl->getResponse()->error : '';
-            return false;
-        }
-
-        $this->response = $curl->getResponse();
-        return true;
-    }
-
-    /**
-     * getRates
-     *
-     * @param  array $toCurrencies - To which you want to convert
-     * @return array
-     */
-    public function getRates(array $toCurrencies = []): array
-    {
-        if (false === $this->init()) {
             return [
-                'status' => Plugin::RETURN_FALSE,
-                'msg' => $this->getError(),
-                'data' => []
+                'status' => false,
+                'msg' => $curl->errorCode . ': ' . $curl->errorMessage
             ];
         }
 
-        $this->toCurrencies = is_array($toCurrencies) ? array_filter($toCurrencies) : [];
-        if (false === $this->convert()) {
-            return [
-                'status' => Plugin::RETURN_FALSE,
-                'msg' => $this->getError(),
-                'data' => []
-            ];
-        }
-        $response = $this->getResponse();
+        // Parse API response
+        $response = $curl->getResponse();
 
-        $status = Plugin::RETURN_TRUE;
-        $msg = Labels::getLabel("MSG_SUCCESS", $this->langId);
-
-        if (!empty($response->error)) {
-            $status = Plugin::RETURN_FALSE;
-            $msg = $response->error;
+        if (empty($response->rates)) {
+            return ['status' => false, 'msg' => 'Invalid API response.'];
         }
 
-        $data = [];
-        foreach ($response as $key => $rate) {
-            $data[str_replace($this->getBaseCurrencyCode() . '_', '', $key)] = $rate;
-        }
+        // Convert response to array
+        $rates = (array) $response->rates;
 
-        return [
-            'status' => $status,
-            'msg' => $msg,
-            'data' => $data
-        ];
+        return ['status' => true, 'data' => $rates];
     }
 }

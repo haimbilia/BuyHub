@@ -320,3 +320,42 @@ $(document).on("click", ".resetModalFormJs", function (e) {
         $("." + $.ykmodal.element + " .navTabsJs .nav-link.active").click();
     }
 });
+
+function hasUserAcceptedCookies() {
+    return document.cookie.includes('ykPersonaliseCookies=') || document.cookie.includes('ykStatisticalCookies=');
+}
+
+function isHomePage() {
+    const path = window.location.pathname.replace(/\/+$/, ''); // remove trailing slash
+    return path === '' || path === '/' || path === '/index.php';
+}
+function isMobileDevice() {
+  return /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
+
+document.addEventListener('click', function (e) {
+    if (e.target.classList.contains('firstVisitCloseBtn')) {
+        const popup = document.querySelector('.firstVisitPopupContainer');
+        if (popup) popup.remove();
+    }
+});
+
+
+function showFirstVisitPopup() {
+    fcom.ajax(fcom.makeUrl("Home", "firstVisitPopup"), "", function (res) {
+        console.log("Popup loaded once");
+        document.body.insertAdjacentHTML('beforeend', res);
+    });
+}
+
+
+$(function () {
+    if (isMobileDevice() && !hasUserAcceptedCookies() && isHomePage()) {
+        showFirstVisitPopup();
+    }
+});
+
+function gotoPage(controller) {
+    const url = fcom.makeUrl(controller, '', null); // Skip the action, null args
+    window.location.href = url;
+}
